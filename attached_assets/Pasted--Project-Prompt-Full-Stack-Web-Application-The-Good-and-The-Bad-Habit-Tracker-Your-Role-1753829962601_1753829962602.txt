@@ -1,0 +1,179 @@
+## Project Prompt: Full-Stack Web Application - "The Good and The Bad: Habit Tracker"
+
+**Your Role:** You are an expert full-stack developer and UI/UX designer specializing in creating modern, clean, and highly performant web applications using the Next.js and Material Design 3 ecosystem.
+
+**Your Primary Task:** Your primary task is to generate the complete, production-ready source code for the web application detailed below. You must follow all specifications precisely and ensure the final product is cohesive, functional, and adheres to the defined design principles.
+
+**Core Directives:**
+
+* **Design System:** Strictly adhere to Material You (Material 3) principles as specified.
+
+* **Technology Stack:** The application will be built with Next.js (App Router), TypeScript, and deployed on Vercel with Serverless Functions.
+
+* **User Experience:** The core philosophy is "Radical Simplicity & Convenience." The UI must be minimalist, intuitive, and mobile-first.
+
+The following prompt is structured in multiple parts, starting from the high-level concept and design system, down to component-level details and technical architecture. Please process each part sequentially to build a coherent and fully-functional application.
+
+Let's begin building "The Good and The Bad: Habit Tracker".
+
+### Part 1: Project Summary & Core Concept
+
+**Project Name:** The Good and The Bad: Habit Tracker
+
+**Core Concept:** A minimalist, mobile-first web application designed for focused, daily habit tracking. The app's core user experience revolves around a one-at-a-time "Card View" for tracking. Its unique selling proposition is the "Character Motivator" system, which provides users with different personality-driven feedback (Positive, Adaptive, or Harsh). For V1.0, please use predefined response templates for the 3 personalities. This approach ensures speed, predictability, and avoids the complexity and potential costs of external API calls for dynamic generation. A list of responses for each personality will be provided at a later stage.
+
+### Part 2: Core Design System: Material You (Material 3)
+
+This project must strictly adhere to Google's Material You (Material 3) design principles. The UI must be clean, spacious, and accessible, with a strong emphasis on shape, dynamic color, and clear typography.
+
+**Color System:**
+The design is based on a single seed color: a modern, deep purple (`#6750A4`). All primary, secondary, and container colors should be tonally derived from this seed color, as is standard in Material 3.
+
+* **Light Theme:** Backgrounds should be off-white (`#FFFBFE`), with surfaces slightly darker. "On-Primary" or "On-Surface" text should be dark (`#1C1B1F`).
+
+* **Dark Theme:** Backgrounds should be very dark gray (`#1C1B1F`). "On-Primary" or "On-Surface" text should be light gray (`#E6E1E5`).
+
+* **Semantic Colors:** Use specific colors for user feedback.
+
+* **Success/Positive Action:** A clear green (`#4CAF50`). Used for the 'Yes' button and positive streaks.
+
+* **Error/Negative Action:** A clear red (`#F44336`). Used for the 'No' button and bad habits.
+
+* **Rule:** Avoid gradients and excessive, non-functional colors. The UI's color palette must feel cohesive and derived from the defined tonal system.
+
+**Typography:**
+**Primary Font:** The designated font for the entire application is Inter. Use it for all text elements, from headers to body copy.
+
+**Type Scale:** Implement a clear type scale for hierarchy. For example:
+
+* **Display Large:** For major screen titles.
+
+* **Headline Medium:** For card titles (the habit name).
+
+* **Title Large:** For section headers within the drawer or settings.
+
+* **Body Large:** For all primary text content.
+
+* **Label Medium:** For smaller labels, like the "Good/Bad" tag.
+
+**Shape & Corner Radius:**
+All key components (Cards, Buttons, Modals, Input Fields) must have a consistent, generous corner radius. Use a value between `12px` and `16px` for all elements.
+
+**Interactivity & States:**
+All interactive elements (buttons, list items) must have clear hover, focus, and pressed states, typically using subtle color overlays as defined by Material 3 state layers.
+
+### Part 3: Page Structure & User Flow
+
+The application is a single-page app (SPA) with a hybrid model:
+
+* **Main Tracking Screen (Card View):** The default view on app load.
+
+* **Side Drawer (Management View):** A navigation drawer sliding in from the left, triggered by a hamburger icon.
+
+* **Add Habit Dialog:** A modal dialog for creating a new habit.
+
+* **Settings Screen:** A separate view/page accessed from the Side Drawer.
+
+### Part 4: Component & Functionality Details
+
+#### A. Main Tracking Screen (Card View)
+
+* **Header:** A `TopAppBar` component. It contains a leading-icon (hamburger menu `IconButton`) and the app title.
+
+* **Main Content:** A single, centered `ElevatedCard` or `FilledCard` component.
+
+* Inside the card, at the top right, place a `Chip` component to display the streak (e.g., "🔥 5 days").
+
+* The card's main content is a `Column` containing:
+
+\* The habit name (\`Headline Medium\` text).
+
+\* A \`Label Medium\` text for the habit type ("Good" or "Bad").
+
+\* The question "Did you do it\?" (\`Title Large\` text).
+
+\* A \`Row\` containing two large, squared \`FilledTonalButtons\` with only icons inside. The left button has a green checkmark icon; the right button has a red 'X' icon.
+
+* **Interaction:** On button click, the card animates out, and the next habit card animates in. A `Snackbar` or `Toast` appears briefly at the bottom of the screen with the motivator's message.
+
+#### B. Side Drawer (Management View)
+
+This is a `NavigationDrawer` component.
+
+**Content:**
+
+* A `List` containing two expandable `ListItems` (accordions): "Good Habits" and "Bad Habits". Clicking them expands/collapses the list of habits within. Each habit item in the sub-list displays its name and its streak chip.
+
+* A `Divider` component.
+
+* A `List` of navigation items: "Leaderboard", "Settings", "Donate", each with a leading icon.
+
+* **Action Button:** A `FloatingActionButton` (FAB) with a `+` icon is placed in the bottom right corner of this drawer.
+
+#### C. Add Habit Dialog
+
+This is a `Dialog` or `Modal` component, triggered by the FAB.
+
+**Content:**
+
+* **Title:** "Add New Habit".
+
+* A `TextField` for the "Habit Name".
+
+* A `SegmentedButton` component with two options: "Good" and "Bad".
+
+* Action buttons at the bottom: a `FilledButton` for "Save" and a `TextButton` for "Cancel".
+
+#### D. Settings Screen
+
+A standard screen with `ListItems`.
+
+** "Appearance" Section:**
+
+* A `ListItem` with "Dark Mode" text and a `Switch` component.
+
+* A `ListItem` for "Language" that opens a dialog to select "English" or "Bahasa Indonesia".
+
+** "Account & Data" Section:**
+
+* `ListItems` for "Login/Logout", "Backup to Cloud", "Export Data", and "Import Data". For the "Export Data" feature, please use JSON. This format is ideal for its primary purpose, which is backup and re-importing into the application ("Import Data"). JSON perfectly preserves the data structure and is the most logical and efficient choice for this function.
+
+### Part 5: Backend & Data Functionality Brief
+
+* **Default Behavior:** The app must be fully functional offline, using browser `localStorage`.
+
+* **Optional Sync:** User login via Firebase Authentication enables data backup and sync to a MongoDB database.
+
+* **Core Logic:** Implement CRUD for habits. Clicks on the main screen must update daily logs, streaks, and points. Leaderboard data should be calculated weekly. The leaderboard must prioritize user privacy and autonomy. The correct approach is to allow users to set a public handle/username when they choose to opt-in. If a user opts-in but does not set a specific handle, assign them a random, anonymous name (e.g., "Anonymous Fox", "User 183B"). Real account names or emails should never be shown on the leaderboard.
+
+### Part 6: Technology Stack & Architecture
+
+* **Platform:** A Progressive Web App (PWA) built with a Mobile-First design philosophy.
+
+**Frontend:**
+
+* **Language:** TypeScript.
+
+* **Framework:** Next.js (utilizing App Router, Server-Side Rendering (SSR), and Static Site Generation (SSG) for optimal performance).
+
+* **UI Library:** React & React Icons.
+
+**Backend & API:**
+
+* **Architecture:** Vercel Serverless Functions. All backend logic, including API routes for database interaction, point calculations, and leaderboard logic, will be implemented as serverless functions within the Next.js `/app/api` directory. This creates a unified, monorepo-style deployment ecosystem entirely on Vercel.
+
+**Database:**
+
+* **Primary Database:** MongoDB (via MongoDB Atlas) for storing user data, habits, and progress.
+
+**Authentication:**
+
+* **Provider:** Firebase Authentication for handling secure user login, registration, and session management (supporting Google and Email/Password).
+
+**Security:**
+
+* **Form Protection:** reCAPTCHA v2 to secure user registration and login forms against bots.
+
+**Deployment:**
+
+* **Hosting & CI/CD:** Vercel. The entire application (frontend and serverless backend) will be deployed and hosted on Vercel, connected directly to a GitHub repository for continuous integration and deployment.

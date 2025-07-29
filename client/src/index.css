@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  /* Material 3 Color System based on #6750A4 seed */
+  --primary: hsl(256, 33%, 52%);
+  --primary-container: hsl(259, 100%, 93%);
+  --on-primary: hsl(0, 0%, 100%);
+  --on-primary-container: hsl(256, 100%, 18%);
+  
+  --secondary: hsl(251, 14%, 41%);
+  --secondary-container: hsl(258, 46%, 91%);
+  --on-secondary: hsl(0, 0%, 100%);
+  --on-secondary-container: hsl(251, 23%, 17%);
+  
+  --tertiary: hsl(336, 23%, 42%);
+  --tertiary-container: hsl(337, 100%, 89%);
+  
+  --surface: hsl(320, 100%, 99%);
+  --surface-variant: hsl(271, 33%, 97%);
+  --on-surface: hsl(258, 8%, 11%);
+  --on-surface-variant: hsl(251, 11%, 29%);
+  
+  --outline: hsl(251, 7%, 49%);
+  --outline-variant: hsl(250, 12%, 81%);
+  
+  --success: hsl(122, 39%, 49%);
+  --error: hsl(4, 90%, 58%);
+  
+  /* Legacy mappings for existing components */
+  --background: hsl(320, 100%, 99%);
+  --foreground: hsl(258, 8%, 11%);
+  --muted: hsl(271, 33%, 97%);
+  --muted-foreground: hsl(251, 11%, 29%);
+  --popover: hsl(320, 100%, 99%);
+  --popover-foreground: hsl(258, 8%, 11%);
+  --card: hsl(320, 100%, 99%);
+  --card-foreground: hsl(258, 8%, 11%);
+  --border: hsl(250, 12%, 81%);
+  --input: hsl(250, 12%, 81%);
+  --secondary: hsl(271, 33%, 97%);
+  --secondary-foreground: hsl(258, 8%, 11%);
+  --accent: hsl(271, 33%, 97%);
+  --accent-foreground: hsl(258, 8%, 11%);
+  --destructive: hsl(4, 90%, 58%);
+  --destructive-foreground: hsl(0, 0%, 100%);
+  --ring: hsl(258, 8%, 11%);
+  --radius: 12px;
+}
+
+.dark {
+  /* Dark theme colors */
+  --surface: hsl(258, 8%, 11%);
+  --surface-variant: hsl(249, 7%, 19%);
+  --on-surface: hsl(252, 11%, 90%);
+  --primary: hsl(259, 100%, 82%);
+  --primary-container: hsl(256, 54%, 27%);
+  
+  /* Legacy mappings for dark theme */
+  --background: hsl(258, 8%, 11%);
+  --foreground: hsl(252, 11%, 90%);
+  --muted: hsl(249, 7%, 19%);
+  --muted-foreground: hsl(250, 12%, 81%);
+  --popover: hsl(258, 8%, 11%);
+  --popover-foreground: hsl(252, 11%, 90%);
+  --card: hsl(258, 8%, 11%);
+  --card-foreground: hsl(252, 11%, 90%);
+  --border: hsl(249, 7%, 19%);
+  --input: hsl(249, 7%, 19%);
+  --secondary: hsl(249, 7%, 19%);
+  --secondary-foreground: hsl(252, 11%, 90%);
+  --accent: hsl(249, 7%, 19%);
+  --accent-foreground: hsl(252, 11%, 90%);
+  --destructive: hsl(4, 90%, 58%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(250, 12%, 81%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply antialiased bg-background text-foreground;
+    font-family: 'Inter', sans-serif;
+  }
+}
+
+@layer utilities {
+  .surface-elevation-1 {
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  }
+  
+  .surface-elevation-2 {
+    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+  }
+  
+  .surface-elevation-3 {
+    box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
+  }
+  
+  .state-layer-hover:hover {
+    background-color: rgba(103, 80, 164, 0.08);
+  }
+  
+  .state-layer-pressed:active {
+    background-color: rgba(103, 80, 164, 0.12);
+  }
+  
+  .material-radius {
+    border-radius: 12px;
+  }
+  
+  .material-radius-lg {
+    border-radius: 16px;
+  }
+  
+  .card-transition {
+    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+  }
+  
+  .drawer-overlay {
+    backdrop-filter: blur(4px);
+  }
+}
