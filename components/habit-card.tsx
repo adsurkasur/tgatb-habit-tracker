@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
 import { Habit } from "@shared/schema";
+import { useEffect, useState } from "react";
 
 interface HabitCardProps {
   habit: Habit;
@@ -10,6 +11,7 @@ interface HabitCardProps {
   onUndo?: () => void;
   isCompletedToday?: boolean;
   completedAt?: Date;
+  navigationDirection?: 'left' | 'right' | null;
 }
 
 export function HabitCard({ 
@@ -17,8 +19,35 @@ export function HabitCard({
   onTrack, 
   onUndo, 
   isCompletedToday = false,
-  completedAt 
+  completedAt,
+  navigationDirection = null
 }: HabitCardProps) {
+  const [previousHabitId, setPreviousHabitId] = useState(habit?.id);
+  const [animationClass, setAnimationClass] = useState('');
+
+  // Handle habit changes and animation direction
+  useEffect(() => {
+    if (habit && habit.id !== previousHabitId) {
+      // Set the appropriate animation class based on navigation direction
+      if (navigationDirection === 'left') {
+        setAnimationClass('slide-from-left');
+      } else if (navigationDirection === 'right') {
+        setAnimationClass('slide-from-right');
+      } else {
+        setAnimationClass('');
+      }
+      
+      setPreviousHabitId(habit.id);
+      
+      // Clear animation class after animation completes
+      const timer = setTimeout(() => {
+        setAnimationClass('');
+      }, 250); // Slightly longer than animation duration
+      
+      return () => clearTimeout(timer);
+    }
+  }, [habit?.id, previousHabitId, navigationDirection]);
+
   if (!habit) {
     return (
       <Card className="w-full max-w-md mx-auto p-6 bg-muted/50">
@@ -31,11 +60,14 @@ export function HabitCard({
   }
 
   return (
-    <Card className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition relative ${
-      isCompletedToday 
-        ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' 
-        : 'bg-card'
-    }`}>
+    <Card 
+      key={`habit-${habit.id}`}
+      className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${
+        isCompletedToday 
+          ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' 
+          : 'bg-card'
+      }`}
+    >
       {/* Completion Status Badge */}
       {isCompletedToday && (
         <div className="absolute top-4 left-4">

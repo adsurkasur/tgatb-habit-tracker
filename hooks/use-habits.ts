@@ -7,6 +7,7 @@ import { useToast } from "@/hooks/use-toast";
 export function useHabits() {
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
+  const [navigationDirection, setNavigationDirection] = useState<'left' | 'right' | null>(null);
   const [settings, setSettings] = useState<UserSettings>({
     darkMode: false,
     language: "en",
@@ -107,7 +108,34 @@ export function useHabits() {
 
   const moveToNextHabit = () => {
     if (habits.length > 1) {
+      setNavigationDirection('right');
       setCurrentHabitIndex(prev => (prev + 1) % habits.length);
+      // Clear direction after animation
+      setTimeout(() => setNavigationDirection(null), 300);
+    }
+  };
+
+  const moveToPreviousHabit = () => {
+    if (habits.length > 1) {
+      setNavigationDirection('left');
+      setCurrentHabitIndex(prev => (prev - 1 + habits.length) % habits.length);
+      // Clear direction after animation
+      setTimeout(() => setNavigationDirection(null), 300);
+    }
+  };
+
+  const navigateToHabitIndex = (index: number) => {
+    if (index >= 0 && index < habits.length) {
+      // Determine direction based on index difference
+      const currentIndex = currentHabitIndex;
+      if (index > currentIndex) {
+        setNavigationDirection('right');
+      } else if (index < currentIndex) {
+        setNavigationDirection('left');
+      }
+      setCurrentHabitIndex(index);
+      // Clear direction after animation
+      setTimeout(() => setNavigationDirection(null), 300);
     }
   };
 
@@ -180,6 +208,7 @@ export function useHabits() {
     badHabits,
     currentHabit,
     currentHabitIndex,
+    navigationDirection,
     settings,
     addHabit,
     deleteHabit,
@@ -187,6 +216,8 @@ export function useHabits() {
     undoHabitTracking,
     getHabitCompletionStatus,
     moveToNextHabit,
+    moveToPreviousHabit,
+    navigateToHabitIndex,
     updateSettings,
     exportData,
     importData,

@@ -150,7 +150,73 @@
   }
   
   .card-transition {
-    transition: transform 0.3s cubic-bezier(0.2, 0, 0, 1), opacity 0.3s ease;
+    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  /* Habit Card Cycling Animations - Fixed */
+  .habit-card-animated {
+    animation: habit-card-slide-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+  
+  /* Default slide in animation */
+  @keyframes habit-card-slide-in {
+    0% {
+      opacity: 0;
+      transform: translateX(10px) scale(0.995);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  /* Slide from left (when moving to previous habit) */
+  .habit-card-animated.slide-from-left {
+    animation: habit-card-slide-from-left 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+  
+  @keyframes habit-card-slide-from-left {
+    0% {
+      opacity: 0;
+      transform: translateX(-20px) scale(0.995);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  /* Slide from right (when moving to next habit) */
+  .habit-card-animated.slide-from-right {
+    animation: habit-card-slide-from-right 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    animation-fill-mode: both;
+  }
+  
+  @keyframes habit-card-slide-from-right {
+    0% {
+      opacity: 0;
+      transform: translateX(20px) scale(0.995);
+    }
+    100% {
+      opacity: 1;
+      transform: translateX(0) scale(1);
+    }
+  }
+  
+  /* Hover effects - separate from animations */
+  .habit-card-animated {
+    /* Only transition properties that won't conflict with animations */
+    transition: box-shadow 0.2s ease;
+    will-change: transform;
+  }
+  
+  .habit-card-animated:hover {
+    /* Use box-shadow only for hover, avoid transform conflicts */
+    box-shadow: 0 6px 25px rgba(103, 80, 164, 0.12);
+    /* Remove animation to prevent re-triggering */
+    animation-duration: 0s;
   }
   
   .drawer-overlay {
@@ -172,6 +238,60 @@
     transform: translateY(-2px);
   }
   
+  /* Enhanced CTA Card Animations */
+  .cta-card-animated {
+    animation: cta-card-pulse 3s ease-in-out infinite;
+  }
+  
+  .cta-card-animated:hover {
+    animation: none;
+  }
+  
+  @keyframes cta-card-pulse {
+    0%, 100% {
+      box-shadow: 0 4px 20px rgba(103, 80, 164, 0.2), 
+                  0 0 40px rgba(103, 80, 164, 0.1);
+    }
+    50% {
+      box-shadow: 0 6px 25px rgba(103, 80, 164, 0.25), 
+                  0 0 50px rgba(103, 80, 164, 0.12);
+    }
+  }
+  
+  /* CTA Icon Animations */
+  .cta-icon-container {
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  .cta-card:hover .cta-icon-container {
+    background-color: hsl(var(--primary) / 0.15);
+    transform: scale(1.05);
+  }
+  
+  .cta-icon {
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  .cta-card:hover .cta-icon {
+    transform: scale(1.1);
+  }
+  
+  /* CTA Sparkle Animation */
+  .cta-sparkle {
+    animation: sparkle 2s ease-in-out infinite;
+  }
+  
+  @keyframes sparkle {
+    0%, 100% {
+      opacity: 0.7;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 1;
+      transform: scale(1.2);
+    }
+  }
+  
   .cta-button {
     background: var(--cta-button-bg);
     color: white;
@@ -182,6 +302,27 @@
   .cta-button:hover {
     background: var(--cta-button-hover);
     transform: scale(1.02);
+  }
+  
+  /* Enhanced CTA Button Animations */
+  .cta-button-animated {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cta-button-animated::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.5s;
+  }
+  
+  .cta-button-animated:hover::before {
+    left: 100%;
   }
   
   .dark .cta-button {
@@ -202,6 +343,61 @@
     transform: scale(1.05);
   }
   
+  /* Enhanced FAB Animations */
+  .fab-animated {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .fab-animated::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 0;
+    height: 0;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    transition: width 0.3s ease, height 0.3s ease;
+  }
+  
+  .fab-animated:active::after {
+    width: 200%;
+    height: 200%;
+  }
+  
+  /* State change animation for FAB */
+  .fab-animated {
+    animation: fab-appear 0.4s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  @keyframes fab-appear {
+    0% {
+      opacity: 0;
+      transform: scale(0.3) rotate(-180deg);
+    }
+    100% {
+      opacity: 1;
+      transform: scale(1) rotate(0deg);
+    }
+  }
+  
+  /* Pulsing effect for new FAB */
+  .fab-animated:not(:hover) {
+    animation: fab-appear 0.4s cubic-bezier(0.2, 0, 0, 1), 
+               fab-pulse 2s ease-in-out 0.5s infinite;
+  }
+  
+  @keyframes fab-pulse {
+    0%, 100% {
+      box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
+    }
+    50% {
+      box-shadow: 0 6px 16px rgba(103, 80, 164, 0.4);
+    }
+  }
+  
   .dark .fab {
     color: white !important;
   }
@@ -215,6 +411,75 @@
   /* Theme transition enhancement */
   .theme-transition {
     transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  /* Page transition animations */
+  .page-content {
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  /* Loading state for content changes */
+  .content-loading {
+    opacity: 0.7;
+    transform: scale(0.98);
+  }
+  
+  /* Smooth page transitions */
+  .main-content-container {
+    transition: opacity 0.2s ease-in-out;
+  }
+  
+  /* Cycling indicator animation (subtle) */
+  @keyframes cycling-indicator {
+    0%, 100% {
+      opacity: 0.5;
+    }
+    50% {
+      opacity: 1;
+    }
+  }
+  
+  .cycling-active {
+    animation: cycling-indicator 1s ease-in-out;
+  }
+
+  /* Navigation button animations */
+  .nav-button {
+    backdrop-filter: blur(10px);
+    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  .nav-button:hover {
+    backdrop-filter: blur(15px);
+    box-shadow: 0 4px 12px rgba(103, 80, 164, 0.2);
+  }
+  
+  .nav-button:active {
+    transform: translate(-50%, -50%) scale(0.95);
+  }
+  /* Mobile responsive navigation buttons */
+  @media (max-width: 640px) {
+    .nav-button {
+      position: relative !important;
+      left: auto !important;
+      right: auto !important;
+      top: auto !important;
+      transform: none !important;
+      margin: 0 8px;
+    }
+    
+    .nav-container-mobile {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      width: 100%;
+    }
+    
+    .habit-card-mobile {
+      flex: 1;
+      max-width: none;
+    }
   }
 
   /* Disable hover effects */
