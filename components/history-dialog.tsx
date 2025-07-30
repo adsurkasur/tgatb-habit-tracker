@@ -162,7 +162,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent 
-        className="w-screen h-screen max-w-none max-h-none p-0 m-0 border-0 rounded-none sm:w-[900px] sm:h-[700px] sm:max-w-[900px] sm:max-h-[700px] sm:p-6 sm:border sm:rounded-lg"
+        className="w-screen h-screen max-w-none max-h-none p-0 m-0 border-0 rounded-none sm:w-[900px] sm:h-[700px] sm:max-w-[900px] sm:max-h-[700px] sm:p-6 sm:border sm:rounded-lg flex flex-col items-stretch justify-start"
         data-mobile-fullscreen
       >
         <DialogHeader className="p-3 sm:p-0 border-b sm:border-b-0">
