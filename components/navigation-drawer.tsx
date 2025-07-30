@@ -50,7 +50,7 @@ const HabitItem = React.memo<{
     
   return (
     <div 
-      className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item"
+      className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item state-layer-hover"
       style={{
         // Only animate on opening, not closing to reduce lag
         animationName: isOpen ? 'fadeInSlideUp' : 'none',
@@ -74,7 +74,7 @@ const HabitItem = React.memo<{
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 hover:bg-primary/10"
+                className="h-6 w-6 p-0 hover:text-blue-600"
                 onClick={(e) => {
                   e.stopPropagation();
                   onEdit(habit);
@@ -87,7 +87,7 @@ const HabitItem = React.memo<{
               <Button
                 variant="ghost"
                 size="sm"
-                className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                className="h-6 w-6 p-0 hover:text-destructive"
                 onClick={(e) => {
                   e.stopPropagation();
                   onDelete(habit.id);
