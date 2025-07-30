@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useState } from "react";
 import { HabitType } from "@shared/schema";
+import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
 interface AddHabitDialogProps {
   open: boolean;
@@ -14,6 +15,14 @@ interface AddHabitDialogProps {
 export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialogProps) {
   const [name, setName] = useState("");
   const [type, setType] = useState<HabitType>("good");
+
+  // Handle mobile back navigation
+  useMobileBackNavigation({
+    onBackPressed: () => {
+      onOpenChange(false);
+    },
+    isActive: open
+  });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();

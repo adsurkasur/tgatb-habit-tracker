@@ -19,6 +19,7 @@ import { useState } from "react";
 import { Habit } from "@shared/schema";
 import { DonationDialog } from "./donation-dialog";
 import { HistoryDialog } from "./history-dialog";
+import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
 interface NavigationDrawerProps {
   goodHabits: Habit[];
@@ -44,6 +45,14 @@ export function NavigationDrawer({
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
   
   const allHabits = [...goodHabits, ...badHabits];
+
+  // Handle mobile back navigation for the navigation drawer
+  useMobileBackNavigation({
+    onBackPressed: () => {
+      setOpen(false);
+    },
+    isActive: open
+  });
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>

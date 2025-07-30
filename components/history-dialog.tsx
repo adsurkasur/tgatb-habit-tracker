@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -20,6 +20,7 @@ import {
 import { Habit, HabitType } from '@/shared/schema';
 import { getHabitStats, getAllHabitLogs } from '@/lib/habit-storage';
 import { format, startOfDay, isToday, subDays, eachDayOfInterval } from 'date-fns';
+import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 
 interface HistoryDialogProps {
   open: boolean;
@@ -48,6 +49,14 @@ interface StatCard {
 export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
+
+  // Handle mobile back navigation
+  useMobileBackNavigation({
+    onBackPressed: () => {
+      onOpenChange(false);
+    },
+    isActive: open
+  });
 
   // Calculate comprehensive statistics
   const statistics = useMemo(() => {

@@ -15,6 +15,7 @@ import {
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef } from "react";
+import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
 interface SettingsScreenProps {
   open: boolean;
@@ -34,6 +35,14 @@ export function SettingsScreen({
   onImportData 
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Handle mobile back navigation
+  useMobileBackNavigation({
+    onBackPressed: () => {
+      onClose();
+    },
+    isActive: open
+  });
 
   const handleImportClick = () => {
     fileInputRef.current?.click();

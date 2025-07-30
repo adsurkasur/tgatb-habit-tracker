@@ -1,12 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
 import { AddHabitCTA } from "@/components/add-habit-cta";
 import { SettingsScreen } from "@/components/settings-screen";
 import { useHabits } from "@/hooks/use-habits";
+import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { HabitType } from "@shared/schema";
 
 export default function Home() {
@@ -14,6 +15,8 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showDonate, setShowDonate] = useState(false);
+  
+  const { registerModal } = useMobileModalManager();
   
   const {
     currentHabit,
@@ -28,6 +31,23 @@ export default function Home() {
     exportData,
     importData,
   } = useHabits();
+
+  // Register modals with the mobile modal manager
+  useEffect(() => {
+    registerModal('addHabit', {
+      isOpen: showAddHabit,
+      onClose: () => setShowAddHabit(false),
+      priority: 2
+    });
+  }, [showAddHabit, registerModal]);
+
+  useEffect(() => {
+    registerModal('settings', {
+      isOpen: showSettings,
+      onClose: () => setShowSettings(false),
+      priority: 1
+    });
+  }, [showSettings, registerModal]);
 
   const handleTrackHabit = (completed: boolean) => {
     if (currentHabit) {

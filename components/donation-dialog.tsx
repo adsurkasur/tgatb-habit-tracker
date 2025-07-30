@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, Heart, DollarSign, Coffee } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 
 interface DonationDialogProps {
   open: boolean;
@@ -124,6 +125,14 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
+
+  // Handle mobile back navigation
+  useMobileBackNavigation({
+    onBackPressed: () => {
+      onOpenChange(false);
+    },
+    isActive: open
+  });
 
   const handleCopy = async (address: string) => {
     try {
