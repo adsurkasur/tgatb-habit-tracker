@@ -205,18 +205,31 @@
     }
   }
   
-  /* Hover effects - separate from animations */
+  /* Hover effects - floating hover effect */
   .habit-card-animated {
-    /* Only transition properties that won't conflict with animations */
-    transition: box-shadow 0.2s ease;
+    /* Minimal shadow when not hovered */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    /* Transition for smooth hover effects */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
     will-change: transform;
   }
   
   .habit-card-animated:hover {
-    /* Use box-shadow only for hover, avoid transform conflicts */
-    box-shadow: 0 6px 25px rgba(103, 80, 164, 0.12);
-    /* Remove animation to prevent re-triggering */
-    animation-duration: 0s;
+    /* Floating hover effect - same pattern as nav buttons */
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Dark mode hover effects */
+  .dark .habit-card-animated {
+    /* Minimal glow when not hovered in dark mode */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  .dark .habit-card-animated:hover {
+    /* Strong purple glow on hover in dark mode - same pattern as nav buttons */
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   
   .drawer-overlay {
@@ -226,16 +239,26 @@
   /* CTA Component Styles */
   .cta-card {
     background: var(--cta-bg);
-    box-shadow: 0 4px 20px rgba(103, 80, 164, 0.2), 
-                0 0 40px rgba(103, 80, 164, 0.1);
-    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+    /* Minimal shadow when not hovered - same as habit cards */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
   }
   
   .cta-card:hover {
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.3), 
-                0 0 60px rgba(103, 80, 164, 0.15);
-    transform: translateY(-2px);
+    /* Floating hover effect with lift - same as habit cards */
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+  }
+  
+  /* Dark mode CTA card effects */
+  .dark .cta-card {
+    /* Minimal glow when not hovered in dark mode */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  .dark .cta-card:hover {
+    /* Strong purple glow on hover in dark mode */
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   
   /* Enhanced CTA Card Animations */
@@ -446,16 +469,31 @@
   /* Navigation button animations */
   .nav-button {
     backdrop-filter: blur(10px);
-    transition: all 0.2s cubic-bezier(0.2, 0, 0, 1);
+    /* Minimal shadow when not hovered - same as habit cards */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, backdrop-filter 0.2s ease;
   }
   
   .nav-button:hover {
     backdrop-filter: blur(15px);
-    box-shadow: 0 4px 12px rgba(103, 80, 164, 0.2);
+    /* Floating hover effect - same as habit cards */
+    transform: translate(-50%, -50%) translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
   .nav-button:active {
     transform: translate(-50%, -50%) scale(0.95);
+  }
+  
+  /* Dark mode navigation button effects */
+  .dark .nav-button {
+    /* Minimal glow when not hovered in dark mode */
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+  }
+  
+  .dark .nav-button:hover {
+    /* Strong purple glow on hover in dark mode */
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   /* Mobile responsive navigation buttons */
   @media (max-width: 640px) {
