@@ -229,6 +229,7 @@ export class HabitStorage {
   static getHabitStats(habitId: string): {
     totalDays: number;
     completedDays: number;
+    totalCompletions: number;
     completionRate: number;
     currentStreak: number;
     longestStreak: number;
@@ -257,6 +258,7 @@ export class HabitStorage {
     return {
       totalDays: logs.length,
       completedDays: completedLogs.length,
+      totalCompletions: completedLogs.length,
       completionRate: logs.length > 0 ? (completedLogs.length / logs.length) * 100 : 0,
       currentStreak,
       longestStreak,
@@ -281,4 +283,13 @@ export class HabitStorage {
     
     return false;
   }
+
+  static getAllHabitLogs(habitId: string): HabitLog[] {
+    const logs = this.getLogs();
+    return logs.filter(log => log.habitId === habitId);
+  }
 }
+
+// Export utility functions for easy access
+export const getHabitStats = HabitStorage.getHabitStats.bind(HabitStorage);
+export const getAllHabitLogs = HabitStorage.getAllHabitLogs.bind(HabitStorage);

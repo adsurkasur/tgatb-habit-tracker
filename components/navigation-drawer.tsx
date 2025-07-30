@@ -9,7 +9,7 @@ import {
   CheckCircle, 
   XCircle, 
   ChevronDown, 
-  AlignJustify, 
+  History, 
   Settings, 
   Heart,
   Plus,
@@ -17,23 +17,33 @@ import {
 } from "lucide-react";
 import { useState } from "react";
 import { Habit } from "@shared/schema";
+import { DonationDialog } from "./donation-dialog";
+import { HistoryDialog } from "./history-dialog";
 
 interface NavigationDrawerProps {
   goodHabits: Habit[];
   badHabits: Habit[];
   onSettingsClick: () => void;
   onAddHabitClick: () => void;
+  onHistoryClick?: () => void;
+  onDonateClick?: () => void;
 }
 
 export function NavigationDrawer({ 
   goodHabits, 
   badHabits, 
   onSettingsClick, 
-  onAddHabitClick 
+  onAddHabitClick,
+  onHistoryClick,
+  onDonateClick
 }: NavigationDrawerProps) {
   const [open, setOpen] = useState(false);
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
   const [badHabitsOpen, setBadHabitsOpen] = useState(false);
+  const [isDonationDialogOpen, setIsDonationDialogOpen] = useState(false);
+  const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
+  
+  const allHabits = [...goodHabits, ...badHabits];
 
   return (
     <Sheet open={open} onOpenChange={setOpen}>
@@ -132,9 +142,13 @@ export function NavigationDrawer({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
+                onClick={() => {
+                  setIsHistoryDialogOpen(true);
+                  setOpen(false);
+                }}
               >
-                <AlignJustify className="w-5 h-5 mr-3" />
-                <span>AlignJustify</span>
+                <History className="w-5 h-5 mr-3" />
+                <span>History</span>
               </Button>
               
               <Button
@@ -152,9 +166,13 @@ export function NavigationDrawer({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
+                onClick={() => {
+                  setIsDonationDialogOpen(true);
+                  setOpen(false);
+                }}
               >
                 <Heart className="w-5 h-5 mr-3" />
-                <span>Donate</span>
+                <span>Support Me</span>
               </Button>
             </div>
           </div>
@@ -174,6 +192,19 @@ export function NavigationDrawer({
           </div>
         </div>
       </SheetContent>
+      
+      {/* Donation Dialog */}
+      <DonationDialog 
+        open={isDonationDialogOpen} 
+        onOpenChange={setIsDonationDialogOpen} 
+      />
+      
+      {/* History Dialog */}
+      <HistoryDialog 
+        open={isHistoryDialogOpen} 
+        onOpenChange={setIsHistoryDialogOpen}
+        habits={allHabits}
+      />
     </Sheet>
   );
 }

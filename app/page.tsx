@@ -4,6 +4,7 @@ import { useState } from "react";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
+import { AddHabitCTA } from "@/components/add-habit-cta";
 import { SettingsScreen } from "@/components/settings-screen";
 import { useHabits } from "@/hooks/use-habits";
 import { HabitType } from "@shared/schema";
@@ -11,6 +12,8 @@ import { HabitType } from "@shared/schema";
 export default function Home() {
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [showSettings, setShowSettings] = useState(false);
+  const [showHistory, setShowHistory] = useState(false);
+  const [showDonate, setShowDonate] = useState(false);
   
   const {
     currentHabit,
@@ -56,6 +59,8 @@ export default function Home() {
           badHabits={badHabits}
           onSettingsClick={() => setShowSettings(true)}
           onAddHabitClick={() => setShowAddHabit(true)}
+          onHistoryClick={() => setShowHistory(true)}
+          onDonateClick={() => setShowDonate(true)}
         />
         <h1 className="text-xl font-semibold">The Good and The Bad</h1>
         <div className="w-10" /> {/* Spacer for balance */}
@@ -63,14 +68,29 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1 p-6 flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <HabitCard 
-          habit={currentHabit} 
-          onTrack={handleTrackHabit}
-          onUndo={handleUndoHabit}
-          isCompletedToday={currentHabitStatus?.isCompletedToday}
-          completedAt={currentHabitStatus?.todayLog?.timestamp}
-        />
+        {currentHabit ? (
+          <HabitCard 
+            habit={currentHabit} 
+            onTrack={handleTrackHabit}
+            onUndo={handleUndoHabit}
+            isCompletedToday={currentHabitStatus?.isCompletedToday}
+            completedAt={currentHabitStatus?.todayLog?.timestamp}
+          />
+        ) : (
+          <AddHabitCTA 
+            onAddHabit={() => setShowAddHabit(true)}
+            hasHabits={false}
+          />
+        )}
       </main>
+
+      {/* Floating Action Button for when habits exist */}
+      {currentHabit && (
+        <AddHabitCTA 
+          onAddHabit={() => setShowAddHabit(true)}
+          hasHabits={true}
+        />
+      )}
 
       {/* Dialogs */}
       <AddHabitDialog
