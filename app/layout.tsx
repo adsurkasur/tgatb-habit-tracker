@@ -7,7 +7,10 @@ export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
   description: "The Good and The Bad: A minimalist habit tracking application",
   icons: {
-    icon: "/favicon.ico",
+    icon: [
+      { url: "/favicon.svg", type: "image/svg+xml" },
+      { url: "/favicon.ico", sizes: "any" }
+    ],
   },
 };
 

@@ -1,4 +1,4 @@
-import { Sheet, SheetContent, SheetTrigger, SheetTitle } from "@/components/ui/sheet";
+import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -55,6 +55,7 @@ export function NavigationDrawer({
       <SheetContent side="left" className="w-80 p-0 bg-muted">
         <VisuallyHidden.Root>
           <SheetTitle>Navigation Menu</SheetTitle>
+          <SheetDescription>Access your habit tracking dashboard and settings</SheetDescription>
         </VisuallyHidden.Root>
         <div className="h-full flex flex-col">
           {/* Header */}
