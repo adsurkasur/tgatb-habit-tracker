@@ -102,7 +102,8 @@ export class HabitStorage {
     const habitIndex = habits.findIndex(h => h.id === habitId);
     if (habitIndex === -1) return;
     
-    const streak = this.calculateStreak(habitId);
+    const habit = habits[habitIndex];
+    const streak = this.calculateStreak(habitId, habit.type);
     
     habits[habitIndex].streak = streak;
     if (streak > 0) {
@@ -112,24 +113,24 @@ export class HabitStorage {
     this.saveHabits(habits);
   }
 
-  private static calculateStreak(habitId: string): number {
-    const logs = this.getLogs()
-      .filter(log => log.habitId === habitId && log.completed)
+  private static calculateStreak(habitId: string, habitType: HabitType): number {
+    const allLogs = this.getLogs()
+      .filter(log => log.habitId === habitId)
       .sort((a, b) => b.date.localeCompare(a.date));
     
-    if (logs.length === 0) return 0;
+    if (allLogs.length === 0) return 0;
     
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
     
     // Find starting point for streak calculation
-    const hasLogToday = logs.some(log => log.date === todayStr);
+    const hasLogToday = allLogs.some(log => log.date === todayStr);
     const startDaysBack = hasLogToday ? 0 : 1;
     
-    return this.countConsecutiveDays(logs, today, startDaysBack);
+    return this.countConsecutiveDays(allLogs, today, startDaysBack, habitType);
   }
 
-  private static countConsecutiveDays(logs: HabitLog[], fromDate: Date, startDaysBack: number): number {
+  private static countConsecutiveDays(logs: HabitLog[], fromDate: Date, startDaysBack: number, habitType: HabitType): number {
     let streak = 0;
     
     for (let i = startDaysBack; i <= 365; i++) {
@@ -137,11 +138,18 @@ export class HabitStorage {
       checkDate.setDate(checkDate.getDate() - i);
       const checkDateStr = checkDate.toISOString().split('T')[0];
       
-      const hasLogForDay = logs.some(log => log.date === checkDateStr);
-      if (hasLogForDay) {
-        streak++;
+      const logForDay = logs.find(log => log.date === checkDateStr);
+      if (logForDay) {
+        // For bad habits, streak continues when completed = false (didn't do bad thing)
+        // For good habits, streak continues when completed = true (did good thing)
+        const isSuccessfulDay = habitType === "bad" ? !logForDay.completed : logForDay.completed;
+        if (isSuccessfulDay) {
+          streak++;
+        } else {
+          break; // Streak broken
+        }
       } else {
-        break;
+        break; // No log for this day, streak broken
       }
     }
     
@@ -206,14 +214,20 @@ export class HabitStorage {
   static isHabitCompletedToday(habitId: string): boolean {
     const logs = this.getLogs();
     const today = new Date().toISOString().split('T')[0];
+    const habit = this.getHabits().find(h => h.id === habitId);
+    
+    if (!habit) return false;
     
     const todayLog = logs.find(log => 
       log.habitId === habitId && 
-      log.date === today && 
-      log.completed
+      log.date === today
     );
     
-    return !!todayLog;
+    if (!todayLog) return false;
+    
+    // For bad habits, "completed" means NOT doing it (log.completed = false)
+    // For good habits, "completed" means doing it (log.completed = true)
+    return habit.type === "bad" ? !todayLog.completed : todayLog.completed;
   }
 
   static getTodayLog(habitId: string): HabitLog | undefined {
@@ -235,19 +249,36 @@ export class HabitStorage {
     longestStreak: number;
   } {
     const logs = this.getLogs().filter(log => log.habitId === habitId);
-    const completedLogs = logs.filter(log => log.completed);
-    
     const habit = this.getHabits().find(h => h.id === habitId);
-    const currentStreak = habit?.streak || 0;
     
-    // Calculate longest streak
+    if (!habit) {
+      return {
+        totalDays: 0,
+        completedDays: 0,
+        totalCompletions: 0,
+        completionRate: 0,
+        currentStreak: 0,
+        longestStreak: 0,
+      };
+    }
+    
+    // For bad habits, "success" means NOT doing the habit (completed = false)
+    // For good habits, "success" means doing the habit (completed = true)
+    const successfulLogs = logs.filter(log => 
+      habit.type === "bad" ? !log.completed : log.completed
+    );
+    
+    const currentStreak = habit.streak || 0;
+    
+    // Calculate longest streak with correct logic for habit type
     let longestStreak = 0;
     let tempStreak = 0;
     
     const sortedLogs = logs.sort((a, b) => a.date.localeCompare(b.date));
     
     for (let i = 0; i < sortedLogs.length; i++) {
-      if (sortedLogs[i].completed) {
+      const isSuccessful = habit.type === "bad" ? !sortedLogs[i].completed : sortedLogs[i].completed;
+      if (isSuccessful) {
         tempStreak++;
         longestStreak = Math.max(longestStreak, tempStreak);
       } else {
@@ -257,9 +288,9 @@ export class HabitStorage {
     
     return {
       totalDays: logs.length,
-      completedDays: completedLogs.length,
-      totalCompletions: completedLogs.length,
-      completionRate: logs.length > 0 ? (completedLogs.length / logs.length) * 100 : 0,
+      completedDays: successfulLogs.length,
+      totalCompletions: successfulLogs.length,
+      completionRate: logs.length > 0 ? (successfulLogs.length / logs.length) * 100 : 0,
       currentStreak,
       longestStreak,
     };

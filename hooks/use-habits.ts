@@ -79,11 +79,14 @@ export function useHabits() {
   const trackHabit = (habitId: string, completed: boolean) => {
     // Check if habit is already completed today
     const isAlreadyCompleted = HabitStorage.isHabitCompletedToday(habitId);
+    const habit = habits.find(h => h.id === habitId);
     
-    if (isAlreadyCompleted && completed) {
+    if (!habit) return;
+    
+    if (isAlreadyCompleted) {
       toast({
         title: "Already completed!",
-        description: "You've already marked this habit as completed today.",
+        description: "You've already tracked this habit today.",
         duration: 2000,
       });
       return;
@@ -95,13 +98,13 @@ export function useHabits() {
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
     
-    const habit = updatedHabits.find(h => h.id === habitId);
-    if (habit) {
+    const updatedHabit = updatedHabits.find(h => h.id === habitId);
+    if (updatedHabit) {
       const message = Motivator.getMessage(
         settings.motivatorPersonality,
         completed,
-        habit.type,
-        habit.streak
+        updatedHabit.type,
+        updatedHabit.streak
       );
       
       toast({
