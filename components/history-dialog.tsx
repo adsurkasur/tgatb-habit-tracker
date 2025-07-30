@@ -161,182 +161,240 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-hidden">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2">
+      <DialogContent 
+        className="w-screen h-screen max-w-none max-h-none p-0 m-0 border-0 rounded-none sm:w-[900px] sm:h-[700px] sm:max-w-[900px] sm:max-h-[700px] sm:p-6 sm:border sm:rounded-lg"
+        data-mobile-fullscreen
+      >
+        <DialogHeader className="p-3 sm:p-0 border-b sm:border-b-0">
+          <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <BarChart3 className="w-5 h-5" />
-            Habit History & Analytics
+            <span className="hidden sm:inline">Habit History & Analytics</span>
+            <span className="sm:hidden">History</span>
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0">
-          <TabsList className="grid w-full grid-cols-3">
-            <TabsTrigger value="overview" className="flex items-center gap-2">
-              <TrendingUp className="w-4 h-4" />
-              Overview
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col p-3 sm:p-0">
+          <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 flex-shrink-0">
+            <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+              <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
+              <span className="hidden sm:inline">Overview</span>
+              <span className="sm:hidden">Stats</span>
             </TabsTrigger>
-            <TabsTrigger value="calendar" className="flex items-center gap-2">
-              <CalendarIcon className="w-4 h-4" />
+            <TabsTrigger value="calendar" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+              <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4" />
               Calendar
             </TabsTrigger>
-            <TabsTrigger value="timeline" className="flex items-center gap-2">
-              <Clock className="w-4 h-4" />
+            <TabsTrigger value="timeline" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
+              <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
               Timeline
             </TabsTrigger>
           </TabsList>
 
           {/* Overview Tab */}
-          <TabsContent value="overview" className="mt-6">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-              {statCards.map((stat, index) => (
-                <Card key={index} className="p-4">
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <p className="text-sm text-muted-foreground">{stat.title}</p>
-                      <p className="text-2xl font-bold">{stat.value}</p>
-                      <p className="text-xs text-muted-foreground">{stat.description}</p>
-                    </div>
-                    <div className={`p-3 rounded-full bg-muted ${stat.color}`}>
-                      {stat.icon}
-                    </div>
-                  </div>
-                </Card>
-              ))}
-            </div>
-
-            {/* Habit Breakdown */}
-            <Card className="p-4">
-              <h3 className="font-semibold mb-4">Habit Breakdown</h3>
-              <ScrollArea className="h-48">
-                <div className="space-y-3">
-                  {habits.map(habit => {
-                    const stats = getHabitStats(habit.id);
-                    return (
-                      <div key={habit.id} className="flex items-center justify-between p-3 bg-muted rounded-lg">
-                        <div className="flex items-center gap-3">
-                          {habit.type === 'good' ? (
-                            <CheckCircle className="w-5 h-5 text-green-500" />
-                          ) : (
-                            <XCircle className="w-5 h-5 text-red-500" />
-                          )}
-                          <div>
-                            <p className="font-medium">{habit.name}</p>
-                            <p className="text-sm text-muted-foreground">
-                              {stats.totalCompletions} completions
-                            </p>
-                          </div>
+          <TabsContent value="overview" className="flex-1 overflow-hidden mt-0">
+            <div className="h-full overflow-y-auto pr-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-3 sm:mb-6">
+                <div className="space-y-3 sm:space-y-4">
+                  {statCards.slice(0, 2).map((stat, index) => (
+                    <Card key={index} className="p-3 sm:p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{stat.title}</p>
+                          <p className="text-lg sm:text-2xl font-bold">{stat.value}</p>
+                          <p className="text-xs text-muted-foreground">{stat.description}</p>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <Badge variant="outline" className="flex items-center gap-1">
-                            <Flame className="w-3 h-3" />
-                            {stats.currentStreak}
-                          </Badge>
+                        <div className={`p-2 sm:p-3 rounded-full bg-muted ${stat.color}`}>
+                          {stat.icon}
                         </div>
                       </div>
-                    );
-                  })}
+                    </Card>
+                  ))}
+                  
+                  {/* Mobile-only Habit Breakdown */}
+                  <Card className="p-3 sm:hidden">
+                    <h3 className="text-sm font-semibold mb-3">Top Habits</h3>
+                    <ScrollArea className="h-40">
+                      <div className="space-y-2">
+                        {habits.slice(0, 3).map(habit => {
+                          const stats = getHabitStats(habit.id);
+                          return (
+                            <div key={habit.id} className="flex items-center justify-between p-2 bg-muted rounded-lg">
+                              <div className="flex items-center gap-2 min-w-0 flex-1">
+                                {habit.type === 'good' ? (
+                                  <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                                ) : (
+                                  <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                                )}
+                                <div className="min-w-0 flex-1">
+                                  <p className="text-xs font-medium truncate">{habit.name}</p>
+                                </div>
+                              </div>
+                              <Badge variant="outline" className="text-xs flex-shrink-0">
+                                {stats.currentStreak}
+                              </Badge>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </ScrollArea>
+                  </Card>
                 </div>
-              </ScrollArea>
-            </Card>
+                
+                <div className="space-y-3 sm:space-y-4">
+                  {statCards.slice(2).map((stat, index) => (
+                    <Card key={index + 2} className="p-3 sm:p-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="text-xs sm:text-sm text-muted-foreground">{stat.title}</p>
+                          <p className="text-lg sm:text-2xl font-bold">{stat.value}</p>
+                          <p className="text-xs text-muted-foreground">{stat.description}</p>
+                        </div>
+                        <div className={`p-2 sm:p-3 rounded-full bg-muted ${stat.color}`}>
+                          {stat.icon}
+                        </div>
+                      </div>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+
+              {/* Desktop-only Habit Breakdown */}
+              <Card className="p-3 sm:p-4 hidden sm:block">
+                <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Habit Breakdown</h3>
+                <ScrollArea className="h-40 sm:h-48">
+                  <div className="space-y-2 sm:space-y-3">
+                    {habits.map(habit => {
+                      const stats = getHabitStats(habit.id);
+                      return (
+                        <div key={habit.id} className="flex items-center justify-between p-2 sm:p-3 bg-muted rounded-lg">
+                          <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                            {habit.type === 'good' ? (
+                              <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+                            ) : (
+                              <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
+                            )}
+                            <div className="min-w-0 flex-1">
+                              <p className="text-xs sm:text-sm font-medium truncate">{habit.name}</p>
+                              <p className="text-xs sm:text-sm text-muted-foreground">
+                                {stats.totalCompletions} completions
+                              </p>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2 flex-shrink-0">
+                            <Badge variant="outline" className="flex items-center gap-1 text-xs">
+                              <Flame className="w-3 h-3" />
+                              {stats.currentStreak}
+                            </Badge>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </ScrollArea>
+              </Card>
+            </div>
           </TabsContent>
 
           {/* Calendar Tab */}
-          <TabsContent value="calendar" className="mt-6">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-              <div>
-                <Calendar
-                  mode="single"
-                  selected={selectedDate}
-                  onSelect={setSelectedDate}
-                  className="rounded-lg border"
-                  modifiers={{
-                    completed: (date) => {
-                      const dateStr = format(date, 'yyyy-MM-dd');
-                      return dailyLogs.some(log => 
-                        format(log.date, 'yyyy-MM-dd') === dateStr && 
-                        log.habits.some(h => h.completed)
-                      );
-                    }
-                  }}
-                  modifiersStyles={{
-                    completed: { backgroundColor: 'hsl(var(--primary))', color: 'white' }
-                  }}
-                />
-              </div>
-              
-              <div>
-                <h3 className="font-semibold mb-4">
-                  {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
-                  {selectedDate && isToday(selectedDate) && (
-                    <Badge variant="secondary" className="ml-2">Today</Badge>
-                  )}
-                </h3>
+          <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
+            <div className="h-full overflow-y-auto pr-4">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-3 sm:mb-6 items-start">
+                <div>
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={setSelectedDate}
+                    className="rounded-lg border w-full max-w-sm"
+                    modifiers={{
+                      completed: (date) => {
+                        const dateStr = format(date, 'yyyy-MM-dd');
+                        return dailyLogs.some(log => 
+                          format(log.date, 'yyyy-MM-dd') === dateStr && 
+                          log.habits.some(h => h.completed)
+                        );
+                      }
+                    }}
+                    modifiersStyles={{
+                      completed: { backgroundColor: 'hsl(var(--primary))', color: 'white' }
+                    }}
+                  />
+                </div>
                 
-                {selectedDayLog ? (
-                  <ScrollArea className="h-64">
-                    <div className="space-y-2">
-                      {selectedDayLog.habits.map(habit => (
-                        <div 
-                          key={habit.id} 
-                          className={`flex items-center justify-between p-3 rounded-lg ${
-                            habit.completed ? 'bg-green-50 dark:bg-green-900/20' : 'bg-muted'
-                          }`}
-                        >
-                          <div className="flex items-center gap-3">
-                            {habit.type === 'good' ? (
-                              <CheckCircle className={`w-4 h-4 ${habit.completed ? 'text-green-500' : 'text-muted-foreground'}`} />
-                            ) : (
-                              <XCircle className={`w-4 h-4 ${habit.completed ? 'text-red-500' : 'text-muted-foreground'}`} />
+                <div>
+                  <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
+                    {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
+                    {selectedDate && isToday(selectedDate) && (
+                      <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>
+                    )}
+                  </h3>
+                  
+                  {selectedDayLog ? (
+                    <ScrollArea className="h-48 sm:h-64">
+                      <div className="space-y-2">
+                        {selectedDayLog.habits.map(habit => (
+                          <div 
+                            key={habit.id} 
+                            className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${
+                              habit.completed ? 'bg-green-50 dark:bg-green-900/20' : 'bg-muted'
+                            }`}
+                          >
+                            <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                              {habit.type === 'good' ? (
+                                <CheckCircle className={`w-4 h-4 ${habit.completed ? 'text-green-500' : 'text-muted-foreground'} flex-shrink-0`} />
+                              ) : (
+                                <XCircle className={`w-4 h-4 ${habit.completed ? 'text-red-500' : 'text-muted-foreground'} flex-shrink-0`} />
+                              )}
+                              <span className={`text-xs sm:text-sm truncate ${habit.completed ? 'font-medium' : 'text-muted-foreground'}`}>
+                                {habit.name}
+                              </span>
+                            </div>
+                            {habit.completed && (
+                              <Badge variant="outline" className="text-green-600 border-green-600 text-xs flex-shrink-0">
+                                ✓
+                              </Badge>
                             )}
-                            <span className={habit.completed ? 'font-medium' : 'text-muted-foreground'}>
-                              {habit.name}
-                            </span>
                           </div>
-                          {habit.completed && (
-                            <Badge variant="outline" className="text-green-600 border-green-600">
-                              ✓
-                            </Badge>
-                          )}
-                        </div>
-                      ))}
+                        ))}
+                      </div>
+                    </ScrollArea>
+                  ) : (
+                    <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm">
+                      No data available for this date
                     </div>
-                  </ScrollArea>
-                ) : (
-                  <div className="text-center text-muted-foreground py-8">
-                    No data available for this date
-                  </div>
-                )}
+                  )}
+                </div>
               </div>
             </div>
           </TabsContent>
 
           {/* Timeline Tab */}
-          <TabsContent value="timeline" className="mt-6">
-            <ScrollArea className="h-96">
-              <div className="space-y-4">
+          <TabsContent value="timeline" className="flex-1 overflow-hidden mt-0">
+            <div className="h-full overflow-y-auto pr-4">
+              <div className="space-y-3 sm:space-y-4">
                 {dailyLogs.map((log, index) => {
                   const completedCount = log.habits.filter(h => h.completed).length;
                   const completionRate = log.habits.length > 0 ? (completedCount / log.habits.length) * 100 : 0;
                   
                   return (
-                    <Card key={index} className="p-4">
-                      <div className="flex items-center justify-between mb-3">
-                        <div>
-                          <h4 className="font-medium">
-                            {format(log.date, 'EEEE, MMMM d')}
+                    <Card key={index} className="p-3 sm:p-4">
+                      <div className="flex items-start justify-between mb-2 sm:mb-3">
+                        <div className="min-w-0 flex-1">
+                          <h4 className="text-sm sm:text-base font-medium">
+                            <span className="hidden sm:inline">{format(log.date, 'EEEE, MMMM d')}</span>
+                            <span className="sm:hidden">{format(log.date, 'MMM d')}</span>
                             {isToday(log.date) && (
-                              <Badge variant="secondary" className="ml-2">Today</Badge>
+                              <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>
                             )}
                           </h4>
-                          <p className="text-sm text-muted-foreground">
+                          <p className="text-xs sm:text-sm text-muted-foreground">
                             {completedCount}/{log.habits.length} habits completed ({Math.round(completionRate)}%)
                           </p>
                         </div>
-                        <div className="flex gap-1">
+                        <div className="flex gap-1 flex-wrap max-w-[100px] sm:max-w-none">
                           {log.habits.map(habit => (
                             <div
                               key={habit.id}
-                              className={`w-3 h-3 rounded-full ${
+                              className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
                                 habit.completed 
                                   ? habit.type === 'good' ? 'bg-green-500' : 'bg-red-500'
                                   : 'bg-muted-foreground/20'
@@ -350,7 +408,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                   );
                 })}
               </div>
-            </ScrollArea>
+            </div>
           </TabsContent>
         </Tabs>
       </DialogContent>
