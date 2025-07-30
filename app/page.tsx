@@ -53,7 +53,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-background text-foreground">
       {/* Top App Bar */}
-      <header className="bg-background border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
+      <header className="bg-header border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
         <NavigationDrawer
           goodHabits={goodHabits}
           badHabits={badHabits}

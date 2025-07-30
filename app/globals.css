@@ -32,6 +32,7 @@
   --error: hsl(4, 90%, 58%);
   
   /* Legacy mappings for existing components - Softened */
+  --header: hsl(256, 33%, 95%);
   --background: hsl(320, 50%, 98%);
   --foreground: hsl(258, 8%, 15%);
   --muted: hsl(271, 20%, 95%);
@@ -52,12 +53,12 @@
   --radius: 12px;
   
   /* Design System Custom Properties */
-  --cta-bg: hsl(var(--card));
+  --cta-bg: var(--header);
   --cta-border: hsl(var(--primary) / 0.3);
   --cta-hover-border: hsl(var(--primary) / 0.5);
   --cta-icon-bg: hsl(var(--primary) / 0.1);
-  --cta-button-bg: hsl(var(--primary));
-  --cta-button-hover: hsl(var(--primary) / 0.9);
+  --cta-button-bg: hsl(256, 33%, 52%);
+  --cta-button-hover: hsl(256, 33%, 45%);
 }
 
 .dark {
@@ -69,9 +70,14 @@
   --primary-container: hsl(256, 54%, 27%);
   
   /* Dark mode CTA colors */
-  --cta-bg: hsl(122, 39%, 8%); /* Dark green background */
-  --cta-border: hsl(122, 39%, 25%); /* Green border */
-  --cta-hover-border: hsl(122, 39%, 35%); /* Lighter green on hover */
+  --cta-bg: hsl(258, 8%, 13%); 
+  --cta-border: hsl(249, 7%, 25%);
+  --cta-hover-border: hsl(249, 7%, 35%);
+  --cta-button-bg: hsl(256, 33%, 52%);
+  --cta-button-hover: hsl(256, 33%, 45%);
+  
+  /* Dark mode header */
+  --header: hsl(258, 8%, 13%);
   
   /* Legacy mappings for dark theme */
   --background: hsl(258, 8%, 11%);
@@ -114,7 +120,8 @@
   }
   
   .surface-elevation-2 {
-    box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 2px 6px 2px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 0 30px rgba(103, 80, 164, 0.25),
+                0 0 60px rgba(103, 80, 164, 0.1);
   }
   
   .surface-elevation-3 {
@@ -122,7 +129,12 @@
   }
   
   .state-layer-hover:hover {
-    background-color: rgba(103, 80, 164, 0.08);
+    background-color: rgba(103, 80, 164, 0.08) !important;
+  }
+
+  /* Dark mode hover effect - light purple */
+  .dark .state-layer-hover:hover {
+    background-color: rgba(171, 149, 255, 0.15) !important;
   }
   
   .state-layer-pressed:active {
@@ -148,13 +160,16 @@
   /* CTA Component Styles */
   .cta-card {
     background: var(--cta-bg);
-    border: 2px solid var(--cta-border);
-    transition: border-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
+    box-shadow: 0 4px 20px rgba(103, 80, 164, 0.2), 
+                0 0 40px rgba(103, 80, 164, 0.1);
+    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1), 
                 transform 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover {
-    border-color: var(--cta-hover-border);
+    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.3), 
+                0 0 60px rgba(103, 80, 164, 0.15);
+    transform: translateY(-2px);
   }
   
   .cta-button {
@@ -191,8 +206,20 @@
     color: white !important;
   }
   
+  /* Dark mode header glow */
+  .dark .surface-elevation-2 {
+    box-shadow: 0 0 40px rgba(103, 80, 164, 0.3),
+                0 0 80px rgba(103, 80, 164, 0.15);
+  }
+  
   /* Theme transition enhancement */
   .theme-transition {
     transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+
+  /* Disable hover effects */
+  .no-hover:hover {
+    background-color: transparent !important;
+    opacity: 1 !important;
   }
 }

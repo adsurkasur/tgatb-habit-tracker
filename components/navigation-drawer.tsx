@@ -72,7 +72,7 @@ export function NavigationDrawer({
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="w-full p-4 justify-between h-auto state-layer-hover"
+                    className="w-full p-4 justify-between h-auto no-hover"
                   >
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
@@ -107,7 +107,7 @@ export function NavigationDrawer({
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="w-full p-4 justify-between h-auto state-layer-hover"
+                    className="w-full p-4 justify-between h-auto no-hover"
                   >
                     <div className="flex items-center space-x-3">
                       <XCircle className="w-5 h-5 text-red-500" />

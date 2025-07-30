@@ -55,7 +55,7 @@ export function SettingsScreen({
       }`}
     >
       {/* Header */}
-      <header className="bg-background border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2">
+      <header className="bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2">
         <Button 
           variant="ghost" 
           size="icon" 
@@ -74,7 +74,7 @@ export function SettingsScreen({
           
           <div className="space-y-2">
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={() => onUpdateSettings({ darkMode: !settings.darkMode })}
             >
               <div className="flex items-center space-x-3">
@@ -92,7 +92,7 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <Globe className="w-5 h-5 text-muted-foreground" />
@@ -114,7 +114,7 @@ export function SettingsScreen({
           
           <div className="space-y-2">
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-muted-foreground" />
@@ -124,7 +124,7 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <CloudUpload className="w-5 h-5 text-muted-foreground" />
@@ -134,7 +134,7 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={onExportData}
             >
               <div className="flex items-center space-x-3">
@@ -145,7 +145,7 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={handleImportClick}
             >
               <div className="flex items-center space-x-3">
