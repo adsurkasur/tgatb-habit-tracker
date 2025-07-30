@@ -19,6 +19,8 @@ export default function Home() {
     settings,
     addHabit,
     trackHabit,
+    undoHabitTracking,
+    getHabitCompletionStatus,
     updateSettings,
     exportData,
     importData,
@@ -30,9 +32,20 @@ export default function Home() {
     }
   };
 
+  const handleUndoHabit = () => {
+    if (currentHabit) {
+      undoHabitTracking(currentHabit.id);
+    }
+  };
+
   const handleAddHabit = (name: string, type: HabitType) => {
     addHabit(name, type);
   };
+
+  // Get current habit completion status
+  const currentHabitStatus = currentHabit 
+    ? getHabitCompletionStatus(currentHabit.id) 
+    : null;
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -50,7 +63,13 @@ export default function Home() {
 
       {/* Main Content */}
       <main className="flex-1 p-6 flex items-center justify-center min-h-[calc(100vh-80px)]">
-        <HabitCard habit={currentHabit} onTrack={handleTrackHabit} />
+        <HabitCard 
+          habit={currentHabit} 
+          onTrack={handleTrackHabit}
+          onUndo={handleUndoHabit}
+          isCompletedToday={currentHabitStatus?.isCompletedToday}
+          completedAt={currentHabitStatus?.todayLog?.timestamp}
+        />
       </main>
 
       {/* Dialogs */}

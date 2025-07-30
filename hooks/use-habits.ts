@@ -38,6 +38,18 @@ export function useHabits() {
   };
 
   const trackHabit = (habitId: string, completed: boolean) => {
+    // Check if habit is already completed today
+    const isAlreadyCompleted = HabitStorage.isHabitCompletedToday(habitId);
+    
+    if (isAlreadyCompleted && completed) {
+      toast({
+        title: "Already completed!",
+        description: "You've already marked this habit as completed today.",
+        duration: 2000,
+      });
+      return;
+    }
+    
     HabitStorage.addLog(habitId, completed);
     
     // Refresh habits to get updated streaks
@@ -61,6 +73,36 @@ export function useHabits() {
     
     // Move to next habit
     moveToNextHabit();
+  };
+
+  const undoHabitTracking = (habitId: string) => {
+    const success = HabitStorage.undoTodayLog(habitId);
+    
+    if (success) {
+      const updatedHabits = HabitStorage.getHabits();
+      setHabits(updatedHabits);
+      
+      toast({
+        title: "Undone!",
+        description: "Today's tracking has been removed.",
+        duration: 2000,
+      });
+    } else {
+      toast({
+        title: "Nothing to undo",
+        description: "No tracking recorded for today.",
+        variant: "destructive",
+        duration: 2000,
+      });
+    }
+  };
+
+  const getHabitCompletionStatus = (habitId: string) => {
+    return {
+      isCompletedToday: HabitStorage.isHabitCompletedToday(habitId),
+      todayLog: HabitStorage.getTodayLog(habitId),
+      stats: HabitStorage.getHabitStats(habitId),
+    };
   };
 
   const moveToNextHabit = () => {
@@ -142,6 +184,8 @@ export function useHabits() {
     addHabit,
     deleteHabit,
     trackHabit,
+    undoHabitTracking,
+    getHabitCompletionStatus,
     moveToNextHabit,
     updateSettings,
     exportData,

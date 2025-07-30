@@ -99,24 +99,10 @@ export class HabitStorage {
 
   private static updateStreak(habitId: string): void {
     const habits = this.getHabits();
-    const logs = this.getLogs().filter(log => log.habitId === habitId).sort((a, b) => b.date.localeCompare(a.date));
-    
     const habitIndex = habits.findIndex(h => h.id === habitId);
     if (habitIndex === -1) return;
     
-    let streak = 0;
-    const today = new Date();
-    
-    for (let i = 0; i < logs.length; i++) {
-      const logDate = new Date(logs[i].date + 'T00:00:00');
-      const daysDiff = Math.floor((today.getTime() - logDate.getTime()) / (1000 * 60 * 60 * 24));
-      
-      if (daysDiff === i && logs[i].completed) {
-        streak++;
-      } else {
-        break;
-      }
-    }
+    const streak = this.calculateStreak(habitId);
     
     habits[habitIndex].streak = streak;
     if (streak > 0) {
@@ -124,6 +110,42 @@ export class HabitStorage {
     }
     
     this.saveHabits(habits);
+  }
+
+  private static calculateStreak(habitId: string): number {
+    const logs = this.getLogs()
+      .filter(log => log.habitId === habitId && log.completed)
+      .sort((a, b) => b.date.localeCompare(a.date));
+    
+    if (logs.length === 0) return 0;
+    
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    // Find starting point for streak calculation
+    const hasLogToday = logs.some(log => log.date === todayStr);
+    const startDaysBack = hasLogToday ? 0 : 1;
+    
+    return this.countConsecutiveDays(logs, today, startDaysBack);
+  }
+
+  private static countConsecutiveDays(logs: HabitLog[], fromDate: Date, startDaysBack: number): number {
+    let streak = 0;
+    
+    for (let i = startDaysBack; i <= 365; i++) {
+      const checkDate = new Date(fromDate);
+      checkDate.setDate(checkDate.getDate() - i);
+      const checkDateStr = checkDate.toISOString().split('T')[0];
+      
+      const hasLogForDay = logs.some(log => log.date === checkDateStr);
+      if (hasLogForDay) {
+        streak++;
+      } else {
+        break;
+      }
+    }
+    
+    return streak;
   }
 
   static getSettings(): UserSettings {
@@ -178,5 +200,85 @@ export class HabitStorage {
     } catch (error) {
       throw new Error("Invalid JSON data format");
     }
+  }
+
+  // New utility methods for enhanced functionality
+  static isHabitCompletedToday(habitId: string): boolean {
+    const logs = this.getLogs();
+    const today = new Date().toISOString().split('T')[0];
+    
+    const todayLog = logs.find(log => 
+      log.habitId === habitId && 
+      log.date === today && 
+      log.completed
+    );
+    
+    return !!todayLog;
+  }
+
+  static getTodayLog(habitId: string): HabitLog | undefined {
+    const logs = this.getLogs();
+    const today = new Date().toISOString().split('T')[0];
+    
+    return logs.find(log => 
+      log.habitId === habitId && 
+      log.date === today
+    );
+  }
+
+  static getHabitStats(habitId: string): {
+    totalDays: number;
+    completedDays: number;
+    completionRate: number;
+    currentStreak: number;
+    longestStreak: number;
+  } {
+    const logs = this.getLogs().filter(log => log.habitId === habitId);
+    const completedLogs = logs.filter(log => log.completed);
+    
+    const habit = this.getHabits().find(h => h.id === habitId);
+    const currentStreak = habit?.streak || 0;
+    
+    // Calculate longest streak
+    let longestStreak = 0;
+    let tempStreak = 0;
+    
+    const sortedLogs = logs.sort((a, b) => a.date.localeCompare(b.date));
+    
+    for (let i = 0; i < sortedLogs.length; i++) {
+      if (sortedLogs[i].completed) {
+        tempStreak++;
+        longestStreak = Math.max(longestStreak, tempStreak);
+      } else {
+        tempStreak = 0;
+      }
+    }
+    
+    return {
+      totalDays: logs.length,
+      completedDays: completedLogs.length,
+      completionRate: logs.length > 0 ? (completedLogs.length / logs.length) * 100 : 0,
+      currentStreak,
+      longestStreak,
+    };
+  }
+
+  static undoTodayLog(habitId: string): boolean {
+    const logs = this.getLogs();
+    const today = new Date().toISOString().split('T')[0];
+    
+    const todayLogIndex = logs.findIndex(log => 
+      log.habitId === habitId && 
+      log.date === today
+    );
+    
+    if (todayLogIndex !== -1) {
+      logs.splice(todayLogIndex, 1);
+      this.saveLogs(logs);
+      this.updateStreak(habitId);
+      return true;
+    }
+    
+    return false;
   }
 }
