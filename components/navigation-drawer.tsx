@@ -14,7 +14,9 @@ import {
   Settings, 
   Heart,
   Plus,
-  Flame
+  Flame,
+  Edit,
+  Trash2
 } from "lucide-react";
 import React, { useState, useCallback } from "react";
 import { Habit } from "@shared/schema";
@@ -29,6 +31,8 @@ interface NavigationDrawerProps {
   onAddHabitClick: () => void;
   onHistoryClick?: () => void;
   onDonateClick?: () => void;
+  onEditHabit?: (habit: Habit) => void;
+  onDeleteHabit?: (habitId: string) => void;
 }
 
 // Memoized habit item component to prevent unnecessary re-renders
@@ -37,7 +41,9 @@ const HabitItem = React.memo<{
   index: number;
   isOpen: boolean;
   type: 'good' | 'bad';
-}>(({ habit, index, isOpen, type }) => {
+  onEdit?: (habit: Habit) => void;
+  onDelete?: (habitId: string) => void;
+}>(({ habit, index, isOpen, type, onEdit, onDelete }) => {
   const colorClasses = type === 'good' 
     ? "bg-green-500/10 text-green-600 border-green-500/20"
     : "bg-red-500/10 text-red-600 border-red-500/20";
@@ -52,11 +58,45 @@ const HabitItem = React.memo<{
         animation: isOpen ? 'fadeInSlideUp 0.25s ease-out' : 'none'
       }}
     >
-      <span className="text-foreground text-sm">{habit.name}</span>
-      <Badge variant="secondary" className={colorClasses}>
-        <Flame className="w-3 h-3 mr-1" />
-        {habit.streak} days
-      </Badge>
+      <div className="flex items-center justify-between flex-1">
+        <span className="text-foreground text-sm">{habit.name}</span>
+        <div className="flex items-center space-x-2">
+          <Badge variant="secondary" className={colorClasses}>
+            <Flame className="w-3 h-3 mr-1" />
+            {habit.streak} days
+          </Badge>
+          
+          {/* Action buttons */}
+          <div className="flex items-center space-x-1">
+            {onEdit && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 hover:bg-primary/10"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onEdit(habit);
+                }}
+              >
+                <Edit className="w-3 h-3" />
+              </Button>
+            )}
+            {onDelete && (
+              <Button
+                variant="ghost"
+                size="sm"
+                className="h-6 w-6 p-0 hover:bg-destructive/10 hover:text-destructive"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  onDelete(habit.id);
+                }}
+              >
+                <Trash2 className="w-3 h-3" />
+              </Button>
+            )}
+          </div>
+        </div>
+      </div>
     </div>
   );
 });
@@ -69,7 +109,9 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   onSettingsClick, 
   onAddHabitClick,
   onHistoryClick,
-  onDonateClick
+  onDonateClick,
+  onEditHabit,
+  onDeleteHabit
 }) => {
   const [open, setOpen] = useState(false);
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
@@ -127,7 +169,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
             <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
           </div>
           
-          {/* Content */}
+          {/* Content - Scrollable Habits Area */}
           <div className="flex-1 p-4 space-y-2 overflow-y-auto">
             {/* Good Habits Accordion */}
             <Collapsible open={goodHabitsOpen} onOpenChange={setGoodHabitsOpen}>
@@ -167,6 +209,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           index={index}
                           isOpen={goodHabitsOpen}
                           type="good"
+                          onEdit={onEditHabit}
+                          onDelete={onDeleteHabit}
                         />
                       ))}
                     </div>
@@ -213,6 +257,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           index={index}
                           isOpen={badHabitsOpen}
                           type="bad"
+                          onEdit={onEditHabit}
+                          onDelete={onDeleteHabit}
                         />
                       ))}
                     </div>
@@ -220,14 +266,11 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 </CollapsibleContent>
               </div>
             </Collapsible>
+          </div>
 
-            {/* Bottom divider after habits */}
-            <div className="my-6">
-              <Separator />
-            </div>
-
-            {/* Navigation Items */}
-            <div className="space-y-1">
+          {/* Bottom Navigation - Fixed at bottom */}
+          <div className="border-t border-border bg-card">
+            <div className="p-4 space-y-1">
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
@@ -255,17 +298,6 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <span>Support Me</span>
               </Button>
             </div>
-          </div>
-
-          {/* Floating Action Button */}
-          <div className="absolute bottom-6 right-6">
-            <Button
-              onClick={handleAddHabitClick}
-              className="w-14 h-14 fab material-radius-lg"
-              size="icon"
-            >
-              <Plus className="w-6 h-6" />
-            </Button>
           </div>
         </div>
       </SheetContent>

@@ -4,19 +4,25 @@ import { useState, useEffect } from "react";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
+import { EditHabitDialog } from "@/components/edit-habit-dialog";
 import { AddHabitCTA } from "@/components/add-habit-cta";
 import { SettingsScreen } from "@/components/settings-screen";
 import { useHabits } from "@/hooks/use-habits";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
-import { HabitType } from "@shared/schema";
+import { useToast } from "@/hooks/use-toast";
+import { ToastAction } from "@/components/ui/toast";
+import { HabitType, Habit } from "@shared/schema";
 
 export default function Home() {
   const [showAddHabit, setShowAddHabit] = useState(false);
+  const [showEditHabit, setShowEditHabit] = useState(false);
+  const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   const [showSettings, setShowSettings] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showDonate, setShowDonate] = useState(false);
   
   const { registerModal } = useMobileModalManager();
+  const { toast } = useToast();
   
   const {
     currentHabit,
@@ -26,6 +32,9 @@ export default function Home() {
     badHabits,
     settings,
     addHabit,
+    updateHabit,
+    deleteHabit,
+    restoreHabit,
     trackHabit,
     undoHabitTracking,
     getHabitCompletionStatus,
@@ -45,6 +54,14 @@ export default function Home() {
       priority: 2
     });
   }, [showAddHabit, registerModal]);
+
+  useEffect(() => {
+    registerModal('editHabit', {
+      isOpen: showEditHabit,
+      onClose: () => setShowEditHabit(false),
+      priority: 2
+    });
+  }, [showEditHabit, registerModal]);
 
   useEffect(() => {
     registerModal('settings', {
@@ -68,6 +85,45 @@ export default function Home() {
 
   const handleAddHabit = (name: string, type: HabitType) => {
     addHabit(name, type);
+  };
+
+  const handleEditHabit = (habit: Habit) => {
+    setEditingHabit(habit);
+    setShowEditHabit(true);
+  };
+
+  const handleUpdateHabit = (id: string, name: string, type: HabitType) => {
+    updateHabit(id, name, type);
+    setShowEditHabit(false);
+    setEditingHabit(null);
+  };
+
+  const handleDeleteHabit = (habitId: string) => {
+    // If we're deleting the current habit, navigate away first
+    if (currentHabit && currentHabit.id === habitId) {
+      if ((goodHabits.length + badHabits.length) > 1) {
+        moveToNextHabit();
+      }
+    }
+    
+    const deletedHabit = deleteHabit(habitId);
+    
+    if (deletedHabit) {
+      // Show toast with undo option
+      toast({
+        title: "Habit deleted!",
+        description: "Your habit has been removed.",
+        action: (
+          <ToastAction
+            altText="Undo delete"
+            onClick={() => restoreHabit(deletedHabit)}
+          >
+            Undo
+          </ToastAction>
+        ),
+        duration: 5000, // Longer duration for undo option
+      });
+    }
   };
 
   // Get current habit completion status
@@ -144,6 +200,8 @@ export default function Home() {
           onAddHabitClick={() => setShowAddHabit(true)}
           onHistoryClick={() => setShowHistory(true)}
           onDonateClick={() => setShowDonate(true)}
+          onEditHabit={handleEditHabit}
+          onDeleteHabit={handleDeleteHabit}
         />
         <h1 className="text-xl font-semibold">The Good and The Bad</h1>
         <div className="w-10" /> {/* Spacer for balance */}
@@ -247,6 +305,13 @@ export default function Home() {
         open={showAddHabit}
         onOpenChange={setShowAddHabit}
         onAddHabit={handleAddHabit}
+      />
+
+      <EditHabitDialog
+        open={showEditHabit}
+        onOpenChange={setShowEditHabit}
+        onEditHabit={handleUpdateHabit}
+        habit={editingHabit}
       />
 
       <SettingsScreen

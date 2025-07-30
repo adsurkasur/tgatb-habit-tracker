@@ -33,9 +33,47 @@ export function useHabits() {
     setHabits(prev => [...prev, newHabit]);
   };
 
+  const updateHabit = (id: string, name: string, type: HabitType) => {
+    HabitStorage.updateHabit(id, { name, type });
+    setHabits(prev => prev.map(h => h.id === id ? { ...h, name, type } : h));
+    
+    toast({
+      title: "Habit updated!",
+      description: "Your habit has been successfully updated.",
+      duration: 2000,
+    });
+  };
+
   const deleteHabit = (id: string) => {
+    const habitToDelete = habits.find(h => h.id === id);
+    if (!habitToDelete) return null;
+    
     HabitStorage.deleteHabit(id);
     setHabits(prev => prev.filter(h => h.id !== id));
+    
+    return habitToDelete;
+  };
+
+  const restoreHabit = (deletedHabit: Habit) => {
+    // Restore the habit
+    const restoredHabit = HabitStorage.addHabit(deletedHabit.name, deletedHabit.type);
+    
+    // Update the restored habit with original data (preserve streak, creation date, etc.)
+    HabitStorage.updateHabit(restoredHabit.id, {
+      streak: deletedHabit.streak,
+      createdAt: deletedHabit.createdAt,
+      lastCompletedDate: deletedHabit.lastCompletedDate,
+    });
+
+    // Update state with fresh data from storage
+    const updatedHabits = HabitStorage.getHabits();
+    setHabits(updatedHabits);
+    
+    toast({
+      title: "Habit restored!",
+      description: "Your habit has been successfully restored.",
+      duration: 2000,
+    });
   };
 
   const trackHabit = (habitId: string, completed: boolean) => {
@@ -211,7 +249,9 @@ export function useHabits() {
     navigationDirection,
     settings,
     addHabit,
+    updateHabit,
     deleteHabit,
+    restoreHabit,
     trackHabit,
     undoHabitTracking,
     getHabitCompletionStatus,
