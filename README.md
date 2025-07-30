@@ -1,6 +1,6 @@
 # The Good and The Bad: Habit Tracker
 
-A minimalist habit tracking application built with modern web technologies, focusing on Material You (Material 3) design principles and providing a simple, mobile-first interface for daily habit tracking.
+A minimalist habit tracking application built with **Next.js 14+ and App Router**, focusing on Material You (Material 3) design principles and providing a simple, mobile-first interface for daily habit tracking.
 
 ## Features
 
@@ -9,25 +9,17 @@ A minimalist habit tracking application built with modern web technologies, focu
 - ⚡ **Real-time updates** with optimistic UI
 - 📊 **Progress tracking** with visual indicators
 - 🔄 **Habit streaks** and consistency metrics
-- 💾 **PostgreSQL database** with Drizzle ORM
-- 🔐 **Session-based authentication**
+- 💾 **LocalStorage-based** data persistence (with database migration planned)
+- � **Next.js App Router** with server components
 
 ## Tech Stack
 
-### Frontend
-- **React** with TypeScript
-- **Wouter** for client-side routing
-- **TanStack Query** for server state management
-- **Radix UI** primitives with **shadcn/ui** components
-- **Tailwind CSS** with Material You design tokens
-- **Vite** for development and bundling
-
-### Backend
-- **Node.js** with Express.js
-- **TypeScript** throughout
-- **PostgreSQL** with Drizzle ORM
-- **Express sessions** with PostgreSQL storage
-- **RESTful API** design
+- **Framework**: Next.js 14+ with App Router
+- **Language**: TypeScript
+- **UI**: Shadcn/ui, Radix UI, Tailwind CSS
+- **State Management**: TanStack Query
+- **Storage**: LocalStorage (planned: PostgreSQL with Drizzle ORM)
+- **Deployment**: Vercel-ready
 
 ## Quick Start
 
@@ -38,74 +30,45 @@ A minimalist habit tracking application built with modern web technologies, focu
    npm install
    ```
 
-2. **Set up environment variables**
-   ```bash
-   cp .env.example .env
-   # Edit .env with your database connection and secrets
-   ```
-
-3. **Set up database**
-   ```bash
-   npm run db:push
-   ```
-
-4. **Start development server**
+2. **Run development server**
    ```bash
    npm run dev
    ```
 
-5. **Open in browser**
+3. **Open in browser**
    ```
-   http://localhost:5000
+   http://localhost:3000
    ```
-
-## Environment Variables
-
-Create a `.env` file with the following variables:
-
-```env
-DATABASE_URL=postgresql://username:password@localhost:5432/habit_tracker
-PORT=5000
-NODE_ENV=development
-SESSION_SECRET=your-session-secret-here
-```
 
 ## Available Scripts
 
-- `npm run dev` - Start development server with hot reload
+- `npm run dev` - Start Next.js development server
 - `npm run build` - Build for production
 - `npm run start` - Start production server
+- `npm run lint` - Run ESLint for code quality
 - `npm run check` - Run TypeScript type checking
-- `npm run db:push` - Push database schema changes
 
-## Database Setup
+## Storage
 
-### Local PostgreSQL
-1. Install PostgreSQL
-2. Create database: `createdb habit_tracker`
-3. Update `DATABASE_URL` in `.env`
+Currently uses **LocalStorage** for data persistence. All habits and tracking data are stored locally in your browser.
 
-### Cloud Database (Recommended)
-- **Neon**: Free PostgreSQL with serverless scaling
-- **Supabase**: PostgreSQL with additional features
-- **Railway**: Simple PostgreSQL deployment
-- **PlanetScale**: MySQL-compatible option
+**Planned Features:**
+- Database migration to PostgreSQL with Drizzle ORM
+- User authentication and multi-device sync
+- Cloud backup and restore
 
 ## Deployment
 
-This application supports multiple deployment options:
-
-### Vercel (Recommended for Serverless)
-
-The application is optimized for Vercel deployment with serverless functions:
+This application is optimized for **Vercel deployment**:
 
 1. **Connect Repository**: Import your GitHub repository to Vercel
-2. **Set Environment Variables**: Add `DATABASE_URL`, `SESSION_SECRET`, `NODE_ENV`
-3. **Deploy**: Vercel automatically builds and deploys
+2. **Deploy**: Vercel automatically builds and deploys with zero configuration
+3. **Access**: Your app will be available at `your-app.vercel.app`
 
-See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions.
-
-### Traditional Server Deployment
+The Next.js App Router architecture makes deployment seamless with automatic:
+- Static generation for optimal performance
+- API routes as serverless functions
+- Edge runtime support
 
 Deploy to any platform that supports Node.js:
 

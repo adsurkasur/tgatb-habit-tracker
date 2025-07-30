@@ -81,7 +81,3 @@ Thumbs.db
 # Temporary folders
 tmp/
 temp/
-
-# Legacy files from Vite setup (can be removed after migration cleanup)
-vite.config.ts.*
-server/public
