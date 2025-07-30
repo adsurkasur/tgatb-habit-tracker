@@ -53,9 +53,11 @@ const HabitItem = React.memo<{
       className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item"
       style={{
         // Only animate on opening, not closing to reduce lag
+        animationName: isOpen ? 'fadeInSlideUp' : 'none',
+        animationDuration: isOpen ? '0.25s' : '0s',
+        animationTimingFunction: isOpen ? 'ease-out' : 'linear',
         animationDelay: isOpen ? `${index * 30}ms` : '0ms',
-        animationFillMode: 'both',
-        animation: isOpen ? 'fadeInSlideUp 0.25s ease-out' : 'none'
+        animationFillMode: 'both'
       }}
     >
       <div className="flex items-center justify-between flex-1">
