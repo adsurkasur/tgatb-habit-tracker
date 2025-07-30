@@ -526,6 +526,77 @@
     opacity: 1 !important;
   }
 
+  /* Enhanced collapsible animations - Ultra performance optimized with hardware acceleration */
+  .collapsible-item {
+    transition: transform 0.1s ease-out, background-color 0.1s ease-out;
+    will-change: auto;
+    /* Force GPU layer for better performance */
+    transform: translateZ(0);
+    backface-visibility: hidden;
+  }
+
+  .collapsible-item:hover {
+    /* Use transform instead of layout-shifting properties */
+    transform: translate3d(1px, 0, 0);
+    background-color: rgba(var(--muted), 0.8);
+  }
+
+  /* Smooth accordion item entrance animation - hardware accelerated */
+  @keyframes fadeInSlideUp {
+    from {
+      opacity: 0;
+      transform: translate3d(0, 6px, 0);
+    }
+    to {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+  }
+
+  /* Optimized closing animation to prevent lag */
+  .collapsible-closing {
+    animation: fadeOutSlideDown 0.15s ease-in forwards;
+  }
+
+  @keyframes fadeOutSlideDown {
+    from {
+      opacity: 1;
+      transform: translate3d(0, 0, 0);
+    }
+    to {
+      opacity: 0;
+      transform: translate3d(0, -4px, 0);
+    }
+  }
+
+  /* Sidebar accordion trigger enhanced animations - Ultra performance optimized */
+  .accordion-trigger {
+    transition: background-color 0.1s ease-out;
+    will-change: auto;
+    /* Prevent unnecessary layer creation unless needed */
+    contain: layout style;
+  }
+
+  .accordion-trigger:hover {
+    background-color: rgba(var(--muted), 0.5) !important;
+  }
+
+  /* Badge count animations - Simplified */
+  .badge-count {
+    transition: transform 0.1s ease-out;
+    will-change: auto;
+  }
+
+  .badge-count.updated {
+    animation: pulse-badge 0.2s ease-out;
+  }
+
+  @keyframes pulse-badge {
+    50% {
+      transform: scale3d(1.05, 1.05, 1);
+    }
+  }
+
   /* Mobile full-screen dialog override */
   @media (max-width: 640px) {
     /* Target the dialog overlay */

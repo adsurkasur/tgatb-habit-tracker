@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
+import { cn } from "@/lib/utils";
 import { 
   Menu, 
   CheckCircle, 
@@ -15,7 +16,7 @@ import {
   Plus,
   Flame
 } from "lucide-react";
-import { useState } from "react";
+import React, { useState, useCallback } from "react";
 import { Habit } from "@shared/schema";
 import { DonationDialog } from "./donation-dialog";
 import { HistoryDialog } from "./history-dialog";
@@ -30,14 +31,46 @@ interface NavigationDrawerProps {
   onDonateClick?: () => void;
 }
 
-export function NavigationDrawer({ 
+// Memoized habit item component to prevent unnecessary re-renders
+const HabitItem = React.memo<{
+  habit: Habit;
+  index: number;
+  isOpen: boolean;
+  type: 'good' | 'bad';
+}>(({ habit, index, isOpen, type }) => {
+  const colorClasses = type === 'good' 
+    ? "bg-green-500/10 text-green-600 border-green-500/20"
+    : "bg-red-500/10 text-red-600 border-red-500/20";
+    
+  return (
+    <div 
+      className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item"
+      style={{
+        // Only animate on opening, not closing to reduce lag
+        animationDelay: isOpen ? `${index * 30}ms` : '0ms',
+        animationFillMode: 'both',
+        animation: isOpen ? 'fadeInSlideUp 0.25s ease-out' : 'none'
+      }}
+    >
+      <span className="text-foreground text-sm">{habit.name}</span>
+      <Badge variant="secondary" className={colorClasses}>
+        <Flame className="w-3 h-3 mr-1" />
+        {habit.streak} days
+      </Badge>
+    </div>
+  );
+});
+
+HabitItem.displayName = "HabitItem";
+
+const NavigationDrawer = React.memo<NavigationDrawerProps>(({ 
   goodHabits, 
   badHabits, 
   onSettingsClick, 
   onAddHabitClick,
   onHistoryClick,
   onDonateClick
-}: NavigationDrawerProps) {
+}) => {
   const [open, setOpen] = useState(false);
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
   const [badHabitsOpen, setBadHabitsOpen] = useState(false);
@@ -45,6 +78,27 @@ export function NavigationDrawer({
   const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
   
   const allHabits = [...goodHabits, ...badHabits];
+
+  // Memoize callbacks to prevent child re-renders
+  const handleSettingsClick = useCallback(() => {
+    onSettingsClick();
+    setOpen(false);
+  }, [onSettingsClick]);
+
+  const handleAddHabitClick = useCallback(() => {
+    onAddHabitClick();
+    setOpen(false);
+  }, [onAddHabitClick]);
+
+  const handleHistoryClick = useCallback(() => {
+    setIsHistoryDialogOpen(true);
+    setOpen(false);
+  }, []);
+
+  const handleDonateClick = useCallback(() => {
+    setIsDonationDialogOpen(true);
+    setOpen(false);
+  }, []);
 
   // Handle mobile back navigation for the navigation drawer
   useMobileBackNavigation({
@@ -81,13 +135,22 @@ export function NavigationDrawer({
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="w-full p-4 justify-between h-auto no-hover"
+                    className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
                   >
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Good Habits</span>
+                      <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20 ml-2 badge-count">
+                        {goodHabits.length}
+                      </Badge>
                     </div>
-                    <ChevronDown className={`w-5 h-5 transition-transform ${goodHabitsOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={cn(
+                      "w-5 h-5",
+                      // Faster closing, slower opening for better UX
+                      goodHabitsOpen 
+                        ? "transition-transform duration-250 ease-[cubic-bezier(0.04,0.62,0.23,0.98)] rotate-180"
+                        : "transition-transform duration-150 ease-[cubic-bezier(0.3,0,0.8,0.15)]"
+                    )} />
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="px-4 pb-4 space-y-2">
@@ -96,15 +159,17 @@ export function NavigationDrawer({
                       <span className="text-muted-foreground text-sm">No good habits yet</span>
                     </div>
                   ) : (
-                    goodHabits.map((habit) => (
-                      <div key={habit.id} className="flex items-center justify-between p-3 bg-muted material-radius">
-                        <span className="text-foreground text-sm">{habit.name}</span>
-                        <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20">
-                          <Flame className="w-3 h-3 mr-1" />
-                          {habit.streak} days
-                        </Badge>
-                      </div>
-                    ))
+                    <div className="space-y-2">
+                      {goodHabits.map((habit, index) => (
+                        <HabitItem
+                          key={habit.id}
+                          habit={habit}
+                          index={index}
+                          isOpen={goodHabitsOpen}
+                          type="good"
+                        />
+                      ))}
+                    </div>
                   )}
                 </CollapsibleContent>
               </div>
@@ -116,13 +181,22 @@ export function NavigationDrawer({
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="w-full p-4 justify-between h-auto no-hover"
+                    className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
                   >
                     <div className="flex items-center space-x-3">
                       <XCircle className="w-5 h-5 text-red-500" />
                       <span className="font-medium">Bad Habits</span>
+                      <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/20 ml-2 badge-count">
+                        {badHabits.length}
+                      </Badge>
                     </div>
-                    <ChevronDown className={`w-5 h-5 transition-transform ${badHabitsOpen ? 'rotate-180' : ''}`} />
+                    <ChevronDown className={cn(
+                      "w-5 h-5",
+                      // Faster closing, slower opening for better UX
+                      badHabitsOpen 
+                        ? "transition-transform duration-250 ease-[cubic-bezier(0.04,0.62,0.23,0.98)] rotate-180"
+                        : "transition-transform duration-150 ease-[cubic-bezier(0.3,0,0.8,0.15)]"
+                    )} />
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="px-4 pb-4 space-y-2">
@@ -131,15 +205,17 @@ export function NavigationDrawer({
                       <span className="text-muted-foreground text-sm">No bad habits tracked</span>
                     </div>
                   ) : (
-                    badHabits.map((habit) => (
-                      <div key={habit.id} className="flex items-center justify-between p-3 bg-muted material-radius">
-                        <span className="text-foreground text-sm">{habit.name}</span>
-                        <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/20">
-                          <Flame className="w-3 h-3 mr-1" />
-                          {habit.streak} days
-                        </Badge>
-                      </div>
-                    ))
+                    <div className="space-y-2">
+                      {badHabits.map((habit, index) => (
+                        <HabitItem
+                          key={habit.id}
+                          habit={habit}
+                          index={index}
+                          isOpen={badHabitsOpen}
+                          type="bad"
+                        />
+                      ))}
+                    </div>
                   )}
                 </CollapsibleContent>
               </div>
@@ -155,10 +231,7 @@ export function NavigationDrawer({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
-                onClick={() => {
-                  setIsHistoryDialogOpen(true);
-                  setOpen(false);
-                }}
+                onClick={handleHistoryClick}
               >
                 <History className="w-5 h-5 mr-3" />
                 <span>History</span>
@@ -167,10 +240,7 @@ export function NavigationDrawer({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
-                onClick={() => {
-                  onSettingsClick();
-                  setOpen(false);
-                }}
+                onClick={handleSettingsClick}
               >
                 <Settings className="w-5 h-5 mr-3" />
                 <span>Settings</span>
@@ -179,10 +249,7 @@ export function NavigationDrawer({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
-                onClick={() => {
-                  setIsDonationDialogOpen(true);
-                  setOpen(false);
-                }}
+                onClick={handleDonateClick}
               >
                 <Heart className="w-5 h-5 mr-3" />
                 <span>Support Me</span>
@@ -193,10 +260,7 @@ export function NavigationDrawer({
           {/* Floating Action Button */}
           <div className="absolute bottom-6 right-6">
             <Button
-              onClick={() => {
-                onAddHabitClick();
-                setOpen(false);
-              }}
+              onClick={handleAddHabitClick}
               className="w-14 h-14 fab material-radius-lg"
               size="icon"
             >
@@ -220,4 +284,8 @@ export function NavigationDrawer({
       />
     </Sheet>
   );
-}
+});
+
+NavigationDrawer.displayName = "NavigationDrawer";
+
+export { NavigationDrawer };
