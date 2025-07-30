@@ -3,7 +3,7 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } f
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, ExternalLink, Heart, DollarSign, Coffee } from 'lucide-react';
+import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 
@@ -239,13 +239,13 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                     </p>
                   </div>
                   <div className="flex-shrink-0">
-                    {copiedAddress === crypto.address ? (
-                      <Badge variant="outline" className="text-green-600 border-green-600">
-                        Copied!
-                      </Badge>
-                    ) : (
-                      <Copy className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
-                    )}
+                    <div className="relative w-4 h-4">
+                      {copiedAddress === crypto.address ? (
+                        <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />
+                      ) : (
+                        <Copy className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
+                      )}
+                    </div>
                   </div>
                 </div>
               </Card>
