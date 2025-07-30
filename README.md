@@ -93,23 +93,30 @@ SESSION_SECRET=your-session-secret-here
 
 ## Deployment
 
-This application can be deployed to various platforms:
+This application supports multiple deployment options:
 
-### Vercel (Recommended)
-1. Connect your GitHub repository
-2. Set environment variables
-3. Deploy automatically
+### Vercel (Recommended for Serverless)
 
-### Railway
-1. Connect repository
-2. Add PostgreSQL service
-3. Set environment variables
+The application is optimized for Vercel deployment with serverless functions:
+
+1. **Connect Repository**: Import your GitHub repository to Vercel
+2. **Set Environment Variables**: Add `DATABASE_URL`, `SESSION_SECRET`, `NODE_ENV`
+3. **Deploy**: Vercel automatically builds and deploys
+
+See [VERCEL_DEPLOYMENT.md](./VERCEL_DEPLOYMENT.md) for detailed instructions.
+
+### Traditional Server Deployment
+
+Deploy to any platform that supports Node.js:
+
+- **Railway**: Connect repository, add PostgreSQL service
+- **DigitalOcean App Platform**: Deploy with app spec
+- **Heroku**: Add PostgreSQL addon
+- **AWS**: Use Elastic Beanstalk with RDS
 
 ### Other Platforms
 - **Netlify** with serverless functions
-- **DigitalOcean App Platform**
-- **Heroku** with PostgreSQL addon
-- **AWS** with RDS and Elastic Beanstalk
+- **PlanetScale** for MySQL-compatible deployment
 
 ## Project Structure
 
