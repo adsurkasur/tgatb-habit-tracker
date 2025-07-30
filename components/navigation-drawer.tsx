@@ -184,7 +184,7 @@ export function NavigationDrawer({
                 onAddHabitClick();
                 setOpen(false);
               }}
-              className="w-14 h-14 bg-primary hover:bg-primary/90 text-primary-foreground material-radius-lg surface-elevation-3"
+              className="w-14 h-14 fab material-radius-lg"
               size="icon"
             >
               <Plus className="w-6 h-6" />

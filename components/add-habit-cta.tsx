@@ -15,7 +15,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
         <Button
           onClick={onAddHabit}
           size="icon"
-          className="h-14 w-14 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground shadow-lg hover:shadow-xl transition-all duration-300 hover:scale-110"
+          className="h-14 w-14 rounded-full fab"
         >
           <Plus className="h-6 w-6" />
         </Button>
@@ -25,7 +25,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
 
   // Full CTA when no habits exist
   return (
-    <Card className="w-full max-w-md mx-auto p-8 bg-gradient-to-br from-primary/5 to-accent/5 border-dashed border-2 border-primary/20 hover:border-primary/40 transition-all duration-300">
+    <Card className="w-full max-w-md mx-auto p-8 cta-card">
       <div className="text-center space-y-6">
         {/* Icon */}
         <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
@@ -45,7 +45,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
         {/* CTA Button */}
         <Button
           onClick={onAddHabit}
-          className="w-full h-12 bg-primary hover:bg-primary/90 text-primary-foreground font-medium transition-all duration-300 hover:scale-105"
+          className="w-full h-12 cta-button font-medium"
         >
           <Plus className="w-5 h-5 mr-2" />
           Add Your First Habit

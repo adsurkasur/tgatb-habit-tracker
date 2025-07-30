@@ -50,7 +50,7 @@ export function SettingsScreen({
 
   return (
     <div 
-      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 ${
+      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 theme-transition ${
         open ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
@@ -73,7 +73,10 @@ export function SettingsScreen({
           <h2 className="text-lg font-semibold">Appearance</h2>
           
           <div className="space-y-2">
-            <div className="flex items-center justify-between p-4 bg-muted material-radius">
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
+              onClick={() => onUpdateSettings({ darkMode: !settings.darkMode })}
+            >
               <div className="flex items-center space-x-3">
                 <Moon className="w-5 h-5 text-muted-foreground" />
                 <div>
@@ -84,6 +87,7 @@ export function SettingsScreen({
               <Switch
                 checked={settings.darkMode}
                 onCheckedChange={(checked) => onUpdateSettings({ darkMode: checked })}
+                onClick={(e) => e.stopPropagation()}
               />
             </div>
 
