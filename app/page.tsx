@@ -259,6 +259,7 @@ export default function Home() {
                 isCompletedToday={currentHabitStatus?.isCompletedToday}
                 completedAt={currentHabitStatus?.todayLog?.timestamp}
                 navigationDirection={navigationDirection}
+                todayLog={currentHabitStatus?.todayLog}
               />
 
               {/* Next button - Desktop */}

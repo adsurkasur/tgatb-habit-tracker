@@ -214,20 +214,14 @@ export class HabitStorage {
   static isHabitCompletedToday(habitId: string): boolean {
     const logs = this.getLogs();
     const today = new Date().toISOString().split('T')[0];
-    const habit = this.getHabits().find(h => h.id === habitId);
-    
-    if (!habit) return false;
     
     const todayLog = logs.find(log => 
       log.habitId === habitId && 
       log.date === today
     );
     
-    if (!todayLog) return false;
-    
-    // For bad habits, "completed" means NOT doing it (log.completed = false)
-    // For good habits, "completed" means doing it (log.completed = true)
-    return habit.type === "bad" ? !todayLog.completed : todayLog.completed;
+    // Return true if there's any log for today (positive or negative action)
+    return !!todayLog;
   }
 
   static getTodayLog(habitId: string): HabitLog | undefined {

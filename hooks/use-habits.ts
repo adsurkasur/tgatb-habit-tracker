@@ -112,9 +112,6 @@ export function useHabits() {
         duration: 3000,
       });
     }
-    
-    // Move to next habit
-    moveToNextHabit();
   };
 
   const undoHabitTracking = (habitId: string) => {

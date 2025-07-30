@@ -12,6 +12,7 @@ interface HabitCardProps {
   isCompletedToday?: boolean;
   completedAt?: Date;
   navigationDirection?: 'left' | 'right' | null;
+  todayLog?: any; // Will contain the actual log to determine positive/negative
 }
 
 export function HabitCard({ 
@@ -20,10 +21,16 @@ export function HabitCard({
   onUndo, 
   isCompletedToday = false,
   completedAt,
-  navigationDirection = null
+  navigationDirection = null,
+  todayLog
 }: HabitCardProps) {
   const [previousHabitId, setPreviousHabitId] = useState(habit?.id);
   const [animationClass, setAnimationClass] = useState('');
+
+  // Determine if today's action was positive or negative
+  const isPositiveAction = todayLog ? 
+    (habit.type === "good" ? todayLog.completed : !todayLog.completed) : 
+    false;
 
   // Handle habit changes and animation direction
   useEffect(() => {
@@ -64,16 +71,31 @@ export function HabitCard({
       key={`habit-${habit.id}`}
       className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${
         isCompletedToday 
-          ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800' 
-          : 'bg-card'
+          ? isPositiveAction
+            ? habit.type === "good" 
+              ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+              : 'bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800'
+            : 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800'
+          : habit.type === "bad" 
+            ? 'bg-card border-red-100 dark:border-red-900' 
+            : 'bg-card border-green-200 dark:border-green-700'
       }`}
     >
       {/* Completion Status Badge */}
       {isCompletedToday && (
         <div className="absolute top-4 left-4">
-          <Badge className="bg-green-500 text-white border-green-600">
+          <Badge className={`text-white border-opacity-60 ${
+            isPositiveAction
+              ? habit.type === "good" 
+                ? "bg-green-500 border-green-600" 
+                : "bg-blue-500 border-blue-600"
+              : "bg-red-500 border-red-600"
+          }`}>
             <CheckCircle className="w-3 h-3 mr-1" />
-            Completed
+            {isPositiveAction 
+              ? (habit.type === "good" ? "Completed" : "Avoided")
+              : (habit.type === "good" ? "Not Completed" : "Done")
+            }
           </Badge>
         </div>
       )}
@@ -82,7 +104,11 @@ export function HabitCard({
       <div className="absolute top-4 right-4">
         <Badge 
           variant="secondary" 
-          className="bg-primary/10 text-primary border-primary/20 font-medium"
+          className={`font-medium ${
+            habit.type === "good"
+              ? "bg-green-500/10 text-green-600 border-green-500/20"
+              : "bg-orange-500/10 text-orange-600 border-orange-500/20"
+          }`}
         >
           <Flame className="w-3 h-3 mr-1" />
           {habit.streak} days
@@ -120,45 +146,39 @@ export function HabitCard({
         {/* Question */}
         <div className="text-center">
           <h3 className="text-xl font-semibold text-foreground">
-            {isCompletedToday ? "Already done today!" : "Did you do it?"}
+            {isCompletedToday 
+              ? isPositiveAction
+                ? (habit.type === "bad" ? "You didn't do it!" : "Already done today!")
+                : (habit.type === "good" ? "You didn't do it today!" : "You did it today!")
+              : "Did you do it?"
+            }
           </h3>
         </div>
 
         {/* Action Buttons */}
         <div className="flex space-x-4">
           {isCompletedToday ? (
-            <>
-              {onUndo && (
-                <Button
-                  onClick={onUndo}
-                  variant="outline"
-                  className="flex-1 h-16 border-orange-300 text-orange-600 hover:bg-orange-50 dark:border-orange-600 dark:text-orange-400 dark:hover:bg-orange-950 transition-all hover:scale-105"
-                  size="lg"
-                >
-                  <RotateCcw className="w-6 h-6 mr-2" />
-                  Undo
-                </Button>
-              )}
-              <Button
-                disabled
-                className="flex-1 h-16 bg-green-500 text-white cursor-not-allowed opacity-50"
-                size="lg"
-              >
-                <CheckCircle className="w-8 h-8" />
-              </Button>
-            </>
+            <Button
+              onClick={onUndo}
+              variant="outline"
+              className="w-full h-16 border-orange-300 text-orange-600 hover:bg-orange-50 dark:border-orange-600 dark:text-orange-400 dark:hover:bg-orange-950 material-radius"
+              size="lg"
+            >
+              <RotateCcw className="w-6 h-6 mr-2" />
+              Undo
+            </Button>
           ) : (
             <>
               <Button
                 onClick={() => onTrack(true)}
-                className="flex-1 h-16 bg-green-500 hover:bg-green-600 text-white transition-all hover:scale-105 material-radius"
+                className="flex-1 h-16 bg-green-500 hover:bg-green-600 text-white material-radius"
                 size="lg"
               >
                 <Check className="w-8 h-8" />
               </Button>
               <Button
                 onClick={() => onTrack(false)}
-                className="flex-1 h-16 bg-red-500 hover:bg-red-600 text-white transition-all hover:scale-105 material-radius" 
+                className="flex-1 h-16 bg-red-500 hover:bg-red-600 text-white material-radius" 
                 size="lg"
               >
                 <X className="w-8 h-8" />
