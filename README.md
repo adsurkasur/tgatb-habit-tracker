@@ -1,16 +1,16 @@
 # The Good and The Bad: Habit Tracker
 
-A minimalist habit tracking application built with **Next.js 14+ and App Router**, focusing on Material You (Material 3) design principles and providing a simple, mobile-first interface for daily habit tracking.
+A minimalist habit tracking application built with **Next.js 14+ and App Router**, providing a simple, mobile-first interface for daily habit tracking.
 
 ## Features
 
 - 📱 **Mobile-first design** with responsive layout
-- 🎨 **Material You design system** following Material 3 principles
+- 🎨 **Modern design system** with clean aesthetics
 - ⚡ **Real-time updates** with optimistic UI
 - 📊 **Progress tracking** with visual indicators
 - 🔄 **Habit streaks** and consistency metrics
 - 💾 **LocalStorage-based** data persistence (with database migration planned)
-- � **Next.js App Router** with server components
+- ⚙️ **Next.js App Router** with server components
 
 ## Tech Stack
 
@@ -24,6 +24,7 @@ A minimalist habit tracking application built with **Next.js 14+ and App Router*
 ## Quick Start
 
 1. **Clone and install dependencies**
+
    ```bash
    git clone <repository-url>
    cd tgatb-habit-tracker
@@ -31,12 +32,14 @@ A minimalist habit tracking application built with **Next.js 14+ and App Router*
    ```
 
 2. **Run development server**
+
    ```bash
    npm run dev
    ```
 
 3. **Open in browser**
-   ```
+
+   ```text
    http://localhost:3000
    ```
 
@@ -53,6 +56,7 @@ A minimalist habit tracking application built with **Next.js 14+ and App Router*
 Currently uses **LocalStorage** for data persistence. All habits and tracking data are stored locally in your browser.
 
 **Planned Features:**
+
 - Database migration to PostgreSQL with Drizzle ORM
 - User authentication and multi-device sync
 - Cloud backup and restore
@@ -66,6 +70,7 @@ This application is optimized for **Vercel deployment**:
 3. **Access**: Your app will be available at `your-app.vercel.app`
 
 The Next.js App Router architecture makes deployment seamless with automatic:
+
 - Static generation for optimal performance
 - API routes as serverless functions
 - Edge runtime support
@@ -78,12 +83,13 @@ Deploy to any platform that supports Node.js:
 - **AWS**: Use Elastic Beanstalk with RDS
 
 ### Other Platforms
+
 - **Netlify** with serverless functions
 - **PlanetScale** for MySQL-compatible deployment
 
 ## Project Structure
 
-```
+```text
 ├── client/                 # Frontend React application
 │   ├── src/
 │   │   ├── components/     # UI components
@@ -103,20 +109,23 @@ Deploy to any platform that supports Node.js:
 ## Development
 
 ### Prerequisites
+
 - Node.js 20+
 - PostgreSQL database
 - npm or yarn
 
 ### Development Workflow
+
 1. Make changes to code
 2. TypeScript will auto-compile
 3. Vite will hot-reload frontend
 4. Server restarts automatically with tsx
 
 ### Code Style
+
 - TypeScript strict mode enabled
 - ESLint and Prettier recommended
-- Material Design principles for UI
+- Clean, modern design principles for UI
 - RESTful API conventions
 
 ## Contributing
@@ -135,6 +144,7 @@ MIT License - see LICENSE file for details
 ## Support
 
 For issues and questions:
+
 1. Check existing GitHub issues
 2. Create a new issue with detailed description
 3. Include steps to reproduce any bugs
