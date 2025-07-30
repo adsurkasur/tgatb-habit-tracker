@@ -91,13 +91,12 @@ export function SettingsScreen({
               />
             </div>
 
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 bg-muted material-radius h-auto state-layer-hover"
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <Globe className="w-5 h-5 text-muted-foreground" />
-                <div className="text-left">
+                <div>
                   <span className="font-medium">Language</span>
                   <p className="text-sm text-muted-foreground">
                     {settings.language === "en" ? "English" : "Bahasa Indonesia"}
@@ -105,7 +104,7 @@ export function SettingsScreen({
                 </div>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </Button>
+            </div>
           </div>
         </div>
 
@@ -114,31 +113,28 @@ export function SettingsScreen({
           <h2 className="text-lg font-semibold">Account & Data</h2>
           
           <div className="space-y-2">
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 bg-muted material-radius h-auto state-layer-hover"
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Login / Logout</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </Button>
+            </div>
 
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 bg-muted material-radius h-auto state-layer-hover"
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
             >
               <div className="flex items-center space-x-3">
                 <CloudUpload className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Backup to Cloud</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </Button>
+            </div>
 
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 bg-muted material-radius h-auto state-layer-hover"
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
               onClick={onExportData}
             >
               <div className="flex items-center space-x-3">
@@ -146,11 +142,10 @@ export function SettingsScreen({
                 <span className="font-medium">Export Data</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </Button>
+            </div>
 
-            <Button
-              variant="ghost"
-              className="w-full justify-between p-4 bg-muted material-radius h-auto state-layer-hover"
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer hover:bg-muted/80 transition-colors theme-transition"
               onClick={handleImportClick}
             >
               <div className="flex items-center space-x-3">
@@ -158,7 +153,7 @@ export function SettingsScreen({
                 <span className="font-medium">Import Data</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </Button>
+            </div>
             
             <input
               ref={fileInputRef}
@@ -174,7 +169,7 @@ export function SettingsScreen({
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Character Motivator</h2>
           
-          <div className="p-4 bg-muted material-radius">
+          <div className="p-4 bg-muted material-radius theme-transition">
             <Label className="font-medium block mb-3">Personality Type</Label>
             <RadioGroup
               value={settings.motivatorPersonality}
