@@ -637,4 +637,77 @@
       background-color: transparent !important;
     }
   }
+
+  /* Loading and Theme Transition Enhancements */
+  
+  /* Smooth theme transitions */
+  html {
+    transition: color-scheme 0.3s ease;
+  }
+  
+  /* Prevent flash of unstyled content */
+  body:not(.app-loaded) {
+    opacity: 0;
+  }
+  
+  body.app-loaded {
+    opacity: 1;
+    transition: opacity 0.4s ease-out;
+  }
+  
+  /* Loading screen animations */
+  @keyframes loadingPulse {
+    0%, 100% {
+      transform: scale(1);
+      opacity: 1;
+    }
+    50% {
+      transform: scale(1.05);
+      opacity: 0.8;
+    }
+  }
+  
+  @keyframes loadingSlideUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  /* Enhanced theme transition for all elements */
+  * {
+    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1),
+                border-color 0.3s cubic-bezier(0.2, 0, 0, 1),
+                color 0.3s cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+  }
+  
+  /* Override transition for specific elements that need faster/different transitions */
+  .theme-transition {
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+  }
+  
+  /* Loading screen specific styles */
+  .loading-screen-enter {
+    animation: loadingSlideUp 0.6s ease-out;
+  }
+  
+  .loading-screen-exit {
+    animation: fadeOutUp 0.4s ease-in forwards;
+  }
+  
+  @keyframes fadeOutUp {
+    from {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    to {
+      opacity: 0;
+      transform: translateY(-20px);
+    }
+  }
 }
