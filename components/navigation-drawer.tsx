@@ -68,7 +68,7 @@ export function NavigationDrawer({
         </VisuallyHidden.Root>
         <div className="h-full flex flex-col">
           {/* Header */}
-          <div className="p-6 border-b border-border">
+          <div className="p-6 border-b border-border bg-card">
             <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
             <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
           </div>
@@ -145,7 +145,10 @@ export function NavigationDrawer({
               </div>
             </Collapsible>
 
-            <Separator className="my-6" />
+            {/* Bottom divider after habits */}
+            <div className="my-6">
+              <Separator />
+            </div>
 
             {/* Navigation Items */}
             <div className="space-y-1">
