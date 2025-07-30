@@ -81,3 +81,6 @@ Thumbs.db
 # Temporary folders
 tmp/
 temp/
+
+# References
+.references
