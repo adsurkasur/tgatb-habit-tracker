@@ -1,4 +1,5 @@
 import { Habit, HabitLog, UserSettings, HabitType } from "@shared/schema";
+import { generateId } from "./utils";
 
 const HABITS_KEY = "habits";
 const LOGS_KEY = "habit_logs";
@@ -28,7 +29,7 @@ export class HabitStorage {
   static addHabit(name: string, type: HabitType): Habit {
     const habits = this.getHabits();
     const newHabit: Habit = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       name,
       type,
       streak: 0,
@@ -81,7 +82,7 @@ export class HabitStorage {
     const filteredLogs = logs.filter(log => !(log.habitId === habitId && log.date === today));
     
     const newLog: HabitLog = {
-      id: crypto.randomUUID(),
+      id: generateId(),
       habitId,
       date: today,
       completed,
