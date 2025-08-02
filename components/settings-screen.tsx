@@ -80,12 +80,12 @@ export function SettingsScreen({
 
   return (
     <div 
-      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 theme-transition ${
+      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 theme-transition flex flex-col ${
         open ? 'translate-x-0' : 'translate-x-full'
       }`}
     >
       {/* Header */}
-      <header className="bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2">
+      <header className="bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2 flex-shrink-0">
         <Button 
           variant="ghost" 
           size="icon" 
@@ -97,7 +97,7 @@ export function SettingsScreen({
         <h1 className="text-xl font-semibold">Settings</h1>
       </header>
 
-      <div className="p-6 space-y-6 overflow-y-auto h-full pb-20">
+      <div className="flex-1 overflow-y-auto p-6 space-y-6">
         {/* Appearance Section */}
         <div className="space-y-4">
           <h2 className="text-lg font-semibold">Appearance</h2>
