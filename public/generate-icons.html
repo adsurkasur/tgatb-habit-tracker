@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>PWA Icon Generator</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        #canvas { border: 1px solid #ccc; margin: 20px 0; }
+        .icon-preview { display: inline-block; margin: 10px; text-align: center; }
+        .icon-preview img { border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>PWA Icon Generator for TGATB Habit Tracker</h1>
+    <p>This tool generates the required PWA icons from the existing favicon.svg</p>
+    
+    <canvas id="canvas" width="512" height="512"></canvas>
+    
+    <div>
+        <button onclick="generateIcons()">Generate All Icons</button>
+        <button onclick="downloadAll()">Download All</button>
+    </div>
+    
+    <div id="iconPreviews"></div>
+
+    <script>
+        const canvas = document.getElementById('canvas');
+        const ctx = canvas.getContext('2d');
+        const sizes = [72, 96, 128, 144, 152, 180, 192, 384, 512];
+        const iconData = [];
+
+        // Draw the TGATB logo
+        function drawLogo() {
+            // Clear canvas
+            ctx.fillStyle = '#0f0f23';
+            ctx.fillRect(0, 0, 512, 512);
+            
+            // Draw a simple habit tracker icon
+            ctx.fillStyle = '#ffffff';
+            ctx.font = 'bold 120px Arial';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('TG', 256, 200);
+            
+            ctx.font = 'bold 80px Arial';
+            ctx.fillText('TB', 256, 320);
+            
+            // Add a checkmark
+            ctx.strokeStyle = '#4ade80';
+            ctx.lineWidth = 20;
+            ctx.lineCap = 'round';
+            ctx.lineJoin = 'round';
+            
+            ctx.beginPath();
+            ctx.moveTo(180, 380);
+            ctx.lineTo(220, 420);
+            ctx.lineTo(320, 320);
+            ctx.stroke();
+        }
+
+        function generateIcons() {
+            drawLogo();
+            
+            const previewDiv = document.getElementById('iconPreviews');
+            previewDiv.innerHTML = '';
+            iconData.length = 0;
+
+            sizes.forEach(size => {
+                // Create a new canvas for each size
+                const tempCanvas = document.createElement('canvas');
+                tempCanvas.width = size;
+                tempCanvas.height = size;
+                const tempCtx = tempCanvas.getContext('2d');
+                
+                // Draw the main canvas scaled down
+                tempCtx.drawImage(canvas, 0, 0, size, size);
+                
+                // Convert to blob and store
+                tempCanvas.toBlob(blob => {
+                    iconData.push({
+                        size: size,
+                        blob: blob,
+                        url: URL.createObjectURL(blob)
+                    });
+                    
+                    // Create preview
+                    const preview = document.createElement('div');
+                    preview.className = 'icon-preview';
+                    preview.innerHTML = `
+                        <img src="${URL.createObjectURL(blob)}" width="64" height="64" alt="${size}x${size}">
+                        <br>
+                        <span>${size}x${size}</span>
+                        <br>
+                        <a href="${URL.createObjectURL(blob)}" download="icon-${size}x${size}.png">Download</a>
+                    `;
+                    previewDiv.appendChild(preview);
+                });
+            });
+        }
+
+        function downloadAll() {
+            iconData.forEach(icon => {
+                const link = document.createElement('a');
+                link.href = icon.url;
+                link.download = `icon-${icon.size}x${icon.size}.png`;
+                document.body.appendChild(link);
+                link.click();
+                document.body.removeChild(link);
+            });
+        }
+
+        // Generate icons on load
+        window.onload = generateIcons;
+    </script>
+</body>
+</html>

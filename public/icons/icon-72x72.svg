@@ -1,0 +1,8 @@
+<svg width="72" height="72" xmlns="http://www.w3.org/2000/svg">
+  <rect width="72" height="72" fill="#0f0f23"/>
+  <text x="50%" y="35%" font-family="Arial, sans-serif" font-size="14.4" font-weight="bold" text-anchor="middle" fill="white">TG</text>
+  <text x="50%" y="65%" font-family="Arial, sans-serif" font-size="10.799999999999999" font-weight="bold" text-anchor="middle" fill="white">TB</text>
+  <g stroke="#4ade80" stroke-width="2.88" fill="none" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25.2,54 L30.96,59.76 L45.36,45.36"/>
+  </g>
+</svg>
