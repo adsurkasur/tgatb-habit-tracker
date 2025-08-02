@@ -64,10 +64,17 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
   // Calculate comprehensive statistics
   const statistics = useMemo(() => {
+    const today = startOfDay(new Date());
+    const habitsActiveToday = habits.filter(habit => {
+      const habitCreatedDate = startOfDay(habit.createdAt);
+      return habitCreatedDate <= today;
+    }).length;
+
     const stats = {
       totalHabits: habits.length,
       goodHabits: habits.filter(h => h.type === 'good').length,
       badHabits: habits.filter(h => h.type === 'bad').length,
+      habitsActiveToday,
       totalStreak: 0,
       longestStreak: 0,
       todayCompletion: 0,
@@ -81,22 +88,32 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
       stats.longestStreak = Math.max(stats.longestStreak, habitStats.longestStreak);
       stats.totalActions += habitStats.totalCompletions;
       
-      // Today completion
-      const logs = getAllHabitLogs(habit.id);
-      const today = format(new Date(), 'yyyy-MM-dd');
-      if (logs.some((log: any) => log.date === today)) {
-        stats.todayCompletion++;
+      // Today completion - only count habits that existed today
+      const habitCreatedDate = startOfDay(habit.createdAt);
+      const today = startOfDay(new Date());
+      
+      if (habitCreatedDate <= today) {
+        const logs = getAllHabitLogs(habit.id);
+        const todayStr = new Date().toISOString().split('T')[0]; // Use same format as storage
+        if (logs.some((log: any) => log.date === todayStr && log.completed === true)) {
+          stats.todayCompletion++;
+        }
       }
       
-      // Weekly completion
+      // Weekly completion - only count habits that existed on each day
       const last7Days = eachDayOfInterval({
         start: subDays(new Date(), 6),
         end: new Date()
       });
       
       const weeklyCompletions = last7Days.filter(day => {
-        const dayStr = format(day, 'yyyy-MM-dd');
-        return logs.some((log: any) => log.date === dayStr);
+        const dayStart = startOfDay(day);
+        if (habitCreatedDate <= dayStart) {
+          const dayStr = day.toISOString().split('T')[0]; // Use same format as storage
+          const logs = getAllHabitLogs(habit.id);
+          return logs.some((log: any) => log.date === dayStr && log.completed === true);
+        }
+        return false;
       }).length;
       
       stats.weeklyCompletion += weeklyCompletions;
@@ -116,18 +133,27 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
     last30Days.forEach(date => {
       const dayLog: DayLog = {
         date,
-        habits: habits.map(habit => {
-          const habitLogs = getAllHabitLogs(habit.id);
-          const dateStr = format(date, 'yyyy-MM-dd');
-          const completed = habitLogs.some((log: any) => log.date === dateStr);
-          
-          return {
-            id: habit.id,
-            name: habit.name,
-            type: habit.type,
-            completed
-          };
-        })
+        habits: habits
+          .filter(habit => {
+            // Only include habits that existed on this date
+            const habitCreatedDate = startOfDay(habit.createdAt);
+            const currentDate = startOfDay(date);
+            return habitCreatedDate <= currentDate;
+          })
+          .map(habit => {
+            const habitLogs = getAllHabitLogs(habit.id);
+            // Use the same date format as storage: toISOString split
+            const dateStr = date.toISOString().split('T')[0];
+            // Check if there's a completed log for this date
+            const completed = habitLogs.some((log: any) => log.date === dateStr && log.completed === true);
+            
+            return {
+              id: habit.id,
+              name: habit.name,
+              type: habit.type,
+              completed
+            };
+          })
       };
       logs.push(dayLog);
     });
@@ -153,9 +179,9 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
     },
     {
       title: 'Today\'s Progress',
-      value: `${statistics.todayCompletion}/${statistics.totalHabits}`,
+      value: `${statistics.todayCompletion}/${statistics.habitsActiveToday}`,
       icon: <CheckCircle className="w-5 h-5" />,
-      description: `${Math.round((statistics.todayCompletion / Math.max(statistics.totalHabits, 1)) * 100)}% completed`,
+      description: `${Math.round((statistics.todayCompletion / Math.max(statistics.habitsActiveToday, 1)) * 100)}% completed`,
       color: 'text-green-500'
     },
     {
@@ -169,7 +195,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
   // Get selected day data
   const selectedDayLog = selectedDate ? 
-    dailyLogs.find(log => format(log.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')) 
+    dailyLogs.find(log => log.date.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0]) 
     : null;
 
   // Choose the appropriate dialog content component
@@ -333,10 +359,10 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                     className="rounded-lg border"
                     modifiers={{
                       completed: (date) => {
-                        const dateStr = format(date, 'yyyy-MM-dd');
+                        const dateStr = date.toISOString().split('T')[0]; // Use same format as storage
                         return dailyLogs.some(log => 
-                          format(log.date, 'yyyy-MM-dd') === dateStr && 
-                          log.habits.some(h => h.completed)
+                          log.date.toISOString().split('T')[0] === dateStr && 
+                          log.habits.some(h => h.completed === true)
                         );
                       }
                     }}
@@ -401,7 +427,8 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
               <div className="space-y-3 sm:space-y-4">
                 {dailyLogs.map((log, index) => {
                   const completedCount = log.habits.filter(h => h.completed).length;
-                  const completionRate = log.habits.length > 0 ? (completedCount / log.habits.length) * 100 : 0;
+                  const totalHabitsForDay = log.habits.length; // This already filters habits by creation date
+                  const completionRate = totalHabitsForDay > 0 ? (completedCount / totalHabitsForDay) * 100 : 0;
                   
                   return (
                     <Card key={index} className="p-3 sm:p-4">
@@ -415,7 +442,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                             )}
                           </h4>
                           <p className="text-xs sm:text-sm text-muted-foreground">
-                            {completedCount}/{log.habits.length} habits completed ({Math.round(completionRate)}%)
+                            {completedCount}/{totalHabitsForDay} habits completed ({Math.round(completionRate)}%)
                           </p>
                         </div>
                         <div className="flex gap-1 flex-wrap max-w-[100px] sm:max-w-none">
