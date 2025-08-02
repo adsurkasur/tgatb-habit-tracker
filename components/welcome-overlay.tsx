@@ -372,7 +372,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         return (
           <Card
             key={stepIndex}
-            className="absolute w-80 max-w-[90vw] max-h-[90vh] p-6 shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-300 ease-out"
+            className="absolute w-80 max-w-[85vw] max-h-[80vh] p-4 max-sm:p-3 max-sm:w-72 max-sm:max-w-[80vw] max-sm:max-h-[70vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-300 ease-out"
             style={{
               top: stepPosition.top,
               left: stepPosition.left,
@@ -382,79 +382,79 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             }}
           >
             {/* Header */}
-            <div className="flex items-start justify-between mb-4">
+            <div className="flex items-start justify-between mb-3 max-sm:mb-2">
               <div className="flex-1">
-                <h3 className="text-lg font-semibold text-card-foreground mb-2">
+                <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-2 max-sm:mb-1 leading-tight">
                   {step.title}
                 </h3>
-                <Badge variant="secondary" className="text-xs bg-primary/10 text-primary border-primary/20">
+                <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20">
                   Step {stepIndex + 1} of {welcomeSteps.length}
                 </Badge>
               </div>
               <button
                 onClick={handleSkip}
-                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
+                className="h-7 w-7 max-sm:h-6 max-sm:w-6 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4 max-sm:w-3 max-sm:h-3" />
               </button>
             </div>
 
             {/* Description */}
-            <p className="text-sm text-muted-foreground mb-6 leading-relaxed">
+            <p className="text-sm max-sm:text-xs text-muted-foreground mb-4 max-sm:mb-3 leading-relaxed max-sm:leading-snug">
               {step.description}
             </p>
 
             {/* Progress bar */}
-            <div className="w-full bg-muted rounded-full h-2 mb-6">
+            <div className="w-full bg-muted rounded-full h-2 max-sm:h-1.5 mb-4 max-sm:mb-3">
               <div
-                className="bg-primary h-2 rounded-full transition-all duration-500 ease-out"
+                className="bg-primary h-2 max-sm:h-1.5 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${((stepIndex + 1) / welcomeSteps.length) * 100}%` }}
               />
             </div>
 
             {/* Actions */}
-            <div className="flex flex-col gap-3">
+            <div className="flex flex-col gap-2 max-sm:gap-1.5">
               {/* Main action button - always full width */}
               <Button
                 onClick={handleNext}
-                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+                className="w-full flex items-center justify-center gap-2 max-sm:gap-1.5 bg-primary hover:bg-primary/90 text-primary-foreground max-sm:h-9 max-sm:text-sm"
               >
                 {stepIndex === welcomeSteps.length - 1 ? (
                   <>
-                    <Play className="w-4 h-4" />
+                    <Play className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
                     Get Started
                   </>
                 ) : (
                   <>
                     Next
-                    <ArrowRight className="w-4 h-4" />
+                    <ArrowRight className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
                   </>
                 )}
               </Button>
 
               {/* Secondary actions row */}
               <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 max-sm:gap-1">
                   {stepIndex > 0 && (
                     <Button
                       variant="outline"
                       size="sm"
                       onClick={handlePrev}
-                      className="flex items-center gap-1.5 text-xs"
+                      className="flex items-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] max-sm:h-7 max-sm:px-2"
                     >
-                      <ArrowLeft className="w-3.5 h-3.5" />
+                      <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3" />
                       Previous
                     </Button>
                   )}
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 max-sm:gap-1">
                   {stepIndex < welcomeSteps.length - 1 && (
                     <Button
                       variant="ghost"
                       size="sm"
                       onClick={handleSkip}
-                      className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs"
+                      className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs max-sm:text-[10px] max-sm:h-7 max-sm:px-2"
                     >
                       Skip Tour
                     </Button>
