@@ -149,8 +149,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       setIsPositionReady(true);
     };
 
-    // Small delay to ensure DOM is ready
-    const timer = setTimeout(calculateAllPositions, 50);
+    // Minimal delay to ensure DOM is ready
+    const timer = setTimeout(calculateAllPositions, 25);
 
     const handleResize = () => {
       if (isVisible) {
@@ -168,13 +168,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
   }, [isVisible]);
 
-  // Recalculate position for step 3 (add-button) and step 4 (habit-card) when they become active
+  // Recalculate position for step 3 (add-button) when it becomes active
+  // Note: Removed habit-card from this effect to prevent repositioning issues
   useEffect(() => {
     if (!isVisible || !isPositionReady) return;
     
     const steps = getWelcomeSteps();
     const currentStepData = steps[currentStep];
-    if (currentStepData?.id === 'add-button' || currentStepData?.id === 'habit-card') {
+    if (currentStepData?.id === 'add-button') {
       const recalculatePosition = () => {
         if (!currentStepData.targetSelector) {
           setAllPositions(prev => ({
@@ -209,32 +210,10 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             return prev;
           });
         } else {
-          // Try fallback for habit-card step
-          if (currentStepData.id === 'habit-card') {
-            const fallback = document.querySelector('[data-tour="habit-area"]');
-            if (fallback) {
-              const rect = fallback.getBoundingClientRect();
-              setAllPositions(prev => ({
-                ...prev,
-                [currentStep]: {
-                  x: rect.left,
-                  y: rect.top,
-                  width: rect.width,
-                  height: rect.height
-                }
-              }));
-            } else {
-              setAllPositions(prev => ({
-                ...prev,
-                [currentStep]: null
-              }));
-            }
-          } else {
-            setAllPositions(prev => ({
-              ...prev,
-              [currentStep]: null
-            }));
-          }
+          setAllPositions(prev => ({
+            ...prev,
+            [currentStep]: null
+          }));
         }
       };
 
