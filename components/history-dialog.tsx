@@ -311,7 +311,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
           <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
             <div className="h-full overflow-y-auto">
               <div className="flex flex-col items-center gap-4 sm:gap-6">
-                <div className="w-full max-w-sm">
+                <div className="w-full max-w-sm sm:max-w-2xl">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
@@ -333,7 +333,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                 </div>
                 
                 {selectedDate && (
-                  <div className="w-full max-w-md">
+                  <div className="w-full max-w-sm sm:max-w-2xl">
                     <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 text-center">
                       {format(selectedDate, 'MMMM d, yyyy')}
                       {isToday(selectedDate) && (
