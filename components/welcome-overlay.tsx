@@ -318,17 +318,76 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           // Check if we're on mobile (viewport width < 640px)
           const isMobile = window.innerWidth < 640;
           
-          // For step 4 on mobile, and step 3 only if it's NOT the FAB, force them to appear above the highlighted component
+          // For specific steps, check if they would be clipped by viewport
+          const shouldCheckViewportClipping = step.id === 'add-button' || step.id === 'habit-card';
+          let shouldPositionAbove = false;
+          
+          if (shouldCheckViewportClipping) {
+            // Calculate where the card would be positioned with original logic
+            let testX, testY;
+            const cardWidth = isMobile ? 288 : 320; // w-72 (288px) on mobile, w-80 (320px) on desktop
+            const cardHeight = 200; // Approximate card height
+            
+            switch (step.position) {
+              case 'right':
+                testX = x + width + margin + offset.x;
+                testY = y + height / 2 + offset.y;
+                // Check if card would extend beyond right edge of viewport
+                if (testX + cardWidth > window.innerWidth) {
+                  shouldPositionAbove = true;
+                }
+                break;
+              case 'left':
+                testX = x - margin + offset.x;
+                testY = y + height / 2 + offset.y;
+                // Check if card would extend beyond left edge of viewport
+                if (testX - cardWidth < 0) {
+                  shouldPositionAbove = true;
+                }
+                break;
+              case 'bottom':
+                testX = x + width / 2 + offset.x;
+                testY = y + height + margin + offset.y;
+                // Check if card would extend beyond bottom edge of viewport
+                if (testY + cardHeight > window.innerHeight) {
+                  shouldPositionAbove = true;
+                }
+                break;
+              case 'top':
+                testX = x + width / 2 + offset.x;
+                testY = y - margin + offset.y;
+                // Check if card would extend beyond top edge of viewport
+                if (testY - cardHeight < 0) {
+                  shouldPositionAbove = true;
+                }
+                break;
+            }
+            
+            // Also check horizontal clipping for all positions
+            if (!shouldPositionAbove) {
+              if (step.position === 'top' || step.position === 'bottom') {
+                testX = x + width / 2 + offset.x;
+                // Check if centered card would be clipped horizontally
+                if (testX - cardWidth / 2 < 20 || testX + cardWidth / 2 > window.innerWidth - 20) {
+                  shouldPositionAbove = true;
+                }
+              }
+            }
+          }
+          
+          // On mobile, always position step 4 above, and step 3 above if it's not the FAB
           const isStep4OnMobile = isMobile && step.id === 'habit-card';
           const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
-          const shouldPositionAbove = isStep4OnMobile || isStep3OnMobileButNotFab;
+          
+          // Combine viewport clipping logic with mobile-specific logic
+          shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab;
 
           let finalX, finalY, transform;
 
           if (shouldPositionAbove) {
-            // Force step 4 and step 3 (when not FAB) to appear above the highlighted component on mobile
+            // Force the card to appear above the highlighted component
             finalX = x + width / 2;
-            finalY = y - margin - 10; // Extra margin for mobile
+            finalY = y - margin - 10; // Extra margin for better spacing
             transform = 'translate(-50%, -100%)';
           } else {
             switch (step.position) {
