@@ -94,15 +94,29 @@ const MobileDialogContent = React.forwardRef<
           ...(isMobile && isKeyboardOpen && {
             height: `${viewportHeight}px`,
             bottom: 'auto'
-          })
+          }),
+          // Completely prevent scrolling on the overlay
+          touchAction: 'none',
+          overscrollBehavior: 'none',
+          overflow: 'hidden'
+        }}
+        onTouchStart={(e) => {
+          e.preventDefault();
+          e.stopPropagation();
         }}
         onTouchMove={(e) => {
-          // ONLY prevent touch events on the overlay itself from propagating
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onTouchEnd={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}
         onWheel={(e) => {
-          // ONLY prevent wheel events on the overlay from propagating  
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onScroll={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}
