@@ -46,6 +46,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
           onClick={onAddHabit}
           size="icon"
           className="h-14 w-14 rounded-full fab fab-animated"
+          data-tour="add-habit-fab"
         >
           <Plus className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
         </Button>

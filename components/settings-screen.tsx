@@ -11,7 +11,8 @@ import {
   User, 
   CloudUpload, 
   Download, 
-  Upload 
+  Upload,
+  HelpCircle
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef } from "react";
@@ -25,6 +26,7 @@ interface SettingsScreenProps {
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => void;
   onImportData: (file: File) => void;
+  onShowHelp?: () => void;
 }
 
 export function SettingsScreen({ 
@@ -33,7 +35,8 @@ export function SettingsScreen({
   settings, 
   onUpdateSettings, 
   onExportData, 
-  onImportData 
+  onImportData,
+  onShowHelp
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -235,6 +238,26 @@ export function SettingsScreen({
                 </Label>
               </div>
             </RadioGroup>
+          </div>
+        </div>
+
+        {/* Help & Support Section */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Help & Support</h2>
+          
+          <div className="space-y-2">
+            {onShowHelp && (
+              <div 
+                className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+                onClick={onShowHelp}
+              >
+                <div className="flex items-center space-x-3">
+                  <HelpCircle className="w-5 h-5 text-muted-foreground" />
+                  <span className="font-medium">Show Welcome Guide</span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              </div>
+            )}
           </div>
         </div>
       </div>
