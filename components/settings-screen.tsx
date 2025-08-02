@@ -12,7 +12,8 @@ import {
   CloudUpload, 
   Download, 
   Upload,
-  HelpCircle
+  HelpCircle,
+  Mail
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef } from "react";
@@ -258,6 +259,17 @@ export function SettingsScreen({
                 <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
             )}
+            
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={() => window.open('mailto:superyusuf55@gmail.com?subject=Habit%20Tracker%20Support&body=Hi%2C%20I%20need%20support.', '_blank')}
+            >
+              <div className="flex items-center space-x-3">
+                <Mail className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Contact me via email</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
           </div>
         </div>
       </div>
