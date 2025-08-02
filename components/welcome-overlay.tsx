@@ -71,7 +71,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         : 'Tap this button to create your first habit. You can add both good habits to build and bad habits to break.',
       targetSelector: hasHabits ? '[data-tour="add-habit-fab"]' : '[data-tour="add-habit-empty"]',
       position: hasHabits ? 'left' : 'right',
-      offset: hasHabits ? { x: -10, y: -100 } : { x: 10, y: 0 }
+      offset: hasHabits ? { x: -10, y: -125 } : { x: 10, y: 0 }
     },
     {
       id: 'habit-card',
@@ -400,49 +400,53 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                {stepIndex > 0 && (
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={handlePrev}
-                    className="flex items-center gap-2 border-border hover:bg-muted"
-                  >
-                    <ArrowLeft className="w-4 h-4" />
-                    Previous
-                  </Button>
+            <div className="flex flex-col gap-3">
+              {/* Main action button - always full width */}
+              <Button
+                onClick={handleNext}
+                className="w-full flex items-center justify-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
+              >
+                {stepIndex === welcomeSteps.length - 1 ? (
+                  <>
+                    <Play className="w-4 h-4" />
+                    Get Started
+                  </>
+                ) : (
+                  <>
+                    Next
+                    <ArrowRight className="w-4 h-4" />
+                  </>
                 )}
-              </div>
+              </Button>
 
-              <div className="flex items-center gap-2">
-                {stepIndex < welcomeSteps.length - 1 && (
-                  <Button
-                    variant="ghost"
-                    size="sm"
-                    onClick={handleSkip}
-                    className="text-muted-foreground hover:bg-muted"
-                  >
-                    Skip Tour
-                  </Button>
-                )}
-                <Button
-                  onClick={handleNext}
-                  size="sm"
-                  className="flex items-center gap-2 bg-primary hover:bg-primary/90 text-primary-foreground"
-                >
-                  {stepIndex === welcomeSteps.length - 1 ? (
-                    <>
-                      <Play className="w-4 h-4" />
-                      Get Started
-                    </>
-                  ) : (
-                    <>
-                      Next
-                      <ArrowRight className="w-4 h-4" />
-                    </>
+              {/* Secondary actions row */}
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-2">
+                  {stepIndex > 0 && (
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={handlePrev}
+                      className="flex items-center gap-1.5 text-xs"
+                    >
+                      <ArrowLeft className="w-3.5 h-3.5" />
+                      Previous
+                    </Button>
                   )}
-                </Button>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  {stepIndex < welcomeSteps.length - 1 && (
+                    <Button
+                      variant="ghost"
+                      size="sm"
+                      onClick={handleSkip}
+                      className="text-muted-foreground hover:text-foreground hover:bg-muted text-xs"
+                    >
+                      Skip Tour
+                    </Button>
+                  )}
+                </div>
               </div>
             </div>
           </Card>
