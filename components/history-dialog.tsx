@@ -1,5 +1,6 @@
 import React, { useState, useMemo, useEffect } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
@@ -21,6 +22,7 @@ import { Habit, HabitType } from '@/shared/schema';
 import { getHabitStats, getAllHabitLogs } from '@/lib/habit-storage';
 import { format, startOfDay, isToday, subDays, eachDayOfInterval } from 'date-fns';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface HistoryDialogProps {
   open: boolean;
@@ -49,6 +51,7 @@ interface StatCard {
 export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
+  const isMobile = useIsMobile();
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -168,13 +171,13 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
     dailyLogs.find(log => format(log.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd')) 
     : null;
 
+  // Choose the appropriate dialog content component
+  const DialogContentComponent = isMobile ? MobileDialogContent : DialogContent;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent 
-        className="w-screen h-screen max-w-none max-h-none p-0 m-0 border-0 rounded-none sm:w-[900px] sm:h-[700px] sm:max-w-[900px] sm:max-h-[700px] sm:p-6 sm:border sm:rounded-lg flex flex-col items-stretch justify-start"
-        data-mobile-fullscreen
-      >
-        <DialogHeader className="p-3 sm:p-0 border-b sm:border-b-0">
+      <DialogContentComponent className={isMobile ? "" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}>
+        <DialogHeader className={isMobile ? "border-b pb-3 mb-3" : ""}>
           <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
             <BarChart3 className="w-5 h-5" />
             <span className="hidden sm:inline">Habit History & Analytics</span>
@@ -182,7 +185,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
           </DialogTitle>
         </DialogHeader>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col p-3 sm:p-0">
+        <Tabs value={selectedTab} onValueChange={setSelectedTab} className={`flex-1 min-h-0 flex flex-col ${isMobile ? "" : "pt-4"}`}>
           <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 flex-shrink-0">
             <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
               <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -420,7 +423,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
             </div>
           </TabsContent>
         </Tabs>
-      </DialogContent>
+      </DialogContentComponent>
     </Dialog>
   );
 }
