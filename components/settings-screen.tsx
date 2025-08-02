@@ -16,6 +16,7 @@ import {
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
+import { useToast } from "@/hooks/use-toast";
 
 interface SettingsScreenProps {
   open: boolean;
@@ -35,6 +36,7 @@ export function SettingsScreen({
   onImportData 
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { toast } = useToast();
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -55,6 +57,22 @@ export function SettingsScreen({
       // Reset file input
       e.target.value = '';
     }
+  };
+
+  const handleLoginClick = () => {
+    toast({
+      title: "Upcoming Feature!",
+      description: "User authentication and cloud sync coming soon. Stay tuned! 🚀",
+      duration: 3000,
+    });
+  };
+
+  const handleBackupClick = () => {
+    toast({
+      title: "Upcoming Feature!",
+      description: "Cloud backup functionality will be available soon. Stay tuned! ☁️",
+      duration: 3000,
+    });
   };
 
   return (
@@ -124,6 +142,7 @@ export function SettingsScreen({
           <div className="space-y-2">
             <div 
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={handleLoginClick}
             >
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-muted-foreground" />
@@ -134,6 +153,7 @@ export function SettingsScreen({
 
             <div 
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={handleBackupClick}
             >
               <div className="flex items-center space-x-3">
                 <CloudUpload className="w-5 h-5 text-muted-foreground" />

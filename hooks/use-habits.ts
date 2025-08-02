@@ -40,7 +40,7 @@ export function useHabits() {
     toast({
       title: "Habit updated!",
       description: "Your habit has been successfully updated.",
-      duration: 2000,
+      duration: 3000,
     });
   };
 
@@ -72,7 +72,7 @@ export function useHabits() {
     toast({
       title: "Habit restored!",
       description: "Your habit has been successfully restored.",
-      duration: 2000,
+      duration: 3000,
     });
   };
 
@@ -87,7 +87,7 @@ export function useHabits() {
       toast({
         title: "Already completed!",
         description: "You've already tracked this habit today.",
-        duration: 2000,
+        duration: 3000,
       });
       return;
     }
@@ -124,14 +124,14 @@ export function useHabits() {
       toast({
         title: "Undone!",
         description: "Today's tracking has been removed.",
-        duration: 2000,
+        duration: 3000,
       });
     } else {
       toast({
         title: "Nothing to undo",
         description: "No tracking recorded for today.",
         variant: "destructive",
-        duration: 2000,
+        duration: 3000,
       });
     }
   };

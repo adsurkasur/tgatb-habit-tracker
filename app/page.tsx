@@ -122,7 +122,7 @@ export default function Home() {
             Undo
           </ToastAction>
         ),
-        duration: 5000, // Longer duration for undo option
+        duration: 3000, // Standard duration for consistency
       });
     }
   };

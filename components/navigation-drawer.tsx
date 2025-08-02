@@ -16,7 +16,8 @@ import {
   Plus,
   Flame,
   Edit,
-  Trash2
+  Trash2,
+  X
 } from "lucide-react";
 import React, { useState, useCallback } from "react";
 import { Habit } from "@shared/schema";
@@ -159,7 +160,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
           <Menu className="w-6 h-6" />
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-80 p-0 bg-muted">
+      <SheetContent side="left" className="w-80 p-0 bg-muted [&>button]:hidden">
         <VisuallyHidden.Root>
           <SheetTitle>Navigation Menu</SheetTitle>
           <SheetDescription>Access your habit tracking dashboard and settings</SheetDescription>
@@ -167,8 +168,20 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="p-6 border-b border-border bg-card">
-            <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
-            <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
+                <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
+              </div>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => setOpen(false)}
+                className="h-8 w-8 p-0 shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            </div>
           </div>
           
           {/* Content - Scrollable Habits Area */}

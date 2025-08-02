@@ -145,7 +145,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
       toast({
         title: "Copied!",
         description: "Address copied to clipboard",
-        duration: 2000,
+        duration: 3000,
       });
 
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -157,7 +157,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
         title: "Failed to copy",
         description: "Please copy the address manually",
         variant: "destructive",
-        duration: 2000,
+        duration: 3000,
       });
     }
   };
