@@ -333,7 +333,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 testX = x + width + margin + offset.x;
                 testY = y + height / 2 + offset.y;
                 // Check if card would extend beyond right edge of viewport
-                if (testX + cardWidth > window.innerWidth) {
+                if (testX + cardWidth > window.innerWidth - 20) {
                   shouldPositionAbove = true;
                 }
                 break;
@@ -341,7 +341,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 testX = x - margin + offset.x;
                 testY = y + height / 2 + offset.y;
                 // Check if card would extend beyond left edge of viewport
-                if (testX - cardWidth < 0) {
+                if (testX - cardWidth < 20) {
                   shouldPositionAbove = true;
                 }
                 break;
@@ -349,7 +349,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 testX = x + width / 2 + offset.x;
                 testY = y + height + margin + offset.y;
                 // Check if card would extend beyond bottom edge of viewport
-                if (testY + cardHeight > window.innerHeight) {
+                if (testY + cardHeight > window.innerHeight - 20) {
                   shouldPositionAbove = true;
                 }
                 break;
@@ -357,7 +357,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 testX = x + width / 2 + offset.x;
                 testY = y - margin + offset.y;
                 // Check if card would extend beyond top edge of viewport
-                if (testY - cardHeight < 0) {
+                if (testY - cardHeight < 20) {
                   shouldPositionAbove = true;
                 }
                 break;
@@ -386,9 +386,31 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
           if (shouldPositionAbove) {
             // Force the card to appear above the highlighted component
+            // Better centering and spacing
             finalX = x + width / 2;
-            finalY = y - margin - 10; // Extra margin for better spacing
+            finalY = y - margin - 15; // Better spacing
             transform = 'translate(-50%, -100%)';
+            
+            // Ensure horizontal centering doesn't go beyond viewport edges
+            const cardWidth = isMobile ? 288 : 320;
+            const halfCardWidth = cardWidth / 2;
+            const safeMargin = 20; // Safe margin from viewport edges
+            const minX = halfCardWidth + safeMargin;
+            const maxX = window.innerWidth - halfCardWidth - safeMargin;
+            
+            // Apply bounds with more aggressive constraint for mobile
+            if (finalX < minX) {
+              finalX = minX;
+            } else if (finalX > maxX) {
+              finalX = maxX;
+            }
+            
+            // Ensure the card doesn't get cut off at the top of the viewport
+            const cardHeight = 250; // Estimated card height including title
+            const minY = cardHeight + 30; // Minimum distance from top
+            if (finalY < minY) {
+              finalY = minY;
+            }
           } else {
             switch (step.position) {
               case 'top':
@@ -416,6 +438,47 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 finalY = y + height + margin + offset.y;
                 transform = 'translate(-50%, 0)';
             }
+            
+            // Ensure proper viewport bounds for all positions
+            const cardWidth = isMobile ? 288 : 320;
+            const cardHeight = 200;
+            const safeMargin = 20;
+            
+            // Horizontal bounds checking
+            if (step.position === 'top' || step.position === 'bottom') {
+              const halfCardWidth = cardWidth / 2;
+              const minX = halfCardWidth + safeMargin;
+              const maxX = window.innerWidth - halfCardWidth - safeMargin;
+              
+              if (finalX < minX) finalX = minX;
+              if (finalX > maxX) finalX = maxX;
+            } else if (step.position === 'left') {
+              if (finalX - cardWidth < safeMargin) {
+                finalX = cardWidth + safeMargin;
+              }
+            } else if (step.position === 'right') {
+              if (finalX + cardWidth > window.innerWidth - safeMargin) {
+                finalX = window.innerWidth - cardWidth - safeMargin;
+              }
+            }
+            
+            // Vertical bounds checking  
+            if (step.position === 'left' || step.position === 'right') {
+              const halfCardHeight = cardHeight / 2;
+              const minY = halfCardHeight + safeMargin;
+              const maxY = window.innerHeight - halfCardHeight - safeMargin;
+              
+              if (finalY < minY) finalY = minY;
+              if (finalY > maxY) finalY = maxY;
+            } else if (step.position === 'top') {
+              if (finalY - cardHeight < safeMargin) {
+                finalY = cardHeight + safeMargin;
+              }
+            } else if (step.position === 'bottom') {
+              if (finalY + cardHeight > window.innerHeight - safeMargin) {
+                finalY = window.innerHeight - cardHeight - safeMargin;
+              }
+            }
           }
 
           return {
@@ -431,40 +494,41 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         return (
           <Card
             key={stepIndex}
-            className="absolute w-80 max-w-[85vw] max-h-[80vh] p-4 max-sm:p-3 max-sm:w-72 max-sm:max-w-[80vw] max-sm:max-h-[70vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-300 ease-out"
+            className="absolute w-80 max-w-[85vw] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-72 max-sm:max-w-[90vw] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-all duration-300 ease-out"
             style={{
               top: stepPosition.top,
               left: stepPosition.left,
               transform: stepPosition.transform,
               pointerEvents: shouldShow ? 'auto' : 'none',
               opacity: shouldShow ? 1 : 0,
+              zIndex: shouldShow ? 110 : 100
             }}
           >
             {/* Header */}
-            <div className="flex items-start justify-between mb-4 max-sm:mb-3">
+            <div className="flex items-start justify-between mb-6 max-sm:mb-4">
               <div className="flex-1">
-                <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-2 max-sm:mb-1 leading-tight">
+                <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-3 max-sm:mb-2 leading-tight">
                   {step.title}
                 </h3>
-                <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20">
+                <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20 px-3 py-1">
                   Step {stepIndex + 1} of {welcomeSteps.length}
                 </Badge>
               </div>
               <button
                 onClick={handleSkip}
-                className="h-7 w-7 max-sm:h-6 max-sm:w-6 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
+                className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50"
               >
-                <X className="w-4 h-4 max-sm:w-3 max-sm:h-3" />
+                <X className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
               </button>
             </div>
 
             {/* Description */}
-            <p className="text-sm max-sm:text-xs text-muted-foreground mb-4 max-sm:mb-3 leading-relaxed max-sm:leading-snug">
+            <p className="text-sm max-sm:text-xs text-muted-foreground mb-6 max-sm:mb-4 leading-relaxed max-sm:leading-snug">
               {step.description}
             </p>
 
             {/* Progress bar */}
-            <div className="w-full bg-muted rounded-full h-2 max-sm:h-1.5 mb-4 max-sm:mb-3">
+            <div className="w-full bg-muted rounded-full h-2 max-sm:h-1.5 mb-6 max-sm:mb-4">
               <div
                 className="bg-primary h-2 max-sm:h-1.5 rounded-full transition-all duration-500 ease-out"
                 style={{ width: `${((stepIndex + 1) / welcomeSteps.length) * 100}%` }}
@@ -472,15 +536,15 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             </div>
 
             {/* Actions */}
-            <div className="flex items-center gap-4 max-sm:gap-3">
-              {/* Previous button - fixed width for consistency */}
-              <div className="w-20 max-sm:w-16">
+            <div className="flex items-center justify-between gap-4 max-sm:gap-3">
+              {/* Previous button - fixed width for perfect alignment */}
+              <div className="w-24 max-sm:w-20 flex justify-start">
                 {stepIndex > 0 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handlePrev}
-                    className="w-full flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] max-sm:h-8 hover:bg-muted/50"
+                    className="w-full flex items-center justify-center gap-2 max-sm:gap-1.5 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium"
                   >
                     <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3" />
                     Previous
@@ -488,26 +552,27 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 )}
               </div>
 
-              {/* Skip tour button - center with flex-1 to take remaining space */}
+              {/* Skip tour button - center section with equal spacing */}
               <div className="flex-1 flex justify-center">
                 {stepIndex < welcomeSteps.length - 1 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleSkip}
-                    className="text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] max-sm:h-8 px-4 max-sm:px-3"
+                    className="text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-6 max-sm:px-4 font-medium"
                   >
                     Skip Tour
                   </Button>
                 )}
               </div>
 
-              <div className="w-20 max-sm:w-16">
+              {/* Next button - fixed width matching previous button */}
+              <div className="w-24 max-sm:w-20 flex justify-end">
                 <Button
                   onClick={handleNext}
                   size="sm"
                   variant="default"
-                  className="w-full flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] max-sm:h-8 fab"
+                  className="w-full flex items-center justify-center gap-2 max-sm:gap-1.5 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium"
                 >
                   {stepIndex === welcomeSteps.length - 1 ? (
                     <>
