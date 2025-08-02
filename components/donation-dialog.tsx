@@ -1,11 +1,13 @@
 import React, { useState, useRef } from 'react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 interface DonationDialogProps {
   open: boolean;
@@ -125,6 +127,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
+  const isMobile = useIsMobile();
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -159,9 +162,12 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
     }
   };
 
+  // Choose the appropriate dialog content component
+  const DialogContentComponent = isMobile ? MobileDialogContent : DialogContent;
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-md mx-auto max-h-[90vh] overflow-y-auto">
+      <DialogContentComponent className={isMobile ? "" : "max-w-md mx-auto max-h-[90vh] overflow-y-auto"}>
         <DialogHeader className="text-center">
           <DialogTitle className="flex items-center justify-center gap-2 text-2xl">
             <Heart className="w-6 h-6 text-red-500" />
@@ -261,7 +267,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             </p>
           </div>
         </div>
-      </DialogContent>
+      </DialogContentComponent>
     </Dialog>
   );
 }
