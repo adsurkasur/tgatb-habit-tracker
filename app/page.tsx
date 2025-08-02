@@ -277,15 +277,6 @@ export default function Home() {
                   </button>
                 )}
 
-                {/* Demo indicator */}
-                {shouldShowDemoHabit && (
-                  <div className="absolute -top-8 left-1/2 transform -translate-x-1/2 z-10">
-                    <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800 shadow-md">
-                      Demo Habit
-                    </Badge>
-                  </div>
-                )}
-
                 <HabitCard 
                   habit={displayedHabit} 
                   onTrack={shouldShowDemoHabit ? () => {} : handleTrackHabit}
@@ -295,6 +286,15 @@ export default function Home() {
                   navigationDirection={shouldShowDemoHabit ? null : navigationDirection}
                   todayLog={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog}
                 />
+
+                {/* Demo indicator - positioned below the habit card */}
+                {shouldShowDemoHabit && (
+                  <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 z-10">
+                    <Badge variant="secondary" className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 border-blue-200 dark:border-blue-800 shadow-md">
+                      Demo Habit
+                    </Badge>
+                  </div>
+                )}
 
                 {/* Next button - Desktop - only show if not demo */}
                 {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
