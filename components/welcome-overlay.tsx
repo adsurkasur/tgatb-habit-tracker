@@ -314,34 +314,49 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           const { x, y, width, height } = stepTargetPosition;
           const offset = step.offset || { x: 0, y: 0 };
           const margin = 20;
+          
+          // Check if we're on mobile (viewport width < 640px)
+          const isMobile = window.innerWidth < 640;
+          
+          // For step 4 on mobile, and step 3 only if it's NOT the FAB, force them to appear above the highlighted component
+          const isStep4OnMobile = isMobile && step.id === 'habit-card';
+          const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
+          const shouldPositionAbove = isStep4OnMobile || isStep3OnMobileButNotFab;
 
           let finalX, finalY, transform;
 
-          switch (step.position) {
-            case 'top':
-              finalX = x + width / 2 + offset.x;
-              finalY = y - margin + offset.y;
-              transform = 'translate(-50%, -100%)';
-              break;
-            case 'bottom':
-              finalX = x + width / 2 + offset.x;
-              finalY = y + height + margin + offset.y;
-              transform = 'translate(-50%, 0)';
-              break;
-            case 'left':
-              finalX = x - margin + offset.x;
-              finalY = y + height / 2 + offset.y;
-              transform = 'translate(-100%, -50%)';
-              break;
-            case 'right':
-              finalX = x + width + margin + offset.x;
-              finalY = y + height / 2 + offset.y;
-              transform = 'translate(0, -50%)';
-              break;
-            default:
-              finalX = x + width / 2 + offset.x;
-              finalY = y + height + margin + offset.y;
-              transform = 'translate(-50%, 0)';
+          if (shouldPositionAbove) {
+            // Force step 4 and step 3 (when not FAB) to appear above the highlighted component on mobile
+            finalX = x + width / 2;
+            finalY = y - margin - 10; // Extra margin for mobile
+            transform = 'translate(-50%, -100%)';
+          } else {
+            switch (step.position) {
+              case 'top':
+                finalX = x + width / 2 + offset.x;
+                finalY = y - margin + offset.y;
+                transform = 'translate(-50%, -100%)';
+                break;
+              case 'bottom':
+                finalX = x + width / 2 + offset.x;
+                finalY = y + height + margin + offset.y;
+                transform = 'translate(-50%, 0)';
+                break;
+              case 'left':
+                finalX = x - margin + offset.x;
+                finalY = y + height / 2 + offset.y;
+                transform = 'translate(-100%, -50%)';
+                break;
+              case 'right':
+                finalX = x + width + margin + offset.x;
+                finalY = y + height / 2 + offset.y;
+                transform = 'translate(0, -50%)';
+                break;
+              default:
+                finalX = x + width / 2 + offset.x;
+                finalY = y + height + margin + offset.y;
+                transform = 'translate(-50%, 0)';
+            }
           }
 
           return {
