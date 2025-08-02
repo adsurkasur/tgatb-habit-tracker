@@ -1,26 +1,65 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PWA Icon Generator</title>
+    <title>PWA Icon Generator - TGATB Habit Tracker</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        #canvas { border: 1px solid #ccc; margin: 20px 0; }
-        .icon-preview { display: inline-block; margin: 10px; text-align: center; }
-        .icon-preview img { border: 1px solid #ccc; }
+        body { font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5; }
+        .container { max-width: 1200px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        #canvas { border: 1px solid #ccc; margin: 20px 0; border-radius: 8px; }
+        .icon-preview { display: inline-block; margin: 10px; text-align: center; background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        .icon-preview img { border: 1px solid #ddd; border-radius: 4px; }
+        .controls { margin: 20px 0; }
+        .controls button { 
+            background: #6750a4; 
+            color: white; 
+            border: none; 
+            padding: 12px 24px; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            margin-right: 10px;
+            font-size: 14px;
+        }
+        .controls button:hover { background: #5a4293; }
+        .preview-section { margin-top: 30px; }
+        h1 { color: #6750a4; }
+        h2 { color: #333; margin-top: 30px; }
+        .info { background: #f0f0f0; padding: 15px; border-radius: 6px; margin: 10px 0; }
     </style>
 </head>
 <body>
-    <h1>PWA Icon Generator for TGATB Habit Tracker</h1>
-    <p>This tool generates the required PWA icons from the existing favicon.svg</p>
-    
-    <canvas id="canvas" width="512" height="512"></canvas>
-    
-    <div>
-        <button onclick="generateIcons()">Generate All Icons</button>
-        <button onclick="downloadAll()">Download All</button>
+    <div class="container">
+        <h1>🎯 PWA Icon Generator for TGATB Habit Tracker</h1>
+        <div class="info">
+            <strong>This tool generates PWA icons based on your favicon design:</strong>
+            <ul>
+                <li>Purple background (#6750a4) - matches your FAB color</li>
+                <li>White checkmark - represents habit completion</li>
+                <li>Red notification dot - indicates activity</li>
+                <li>Rounded corners for modern app icon look</li>
+            </ul>
+        </div>
+        
+        <canvas id="canvas" width="512" height="512"></canvas>
+        
+        <div class="controls">
+            <button onclick="generateIcons()">🎨 Generate All Icons</button>
+            <button onclick="downloadAll()">📥 Download All</button>
+            <button onclick="previewOnDevices()">📱 Preview on Devices</button>
+        </div>
+
+        <h2>📱 Generated Icons</h2>
+        <div id="iconPreviews" class="preview-section"></div>
+
+        <h2>📝 Instructions</h2>
+        <div class="info">
+            <ol>
+                <li>Click "Generate All Icons" to create icons in all required sizes</li>
+                <li>Click "Download All" to download all icons as PNG files</li>
+                <li>Place the downloaded files in your <code>/public/icons/</code> directory</li>
+                <li>Your PWA will automatically use these icons</li>
+            </ol>
+        </div>
     </div>
-    
-    <div id="iconPreviews"></div>
 
     <script>
         const canvas = document.getElementById('canvas');
@@ -28,76 +67,105 @@
         const sizes = [72, 96, 128, 144, 152, 180, 192, 384, 512];
         const iconData = [];
 
-        // Draw the TGATB logo
-        function drawLogo() {
-            // Clear canvas
-            ctx.fillStyle = '#0f0f23';
-            ctx.fillRect(0, 0, 512, 512);
+        // Draw the TGATB habit tracker icon based on favicon design
+        function drawIcon(size) {
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
             
-            // Draw a simple habit tracker icon
-            ctx.fillStyle = '#ffffff';
-            ctx.font = 'bold 120px Arial';
-            ctx.textAlign = 'center';
-            ctx.textBaseline = 'middle';
-            ctx.fillText('TG', 256, 200);
+            // Calculate proportions
+            const cornerRadius = size * 0.1875; // 6/32 from original
             
-            ctx.font = 'bold 80px Arial';
-            ctx.fillText('TB', 256, 320);
+            // Draw rounded rectangle background
+            ctx.fillStyle = '#6750a4'; // FAB purple color
+            ctx.beginPath();
+            ctx.roundRect(0, 0, size, size, cornerRadius);
+            ctx.fill();
             
-            // Add a checkmark
-            ctx.strokeStyle = '#4ade80';
-            ctx.lineWidth = 20;
+            // Draw checkmark (scaled from original 8,16 4,4 8,-8)
+            const checkScale = size / 32;
+            const checkStartX = 8 * checkScale;
+            const checkStartY = 16 * checkScale;
+            const checkMidX = 12 * checkScale;
+            const checkMidY = 20 * checkScale;
+            const checkEndX = 20 * checkScale;
+            const checkEndY = 12 * checkScale;
+            
+            ctx.strokeStyle = 'white';
+            ctx.lineWidth = 2 * checkScale;
             ctx.lineCap = 'round';
             ctx.lineJoin = 'round';
             
             ctx.beginPath();
-            ctx.moveTo(180, 380);
-            ctx.lineTo(220, 420);
-            ctx.lineTo(320, 320);
+            ctx.moveTo(checkStartX, checkStartY);
+            ctx.lineTo(checkMidX, checkMidY);
+            ctx.lineTo(checkEndX, checkEndY);
             ctx.stroke();
+            
+            // Draw notification dot (scaled from original at 22,10 r=2)
+            const dotX = 22 * checkScale;
+            const dotY = 10 * checkScale;
+            const dotRadius = 2 * checkScale;
+            
+            ctx.fillStyle = '#ef4444'; // Red color
+            ctx.beginPath();
+            ctx.arc(dotX, dotY, dotRadius, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            return canvas;
+        }
+
+        // Generate preview in main canvas
+        function generatePreview() {
+            const iconCanvas = drawIcon(512);
+            ctx.clearRect(0, 0, 512, 512);
+            ctx.drawImage(iconCanvas, 0, 0);
         }
 
         function generateIcons() {
-            drawLogo();
+            generatePreview();
             
             const previewDiv = document.getElementById('iconPreviews');
             previewDiv.innerHTML = '';
             iconData.length = 0;
 
             sizes.forEach(size => {
-                // Create a new canvas for each size
-                const tempCanvas = document.createElement('canvas');
-                tempCanvas.width = size;
-                tempCanvas.height = size;
-                const tempCtx = tempCanvas.getContext('2d');
+                const iconCanvas = drawIcon(size);
                 
-                // Draw the main canvas scaled down
-                tempCtx.drawImage(canvas, 0, 0, size, size);
-                
-                // Convert to blob and store
-                tempCanvas.toBlob(blob => {
+                iconCanvas.toBlob(blob => {
+                    const url = URL.createObjectURL(blob);
                     iconData.push({
                         size: size,
                         blob: blob,
-                        url: URL.createObjectURL(blob)
+                        url: url
                     });
                     
                     // Create preview
                     const preview = document.createElement('div');
                     preview.className = 'icon-preview';
+                    
+                    const displaySize = Math.min(64, size);
                     preview.innerHTML = `
-                        <img src="${URL.createObjectURL(blob)}" width="64" height="64" alt="${size}x${size}">
+                        <img src="${url}" width="${displaySize}" height="${displaySize}" alt="${size}x${size}">
                         <br>
-                        <span>${size}x${size}</span>
+                        <strong>${size}x${size}</strong>
                         <br>
-                        <a href="${URL.createObjectURL(blob)}" download="icon-${size}x${size}.png">Download</a>
+                        <small>${(blob.size / 1024).toFixed(1)}KB</small>
+                        <br>
+                        <a href="${url}" download="icon-${size}x${size}.png" style="color: #6750a4;">Download</a>
                     `;
                     previewDiv.appendChild(preview);
-                });
+                }, 'image/png', 0.9);
             });
         }
 
         function downloadAll() {
+            if (iconData.length === 0) {
+                alert('Please generate icons first!');
+                return;
+            }
+            
             iconData.forEach(icon => {
                 const link = document.createElement('a');
                 link.href = icon.url;
@@ -106,10 +174,63 @@
                 link.click();
                 document.body.removeChild(link);
             });
+            
+            alert(`Downloaded ${iconData.length} icons! Place them in your /public/icons/ directory.`);
         }
 
-        // Generate icons on load
-        window.onload = generateIcons;
+        function previewOnDevices() {
+            if (iconData.length === 0) {
+                alert('Please generate icons first!');
+                return;
+            }
+            
+            const preview192 = iconData.find(icon => icon.size === 192);
+            const preview512 = iconData.find(icon => icon.size === 512);
+            
+            if (preview192 && preview512) {
+                const newWindow = window.open('', '_blank', 'width=400,height=600');
+                newWindow.document.write(`
+                    <html>
+                        <head>
+                            <title>TGATB PWA Icon Preview</title>
+                            <style>
+                                body { font-family: Arial, sans-serif; padding: 20px; text-align: center; background: #f5f5f5; }
+                                .device-preview { background: white; margin: 20px 0; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+                                .icon-large { width: 120px; height: 120px; border-radius: 20px; margin: 10px; }
+                                .icon-small { width: 60px; height: 60px; border-radius: 12px; margin: 5px; }
+                            </style>
+                        </head>
+                        <body>
+                            <h2 style="color: #6750a4;">TGATB Habit Tracker - Icon Preview</h2>
+                            
+                            <div class="device-preview">
+                                <h3>📱 Mobile Home Screen</h3>
+                                <img src="${preview192.url}" class="icon-large" alt="Mobile icon">
+                                <p>192x192px - Primary app icon</p>
+                            </div>
+                            
+                            <div class="device-preview">
+                                <h3>🖥️ Desktop & Splash Screen</h3>
+                                <img src="${preview512.url}" class="icon-large" alt="Desktop icon">
+                                <p>512x512px - High resolution icon</p>
+                            </div>
+                            
+                            <div class="device-preview">
+                                <h3>📋 Browser Tab & Notifications</h3>
+                                <img src="${preview192.url}" class="icon-small" alt="Small icon">
+                                <p>Used in browser tabs and notifications</p>
+                            </div>
+                        </body>
+                    </html>
+                `);
+            }
+        }
+
+        // Auto-generate on load
+        window.onload = () => {
+            generatePreview();
+            generateIcons();
+        };
     </script>
 </body>
 </html>

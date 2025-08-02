@@ -4,27 +4,44 @@ import { fileURLToPath } from 'url';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
-// Create simple SVG icons that can be converted to PNG
+// Create SVG icons based on the favicon design
 const sizes = [72, 96, 128, 144, 152, 180, 192, 384, 512];
 
-const createSVG = (size) => `
-<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">
-  <rect width="${size}" height="${size}" fill="#0f0f23"/>
-  <text x="50%" y="35%" font-family="Arial, sans-serif" font-size="${size * 0.2}" font-weight="bold" text-anchor="middle" fill="white">TG</text>
-  <text x="50%" y="65%" font-family="Arial, sans-serif" font-size="${size * 0.15}" font-weight="bold" text-anchor="middle" fill="white">TB</text>
-  <g stroke="#4ade80" stroke-width="${size * 0.04}" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M${size * 0.35},${size * 0.75} L${size * 0.43},${size * 0.83} L${size * 0.63},${size * 0.63}"/>
-  </g>
-</svg>
-`;
+const createSVG = (size) => {
+  const cornerRadius = size * 0.1875; // 6/32 from original favicon
+  const checkScale = size / 32;
+  
+  // Checkmark path coordinates (scaled from favicon)
+  const checkPath = `M${8 * checkScale},${16 * checkScale} L${12 * checkScale},${20 * checkScale} L${20 * checkScale},${12 * checkScale}`;
+  
+  // Notification dot (scaled from favicon)
+  const dotCx = 22 * checkScale;
+  const dotCy = 10 * checkScale;
+  const dotR = 2 * checkScale;
+  
+  return `<svg width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}">
+  <rect width="${size}" height="${size}" rx="${cornerRadius}" fill="#6750a4"/>
+  <path d="${checkPath}" stroke="white" stroke-width="${2 * checkScale}" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="${dotCx}" cy="${dotCy}" r="${dotR}" fill="#ef4444"/>
+</svg>`;
+};
 
 // Generate SVG icons
 sizes.forEach(size => {
   const svg = createSVG(size);
-  fs.writeFileSync(path.join(__dirname, `icon-${size}x${size}.svg`), svg.trim());
+  fs.writeFileSync(path.join(__dirname, `icon-${size}x${size}.svg`), svg);
 });
 
-console.log('Generated SVG icons for PWA');
-console.log('Note: For production, convert these SVG files to PNG format');
-console.log('You can use online tools or ImageMagick to convert them:');
-console.log('Example: magick icon-192x192.svg icon-192x192.png');
+console.log('✅ Generated SVG icons based on your favicon design!');
+console.log('🎨 Icons feature:');
+console.log('   - Purple background (#6750a4) matching your FAB');
+console.log('   - White checkmark for habit completion');
+console.log('   - Red notification dot for activity indicators');
+console.log('   - Rounded corners for modern app icon look');
+console.log('');
+console.log('📝 Next steps:');
+console.log('1. Open /public/generate-icons.html in your browser for PNG generation');
+console.log('2. Or convert these SVG files to PNG format:');
+console.log('   Example: magick icon-192x192.svg icon-192x192.png');
+console.log('3. Place PNG files in /public/icons/ directory');
+console.log('4. Your PWA will automatically use the new icons!');

@@ -1,8 +1,5 @@
-<svg width="152" height="152" xmlns="http://www.w3.org/2000/svg">
-  <rect width="152" height="152" fill="#0f0f23"/>
-  <text x="50%" y="35%" font-family="Arial, sans-serif" font-size="30.400000000000002" font-weight="bold" text-anchor="middle" fill="white">TG</text>
-  <text x="50%" y="65%" font-family="Arial, sans-serif" font-size="22.8" font-weight="bold" text-anchor="middle" fill="white">TB</text>
-  <g stroke="#4ade80" stroke-width="6.08" fill="none" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M53.199999999999996,114 L65.36,126.16 L95.76,95.76"/>
-  </g>
+<svg width="152" height="152" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 152 152">
+  <rect width="152" height="152" rx="28.5" fill="#6750a4"/>
+  <path d="M38,76 L57,95 L95,57" stroke="white" stroke-width="9.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  <circle cx="104.5" cy="47.5" r="9.5" fill="#ef4444"/>
 </svg>

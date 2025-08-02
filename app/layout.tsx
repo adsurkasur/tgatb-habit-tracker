@@ -27,7 +27,7 @@ export const metadata: Metadata = {
       { url: "/icons/icon-180x180.png", sizes: "180x180", type: "image/png" }
     ],
     other: [
-      { rel: "mask-icon", url: "/favicon.svg", color: "#0f0f23" }
+      { rel: "mask-icon", url: "/favicon.svg", color: "#6750a4" }
     ]
   },
   manifest: "/manifest.json",
@@ -49,7 +49,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   themeColor: [
     { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#0f0f23" }
+    { media: "(prefers-color-scheme: dark)", color: "#6750a4" }
   ],
   width: "device-width",
   initialScale: 1,
@@ -71,9 +71,9 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="default" />
         <meta name="apple-mobile-web-app-title" content="TGATB" />
         <meta name="msapplication-TileImage" content="/icons/icon-144x144.png" />
-        <meta name="msapplication-TileColor" content="#0f0f23" />
+        <meta name="msapplication-TileColor" content="#6750a4" />
         <meta name="msapplication-tap-highlight" content="no" />
-        <meta name="theme-color" content="#0f0f23" />
+        <meta name="theme-color" content="#6750a4" />
         <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
