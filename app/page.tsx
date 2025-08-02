@@ -224,6 +224,7 @@ export default function Home() {
               onDonateClick={() => setShowDonate(true)}
               onEditHabit={handleEditHabit}
               onDeleteHabit={handleDeleteHabit}
+              onHelpClick={resetWelcome}
             />
           </div>
           <h1 className="text-xl font-semibold">The Good and The Bad</h1>

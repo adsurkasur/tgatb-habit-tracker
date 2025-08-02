@@ -17,7 +17,8 @@ import {
   Flame,
   Edit,
   Trash2,
-  X
+  X,
+  HelpCircle
 } from "lucide-react";
 import React, { useState, useCallback } from "react";
 import { Habit } from "@shared/schema";
@@ -34,6 +35,7 @@ interface NavigationDrawerProps {
   onDonateClick?: () => void;
   onEditHabit?: (habit: Habit) => void;
   onDeleteHabit?: (habitId: string) => void;
+  onHelpClick?: () => void;
 }
 
 // Memoized habit item component to prevent unnecessary re-renders
@@ -114,7 +116,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   onHistoryClick,
   onDonateClick,
   onEditHabit,
-  onDeleteHabit
+  onDeleteHabit,
+  onHelpClick
 }) => {
   const [open, setOpen] = useState(false);
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
@@ -144,6 +147,11 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
     setIsDonationDialogOpen(true);
     setOpen(false);
   }, []);
+
+  const handleHelpClick = useCallback(() => {
+    onHelpClick?.();
+    setOpen(false);
+  }, [onHelpClick]);
 
   // Handle mobile back navigation for the navigation drawer
   useMobileBackNavigation({
@@ -286,6 +294,15 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
           {/* Bottom Navigation - Fixed at bottom */}
           <div className="border-t border-border bg-card">
             <div className="p-4 space-y-1">
+              <Button
+                variant="ghost"
+                className="w-full justify-start p-3 h-auto state-layer-hover"
+                onClick={handleHelpClick}
+              >
+                <HelpCircle className="w-5 h-5 mr-3" />
+                <span>Help</span>
+              </Button>
+              
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
