@@ -204,7 +204,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
           {/* Overview Tab */}
           <TabsContent value="overview" className="flex-1 overflow-hidden mt-0">
-            <div className="h-full overflow-y-auto pr-4">
+            <div className="h-full overflow-y-auto">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-3 sm:mb-6">
                 <div className="space-y-3 sm:space-y-4">
                   {statCards.slice(0, 2).map((stat, index) => (
@@ -309,14 +309,14 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
           {/* Calendar Tab */}
           <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
-            <div className="h-full overflow-y-auto pr-4">
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 mb-3 sm:mb-6 items-start">
-                <div>
+            <div className="h-full overflow-y-auto">
+              <div className="flex flex-col items-center gap-4 sm:gap-6">
+                <div className="w-full max-w-sm">
                   <Calendar
                     mode="single"
                     selected={selectedDate}
                     onSelect={setSelectedDate}
-                    className="rounded-lg border w-full max-w-sm"
+                    className="rounded-lg border w-full"
                     modifiers={{
                       completed: (date) => {
                         const dateStr = format(date, 'yyyy-MM-dd');
@@ -332,13 +332,14 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                   />
                 </div>
                 
-                <div>
-                  <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">
-                    {selectedDate ? format(selectedDate, 'MMMM d, yyyy') : 'Select a date'}
-                    {selectedDate && isToday(selectedDate) && (
-                      <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>
-                    )}
-                  </h3>
+                {selectedDate && (
+                  <div className="w-full max-w-md">
+                    <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 text-center">
+                      {format(selectedDate, 'MMMM d, yyyy')}
+                      {isToday(selectedDate) && (
+                        <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>
+                      )}
+                    </h3>
                   
                   {selectedDayLog ? (
                     <ScrollArea className="h-48 sm:h-64">
@@ -375,13 +376,14 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                     </div>
                   )}
                 </div>
-              </div>
+              )}
+            </div>
             </div>
           </TabsContent>
 
           {/* Timeline Tab */}
           <TabsContent value="timeline" className="flex-1 overflow-hidden mt-0">
-            <div className="h-full overflow-y-auto pr-4">
+            <div className="h-full overflow-y-auto">
               <div className="space-y-3 sm:space-y-4">
                 {dailyLogs.map((log, index) => {
                   const completedCount = log.habits.filter(h => h.completed).length;
