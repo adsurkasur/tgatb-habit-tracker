@@ -54,7 +54,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className="material-radius-lg surface-elevation-3">
+      <MobileDialogContent className="w-full max-w-md material-radius-lg surface-elevation-3">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Edit Habit</DialogTitle>
         </DialogHeader>

@@ -43,7 +43,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className="material-radius-lg surface-elevation-3">
+      <MobileDialogContent className="w-full max-w-md material-radius-lg surface-elevation-3">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Add New Habit</DialogTitle>
         </DialogHeader>

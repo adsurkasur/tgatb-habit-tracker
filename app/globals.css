@@ -712,61 +712,35 @@
   }
 }
 
-/* Mobile Dialog Overflow Prevention */
+/* Mobile Dialog Optimizations */
 @media (max-width: 767px) {
-  [data-radix-dialog-content] {
-    width: calc(100vw - 3rem) !important;
-    max-width: calc(100vw - 3rem) !important;
-    left: 50% !important;
-    margin-left: 0 !important;
-    margin-right: 0 !important;
-    transform: translateX(-50%) translateY(-50%) !important;
-  }
-  
-  [data-radix-dialog-content][data-keyboard-open="true"] {
-    transform: translateX(-50%) translateY(0) !important;
-    top: 15% !important;
-  }
-}
-
-/* Mobile Virtual Keyboard Handling */
-@media (max-width: 768px) {
-  /* Ensure the viewport units respect the visual viewport */
-  .mobile-dialog-container {
-    height: 100vh;
-    height: 100dvh; /* Dynamic viewport height for better mobile support */
-  }
-
   /* Prevent zoom on input focus on iOS */
   input[type="text"],
   input[type="email"],
+  input[type="number"],
   input[type="password"],
-  input[type="search"],
-  input[type="tel"],
-  input[type="url"],
-  textarea {
+  textarea,
+  select {
     font-size: 16px !important;
-    transform: translateZ(0); /* Force hardware acceleration */
   }
-
-  /* Optimize keyboard transitions */
-  .mobile-dialog-content {
-    will-change: transform;
-    backface-visibility: hidden;
+  
+  /* Better touch targets */
+  button,
+  [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
   }
-
-  /* Prevent body scroll when dialog is open */
-  .dialog-open {
-    overflow: hidden;
+  
+  /* Prevent rubber band scrolling on iOS when dialog is open */
+  body.dialog-open {
     position: fixed;
+    overflow: hidden;
     width: 100%;
   }
-}
-
-/* iOS specific fixes */
-@supports (-webkit-touch-callout: none) {
-  .mobile-dialog-content {
-    /* Better iOS keyboard handling */
-    min-height: -webkit-fill-available;
+  
+  /* Ensure dialog content is properly contained */
+  [data-radix-popper-content-wrapper] {
+    max-height: 100vh !important;
+    overflow: hidden;
   }
 }

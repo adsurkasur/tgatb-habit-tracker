@@ -11,137 +11,123 @@ const MobileDialogContent = React.forwardRef<
 >(({ className, children, ...props }, ref) => {
   const { isKeyboardOpen, viewportHeight } = useVirtualKeyboard();
   const isMobile = useIsMobile();
-  const contentRef = React.useRef<HTMLDivElement>(null);
 
-  // Scroll the focused input into view when keyboard opens
+  // Lock body scroll when modal is open on mobile
   React.useEffect(() => {
-    if (isKeyboardOpen && isMobile && contentRef.current) {
+    // Removed body scroll lock - allow normal page scrolling
+    return () => {
+      // No cleanup needed
+    };
+  }, [isMobile]);
+
+  // Scroll focused input into view when keyboard opens
+  React.useEffect(() => {
+    if (isKeyboardOpen && isMobile) {
       const activeElement = document.activeElement as HTMLElement;
       if (activeElement && (activeElement.tagName === 'INPUT' || activeElement.tagName === 'TEXTAREA')) {
-        // Small delay to ensure the keyboard animation is complete
+        // Delay to ensure keyboard animation completes
         setTimeout(() => {
           activeElement.scrollIntoView({ 
             behavior: 'smooth', 
             block: 'center',
             inline: 'nearest'
           });
-        }, 150);
+        }, 300);
       }
     }
   }, [isKeyboardOpen, isMobile]);
 
-  // Calculate positioning based on keyboard state - only use CSS classes for desktop
-  const getPositionClass = () => {
-    if (isMobile === undefined || !isMobile) {
-      // Desktop or hydration: use CSS classes only
-      return "fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]";
-    }
-
-    // Mobile: use minimal CSS, let inline styles do the work
-    return "fixed";
-  };
-
-  // Calculate max height based on available space
-  const getMaxHeight = () => {
-    if (isMobile === undefined || !isMobile) {
-      return undefined; // No restriction on desktop or during hydration
-    }
-
-    if (isKeyboardOpen) {
-      // Reserve space for keyboard and some padding
-      const availableHeight = viewportHeight * 0.8; // Use 80% of visible viewport
-      return `${availableHeight}px`;
-    }
-
-    // Mobile without keyboard: use reasonable max height
-    return "85vh";
-  };
-
-  // Calculate width classes based on device type
-  const getWidthClasses = () => {
-    return "w-full"; // Always safe default
-  };
-
-  // Get margin and max-width classes for mobile
-  const getMobileSpacingClasses = () => {
-    if (isMobile === undefined || !isMobile) {
-      return "max-w-lg"; // Desktop default or hydration safe
-    }
-    
-    // Mobile: no classes, let inline styles handle everything
-    return "";
-  };
-
-  // Calculate inline styles for positioning
-  const getPositioningStyles = () => {
-    if (isMobile === undefined || !isMobile) {
-      return {}; // Let CSS classes handle desktop positioning
-    }
-
-    // Mobile-specific positioning - completely override CSS
-    const baseStyles = {
-      width: 'calc(100vw - 3rem)',
-      maxWidth: 'calc(100vw - 3rem)',
-      left: '50%',
-      marginLeft: '0',
-      marginRight: '0',
-      // Override any CSS positioning
-      position: 'fixed' as const,
-    };
-
-    if (isKeyboardOpen) {
-      // When keyboard is open, position from top using viewport units that are stable
+  // Calculate responsive positioning
+  const getPositioning = () => {
+    if (!isMobile) {
+      // Desktop: use default centering
       return {
-        ...baseStyles,
-        top: '10vh', // Use viewport units instead of percentage to avoid address bar issues
-        transform: 'translateX(-50%)',
-        // Remove translateY to avoid conflicts with dynamic viewport
+        className: "fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
+        style: {}
       };
     }
 
-    // When keyboard is closed, use a safe top position that accounts for address bar
-    return {
-      ...baseStyles,
-      top: '20vh', // Start lower to avoid address bar, use viewport units
+    // Mobile positioning
+    const baseStyle = {
+      position: 'fixed' as const,
+      left: '50%',
       transform: 'translateX(-50%)',
-      // Don't use translateY(-50%) as it can cause issues with dynamic viewport
+      width: 'calc(100vw - 2rem)', // Less margin, wider modal
+      maxWidth: '500px', // Slightly larger max width
+      minWidth: '300px', // Minimum width to prevent too narrow
+    };
+
+    if (isKeyboardOpen) {
+      // Position higher when keyboard is open - better sizing for keyboard state
+      return {
+        className: "fixed",
+        style: {
+          ...baseStyle,
+          top: '2vh', // Start closer to top to maximize space
+          bottom: '2vh', // Also set bottom constraint
+          height: 'auto', // Let content determine height
+          maxHeight: `${viewportHeight - 40}px`, // Use almost all available viewport height
+        }
+      };
+    }
+
+    // Center vertically when keyboard is closed - more even spacing
+    return {
+      className: "fixed",
+      style: {
+        ...baseStyle,
+        top: '50%',
+        transform: 'translateX(-50%) translateY(-50%)', // Perfect center
+        maxHeight: '75vh', // Slightly more height allowance
+      }
     };
   };
 
+  const positioning = getPositioning();
+
   return (
     <DialogPrimitive.Portal>
-      <DialogPrimitive.Overlay className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0" />
+      <DialogPrimitive.Overlay 
+        className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
+        style={{
+          // Make overlay responsive to virtual keyboard
+          ...(isMobile && isKeyboardOpen && {
+            height: `${viewportHeight}px`,
+            bottom: 'auto'
+          })
+        }}
+        onTouchMove={(e) => {
+          // ONLY prevent touch events on the overlay itself from propagating
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+        onWheel={(e) => {
+          // ONLY prevent wheel events on the overlay from propagating  
+          e.preventDefault();
+          e.stopPropagation();
+        }}
+      />
       <DialogPrimitive.Content
         ref={ref}
-        data-keyboard-open={isMobile && isKeyboardOpen ? "true" : undefined}
         className={cn(
-          "z-50 grid gap-4 border bg-background p-4 shadow-lg duration-200",
+          "z-50 grid gap-4 border bg-background p-6 shadow-lg duration-200",
           "data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
-          "sm:rounded-lg sm:p-6 overflow-y-auto",
-          // Width classes based on device
-          getWidthClasses(),
-          // Mobile spacing and constraints
-          getMobileSpacingClasses(),
-          isMobile && isKeyboardOpen ? "rounded-t-lg" : "",
-          isMobile ? "rounded-lg" : "",
-          getPositionClass(),
+          "overflow-y-auto rounded-lg",
+          // Apply responsive width - more proportionate sizing
+          isMobile ? "w-auto" : "w-full max-w-lg",
+          positioning.className,
           className
         )}
         style={{
-          maxHeight: getMaxHeight(),
-          transition: "all 0.3s ease-in-out",
-          // Apply positioning styles - these override CSS classes when present
-          ...getPositioningStyles(),
-          // Ensure z-index is high enough
-          zIndex: isMobile ? 9999 : undefined,
+          ...positioning.style,
+          // Prevent overscroll behavior
+          overscrollBehavior: isMobile ? 'contain' : undefined,
         }}
         {...props}
       >
-        <div ref={contentRef} className="relative">
-          {children}
-        </div>
+        {children}
         <DialogPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground">
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>

@@ -1,64 +1,87 @@
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 
-interface UseVirtualKeyboardReturn {
+interface VirtualKeyboardState {
   isKeyboardOpen: boolean;
-  keyboardHeight: number;
   viewportHeight: number;
+  keyboardHeight: number;
 }
 
 /**
- * Hook to detect when the virtual keyboard is open on mobile devices
- * and provide information about the keyboard state
+ * Custom hook to detect virtual keyboard state on mobile devices
+ * Uses the Visual Viewport API when available, falls back to viewport height detection
  */
-export function useVirtualKeyboard(): UseVirtualKeyboardReturn {
-  const [isKeyboardOpen, setIsKeyboardOpen] = useState(false);
-  const [keyboardHeight, setKeyboardHeight] = useState(0);
-  const [viewportHeight, setViewportHeight] = useState(0);
+export function useVirtualKeyboard(): VirtualKeyboardState {
+  const [state, setState] = useState<VirtualKeyboardState>({
+    isKeyboardOpen: false,
+    viewportHeight: typeof window !== 'undefined' ? window.innerHeight : 0,
+    keyboardHeight: 0,
+  });
 
   useEffect(() => {
+    // SSR safety check
     if (typeof window === 'undefined') return;
 
-    const initialViewportHeight = window.visualViewport?.height || window.innerHeight;
-    const initialWindowHeight = window.innerHeight;
-    setViewportHeight(initialViewportHeight);
+    let isSupported = false;
+    let initialHeight = window.innerHeight;
 
-    const handleViewportChange = () => {
-      const currentViewportHeight = window.visualViewport?.height || window.innerHeight;
-      const currentWindowHeight = window.innerHeight;
-      
-      // Calculate the difference to determine if keyboard is open
-      const heightDifference = initialWindowHeight - currentViewportHeight;
-      const isOpen = heightDifference > 150; // Threshold for keyboard detection
-      
-      setIsKeyboardOpen(isOpen);
-      setKeyboardHeight(isOpen ? heightDifference : 0);
-      setViewportHeight(currentViewportHeight);
-    };
+    // Check if Visual Viewport API is supported (modern approach)
+    if ('visualViewport' in window && window.visualViewport) {
+      isSupported = true;
+      initialHeight = window.visualViewport.height;
 
-    // Listen for viewport changes (modern approach)
-    if (window.visualViewport) {
+      const handleViewportChange = () => {
+        if (!window.visualViewport) return;
+
+        const currentHeight = window.visualViewport.height;
+        const heightDifference = initialHeight - currentHeight;
+        
+        // Consider keyboard open if viewport height reduced by more than 150px
+        // This threshold helps avoid false positives from address bar hiding
+        const isKeyboardOpen = heightDifference > 150;
+
+        setState({
+          isKeyboardOpen,
+          viewportHeight: currentHeight,
+          keyboardHeight: isKeyboardOpen ? heightDifference : 0,
+        });
+      };
+
       window.visualViewport.addEventListener('resize', handleViewportChange);
-      window.visualViewport.addEventListener('scroll', handleViewportChange);
+      
+      // Set initial state
+      handleViewportChange();
+
+      return () => {
+        if (window.visualViewport) {
+          window.visualViewport.removeEventListener('resize', handleViewportChange);
+        }
+      };
     }
 
-    // Fallback for older browsers
-    window.addEventListener('resize', handleViewportChange);
+    // Fallback for older browsers using window resize
+    if (!isSupported) {
+      const handleResize = () => {
+        const currentHeight = window.innerHeight;
+        const heightDifference = initialHeight - currentHeight;
+        const isKeyboardOpen = heightDifference > 150;
 
-    // Initial check
-    handleViewportChange();
+        setState({
+          isKeyboardOpen,
+          viewportHeight: currentHeight,
+          keyboardHeight: isKeyboardOpen ? heightDifference : 0,
+        });
+      };
 
-    return () => {
-      if (window.visualViewport) {
-        window.visualViewport.removeEventListener('resize', handleViewportChange);
-        window.visualViewport.removeEventListener('scroll', handleViewportChange);
-      }
-      window.removeEventListener('resize', handleViewportChange);
-    };
+      window.addEventListener('resize', handleResize);
+      
+      // Set initial state
+      handleResize();
+
+      return () => {
+        window.removeEventListener('resize', handleResize);
+      };
+    }
   }, []);
 
-  return {
-    isKeyboardOpen,
-    keyboardHeight,
-    viewportHeight
-  };
+  return state;
 }
