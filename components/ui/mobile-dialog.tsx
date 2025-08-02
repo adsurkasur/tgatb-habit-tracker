@@ -30,26 +30,21 @@ const MobileDialogContent = React.forwardRef<
     }
   }, [isKeyboardOpen, isMobile]);
 
-  // Calculate positioning based on keyboard state
+  // Calculate positioning based on keyboard state - only use CSS classes for desktop
   const getPositionClass = () => {
-    if (!isMobile) {
-      // Desktop: use default centering
+    if (isMobile === undefined || !isMobile) {
+      // Desktop or hydration: use CSS classes only
       return "fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]";
     }
 
-    if (isKeyboardOpen) {
-      // Mobile with keyboard: position in upper portion of visible viewport
-      return "fixed left-[50%] top-[15%] translate-x-[-50%] translate-y-0";
-    }
-
-    // Mobile without keyboard: use default centering
-    return "fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]";
+    // Mobile: use minimal CSS, let inline styles do the work
+    return "fixed";
   };
 
   // Calculate max height based on available space
   const getMaxHeight = () => {
-    if (!isMobile) {
-      return undefined; // No restriction on desktop
+    if (isMobile === undefined || !isMobile) {
+      return undefined; // No restriction on desktop or during hydration
     }
 
     if (isKeyboardOpen) {
@@ -64,23 +59,53 @@ const MobileDialogContent = React.forwardRef<
 
   // Calculate width classes based on device type
   const getWidthClasses = () => {
-    if (!isMobile) {
-      // Desktop: use default width handling
-      return "w-full";
-    }
-    
-    // Mobile: ensure it doesn't overflow with proper constraints
-    return "w-full";
+    return "w-full"; // Always safe default
   };
 
   // Get margin and max-width classes for mobile
   const getMobileSpacingClasses = () => {
-    if (!isMobile) {
-      return "max-w-lg"; // Desktop default
+    if (isMobile === undefined || !isMobile) {
+      return "max-w-lg"; // Desktop default or hydration safe
     }
     
-    // Mobile: no margin classes, let positioning handle centering
+    // Mobile: no classes, let inline styles handle everything
     return "";
+  };
+
+  // Calculate inline styles for positioning
+  const getPositioningStyles = () => {
+    if (isMobile === undefined || !isMobile) {
+      return {}; // Let CSS classes handle desktop positioning
+    }
+
+    // Mobile-specific positioning - completely override CSS
+    const baseStyles = {
+      width: 'calc(100vw - 3rem)',
+      maxWidth: 'calc(100vw - 3rem)',
+      left: '50%',
+      marginLeft: '0',
+      marginRight: '0',
+      // Override any CSS positioning
+      position: 'fixed' as const,
+    };
+
+    if (isKeyboardOpen) {
+      // When keyboard is open, position from top using viewport units that are stable
+      return {
+        ...baseStyles,
+        top: '10vh', // Use viewport units instead of percentage to avoid address bar issues
+        transform: 'translateX(-50%)',
+        // Remove translateY to avoid conflicts with dynamic viewport
+      };
+    }
+
+    // When keyboard is closed, use a safe top position that accounts for address bar
+    return {
+      ...baseStyles,
+      top: '20vh', // Start lower to avoid address bar, use viewport units
+      transform: 'translateX(-50%)',
+      // Don't use translateY(-50%) as it can cause issues with dynamic viewport
+    };
   };
 
   return (
@@ -107,17 +132,10 @@ const MobileDialogContent = React.forwardRef<
         style={{
           maxHeight: getMaxHeight(),
           transition: "all 0.3s ease-in-out",
-          // Force width and centering constraints on mobile
-          ...(isMobile && {
-            width: 'calc(100vw - 3rem)',
-            maxWidth: 'calc(100vw - 3rem)',
-            left: '50%',
-            transform: isKeyboardOpen 
-              ? 'translateX(-50%) translateY(0)' 
-              : 'translateX(-50%) translateY(-50%)',
-            marginLeft: '0',
-            marginRight: '0'
-          })
+          // Apply positioning styles - these override CSS classes when present
+          ...getPositioningStyles(),
+          // Ensure z-index is high enough
+          zIndex: isMobile ? 9999 : undefined,
         }}
         {...props}
       >
