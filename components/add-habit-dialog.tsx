@@ -1,4 +1,5 @@
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { Dialog, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -42,7 +43,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="w-full max-w-md material-radius-lg surface-elevation-3">
+      <MobileDialogContent className="material-radius-lg surface-elevation-3">
         <DialogHeader>
           <DialogTitle className="text-xl font-semibold">Add New Habit</DialogTitle>
         </DialogHeader>
@@ -113,7 +114,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
             </Button>
           </div>
         </form>
-      </DialogContent>
+      </MobileDialogContent>
     </Dialog>
   );
 }
