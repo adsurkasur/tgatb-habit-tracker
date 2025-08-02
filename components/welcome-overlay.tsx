@@ -376,14 +376,12 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                   Step {stepIndex + 1} of {welcomeSteps.length}
                 </Badge>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={handleSkip}
-                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 hover:bg-destructive/10 hover:text-destructive"
+                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
                 <X className="w-4 h-4" />
-              </Button>
+              </button>
             </div>
 
             {/* Description */}
@@ -452,29 +450,6 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           </Card>
         );
       })}
-
-      {/* Arrow pointing to target (if applicable) */}
-      {allPositions[currentStep] && currentStepData.targetSelector && isPositionReady && (
-        <div
-          className="absolute pointer-events-none"
-          style={{
-            left: allPositions[currentStep]!.x + allPositions[currentStep]!.width / 2,
-            top: allPositions[currentStep]!.y + allPositions[currentStep]!.height / 2,
-            transform: 'translate(-50%, -50%)'
-          }}
-        >
-          {/* Arrow based on position */}
-          <div
-            className="w-0 h-0"
-            style={{
-              borderLeft: currentStepData.position === 'right' ? '12px solid hsl(var(--primary))' : '12px solid transparent',
-              borderRight: currentStepData.position === 'left' ? '12px solid hsl(var(--primary))' : '12px solid transparent',
-              borderTop: currentStepData.position === 'bottom' ? '12px solid hsl(var(--primary))' : '12px solid transparent',
-              borderBottom: currentStepData.position === 'top' ? '12px solid hsl(var(--primary))' : '12px solid transparent',
-            }}
-          />
-        </div>
-      )}
     </div>
   );
 }

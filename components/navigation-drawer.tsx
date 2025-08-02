@@ -181,14 +181,12 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
                 <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
+              <button
                 onClick={() => setOpen(false)}
-                className="h-8 w-8 p-0 shrink-0"
+                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
                 <X className="w-5 h-5" />
-              </Button>
+              </button>
             </div>
           </div>
           
