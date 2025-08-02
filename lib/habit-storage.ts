@@ -1,5 +1,5 @@
 import { Habit, HabitLog, UserSettings, HabitType } from "@shared/schema";
-import { generateId } from "./utils";
+import { generateId, formatLocalDate } from "./utils";
 
 const HABITS_KEY = "habits";
 const LOGS_KEY = "habit_logs";
@@ -76,7 +76,7 @@ export class HabitStorage {
 
   static addLog(habitId: string, completed: boolean): HabitLog {
     const logs = this.getLogs();
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date()); // Use local timezone
     
     // Remove existing log for today if it exists
     const filteredLogs = logs.filter(log => !(log.habitId === habitId && log.date === today));
@@ -122,7 +122,7 @@ export class HabitStorage {
     if (allLogs.length === 0) return 0;
     
     const today = new Date();
-    const todayStr = today.toISOString().split('T')[0];
+    const todayStr = formatLocalDate(today); // Use local timezone
     
     // Find starting point for streak calculation
     const hasLogToday = allLogs.some(log => log.date === todayStr);
@@ -137,7 +137,7 @@ export class HabitStorage {
     for (let i = startDaysBack; i <= 365; i++) {
       const checkDate = new Date(fromDate);
       checkDate.setDate(checkDate.getDate() - i);
-      const checkDateStr = checkDate.toISOString().split('T')[0];
+      const checkDateStr = formatLocalDate(checkDate); // Use local timezone
       
       const logForDay = logs.find(log => log.date === checkDateStr);
       if (logForDay) {
@@ -214,7 +214,7 @@ export class HabitStorage {
   // New utility methods for enhanced functionality
   static isHabitCompletedToday(habitId: string): boolean {
     const logs = this.getLogs();
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date()); // Use local timezone
     
     const todayLog = logs.find(log => 
       log.habitId === habitId && 
@@ -227,7 +227,7 @@ export class HabitStorage {
 
   static getTodayLog(habitId: string): HabitLog | undefined {
     const logs = this.getLogs();
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date()); // Use local timezone
     
     return logs.find(log => 
       log.habitId === habitId && 
@@ -293,7 +293,7 @@ export class HabitStorage {
 
   static undoTodayLog(habitId: string): boolean {
     const logs = this.getLogs();
-    const today = new Date().toISOString().split('T')[0];
+    const today = formatLocalDate(new Date()); // Use local timezone
     
     const todayLogIndex = logs.findIndex(log => 
       log.habitId === habitId && 

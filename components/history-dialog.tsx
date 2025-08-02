@@ -21,6 +21,7 @@ import {
 } from 'lucide-react';
 import { Habit, HabitType } from '@/shared/schema';
 import { getHabitStats, getAllHabitLogs } from '@/lib/habit-storage';
+import { formatLocalDate } from '@/lib/utils';
 import { format, startOfDay, isToday, subDays, eachDayOfInterval } from 'date-fns';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -94,7 +95,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
       
       if (habitCreatedDate <= today) {
         const logs = getAllHabitLogs(habit.id);
-        const todayStr = new Date().toISOString().split('T')[0]; // Use same format as storage
+        const todayStr = formatLocalDate(new Date()); // Use local timezone
         if (logs.some((log: any) => log.date === todayStr && log.completed === true)) {
           stats.todayCompletion++;
         }
@@ -109,7 +110,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
       const weeklyCompletions = last7Days.filter(day => {
         const dayStart = startOfDay(day);
         if (habitCreatedDate <= dayStart) {
-          const dayStr = day.toISOString().split('T')[0]; // Use same format as storage
+          const dayStr = formatLocalDate(day); // Use local timezone
           const logs = getAllHabitLogs(habit.id);
           return logs.some((log: any) => log.date === dayStr && log.completed === true);
         }
@@ -142,8 +143,8 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
           })
           .map(habit => {
             const habitLogs = getAllHabitLogs(habit.id);
-            // Use the same date format as storage: toISOString split
-            const dateStr = date.toISOString().split('T')[0];
+            // Use local timezone for consistent date handling
+            const dateStr = formatLocalDate(date);
             // Check if there's a completed log for this date
             const completed = habitLogs.some((log: any) => log.date === dateStr && log.completed === true);
             
@@ -195,7 +196,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
   // Get selected day data
   const selectedDayLog = selectedDate ? 
-    dailyLogs.find(log => log.date.toISOString().split('T')[0] === selectedDate.toISOString().split('T')[0]) 
+    dailyLogs.find(log => formatLocalDate(log.date) === formatLocalDate(selectedDate)) 
     : null;
 
   // Choose the appropriate dialog content component
@@ -359,9 +360,9 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
                     className="rounded-lg border"
                     modifiers={{
                       completed: (date) => {
-                        const dateStr = date.toISOString().split('T')[0]; // Use same format as storage
+                        const dateStr = formatLocalDate(date); // Use local timezone
                         return dailyLogs.some(log => 
-                          log.date.toISOString().split('T')[0] === dateStr && 
+                          formatLocalDate(log.date) === dateStr && 
                           log.habits.some(h => h.completed === true)
                         );
                       }
