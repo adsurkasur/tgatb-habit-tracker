@@ -81,7 +81,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         : 'Once you add habits, they\'ll appear here. Tap to mark them as complete for the day.',
       targetSelector: '.habit-card-animated',
       position: 'right',
-      offset: { x: 10, y: 0 }
+      offset: { x: 0, y: 0 } // Centered for better alignment
     },
     {
       id: 'complete',
@@ -383,8 +383,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
           if (shouldPositionAbove) {
             // Force the card to appear above the highlighted component
-            // Better centering and spacing
-            finalX = x + width / 2;
+            // Perfect centering - ignore horizontal offset for better alignment
+            finalX = x + width / 2; // Center on the highlighted element, ignore offset.x for centering
             finalY = y - margin - 15; // Better spacing
             transform = 'translate(-50%, -100%)';
             
