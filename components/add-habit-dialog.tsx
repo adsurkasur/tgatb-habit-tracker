@@ -46,7 +46,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col h-full gap-0" : ""}`}>
+      <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}>
         <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : ""}`}>
           <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
             <DialogTitle className="text-xl font-semibold">
@@ -65,8 +65,8 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
           </div>
         </DialogHeader>
         
-        <div className={`${isMobile ? "flex-1 overflow-y-auto" : ""}`}>
-          <form onSubmit={handleSubmit} className={`space-y-6 ${isMobile ? "px-6 pt-4 pb-6" : ""}`}>
+        <div className={`${isMobile ? "overflow-y-auto" : ""}`}>
+          <form onSubmit={handleSubmit} className={`${isMobile ? "px-6 pt-4 pb-4 space-y-4" : "space-y-6"}`}>
           {/* Habit Name Input */}
           <div className="space-y-2">
             <Label htmlFor="habit-name" className="text-sm font-medium">
@@ -115,7 +115,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
           </div>
 
           {/* Dialog Actions */}
-          <div className="flex space-x-3 justify-end pt-4">
+          <div className={`flex space-x-3 justify-end ${isMobile ? "pt-2" : "pt-4"}`}>
             <Button
               type="button"
               variant="ghost"
@@ -126,7 +126,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
             </Button>
             <Button
               type="submit"
-              className="px-6 bg-primary hover:bg-primary/90 text-primary-foreground material-radius surface-elevation-1"
+              className="px-6 bg-primary hover:bg-primary/90 text-white material-radius surface-elevation-1"
             >
               Save
             </Button>
