@@ -318,59 +318,56 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           // Check if we're on mobile (viewport width < 640px)
           const isMobile = window.innerWidth < 640;
           
-          // For specific steps, check if they would be clipped by viewport
-          const shouldCheckViewportClipping = step.id === 'add-button' || step.id === 'habit-card';
+          // Apply viewport clipping detection to ALL steps for consistent behavior
           let shouldPositionAbove = false;
           
-          if (shouldCheckViewportClipping) {
-            // Calculate where the card would be positioned with original logic
-            let testX, testY;
-            const cardWidth = isMobile ? 288 : 320; // w-72 (288px) on mobile, w-80 (320px) on desktop
-            const cardHeight = 200; // Approximate card height
-            
-            switch (step.position) {
-              case 'right':
-                testX = x + width + margin + offset.x;
-                testY = y + height / 2 + offset.y;
-                // Check if card would extend beyond right edge of viewport
-                if (testX + cardWidth > window.innerWidth - 20) {
-                  shouldPositionAbove = true;
-                }
-                break;
-              case 'left':
-                testX = x - margin + offset.x;
-                testY = y + height / 2 + offset.y;
-                // Check if card would extend beyond left edge of viewport
-                if (testX - cardWidth < 20) {
-                  shouldPositionAbove = true;
-                }
-                break;
-              case 'bottom':
-                testX = x + width / 2 + offset.x;
-                testY = y + height + margin + offset.y;
-                // Check if card would extend beyond bottom edge of viewport
-                if (testY + cardHeight > window.innerHeight - 20) {
-                  shouldPositionAbove = true;
-                }
-                break;
-              case 'top':
-                testX = x + width / 2 + offset.x;
-                testY = y - margin + offset.y;
-                // Check if card would extend beyond top edge of viewport
-                if (testY - cardHeight < 20) {
-                  shouldPositionAbove = true;
-                }
-                break;
-            }
-            
-            // Also check horizontal clipping for all positions
-            if (!shouldPositionAbove) {
-              if (step.position === 'top' || step.position === 'bottom') {
-                testX = x + width / 2 + offset.x;
-                // Check if centered card would be clipped horizontally
-                if (testX - cardWidth / 2 < 20 || testX + cardWidth / 2 > window.innerWidth - 20) {
-                  shouldPositionAbove = true;
-                }
+          // Calculate where the card would be positioned with original logic
+          let testX, testY;
+          const cardWidth = isMobile ? 288 : 320; // w-72 (288px) on mobile, w-80 (320px) on desktop
+          const cardHeight = 250; // Approximate card height including title
+          
+          switch (step.position) {
+            case 'right':
+              testX = x + width + margin + offset.x;
+              testY = y + height / 2 + offset.y;
+              // Check if card would extend beyond right edge of viewport
+              if (testX + cardWidth > window.innerWidth - 20) {
+                shouldPositionAbove = true;
+              }
+              break;
+            case 'left':
+              testX = x - margin + offset.x;
+              testY = y + height / 2 + offset.y;
+              // Check if card would extend beyond left edge of viewport
+              if (testX - cardWidth < 20) {
+                shouldPositionAbove = true;
+              }
+              break;
+            case 'bottom':
+              testX = x + width / 2 + offset.x;
+              testY = y + height + margin + offset.y;
+              // Check if card would extend beyond bottom edge of viewport
+              if (testY + cardHeight > window.innerHeight - 20) {
+                shouldPositionAbove = true;
+              }
+              break;
+            case 'top':
+              testX = x + width / 2 + offset.x;
+              testY = y - margin + offset.y;
+              // Check if card would extend beyond top edge of viewport
+              if (testY - cardHeight < 20) {
+                shouldPositionAbove = true;
+              }
+              break;
+          }
+          
+          // Also check horizontal clipping for all positions
+          if (!shouldPositionAbove) {
+            if (step.position === 'top' || step.position === 'bottom') {
+              testX = x + width / 2 + offset.x;
+              // Check if centered card would be clipped horizontally
+              if (testX - cardWidth / 2 < 20 || testX + cardWidth / 2 > window.innerWidth - 20) {
+                shouldPositionAbove = true;
               }
             }
           }
@@ -406,8 +403,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             }
             
             // Ensure the card doesn't get cut off at the top of the viewport
-            const cardHeight = 250; // Estimated card height including title
-            const minY = cardHeight + 30; // Minimum distance from top
+            const cardHeight = 250; // Estimated card height including title and padding
+            const minY = cardHeight + 30; // Minimum distance from top to ensure title is visible
             if (finalY < minY) {
               finalY = minY;
             }
@@ -439,9 +436,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 transform = 'translate(-50%, 0)';
             }
             
-            // Ensure proper viewport bounds for all positions
+            // Apply comprehensive viewport bounds for all positions to prevent any clipping
             const cardWidth = isMobile ? 288 : 320;
-            const cardHeight = 200;
+            const cardHeight = 250; // Updated to match consistent height estimate
             const safeMargin = 20;
             
             // Horizontal bounds checking
@@ -462,7 +459,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
               }
             }
             
-            // Vertical bounds checking  
+            // Vertical bounds checking with top viewport protection for all steps
             if (step.position === 'left' || step.position === 'right') {
               const halfCardHeight = cardHeight / 2;
               const minY = halfCardHeight + safeMargin;
@@ -471,8 +468,10 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
               if (finalY < minY) finalY = minY;
               if (finalY > maxY) finalY = maxY;
             } else if (step.position === 'top') {
-              if (finalY - cardHeight < safeMargin) {
-                finalY = cardHeight + safeMargin;
+              // Ensure card title and content are visible when positioned above
+              const minTopY = cardHeight + safeMargin + 30; // Extra padding for title visibility
+              if (finalY - cardHeight < safeMargin || finalY < minTopY) {
+                finalY = minTopY;
               }
             } else if (step.position === 'bottom') {
               if (finalY + cardHeight > window.innerHeight - safeMargin) {
