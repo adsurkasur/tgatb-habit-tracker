@@ -177,8 +177,8 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContentComponent className={isMobile ? "p-0" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}>
-        <DialogHeader className={`${isMobile ? "px-6 pt-4 pb-3 mb-3 border-b sticky top-0 bg-background z-10" : "pb-4 mb-4"}`}>
+      <DialogContentComponent className={isMobile ? "p-0 flex flex-col h-full gap-0 [&>button]:hidden" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}>
+        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : "pb-4 mb-4"}`}>
           <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
             <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
               <BarChart3 className="w-5 h-5" />
@@ -198,7 +198,8 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
           </div>
         </DialogHeader>
 
-        <Tabs value={selectedTab} onValueChange={setSelectedTab} className={`flex-1 min-h-0 flex flex-col ${isMobile ? "px-6 pb-6" : "pt-4"}`}>
+        <div className={`${isMobile ? "flex-1 overflow-y-auto" : ""}`}>
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className={`flex-1 min-h-0 flex flex-col ${isMobile ? "px-6 pt-4 pb-6" : "pt-4"}`}>
           <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 flex-shrink-0">
             <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
               <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -438,6 +439,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
             </div>
           </TabsContent>
         </Tabs>
+        </div>
       </DialogContentComponent>
     </Dialog>
   );

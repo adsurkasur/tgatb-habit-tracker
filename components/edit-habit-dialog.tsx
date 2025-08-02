@@ -6,6 +6,8 @@ import { Label } from "@/components/ui/label";
 import { useState, useEffect } from "react";
 import { Habit, HabitType } from "@shared/schema";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
+import { useIsMobile } from "@/hooks/use-mobile";
+import { X } from "lucide-react";
 
 interface EditHabitDialogProps {
   open: boolean;
@@ -17,6 +19,7 @@ interface EditHabitDialogProps {
 export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: EditHabitDialogProps) {
   const [name, setName] = useState("");
   const [type, setType] = useState<HabitType>("good");
+  const isMobile = useIsMobile();
 
   // Update form when habit changes
   useEffect(() => {
@@ -54,12 +57,27 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className="w-full max-w-md material-radius-lg surface-elevation-3">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold">Edit Habit</DialogTitle>
+      <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col h-full gap-0" : ""}`}>
+        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : ""}`}>
+          <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
+            <DialogTitle className="text-xl font-semibold">
+              {isMobile ? "Edit" : "Edit Habit"}
+            </DialogTitle>
+            {isMobile && (
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => onOpenChange(false)}
+                className="h-8 w-8 p-0 shrink-0"
+              >
+                <X className="w-5 h-5" />
+              </Button>
+            )}
+          </div>
         </DialogHeader>
         
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <div className={`${isMobile ? "flex-1 overflow-y-auto" : ""}`}>
+          <form onSubmit={handleSubmit} className={`space-y-6 ${isMobile ? "px-6 pt-4 pb-6" : ""}`}>
           {/* Habit Name Input */}
           <div className="space-y-2">
             <Label htmlFor="edit-habit-name" className="text-sm font-medium">
@@ -126,6 +144,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
             </Button>
           </div>
         </form>
+        </div>
       </MobileDialogContent>
     </Dialog>
   );
