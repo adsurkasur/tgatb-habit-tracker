@@ -28,6 +28,9 @@ export function PWAInstallPrompt() {
       return;
     }
 
+    // Clear any previous dismissal for testing
+    sessionStorage.removeItem('pwa-install-dismissed');
+
     // Listen for the beforeinstallprompt event
     const handler = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
@@ -45,9 +48,26 @@ export function PWAInstallPrompt() {
 
     window.addEventListener('appinstalled', appInstalledHandler);
 
+    // For testing - show install prompt after 2 seconds if not installed
+    const timer = setTimeout(() => {
+      if (!isStandalone && !isInWebAppiOS) {
+        setShowInstallPrompt(true);
+      }
+    }, 2000);
+
+    // Listen for manual trigger from settings
+    const handleManualTrigger = () => {
+      sessionStorage.removeItem('pwa-install-dismissed');
+      setShowInstallPrompt(true);
+    };
+
+    window.addEventListener('trigger-pwa-install', handleManualTrigger);
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handler as EventListener);
       window.removeEventListener('appinstalled', appInstalledHandler);
+      window.removeEventListener('trigger-pwa-install', handleManualTrigger);
+      clearTimeout(timer);
     };
   }, []);
 
@@ -69,13 +89,14 @@ export function PWAInstallPrompt() {
     sessionStorage.setItem('pwa-install-dismissed', 'true');
   };
 
-  // Don't show if already installed or dismissed
-  if (isInstalled || !showInstallPrompt || sessionStorage.getItem('pwa-install-dismissed')) {
+  // Don't show if already installed
+  if (isInstalled || !showInstallPrompt) {
     return null;
   }
 
   return (
-    <div className="fixed bottom-4 left-4 right-4 md:left-auto md:max-w-sm bg-background border border-border rounded-lg shadow-lg p-4 z-50">
+    <div className="fixed inset-0 bg-black/20 flex items-center justify-center p-4 z-50">
+      <div className="bg-background border border-border rounded-lg shadow-lg p-4 max-w-sm w-full">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <h3 className="font-semibold text-sm mb-1">Install TGATB App</h3>
@@ -108,6 +129,7 @@ export function PWAInstallPrompt() {
         >
           <X className="h-3 w-3" />
         </Button>
+      </div>
       </div>
     </div>
   );

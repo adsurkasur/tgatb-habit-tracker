@@ -13,10 +13,11 @@ import {
   Download, 
   Upload,
   HelpCircle,
-  Mail
+  Mail,
+  Smartphone
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
-import { useRef } from "react";
+import { useRef, useState, useEffect } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 
@@ -41,6 +42,25 @@ export function SettingsScreen({
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const [canInstallPWA, setCanInstallPWA] = useState(false);
+  const [isAppInstalled, setIsAppInstalled] = useState(false);
+
+  // Check PWA install availability
+  useEffect(() => {
+    // Check if app is already installed
+    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
+    const isInWebAppiOS = (window.navigator as any).standalone === true;
+    setIsAppInstalled(isStandalone || isInWebAppiOS);
+
+    // Listen for install prompt availability
+    const handler = (e: any) => {
+      e.preventDefault();
+      setCanInstallPWA(true);
+    };
+
+    window.addEventListener('beforeinstallprompt', handler);
+    return () => window.removeEventListener('beforeinstallprompt', handler);
+  }, []);
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -76,6 +96,30 @@ export function SettingsScreen({
       title: "Upcoming Feature!",
       description: "Cloud backup functionality will be available soon. Stay tuned! ☁️",
       duration: 3000,
+    });
+  };
+
+  const handleInstallPWA = () => {
+    if (isAppInstalled) {
+      toast({
+        title: "App Already Installed",
+        description: "TGATB is already installed on your device!",
+        duration: 3000,
+      });
+      return;
+    }
+
+    // Clear any previous dismissal
+    sessionStorage.removeItem('pwa-install-dismissed');
+    
+    // Try to trigger install prompt
+    const event = new CustomEvent('trigger-pwa-install');
+    window.dispatchEvent(event);
+
+    toast({
+      title: "Install Prompt",
+      description: "If supported, an install prompt should appear. Look for the install button in your browser's address bar if no popup appears.",
+      duration: 5000,
     });
   };
 
@@ -184,6 +228,22 @@ export function SettingsScreen({
               <div className="flex items-center space-x-3">
                 <Upload className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Import Data</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+
+            <div 
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={handleInstallPWA}
+            >
+              <div className="flex items-center space-x-3">
+                <Smartphone className="w-5 h-5 text-muted-foreground" />
+                <div className="flex flex-col">
+                  <span className="font-medium">Install App</span>
+                  <span className="text-xs text-muted-foreground">
+                    {isAppInstalled ? "Already installed" : "Add to home screen"}
+                  </span>
+                </div>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>

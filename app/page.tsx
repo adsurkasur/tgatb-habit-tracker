@@ -9,6 +9,7 @@ import { AddHabitCTA } from "@/components/add-habit-cta";
 import { SettingsScreen } from "@/components/settings-screen";
 import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
+import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
@@ -228,7 +229,7 @@ export default function Home() {
             />
           </div>
           <h1 className="text-xl font-semibold">The Good and The Bad</h1>
-          <div className="w-10" /> {/* Spacer for balance */}
+          <OfflineHeaderIndicator />
         </header>
 
         {/* Main Content */}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/react";
+import { OfflineToast } from "@/components/offline-toast";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -77,13 +78,14 @@ export default function RootLayout({
         <link rel="apple-touch-icon" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" />
+        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
       </head>
       <body>
         <Providers>
           {children}
         </Providers>
-        <Analytics />
+        <OfflineToast />
+        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   );

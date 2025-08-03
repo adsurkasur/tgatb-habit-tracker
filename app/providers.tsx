@@ -6,7 +6,6 @@ import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/theme-provider";
 import { LoadingScreen } from "@/components/loading-screen";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
-import { OfflineIndicator } from "@/components/offline-indicator";
 import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
 import { useState } from "react";
 
@@ -28,7 +27,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <LoadingScreen />
           {children}
           <PWAInstallPrompt />
-          <OfflineIndicator />
           <Toaster />
         </TooltipProvider>
       </QueryClientProvider>
