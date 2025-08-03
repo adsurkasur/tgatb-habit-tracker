@@ -355,8 +355,11 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           const isStep4OnMobile = isMobile && step.id === 'habit-card';
           const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
           
-          // Combine viewport clipping logic with mobile-specific logic
-          shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab;
+          // On desktop, force navigation step above to prevent covering
+          const isNavigationOnDesktop = !isMobile && step.id === 'navigation';
+          
+          // Combine viewport clipping logic with device-specific logic
+          shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab || isNavigationOnDesktop;
 
           let finalX, finalY, transform;
 
@@ -483,9 +486,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             }}
           >
             {/* Header */}
-            <div className="flex items-start justify-between mb-6 max-sm:mb-4">
-              <div className="flex-1">
-                <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-3 max-sm:mb-2 leading-tight">
+            <div className="flex items-start justify-between mb-6 max-sm:mb-4 min-w-0">
+              <div className="flex-1 min-w-0">
+                <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-3 max-sm:mb-2 leading-tight break-words">
                   {step.title}
                 </h3>
                 <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20 px-3 py-1">
@@ -494,14 +497,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
               </div>
               <button
                 onClick={handleSkip}
-                className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50"
+                className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50 ml-3"
               >
                 <X className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
               </button>
             </div>
 
             {/* Description */}
-            <p className="text-sm max-sm:text-xs text-muted-foreground mb-6 max-sm:mb-4 leading-relaxed max-sm:leading-snug">
+            <p className="text-sm max-sm:text-xs text-muted-foreground mb-6 max-sm:mb-4 leading-relaxed max-sm:leading-snug break-words">
               {step.description}
             </p>
 
@@ -514,54 +517,54 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             </div>
 
             {/* Actions */}
-            <div className="flex items-center justify-between gap-4 max-sm:gap-3">
-              {/* Previous button - fixed width for perfect alignment */}
-              <div className="w-24 max-sm:w-20 flex justify-start">
+            <div className="flex items-center justify-between gap-3 max-sm:gap-2 min-w-0">
+              {/* Previous button - flexible width for perfect alignment */}
+              <div className="flex justify-start min-w-0" style={{ minWidth: '80px' }}>
                 {stepIndex > 0 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handlePrev}
-                    className="w-full flex items-center justify-center gap-2 max-sm:gap-1.5 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium"
+                    className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap"
                   >
-                    <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3" />
-                    Previous
+                    <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
+                    <span className="truncate">Previous</span>
                   </Button>
                 )}
               </div>
 
               {/* Skip tour button - center section with equal spacing */}
-              <div className="flex-1 flex justify-center">
+              <div className="flex-1 flex justify-center min-w-0">
                 {stepIndex < welcomeSteps.length - 1 && (
                   <Button
                     variant="ghost"
                     size="sm"
                     onClick={handleSkip}
-                    className="text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-6 max-sm:px-4 font-medium"
+                    className="text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-4 max-sm:px-3 font-medium whitespace-nowrap"
                   >
                     Skip Tour
                   </Button>
                 )}
               </div>
 
-              {/* Next button - fixed width matching previous button */}
-              <div className="w-24 max-sm:w-20 flex justify-end">
+              {/* Next button - flexible width matching previous button */}
+              <div className="flex justify-end min-w-0" style={{ minWidth: '80px' }}>
                 <Button
                   onClick={handleNext}
                   size="sm"
                   variant="default"
-                  className="w-full flex items-center justify-center gap-2 max-sm:gap-1.5 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium"
+                  className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium px-3 max-sm:px-2 whitespace-nowrap"
                 >
                   {stepIndex === welcomeSteps.length - 1 ? (
                     <>
-                      <Play className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3" />
-                      <span className="max-sm:hidden">Get Started</span>
-                      <span className="sm:hidden">Start</span>
+                      <Play className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
+                      <span className="max-sm:hidden truncate">Get Started</span>
+                      <span className="sm:hidden truncate">Start</span>
                     </>
                   ) : (
                     <>
-                      <span>Next</span>
-                      <ArrowRight className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3" />
+                      <span className="truncate">Next</span>
+                      <ArrowRight className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
                     </>
                   )}
                 </Button>
