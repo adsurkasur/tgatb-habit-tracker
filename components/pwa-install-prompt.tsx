@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, X } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -17,6 +18,7 @@ export function PWAInstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     // Check if app is already installed
@@ -28,14 +30,18 @@ export function PWAInstallPrompt() {
       return;
     }
 
-    // Clear any previous dismissal for testing
-    sessionStorage.removeItem('pwa-install-dismissed');
+    // Check if user has dismissed the prompt before
+    const hasDismissed = sessionStorage.getItem('pwa-install-dismissed') === 'true';
 
     // Listen for the beforeinstallprompt event
     const handler = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      setShowInstallPrompt(true);
+      
+      // Only show if not previously dismissed
+      if (!hasDismissed) {
+        setShowInstallPrompt(true);
+      }
     };
 
     window.addEventListener('beforeinstallprompt', handler as EventListener);
@@ -44,13 +50,14 @@ export function PWAInstallPrompt() {
     const appInstalledHandler = () => {
       setIsInstalled(true);
       setShowInstallPrompt(false);
+      sessionStorage.removeItem('pwa-install-dismissed');
     };
 
     window.addEventListener('appinstalled', appInstalledHandler);
 
-    // For testing - show install prompt after 2 seconds if not installed
+    // For testing - show install prompt after 2 seconds if not installed and not dismissed
     const timer = setTimeout(() => {
-      if (!isStandalone && !isInWebAppiOS) {
+      if (!isStandalone && !isInWebAppiOS && !hasDismissed) {
         setShowInstallPrompt(true);
       }
     }, 2000);
@@ -87,6 +94,13 @@ export function PWAInstallPrompt() {
     setShowInstallPrompt(false);
     // Remember user dismissed the prompt for this session
     sessionStorage.setItem('pwa-install-dismissed', 'true');
+    
+    // Show toast notification about settings option
+    toast({
+      title: "App installation available",
+      description: "You can install the app anytime from Settings → Install App",
+      duration: 4000,
+    });
   };
 
   // Don't show if already installed
