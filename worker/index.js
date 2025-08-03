@@ -74,7 +74,7 @@ registerRoute(
   })
 );
 
-// Cache HTML pages with Network First strategy
+// Cache HTML pages with Network First strategy and proper fallback
 registerRoute(
   ({ request }) => request.destination === 'document',
   new NetworkFirst({
@@ -83,7 +83,67 @@ registerRoute(
       new ExpirationPlugin({
         maxEntries: 10,
         maxAgeSeconds: 24 * 60 * 60 // 24 hours
-      })
+      }),
+      {
+        // Custom fallback plugin for navigation requests
+        handlerDidError: async () => {
+          return new Response(`
+            <!DOCTYPE html>
+            <html>
+              <head>
+                <title>TGATB - Offline</title>
+                <meta name="viewport" content="width=device-width, initial-scale=1">
+                <style>
+                  body { 
+                    font-family: system-ui, sans-serif; 
+                    text-align: center; 
+                    padding: 2rem; 
+                    background: #f5f5f5;
+                    margin: 0;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    min-height: 100vh;
+                  }
+                  .container {
+                    max-width: 400px;
+                    background: white;
+                    padding: 2rem;
+                    border-radius: 12px;
+                    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+                  }
+                  .icon { font-size: 4rem; margin-bottom: 1rem; }
+                  h1 { color: #6750a4; margin-bottom: 1rem; }
+                  p { color: #666; line-height: 1.5; margin-bottom: 2rem; }
+                  button {
+                    background: #6750a4; 
+                    color: white; 
+                    border: none; 
+                    padding: 12px 24px; 
+                    border-radius: 6px; 
+                    cursor: pointer;
+                    font-size: 16px;
+                    transition: background-color 0.2s;
+                  }
+                  button:hover {
+                    background: #5a47a0;
+                  }
+                </style>
+              </head>
+              <body>
+                <div class="container">
+                  <div class="icon">📱</div>
+                  <h1>You're Offline</h1>
+                  <p>TGATB Habit Tracker is available offline. Your habit data will sync when you're back online.</p>
+                  <button onclick="window.location.reload()">Try Again</button>
+                </div>
+              </body>
+            </html>
+          `, {
+            headers: { 'Content-Type': 'text/html' }
+          });
+        }
+      }
     ]
   })
 );
@@ -210,70 +270,3 @@ async function removeOfflineHabitData(id) {
     };
   });
 }
-
-// Custom offline page handler
-registerRoute(
-  ({ request }) => request.mode === 'navigate',
-  async ({ event }) => {
-    try {
-      return await fetch(event.request);
-    } catch (error) {
-      // Return custom offline page with branding
-      return new Response(`
-        <!DOCTYPE html>
-        <html>
-          <head>
-            <title>TGATB - Offline</title>
-            <meta name="viewport" content="width=device-width, initial-scale=1">
-            <style>
-              body { 
-                font-family: system-ui, sans-serif; 
-                text-align: center; 
-                padding: 2rem; 
-                background: #f5f5f5;
-                margin: 0;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                min-height: 100vh;
-              }
-              .container {
-                max-width: 400px;
-                background: white;
-                padding: 2rem;
-                border-radius: 12px;
-                box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-              }
-              .icon { font-size: 4rem; margin-bottom: 1rem; }
-              h1 { color: #6750a4; margin-bottom: 1rem; }
-              p { color: #666; line-height: 1.5; margin-bottom: 2rem; }
-              button {
-                background: #6750a4; 
-                color: white; 
-                border: none; 
-                padding: 12px 24px; 
-                border-radius: 6px; 
-                cursor: pointer;
-                font-size: 16px;
-                transition: background-color 0.2s;
-              }
-              button:hover {
-                background: #5a47a0;
-              }
-            </style>
-          </head>
-          <body>
-            <div class="container">
-              <div class="icon">📱</div>
-              <h1>You're Offline</h1>
-              <p>TGATB Habit Tracker is available offline. Your habit data will sync when you're back online.</p>
-              <button onclick="window.location.reload()">Try Again</button>
-            </div>
-          </body>
-        </html>
-      `, {
-        headers: { 'Content-Type': 'text/html' }
-      });
-    }
-  }
-);
