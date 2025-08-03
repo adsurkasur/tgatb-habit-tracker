@@ -356,10 +356,36 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
           
           // On desktop, force navigation step above to prevent covering
+          // Apply same logic as mobile but for desktop navigation step
           const isNavigationOnDesktop = !isMobile && step.id === 'navigation';
           
+          // For desktop navigation, dynamically determine best position based on element location
+          let forceNavigationAbove = false;
+          if (!isMobile && step.id === 'navigation') {
+            // Calculate available space above and below the element
+            const spaceAbove = y;
+            const spaceBelow = window.innerHeight - (y + height);
+            const requiredSpace = cardHeight + 40; // Card height plus margin
+            
+            // If element is in top half OR there's insufficient space below, position above
+            const elementVerticalPosition = (y + height / 2) / window.innerHeight;
+            const isInTopHalf = elementVerticalPosition < 0.5;
+            const insufficientSpaceBelow = spaceBelow < requiredSpace;
+            
+            // Force above if in top half or insufficient space below
+            // But only if there's enough space above, otherwise keep below
+            if ((isInTopHalf || insufficientSpaceBelow) && spaceAbove >= requiredSpace) {
+              forceNavigationAbove = true;
+            }
+            // Special case: if both spaces are limited, choose the larger one
+            else if (spaceAbove < requiredSpace && spaceBelow < requiredSpace) {
+              forceNavigationAbove = spaceAbove > spaceBelow;
+            }
+          }
+          
           // Combine viewport clipping logic with device-specific logic
-          shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab || isNavigationOnDesktop;
+          shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab || 
+                               isNavigationOnDesktop || forceNavigationAbove;
 
           let finalX, finalY, transform;
 
@@ -367,7 +393,15 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             // Force the card to appear above the highlighted component
             // Perfect centering - ignore horizontal offset for better alignment
             finalX = x + width / 2; // Center on the highlighted element, ignore offset.x for centering
-            finalY = y - margin - 15; // Better spacing
+            
+            // For navigation specifically, add better spacing and positioning
+            if (step.id === 'navigation') {
+              // Position with more generous spacing for navigation
+              finalY = y - margin - 20; // Extra spacing for navigation
+            } else {
+              finalY = y - margin - 15; // Standard spacing for other steps
+            }
+            
             transform = 'translate(-50%, -100%)';
             
             // Ensure horizontal centering doesn't go beyond viewport edges
