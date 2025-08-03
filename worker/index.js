@@ -6,8 +6,16 @@ import { registerRoute } from 'workbox-routing';
 import { StaleWhileRevalidate, NetworkFirst, CacheFirst } from 'workbox-strategies';
 import { ExpirationPlugin } from 'workbox-expiration';
 
-// Allow workbox to handle precaching
-precacheAndRoute(self.__WB_MANIFEST);
+// Filter out files that might not exist (like app-build-manifest.json)
+const manifest = self.__WB_MANIFEST.filter(entry => {
+  if (typeof entry === 'string') {
+    return !entry.includes('app-build-manifest.json');
+  }
+  return !entry.url.includes('app-build-manifest.json');
+});
+
+// Allow workbox to handle precaching with filtered manifest
+precacheAndRoute(manifest);
 cleanupOutdatedCaches();
 
 // Runtime caching strategies
@@ -61,6 +69,20 @@ registerRoute(
       new ExpirationPlugin({
         maxEntries: 32,
         maxAgeSeconds: 60 * 60 // 1 hour
+      })
+    ]
+  })
+);
+
+// Cache HTML pages with Network First strategy
+registerRoute(
+  ({ request }) => request.destination === 'document',
+  new NetworkFirst({
+    cacheName: 'pages',
+    plugins: [
+      new ExpirationPlugin({
+        maxEntries: 10,
+        maxAgeSeconds: 24 * 60 * 60 // 24 hours
       })
     ]
   })

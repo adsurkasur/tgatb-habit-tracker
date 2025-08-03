@@ -26,9 +26,20 @@ const pwaConfig = withPWA({
   swSrc: 'worker/index.js', // This tells next-pwa to use our custom worker
   // Workbox will handle all the heavy lifting + our custom code
   
+  // Configure manifest generation to exclude problematic files
+  buildExcludes: [
+    /app-build-manifest\.json$/,
+    /middleware-manifest\.json$/,
+    /middleware\.js$/,
+    /_middleware\.js$/,
+  ],
+  
+  // Additional configuration for handling 404s gracefully
+  additionalManifestEntries: [],
+  
   // Fallbacks for offline experience
   fallbacks: {
-    document: '/_offline', // Create pages/_offline.js
+    document: '/offline', // Updated to use correct route
   }
 });
 
