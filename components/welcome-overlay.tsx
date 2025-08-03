@@ -61,7 +61,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       description: 'Access all your habits, view history, and adjust settings from this menu.',
       targetSelector: '[data-tour="navigation"]',
       position: 'bottom',
-      offset: { x: 135, y: 0 }
+      offset: { x: 135, y: 10 }
     },
     {
       id: 'add-button',
@@ -326,7 +326,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
               testX = x + width / 2 + offset.x;
               testY = y + height + margin + offset.y;
               // Check if card would extend beyond bottom edge of viewport
-              if (testY + cardHeight > window.innerHeight - 20) {
+              // Skip viewport clipping for navigation step to allow proper positioning
+              if (step.id !== 'navigation' && testY + cardHeight > window.innerHeight - 20) {
                 shouldPositionAbove = true;
               }
               break;
@@ -345,7 +346,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             if (step.position === 'top' || step.position === 'bottom') {
               testX = x + width / 2 + offset.x;
               // Check if centered card would be clipped horizontally
-              if (testX - cardWidth / 2 < 20 || testX + cardWidth / 2 > window.innerWidth - 20) {
+              // Skip horizontal clipping for navigation step to allow proper positioning
+              if (step.id !== 'navigation' && (testX - cardWidth / 2 < 20 || testX + cardWidth / 2 > window.innerWidth - 20)) {
                 shouldPositionAbove = true;
               }
             }
@@ -355,37 +357,20 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           const isStep4OnMobile = isMobile && step.id === 'habit-card';
           const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
           
-          // On desktop, force navigation step above to prevent covering
-          // Apply same logic as mobile but for desktop navigation step
-          const isNavigationOnDesktop = !isMobile && step.id === 'navigation';
+          // On desktop, force habit-card step above to prevent covering the actual habit card
+          const isHabitCardOnDesktop = !isMobile && step.id === 'habit-card';
           
           // For desktop navigation, dynamically determine best position based on element location
           let forceNavigationAbove = false;
           if (!isMobile && step.id === 'navigation') {
-            // Calculate available space above and below the element
-            const spaceAbove = y;
-            const spaceBelow = window.innerHeight - (y + height);
-            const requiredSpace = cardHeight + 40; // Card height plus margin
-            
-            // If element is in top half OR there's insufficient space below, position above
-            const elementVerticalPosition = (y + height / 2) / window.innerHeight;
-            const isInTopHalf = elementVerticalPosition < 0.5;
-            const insufficientSpaceBelow = spaceBelow < requiredSpace;
-            
-            // Force above if in top half or insufficient space below
-            // But only if there's enough space above, otherwise keep below
-            if ((isInTopHalf || insufficientSpaceBelow) && spaceAbove >= requiredSpace) {
-              forceNavigationAbove = true;
-            }
-            // Special case: if both spaces are limited, choose the larger one
-            else if (spaceAbove < requiredSpace && spaceBelow < requiredSpace) {
-              forceNavigationAbove = spaceAbove > spaceBelow;
-            }
+            // For navigation step, always position below instead of above
+            // This ensures the card appears below the highlighted navigation menu
+            forceNavigationAbove = false; // Force below, not above
           }
           
           // Combine viewport clipping logic with device-specific logic
           shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab || 
-                               isNavigationOnDesktop || forceNavigationAbove;
+                               forceNavigationAbove || isHabitCardOnDesktop;
 
           let finalX, finalY, transform;
 
