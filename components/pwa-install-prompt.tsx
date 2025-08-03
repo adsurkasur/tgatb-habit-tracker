@@ -15,19 +15,57 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
+  // Only show if analytics notice is acknowledged
+  const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
+    typeof window !== 'undefined' && localStorage.getItem('analytics-notice-acknowledged') === 'true'
+  );
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const { toast } = useToast();
 
+  // Hide install prompt immediately if user has already dismissed it
   useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true' && showInstallPrompt) {
+      setShowInstallPrompt(false);
+    }
+  }, [showInstallPrompt]);
+
+  // Listen for custom event from analytics notice
+  useEffect(() => {
+    const handleCustomEvent = () => {
+      setAnalyticsAcknowledged(true);
+      setShowInstallPrompt(true);
+    };
+    window.addEventListener('analytics-notice-acknowledged-event', handleCustomEvent);
+    return () => {
+      window.removeEventListener('analytics-notice-acknowledged-event', handleCustomEvent);
+    };
+  }, []);
+
+  // Watch for analyticsAcknowledged changes in the same tab
+  useEffect(() => {
+    if (analyticsAcknowledged) {
+      setShowInstallPrompt(true);
+    }
+  }, [analyticsAcknowledged]);
+
+  useEffect(() => {
+    // Listen for changes to analytics notice acknowledgment
+    const handleStorage = (e: StorageEvent) => {
+      if (e.key === 'analytics-notice-acknowledged' && e.newValue === 'true') {
+        setAnalyticsAcknowledged(true);
+        setShowInstallPrompt(true);
+      }
+    };
+    window.addEventListener('storage', handleStorage);
     // Check if app is already installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
     
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
-      return;
+      return () => window.removeEventListener('storage', handleStorage);
     }
 
     // Check if user has dismissed the prompt before
@@ -66,6 +104,7 @@ export function PWAInstallPrompt() {
     const handleManualTrigger = () => {
       sessionStorage.removeItem('pwa-install-dismissed');
       setShowInstallPrompt(true);
+      // Do NOT set analyticsAcknowledged here
     };
 
     window.addEventListener('trigger-pwa-install', handleManualTrigger);
@@ -74,8 +113,16 @@ export function PWAInstallPrompt() {
       window.removeEventListener('beforeinstallprompt', handler as EventListener);
       window.removeEventListener('appinstalled', appInstalledHandler);
       window.removeEventListener('trigger-pwa-install', handleManualTrigger);
+      window.removeEventListener('storage', handleStorage);
       clearTimeout(timer);
     };
+  // Fix: Only set analyticsAcknowledged to true if not dismissed, and do not reset analyticsAcknowledged on dismiss
+  useEffect(() => {
+    if (typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true' && showInstallPrompt) {
+      setShowInstallPrompt(false);
+      // Do not reset analyticsAcknowledged here, let manual trigger override
+    }
+  }, [showInstallPrompt]);
   }, []);
 
   const handleInstallClick = async () => {
@@ -90,12 +137,10 @@ export function PWAInstallPrompt() {
     }
   };
 
+  // Fix: When dismissing, also set showInstallPrompt to false and do not touch analyticsAcknowledged
   const handleDismiss = () => {
     setShowInstallPrompt(false);
-    // Remember user dismissed the prompt for this session
     sessionStorage.setItem('pwa-install-dismissed', 'true');
-    
-    // Show toast notification about settings option
     toast({
       title: "App installation available",
       description: "You can install the app anytime from Settings → Install App",
@@ -103,8 +148,14 @@ export function PWAInstallPrompt() {
     });
   };
 
-  // Don't show if already installed
-  if (isInstalled || !showInstallPrompt) {
+  // Don't show if already installed or (analytics notice is not acknowledged and not manually triggered)
+  // If manually triggered (via settings), showInstallPrompt will be true even if analyticsAcknowledged is false
+  // Fix: Only check sessionStorage on client
+  // Fix: Only render the prompt on the client, never on the server
+  if (typeof window === 'undefined') {
+    return null;
+  }
+  if (isInstalled || (window.sessionStorage.getItem('pwa-install-dismissed') === 'true' && !analyticsAcknowledged) || !showInstallPrompt) {
     return null;
   }
 

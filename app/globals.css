@@ -326,12 +326,8 @@
     transform: scale(1.05);
   }
   
-  .cta-icon {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
-  }
-  
-  .cta-card:hover .cta-icon {
-    transform: scale(1.1);
+  .cta-card:hover {
+    transform: scale(1.02);
   }
   
   /* CTA Sparkle Animation */
@@ -465,6 +461,7 @@
     box-shadow: 0 0 40px rgba(103, 80, 164, 0.3),
                 0 0 80px rgba(103, 80, 164, 0.15);
   }
+
   
   /* Theme transition enhancement */
   .theme-transition {

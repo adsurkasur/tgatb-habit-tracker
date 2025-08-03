@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import { Analytics } from "@vercel/analytics/react";
 import { OfflineToast } from "@/components/offline-toast";
 import { ServiceWorkerRegistration } from "@/components/sw-registration";
+import { AnalyticsNotice } from "@/components/analytics-notice";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -87,6 +88,7 @@ export default function RootLayout({
           {children}
         </Providers>
         <OfflineToast />
+        <AnalyticsNotice />
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>

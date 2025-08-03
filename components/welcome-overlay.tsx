@@ -25,6 +25,12 @@ interface WelcomeOverlayProps {
 }
 
 export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = false, onStepChange }: WelcomeOverlayProps) {
+  // Hide overlay immediately if user has already skipped the tour
+  useEffect(() => {
+    if (typeof window !== 'undefined' && localStorage.getItem('welcome-overlay-shown') === 'true' && isVisible) {
+      onClose();
+    }
+  }, [isVisible, onClose]);
   const [currentStep, setCurrentStep] = useState(0);
   const [targetPosition, setTargetPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
   const [isPositionReady, setIsPositionReady] = useState(false);
@@ -344,6 +350,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   };
 
   const handleSkip = () => {
+    localStorage.setItem('welcome-overlay-shown', 'true');
     onClose();
   };
 

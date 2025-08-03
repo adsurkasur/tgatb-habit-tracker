@@ -168,6 +168,13 @@ export function SettingsScreen({
 
             <div 
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={() => {
+                toast({
+                  title: "Upcoming Feature!",
+                  description: "Language selection coming soon. Stay tuned! 🌐",
+                  duration: 3000,
+                });
+              }}
             >
               <div className="flex items-center space-x-3">
                 <Globe className="w-5 h-5 text-muted-foreground" />
