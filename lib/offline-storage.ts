@@ -31,83 +31,89 @@ class OfflineHabitStorage {
 
       request.onupgradeneeded = (event) => {
         const db = (event.target as IDBOpenDBRequest).result;
-        
-        // Create object stores
-        if (!db.objectStoreNames.contains('pendingActions')) {
-          const store = db.createObjectStore('pendingActions', { keyPath: 'id' });
-          store.createIndex('timestamp', 'timestamp', { unique: false });
-        }
-
-        if (!db.objectStoreNames.contains('habits')) {
-          db.createObjectStore('habits', { keyPath: 'id' });
-        }
-
-        if (!db.objectStoreNames.contains('habitLogs')) {
-          db.createObjectStore('habitLogs', { keyPath: 'id' });
-        }
+        this.createObjectStores(db);
       };
     });
   }
 
-  // Store pending actions for when we're back online
-  async addPendingAction(action: OfflineHabitAction): Promise<void> {
-    if (!this.db) {
-      // Fallback to localStorage
-      const pending = this.getPendingActionsFromStorage();
-      pending.push(action);
-      localStorage.setItem('pending-habit-actions', JSON.stringify(pending));
-      return;
+  private createObjectStores(db: IDBDatabase): void {
+    // Create object stores
+    if (!db.objectStoreNames.contains('pendingActions')) {
+      const store = db.createObjectStore('pendingActions', { keyPath: 'id' });
+      store.createIndex('timestamp', 'timestamp', { unique: false });
     }
 
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['pendingActions'], 'readwrite');
-      const store = transaction.objectStore('pendingActions');
-      const request = store.add(action);
+    if (!db.objectStoreNames.contains('habits')) {
+      db.createObjectStore('habits', { keyPath: 'id' });
+    }
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
-    });
+    if (!db.objectStoreNames.contains('habitLogs')) {
+      db.createObjectStore('habitLogs', { keyPath: 'id' });
+    }
   }
 
-  // Get all pending actions
-  async getPendingActions(): Promise<OfflineHabitAction[]> {
+  // Generic IndexedDB operation handler
+  private async executeTransaction<T>(
+    storeName: string,
+    mode: IDBTransactionMode,
+    operation: (store: IDBObjectStore) => IDBRequest<T>
+  ): Promise<T> {
     if (!this.db) {
-      // Fallback to localStorage
-      return this.getPendingActionsFromStorage();
+      throw new Error('Database not initialized');
     }
 
     return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['pendingActions'], 'readonly');
-      const store = transaction.objectStore('pendingActions');
-      const request = store.getAll();
+      const transaction = this.db!.transaction([storeName], mode);
+      const store = transaction.objectStore(storeName);
+      const request = operation(store);
 
       request.onerror = () => reject(request.error);
       request.onsuccess = () => resolve(request.result);
     });
   }
 
+  // Store pending actions for when we're back online
+  async addPendingAction(action: OfflineHabitAction): Promise<void> {
+    if (!this.db) {
+      return this.addPendingActionToLocalStorage(action);
+    }
+
+    await this.executeTransaction('pendingActions', 'readwrite', (store) => 
+      store.add(action)
+    );
+  }
+
+  // Get all pending actions
+  async getPendingActions(): Promise<OfflineHabitAction[]> {
+    if (!this.db) {
+      return this.getPendingActionsFromStorage();
+    }
+
+    return this.executeTransaction('pendingActions', 'readonly', (store) => 
+      store.getAll()
+    );
+  }
+
   // Clear pending actions after successful sync
   async clearPendingActions(): Promise<void> {
     if (!this.db) {
-      // Fallback to localStorage
       localStorage.removeItem('pending-habit-actions');
       return;
     }
 
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['pendingActions'], 'readwrite');
-      const store = transaction.objectStore('pendingActions');
-      const request = store.clear();
-
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve();
-    });
+    await this.executeTransaction('pendingActions', 'readwrite', (store) => 
+      store.clear()
+    );
   }
 
   // Store habits locally
   async storeHabits(habits: any[]): Promise<void> {
     if (!this.db) {
-      // Fallback to localStorage
+      localStorage.setItem('offline-habits', JSON.stringify(habits));
+      return;
+    }
+
+    if (!this.db) {
       localStorage.setItem('offline-habits', JSON.stringify(habits));
       return;
     }
@@ -116,40 +122,48 @@ class OfflineHabitStorage {
       const transaction = this.db!.transaction(['habits'], 'readwrite');
       const store = transaction.objectStore('habits');
       
-      // Clear existing data
-      store.clear();
-      
-      // Add all habits
-      let completed = 0;
-      habits.forEach(habit => {
-        const request = store.add(habit);
-        request.onsuccess = () => {
-          completed++;
-          if (completed === habits.length) {
-            resolve();
-          }
-        };
-        request.onerror = () => reject(request.error);
-      });
+      // Clear existing data first
+      const clearRequest = store.clear();
+      clearRequest.onsuccess = () => {
+        // Add all habits
+        let completed = 0;
+        if (habits.length === 0) {
+          resolve();
+          return;
+        }
+        
+        habits.forEach(habit => {
+          const request = store.add(habit);
+          request.onsuccess = () => {
+            completed++;
+            if (completed === habits.length) {
+              resolve();
+            }
+          };
+          request.onerror = () => reject(request.error);
+        });
+      };
+      clearRequest.onerror = () => reject(clearRequest.error);
     });
   }
 
   // Get stored habits
   async getStoredHabits(): Promise<any[]> {
     if (!this.db) {
-      // Fallback to localStorage
       const stored = localStorage.getItem('offline-habits');
       return stored ? JSON.parse(stored) : [];
     }
 
-    return new Promise((resolve, reject) => {
-      const transaction = this.db!.transaction(['habits'], 'readonly');
-      const store = transaction.objectStore('habits');
-      const request = store.getAll();
+    return this.executeTransaction('habits', 'readonly', (store) => 
+      store.getAll()
+    );
+  }
 
-      request.onerror = () => reject(request.error);
-      request.onsuccess = () => resolve(request.result);
-    });
+  // LocalStorage fallback methods
+  private addPendingActionToLocalStorage(action: OfflineHabitAction): void {
+    const pending = this.getPendingActionsFromStorage();
+    pending.push(action);
+    localStorage.setItem('pending-habit-actions', JSON.stringify(pending));
   }
 
   private getPendingActionsFromStorage(): OfflineHabitAction[] {
@@ -162,7 +176,7 @@ class OfflineHabitStorage {
     }
   }
 
-  // Track habit offline
+  // Convenience methods for different habit operations
   async trackHabitOffline(habitId: string, date: string, status: boolean): Promise<void> {
     const action: OfflineHabitAction = {
       id: `track-${habitId}-${date}-${Date.now()}`,
@@ -171,10 +185,9 @@ class OfflineHabitStorage {
       timestamp: Date.now()
     };
 
-    await this.addPendingAction(action);
+    return this.addPendingAction(action);
   }
 
-  // Create habit offline
   async createHabitOffline(habitData: any): Promise<void> {
     const action: OfflineHabitAction = {
       id: `create-${habitData.id}-${Date.now()}`,
@@ -183,10 +196,9 @@ class OfflineHabitStorage {
       timestamp: Date.now()
     };
 
-    await this.addPendingAction(action);
+    return this.addPendingAction(action);
   }
 
-  // Update habit offline
   async updateHabitOffline(habitId: string, updates: any): Promise<void> {
     const action: OfflineHabitAction = {
       id: `update-${habitId}-${Date.now()}`,
@@ -195,10 +207,9 @@ class OfflineHabitStorage {
       timestamp: Date.now()
     };
 
-    await this.addPendingAction(action);
+    return this.addPendingAction(action);
   }
 
-  // Delete habit offline
   async deleteHabitOffline(habitId: string): Promise<void> {
     const action: OfflineHabitAction = {
       id: `delete-${habitId}-${Date.now()}`,
@@ -207,7 +218,7 @@ class OfflineHabitStorage {
       timestamp: Date.now()
     };
 
-    await this.addPendingAction(action);
+    return this.addPendingAction(action);
   }
 }
 
