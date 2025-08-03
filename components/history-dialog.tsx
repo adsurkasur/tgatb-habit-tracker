@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -199,34 +199,28 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
     dailyLogs.find(log => formatLocalDate(log.date) === formatLocalDate(selectedDate)) 
     : null;
 
-  // Choose the appropriate dialog content component
-  const DialogContentComponent = isMobile ? MobileDialogContent : DialogContent;
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContentComponent className={isMobile ? "p-0 flex flex-col h-full gap-0 [&>button]:hidden" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}>
-        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : "pb-4 mb-4"}`}>
-          <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
-            <DialogTitle className="flex items-center gap-2 text-lg sm:text-xl">
+      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-auto gap-0" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}`}>
+        <DialogHeader className="px-6 pb-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative">
+          <div className="flex items-center w-full justify-between">
+            <DialogTitle className="flex items-center gap-2">
               <BarChart3 className="w-5 h-5" />
-              <span className="hidden sm:inline">Habit History & Analytics</span>
-              <span className="sm:hidden">History</span>
+              Habit History & Analytics
             </DialogTitle>
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            )}
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </button>
           </div>
         </DialogHeader>
 
-        <div className={`${isMobile ? "flex-1 overflow-y-auto" : ""}`}>
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className={`flex-1 min-h-0 flex flex-col ${isMobile ? "px-6 pt-4 pb-6" : "pt-4"}`}>
+        <div className="flex-1 overflow-y-auto">
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col px-6 pt-4 pb-6">
           <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 flex-shrink-0">
             <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
               <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -468,7 +462,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
           </TabsContent>
         </Tabs>
         </div>
-      </DialogContentComponent>
+      </MobileDialogContent>
     </Dialog>
   );
 }

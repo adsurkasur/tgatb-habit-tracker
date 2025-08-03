@@ -1,10 +1,10 @@
 import React, { useState, useRef } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check } from 'lucide-react';
+import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -162,23 +162,33 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
     }
   };
 
-  // Choose the appropriate dialog content component
-  const DialogContentComponent = isMobile ? MobileDialogContent : DialogContent;
+  // Choose the appropriate dialog content component - using MobileDialogContent for consistency
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContentComponent className={isMobile ? "" : "max-w-md mx-auto max-h-[90vh] overflow-y-auto"}>
-        <DialogHeader className="text-center">
-          <DialogTitle className="flex items-center justify-center gap-2 text-2xl">
-            <Heart className="w-6 h-6 text-red-500" />
-            Support Me
-          </DialogTitle>
-          <DialogDescription className="text-center mt-2">
-            If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!
-          </DialogDescription>
+      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-auto gap-0" : "w-[500px] h-auto max-w-[500px] flex flex-col items-stretch justify-start"}`}>
+        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+          <div className="flex items-center w-full justify-between">
+            <DialogTitle className="flex items-center gap-2">
+              <Heart className="w-5 h-5 text-red-500" />
+              Support Me
+            </DialogTitle>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
         </DialogHeader>
 
-        <div className="space-y-6 mt-6">
+        <div className="flex-1 overflow-y-auto px-6 pt-4 pb-6">
+          <DialogDescription className="text-center mb-6">
+            If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!
+          </DialogDescription>
+          <div className="space-y-6">
           {/* Payment Platforms */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold flex items-center gap-2">
@@ -189,7 +199,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {supportContacts.map((contact) => (
               <Card
                 key={contact.name}
-                className="p-4 hover:bg-accent/50 transition-all duration-200 cursor-pointer group"
+                className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
               >
                 <a
                   href={contact.href}
@@ -203,10 +213,10 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                     </div>
                     <div>
                       <h4 className="font-medium">{contact.name}</h4>
-                      <p className="text-sm text-muted-foreground">{contact.label}</p>
+                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">{contact.label}</p>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
                 </a>
               </Card>
             ))}
@@ -215,7 +225,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           {/* Cryptocurrency */}
           <div className="space-y-3">
             <h3 className="text-lg font-semibold flex items-center gap-2">
-              <svg className="w-5 h-5 text-primary-foreground " xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+              <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                 <path fillRule="evenodd" d="M13.425 6.432c1.983.19 3.538.778 3.71 2.528.117 1.276-.438 2.035-1.355 2.463 1.481.359 2.382 1.202 2.196 3.072-.227 2.343-2.035 2.952-4.62 3.08l.004 2.42-1.522.002-.004-2.42c-.166-.002-.34 0-.519.003-.238.003-.484.006-.731-.001l.004 2.42-1.52.001-.004-2.42-3.044-.058.256-1.768s1.15.024 1.129.012c.423-.002.549-.293.58-.485l-.008-3.878.012-2.76c-.046-.288-.248-.634-.87-.644.033-.03-1.115.001-1.115.001L6 6.38l3.12-.005-.004-2.37 1.571-.002.004 2.37c.304-.008.603-.005.906-.003l.3.002-.005-2.37L13.422 4l.003 2.432zm-2.92 4.46l.076.002c.926.04 3.67.155 3.673-1.457-.004-1.532-2.339-1.482-3.423-1.46-.129.003-.24.006-.327.005v2.91zm.129 4.75l-.134-.005v-2.91c.097.002.218 0 .359-.002 1.282-.015 4.145-.05 4.132 1.494.014 1.597-3.218 1.468-4.357 1.423z" clipRule="evenodd" />
               </svg>
               Cryptocurrency
@@ -224,11 +234,11 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {cryptoList.map((crypto) => (
               <Card
                 key={crypto.name}
-                className="p-4 hover:bg-accent/50 transition-all duration-200 cursor-pointer group"
+                className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
                 onClick={() => handleCopy(crypto.address)}
               >
                 <div className="flex items-center space-x-3">
-                  <div className={`group-hover:scale-110 transition-transform ${crypto.color}`}>
+                  <div className={crypto.color}>
                     {crypto.icon}
                   </div>
                   <div className="flex-1 min-w-0">
@@ -240,7 +250,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                         </Badge>
                       )}
                     </div>
-                    <p className="text-xs text-muted-foreground font-mono break-all">
+                    <p className="text-xs text-muted-foreground font-mono break-all group-hover:text-accent-foreground/70 transition-colors">
                       {crypto.address}
                     </p>
                   </div>
@@ -249,7 +259,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                       {copiedAddress === crypto.address ? (
                         <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />
                       ) : (
-                        <Copy className="w-4 h-4 text-muted-foreground group-hover:text-primary transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
+                        <Copy className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
                       )}
                     </div>
                   </div>
@@ -267,7 +277,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             </p>
           </div>
         </div>
-      </DialogContentComponent>
+        </div>
+      </MobileDialogContent>
     </Dialog>
   );
 }

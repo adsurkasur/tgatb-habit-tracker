@@ -14,7 +14,7 @@ interface AboutDialogProps {
 }
 
 export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
-  const version = "1.0.0"; // This would ideally come from package.json at build time
+  const version = process.env.APP_VERSION || "1.0.0";
   const isMobile = useIsMobile();
   
   return (

@@ -1,4 +1,9 @@
 import withPWA from 'next-pwa';
+import { readFileSync } from 'fs';
+import { join } from 'path';
+
+// Read package.json to get version
+const packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -12,6 +17,7 @@ const nextConfig = {
   },
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
+    APP_VERSION: packageJson.version,
   },
   serverExternalPackages: [],
 };
