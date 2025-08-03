@@ -79,7 +79,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       description: hasHabits 
         ? 'Here are your habits! Tap them to mark as complete for the day.'
         : 'Once you add habits, they\'ll appear here. Tap to mark them as complete for the day.',
-      targetSelector: '.habit-card-animated',
+      targetSelector: '[data-tour="habit-card"]',
       position: 'right',
       offset: { x: 0, y: 0 } // Centered for better alignment
     },
@@ -114,7 +114,26 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         if (!step.targetSelector) {
           positions[i] = null; // Will use center position
         } else {
-          const element = document.querySelector(step.targetSelector);
+          let element = document.querySelector(step.targetSelector);
+          
+          // For habit-card step, ensure we're targeting the actual Card component, not the container
+          if (step.id === 'habit-card' && step.targetSelector === '[data-tour="habit-card"]') {
+            // Try multiple approaches to find the actual card element
+            element = document.querySelector('[data-tour="habit-card"]') || 
+                     document.querySelector('.habit-card-animated') ||
+                     document.querySelector('div[data-tour="habit-card"]');
+            
+            // If still not found, look inside the habit-area container for a Card
+            if (!element) {
+              const habitArea = document.querySelector('[data-tour="habit-area"]');
+              if (habitArea) {
+                element = habitArea.querySelector('[data-tour="habit-card"]') ||
+                         habitArea.querySelector('.habit-card-animated') ||
+                         habitArea.querySelector('[class*="card"]');
+              }
+            }
+          }
+          
           if (element) {
             const rect = element.getBoundingClientRect();
             positions[i] = {
@@ -124,23 +143,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
               height: rect.height
             };
           } else {
-            // Try fallback for habit-card step
-            if (step.id === 'habit-card') {
-              const fallback = document.querySelector('[data-tour="habit-area"]');
-              if (fallback) {
-                const rect = fallback.getBoundingClientRect();
-                positions[i] = {
-                  x: rect.left,
-                  y: rect.top,
-                  width: rect.width,
-                  height: rect.height
-                };
-              } else {
-                positions[i] = null;
-              }
-            } else {
-              positions[i] = null;
-            }
+            positions[i] = null;
           }
         }
       }
@@ -168,14 +171,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
   }, [isVisible]);
 
-  // Recalculate position for step 3 (add-button) when it becomes active
-  // Note: Removed habit-card from this effect to prevent repositioning issues
+  // Recalculate position for step 3 (add-button) and step 4 (habit-card) when they become active
   useEffect(() => {
     if (!isVisible || !isPositionReady) return;
     
     const steps = getWelcomeSteps();
     const currentStepData = steps[currentStep];
-    if (currentStepData?.id === 'add-button') {
+    
+    if (currentStepData?.id === 'add-button' || currentStepData?.id === 'habit-card') {
       const recalculatePosition = () => {
         if (!currentStepData.targetSelector) {
           setAllPositions(prev => ({
@@ -185,7 +188,24 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           return;
         }
 
-        const element = document.querySelector(currentStepData.targetSelector);
+        let element = document.querySelector(currentStepData.targetSelector);
+        
+        // Special handling for habit-card to ensure we get the actual card
+        if (currentStepData.id === 'habit-card' && currentStepData.targetSelector === '[data-tour="habit-card"]') {
+          element = document.querySelector('[data-tour="habit-card"]') || 
+                   document.querySelector('.habit-card-animated') ||
+                   document.querySelector('div[data-tour="habit-card"]');
+          
+          // If still not found, look inside the habit-area container for a Card
+          if (!element) {
+            const habitArea = document.querySelector('[data-tour="habit-area"]');
+            if (habitArea) {
+              element = habitArea.querySelector('[data-tour="habit-card"]') ||
+                       habitArea.querySelector('.habit-card-animated') ||
+                       habitArea.querySelector('[class*="card"]');
+            }
+          }
+        }
         
         if (element) {
           const rect = element.getBoundingClientRect();

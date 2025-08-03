@@ -69,6 +69,7 @@ export function HabitCard({
   return (
     <Card 
       key={`habit-${habit.id}`}
+      data-tour="habit-card"
       className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${
         isCompletedToday 
           ? isPositiveAction
