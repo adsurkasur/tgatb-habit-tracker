@@ -5,11 +5,14 @@ import { WifiOff } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
 export function OfflineHeaderIndicator() {
-  const { isOnline } = useNetworkStatus();
+  const { isOnline, isInitialized } = useNetworkStatus();
   const [shouldShow, setShouldShow] = useState(false);
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
+    // Only start showing/hiding logic after initialization is complete
+    if (!isInitialized) return;
+
     if (!isOnline) {
       // Going offline - show indicator
       setShouldShow(true);
@@ -21,7 +24,15 @@ export function OfflineHeaderIndicator() {
       // Hide element after fade out completes
       setTimeout(() => setShouldShow(false), 300);
     }
-  }, [isOnline]);
+  }, [isOnline, isInitialized]);
+
+  // Before initialization is complete, check if we should show based on current state
+  useEffect(() => {
+    if (!isInitialized && !isOnline) {
+      setShouldShow(true);
+      setIsVisible(true);
+    }
+  }, [isOnline, isInitialized]);
 
   if (!shouldShow) {
     return <div className="w-10" />; // Spacer for balance when online
@@ -33,6 +44,7 @@ export function OfflineHeaderIndicator() {
         className={`p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 transition-opacity duration-300 ease-in-out ${
           isVisible ? 'opacity-100' : 'opacity-0'
         }`}
+        title="You are offline"
       >
         <WifiOff className="h-4 w-4 text-orange-600 dark:text-orange-400" />
       </div>
