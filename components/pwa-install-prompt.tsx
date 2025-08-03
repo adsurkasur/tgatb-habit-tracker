@@ -96,39 +96,42 @@ export function PWAInstallPrompt() {
 
   return (
     <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-background border border-border rounded-lg shadow-xl max-w-sm animate-slide-up">
-      <div className="flex items-start justify-between p-4">
-          <div className="flex-1">
-            <h3 className="font-semibold text-sm mb-1">Install TGATB App</h3>
-            <p className="text-xs text-muted-foreground mb-3">
-              Install our app for a better experience with offline support and quick access.
+      <div className="p-3">
+        <div className="flex items-start justify-between mb-2">
+          <div className="flex-1 min-w-0">
+            <h3 className="font-medium text-sm mb-1">Install TGATB App</h3>
+            <p className="text-xs text-muted-foreground">
+              Better experience with offline support and quick access
             </p>
-            <div className="flex gap-2">
-              <Button
-                size="sm"
-                onClick={handleInstallClick}
-                className="flex items-center gap-1"
-              >
-                <Download className="h-3 w-3" />
-                Install
-              </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                onClick={handleDismiss}
-              >
-                Not now
-              </Button>
-            </div>
           </div>
           <Button
             size="sm"
             variant="ghost"
             onClick={handleDismiss}
-            className="p-1 h-6 w-6"
+            className="p-1 h-6 w-6 flex-shrink-0 ml-2"
           >
             <X className="h-3 w-3" />
           </Button>
         </div>
+        <div className="flex gap-1.5">
+          <Button
+            size="sm"
+            onClick={handleInstallClick}
+            className="flex items-center gap-1 h-8 px-2 text-xs"
+          >
+            <Download className="h-3 w-3" />
+            Install
+          </Button>
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={handleDismiss}
+            className="h-8 px-2 text-xs"
+          >
+            Not now
+          </Button>
+        </div>
+      </div>
     </div>
   );
 }
