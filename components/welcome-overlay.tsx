@@ -36,11 +36,27 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const [isPositionReady, setIsPositionReady] = useState(false);
   const [cardOpacity, setCardOpacity] = useState(0);
   const [allPositions, setAllPositions] = useState<{ [key: number]: { x: number; y: number; width: number; height: number } | null }>({});
-  const [cardPosition, setCardPosition] = useState<{ top: string | number; left: string | number; transform: string }>({
-    top: '50%',
-    left: '50%',
-    transform: 'translate(-50%, -50%)'
-  });
+  
+  // Function to calculate step-specific initial positions
+  const getInitialCardPosition = (step: number) => {
+    if (step === 3) { // Step 4 (0-indexed) - habit card step
+      return {
+        top: '15%', // Position above the habit card center (~54-56% from top)
+        left: '50%',
+        transform: 'translate(-50%, -50%)'
+      };
+    }
+    // Default center position for other steps
+    return {
+      top: '50%',
+      left: '50%',
+      transform: 'translate(-50%, -50%)'
+    };
+  };
+
+  const [cardPosition, setCardPosition] = useState<{ top: string | number; left: string | number; transform: string }>(
+    getInitialCardPosition(0)
+  );
   const overlayRef = useRef<HTMLDivElement>(null);
 
   // Reset to first step whenever overlay becomes visible
@@ -49,6 +65,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       setCurrentStep(0);
     }
   }, [isVisible]);
+
+  // Update card position when step changes to use appropriate initial position
+  useEffect(() => {
+    if (isVisible) {
+      const newPosition = getInitialCardPosition(currentStep);
+      setCardPosition(newPosition);
+    }
+  }, [currentStep, isVisible]);
 
   // Notify parent of step changes
   useEffect(() => {
@@ -171,7 +195,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
 
     // Give time for step transition and element rendering
-    const timer = setTimeout(calculateCurrentStepPosition, 50);
+    // For habit-card step, wait longer for the card animation to complete (250ms + buffer)
+    const delay = currentStepData.id === 'habit-card' ? 300 : 50;
+    const timer = setTimeout(calculateCurrentStepPosition, delay);
 
     // Handle resize and scroll events
     const handleResize = () => {
