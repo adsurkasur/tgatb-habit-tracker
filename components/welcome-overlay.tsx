@@ -37,6 +37,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const [cardOpacity, setCardOpacity] = useState(0);
   const [allPositions, setAllPositions] = useState<{ [key: number]: { x: number; y: number; width: number; height: number } | null }>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [shouldMoveToFinalPosition, setShouldMoveToFinalPosition] = useState(false);
   
   // Function to calculate step-specific initial positions
   const getInitialCardPosition = (step: number) => {
@@ -70,11 +71,12 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   // Update card position when step changes to use appropriate initial position
   useEffect(() => {
     if (isVisible) {
-      // Reset position state and set initial position for new step
+      // Reset position state and movement flag for new step
       setIsPositionReady(false);
+      setShouldMoveToFinalPosition(false);
       
-      const newPosition = getInitialCardPosition(currentStep);
-      setCardPosition(newPosition);
+      // Keep card at current position initially (don't move during content change)
+      // Position calculation will happen after content is rendered and visible
     }
   }, [currentStep, isVisible]);
 
@@ -221,9 +223,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
   }, [isVisible, currentStep]);
 
-  // Calculate and set card position when position data is ready
+  // Calculate and set card position when position data is ready AND we should move to final position
   useEffect(() => {
-    if (!isVisible || !isPositionReady) {
+    if (!isVisible || !isPositionReady || !shouldMoveToFinalPosition) {
       return;
     }
 
@@ -232,7 +234,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     const step = steps[currentStep];
     
     if (!stepTargetPosition) {
-      // For center-positioned steps (welcome, complete), keep the initial position
+      // For center-positioned steps (welcome, complete), use the initial position
       const initialPosition = getInitialCardPosition(currentStep);
       setCardPosition(initialPosition);
     } else {
@@ -337,13 +339,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         transform: calculatedTransform
       });
     }
-  }, [isVisible, isPositionReady, allPositions, currentStep]);
+  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition]);
 
   // Simple fade control - card fades in when position is ready
   useEffect(() => {
     if (!isVisible) {
       setCardOpacity(0);
       setIsTransitioning(false);
+      setShouldMoveToFinalPosition(false);
       return;
     }
 
@@ -355,8 +358,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       
       const timer = setTimeout(() => {
         setCardOpacity(1);
-        // Mark transition as complete when card is fully visible
-        setIsTransitioning(false);
+        // After card is fully visible, trigger movement to final position
+        setTimeout(() => {
+          setShouldMoveToFinalPosition(true);
+          // Mark transition as complete after movement
+          setTimeout(() => {
+            setIsTransitioning(false);
+          }, 300); // Wait for movement animation to complete
+        }, 100); // Small delay to ensure opacity transition is complete
       }, extraDelay);
       return () => clearTimeout(timer);
     } else {
