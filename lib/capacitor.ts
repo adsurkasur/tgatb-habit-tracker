@@ -20,14 +20,18 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
     
     if (platform === 'android') {
-      // Android configuration - prevent status bar overlay
+      // Android configuration - prevent status bar overlay with solid background
+      // Set light text on dark background or dark text on light background
       await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
-      await StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
+      // Set solid white background color (matches colors.xml)
+      await StatusBar.setBackgroundColor({ color: '#FFFFFF' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
       
       // Always show status bar and ensure it doesn't overlay content
       await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
+      // Disable overlay mode to prevent content from appearing under status bar
       await StatusBar.setOverlaysWebView({ overlay: false }).catch(e => console.warn('StatusBar.setOverlaysWebView failed:', e));
       
+      // Only hide status bar if explicitly requested in fullscreen mode
       if (shouldHideStatusBar) {
         await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
       }
@@ -106,6 +110,16 @@ export const statusBar = {
   setDark: () => {
     if (isNativePlatform()) {
       StatusBar.setStyle({ style: Style.Dark });
+    }
+  },
+  setDefault: () => {
+    if (isNativePlatform()) {
+      StatusBar.setStyle({ style: Style.Default });
+    }
+  },
+  setBackgroundColor: (color: string) => {
+    if (isNativePlatform()) {
+      StatusBar.setBackgroundColor({ color });
     }
   },
   hide: () => {

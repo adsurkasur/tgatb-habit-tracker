@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { StatusBar } from '@capacitor/status-bar';
+import { StatusBar, Style } from '@capacitor/status-bar';
 import { Capacitor } from '@capacitor/core';
 
 interface StatusBarInfo {
@@ -108,9 +108,41 @@ export const useStatusBar = () => {
     }
   };
 
+  const setStatusBarStyle = async (style: Style) => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    try {
+      await StatusBar.setStyle({ style });
+      console.log('Status bar style set to:', style);
+    } catch (error) {
+      console.warn('Failed to set status bar style:', error);
+    }
+  };
+
+  const setStatusBarBackgroundColor = async (color: string) => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    try {
+      await StatusBar.setBackgroundColor({ color });
+      console.log('Status bar background color set to:', color);
+    } catch (error) {
+      console.warn('Failed to set status bar background color:', error);
+    }
+  };
+
   return {
     ...statusBarInfo,
     setVisible: setStatusBarVisible,
-    isNative: Capacitor.isNativePlatform()
+    setStyle: setStatusBarStyle,
+    setBackgroundColor: setStatusBarBackgroundColor,
+    isNative: Capacitor.isNativePlatform(),
+    // Helper methods for common use cases
+    setLightStyle: () => setStatusBarStyle(Style.Light),
+    setDarkStyle: () => setStatusBarStyle(Style.Dark),
+    setDefaultStyle: () => setStatusBarStyle(Style.Default)
   };
 };

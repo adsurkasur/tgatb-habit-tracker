@@ -15,7 +15,11 @@
         <item name="android:background">@null</item>
         <!-- Ensure status bar doesn't overlay content -->
         <item name="android:fitsSystemWindows">true</item>
+        <!-- Remove translucent status bar and set solid color -->
         <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <!-- Ensure light text on dark status bar or dark text on light status bar -->
+        <item name="android:windowLightStatusBar">true</item>
     </style>
 
 
