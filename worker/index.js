@@ -60,19 +60,7 @@ registerRoute(
   })
 );
 
-// API Routes - Special handling for habit tracking
-registerRoute(
-  /^.*\/api\/habits.*$/,
-  new NetworkFirst({
-    cacheName: 'habit-api',
-    plugins: [
-      new ExpirationPlugin({
-        maxEntries: 32,
-        maxAgeSeconds: 60 * 60 // 1 hour
-      })
-    ]
-  })
-);
+// Note: API routes removed for static export - app uses client-side storage
 
 // Cache HTML pages with Network First strategy and proper fallback
 registerRoute(
@@ -148,12 +136,8 @@ registerRoute(
   })
 );
 
-// Custom functionality for habit tracking
-self.addEventListener('sync', event => {
-  if (event.tag === 'habit-sync') {
-    event.waitUntil(syncOfflineHabits());
-  }
-});
+// Background sync removed - app uses client-side storage only
+// All data is stored locally and doesn't require server sync
 
 self.addEventListener('push', event => {
   if (event.data) {
@@ -196,77 +180,4 @@ self.addEventListener('notificationclick', event => {
   }
 });
 
-// Custom background sync for offline habit data
-async function syncOfflineHabits() {
-  console.log('[SW] Syncing offline habits...');
-  
-  try {
-    // Get offline habit data from IndexedDB
-    const offlineData = await getOfflineHabitData();
-    
-    if (offlineData.length > 0) {
-      // Sync each habit log
-      for (const habitLog of offlineData) {
-        try {
-          await fetch('/api/habits/sync', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(habitLog)
-          });
-          
-          // Remove from offline storage after successful sync
-          await removeOfflineHabitData(habitLog.id);
-        } catch (error) {
-          console.error('[SW] Failed to sync habit:', error);
-        }
-      }
-    }
-  } catch (error) {
-    console.error('[SW] Background sync failed:', error);
-  }
-}
-
-// IndexedDB helpers for offline storage
-async function getOfflineHabitData() {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('TGATB-OfflineDB', 1);
-    
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction(['habits'], 'readonly');
-      const store = transaction.objectStore('habits');
-      const getAll = store.getAll();
-      
-      getAll.onsuccess = () => resolve(getAll.result || []);
-      getAll.onerror = () => reject(getAll.error);
-    };
-    
-    request.onupgradeneeded = (event) => {
-      const db = event.target.result;
-      if (!db.objectStoreNames.contains('habits')) {
-        const store = db.createObjectStore('habits', { keyPath: 'id' });
-        store.createIndex('timestamp', 'timestamp', { unique: false });
-      }
-    };
-  });
-}
-
-async function removeOfflineHabitData(id) {
-  return new Promise((resolve, reject) => {
-    const request = indexedDB.open('TGATB-OfflineDB', 1);
-    
-    request.onerror = () => reject(request.error);
-    request.onsuccess = () => {
-      const db = request.result;
-      const transaction = db.transaction(['habits'], 'readwrite');
-      const store = transaction.objectStore('habits');
-      const deleteRequest = store.delete(id);
-      
-      deleteRequest.onsuccess = () => resolve();
-      deleteRequest.onerror = () => reject(deleteRequest.error);
-    };
-  });
-}
+// Sync functions removed - using client-side storage only

@@ -63,9 +63,8 @@ async function handleFetch(event) {
 }
 
 async function handleBackgroundSync(event) {
-  if (event.tag === 'habit-sync') {
-    event.waitUntil(syncOfflineHabits());
-  }
+  // Background sync removed - app uses client-side storage only
+  console.log('[SW] Background sync not needed - using client-side storage');
 }
 
 async function handlePushNotification(event) {
@@ -101,7 +100,7 @@ async function cleanupOldCaches() {
 }
 
 function isAPIRequest(url) {
-  return url.pathname.startsWith('/api/');
+  return false; // No API routes in static export
 }
 
 function isStaticAsset(url) {
@@ -110,25 +109,8 @@ function isStaticAsset(url) {
 }
 
 async function handleAPIRequest(request) {
-  try {
-    const response = await fetch(request);
-    
-    // Cache successful habit-related API responses
-    if (request.url.includes('/api/habits') && response.ok) {
-      const cache = await caches.open(CACHE_NAMES.habits);
-      cache.put(request.clone(), response.clone());
-    }
-    
-    return response;
-  } catch (error) {
-    // Return cached version for habit requests when offline
-    if (request.url.includes('/api/habits')) {
-      const cachedResponse = await caches.match(request);
-      if (cachedResponse) return cachedResponse;
-    }
-    
-    throw error;
-  }
+  // No API routes - app uses client-side storage only
+  return new Response('Not Found', { status: 404 });
 }
 
 async function handleStaticAsset(request) {
