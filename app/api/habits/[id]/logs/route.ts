@@ -1,6 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { storage } from '@/lib/storage';
 
+// Required for static export
+export const dynamic = 'force-static';
+
+// Required for static export with dynamic routes
+export async function generateStaticParams() {
+  return [];
+}
+
 interface RouteParams {
   params: {
     id: string;
