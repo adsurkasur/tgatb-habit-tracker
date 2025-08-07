@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 
-const WELCOME_SHOWN_KEY = 'habit-tracker-welcome-shown';
+const WELCOME_SHOWN_KEY = 'welcome-overlay-shown';
 
 export function useWelcomeOverlay() {
   const [isWelcomeVisible, setIsWelcomeVisible] = useState(false);
@@ -32,6 +32,8 @@ export function useWelcomeOverlay() {
   };
 
   const resetWelcome = () => {
+    // Temporarily clear the "shown" flag so the overlay can be displayed
+    localStorage.removeItem(WELCOME_SHOWN_KEY);
     // Always show the welcome tour from the beginning when requested
     setIsWelcomeVisible(true);
   };

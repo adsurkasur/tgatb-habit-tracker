@@ -274,9 +274,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       // Device-specific positioning
       const isStep4OnMobile = isMobile && step.id === 'habit-card';
       const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
-      const isHabitCardOnDesktop = !isMobile && step.id === 'habit-card';
       
-      shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab || isHabitCardOnDesktop;
+      shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab;
 
       // Calculate positions
       let calculatedTop: string | number;
