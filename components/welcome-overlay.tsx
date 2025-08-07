@@ -41,7 +41,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const getInitialCardPosition = (step: number) => {
     if (step === 3) { // Step 4 (0-indexed) - habit card step
       return {
-        top: '15%', // Position above the habit card center (~54-56% from top)
+        top: '20%',
         left: '50%',
         transform: 'translate(-50%, -50%)'
       };
@@ -69,6 +69,10 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   // Update card position when step changes to use appropriate initial position
   useEffect(() => {
     if (isVisible) {
+      // Immediately hide the card and reset position state
+      setCardOpacity(0);
+      setIsPositionReady(false);
+      
       const newPosition = getInitialCardPosition(currentStep);
       setCardPosition(newPosition);
     }
@@ -195,8 +199,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
 
     // Give time for step transition and element rendering
-    // For habit-card step, wait longer for the card animation to complete (250ms + buffer)
-    const delay = currentStepData.id === 'habit-card' ? 300 : 50;
+    // For habit-card step, wait longer for the card animation to complete
+    // Habit card has 0.2s (200ms) animation + buffer for any additional transitions
+    const delay = currentStepData.id === 'habit-card' ? 400 : 50;
     const timer = setTimeout(calculateCurrentStepPosition, delay);
 
     // Handle resize and scroll events
@@ -227,12 +232,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     const step = steps[currentStep];
     
     if (!stepTargetPosition) {
-      // For center-positioned steps (welcome, complete)
-      setCardPosition({
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)'
-      });
+      // For center-positioned steps (welcome, complete), keep the initial position
+      const initialPosition = getInitialCardPosition(currentStep);
+      setCardPosition(initialPosition);
     } else {
       const { x, y, width, height } = stepTargetPosition;
       const offset = step.offset || { x: 0, y: 0 };
@@ -345,8 +347,12 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     if (isPositionReady) {
-      // Position is ready, fade in the card
-      const timer = setTimeout(() => setCardOpacity(1), 50);
+      // For habit-card step, ensure we wait for position calculation to complete
+      // before making the card visible to prevent "blinking"
+      const currentStepData = getWelcomeSteps()[currentStep];
+      const extraDelay = currentStepData.id === 'habit-card' ? 50 : 0;
+      
+      const timer = setTimeout(() => setCardOpacity(1), extraDelay);
       return () => clearTimeout(timer);
     } else {
       // Position not ready, keep card hidden
@@ -360,18 +366,16 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       onClose();
     } else {
       setCardOpacity(0); // Fade out current card
-      setTimeout(() => {
-        setCurrentStep(prev => prev + 1); // Change step after fade out
-      }, 150);
+      // Update step immediately while card is fading out (opacity 0)
+      setCurrentStep(prev => prev + 1);
     }
   };
 
   const handlePrev = () => {
     if (currentStep > 0) {
       setCardOpacity(0); // Fade out current card
-      setTimeout(() => {
-        setCurrentStep(prev => prev - 1); // Change step after fade out
-      }, 150);
+      // Update step immediately while card is fading out (opacity 0)
+      setCurrentStep(prev => prev - 1);
     }
   };
 
