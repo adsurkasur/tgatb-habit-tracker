@@ -8,16 +8,52 @@ export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
 
 // Initialize Capacitor plugins
-export const initializeCapacitor = async () => {
+export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
   if (!isNativePlatform()) return;
 
   try {
     // Hide splash screen after app loads
     await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
 
-    // Configure status bar
-    await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
-    await StatusBar.setBackgroundColor({ color: '#000000' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
+    // Configure status bar for proper display
+    const platform = getPlatform();
+    const shouldHideStatusBar = settings?.fullscreenMode ?? false;
+    
+    if (platform === 'android') {
+      // Android configuration
+      await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
+      await StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
+      
+      if (shouldHideStatusBar) {
+        await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
+      } else {
+        await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
+      }
+    } else if (platform === 'ios') {
+      // iOS configuration
+      await StatusBar.setStyle({ style: Style.Light }).catch(e => console.warn('StatusBar.setStyle failed:', e));
+      
+      if (shouldHideStatusBar) {
+        await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
+      } else {
+        await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
+      }
+    }
+
+    // Get status bar info and set CSS variables
+    try {
+      const statusBarInfo = await StatusBar.getInfo();
+      const root = document.documentElement;
+      
+      // Set status bar height based on platform
+      const statusBarHeight = platform === 'android' ? 24 : 44;
+      root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
+      root.style.setProperty('--safe-area-top', statusBarInfo.overlays ? `${statusBarHeight}px` : '0px');
+      
+      console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight });
+    } catch (error) {
+      console.warn('Failed to get status bar info:', error);
+    }
 
     // App state change listeners
     App.addListener('appStateChange', ({ isActive }) => {

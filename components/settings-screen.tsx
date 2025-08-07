@@ -14,12 +14,15 @@ import {
   Upload,
   HelpCircle,
   Mail,
-  Smartphone
+  Smartphone,
+  Maximize
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
+import { useStatusBar } from "@/hooks/use-status-bar";
+import { Capacitor } from '@capacitor/core';
 
 interface SettingsScreenProps {
   open: boolean;
@@ -44,9 +47,18 @@ export function SettingsScreen({
   const { toast } = useToast();
   const [canInstallPWA, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
+  const { setVisible: setStatusBarVisible, isNative } = useStatusBar();
+  const isCapacitorApp = Capacitor.isNativePlatform();
 
   // Check PWA install availability
   useEffect(() => {
+    // Don't show PWA install option if running in Capacitor (native app)
+    if (isCapacitorApp) {
+      setCanInstallPWA(false);
+      setIsAppInstalled(true); // Consider it "installed" since it's the native app
+      return;
+    }
+
     // Check if app is already installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
     const isInWebAppiOS = (window.navigator as any).standalone === true;
@@ -60,7 +72,7 @@ export function SettingsScreen({
 
     window.addEventListener('beforeinstallprompt', handler);
     return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, []);
+  }, [isCapacitorApp]);
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -80,6 +92,26 @@ export function SettingsScreen({
       onImportData(file);
       // Reset file input
       e.target.value = '';
+    }
+  };
+
+  const handleFullscreenToggle = async (enabled: boolean) => {
+    if (isNative) {
+      await setStatusBarVisible(!enabled);
+      onUpdateSettings({ fullscreenMode: enabled });
+      
+      toast({
+        title: enabled ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
+        description: enabled 
+          ? "Status bar is now hidden for immersive experience"
+          : "Status bar is now visible",
+      });
+    } else {
+      onUpdateSettings({ fullscreenMode: enabled });
+      toast({
+        title: "Setting Saved",
+        description: "Fullscreen preference saved (applies to mobile app)",
+      });
     }
   };
 
@@ -240,19 +272,50 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
-              onClick={handleInstallPWA}
+              className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+                isCapacitorApp 
+                  ? 'opacity-50 cursor-not-allowed' 
+                  : 'cursor-pointer state-layer-hover'
+              }`}
+              onClick={isCapacitorApp ? undefined : handleInstallPWA}
             >
               <div className="flex items-center space-x-3">
                 <Smartphone className="w-5 h-5 text-muted-foreground" />
                 <div className="flex flex-col">
-                  <span className="font-medium">Install App</span>
+                  <span className="font-medium">
+                    {isCapacitorApp ? "Native App" : "Install App"}
+                  </span>
                   <span className="text-xs text-muted-foreground">
-                    {isAppInstalled ? "Already installed" : "Add to home screen"}
+                    {isCapacitorApp 
+                      ? "You're using the native Android app" 
+                      : isAppInstalled 
+                        ? "Already installed" 
+                        : "Add to home screen"
+                    }
                   </span>
                 </div>
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              {!isCapacitorApp && (
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
+              )}
+            </div>
+
+            {/* Fullscreen Mode Toggle */}
+            <div className="flex items-center justify-between p-4 bg-muted material-radius theme-transition">
+              <div className="flex items-center space-x-3">
+                <Maximize className="w-5 h-5 text-muted-foreground" />
+                <div className="flex flex-col">
+                  <span className="font-medium">Fullscreen Mode</span>
+                  <span className="text-xs text-muted-foreground">
+                    {isNative ? "Hide status bar for immersive experience" : "Mobile app setting"}
+                  </span>
+                </div>
+              </div>
+              <Switch
+                checked={settings.fullscreenMode}
+                onCheckedChange={handleFullscreenToggle}
+                disabled={!isNative}
+              />
             </div>
             
             <input

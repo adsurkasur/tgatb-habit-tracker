@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Download, X } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
+import { Capacitor } from '@capacitor/core';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -15,6 +16,9 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
+  // Don't show PWA prompt in Capacitor (native app)
+  const isCapacitorApp = Capacitor.isNativePlatform();
+  
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
     typeof window !== 'undefined' && localStorage.getItem('analytics-notice-acknowledged') === 'true'
@@ -23,6 +27,11 @@ export function PWAInstallPrompt() {
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
   const { toast } = useToast();
+
+  // Early return if running in Capacitor
+  if (isCapacitorApp) {
+    return null;
+  }
 
   // Hide install prompt immediately if user has already dismissed it
   useEffect(() => {

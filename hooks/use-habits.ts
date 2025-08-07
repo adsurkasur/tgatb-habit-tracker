@@ -12,6 +12,7 @@ export function useHabits() {
     darkMode: false,
     language: "en",
     motivatorPersonality: "positive",
+    fullscreenMode: false,
   });
   const { toast } = useToast();
 

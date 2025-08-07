@@ -25,6 +25,7 @@ export interface UserSettings {
   darkMode: boolean;
   language: "en" | "id";
   motivatorPersonality: MotivatorPersonality;
+  fullscreenMode: boolean;
 }
 
 export const habitSchema = z.object({

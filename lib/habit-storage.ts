@@ -165,6 +165,7 @@ export class HabitStorage {
           darkMode: false,
           language: "en",
           motivatorPersonality: "positive",
+          fullscreenMode: false,
         };
       }
       return JSON.parse(data);
@@ -173,6 +174,7 @@ export class HabitStorage {
         darkMode: false,
         language: "en",
         motivatorPersonality: "positive",
+        fullscreenMode: false,
       };
     }
   }

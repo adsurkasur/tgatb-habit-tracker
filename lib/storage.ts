@@ -31,7 +31,8 @@ export class MemStorage implements IStorage {
     this.settings = {
       darkMode: false,
       language: "en",
-      motivatorPersonality: "positive"
+      motivatorPersonality: "positive",
+      fullscreenMode: false
     };
   }
 

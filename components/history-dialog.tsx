@@ -202,7 +202,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-auto gap-0" : "w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start"}`}>
-        <DialogHeader className="px-6 pb-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative">
+        <DialogHeader className="px-6 py-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative">
           <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
               <BarChart3 className="w-5 h-5" />
@@ -211,7 +211,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
             <button
               type="button"
               onClick={() => onOpenChange(false)}
-              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground"
+              className="flex items-center justify-center w-6 h-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none hover:bg-accent"
             >
               <X className="h-4 w-4" />
               <span className="sr-only">Close</span>

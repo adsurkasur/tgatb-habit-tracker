@@ -5,6 +5,13 @@
 @tailwind utilities;
 
 :root {
+  /* Safe Area Variables for Mobile Apps */
+  --status-bar-height: 0px;
+  --safe-area-top: env(safe-area-inset-top, 0px);
+  --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-area-left: env(safe-area-inset-left, 0px);
+  --safe-area-right: env(safe-area-inset-right, 0px);
+  
   /* Material 3 Color System based on #6750A4 seed */
   --primary: hsl(256, 33%, 52%);
   --primary-container: hsl(259, 100%, 93%);

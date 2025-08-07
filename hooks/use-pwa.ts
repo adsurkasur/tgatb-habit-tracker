@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { Capacitor } from '@capacitor/core';
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -17,8 +18,18 @@ export function usePWA() {
   const [isInstalled, setIsInstalled] = useState(false);
   const [isOnline, setIsOnline] = useState(true);
   const [isStandalone, setIsStandalone] = useState(false);
+  
+  const isCapacitorApp = Capacitor.isNativePlatform();
 
   useEffect(() => {
+    // If running in Capacitor, consider it installed and standalone
+    if (isCapacitorApp) {
+      setIsInstalled(true);
+      setIsStandalone(true);
+      setIsInstallable(false);
+      return;
+    }
+
     // Check if app is running in standalone mode
     const standalone = window.matchMedia('(display-mode: standalone)').matches || 
                      (window.navigator as any).standalone === true;
@@ -39,29 +50,33 @@ export function usePWA() {
     // Set initial online status
     setIsOnline(navigator.onLine);
 
-    // Listen for the beforeinstallprompt event
+    // Define handlers outside conditional for cleanup
     const handleBeforeInstallPrompt = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
       setDeferredPrompt(e);
       setIsInstallable(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
-
-    // Listen for app installed event
     const handleAppInstalled = () => {
       setIsInstalled(true);
       setIsInstallable(false);
       setDeferredPrompt(null);
     };
 
-    window.addEventListener('appinstalled', handleAppInstalled);
+    // Don't listen for install prompts in Capacitor
+    if (!isCapacitorApp) {
+      window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+      window.addEventListener('appinstalled', handleAppInstalled);
+    }
 
     return () => {
       window.removeEventListener('online', handleOnline);
       window.removeEventListener('offline', handleOffline);
-      window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
-      window.removeEventListener('appinstalled', handleAppInstalled);
+      
+      if (!isCapacitorApp) {
+        window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt as EventListener);
+        window.removeEventListener('appinstalled', handleAppInstalled);
+      }
     };
   }, []);
 

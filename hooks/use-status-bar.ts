@@ -1,0 +1,115 @@
+import { useEffect, useState } from 'react';
+import { StatusBar } from '@capacitor/status-bar';
+import { Capacitor } from '@capacitor/core';
+
+interface StatusBarInfo {
+  visible: boolean;
+  height: number;
+  overlays: boolean;
+}
+
+export const useStatusBar = () => {
+  const [statusBarInfo, setStatusBarInfo] = useState<StatusBarInfo>({
+    visible: true,
+    height: 0,
+    overlays: false
+  });
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    const getStatusBarInfo = async () => {
+      try {
+        const info = await StatusBar.getInfo();
+        const statusBarHeight = Capacitor.getPlatform() === 'android' ? 24 : 44; // Default heights
+        
+        setStatusBarInfo({
+          visible: info.visible,
+          height: statusBarHeight, // StatusBar.getInfo() doesn't return height on all platforms
+          overlays: info.overlays ?? false
+        });
+
+        // Set CSS custom properties for safe area
+        const root = document.documentElement;
+        root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
+        root.style.setProperty('--safe-area-top', (info.overlays ?? false) ? `${statusBarHeight}px` : '0px');
+        
+        console.log('Status bar info:', { ...info, height: statusBarHeight });
+      } catch (error) {
+        console.warn('Failed to get status bar info:', error);
+        // Fallback values
+        const fallbackHeight = Capacitor.getPlatform() === 'android' ? 24 : 44;
+        setStatusBarInfo({
+          visible: true,
+          height: fallbackHeight,
+          overlays: true
+        });
+        
+        const root = document.documentElement;
+        root.style.setProperty('--status-bar-height', `${fallbackHeight}px`);
+        root.style.setProperty('--safe-area-top', `${fallbackHeight}px`);
+      }
+    };
+
+    getStatusBarInfo();
+
+    // Listen for status bar changes
+    const setupStatusBarListener = async () => {
+      try {
+        // Update on orientation and resize changes
+        window.addEventListener('resize', getStatusBarInfo);
+        window.addEventListener('orientationchange', getStatusBarInfo);
+      } catch (error) {
+        console.warn('Failed to setup status bar listener:', error);
+      }
+    };
+
+    setupStatusBarListener();
+
+    return () => {
+      window.removeEventListener('resize', getStatusBarInfo);
+      window.removeEventListener('orientationchange', getStatusBarInfo);
+    };
+  }, []);
+
+  const setStatusBarVisible = async (visible: boolean) => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    try {
+      if (visible) {
+        await StatusBar.show();
+      } else {
+        await StatusBar.hide();
+      }
+      
+      // Update info after change
+      setTimeout(async () => {
+        const info = await StatusBar.getInfo();
+        const statusBarHeight = Capacitor.getPlatform() === 'android' ? 24 : 44;
+        
+        setStatusBarInfo({
+          visible: info.visible,
+          height: statusBarHeight,
+          overlays: info.overlays ?? false
+        });
+
+        // Update CSS custom properties
+        const root = document.documentElement;
+        root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
+        root.style.setProperty('--safe-area-top', (info.overlays ?? false) ? `${statusBarHeight}px` : '0px');
+      }, 100);
+    } catch (error) {
+      console.warn('Failed to set status bar visibility:', error);
+    }
+  };
+
+  return {
+    ...statusBarInfo,
+    setVisible: setStatusBarVisible,
+    isNative: Capacitor.isNativePlatform()
+  };
+};
