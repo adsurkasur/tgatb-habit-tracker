@@ -487,32 +487,35 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           <div className="flex items-center justify-between gap-3 max-sm:gap-2 min-w-0">
             {/* Previous button - flexible width for perfect alignment */}
             <div className="flex justify-start min-w-0" style={{ minWidth: '80px' }}>
-              {currentStep > 0 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handlePrev}
-                  disabled={isTransitioning}
-                  className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
-                >
-                  <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
-                  <span className="truncate">Previous</span>
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handlePrev}
+                disabled={isTransitioning || currentStep === 0}
+                className={cn(
+                  "flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed",
+                  currentStep === 0 && "invisible"
+                )}
+              >
+                <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
+                <span className="truncate">Previous</span>
+              </Button>
             </div>
 
             {/* Skip tour button - center section with equal spacing */}
             <div className="flex-1 flex justify-center min-w-0">
-              {currentStep < welcomeSteps.length - 1 && (
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={handleSkip}
-                  className="text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-4 max-sm:px-3 font-medium whitespace-nowrap"
-                >
-                  Skip Tour
-                </Button>
-              )}
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={handleSkip}
+                disabled={isTransitioning}
+                className={cn(
+                  "text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-4 max-sm:px-3 font-medium whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed",
+                  currentStep >= welcomeSteps.length - 1 && "invisible"
+                )}
+              >
+                Skip Tour
+              </Button>
             </div>
 
             {/* Next button - flexible width matching previous button */}
