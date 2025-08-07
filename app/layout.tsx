@@ -5,6 +5,7 @@ import { Analytics } from "@vercel/analytics/react";
 import { OfflineToast } from "@/components/offline-toast";
 import { ServiceWorkerRegistration } from "@/components/sw-registration";
 import { AnalyticsNotice } from "@/components/analytics-notice";
+import { CapacitorInit } from "@/components/capacitor-init";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -83,6 +84,7 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
       </head>
       <body>
+        <CapacitorInit />
         <ServiceWorkerRegistration />
         <Providers>
           {children}

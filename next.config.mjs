@@ -13,13 +13,19 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: [],
-    unoptimized: false,
+    unoptimized: true, // Required for static export
   },
+  output: 'export', // Enable static export
+  trailingSlash: true, // Required for static export
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
     APP_VERSION: packageJson.version,
   },
   serverExternalPackages: [],
+  // Exclude API routes from static export
+  generateBuildId: async () => {
+    return 'capacitor-build'
+  },
 };
 
 // PWA Configuration - BEST PRACTICE: Use Workbox with custom worker

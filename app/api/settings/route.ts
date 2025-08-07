@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { storage } from '@/lib/storage';
 
+// Required for static export
+export const dynamic = 'force-static';
+
 // Handler for GET /api/settings
 export async function GET(request: NextRequest) {
   try {
