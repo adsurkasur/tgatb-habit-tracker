@@ -28,15 +28,16 @@ export const useStatusBar = () => {
         setStatusBarInfo({
           visible: info.visible,
           height: statusBarHeight, // StatusBar.getInfo() doesn't return height on all platforms
-          overlays: info.overlays ?? false
+          overlays: false // We set overlays to false to prevent content overlap
         });
 
         // Set CSS custom properties for safe area
         const root = document.documentElement;
         root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
-        root.style.setProperty('--safe-area-top', (info.overlays ?? false) ? `${statusBarHeight}px` : '0px');
+        // Since we're not overlaying, we don't need safe area padding
+        root.style.setProperty('--safe-area-top', '0px');
         
-        console.log('Status bar info:', { ...info, height: statusBarHeight });
+        console.log('Status bar info:', { ...info, height: statusBarHeight, overlays: false });
       } catch (error) {
         console.warn('Failed to get status bar info:', error);
         // Fallback values
@@ -44,12 +45,12 @@ export const useStatusBar = () => {
         setStatusBarInfo({
           visible: true,
           height: fallbackHeight,
-          overlays: true
+          overlays: false // Default to no overlay for cleaner layout
         });
         
         const root = document.documentElement;
         root.style.setProperty('--status-bar-height', `${fallbackHeight}px`);
-        root.style.setProperty('--safe-area-top', `${fallbackHeight}px`);
+        root.style.setProperty('--safe-area-top', '0px');
       }
     };
 
@@ -94,13 +95,13 @@ export const useStatusBar = () => {
         setStatusBarInfo({
           visible: info.visible,
           height: statusBarHeight,
-          overlays: info.overlays ?? false
+          overlays: false // We're not using overlay mode
         });
 
         // Update CSS custom properties
         const root = document.documentElement;
         root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
-        root.style.setProperty('--safe-area-top', (info.overlays ?? false) ? `${statusBarHeight}px` : '0px');
+        root.style.setProperty('--safe-area-top', '0px');
       }, 100);
     } catch (error) {
       console.warn('Failed to set status bar visibility:', error);

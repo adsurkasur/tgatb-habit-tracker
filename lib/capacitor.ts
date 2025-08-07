@@ -20,14 +20,16 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
     
     if (platform === 'android') {
-      // Android configuration
+      // Android configuration - prevent status bar overlay
       await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
       await StatusBar.setBackgroundColor({ color: '#ffffff' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
       
+      // Always show status bar and ensure it doesn't overlay content
+      await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
+      await StatusBar.setOverlaysWebView({ overlay: false }).catch(e => console.warn('StatusBar.setOverlaysWebView failed:', e));
+      
       if (shouldHideStatusBar) {
         await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
-      } else {
-        await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
       }
     } else if (platform === 'ios') {
       // iOS configuration
@@ -48,9 +50,10 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       // Set status bar height based on platform
       const statusBarHeight = platform === 'android' ? 24 : 44;
       root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
-      root.style.setProperty('--safe-area-top', statusBarInfo.overlays ? `${statusBarHeight}px` : '0px');
+      // Since we disabled overlay, no need for safe area padding
+      root.style.setProperty('--safe-area-top', '0px');
       
-      console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight });
+      console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight, overlays: false });
     } catch (error) {
       console.warn('Failed to get status bar info:', error);
     }
