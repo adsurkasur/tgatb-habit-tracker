@@ -85,13 +85,13 @@ export default function RootLayout({
       </head>
       <body>
         <CapacitorInit />
-        <ServiceWorkerRegistration />
+        {/* <ServiceWorkerRegistration /> */}
         <Providers>
           {children}
         </Providers>
-        <OfflineToast />
-        <AnalyticsNotice />
-        {process.env.NODE_ENV === 'production' && <Analytics />}
+        {/* <OfflineToast /> */}
+        {/* <AnalyticsNotice /> */}
+        {/* {process.env.NODE_ENV === 'production' && <Analytics />} */}
       </body>
     </html>
   );

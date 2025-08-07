@@ -13,25 +13,25 @@ export const initializeCapacitor = async () => {
 
   try {
     // Hide splash screen after app loads
-    await SplashScreen.hide();
+    await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
 
     // Configure status bar
-    await StatusBar.setStyle({ style: Style.Dark });
-    await StatusBar.setBackgroundColor({ color: '#000000' });
+    await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
+    await StatusBar.setBackgroundColor({ color: '#000000' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
 
     // App state change listeners
     App.addListener('appStateChange', ({ isActive }) => {
       console.log('App state changed. Is active?', isActive);
-    });
+    }).catch(e => console.warn('App.addListener appStateChange failed:', e));
 
     // Back button handler
     App.addListener('backButton', ({ canGoBack }) => {
       if (!canGoBack) {
-        App.exitApp();
+        App.exitApp().catch(e => console.warn('App.exitApp failed:', e));
       } else {
         window.history.back();
       }
-    });
+    }).catch(e => console.warn('App.addListener backButton failed:', e));
 
   } catch (error) {
     console.error('Error initializing Capacitor:', error);

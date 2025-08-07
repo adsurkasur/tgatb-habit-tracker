@@ -12,7 +12,7 @@
     "check": "tsc",
     "api:move-out": "if not exist temp-api-backup mkdir temp-api-backup && move app\\api temp-api-backup\\api",
     "api:move-back": "move temp-api-backup\\api app\\api && rmdir temp-api-backup",
-    "android:build": "npm run api:move-out && npm run build && npm run api:move-back && npx cap copy android",
+    "android:build": "npm run api:move-out && npm run build && node scripts/fix-paths.js && npm run api:move-back && npx cap copy android",
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android"
