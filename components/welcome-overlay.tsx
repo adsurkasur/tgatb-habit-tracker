@@ -42,6 +42,27 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   // Function to calculate step-specific initial positions
   const getInitialCardPosition = (step: number) => {
     if (step === 3) { // Step 4 (0-indexed) - habit card step
+      // Use the same logic as the viewport clipping detection
+      const isMobile = window.innerWidth < 640;
+      const cardWidth = isMobile ? 288 : 320;
+      
+      if (!isMobile) {
+        // On desktop, assume we have enough space for right positioning initially
+        // The actual clipping detection will happen later in the positioning logic
+        // This is just to set a reasonable initial position
+        const hasEnoughSpace = window.innerWidth > 1200; // Conservative estimate
+        
+        if (hasEnoughSpace) {
+          // Start from center-right area for smooth transition to right side
+          return {
+            top: '50%',
+            left: '70%',
+            transform: 'translate(-50%, -50%)'
+          };
+        }
+      }
+      
+      // Mobile or smaller desktop - start from top center
       return {
         top: '20%',
         left: '50%',
@@ -75,8 +96,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       setIsPositionReady(false);
       setShouldMoveToFinalPosition(false);
       
-      // Keep card at current position initially (don't move during content change)
-      // Position calculation will happen after content is rendered and visible
+      // Update the initial position for the new step
+      const newInitialPosition = getInitialCardPosition(currentStep);
+      setCardPosition(newInitialPosition);
     }
   }, [currentStep, isVisible]);
 
