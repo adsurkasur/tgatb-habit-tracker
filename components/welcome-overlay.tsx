@@ -36,6 +36,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const [isPositionReady, setIsPositionReady] = useState(false);
   const [cardOpacity, setCardOpacity] = useState(0);
   const [allPositions, setAllPositions] = useState<{ [key: number]: { x: number; y: number; width: number; height: number } | null }>({});
+  const [isTransitioning, setIsTransitioning] = useState(false);
   
   // Function to calculate step-specific initial positions
   const getInitialCardPosition = (step: number) => {
@@ -69,8 +70,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   // Update card position when step changes to use appropriate initial position
   useEffect(() => {
     if (isVisible) {
-      // Immediately hide the card and reset position state
-      setCardOpacity(0);
+      // Reset position state and set initial position for new step
       setIsPositionReady(false);
       
       const newPosition = getInitialCardPosition(currentStep);
@@ -343,6 +343,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   useEffect(() => {
     if (!isVisible) {
       setCardOpacity(0);
+      setIsTransitioning(false);
       return;
     }
 
@@ -352,7 +353,11 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       const currentStepData = getWelcomeSteps()[currentStep];
       const extraDelay = currentStepData.id === 'habit-card' ? 50 : 0;
       
-      const timer = setTimeout(() => setCardOpacity(1), extraDelay);
+      const timer = setTimeout(() => {
+        setCardOpacity(1);
+        // Mark transition as complete when card is fully visible
+        setIsTransitioning(false);
+      }, extraDelay);
       return () => clearTimeout(timer);
     } else {
       // Position not ready, keep card hidden
@@ -365,17 +370,35 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       onComplete();
       onClose();
     } else {
-      setCardOpacity(0); // Fade out current card
-      // Update step immediately while card is fading out (opacity 0)
-      setCurrentStep(prev => prev + 1);
+      // Prevent double-clicks during transition
+      if (isTransitioning) return;
+      
+      // Phase 1: Start transition and fade out current card
+      setIsTransitioning(true);
+      setCardOpacity(0);
+      
+      // Phase 2: Wait for fade-out to complete, then update content while invisible
+      setTimeout(() => {
+        setCurrentStep(prev => prev + 1);
+        // Phase 3: Fade in happens automatically via useEffect when position is ready
+      }, 300); // Match CSS transition duration
     }
   };
 
   const handlePrev = () => {
     if (currentStep > 0) {
-      setCardOpacity(0); // Fade out current card
-      // Update step immediately while card is fading out (opacity 0)
-      setCurrentStep(prev => prev - 1);
+      // Prevent double-clicks during transition
+      if (isTransitioning) return;
+      
+      // Phase 1: Start transition and fade out current card
+      setIsTransitioning(true);
+      setCardOpacity(0);
+      
+      // Phase 2: Wait for fade-out to complete, then update content while invisible
+      setTimeout(() => {
+        setCurrentStep(prev => prev - 1);
+        // Phase 3: Fade in happens automatically via useEffect when position is ready
+      }, 300); // Match CSS transition duration
     }
   };
 
@@ -460,7 +483,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                   variant="ghost"
                   size="sm"
                   onClick={handlePrev}
-                  className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap"
+                  disabled={isTransitioning}
+                  className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
                   <span className="truncate">Previous</span>
@@ -488,7 +512,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 onClick={handleNext}
                 size="sm"
                 variant="default"
-                className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium px-3 max-sm:px-2 whitespace-nowrap"
+                disabled={isTransitioning}
+                className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {currentStep === welcomeSteps.length - 1 ? (
                   <>
