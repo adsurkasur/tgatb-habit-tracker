@@ -302,18 +302,19 @@ export default function Home() {
                     </button>
                   )}
 
-                  {/* Habit counter indicator - text only, no dots - only show if not demo */}
-                  {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
-                    <div className="absolute bottom-[-40px] left-1/2 transform -translate-x-1/2 flex flex-col items-center space-y-2">
-                      <div className="text-xs text-muted-foreground text-center">
-                        {currentHabitIndex + 1} of {goodHabits.length + badHabits.length} habits
-                        <div className="text-[10px] opacity-60 mt-1">
-                          Use ← → keys or swipe to navigate
-                        </div>
+                </div>
+
+                {/* Habit counter indicator - positioned outside the habit card container to avoid clipping */}
+                {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
+                  <div className="flex justify-center mt-4">
+                    <div className="text-xs text-muted-foreground text-center">
+                      {currentHabitIndex + 1} of {goodHabits.length + badHabits.length} habits
+                      <div className="text-[10px] opacity-60 mt-1">
+                        Use ← → keys or swipe to navigate
                       </div>
                     </div>
-                  )}
-                </div>
+                  </div>
+                )}
 
                 {/* Demo indicator - positioned outside the habit card container */}
                 {shouldShowDemoHabit && (
