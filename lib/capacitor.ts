@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
-import { StatusBar, Style } from '@capacitor/status-bar';
+import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
+import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
@@ -20,29 +21,34 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
     
     if (platform === 'android') {
-      // Android configuration - prevent status bar overlay with solid background
-      // Set light text on dark background or dark text on light background
-      await StatusBar.setStyle({ style: Style.Dark }).catch(e => console.warn('StatusBar.setStyle failed:', e));
-      // Set solid white background color (matches colors.xml)
-      await StatusBar.setBackgroundColor({ color: '#FFFFFF' }).catch(e => console.warn('StatusBar.setBackgroundColor failed:', e));
+      // Basic setup - colors will be managed by useSystemBars hook
+      await StatusBar.show();
       
-      // Always show status bar and ensure it doesn't overlay content
-      await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
-      // Disable overlay mode to prevent content from appearing under status bar
-      await StatusBar.setOverlaysWebView({ overlay: false }).catch(e => console.warn('StatusBar.setOverlaysWebView failed:', e));
-      
-      // Only hide status bar if explicitly requested in fullscreen mode
+      try {
+        // Show navigation bar by default
+        await (NavigationBar as any).show();
+      } catch (e) {
+        console.warn('NavigationBar.show failed:', e);
+      }
+
+      // Handle fullscreen mode
       if (shouldHideStatusBar) {
-        await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
+        await StatusBar.hide();
+        try {
+          // Hide navigation bar in fullscreen mode
+          await (NavigationBar as any).hide();
+        } catch (e) {
+          console.warn('NavigationBar.hide failed:', e);
+        }
       }
     } else if (platform === 'ios') {
       // iOS configuration
-      await StatusBar.setStyle({ style: Style.Light }).catch(e => console.warn('StatusBar.setStyle failed:', e));
+      await StatusBar.setStyle({ style: StatusBarStyles.Light });
       
       if (shouldHideStatusBar) {
-        await StatusBar.hide().catch(e => console.warn('StatusBar.hide failed:', e));
+        await StatusBar.hide();
       } else {
-        await StatusBar.show().catch(e => console.warn('StatusBar.show failed:', e));
+        await StatusBar.show();
       }
     }
 
@@ -104,17 +110,17 @@ export const haptics = {
 export const statusBar = {
   setLight: () => {
     if (isNativePlatform()) {
-      StatusBar.setStyle({ style: Style.Light });
+      StatusBar.setStyle({ style: StatusBarStyles.Light });
     }
   },
   setDark: () => {
     if (isNativePlatform()) {
-      StatusBar.setStyle({ style: Style.Dark });
+      StatusBar.setStyle({ style: StatusBarStyles.Dark });
     }
   },
   setDefault: () => {
     if (isNativePlatform()) {
-      StatusBar.setStyle({ style: Style.Default });
+      StatusBar.setStyle({ style: StatusBarStyles.Default });
     }
   },
   setBackgroundColor: (color: string) => {

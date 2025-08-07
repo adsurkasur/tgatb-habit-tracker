@@ -28,7 +28,7 @@ export const useStatusBar = () => {
         setStatusBarInfo({
           visible: info.visible,
           height: statusBarHeight, // StatusBar.getInfo() doesn't return height on all platforms
-          overlays: false // We set overlays to false to prevent content overlap
+          overlays: info.overlays ?? false // Use the actual overlay value, default to false
         });
 
         // Set CSS custom properties for safe area
@@ -95,7 +95,7 @@ export const useStatusBar = () => {
         setStatusBarInfo({
           visible: info.visible,
           height: statusBarHeight,
-          overlays: false // We're not using overlay mode
+          overlays: info.overlays ?? false // We're not using overlay mode
         });
 
         // Update CSS custom properties

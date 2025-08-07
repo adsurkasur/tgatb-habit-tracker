@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#4f46e5</color>
     <color name="colorAccent">#ec4899</color>
     
-    <!-- Status bar color for dark theme - using a solid dark color -->
-    <color name="status_bar_color">#0f172a</color>
+    <!-- Status bar color for dark theme - using dark purple color -->
+    <color name="status_bar_color">#1e1b2e</color>
 </resources>

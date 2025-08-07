@@ -4,9 +4,9 @@
     <color name="colorPrimaryDark">#4f46e5</color>
     <color name="colorAccent">#ec4899</color>
     
-    <!-- Status bar color - using a solid white by default -->
-    <color name="status_bar_color">#FFFFFF</color>
+    <!-- Status bar color - using purple theme color -->
+    <color name="status_bar_color">#6750a4</color>
     
     <!-- Alternative status bar colors for different themes -->
-    <color name="status_bar_color_dark">#0f172a</color>
+    <color name="status_bar_color_dark">#1e1b2e</color>
 </resources>
