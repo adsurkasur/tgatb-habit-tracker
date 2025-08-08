@@ -8,7 +8,7 @@ const config: CapacitorConfig = {
   webDir: 'out',
   plugins: {
     StatusBar: {
-      style: 'light',
+      style: 'dark',
       backgroundColor: '#6750a4',
       overlaysWebView: false
     },
@@ -19,7 +19,7 @@ const config: CapacitorConfig = {
       showSpinner: false
     },
     EdgeToEdge: {
-      backgroundColor: "#6750a4"
+      backgroundColor: "transparent"
     },
     Keyboard: {
       resizeOnFullScreen: false
