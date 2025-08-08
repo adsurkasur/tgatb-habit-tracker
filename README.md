@@ -31,7 +31,7 @@ Try it live: [tgatb.vercel.app](https://tgatb.vercel.app/)
 - ⚡ Real-time updates and optimistic UI (TanStack Query)
 - 📊 Progress tracking with visual indicators
 - 🔄 Habit streaks and consistency metrics
-- 💾 LocalStorage-based data persistence
+- 💾 Local, private data persistence
 - ⚙️ Next.js App Router with server components
 - 🌐 Offline-first experience (Service Worker, custom caching)
 - 📦 Installable as a PWA (Progressive Web App) on desktop and mobile
@@ -73,7 +73,7 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 - **Language:** TypeScript
 - **UI:** Shadcn/ui, Radix UI, Tailwind CSS
 - **State Management:** TanStack Query
-- **Storage:** LocalStorage (web) and Capacitor Preferences (native), Service Worker cache
+- **Storage:** Platform-aware settings and data layer using LocalStorage (web) and Capacitor Preferences (native), plus Service Worker cache
 - **Native:** Capacitor (Android/iOS)
 - **Deployment:** Vercel (Web), Android Studio (Native)
 
@@ -158,9 +158,10 @@ npm run android:open    # Open in Android Studio
 
 ## Storage & Offline
 
-- All habits and tracking data are stored locally in your browser using **LocalStorage**.
-- Offline support via Service Worker and custom caching (see `public/sw-custom.js`)
-- Android app uses same local storage and offline logic
+- Web: data and settings stored locally with **LocalStorage**.
+- Native (Android): data and settings stored with **Capacitor Preferences**.
+- A platform-aware storage layer keeps them in sync so toggles (like fullscreen) persist across web/native.
+- Offline support via Service Worker and custom caching (see `public/sw-custom.js`).
 
 ---
 
@@ -191,7 +192,7 @@ See [docs/ANDROID_SETUP.md](docs/ANDROID_SETUP.md) for full instructions.
 
 ## Development Workflow
 
-1. Make changes to code in `src/`
+1. Make changes to code in `app/` and `components/`
 2. TypeScript auto-compiles
 3. Next.js hot-reloads frontend
 
@@ -257,7 +258,7 @@ For issues and questions:
 
 - Star ⭐ the repo if you like it!
 - Open an issue for bugs or feature requests
-- Join discussions on [GitHub Discussions](https://github.com/<your-username>/tgatb-habit-tracker/discussions)
+- Join discussions on [GitHub Discussions](https://github.com/adsurkasur/tgatb-habit-tracker/discussions)
 
 ---
 

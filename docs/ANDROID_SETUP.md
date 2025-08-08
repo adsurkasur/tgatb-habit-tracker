@@ -24,7 +24,7 @@ This guide helps you set up Android development for the TGATB Habit Tracker on *
 
 ### 🖥️ Windows Setup
 
-**Install Java**
+#### Windows: Install Java
 
 ```powershell
 # Using winget (recommended)
@@ -33,13 +33,13 @@ winget install EclipseAdoptium.Temurin.21.JDK
 # Or download from https://adoptium.net/
 ```
 
-**Install Android Studio**
+#### Windows: Install Android Studio
 
 1. Download from [Android Developer](https://developer.android.com/studio)
 2. Run installer and follow setup wizard
 3. Install Android SDK through SDK Manager
 
-**Environment Variables**
+#### Windows: Environment variables
 
 ```powershell
 # Add to System Environment Variables
@@ -50,7 +50,7 @@ ANDROID_HOME=C:\Users\%USERNAME%\AppData\Local\Android\Sdk
 %ANDROID_HOME%\platform-tools
 ```
 
-**Verify Installation**
+#### Windows: Verify installation
 
 ```powershell
 java --version
@@ -62,7 +62,7 @@ npm run setup:android
 
 ### 🍎 macOS Setup
 
-**Install Java**
+#### macOS: Install Java
 
 ```bash
 # Using Homebrew (recommended)
@@ -73,7 +73,7 @@ echo 'export PATH="/opt/homebrew/opt/openjdk@21/bin:$PATH"' >> ~/.zshrc
 source ~/.zshrc
 ```
 
-**Install Android Studio**
+#### macOS: Install Android Studio
 
 ```bash
 # Using Homebrew Cask
@@ -82,7 +82,7 @@ brew install --cask android-studio
 # Or download from https://developer.android.com/studio
 ```
 
-**Environment Variables**
+#### macOS: Environment variables
 
 Add to `~/.zshrc` or `~/.bash_profile`:
 
@@ -91,7 +91,7 @@ export ANDROID_HOME=$HOME/Library/Android/sdk
 export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 ```
 
-**Verify Installation**
+#### macOS: Verify installation
 
 ```bash
 java --version
@@ -103,7 +103,7 @@ npm run setup:android
 
 ### 🐧 Linux Setup
 
-**Install Java**
+#### Linux: Install Java
 
 ```bash
 # Ubuntu/Debian
@@ -117,7 +117,7 @@ sudo dnf install java-21-openjdk-devel
 sudo pacman -S jdk21-openjdk
 ```
 
-**Install Android Studio**
+#### Linux: Install Android Studio
 
 ```bash
 # Using Flatpak (recommended)
@@ -129,7 +129,7 @@ sudo snap install android-studio --classic
 # Or download from https://developer.android.com/studio
 ```
 
-**Environment Variables**
+#### Linux: Environment variables
 
 Add to `~/.bashrc` or `~/.zshrc`:
 
@@ -138,7 +138,7 @@ export ANDROID_HOME=$HOME/Android/Sdk
 export PATH=$PATH:$ANDROID_HOME/tools:$ANDROID_HOME/platform-tools
 ```
 
-**Additional Packages**
+#### Linux: Additional packages
 
 ```bash
 # Ubuntu/Debian
@@ -148,7 +148,7 @@ sudo apt install build-essential
 sudo dnf groupinstall "Development Tools"
 ```
 
-**Device Access (if using physical device)**
+#### Linux: Device access (physical device)
 
 ```bash
 # Add user to plugdev group
@@ -159,7 +159,7 @@ sudo curl -o /etc/udev/rules.d/51-android.rules https://raw.githubusercontent.co
 sudo udevadm control --reload-rules
 ```
 
-**Verify Installation**
+#### Linux: Verify installation
 
 ```bash
 java --version
@@ -212,48 +212,48 @@ adb install android/app/build/outputs/apk/debug/app-debug.apk
 
 ## 🛠️ Troubleshooting
 
-**Common Issues**
+### Common issues
 
-### "Java not found"
+#### "Java not found"
 
 - Ensure Java 17-21 is installed
 - Check JAVA_HOME environment variable
 - Restart terminal after setting environment variables
 
-### "Android SDK not found"
+#### "Android SDK not found"
 
 - Install Android Studio completely
 - Set ANDROID_HOME environment variable
 - Install Android SDK through Android Studio SDK Manager
 
-### "Device not found"
+#### "Device not found"
 
 - Enable USB Debugging on device
 - Install device drivers (Windows)
 - Check USB cable (data cable, not charging-only)
 - Run `adb devices` to verify
 
-### "Build failed"
+#### "Build failed"
 
 - Run `npm run setup:android` to check prerequisites
 - Clear Gradle cache: `cd android && ./gradlew clean`
 - Sync project: `npm run android:sync`
 
-### Platform-specific Issues
+### Platform-specific issues
 
-**Windows:**
+#### Windows
 
 - Use PowerShell as Administrator if needed
 - Disable Windows Defender real-time protection temporarily during build
 - Ensure no spaces in your project path
 
-**macOS:**
+#### macOS
 
 - Grant Android Studio permissions in System Preferences
 - Use `sudo` only if absolutely necessary
 - Check Gatekeeper permissions for Android Studio
 
-**Linux:**
+#### Linux
 
 - Install missing development packages
 - Check user permissions for device access

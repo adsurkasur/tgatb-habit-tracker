@@ -168,10 +168,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     const calculateCurrentStepPosition = () => {
-  const steps = getWelcomeSteps();
-  const currentStepData = steps[currentStep];
-      
-      if (!currentStepData?.targetSelector) {
+      const stepData = currentStepData;
+
+      if (!stepData?.targetSelector) {
         // No target selector, use center position
         setAllPositions(prev => ({
           ...prev,
@@ -182,14 +181,14 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       }
 
       // Find the element for current step
-      let element = document.querySelector(currentStepData.targetSelector);
-      
+      let element: Element | null = document.querySelector(stepData.targetSelector);
+
       // Special handling for habit-card step to target the actual card
-      if (currentStepData.id === 'habit-card') {
-        element = document.querySelector('[data-tour="habit-card"]') || 
+      if (stepData.id === 'habit-card') {
+        element = document.querySelector('[data-tour="habit-card"]') ||
                  document.querySelector('.habit-card-animated') ||
                  document.querySelector('div[data-tour="habit-card"]');
-        
+
         if (!element) {
           const habitArea = document.querySelector('[data-tour="habit-area"]');
           if (habitArea) {
@@ -199,9 +198,9 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           }
         }
       }
-      
+
       if (element) {
-        const rect = element.getBoundingClientRect();
+        const rect = (element as HTMLElement).getBoundingClientRect();
         setAllPositions(prev => ({
           ...prev,
           [currentStep]: {
@@ -217,13 +216,11 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           [currentStep]: null
         }));
       }
-      
+
       setIsPositionReady(true);
     };
 
     // Give time for step transition and element rendering
-    // For habit-card step, wait longer for the card animation to complete
-    // Habit card has 0.2s (200ms) animation + buffer for any additional transitions
     const delay = currentStepData.id === 'habit-card' ? 400 : 50;
     const timer = setTimeout(calculateCurrentStepPosition, delay);
 
@@ -242,7 +239,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleResize);
     };
-  }, [isVisible, currentStep, getWelcomeSteps, currentStepData.id, getInitialCardPosition]);
+  }, [isVisible, currentStep, currentStepData, currentStepData.id]);
 
   // Calculate and set card position when position data is ready AND we should move to final position
   useEffect(() => {
@@ -251,115 +248,113 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     const stepTargetPosition = allPositions[currentStep];
-  const steps = getWelcomeSteps();
-  const step = steps[currentStep];
-    
+    const step = currentStepData;
+
     if (!stepTargetPosition) {
       // For center-positioned steps (welcome, complete), use the initial position
       const initialPosition = getInitialCardPosition(currentStep);
       setCardPosition(initialPosition);
+      return;
+    }
+
+    const { x, y, width, height } = stepTargetPosition;
+    const offset = step.offset || { x: 0, y: 0 };
+    const margin = 20;
+    const isMobile = window.innerWidth < 640;
+
+    // Apply viewport clipping detection
+    let shouldPositionAbove = false;
+    const cardWidth = isMobile ? 288 : 320;
+    const cardHeight = 250;
+
+    switch (step.position) {
+      case 'right':
+        if (x + width + margin + offset.x + cardWidth > window.innerWidth - 20) {
+          shouldPositionAbove = true;
+        }
+        break;
+      case 'left':
+        if (x - margin + offset.x - cardWidth < 20) {
+          shouldPositionAbove = true;
+        }
+        break;
+      case 'bottom':
+        if (step.id !== 'navigation' && y + height + margin + offset.y + cardHeight > window.innerHeight - 20) {
+          shouldPositionAbove = true;
+        }
+        break;
+      case 'top':
+        if (y - margin + offset.y - cardHeight < 20) {
+          shouldPositionAbove = true;
+        }
+        break;
+    }
+
+    // Device-specific positioning
+    const isStep4OnMobile = isMobile && step.id === 'habit-card';
+    const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
+    shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab;
+
+    // Calculate positions
+    let calculatedTop: string | number;
+    let calculatedLeft: string | number;
+    let calculatedTransform: string;
+
+    if (shouldPositionAbove) {
+      let finalY = y - margin - 15;
+      if (step.id === 'navigation') {
+        finalY = y - margin - 20;
+      }
+      const minY = cardHeight + 30;
+      if (finalY < minY) {
+        finalY = minY;
+      }
+      calculatedTop = finalY;
+
+      let finalX = x + width / 2;
+      const halfCardWidth = cardWidth / 2;
+      const safeMargin = 20;
+      const minX = halfCardWidth + safeMargin;
+      const maxX = window.innerWidth - halfCardWidth - safeMargin;
+      if (finalX < minX) finalX = minX;
+      if (finalX > maxX) finalX = maxX;
+      calculatedLeft = finalX;
+      calculatedTransform = 'translate(-50%, -100%)';
     } else {
-      const { x, y, width, height } = stepTargetPosition;
-      const offset = step.offset || { x: 0, y: 0 };
-      const margin = 20;
-      const isMobile = window.innerWidth < 640;
-      
-      // Apply viewport clipping detection
-      let shouldPositionAbove = false;
-      const cardWidth = isMobile ? 288 : 320;
-      const cardHeight = 250;
-      
       switch (step.position) {
-        case 'right':
-          if (x + width + margin + offset.x + cardWidth > window.innerWidth - 20) {
-            shouldPositionAbove = true;
-          }
-          break;
-        case 'left':
-          if (x - margin + offset.x - cardWidth < 20) {
-            shouldPositionAbove = true;
-          }
+        case 'top':
+          calculatedTop = y - margin + offset.y;
+          calculatedLeft = x + width / 2 + offset.x;
+          calculatedTransform = 'translate(-50%, -100%)';
           break;
         case 'bottom':
-          if (step.id !== 'navigation' && y + height + margin + offset.y + cardHeight > window.innerHeight - 20) {
-            shouldPositionAbove = true;
-          }
+          calculatedTop = y + height + margin + offset.y;
+          calculatedLeft = x + width / 2 + offset.x;
+          calculatedTransform = 'translate(-50%, 0)';
           break;
-        case 'top':
-          if (y - margin + offset.y - cardHeight < 20) {
-            shouldPositionAbove = true;
-          }
+        case 'left':
+          calculatedTop = y + height / 2 + offset.y;
+          calculatedLeft = x - margin + offset.x;
+          calculatedTransform = 'translate(-100%, -50%)';
           break;
+        case 'right':
+          calculatedTop = y + height / 2 + offset.y;
+          calculatedLeft = x + width + margin + offset.x;
+          calculatedTransform = 'translate(0, -50%)';
+          break;
+        default:
+          calculatedTop = y + height + margin + offset.y;
+          calculatedLeft = x + width / 2 + offset.x;
+          calculatedTransform = 'translate(-50%, 0)';
       }
-      
-      // Device-specific positioning
-      const isStep4OnMobile = isMobile && step.id === 'habit-card';
-      const isStep3OnMobileButNotFab = isMobile && step.id === 'add-button' && step.targetSelector !== '[data-tour="add-habit-fab"]';
-      
-      shouldPositionAbove = shouldPositionAbove || isStep4OnMobile || isStep3OnMobileButNotFab;
-
-      // Calculate positions
-      let calculatedTop: string | number;
-      let calculatedLeft: string | number;
-      let calculatedTransform: string;
-
-      if (shouldPositionAbove) {
-        let finalY = y - margin - 15;
-        if (step.id === 'navigation') {
-          finalY = y - margin - 20;
-        }
-        const minY = cardHeight + 30;
-        if (finalY < minY) {
-          finalY = minY;
-        }
-        calculatedTop = finalY;
-        
-        let finalX = x + width / 2;
-        const halfCardWidth = cardWidth / 2;
-        const safeMargin = 20;
-        const minX = halfCardWidth + safeMargin;
-        const maxX = window.innerWidth - halfCardWidth - safeMargin;
-        
-        if (finalX < minX) finalX = minX;
-        if (finalX > maxX) finalX = maxX;
-        calculatedLeft = finalX;
-        calculatedTransform = 'translate(-50%, -100%)';
-      } else {
-        switch (step.position) {
-          case 'top':
-            calculatedTop = y - margin + offset.y;
-            calculatedLeft = x + width / 2 + offset.x;
-            calculatedTransform = 'translate(-50%, -100%)';
-            break;
-          case 'bottom':
-            calculatedTop = y + height + margin + offset.y;
-            calculatedLeft = x + width / 2 + offset.x;
-            calculatedTransform = 'translate(-50%, 0)';
-            break;
-          case 'left':
-            calculatedTop = y + height / 2 + offset.y;
-            calculatedLeft = x - margin + offset.x;
-            calculatedTransform = 'translate(-100%, -50%)';
-            break;
-          case 'right':
-            calculatedTop = y + height / 2 + offset.y;
-            calculatedLeft = x + width + margin + offset.x;
-            calculatedTransform = 'translate(0, -50%)';
-            break;
-          default:
-            calculatedTop = y + height + margin + offset.y;
-            calculatedLeft = x + width / 2 + offset.x;
-            calculatedTransform = 'translate(-50%, 0)';
-        }
-      }
-
-      setCardPosition({
-        top: calculatedTop,
-        left: calculatedLeft,
-        transform: calculatedTransform
-      });
     }
-  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition, getWelcomeSteps, getInitialCardPosition]);
+
+    setCardPosition({
+      top: calculatedTop,
+      left: calculatedLeft,
+      transform: calculatedTransform
+    });
+  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition, currentStepData, getInitialCardPosition]);
 
   // Simple fade control - card fades in when position is ready
   useEffect(() => {
@@ -373,9 +368,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     if (isPositionReady) {
       // For habit-card step, ensure we wait for position calculation to complete
       // before making the card visible to prevent "blinking"
-  const currentStepData = getWelcomeSteps()[currentStep];
       const extraDelay = currentStepData.id === 'habit-card' ? 50 : 0;
-      
+
       const timer = setTimeout(() => {
         setCardOpacity(1);
         // After card is fully visible, trigger movement to final position
@@ -392,44 +386,31 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       // Position not ready, keep card hidden
       setCardOpacity(0);
     }
-  }, [isVisible, isPositionReady, currentStep, getWelcomeSteps]);
+  }, [isVisible, isPositionReady, currentStep, currentStepData.id]);
 
-  const handleNext = () => {
-    if (isLastStep) {
+  const transitionStep = useCallback((direction: 1 | -1) => {
+    if (isTransitioning) return;
+    // if finishing the tour
+    if (direction === 1 && isLastStep) {
       onComplete();
       onClose();
-    } else {
-      // Prevent double-clicks during transition
-      if (isTransitioning) return;
-      
-      // Phase 1: Start transition and fade out current card
-      setIsTransitioning(true);
-      setCardOpacity(0);
-      
-      // Phase 2: Wait for fade-out to complete, then update content while invisible
-      setTimeout(() => {
-        setCurrentStep(prev => prev + 1);
-        // Phase 3: Fade in happens automatically via useEffect when position is ready
-      }, 300); // Match CSS transition duration
+      return;
     }
-  };
+    // guard lower bound
+    if (direction === -1 && currentStep === 0) return;
 
-  const handlePrev = () => {
-    if (currentStep > 0) {
-      // Prevent double-clicks during transition
-      if (isTransitioning) return;
-      
-      // Phase 1: Start transition and fade out current card
-      setIsTransitioning(true);
-      setCardOpacity(0);
-      
-      // Phase 2: Wait for fade-out to complete, then update content while invisible
-      setTimeout(() => {
-        setCurrentStep(prev => prev - 1);
-        // Phase 3: Fade in happens automatically via useEffect when position is ready
-      }, 300); // Match CSS transition duration
-    }
-  };
+    // Start transition and fade out current card
+    setIsTransitioning(true);
+    setCardOpacity(0);
+
+    // After fade-out, update step; fade-in handled by effects
+    setTimeout(() => {
+      setCurrentStep(prev => prev + direction);
+    }, 300);
+  }, [currentStep, isLastStep, isTransitioning, onClose, onComplete]);
+
+  const handleNext = () => transitionStep(1);
+  const handlePrev = () => transitionStep(-1);
 
   const handleSkip = () => {
     localStorage.setItem('welcome-overlay-shown', 'true');

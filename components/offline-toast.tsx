@@ -14,7 +14,6 @@ export function OfflineToast() {
   
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
   const hideTimerRef = useRef<NodeJS.Timeout | null>(null);
-  const toastRef = useRef<HTMLDivElement>(null);
   const startYRef = useRef(0);
   const startTimeRef = useRef(0);
 
@@ -169,8 +168,7 @@ export function OfflineToast() {
   };
 
   return (
-    <div 
-      ref={toastRef}
+  <div 
       className={`fixed bottom-4 left-1/2 z-50 bg-white rounded-lg shadow-lg border border-gray-200 px-4 py-3 flex items-center gap-3 min-w-max cursor-pointer select-none ${
         isExiting && !isSwipedAway ? 'animate-slide-down' : 
         !isDragging && !isSwipedAway ? 'animate-slide-up' : ''
