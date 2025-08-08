@@ -158,7 +158,6 @@ npm run android:open    # Open in Android Studio
 
 ---
 
-
 ## Deployment
 
 ### Web
@@ -210,7 +209,6 @@ See [docs/ANDROID_SETUP.md](docs/ANDROID_SETUP.md) for full instructions.
 
 ---
 
-
 ## FAQ
 
 **Q: Is there a mobile app?**  
@@ -229,7 +227,6 @@ A: Yes! Offline support is built-in for both web and Android.
 A: Yes! Browser and Android push notifications are supported (where permissions are granted).
 
 ---
-
 
 ## License
 
@@ -254,7 +251,6 @@ For issues and questions:
 - Join discussions on [GitHub Discussions](https://github.com/adsurkasur/tgatb-habit-tracker/discussions)
 
 ---
-
 
 ## Resources
 

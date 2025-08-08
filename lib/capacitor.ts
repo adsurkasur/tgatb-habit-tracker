@@ -13,85 +13,77 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
   if (!isNativePlatform()) return;
 
   try {
-    // Hide splash screen after app loads
     await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
 
-    // Configure status bar for proper display
     const platform = getPlatform();
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
-    
-    if (platform === 'android') {
-      // Basic setup - colors will be managed by useSystemBars hook
-      await StatusBar.show();
-      
-      try {
-        // Show navigation bar by default (Note: @squareetlabs plugin only supports hide/show)
-  await NavigationBar.show();
-      } catch (e) {
-        console.warn('NavigationBar.show failed:', e);
-      }
 
-      // Handle fullscreen mode with enhanced hiding
-      if (shouldHideStatusBar) {
-        await StatusBar.hide();
-        try {
-          // Use the specialized plugin for hiding navigation bar
-          await NavigationBar.hide();
-          
-          // Re-apply after a short delay to ensure persistence
-          setTimeout(async () => {
-            await NavigationBar.hide();
-          }, 100);
-        } catch (e) {
-          console.warn('NavigationBar.hide failed:', e);
-        }
-      }
-    } else if (platform === 'ios') {
-      // iOS configuration
-      await StatusBar.setStyle({ style: StatusBarStyles.Light });
-      
-      if (shouldHideStatusBar) {
-        await StatusBar.hide();
-      } else {
-        await StatusBar.show();
-      }
-    }
-
-    // Get status bar info and set CSS variables
-    try {
-      const statusBarInfo = await StatusBar.getInfo();
-      const root = document.documentElement;
-      
-      // Set status bar height based on platform
-      const statusBarHeight = platform === 'android' ? 24 : 44;
-      root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
-      // Since we disabled overlay, no need for safe area padding
-      root.style.setProperty('--safe-area-top', '0px');
-  // When respecting OS nav bar, let bottom inset be provided by the platform/CSS.
-      
-      console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight, overlays: false });
-    } catch (error) {
-      console.warn('Failed to get status bar info:', error);
-    }
-
-    // App state change listeners
-    App.addListener('appStateChange', ({ isActive }) => {
-      console.log('App state changed. Is active?', isActive);
-    }).catch(e => console.warn('App.addListener appStateChange failed:', e));
-
-    // Back button handler
-    App.addListener('backButton', ({ canGoBack }) => {
-      if (!canGoBack) {
-        App.exitApp().catch(e => console.warn('App.exitApp failed:', e));
-      } else {
-        window.history.back();
-      }
-    }).catch(e => console.warn('App.addListener backButton failed:', e));
+    await configureSystemBars(platform, shouldHideStatusBar);
+    await setCssInsets(platform);
+    registerAppListeners();
 
   } catch (error) {
     console.error('Error initializing Capacitor:', error);
   }
 };
+
+async function configureSystemBars(platform: string, shouldHideStatusBar: boolean) {
+  if (platform === 'android') return configureAndroidBars(shouldHideStatusBar);
+  if (platform === 'ios') return configureIosBars(shouldHideStatusBar);
+}
+
+async function configureAndroidBars(shouldHideStatusBar: boolean) {
+  await StatusBar.show();
+  try {
+    await NavigationBar.show();
+  } catch (e) {
+    console.warn('NavigationBar.show failed:', e);
+  }
+  if (shouldHideStatusBar) {
+    await StatusBar.hide();
+    try {
+      await NavigationBar.hide();
+      setTimeout(async () => {
+        await NavigationBar.hide();
+      }, 100);
+    } catch (e) {
+      console.warn('NavigationBar.hide failed:', e);
+    }
+  }
+}
+
+async function configureIosBars(shouldHideStatusBar: boolean) {
+  await StatusBar.setStyle({ style: StatusBarStyles.Light });
+  if (shouldHideStatusBar) await StatusBar.hide();
+  else await StatusBar.show();
+}
+
+async function setCssInsets(platform: string) {
+  try {
+    const statusBarInfo = await StatusBar.getInfo();
+    const root = document.documentElement;
+    const statusBarHeight = platform === 'android' ? 24 : 44;
+    root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
+    root.style.setProperty('--safe-area-top', '0px');
+    console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight, overlays: false });
+  } catch (error) {
+    console.warn('Failed to get status bar info:', error);
+  }
+}
+
+function registerAppListeners() {
+  App.addListener('appStateChange', ({ isActive }) => {
+    console.log('App state changed. Is active?', isActive);
+  }).catch(e => console.warn('App.addListener appStateChange failed:', e));
+
+  App.addListener('backButton', ({ canGoBack }) => {
+    if (!canGoBack) {
+      App.exitApp().catch(e => console.warn('App.exitApp failed:', e));
+    } else {
+      window.history.back();
+    }
+  }).catch(e => console.warn('App.addListener backButton failed:', e));
+}
 
 // Haptic feedback helpers
 export const haptics = {
