@@ -16,18 +16,18 @@ export function useHabits() {
   });
   const { toast } = useToast();
 
-  useEffect(() => {
-    const loadedHabits = HabitStorage.getHabits();
-    const loadedSettings = HabitStorage.getSettings();
-    
-    setHabits(loadedHabits);
-    setSettings(loadedSettings);
-    
-    // Apply dark mode
-    if (loadedSettings.darkMode) {
-      document.documentElement.classList.add("dark");
-    }
-  }, []);
+    useEffect(() => {
+      (async () => {
+        const loadedHabits = HabitStorage.getHabits();
+        const loadedSettings = await HabitStorage.getSettings();
+        setHabits(loadedHabits);
+        setSettings(loadedSettings);
+        // Apply dark mode
+        if (loadedSettings.darkMode) {
+          document.documentElement.classList.add("dark");
+        }
+      })();
+    }, []);
 
   const addHabit = (name: string, type: HabitType) => {
     const newHabit = HabitStorage.addHabit(name, type);
@@ -181,7 +181,9 @@ export function useHabits() {
   const updateSettings = (newSettings: Partial<UserSettings>) => {
     const updatedSettings = { ...settings, ...newSettings };
     setSettings(updatedSettings);
-    HabitStorage.saveSettings(updatedSettings);
+      (async () => {
+        await HabitStorage.saveSettings(updatedSettings);
+      })();
     
     // Apply dark mode immediately
     if (newSettings.darkMode !== undefined) {
@@ -244,30 +246,32 @@ export function useHabits() {
   const importData = (file: File) => {
     const reader = new FileReader();
     reader.onload = (e) => {
-      try {
-        const content = e.target?.result as string;
-        HabitStorage.importData(content);
-        
-        // Reload data
-        const loadedHabits = HabitStorage.getHabits();
-        const loadedSettings = HabitStorage.getSettings();
-        
-        setHabits(loadedHabits);
-        setSettings(loadedSettings);
-        
-        toast({
-          title: "Success",
-          description: "Data imported successfully!",
-          duration: 3000,
-        });
-      } catch (error) {
-        toast({
-          title: "Error",
-          description: "Failed to import data. Please check the file format.",
-          variant: "destructive",
-          duration: 3000,
-        });
-      }
+        (async () => {
+          try {
+            const content = e.target?.result as string;
+            HabitStorage.importData(content);
+          
+            // Reload data
+            const loadedHabits = HabitStorage.getHabits();
+            const loadedSettings = await HabitStorage.getSettings();
+          
+            setHabits(loadedHabits);
+            setSettings(loadedSettings);
+          
+            toast({
+              title: "Success",
+              description: "Data imported successfully!",
+              duration: 3000,
+            });
+          } catch (error) {
+            toast({
+              title: "Error",
+              description: "Failed to import data. Please check the file format.",
+              variant: "destructive",
+              duration: 3000,
+            });
+          }
+        })();
     };
     reader.readAsText(file);
   };

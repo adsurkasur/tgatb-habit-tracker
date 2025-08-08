@@ -30,24 +30,23 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 
   // Load theme from localStorage immediately on mount
   useEffect(() => {
-    try {
-      const settings = HabitStorage.getSettings();
-      const darkMode = settings.darkMode;
-      
-      setIsDarkState(darkMode);
-      
-      // Apply theme immediately to prevent flash
-      if (darkMode) {
-        document.documentElement.classList.add("dark");
-      } else {
-        document.documentElement.classList.remove("dark");
+    (async () => {
+      try {
+        const settings = await HabitStorage.getSettings();
+        const darkMode = settings.darkMode;
+        setIsDarkState(darkMode);
+        // Apply theme immediately to prevent flash
+        if (darkMode) {
+          document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
+        }
+        setIsInitialized(true);
+      } catch (error) {
+        console.error("Error loading theme settings:", error);
+        setIsInitialized(true);
       }
-      
-      setIsInitialized(true);
-    } catch (error) {
-      console.error("Error loading theme settings:", error);
-      setIsInitialized(true);
-    }
+    })();
   }, []);
 
   // Handle loading state - wait for initialization and a brief moment for smooth transition
@@ -81,12 +80,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }
     
     // Save to localStorage
-    try {
-      const currentSettings = HabitStorage.getSettings();
-      HabitStorage.saveSettings({ ...currentSettings, darkMode });
-    } catch (error) {
-      console.error("Error saving theme settings:", error);
-    }
+    (async () => {
+      try {
+        const currentSettings = await HabitStorage.getSettings();
+        await HabitStorage.saveSettings({ ...currentSettings, darkMode });
+      } catch (error) {
+        console.error("Error saving theme settings:", error);
+      }
+    })();
   };
 
   return (

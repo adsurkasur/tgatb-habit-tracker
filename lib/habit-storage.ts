@@ -157,30 +157,14 @@ export class HabitStorage {
     return streak;
   }
 
-  static getSettings(): UserSettings {
-    try {
-      const data = localStorage.getItem(SETTINGS_KEY);
-      if (!data) {
-        return {
-          darkMode: false,
-          language: "en",
-          motivatorPersonality: "positive",
-          fullscreenMode: false,
-        };
-      }
-      return JSON.parse(data);
-    } catch {
-      return {
-        darkMode: false,
-        language: "en",
-        motivatorPersonality: "positive",
-        fullscreenMode: false,
-      };
-    }
+  static async getSettings(): Promise<UserSettings> {
+    const { getSettings } = await import('./platform-storage');
+    return getSettings();
   }
 
-  static saveSettings(settings: UserSettings): void {
-    localStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  static async saveSettings(settings: UserSettings): Promise<void> {
+    const { saveSettings } = await import('./platform-storage');
+    await saveSettings(settings);
   }
 
   static exportData(): string {

@@ -11,15 +11,17 @@ export function CapacitorInit() {
   useEffect(() => {
     // Delay initialization to ensure the app is fully loaded
     const timer = setTimeout(() => {
-      try {
-        // Load user settings to apply fullscreen mode
-        const userSettings = HabitStorage.getSettings();
-        initializeCapacitor({ fullscreenMode: userSettings.fullscreenMode });
-      } catch (error) {
-        console.error('CapacitorInit error:', error);
-        // Fallback initialization without settings
-        initializeCapacitor();
-      }
+        (async () => {
+          try {
+            // Load user settings to apply fullscreen mode
+            const userSettings = await HabitStorage.getSettings();
+            initializeCapacitor({ fullscreenMode: userSettings.fullscreenMode });
+          } catch (error) {
+            console.error('CapacitorInit error:', error);
+            // Fallback initialization without settings
+            initializeCapacitor();
+          }
+        })();
     }, 1000);
 
     return () => clearTimeout(timer);
