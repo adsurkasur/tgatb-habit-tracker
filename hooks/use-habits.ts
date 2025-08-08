@@ -197,7 +197,7 @@ export function useHabits() {
 
   const exportData = async () => {
     try {
-      const data = HabitStorage.exportData();
+  const data = await HabitStorage.exportData();
       const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
       
       // Try modern File System Access API first (for file save dialog)
@@ -249,7 +249,7 @@ export function useHabits() {
         (async () => {
           try {
             const content = e.target?.result as string;
-            HabitStorage.importData(content);
+            await HabitStorage.importData(content);
           
             // Reload data
             const loadedHabits = HabitStorage.getHabits();

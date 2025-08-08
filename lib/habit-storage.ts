@@ -181,17 +181,18 @@ export class HabitStorage {
     await saveSettings(settings);
   }
 
-  static exportData(): string {
+  static async exportData(): Promise<string> {
+    const settings = await this.getSettings();
     const data = {
       habits: this.getHabits(),
       logs: this.getLogs(),
-      settings: this.getSettings(),
+      settings,
       exportDate: new Date().toISOString(),
-    };
+    } as const;
     return JSON.stringify(data, null, 2);
   }
 
-  static importData(jsonData: string): void {
+  static async importData(jsonData: string): Promise<void> {
     try {
       const data = JSON.parse(jsonData);
       
@@ -204,7 +205,13 @@ export class HabitStorage {
       }
       
       if (data.settings) {
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+        try {
+          const { saveSettings } = await import('./platform-storage');
+          await saveSettings(data.settings as UserSettings);
+        } catch {
+          // Fallback to localStorage for web
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+        }
       }
   } catch {
       throw new Error("Invalid JSON data format");
