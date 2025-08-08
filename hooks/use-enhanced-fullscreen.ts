@@ -27,6 +27,10 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
         try {
           const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
           await NavigationBar.hide();
+          // Optionally, for Android 11+, make nav bar fully transparent:
+          if (typeof NavigationBar.setTransparency === 'function') {
+            await NavigationBar.setTransparency({ isTransparent: true });
+          }
           if (isFullscreenEnabled) {
             await StatusBar.hide();
             if (EdgeToEdge?.setBackgroundColor) {
@@ -86,7 +90,17 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       
       try {
         // Always hide navigation bar using better plugin
-  await NavigationBar.hide();
+        if (isFullscreenEnabled) {
+          await NavigationBar.hide();
+          if (typeof NavigationBar.setTransparency === 'function') {
+            await NavigationBar.setTransparency({ isTransparent: true });
+          }
+        } else {
+          await NavigationBar.show();
+          if (typeof NavigationBar.setColor === 'function') {
+            await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
+          }
+        }
         
         if (isFullscreenEnabled) {
           await StatusBar.hide();

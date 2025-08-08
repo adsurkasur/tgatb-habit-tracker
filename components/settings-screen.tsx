@@ -130,8 +130,15 @@ export function SettingsScreen({
   const handleFullscreenToggle = async (enabled: boolean) => {
     if (isNative) {
       await setStatusBarVisible(!enabled);
+      const newSettings = { ...settings, fullscreenMode: enabled };
       onUpdateSettings({ fullscreenMode: enabled });
-      
+      // Persist fullscreen state
+      try {
+        const { HabitStorage } = await import("@/lib/habit-storage");
+        HabitStorage.saveSettings(newSettings);
+      } catch (e) {
+        // fallback: do nothing
+      }
       toast({
         title: enabled ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
         description: enabled 
@@ -140,6 +147,13 @@ export function SettingsScreen({
       });
     } else {
       onUpdateSettings({ fullscreenMode: enabled });
+      const newSettings = { ...settings, fullscreenMode: enabled };
+      try {
+        const { HabitStorage } = await import("@/lib/habit-storage");
+        HabitStorage.saveSettings(newSettings);
+      } catch (e) {
+        // fallback: do nothing
+      }
       toast({
         title: "Setting Saved",
         description: "Fullscreen preference saved (applies to mobile app)",
