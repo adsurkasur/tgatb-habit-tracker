@@ -22,6 +22,7 @@ import { useRef, useState, useEffect } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
+import { useEnhancedFullscreen } from "@/hooks/use-enhanced-fullscreen";
 import { Capacitor } from '@capacitor/core';
 
 interface SettingsScreenProps {
@@ -47,8 +48,12 @@ export function SettingsScreen({
   const { toast } = useToast();
   const [canInstallPWA, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
+  const [isExporting, setIsExporting] = useState(false);
   const { setVisible: setStatusBarVisible, isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
+  
+  // Enhanced fullscreen hook for persistent navigation bar hiding
+  useEnhancedFullscreen(settings.fullscreenMode);
 
   // Check PWA install availability
   useEffect(() => {
@@ -84,6 +89,33 @@ export function SettingsScreen({
 
   const handleImportClick = () => {
     fileInputRef.current?.click();
+  };
+
+  const handleExportClick = async () => {
+    if (isExporting) return;
+    
+    setIsExporting(true);
+    try {
+      await onExportData();
+      
+      // Show success toast - only if export didn't use file picker (which has its own feedback)
+      if (!('showSaveFilePicker' in window)) {
+        toast({
+          title: "Export Successful",
+          description: "Data has been downloaded to your Downloads folder",
+          duration: 3000,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Export Failed",
+        description: "There was an error exporting your data. Please try again.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    } finally {
+      setIsExporting(false);
+    }
   };
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -250,12 +282,16 @@ export function SettingsScreen({
             </div>
 
             <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
-              onClick={onExportData}
+              className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+                isExporting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
+              }`}
+              onClick={isExporting ? undefined : handleExportClick}
             >
               <div className="flex items-center space-x-3">
                 <Download className="w-5 h-5 text-muted-foreground" />
-                <span className="font-medium">Export Data</span>
+                <span className="font-medium">
+                  {isExporting ? "Exporting..." : "Export Data"}
+                </span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>

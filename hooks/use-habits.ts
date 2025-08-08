@@ -193,17 +193,52 @@ export function useHabits() {
     }
   };
 
-  const exportData = () => {
-    const data = HabitStorage.exportData();
-    const blob = new Blob([data], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
+  const exportData = async () => {
+    try {
+      const data = HabitStorage.exportData();
+      const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
+      
+      // Try modern File System Access API first (for file save dialog)
+      if ('showSaveFilePicker' in window) {
+        try {
+          const fileHandle = await (window as any).showSaveFilePicker({
+            suggestedName: defaultFilename,
+            types: [{
+              description: 'JSON files',
+              accept: { 'application/json': ['.json'] },
+            }],
+          });
+          
+          const writable = await fileHandle.createWritable();
+          await writable.write(data);
+          await writable.close();
+          
+          return; // Success - exit early
+        } catch (error: any) {
+          // If user cancels, don't show error
+          if (error.name === 'AbortError') {
+            return;
+          }
+          // If API fails, fall through to fallback
+          console.warn('File System Access API failed, using fallback:', error);
+        }
+      }
+      
+      // Fallback: traditional blob download
+      const blob = new Blob([data], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = defaultFilename;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+      
+    } catch (error) {
+      console.error('Export failed:', error);
+      throw error; // Re-throw so UI can handle the error
+    }
   };
 
   const importData = (file: File) => {

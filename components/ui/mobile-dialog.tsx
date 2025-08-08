@@ -58,15 +58,19 @@ const MobileDialogContent = React.forwardRef<
     };
 
     if (isKeyboardOpen) {
-      // Position higher when keyboard is open - better sizing for keyboard state
+      // Center vertically in available viewport space when keyboard is open
+      const availableHeight = viewportHeight;
+      const modalHeight = Math.min(400, availableHeight * 0.8); // Use 80% of available space or 400px max
+      const topPosition = (availableHeight - modalHeight) / 2; // Center in available space
+      
       return {
         className: "fixed",
         style: {
           ...baseStyle,
-          top: '2vh', // Start closer to top to maximize space
-          bottom: '2vh', // Also set bottom constraint
-          height: 'auto', // Let content determine height
-          maxHeight: `${viewportHeight - 40}px`, // Use almost all available viewport height
+          top: `${Math.max(20, topPosition)}px`, // Ensure minimum 20px from top
+          transform: 'translateX(-50%)', // Only center horizontally, not vertically (since we calculated top)
+          height: 'fit-content',
+          maxHeight: `${modalHeight}px`,
         }
       };
     }
