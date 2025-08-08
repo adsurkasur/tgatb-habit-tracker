@@ -1,6 +1,5 @@
 # The Good and The Bad: Habit Tracker
 
-
 [![Build Status](https://img.shields.io/github/actions/workflow/status/adsurkasur/tgatb-habit-tracker/main.yml?branch=main)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://tgatb.vercel.app/)
@@ -20,7 +19,6 @@ Try it live: [tgatb.vercel.app](https://tgatb.vercel.app/)
 ![Desktop Main UI](public/screenshots/desktop-main.png)
 
 ---
-
 
 ## Features
 
@@ -66,7 +64,6 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 
 ---
 
-
 ## Tech Stack
 
 - **Framework:** Next.js 15 (App Router)
@@ -78,7 +75,6 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 - **Deployment:** Vercel (Web), Android Studio (Native)
 
 ---
-
 
 ## Getting Started
 
@@ -118,7 +114,6 @@ npm run android:open    # Open in Android Studio
 
 ---
 
-
 ## Available Scripts
 
 - `npm run dev` — Start Next.js development server
@@ -133,7 +128,6 @@ npm run android:open    # Open in Android Studio
 - `npm run android:sync` — Sync Capacitor plugins
 
 ---
-
 
 ## Project Structure
 
@@ -154,7 +148,6 @@ npm run android:open    # Open in Android Studio
 ```
 
 ---
-
 
 ## Storage & Offline
 
