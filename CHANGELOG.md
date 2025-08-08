@@ -16,7 +16,6 @@ Major update with platform persistence, Android build fixes, and UX improvements
 
 Note: Version 0.1.2 was not officially released. The planned changes for 0.1.2 were consolidated into 0.2.0.
 
-
 ## 0.1.1 - 2025-08-08
 
 - System bar improvements: respected OS navigation bar visibility and refined StatusBar styling.
