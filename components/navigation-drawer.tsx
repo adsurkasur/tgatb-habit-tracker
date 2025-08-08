@@ -211,8 +211,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                       "w-5 h-5",
                       // Faster closing, slower opening for better UX
                       goodHabitsOpen 
-                        ? "transition-transform duration-250 ease-[cubic-bezier(0.04,0.62,0.23,0.98)] rotate-180"
-                        : "transition-transform duration-150 ease-[cubic-bezier(0.3,0,0.8,0.15)]"
+                        ? "transition-transform duration-250 ease-out rotate-180"
+                        : "transition-transform duration-150 ease-in"
                     )} />
                   </Button>
                 </CollapsibleTrigger>
@@ -259,8 +259,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                       "w-5 h-5",
                       // Faster closing, slower opening for better UX
                       badHabitsOpen 
-                        ? "transition-transform duration-250 ease-[cubic-bezier(0.04,0.62,0.23,0.98)] rotate-180"
-                        : "transition-transform duration-150 ease-[cubic-bezier(0.3,0,0.8,0.15)]"
+                        ? "transition-transform duration-250 ease-out rotate-180"
+                        : "transition-transform duration-150 ease-in"
                     )} />
                   </Button>
                 </CollapsibleTrigger>
