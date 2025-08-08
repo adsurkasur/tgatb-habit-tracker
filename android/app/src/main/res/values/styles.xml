@@ -11,16 +11,11 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <!-- Ensure status bar doesn't overlay content -->
-        <item name="android:fitsSystemWindows">true</item>
-        <!-- Remove translucent status bar and set solid color -->
-        <item name="android:windowTranslucentStatus">false</item>
+        <item name="android:windowTranslucentStatus">true</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
-        <!-- Make status bar icons white (false = white icons, true = dark icons) -->
-        <item name="android:windowLightStatusBar">false</item>
         <!-- Prevent fullscreen popup/dialog -->
         <item name="android:windowFullscreen">false</item>
-        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:windowTranslucentNavigation">true</item>
         <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 

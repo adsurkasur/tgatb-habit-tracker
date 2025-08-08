@@ -23,6 +23,11 @@ const config: CapacitorConfig = {
     },
     Keyboard: {
       resizeOnFullScreen: false
+    },
+    NavigationBar: {
+      height: 0,
+      backgroundColor: '#00000000',
+      navigationBarColor: '#00000000'
     }
   },
   android: {

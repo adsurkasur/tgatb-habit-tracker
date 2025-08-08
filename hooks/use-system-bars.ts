@@ -47,7 +47,7 @@ export const useSystemBars = () => {
       }
     };
 
-    const setBars = async () => {
+  const setBars = async () => {
       const isDarkMode = resolvedTheme === 'dark';
       
       // Define colors based on your app's purple theme
@@ -61,12 +61,13 @@ export const useSystemBars = () => {
         
         // Primary method: Use EdgeToEdge plugin (recommended approach)
         if (EdgeToEdge) {
-          await EdgeToEdge.setBackgroundColor({ color: selectedColor });
-          // Use Dark style to make icons WHITE on purple background
-          await StatusBar.setStyle({ 
-            style: StatusBarStyles.Dark 
-          });
-          console.log(`EdgeToEdge: System bars set to ${selectedColor} with white icons`);
+      // Do NOT color navigation bar; keep it transparent via MainActivity.
+      // Only style the StatusBar (top) to purple with white icons.
+      await StatusBar.show();
+      await StatusBar.setOverlaysWebView({ overlay: false });
+      await StatusBar.setStyle({ style: StatusBarStyles.Dark });
+      await StatusBar.setBackgroundColor({ color: selectedColor });
+      console.log(`EdgeToEdge: Status bar set to ${selectedColor} (nav bar stays transparent)`);
         } else {
           // Fallback: Use individual plugins
           await StatusBar.show();
@@ -77,26 +78,14 @@ export const useSystemBars = () => {
           });
           await StatusBar.setBackgroundColor({ color: selectedColor });
           
-          console.log(`Fallback: System bars set to ${selectedColor} with white icons`);
+      console.log(`Fallback: Status bar set to ${selectedColor} (nav bar stays transparent)`);
         }
 
-        // Always hide navigation bar completely using the better plugin
-        // Apply multiple times to prevent brief appearances
+        // Respect OS navigation bar (do not hide). Explicitly show to avoid edge cases.
         try {
-          await NavigationBar.hide();
-          // Immediate re-hide to prevent brief appearances
-          setTimeout(async () => {
-            await NavigationBar.hide();
-          }, 50);
-          setTimeout(async () => {
-            await NavigationBar.hide();
-          }, 100);
-          setTimeout(async () => {
-            await NavigationBar.hide();
-          }, 200);
-          console.log('Navigation bar permanently hidden with aggressive hiding');
+          await NavigationBar.show();
         } catch (e) {
-          console.warn("Navigation bar hiding failed:", e);
+          console.warn("NavigationBar.show failed:", e);
         }
         
       } catch (e) {

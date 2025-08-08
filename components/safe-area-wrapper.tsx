@@ -20,9 +20,8 @@ export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperPro
       root.style.setProperty('--status-bar-height', `${height}px`);
       root.style.setProperty('--safe-area-top', overlays ? `${height}px` : '0px');
       
-      // For navigation bar (Android) - estimate
-      const navBarHeight = 48; // Common Android nav bar height
-      root.style.setProperty('--safe-area-bottom', `${navBarHeight}px`);
+  // Respect OS-provided bottom inset when not in immersive nav mode
+  // Do not override here; CSS env will handle it
       
       // Apply to body to prevent content from going under status bar
       document.body.style.paddingTop = overlays ? `${height}px` : '0px';
@@ -52,7 +51,8 @@ export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperPro
       className={`min-h-screen ${className}`}
       style={{
         paddingTop: overlays ? `${height}px` : '0px',
-        paddingBottom: '48px' // For Android navigation bar
+  // Respect platform bottom inset (Android 3-button or gesture)
+  paddingBottom: 'env(safe-area-inset-bottom)'
       }}
     >
       {children}

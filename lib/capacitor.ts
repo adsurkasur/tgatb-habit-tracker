@@ -67,6 +67,7 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       root.style.setProperty('--status-bar-height', `${statusBarHeight}px`);
       // Since we disabled overlay, no need for safe area padding
       root.style.setProperty('--safe-area-top', '0px');
+  // When respecting OS nav bar, let bottom inset be provided by the platform/CSS.
       
       console.log('Status bar configured:', { ...statusBarInfo, height: statusBarHeight, overlays: false });
     } catch (error) {

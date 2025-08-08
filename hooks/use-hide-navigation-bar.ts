@@ -15,45 +15,42 @@ export const useHideNavigationBar = () => {
       return;
     }
 
-    const hideNavigationBar = async () => {
+  const showNavigationBar = async () => {
       try {
-        // Use the specialized plugin for hiding navigation bar
-        await NavigationBar.hide();
-        console.log('Navigation bar permanently hidden');
+    await NavigationBar.show();
+    console.log('Navigation bar shown (respect OS nav bar)');
       } catch (error) {
-        console.warn('Failed to hide navigation bar:', error);
+    console.warn('Failed to show navigation bar:', error);
       }
     };
 
-    // Hide immediately
-    hideNavigationBar();
+  // Show immediately
+  showNavigationBar();
 
-    // Set up persistent hiding - reapply every few seconds
-    const interval = setInterval(hideNavigationBar, 2000);
+  // Re-apply when app becomes visible again
+    const handleVisibilityChange = () => {
+      if (document.visibilityState === 'visible') {
+    showNavigationBar();
+      }
+    };
 
-    // Also hide on various events that might show the navigation bar
-    const events = ['focus', 'touchstart', 'click', 'visibilitychange'];
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+
+  // Also ensure on user interactions we keep default nav bar visible
+    const events: (keyof WindowEventMap)[] = ['focus', 'touchstart', 'click'];
     const handleEvent = () => {
-      setTimeout(hideNavigationBar, 100);
+    setTimeout(() => showNavigationBar(), 100);
     };
 
     events.forEach(event => {
-      if (event === 'visibilitychange') {
-        document.addEventListener(event, handleEvent);
-      } else {
-        window.addEventListener(event, handleEvent);
-      }
+      window.addEventListener(event, handleEvent);
     });
 
     // Cleanup
     return () => {
-      clearInterval(interval);
+  document.removeEventListener('visibilitychange', handleVisibilityChange);
       events.forEach(event => {
-        if (event === 'visibilitychange') {
-          document.removeEventListener(event, handleEvent);
-        } else {
-          window.removeEventListener(event, handleEvent);
-        }
+        window.removeEventListener(event, handleEvent);
       });
     };
   }, []);
