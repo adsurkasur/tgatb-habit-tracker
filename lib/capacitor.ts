@@ -1,9 +1,9 @@
-import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
+import { Capacitor } from '@capacitor/core';
 
 export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
@@ -26,7 +26,16 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
 
       if (shouldHideStatusBar) {
         await StatusBar.hide();
-        // Do not loop or force nav bar state here to avoid flicker
+        // Enable native immersive to fully hide system bars without JS loops
+        try {
+          const Immersive = (window as any).Capacitor?.Plugins?.Immersive;
+          await Immersive?.enable?.();
+        } catch (e) { console.warn('Immersive.enable failed:', e); }
+      } else {
+        try {
+          const Immersive = (window as any).Capacitor?.Plugins?.Immersive;
+          await Immersive?.disable?.();
+        } catch (e) { /* ignore */ }
       }
     } else if (platform === 'ios') {
       // iOS configuration
