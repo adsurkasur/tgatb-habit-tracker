@@ -1,4 +1,4 @@
-import { Habit, HabitLog, UserSettings, HabitType } from "@shared/schema";
+import { Habit, HabitLog, UserSettings, HabitType, ExportBundle, exportBundleSchema } from "@shared/schema";
 import { generateId, formatLocalDate } from "./utils";
 
 const HABITS_KEY = "habits";
@@ -183,38 +183,51 @@ export class HabitStorage {
 
   static async exportData(): Promise<string> {
     const settings = await this.getSettings();
-    const data = {
-      habits: this.getHabits(),
-      logs: this.getLogs(),
+    const habits = this.getHabits().map(h => ({
+      ...h,
+      createdAt: h.createdAt.toISOString(),
+      lastCompletedDate: h.lastCompletedDate ? h.lastCompletedDate.toISOString() : undefined,
+    }));
+    const logs = this.getLogs().map(l => ({
+      ...l,
+      timestamp: l.timestamp.toISOString(),
+    }));
+
+    const bundle: ExportBundle = {
+      version: "1",
+      meta: {
+        exportedAt: new Date().toISOString(),
+        counts: { habits: habits.length, logs: logs.length },
+      },
+      habits,
+      logs,
       settings,
-      exportDate: new Date().toISOString(),
-    } as const;
-    return JSON.stringify(data, null, 2);
+    };
+
+    return JSON.stringify(bundle, null, 2);
   }
 
   static async importData(jsonData: string): Promise<void> {
     try {
-      const data = JSON.parse(jsonData);
-      
-      if (data.habits) {
-        localStorage.setItem(HABITS_KEY, JSON.stringify(data.habits));
+      const parsed = exportBundleSchema.safeParse(JSON.parse(jsonData));
+      if (!parsed.success) {
+        throw new Error("Invalid export file format");
       }
+      const data = parsed.data;
       
-      if (data.logs) {
-        localStorage.setItem(LOGS_KEY, JSON.stringify(data.logs));
+      // Persist habits/logs (as-is JSON with strings for dates)
+      localStorage.setItem(HABITS_KEY, JSON.stringify(data.habits));
+      localStorage.setItem(LOGS_KEY, JSON.stringify(data.logs));
+
+      // Persist settings via platform storage when available
+      try {
+        const { saveSettings } = await import('./platform-storage');
+        await saveSettings(data.settings as UserSettings);
+      } catch {
+        localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
       }
-      
-      if (data.settings) {
-        try {
-          const { saveSettings } = await import('./platform-storage');
-          await saveSettings(data.settings as UserSettings);
-        } catch {
-          // Fallback to localStorage for web
-          localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
-        }
-      }
-  } catch {
-      throw new Error("Invalid JSON data format");
+  } catch (e) {
+      throw new Error((e as Error).message || "Invalid JSON data format");
     }
   }
 

@@ -250,8 +250,8 @@ export function useHabits() {
           try {
             const content = e.target?.result as string;
             await HabitStorage.importData(content);
-          
-            // Reload data
+
+            // Reload data (HabitStorage.getHabits rehydrates Date fields)
             const loadedHabits = HabitStorage.getHabits();
             const loadedSettings = await HabitStorage.getSettings();
           

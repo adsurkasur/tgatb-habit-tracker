@@ -51,3 +51,45 @@ export const createHabitSchema = z.object({
 });
 
 export type CreateHabitInput = z.infer<typeof createHabitSchema>;
+
+// Settings schema for validation (used during import/export)
+export const userSettingsSchema = z.object({
+  darkMode: z.boolean(),
+  language: z.enum(["en", "id"]),
+  motivatorPersonality: z.enum(["positive", "adaptive", "harsh"]),
+  fullscreenMode: z.boolean(),
+});
+
+// Export bundle schema and types
+export const exportBundleSchema = z.object({
+  version: z.literal("1"),
+  meta: z.object({
+    exportedAt: z.string(),
+    counts: z.object({
+      habits: z.number().nonnegative(),
+      logs: z.number().nonnegative(),
+    }),
+  }),
+  habits: z.array(
+    z.object({
+      id: z.string(),
+      name: z.string(),
+      type: z.enum(["good", "bad"]),
+      streak: z.number(),
+      createdAt: z.string(),
+      lastCompletedDate: z.string().optional(),
+    })
+  ),
+  logs: z.array(
+    z.object({
+      id: z.string(),
+      habitId: z.string(),
+      date: z.string(),
+      completed: z.boolean(),
+      timestamp: z.string(),
+    })
+  ),
+  settings: userSettingsSchema,
+});
+
+export type ExportBundle = z.infer<typeof exportBundleSchema>;
