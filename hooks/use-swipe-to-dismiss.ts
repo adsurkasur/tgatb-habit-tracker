@@ -36,13 +36,13 @@ export function useSwipeToDismiss(onDismiss: () => void, options?: { snapBackMs?
   }, []);
 
   const scheduleAutoDismiss = useCallback((exitDelay: number, hideDelay: number) => {
-    exitTimerRef.current = setTimeout(() => {
-      setState(prev => ({ ...prev, isExiting: true }));
-    }, exitDelay);
-    hideTimerRef.current = setTimeout(() => {
+    const startExit = () => setState(prev => ({ ...prev, isExiting: true }));
+    const performHide = () => {
       onDismiss();
       setState({ isDragging: false, dragOffset: 0, isExiting: false, isSwipedAway: false });
-    }, hideDelay);
+    };
+    exitTimerRef.current = setTimeout(startExit, exitDelay);
+    hideTimerRef.current = setTimeout(performHide, hideDelay);
   }, [onDismiss]);
 
   const begin = useCallback((clientY: number) => {
@@ -60,22 +60,24 @@ export function useSwipeToDismiss(onDismiss: () => void, options?: { snapBackMs?
     setState(prev => ({ ...prev, dragOffset: clamped }));
   }, [state.isDragging, state.isExiting]);
 
+  const shouldDismissImmediately = (distance: number, elapsedMs: number) => {
+    const velocity = distance / Math.max(elapsedMs, 1);
+    return distance > 40 || velocity > 0.3;
+  };
+
   const end = useCallback(() => {
     if (!state.isDragging || state.isExiting) return;
     const deltaY = state.dragOffset;
     const deltaTime = Date.now() - startTimeRef.current;
-    const velocity = deltaY / Math.max(deltaTime, 1);
 
     setState(prev => ({ ...prev, isDragging: false }));
 
-    if (deltaY > 40 || velocity > 0.3) {
+    if (shouldDismissImmediately(deltaY, deltaTime)) {
       setState(prev => ({ ...prev, isSwipedAway: true }));
       clearTimers();
-      // immediate dismiss
       onDismiss();
       setState({ isDragging: false, dragOffset: 0, isExiting: false, isSwipedAway: false });
     } else {
-      // Snap back and reschedule auto-dismiss
       setState(prev => ({ ...prev, dragOffset: 0 }));
       clearTimers();
       scheduleAutoDismiss(SNAP_BACK_MS, SNAP_BACK_MS + 300);

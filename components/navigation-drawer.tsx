@@ -13,7 +13,6 @@ import {
   History, 
   Settings, 
   Heart,
-  Plus,
   Flame,
   Edit,
   Trash2,
@@ -31,7 +30,6 @@ interface NavigationDrawerProps {
   goodHabits: Habit[];
   badHabits: Habit[];
   onSettingsClick: () => void;
-  onAddHabitClick: () => void;
   onHistoryClick?: () => void;
   onDonateClick?: () => void;
   onAboutClick?: () => void;
@@ -114,7 +112,6 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   goodHabits, 
   badHabits, 
   onSettingsClick, 
-  onAddHabitClick,
   onHistoryClick,
   onDonateClick,
   onAboutClick,
@@ -295,14 +292,6 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
           {/* Bottom Navigation - Fixed at bottom */}
           <div className="border-t border-border bg-card">
             <div className="p-4 space-y-1">
-              <Button
-                variant="ghost"
-                className="w-full justify-start p-3 h-auto state-layer-hover"
-                onClick={() => { onAddHabitClick(); onOpenChange(false); }}
-              >
-                <Plus className="w-5 h-5 mr-3" />
-                <span>Add Habit</span>
-              </Button>
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"

@@ -244,7 +244,6 @@ export default function Home() {
               goodHabits={goodHabits}
               badHabits={badHabits}
               onSettingsClick={() => setShowSettings(true)}
-              onAddHabitClick={() => setShowAddHabit(true)}
               onHistoryClick={() => setShowHistory(true)}
               onDonateClick={() => setShowDonate(true)}
               onAboutClick={() => setShowAbout(true)}

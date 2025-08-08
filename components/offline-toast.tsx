@@ -32,15 +32,15 @@ export function OfflineToast() {
 
   if (!showToast) return null;
 
-  const getTransform = () => {
-  if (state.isSwipedAway) return 'translate(-50%, 100px)';
-  if (state.isDragging) return `translate(-50%, ${state.dragOffset}px)`;
+  const computeTransform = (s: typeof state) => {
+    if (s.isSwipedAway) return 'translate(-50%, 100px)';
+    if (s.isDragging) return `translate(-50%, ${s.dragOffset}px)`;
     return 'translate(-50%, 0)';
   };
 
-  const getOpacity = () => {
-  if (state.isSwipedAway) return 0;
-  if (state.isDragging && state.dragOffset > 0) return Math.max(0.3, 1 - (state.dragOffset / 100));
+  const computeOpacity = (s: typeof state) => {
+    if (s.isSwipedAway) return 0;
+    if (s.isDragging && s.dragOffset > 0) return Math.max(0.3, 1 - (s.dragOffset / 100));
     return 1;
   };
 
@@ -51,9 +51,9 @@ export function OfflineToast() {
         !state.isDragging && !state.isSwipedAway ? 'animate-slide-up' : ''
       }`}
       style={{
-        transform: getTransform(),
-        opacity: getOpacity(),
-  transition: state.isDragging ? 'none' : 'all 0.3s ease-out',
+        transform: computeTransform(state),
+        opacity: computeOpacity(state),
+        transition: state.isDragging ? 'none' : 'all 0.3s ease-out',
       }}
   onMouseDown={handlers.onMouseDown}
   onTouchStart={handlers.onTouchStart}

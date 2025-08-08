@@ -4,30 +4,21 @@ import type { UserSettings } from "@shared/schema";
 
 export const SETTINGS_KEY = 'user_settings';
 
+const defaultSettings = (): UserSettings => ({
+  darkMode: false,
+  language: 'en',
+  motivatorPersonality: 'positive',
+  fullscreenMode: false,
+});
+
 export async function getSettings(): Promise<UserSettings> {
   if (Capacitor.isNativePlatform()) {
     const { value } = await Preferences.get({ key: SETTINGS_KEY });
-    if (!value) {
-      const defaults: UserSettings = {
-        darkMode: false,
-        language: 'en',
-        motivatorPersonality: 'positive',
-        fullscreenMode: false,
-      };
-      return defaults;
-    }
+  if (!value) return defaultSettings();
     return JSON.parse(value);
   } else {
     const data = localStorage.getItem(SETTINGS_KEY);
-    if (!data) {
-      const defaults: UserSettings = {
-        darkMode: false,
-        language: 'en',
-        motivatorPersonality: 'positive',
-        fullscreenMode: false,
-      };
-      return defaults;
-    }
+  if (!data) return defaultSettings();
     return JSON.parse(data) as UserSettings;
   }
 }
