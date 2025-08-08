@@ -62,26 +62,39 @@ export const useSystemBars = () => {
         // Primary method: Use EdgeToEdge plugin (recommended approach)
         if (EdgeToEdge) {
           await EdgeToEdge.setBackgroundColor({ color: selectedColor });
+          // Use Dark style to make icons WHITE on purple background
           await StatusBar.setStyle({ 
-            style: isDarkMode ? StatusBarStyles.Dark : StatusBarStyles.Light 
+            style: StatusBarStyles.Dark 
           });
-          console.log(`EdgeToEdge: System bars set to ${selectedColor} for ${isDarkMode ? 'dark' : 'light'} theme`);
+          console.log(`EdgeToEdge: System bars set to ${selectedColor} with white icons`);
         } else {
           // Fallback: Use individual plugins
           await StatusBar.show();
           await StatusBar.setOverlaysWebView({ overlay: false });
+          // Use Dark style to make icons WHITE on purple background
           await StatusBar.setStyle({ 
-            style: isDarkMode ? StatusBarStyles.Dark : StatusBarStyles.Light 
+            style: StatusBarStyles.Dark 
           });
           await StatusBar.setBackgroundColor({ color: selectedColor });
           
-          console.log(`Fallback: System bars set to ${selectedColor} for ${isDarkMode ? 'dark' : 'light'} theme`);
+          console.log(`Fallback: System bars set to ${selectedColor} with white icons`);
         }
 
         // Always hide navigation bar completely using the better plugin
+        // Apply multiple times to prevent brief appearances
         try {
           await NavigationBar.hide();
-          console.log('Navigation bar permanently hidden with @squareetlabs plugin');
+          // Immediate re-hide to prevent brief appearances
+          setTimeout(async () => {
+            await NavigationBar.hide();
+          }, 50);
+          setTimeout(async () => {
+            await NavigationBar.hide();
+          }, 100);
+          setTimeout(async () => {
+            await NavigationBar.hide();
+          }, 200);
+          console.log('Navigation bar permanently hidden with aggressive hiding');
         } catch (e) {
           console.warn("Navigation bar hiding failed:", e);
         }

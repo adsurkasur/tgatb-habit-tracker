@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
-import { StatusBar } from '@capacitor/status-bar';
+import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 
 /**
@@ -39,7 +39,18 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
           // Show status bar but keep navigation bar hidden
           await StatusBar.show();
           
-          console.log('Normal mode: status bar shown, navigation bar permanently hidden');
+          // Restore purple background and white icons when exiting fullscreen
+          if (EdgeToEdge?.setBackgroundColor) {
+            await EdgeToEdge.setBackgroundColor({ color: '#6750a4' }); // Purple background
+          } else {
+            // Fallback: use StatusBar plugin
+            await StatusBar.setBackgroundColor({ color: '#6750a4' });
+          }
+          
+          // Set white icons on purple background
+          await StatusBar.setStyle({ style: StatusBarStyles.Dark });
+          
+          console.log('Normal mode: status bar shown with purple background and white icons, navigation bar permanently hidden');
         }
       } catch (error) {
         console.warn('Failed to apply fullscreen settings:', error);
@@ -119,6 +130,9 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
           await StatusBar.hide();
         } else {
           await StatusBar.show();
+          // Restore purple background and white icons
+          await StatusBar.setBackgroundColor({ color: '#6750a4' });
+          await StatusBar.setStyle({ style: StatusBarStyles.Dark });
         }
       } catch (error) {
         console.warn('Manual fullscreen application failed:', error);

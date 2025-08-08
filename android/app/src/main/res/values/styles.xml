@@ -16,8 +16,12 @@
         <!-- Remove translucent status bar and set solid color -->
         <item name="android:windowTranslucentStatus">false</item>
         <item name="android:statusBarColor">@color/status_bar_color</item>
-        <!-- Ensure light text on dark status bar or dark text on light status bar -->
-        <item name="android:windowLightStatusBar">true</item>
+        <!-- Make status bar icons white (false = white icons, true = dark icons) -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Prevent fullscreen popup/dialog -->
+        <item name="android:windowFullscreen">false</item>
+        <item name="android:windowTranslucentNavigation">false</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
     </style>
 
 
