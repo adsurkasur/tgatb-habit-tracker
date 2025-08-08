@@ -48,12 +48,8 @@ export const useSystemBars = () => {
     };
 
     const setBars = async () => {
-      const isDarkMode = resolvedTheme === 'dark';
-      
-      // Define colors based on your app's purple theme
-      const lightThemeColor = '#6750a4'; // Primary purple
-      const darkThemeColor = '#1e1b2e'; // Dark purple
-      const selectedColor = isDarkMode ? darkThemeColor : lightThemeColor;
+      // Keep a constant purple to match app branding and avoid theme-induced changes
+      const selectedColor = '#6750a4';
       
       try {
         // Access EdgeToEdge from global Capacitor object
@@ -67,6 +63,10 @@ export const useSystemBars = () => {
       await StatusBar.setOverlaysWebView({ overlay: false });
       await StatusBar.setStyle({ style: StatusBarStyles.Dark });
       await StatusBar.setBackgroundColor({ color: selectedColor });
+      // Best effort: set nav bar color to purple to avoid black flashes on transient reveals
+      try {
+        await (NavigationBar as any).setColor?.({ color: selectedColor });
+      } catch {}
       console.log(`EdgeToEdge: Status bar set to ${selectedColor} (nav bar stays transparent)`);
         } else {
           // Fallback: Use individual plugins
@@ -77,6 +77,9 @@ export const useSystemBars = () => {
             style: StatusBarStyles.Dark 
           });
           await StatusBar.setBackgroundColor({ color: selectedColor });
+          try {
+            await (NavigationBar as any).setColor?.({ color: selectedColor });
+          } catch {}
           
       console.log(`Fallback: Status bar set to ${selectedColor} (nav bar stays transparent)`);
         }

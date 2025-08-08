@@ -16,7 +16,7 @@ public class MainActivity extends BridgeActivity {
         // Set the web view's background color to solid white
         getBridge().getWebView().setBackgroundColor(Color.WHITE);
 
-    // Respect system bars: let the OS apply insets to content
+    // Default: respect system bars; content fits system windows
     WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
     // Keep current theme color for navigation bar (styles.xml) or leave as-is
     // getWindow().setNavigationBarColor(Color.TRANSPARENT); // optional; rely on theme
@@ -25,7 +25,7 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onResume() {
         super.onResume();
-    // No-op: respect system navigation bar
+    // No-op: respect system navigation bar; immersive handled in JS via plugins
     }
 
     @Override
