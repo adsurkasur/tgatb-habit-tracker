@@ -4,6 +4,7 @@ import { useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+import { App } from '@capacitor/app';
 
 /**
  * Enhanced fullscreen hook that provides persistent navigation bar hiding
@@ -26,11 +27,16 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       debounceRef.current = window.setTimeout(async () => {
         try {
           const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-          await NavigationBar.hide();
+          // Ensure nav bar is fully hidden & transparent
+          try {
+            if (typeof NavigationBar.setTransparency === 'function') {
+              await NavigationBar.setTransparency({ isTransparent: true });
+            }
+            await NavigationBar.hide();
+            // Re-apply shortly after to fight insets race conditions
+            setTimeout(() => { NavigationBar.hide().catch(() => {}); }, 120);
+          } catch {}
           // Optionally, for Android 11+, make nav bar fully transparent:
-          if (typeof NavigationBar.setTransparency === 'function') {
-            await NavigationBar.setTransparency({ isTransparent: true });
-          }
           if (isFullscreenEnabled) {
             await StatusBar.hide();
             if (EdgeToEdge?.setBackgroundColor) {
@@ -44,6 +50,12 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
               await StatusBar.setBackgroundColor({ color: '#6750a4' });
             }
             await StatusBar.setStyle({ style: StatusBarStyles.Dark });
+            try {
+              await NavigationBar.show();
+              if (typeof NavigationBar.setColor === 'function') {
+                await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
+              }
+            } catch {}
           }
         } catch (error) {
           console.warn('Failed to apply fullscreen settings:', error);
@@ -63,13 +75,21 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       };
 
       window.addEventListener('resize', handleResize);
+      window.addEventListener('orientationchange', handleResize);
       window.addEventListener('focus', handleFocus);
       document.addEventListener('visibilitychange', handleVisibility);
+      // Re-apply when app resumes
+      const resumeHandle = App.addListener('appStateChange', ({ isActive }) => {
+        if (isActive) applyFullscreenSettings();
+      });
 
       keyboardListenerRef.current = () => {
         window.removeEventListener('resize', handleResize);
+        window.removeEventListener('orientationchange', handleResize);
         window.removeEventListener('focus', handleFocus);
         document.removeEventListener('visibilitychange', handleVisibility);
+        // Cleanup app listener
+        Promise.resolve(resumeHandle).then(h => h.remove?.()).catch(() => {});
       };
     }
 

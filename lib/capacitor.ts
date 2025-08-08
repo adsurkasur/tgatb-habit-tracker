@@ -18,9 +18,9 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const platform = getPlatform();
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
 
-    await configureSystemBars(platform, shouldHideStatusBar);
+  await configureSystemBars(platform, shouldHideStatusBar);
     await setCssInsets(platform);
-    registerAppListeners();
+  registerAppListeners(shouldHideStatusBar);
 
   } catch (error) {
     console.error('Error initializing Capacitor:', error);
@@ -33,23 +33,39 @@ async function configureSystemBars(platform: string, shouldHideStatusBar: boolea
 }
 
 async function configureAndroidBars(shouldHideStatusBar: boolean) {
-  await StatusBar.show();
-  try {
-    await NavigationBar.show();
-  } catch (e) {
-    console.warn('NavigationBar.show failed:', e);
-  }
-  if (shouldHideStatusBar) {
-    await StatusBar.hide();
+  const applyFullscreen = async () => {
     try {
-      await NavigationBar.hide();
-      setTimeout(async () => {
-        await NavigationBar.hide();
-      }, 100);
+      if (shouldHideStatusBar) {
+        await StatusBar.hide();
+        // Make nav bar transparent and hidden
+        try {
+          if (typeof NavigationBar.setTransparency === 'function') {
+            await NavigationBar.setTransparency({ isTransparent: true });
+          }
+          await NavigationBar.hide();
+        } catch (e) {
+          console.warn('NavigationBar adjustments failed:', e);
+        }
+      } else {
+        await StatusBar.show();
+        // Show nav bar and set a stable color
+        try {
+          await NavigationBar.show();
+          if (typeof NavigationBar.setColor === 'function') {
+            await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
+          }
+        } catch (e) {
+          console.warn('NavigationBar show/color failed:', e);
+        }
+      }
     } catch (e) {
-      console.warn('NavigationBar.hide failed:', e);
+      console.warn('applyFullscreen error:', e);
     }
-  }
+  };
+
+  await applyFullscreen();
+  // Re-apply shortly after to combat race conditions with window insets
+  setTimeout(applyFullscreen, 150);
 }
 
 async function configureIosBars(shouldHideStatusBar: boolean) {
@@ -71,9 +87,12 @@ async function setCssInsets(platform: string) {
   }
 }
 
-function registerAppListeners() {
+function registerAppListeners(shouldHideStatusBar: boolean) {
   App.addListener('appStateChange', ({ isActive }) => {
-    console.log('App state changed. Is active?', isActive);
+    if (isActive && Capacitor.getPlatform() === 'android') {
+      // Re-apply system bars state on resume
+      configureAndroidBars(shouldHideStatusBar);
+    }
   }).catch(e => console.warn('App.addListener appStateChange failed:', e));
 
   App.addListener('backButton', ({ canGoBack }) => {
