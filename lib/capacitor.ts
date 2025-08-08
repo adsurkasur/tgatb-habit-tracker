@@ -26,17 +26,26 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       
       try {
         // Show navigation bar by default
-        await (NavigationBar as any).show();
+        const navBar = NavigationBar as any;
+        if (navBar.show) await navBar.show();
       } catch (e) {
         console.warn('NavigationBar.show failed:', e);
       }
 
-      // Handle fullscreen mode
+      // Handle fullscreen mode with enhanced hiding
       if (shouldHideStatusBar) {
         await StatusBar.hide();
         try {
-          // Hide navigation bar in fullscreen mode
-          await (NavigationBar as any).hide();
+          const navBar = NavigationBar as any;
+          // Try multiple methods to hide navigation bar on Android 15
+          if (navBar.hide) await navBar.hide();
+          if (navBar.setTransparency) await navBar.setTransparency({ isTransparent: true });
+          if (navBar.setNavigationBarHidden) await navBar.setNavigationBarHidden({ hidden: true });
+          
+          // Force immersive mode
+          setTimeout(async () => {
+            if (navBar.hide) await navBar.hide();
+          }, 100);
         } catch (e) {
           console.warn('NavigationBar.hide failed:', e);
         }

@@ -57,7 +57,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}>
+      <MobileDialogContent className={`w-full max-w-md mx-auto material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-auto max-h-[90vh]" : ""}`}>
         <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : ""}`}>
           <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
             <DialogTitle className="text-xl font-semibold">

@@ -12,6 +12,7 @@
     "check": "tsc",
     "setup:android": "node scripts/setup-android.js",
     "generate-icons": "node scripts/generate-android-icons.cjs",
+    "generate-splash-screens": "node scripts/generate-splash-screens.js",
     "api:move-out": "node scripts/api-backup.js move-out",
     "api:move-back": "node scripts/api-backup.js move-back",
     "android:build": "npm run api:move-out && npm run build && node scripts/fix-paths.js && npm run api:move-back && npx cap copy android",
