@@ -1,5 +1,8 @@
 import { useState, useEffect } from "react";
 import { Habit, HabitType, UserSettings } from "@shared/schema";
+import { Capacitor } from "@capacitor/core";
+import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
+import { Share } from "@capacitor/share";
 import { HabitStorage } from "@/lib/habit-storage";
 import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
@@ -197,10 +200,42 @@ export function useHabits() {
 
   const exportData = async () => {
     try {
-  const data = await HabitStorage.exportData();
+      const data = await HabitStorage.exportData();
       const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
       
-      // Try modern File System Access API first (for file save dialog)
+      // Native Android path: save to app cache and offer system Share sheet
+      if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
+        try {
+          const path = `${defaultFilename}`;
+          await Filesystem.writeFile({
+            path,
+            data,
+            directory: Directory.Cache,
+            encoding: Encoding.UTF8,
+            recursive: true,
+          });
+          // Get a sharable content:// URI
+          const { uri } = await Filesystem.getUri({ path, directory: Directory.Cache });
+          // Try sharing the file via Android share sheet
+          try {
+            await Share.share({
+              title: 'Habit Tracker Export',
+              text: 'Your habit data export file',
+              dialogTitle: 'Share export file',
+              url: uri,
+            });
+          } catch {
+            // If sharing fails, still succeed since file is saved
+          }
+
+          return;
+        } catch (err) {
+          console.warn('Native export failed, falling back to web method:', err);
+          // fall through to web fallback
+        }
+      }
+      
+  // Web: Try modern File System Access API first (for file save dialog)
       if ('showSaveFilePicker' in window) {
         try {
           const fileHandle = await (window as any).showSaveFilePicker({

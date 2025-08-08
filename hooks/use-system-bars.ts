@@ -1,142 +1,37 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 
-// Import EdgeToEdge correctly
-declare global {
-  interface Window {
-    EdgeToEdge?: {
-      enable: () => Promise<void>;
-      disable: () => Promise<void>;
-      setBackgroundColor: (options: { color: string }) => Promise<void>;
-      getInsets: () => Promise<any>;
-    };
-  }
-}
-
-/**
- * Enhanced hook to manage system status and navigation bars with Android 15 Edge-to-Edge compatibility.
- * Uses the proper EdgeToEdge plugin integration and @squareetlabs/capacitor-navigation-bar for hiding.
- */
+// Minimal, non-intrusive system bar styling to avoid conflicts and blinking
 export const useSystemBars = () => {
   const { resolvedTheme } = useTheme();
-  const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
-  const isInitializedRef = useRef(false);
 
   useEffect(() => {
-    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
-      return;
-    }
+    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') return;
 
-    const initializeEdgeToEdge = async () => {
+    const apply = async () => {
       try {
-        // Access EdgeToEdge from global Capacitor object
-        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-        
-        if (EdgeToEdge && !isInitializedRef.current) {
-          await EdgeToEdge.enable();
-          console.log('Edge-to-Edge enabled successfully');
-          isInitializedRef.current = true;
-        }
+        const info = await StatusBar.getInfo();
+        // If status bar is hidden (fullscreen), do nothing
+        if (info.visible === false) return;
+
+        const isDarkMode = resolvedTheme === 'dark';
+        const selectedColor = isDarkMode ? '#1e1b2e' : '#6750a4';
+
+        await StatusBar.setOverlaysWebView({ overlay: false });
+        await StatusBar.setStyle({ style: StatusBarStyles.Dark }); // white icons
+        await StatusBar.setBackgroundColor({ color: selectedColor });
       } catch (e) {
-        console.warn("Edge-to-Edge initialization failed:", e);
+        console.warn('useSystemBars apply failed:', e);
       }
     };
 
-  const setBars = async () => {
-      const isDarkMode = resolvedTheme === 'dark';
-      
-      // Define colors based on your app's purple theme
-      const lightThemeColor = '#6750a4'; // Primary purple
-      const darkThemeColor = '#1e1b2e'; // Dark purple
-      const selectedColor = isDarkMode ? darkThemeColor : lightThemeColor;
-      
-      try {
-        // Access EdgeToEdge from global Capacitor object
-        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-        
-        // Primary method: Use EdgeToEdge plugin (recommended approach)
-        if (EdgeToEdge) {
-      // Do NOT color navigation bar; keep it transparent via MainActivity.
-      // Only style the StatusBar (top) to purple with white icons.
-      await StatusBar.show();
-      await StatusBar.setOverlaysWebView({ overlay: false });
-      await StatusBar.setStyle({ style: StatusBarStyles.Dark });
-      await StatusBar.setBackgroundColor({ color: selectedColor });
-      console.log(`EdgeToEdge: Status bar set to ${selectedColor} (nav bar stays transparent)`);
-        } else {
-          // Fallback: Use individual plugins
-          await StatusBar.show();
-          await StatusBar.setOverlaysWebView({ overlay: false });
-          // Use Dark style to make icons WHITE on purple background
-          await StatusBar.setStyle({ 
-            style: StatusBarStyles.Dark 
-          });
-          await StatusBar.setBackgroundColor({ color: selectedColor });
-          
-      console.log(`Fallback: Status bar set to ${selectedColor} (nav bar stays transparent)`);
-        }
-
-        // Respect OS navigation bar (do not hide). Explicitly show to avoid edge cases.
-        try {
-          await NavigationBar.show();
-        } catch (e) {
-          console.warn("NavigationBar.show failed:", e);
-        }
-        
-      } catch (e) {
-        console.error("Failed to set system bar colors:", e);
-      }
-    };
-
-    // Initialize EdgeToEdge on first run
-    initializeEdgeToEdge();
-
-    // Clear any existing retry interval
-    if (retryIntervalRef.current) {
-      clearInterval(retryIntervalRef.current);
-    }
-
-    // Set immediately
-    setBars();
-    
-    // Set up persistent retry mechanism for Android 15
-    retryIntervalRef.current = setInterval(setBars, 3000); // Retry every 3 seconds
-    
-    // Also retry with delays to handle Android 15 timing issues
-    const timeouts = [100, 500, 1000, 2000, 5000];
-    timeouts.forEach(delay => {
-      setTimeout(setBars, delay);
-    });
-
-    // Add visibility change listener to re-apply colors when app comes to foreground
-    const handleVisibilityChange = () => {
-      if (!document.hidden) {
-        setTimeout(setBars, 100);
-        setTimeout(setBars, 500);
-      }
-    };
-
-    const handleFocus = () => {
-      setBars();
-    };
-
-    document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('focus', handleFocus);
-
-    // Cleanup
-    return () => {
-      if (retryIntervalRef.current) {
-        clearInterval(retryIntervalRef.current);
-      }
-      document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('focus', handleFocus);
-    };
+    apply();
+    const onFocus = () => apply();
+    window.addEventListener('focus', onFocus);
+    return () => window.removeEventListener('focus', onFocus);
   }, [resolvedTheme]);
-
-  return { resolvedTheme };
 };

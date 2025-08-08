@@ -8,6 +8,9 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
 
+// Global fullscreen flag so listeners always use the latest value
+let fullscreenEnabled = false;
+
 // Initialize Capacitor plugins
 export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
   if (!isNativePlatform()) return;
@@ -16,11 +19,11 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
 
     const platform = getPlatform();
-    const shouldHideStatusBar = settings?.fullscreenMode ?? false;
+  fullscreenEnabled = settings?.fullscreenMode ?? false;
 
-  await configureSystemBars(platform, shouldHideStatusBar);
+  await configureSystemBars(platform, fullscreenEnabled);
     await setCssInsets(platform);
-  registerAppListeners(shouldHideStatusBar);
+  registerAppListeners();
 
   } catch (error) {
     console.error('Error initializing Capacitor:', error);
@@ -87,11 +90,11 @@ async function setCssInsets(platform: string) {
   }
 }
 
-function registerAppListeners(shouldHideStatusBar: boolean) {
+function registerAppListeners() {
   App.addListener('appStateChange', ({ isActive }) => {
     if (isActive && Capacitor.getPlatform() === 'android') {
-      // Re-apply system bars state on resume
-      configureAndroidBars(shouldHideStatusBar);
+      // Re-apply system bars state on resume using latest value
+      configureAndroidBars(fullscreenEnabled);
     }
   }).catch(e => console.warn('App.addListener appStateChange failed:', e));
 
@@ -102,6 +105,14 @@ function registerAppListeners(shouldHideStatusBar: boolean) {
       window.history.back();
     }
   }).catch(e => console.warn('App.addListener backButton failed:', e));
+}
+
+// Allow toggling fullscreen dynamically at runtime
+export async function setFullscreenMode(enabled: boolean) {
+  if (!isNativePlatform()) return;
+  fullscreenEnabled = enabled;
+  const platform = getPlatform();
+  await configureSystemBars(platform, fullscreenEnabled);
 }
 
 // Haptic feedback helpers

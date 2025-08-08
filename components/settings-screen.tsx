@@ -21,7 +21,7 @@ import { useRef, useState, useEffect } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
-import { useEnhancedFullscreen } from "@/hooks/use-enhanced-fullscreen";
+import { setFullscreenMode } from "@/lib/capacitor";
 import { Capacitor } from '@capacitor/core';
 
 interface SettingsScreenProps {
@@ -51,8 +51,7 @@ export function SettingsScreen({
   const { setVisible: setStatusBarVisible, isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
   
-  // Enhanced fullscreen hook for persistent navigation bar hiding
-  useEnhancedFullscreen(settings.fullscreenMode);
+  // Fullscreen managed centrally via Capacitor helpers
 
   // Check PWA install availability
   useEffect(() => {
@@ -97,8 +96,8 @@ export function SettingsScreen({
     try {
       await onExportData();
       
-      // Show success toast - only if export didn't use file picker (which has its own feedback)
-      if (!('showSaveFilePicker' in window)) {
+  // Show success toast only on web non-FSA fallback; skip on native (share UI handles feedback)
+  if (!('showSaveFilePicker' in window) && !isCapacitorApp) {
         toast({
           title: "Export Successful",
           description: "Data has been downloaded to your Downloads folder",
@@ -136,7 +135,7 @@ export function SettingsScreen({
       // fallback: do nothing
     }
     if (isNative) {
-      await setStatusBarVisible(!enabled);
+      await setFullscreenMode(enabled);
       toast({
         title: enabled ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
         description: enabled 
