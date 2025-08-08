@@ -4,20 +4,48 @@ import { useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@capgo/capacitor-navigation-bar';
+import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+
+// Import EdgeToEdge correctly
+declare global {
+  interface Window {
+    EdgeToEdge?: {
+      enable: () => Promise<void>;
+      disable: () => Promise<void>;
+      setBackgroundColor: (options: { color: string }) => Promise<void>;
+      getInsets: () => Promise<any>;
+    };
+  }
+}
 
 /**
  * Enhanced hook to manage system status and navigation bars with Android 15 Edge-to-Edge compatibility.
- * Uses aggressive retry logic and activity lifecycle integration.
+ * Uses the proper EdgeToEdge plugin integration and @squareetlabs/capacitor-navigation-bar for hiding.
  */
 export const useSystemBars = () => {
   const { resolvedTheme } = useTheme();
   const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const isInitializedRef = useRef(false);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
       return;
     }
+
+    const initializeEdgeToEdge = async () => {
+      try {
+        // Access EdgeToEdge from global Capacitor object
+        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
+        
+        if (EdgeToEdge && !isInitializedRef.current) {
+          await EdgeToEdge.enable();
+          console.log('Edge-to-Edge enabled successfully');
+          isInitializedRef.current = true;
+        }
+      } catch (e) {
+        console.warn("Edge-to-Edge initialization failed:", e);
+      }
+    };
 
     const setBars = async () => {
       const isDarkMode = resolvedTheme === 'dark';
@@ -28,38 +56,43 @@ export const useSystemBars = () => {
       const selectedColor = isDarkMode ? darkThemeColor : lightThemeColor;
       
       try {
-        // Force status bar configuration multiple times
-        await StatusBar.show();
-        await StatusBar.setOverlaysWebView({ overlay: false });
-        await StatusBar.setStyle({ style: StatusBarStyles.Light });
-        await StatusBar.setBackgroundColor({ color: selectedColor });
+        // Access EdgeToEdge from global Capacitor object
+        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
         
-        // Navigation Bar configuration
-        try {
-          const navBar = NavigationBar as any;
+        // Primary method: Use EdgeToEdge plugin (recommended approach)
+        if (EdgeToEdge) {
+          await EdgeToEdge.setBackgroundColor({ color: selectedColor });
+          await StatusBar.setStyle({ 
+            style: isDarkMode ? StatusBarStyles.Dark : StatusBarStyles.Light 
+          });
+          console.log(`EdgeToEdge: System bars set to ${selectedColor} for ${isDarkMode ? 'dark' : 'light'} theme`);
+        } else {
+          // Fallback: Use individual plugins
+          await StatusBar.show();
+          await StatusBar.setOverlaysWebView({ overlay: false });
+          await StatusBar.setStyle({ 
+            style: isDarkMode ? StatusBarStyles.Dark : StatusBarStyles.Light 
+          });
+          await StatusBar.setBackgroundColor({ color: selectedColor });
           
-          if (navBar.show) await navBar.show();
-          if (navBar.setColor) {
-            await navBar.setColor({
-              color: selectedColor,
-              darkButtons: false,
-            });
-          }
-          if (navBar.setBackgroundColor) {
-            await navBar.setBackgroundColor({
-              color: selectedColor,
-              darkButtons: false,
-            });
-          }
+          console.log(`Fallback: System bars set to ${selectedColor} for ${isDarkMode ? 'dark' : 'light'} theme`);
+        }
+
+        // Always hide navigation bar completely using the better plugin
+        try {
+          await NavigationBar.hide();
+          console.log('Navigation bar permanently hidden with @squareetlabs plugin');
         } catch (e) {
-          console.warn("Navigation bar configuration failed:", e);
+          console.warn("Navigation bar hiding failed:", e);
         }
         
-        console.log(`System bars set to ${selectedColor} for ${isDarkMode ? 'dark' : 'light'} theme`);
       } catch (e) {
         console.error("Failed to set system bar colors:", e);
       }
     };
+
+    // Initialize EdgeToEdge on first run
+    initializeEdgeToEdge();
 
     // Clear any existing retry interval
     if (retryIntervalRef.current) {
@@ -70,7 +103,7 @@ export const useSystemBars = () => {
     setBars();
     
     // Set up persistent retry mechanism for Android 15
-    retryIntervalRef.current = setInterval(setBars, 2000); // Retry every 2 seconds
+    retryIntervalRef.current = setInterval(setBars, 3000); // Retry every 3 seconds
     
     // Also retry with delays to handle Android 15 timing issues
     const timeouts = [100, 500, 1000, 2000, 5000];
@@ -86,8 +119,12 @@ export const useSystemBars = () => {
       }
     };
 
+    const handleFocus = () => {
+      setBars();
+    };
+
     document.addEventListener('visibilitychange', handleVisibilityChange);
-    window.addEventListener('focus', setBars);
+    window.addEventListener('focus', handleFocus);
 
     // Cleanup
     return () => {
@@ -95,7 +132,7 @@ export const useSystemBars = () => {
         clearInterval(retryIntervalRef.current);
       }
       document.removeEventListener('visibilitychange', handleVisibilityChange);
-      window.removeEventListener('focus', setBars);
+      window.removeEventListener('focus', handleFocus);
     };
   }, [resolvedTheme]);
 

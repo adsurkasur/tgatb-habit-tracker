@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@capgo/capacitor-navigation-bar';
+import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
@@ -25,9 +25,8 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       await StatusBar.show();
       
       try {
-        // Show navigation bar by default
-        const navBar = NavigationBar as any;
-        if (navBar.show) await navBar.show();
+        // Show navigation bar by default (Note: @squareetlabs plugin only supports hide/show)
+        await NavigationBar.show();
       } catch (e) {
         console.warn('NavigationBar.show failed:', e);
       }
@@ -36,15 +35,12 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       if (shouldHideStatusBar) {
         await StatusBar.hide();
         try {
-          const navBar = NavigationBar as any;
-          // Try multiple methods to hide navigation bar on Android 15
-          if (navBar.hide) await navBar.hide();
-          if (navBar.setTransparency) await navBar.setTransparency({ isTransparent: true });
-          if (navBar.setNavigationBarHidden) await navBar.setNavigationBarHidden({ hidden: true });
+          // Use the specialized plugin for hiding navigation bar
+          await NavigationBar.hide();
           
-          // Force immersive mode
+          // Re-apply after a short delay to ensure persistence
           setTimeout(async () => {
-            if (navBar.hide) await navBar.hide();
+            await NavigationBar.hide();
           }, 100);
         } catch (e) {
           console.warn('NavigationBar.hide failed:', e);

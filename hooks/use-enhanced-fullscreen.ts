@@ -3,11 +3,11 @@
 import { useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar } from '@capacitor/status-bar';
-import { NavigationBar } from '@capgo/capacitor-navigation-bar';
+import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 
 /**
  * Enhanced fullscreen hook that provides persistent navigation bar hiding
- * even when keyboard appears, specifically for Android 15 compatibility.
+ * using the better @squareetlabs/capacitor-navigation-bar plugin.
  */
 export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
   const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
@@ -20,38 +20,26 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
 
     const applyFullscreenSettings = async () => {
       try {
+        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
+        
+        // Always hide navigation bar regardless of fullscreen mode using better plugin
+        await NavigationBar.hide();
+        
         if (isFullscreenEnabled) {
-          // Hide status bar
+          // Hide status bar for fullscreen
           await StatusBar.hide();
           
-          // Hide navigation bar aggressively
-          const navBar = NavigationBar as any;
-          if (navBar.hide) {
-            await navBar.hide();
+          // Set black background for fullscreen if EdgeToEdge available
+          if (EdgeToEdge?.setBackgroundColor) {
+            await EdgeToEdge.setBackgroundColor({ color: '#000000' }); // Black for fullscreen
           }
           
-          // Set immersive mode if available
-          if (navBar.setImmersive) {
-            await navBar.setImmersive({ immersive: true });
-          }
-          
-          console.log('Fullscreen mode applied: status bar and navigation bar hidden');
+          console.log('Fullscreen mode applied: status bar hidden, navigation bar permanently hidden');
         } else {
-          // Show status bar
+          // Show status bar but keep navigation bar hidden
           await StatusBar.show();
           
-          // Show navigation bar
-          const navBar = NavigationBar as any;
-          if (navBar.show) {
-            await navBar.show();
-          }
-          
-          // Disable immersive mode
-          if (navBar.setImmersive) {
-            await navBar.setImmersive({ immersive: false });
-          }
-          
-          console.log('Fullscreen mode disabled: status bar and navigation bar shown');
+          console.log('Normal mode: status bar shown, navigation bar permanently hidden');
         }
       } catch (error) {
         console.warn('Failed to apply fullscreen settings:', error);
@@ -124,14 +112,13 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       if (!Capacitor.isNativePlatform()) return;
       
       try {
+        // Always hide navigation bar using better plugin
+        await NavigationBar.hide();
+        
         if (isFullscreenEnabled) {
           await StatusBar.hide();
-          const navBar = NavigationBar as any;
-          if (navBar.hide) await navBar.hide();
         } else {
           await StatusBar.show();
-          const navBar = NavigationBar as any;
-          if (navBar.show) await navBar.show();
         }
       } catch (error) {
         console.warn('Manual fullscreen application failed:', error);

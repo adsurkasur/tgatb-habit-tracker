@@ -1,3 +1,5 @@
+/// <reference types="@capawesome/capacitor-android-edge-to-edge-support" />
+
 import type { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
@@ -6,8 +8,8 @@ const config: CapacitorConfig = {
   webDir: 'out',
   plugins: {
     StatusBar: {
-      style: 'dark',
-      backgroundColor: '#ffffff',
+      style: 'light',
+      backgroundColor: '#6750a4',
       overlaysWebView: false
     },
     SplashScreen: {
@@ -15,6 +17,12 @@ const config: CapacitorConfig = {
       backgroundColor: '#6750a4',
       androidScaleType: 'CENTER_CROP',
       showSpinner: false
+    },
+    EdgeToEdge: {
+      backgroundColor: "#6750a4"
+    },
+    Keyboard: {
+      resizeOnFullScreen: false
     }
   },
   android: {

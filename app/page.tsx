@@ -15,6 +15,7 @@ import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
 import { useSystemBars } from "@/hooks/use-system-bars";
+import { useHideNavigationBar } from "@/hooks/use-hide-navigation-bar";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
 import { HabitType, Habit } from "@shared/schema";
@@ -34,6 +35,9 @@ export default function Home() {
   
   // Initialize system bars for Android 15 theme colors
   useSystemBars();
+  
+  // Permanently hide navigation bar
+  useHideNavigationBar();
   
   const {
     currentHabit,
