@@ -10,7 +10,7 @@ import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
  * using the better @squareetlabs/capacitor-navigation-bar plugin.
  */
 export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
-  const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const debounceRef = useRef<number | null>(null);
   const keyboardListenerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
@@ -18,99 +18,61 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       return;
     }
 
-    const applyFullscreenSettings = async () => {
-      try {
-        const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-        
-        // Always hide navigation bar regardless of fullscreen mode using better plugin
-        await NavigationBar.hide();
-        
-        if (isFullscreenEnabled) {
-          // Hide status bar for fullscreen
-          await StatusBar.hide();
-          
-          // Set black background for fullscreen if EdgeToEdge available
-          if (EdgeToEdge?.setBackgroundColor) {
-            await EdgeToEdge.setBackgroundColor({ color: '#000000' }); // Black for fullscreen
-          }
-          
-          console.log('Fullscreen mode applied: status bar hidden, navigation bar permanently hidden');
-        } else {
-          // Show status bar but keep navigation bar hidden
-          await StatusBar.show();
-          
-          // Restore purple background and white icons when exiting fullscreen
-          if (EdgeToEdge?.setBackgroundColor) {
-            await EdgeToEdge.setBackgroundColor({ color: '#6750a4' }); // Purple background
-          } else {
-            // Fallback: use StatusBar plugin
-            await StatusBar.setBackgroundColor({ color: '#6750a4' });
-          }
-          
-          // Set white icons on purple background
-          await StatusBar.setStyle({ style: StatusBarStyles.Dark });
-          
-          console.log('Normal mode: status bar shown with purple background and white icons, navigation bar permanently hidden');
-        }
-      } catch (error) {
-        console.warn('Failed to apply fullscreen settings:', error);
+    // Debounced fullscreen settings application
+    const applyFullscreenSettings = () => {
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
       }
+      debounceRef.current = window.setTimeout(async () => {
+        try {
+          const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
+          await NavigationBar.hide();
+          if (isFullscreenEnabled) {
+            await StatusBar.hide();
+            if (EdgeToEdge?.setBackgroundColor) {
+              await EdgeToEdge.setBackgroundColor({ color: '#000000' });
+            }
+          } else {
+            await StatusBar.show();
+            if (EdgeToEdge?.setBackgroundColor) {
+              await EdgeToEdge.setBackgroundColor({ color: '#6750a4' });
+            } else {
+              await StatusBar.setBackgroundColor({ color: '#6750a4' });
+            }
+            await StatusBar.setStyle({ style: StatusBarStyles.Dark });
+          }
+        } catch (error) {
+          console.warn('Failed to apply fullscreen settings:', error);
+        }
+      }, 400); // Only allow once every 400ms
     };
-
-    // Clear any existing intervals
-    if (retryIntervalRef.current) {
-      clearInterval(retryIntervalRef.current);
-    }
 
     // Apply settings immediately
     applyFullscreenSettings();
 
+    // Only reapply fullscreen after specific events, debounced
     if (isFullscreenEnabled) {
-      // Set up persistent retry for fullscreen mode (to counter Android's automatic showing)
-      retryIntervalRef.current = setInterval(applyFullscreenSettings, 1000);
-
-      // Add keyboard event listeners to re-hide navigation bar when keyboard appears
-      const handleKeyboardShow = () => {
-        console.log('Keyboard shown, re-applying fullscreen settings');
-        setTimeout(applyFullscreenSettings, 100);
-        setTimeout(applyFullscreenSettings, 500);
-      };
-
-      const handleKeyboardHide = () => {
-        console.log('Keyboard hidden, re-applying fullscreen settings');
-        setTimeout(applyFullscreenSettings, 100);
-      };
-
-      // Listen for window resize as a proxy for keyboard events
-      const handleResize = () => {
-        applyFullscreenSettings();
+      const handleResize = () => applyFullscreenSettings();
+      const handleFocus = () => applyFullscreenSettings();
+      const handleVisibility = () => {
+        if (!document.hidden) applyFullscreenSettings();
       };
 
       window.addEventListener('resize', handleResize);
-      
-      // Also listen for focus events to reapply settings
-      const handleFocus = () => {
-        applyFullscreenSettings();
-      };
-
       window.addEventListener('focus', handleFocus);
-      document.addEventListener('visibilitychange', () => {
-        if (!document.hidden) {
-          applyFullscreenSettings();
-        }
-      });
+      document.addEventListener('visibilitychange', handleVisibility);
 
-      // Store cleanup function
       keyboardListenerRef.current = () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('focus', handleFocus);
+        document.removeEventListener('visibilitychange', handleVisibility);
       };
     }
 
     // Cleanup function
     return () => {
-      if (retryIntervalRef.current) {
-        clearInterval(retryIntervalRef.current);
+      if (debounceRef.current) {
+        clearTimeout(debounceRef.current);
       }
       if (keyboardListenerRef.current) {
         keyboardListenerRef.current();
@@ -124,7 +86,7 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       
       try {
         // Always hide navigation bar using better plugin
-        await NavigationBar.hide();
+  await NavigationBar.hide();
         
         if (isFullscreenEnabled) {
           await StatusBar.hide();

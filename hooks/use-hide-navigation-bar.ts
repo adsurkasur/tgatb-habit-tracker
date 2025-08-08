@@ -17,7 +17,7 @@ export const useHideNavigationBar = () => {
 
   const showNavigationBar = async () => {
       try {
-    await NavigationBar.show();
+  await NavigationBar.show();
     console.log('Navigation bar shown (respect OS nav bar)');
       } catch (error) {
     console.warn('Failed to show navigation bar:', error);

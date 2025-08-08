@@ -26,7 +26,7 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
       
       try {
         // Show navigation bar by default (Note: @squareetlabs plugin only supports hide/show)
-        await NavigationBar.show();
+  await NavigationBar.show();
       } catch (e) {
         console.warn('NavigationBar.show failed:', e);
       }
