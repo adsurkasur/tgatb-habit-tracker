@@ -17,9 +17,9 @@ android {
         }
     }
     compileOptions {
-        // Ensure Java 21 source/target compatibility for the Android module
-        sourceCompatibility JavaVersion.VERSION_21
-        targetCompatibility JavaVersion.VERSION_21
+    // Compile with Java 21
+    sourceCompatibility JavaVersion.VERSION_21
+    targetCompatibility JavaVersion.VERSION_21
     }
     buildTypes {
         release {
