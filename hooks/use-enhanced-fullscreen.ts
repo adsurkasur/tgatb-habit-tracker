@@ -23,8 +23,6 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
         
         // Only hide navigation bar in fullscreen mode
         if (isFullscreenEnabled) {
-          // Set nav bar color to purple before hide to avoid black flash during transient reveals
-          try { await (NavigationBar as any).setColor?.({ color: '#6750a4' }); } catch {}
           await NavigationBar.hide();
         }
         
@@ -93,7 +91,6 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       try {
         // Hide navigation bar only when fullscreen is enabled
         if (isFullscreenEnabled) {
-          try { await (NavigationBar as any).setColor?.({ color: '#6750a4' }); } catch {}
           await NavigationBar.hide();
         }
         
