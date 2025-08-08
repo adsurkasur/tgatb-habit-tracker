@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
@@ -19,6 +19,8 @@ import { useHideNavigationBar } from "@/hooks/use-hide-navigation-bar";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
 import { HabitType, Habit } from "@shared/schema";
+import { Capacitor } from "@capacitor/core";
+import { App } from "@capacitor/app";
 
 export default function Home() {
   const [showAddHabit, setShowAddHabit] = useState(false);
@@ -31,6 +33,28 @@ export default function Home() {
   
   const { registerModal } = useMobileModalManager();
   const { toast } = useToast();
+  
+  // Back again to exit logic (Android only)
+  const lastBackPressRef = useRef<number>(0);
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
+    const handler = App.addListener('backButton', () => {
+      const now = Date.now();
+      if (now - lastBackPressRef.current < 2000) {
+        App.exitApp();
+      } else {
+        lastBackPressRef.current = now;
+        toast({
+          title: "Press back again to exit",
+          duration: 2000,
+        });
+      }
+    });
+    return () => {
+      handler.then(h => h.remove());
+    };
+  }, [toast]);
+  
   const { isWelcomeVisible, closeWelcome, completeWelcome, resetWelcome } = useWelcomeOverlay();
   
   // Initialize system bars for Android 15 theme colors
