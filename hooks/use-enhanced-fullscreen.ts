@@ -20,7 +20,6 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
     const applyFullscreenSettings = async () => {
       try {
         const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-  const Immersive = (window as any).Capacitor?.Plugins?.Immersive;
         
         // Only hide navigation bar in fullscreen mode
         if (isFullscreenEnabled) {
@@ -32,7 +31,6 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
         if (isFullscreenEnabled) {
           // Hide status bar for fullscreen
           await StatusBar.hide();
-          try { await Immersive?.enable?.(); } catch {}
           
           // Set black background for fullscreen if EdgeToEdge available
           if (EdgeToEdge?.setBackgroundColor) {
@@ -43,7 +41,6 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
         } else {
           // Show status bar but keep navigation bar hidden
           await StatusBar.show();
-          try { await Immersive?.disable?.(); } catch {}
           
           // Restore purple background and white icons when exiting fullscreen
           if (EdgeToEdge?.setBackgroundColor) {
