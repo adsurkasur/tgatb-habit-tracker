@@ -10,7 +10,8 @@ import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
  * using the better @squareetlabs/capacitor-navigation-bar plugin.
  */
 export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
-  const reapplyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const keyboardListenerRef = useRef<(() => void) | null>(null);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
@@ -21,10 +22,8 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       try {
         const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
         
-        // Only hide navigation bar in fullscreen mode
-        if (isFullscreenEnabled) {
-          await NavigationBar.hide();
-        }
+        // Always hide navigation bar regardless of fullscreen mode using better plugin
+        await NavigationBar.hide();
         
         if (isFullscreenEnabled) {
           // Hide status bar for fullscreen
@@ -58,29 +57,64 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       }
     };
 
+    // Clear any existing intervals
+    if (retryIntervalRef.current) {
+      clearInterval(retryIntervalRef.current);
+    }
+
     // Apply settings immediately
     applyFullscreenSettings();
 
-    // Re-apply on focus/visibility/orientation with debounce (no intervals)
-    const debouncedReapply = () => {
-      if (reapplyTimeoutRef.current) clearTimeout(reapplyTimeoutRef.current);
-      reapplyTimeoutRef.current = setTimeout(applyFullscreenSettings, 150);
-    };
+    if (isFullscreenEnabled) {
+      // Set up persistent retry for fullscreen mode (to counter Android's automatic showing)
+      retryIntervalRef.current = setInterval(applyFullscreenSettings, 1000);
 
-    const handleFocus = () => debouncedReapply();
-    const handleVisibility = () => { if (!document.hidden) debouncedReapply(); };
-    const handleResize = () => debouncedReapply();
+      // Add keyboard event listeners to re-hide navigation bar when keyboard appears
+      const handleKeyboardShow = () => {
+        console.log('Keyboard shown, re-applying fullscreen settings');
+        setTimeout(applyFullscreenSettings, 100);
+        setTimeout(applyFullscreenSettings, 500);
+      };
 
-    window.addEventListener('focus', handleFocus);
-    document.addEventListener('visibilitychange', handleVisibility);
-    window.addEventListener('resize', handleResize);
+      const handleKeyboardHide = () => {
+        console.log('Keyboard hidden, re-applying fullscreen settings');
+        setTimeout(applyFullscreenSettings, 100);
+      };
+
+      // Listen for window resize as a proxy for keyboard events
+      const handleResize = () => {
+        applyFullscreenSettings();
+      };
+
+      window.addEventListener('resize', handleResize);
+      
+      // Also listen for focus events to reapply settings
+      const handleFocus = () => {
+        applyFullscreenSettings();
+      };
+
+      window.addEventListener('focus', handleFocus);
+      document.addEventListener('visibilitychange', () => {
+        if (!document.hidden) {
+          applyFullscreenSettings();
+        }
+      });
+
+      // Store cleanup function
+      keyboardListenerRef.current = () => {
+        window.removeEventListener('resize', handleResize);
+        window.removeEventListener('focus', handleFocus);
+      };
+    }
 
     // Cleanup function
     return () => {
-      if (reapplyTimeoutRef.current) clearTimeout(reapplyTimeoutRef.current);
-      window.removeEventListener('focus', handleFocus);
-      document.removeEventListener('visibilitychange', handleVisibility);
-      window.removeEventListener('resize', handleResize);
+      if (retryIntervalRef.current) {
+        clearInterval(retryIntervalRef.current);
+      }
+      if (keyboardListenerRef.current) {
+        keyboardListenerRef.current();
+      }
     };
   }, [isFullscreenEnabled]);
 
@@ -89,10 +123,8 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       if (!Capacitor.isNativePlatform()) return;
       
       try {
-        // Hide navigation bar only when fullscreen is enabled
-        if (isFullscreenEnabled) {
-          await NavigationBar.hide();
-        }
+        // Always hide navigation bar using better plugin
+        await NavigationBar.hide();
         
         if (isFullscreenEnabled) {
           await StatusBar.hide();
