@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
-import { Habit } from "@shared/schema";
+import { Habit, HabitLog } from "@shared/schema";
 import { useEffect, useState } from "react";
 
 interface HabitCardProps {
@@ -12,7 +12,7 @@ interface HabitCardProps {
   isCompletedToday?: boolean;
   completedAt?: Date;
   navigationDirection?: 'left' | 'right' | null;
-  todayLog?: any; // Will contain the actual log to determine positive/negative
+  todayLog?: HabitLog; // Log for today to determine positive/negative
 }
 
 export function HabitCard({ 
@@ -53,7 +53,7 @@ export function HabitCard({
       
       return () => clearTimeout(timer);
     }
-  }, [habit?.id, previousHabitId, navigationDirection]);
+  }, [habit, habit?.id, previousHabitId, navigationDirection]);
 
   if (!habit) {
     return (

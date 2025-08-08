@@ -2,9 +2,15 @@
 
 import { useEffect } from "react";
 
+type WorkboxLike = {
+  addEventListener: (event: string, cb: (...args: unknown[]) => void) => void;
+  register: () => void;
+  messageSkipWaiting: () => void;
+};
+
 declare global {
   interface Window {
-    workbox?: any;
+    workbox?: WorkboxLike;
   }
 }
 
@@ -23,13 +29,13 @@ export function ServiceWorkerRegistration() {
 function isServiceWorkerSupported(): boolean {
   const isClient = typeof window !== 'undefined';
   const hasServiceWorker = 'serviceWorker' in navigator;
-  const hasWorkbox = window.workbox !== undefined;
+  const hasWorkbox = typeof window !== 'undefined' && window.workbox !== undefined;
 
   return isClient && hasServiceWorker && hasWorkbox;
 }
 
 function registerServiceWorker(): void {
-  const wb = window.workbox;
+  const wb = window.workbox!;
   
   const promptNewVersionAvailable = () => {
     const shouldUpdate = confirm("A newer version of this web app is available, reload to update?");
@@ -45,7 +51,7 @@ function registerServiceWorker(): void {
   wb.register();
 }
 
-function handleServiceWorkerUpdate(workbox: any): void {
+function handleServiceWorkerUpdate(workbox: WorkboxLike): void {
   workbox.addEventListener('controlling', () => {
     window.location.reload();
   });

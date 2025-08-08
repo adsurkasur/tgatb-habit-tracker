@@ -5,6 +5,9 @@ import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
 import { EditHabitDialog } from "@/components/edit-habit-dialog";
+import { DonationDialog } from "@/components/donation-dialog";
+import { HistoryDialog } from "@/components/history-dialog";
+import { AboutDialog } from "@/components/about-dialog";
 import { AddHabitCTA } from "@/components/add-habit-cta";
 import { SettingsScreen } from "@/components/settings-screen";
 import { ContentWrapper } from "@/components/content-wrapper";
@@ -29,33 +32,47 @@ export default function Home() {
   const [showSettings, setShowSettings] = useState(false);
   const [showHistory, setShowHistory] = useState(false);
   const [showDonate, setShowDonate] = useState(false);
+  const [showAbout, setShowAbout] = useState(false);
   const [welcomeStep, setWelcomeStep] = useState(0);
+  const [drawerOpen, setDrawerOpen] = useState(false);
   
-  const { registerModal } = useMobileModalManager();
+  const { registerModal, hasOpenModals, closeTopModal } = useMobileModalManager();
   const { toast } = useToast();
   
+  const { isWelcomeVisible, closeWelcome, completeWelcome, resetWelcome } = useWelcomeOverlay();
+
+  // Register all modals/overlays with modal manager after all states are defined
+  useEffect(() => {
+    registerModal('drawer', { isOpen: drawerOpen, onClose: () => setDrawerOpen(false), priority: 10 });
+    registerModal('settings', { isOpen: showSettings, onClose: () => setShowSettings(false), priority: 9 });
+    registerModal('donate', { isOpen: showDonate, onClose: () => setShowDonate(false), priority: 8 });
+    registerModal('history', { isOpen: showHistory, onClose: () => setShowHistory(false), priority: 7 });
+    registerModal('about', { isOpen: showAbout, onClose: () => setShowAbout(false), priority: 8 });
+    registerModal('addHabit', { isOpen: showAddHabit, onClose: () => setShowAddHabit(false), priority: 6 });
+    registerModal('editHabit', { isOpen: showEditHabit, onClose: () => { setShowEditHabit(false); setEditingHabit(null); }, priority: 5 });
+    registerModal('welcome', { isOpen: isWelcomeVisible, onClose: closeWelcome, priority: 11 });
+  }, [drawerOpen, showSettings, showDonate, showHistory, showAbout, showAddHabit, showEditHabit, isWelcomeVisible, closeWelcome, registerModal]);
+
   // Back again to exit logic (Android only)
   const lastBackPressRef = useRef<number>(0);
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
     const handler = App.addListener('backButton', () => {
       const now = Date.now();
+      if (hasOpenModals()) {
+        // Close the topmost modal via manager
+        closeTopModal();
+        return;
+      }
       if (now - lastBackPressRef.current < 2000) {
         App.exitApp();
       } else {
         lastBackPressRef.current = now;
-        toast({
-          title: "Press back again to exit",
-          duration: 2000,
-        });
+        toast({ title: "Press back again to exit", duration: 2000 });
       }
     });
-    return () => {
-      handler.then(h => h.remove());
-    };
-  }, [toast]);
-  
-  const { isWelcomeVisible, closeWelcome, completeWelcome, resetWelcome } = useWelcomeOverlay();
+    return () => { handler.then(h => h.remove()); };
+  }, [toast, hasOpenModals, closeTopModal]);
   
   // Initialize system bars for Android 15 theme colors
   useSystemBars();
@@ -78,37 +95,11 @@ export default function Home() {
     undoHabitTracking,
     getHabitCompletionStatus,
     moveToNextHabit,
-    moveToPreviousHabit,
-    navigateToHabitIndex,
+  moveToPreviousHabit,
     updateSettings,
     exportData,
     importData,
   } = useHabits();
-
-  // Register modals with the mobile modal manager
-  useEffect(() => {
-    registerModal('addHabit', {
-      isOpen: showAddHabit,
-      onClose: () => setShowAddHabit(false),
-      priority: 2
-    });
-  }, [showAddHabit, registerModal]);
-
-  useEffect(() => {
-    registerModal('editHabit', {
-      isOpen: showEditHabit,
-      onClose: () => setShowEditHabit(false),
-      priority: 2
-    });
-  }, [showEditHabit, registerModal]);
-
-  useEffect(() => {
-    registerModal('settings', {
-      isOpen: showSettings,
-      onClose: () => setShowSettings(false),
-      priority: 1
-    });
-  }, [showSettings, registerModal]);
 
   const handleTrackHabit = (completed: boolean) => {
     if (currentHabit) {
@@ -183,6 +174,7 @@ export default function Home() {
   // Show demo habit during welcome tour step 4 (habit-card step)
   const shouldShowDemoHabit = isWelcomeVisible && welcomeStep === 3 && (goodHabits.length + badHabits.length) === 0;
   const displayedHabit = shouldShowDemoHabit ? demoHabit : currentHabit;
+  const allHabits = [...goodHabits, ...badHabits];
 
   // Keyboard navigation
   useEffect(() => {
@@ -255,9 +247,12 @@ export default function Home() {
               onAddHabitClick={() => setShowAddHabit(true)}
               onHistoryClick={() => setShowHistory(true)}
               onDonateClick={() => setShowDonate(true)}
+              onAboutClick={() => setShowAbout(true)}
               onEditHabit={handleEditHabit}
               onDeleteHabit={handleDeleteHabit}
               onHelpClick={resetWelcome}
+              open={drawerOpen}
+              onOpenChange={setDrawerOpen}
             />
           </div>
           <h1 className="text-xl font-semibold">The Good and The Bad</h1>
@@ -388,6 +383,23 @@ export default function Home() {
           onOpenChange={setShowEditHabit}
           onEditHabit={handleUpdateHabit}
           habit={editingHabit}
+        />
+
+        {/* Centralized dialogs moved from NavigationDrawer */}
+        <DonationDialog 
+          open={showDonate}
+          onOpenChange={setShowDonate}
+        />
+
+        <HistoryDialog 
+          open={showHistory}
+          onOpenChange={setShowHistory}
+          habits={allHabits}
+        />
+
+        <AboutDialog 
+          open={showAbout}
+          onOpenChange={setShowAbout}
         />
 
         <SettingsScreen

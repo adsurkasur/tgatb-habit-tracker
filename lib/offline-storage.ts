@@ -5,7 +5,7 @@
 interface OfflineHabitAction {
   id: string;
   action: 'create' | 'update' | 'delete' | 'track';
-  data: any;
+  data: unknown;
   timestamp: number;
 }
 
@@ -107,12 +107,7 @@ class OfflineHabitStorage {
   }
 
   // Store habits locally
-  async storeHabits(habits: any[]): Promise<void> {
-    if (!this.db) {
-      localStorage.setItem('offline-habits', JSON.stringify(habits));
-      return;
-    }
-
+  async storeHabits(habits: Array<Record<string, unknown>>): Promise<void> {
     if (!this.db) {
       localStorage.setItem('offline-habits', JSON.stringify(habits));
       return;
@@ -148,7 +143,7 @@ class OfflineHabitStorage {
   }
 
   // Get stored habits
-  async getStoredHabits(): Promise<any[]> {
+  async getStoredHabits(): Promise<Array<Record<string, unknown>>> {
     if (!this.db) {
       const stored = localStorage.getItem('offline-habits');
       return stored ? JSON.parse(stored) : [];
@@ -188,7 +183,7 @@ class OfflineHabitStorage {
     return this.addPendingAction(action);
   }
 
-  async createHabitOffline(habitData: any): Promise<void> {
+  async createHabitOffline(habitData: Record<string, unknown>): Promise<void> {
     const action: OfflineHabitAction = {
       id: `create-${habitData.id}-${Date.now()}`,
       action: 'create',
@@ -199,7 +194,7 @@ class OfflineHabitStorage {
     return this.addPendingAction(action);
   }
 
-  async updateHabitOffline(habitId: string, updates: any): Promise<void> {
+  async updateHabitOffline(habitId: string, updates: Record<string, unknown>): Promise<void> {
     const action: OfflineHabitAction = {
       id: `update-${habitId}-${Date.now()}`,
       action: 'update',

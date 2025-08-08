@@ -102,6 +102,7 @@ export function useMobileModalManager() {
   return {
     registerModal,
     hasOpenModals: () => Array.from(modalsRef.current.values()).some(modal => modal.isOpen),
-    isMobile
+  isMobile,
+  closeTopModal: handleBackPressed
   };
 }

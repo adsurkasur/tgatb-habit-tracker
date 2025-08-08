@@ -16,7 +16,7 @@ This guide helps you set up Android development for the TGATB Habit Tracker on *
 | Software | Version | Purpose |
 |----------|---------|---------|
 | **Node.js** | 18+ | JavaScript runtime |
-| **Java JDK** | 17-21 | Android compilation |
+| **Java JDK** | 21 | Android compilation |
 | **Android Studio** | Latest | IDE and SDK |
 | **Git** | Latest | Version control |
 

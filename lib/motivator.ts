@@ -63,8 +63,7 @@ export class Motivator {
     habitType: HabitType,
     streak: number
   ): string {
-    const messages = motivatorMessages[personality];
-    const messageArray = success ? messages.success : messages.failure;
+  const messages = motivatorMessages[personality];
     
     // For bad habits, flip the success/failure logic
     const actualSuccess = habitType === "bad" ? !success : success;

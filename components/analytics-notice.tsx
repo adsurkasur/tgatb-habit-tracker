@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocalStorage } from '@/hooks/use-local-storage';
-import { BarChart3, X } from 'lucide-react';
+import { BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 
@@ -42,9 +42,7 @@ export function AnalyticsNotice() {
     }, 300);
   };
 
-  const handleDismiss = () => {
-    handleAcknowledge();
-  };
+  // handler removed; using custom event approach
 
   if (!isMounted || !hasRendered || acknowledged) {
     return null;

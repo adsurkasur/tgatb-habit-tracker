@@ -15,7 +15,6 @@ export const StatusBarExample = () => {
     height, 
     isNative, 
     setVisible,
-    setStyle,
     setBackgroundColor,
     setLightStyle,
     setDarkStyle,

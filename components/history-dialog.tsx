@@ -1,8 +1,7 @@
-import React, { useState, useMemo, useEffect } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
@@ -96,7 +95,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
       if (habitCreatedDate <= today) {
         const logs = getAllHabitLogs(habit.id);
         const todayStr = formatLocalDate(new Date()); // Use local timezone
-        if (logs.some((log: any) => log.date === todayStr && log.completed === true)) {
+  if (logs.some((log) => log.date === todayStr && log.completed === true)) {
           stats.todayCompletion++;
         }
       }
@@ -112,7 +111,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
         if (habitCreatedDate <= dayStart) {
           const dayStr = formatLocalDate(day); // Use local timezone
           const logs = getAllHabitLogs(habit.id);
-          return logs.some((log: any) => log.date === dayStr && log.completed === true);
+          return logs.some((log) => log.date === dayStr && log.completed === true);
         }
         return false;
       }).length;
@@ -146,7 +145,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
             // Use local timezone for consistent date handling
             const dateStr = formatLocalDate(date);
             // Check if there's a completed log for this date
-            const completed = habitLogs.some((log: any) => log.date === dateStr && log.completed === true);
+            const completed = habitLogs.some((log) => log.date === dateStr && log.completed === true);
             
             return {
               id: habit.id,

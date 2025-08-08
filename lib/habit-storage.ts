@@ -11,12 +11,19 @@ export class HabitStorage {
       const data = localStorage.getItem(HABITS_KEY);
       if (!data) return [];
       
-      const habits = JSON.parse(data);
-      return habits.map((habit: any) => ({
-        ...habit,
-        createdAt: new Date(habit.createdAt),
-        lastCompletedDate: habit.lastCompletedDate ? new Date(habit.lastCompletedDate) : undefined,
-      }));
+      const raw = JSON.parse(data) as unknown[];
+      return raw.map((h) => {
+        const habitObj = h as Record<string, unknown>;
+        const result: Habit = {
+          id: String(habitObj.id),
+          name: String(habitObj.name),
+          type: habitObj.type as HabitType, // falls back to runtime data; schema enforces later
+          streak: Number(habitObj.streak ?? 0),
+          createdAt: new Date(String(habitObj.createdAt)),
+          lastCompletedDate: habitObj.lastCompletedDate ? new Date(String(habitObj.lastCompletedDate)) : undefined,
+        };
+        return result;
+      });
     } catch {
       return [];
     }
@@ -60,11 +67,18 @@ export class HabitStorage {
       const data = localStorage.getItem(LOGS_KEY);
       if (!data) return [];
       
-      const logs = JSON.parse(data);
-      return logs.map((log: any) => ({
-        ...log,
-        timestamp: new Date(log.timestamp),
-      }));
+      const raw = JSON.parse(data) as unknown[];
+      return raw.map((l) => {
+        const logObj = l as Record<string, unknown>;
+        const result: HabitLog = {
+          id: String(logObj.id),
+          habitId: String(logObj.habitId),
+          date: String(logObj.date),
+          completed: Boolean(logObj.completed),
+          timestamp: new Date(String(logObj.timestamp)),
+        };
+        return result;
+      });
     } catch {
       return [];
     }
@@ -192,7 +206,7 @@ export class HabitStorage {
       if (data.settings) {
         localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
       }
-    } catch (error) {
+  } catch {
       throw new Error("Invalid JSON data format");
     }
   }

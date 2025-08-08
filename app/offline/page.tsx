@@ -15,7 +15,7 @@ export default function OfflinePage() {
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-sm font-medium text-gray-900">
-              You're offline
+              You&apos;re offline
             </p>
             <p className="text-xs text-gray-500">
               App works offline. Data syncs when reconnected.

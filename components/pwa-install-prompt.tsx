@@ -16,7 +16,7 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt() {
-  // Don't show PWA prompt in Capacitor (native app)
+  // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
   
   // Only show if analytics notice is acknowledged
@@ -28,10 +28,7 @@ export function PWAInstallPrompt() {
   const [isInstalled, setIsInstalled] = useState(false);
   const { toast } = useToast();
 
-  // Early return if running in Capacitor
-  if (isCapacitorApp) {
-    return null;
-  }
+  // Note: do not early-return before hooks (rules-of-hooks)
 
   // Hide install prompt immediately if user has already dismissed it
   useEffect(() => {
@@ -68,13 +65,16 @@ export function PWAInstallPrompt() {
       }
     };
     window.addEventListener('storage', handleStorage);
+
     // Check if app is already installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (window.navigator as any).standalone === true;
-    
+    const isInWebAppiOS = (navigator as Navigator & { standalone?: boolean }).standalone === true;
+
     if (isStandalone || isInWebAppiOS) {
       setIsInstalled(true);
-      return () => window.removeEventListener('storage', handleStorage);
+      return () => {
+        window.removeEventListener('storage', handleStorage);
+      };
     }
 
     // Check if user has dismissed the prompt before
@@ -84,14 +84,12 @@ export function PWAInstallPrompt() {
     const handler = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
       setDeferredPrompt(e);
-      
       // Only show if not previously dismissed
       if (!hasDismissed) {
         setShowInstallPrompt(true);
       }
     };
-
-    window.addEventListener('beforeinstallprompt', handler as EventListener);
+    window.addEventListener('beforeinstallprompt', handler as unknown as EventListener);
 
     // Listen for app installed event
     const appInstalledHandler = () => {
@@ -99,7 +97,6 @@ export function PWAInstallPrompt() {
       setShowInstallPrompt(false);
       sessionStorage.removeItem('pwa-install-dismissed');
     };
-
     window.addEventListener('appinstalled', appInstalledHandler);
 
     // For testing - show install prompt after 2 seconds if not installed and not dismissed
@@ -115,24 +112,23 @@ export function PWAInstallPrompt() {
       setShowInstallPrompt(true);
       // Do NOT set analyticsAcknowledged here
     };
-
     window.addEventListener('trigger-pwa-install', handleManualTrigger);
 
     return () => {
-      window.removeEventListener('beforeinstallprompt', handler as EventListener);
+      window.removeEventListener('beforeinstallprompt', handler as unknown as EventListener);
       window.removeEventListener('appinstalled', appInstalledHandler);
       window.removeEventListener('trigger-pwa-install', handleManualTrigger);
       window.removeEventListener('storage', handleStorage);
       clearTimeout(timer);
     };
-  // Fix: Only set analyticsAcknowledged to true if not dismissed, and do not reset analyticsAcknowledged on dismiss
+  }, []);
+
+  // Ensure prompt hides if dismissed in this session
   useEffect(() => {
     if (typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true' && showInstallPrompt) {
       setShowInstallPrompt(false);
-      // Do not reset analyticsAcknowledged here, let manual trigger override
     }
   }, [showInstallPrompt]);
-  }, []);
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
@@ -161,10 +157,13 @@ export function PWAInstallPrompt() {
   // If manually triggered (via settings), showInstallPrompt will be true even if analyticsAcknowledged is false
   // Fix: Only check sessionStorage on client
   // Fix: Only render the prompt on the client, never on the server
-  if (typeof window === 'undefined') {
-    return null;
-  }
-  if (isInstalled || (window.sessionStorage.getItem('pwa-install-dismissed') === 'true' && !analyticsAcknowledged) || !showInstallPrompt) {
+  if (
+    typeof window === 'undefined' ||
+    isCapacitorApp ||
+    isInstalled ||
+    (typeof window !== 'undefined' && window.sessionStorage.getItem('pwa-install-dismissed') === 'true' && !analyticsAcknowledged) ||
+    !showInstallPrompt
+  ) {
     return null;
   }
 

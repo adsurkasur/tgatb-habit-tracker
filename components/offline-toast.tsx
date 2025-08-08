@@ -2,7 +2,7 @@
 
 import { useNetworkStatus } from '@/hooks/use-network-status';
 import { WifiOff } from 'lucide-react';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 
 export function OfflineToast() {
   const { isOnline } = useNetworkStatus();
@@ -18,7 +18,7 @@ export function OfflineToast() {
   const startYRef = useRef(0);
   const startTimeRef = useRef(0);
 
-  const clearTimers = () => {
+  const clearTimers = useCallback(() => {
     if (exitTimerRef.current) {
       clearTimeout(exitTimerRef.current);
       exitTimerRef.current = null;
@@ -27,9 +27,9 @@ export function OfflineToast() {
       clearTimeout(hideTimerRef.current);
       hideTimerRef.current = null;
     }
-  };
+  }, []);
 
-  const dismissToast = () => {
+  const dismissToast = useCallback(() => {
     clearTimers();
     setIsExiting(true);
     hideTimerRef.current = setTimeout(() => {
@@ -38,7 +38,7 @@ export function OfflineToast() {
       setIsSwipedAway(false);
       setDragOffset(0);
     }, 300);
-  };
+  }, [clearTimers]);
 
   useEffect(() => {
     clearTimers();
@@ -65,26 +65,26 @@ export function OfflineToast() {
     }
 
     return clearTimers;
-  }, [isOnline]); // Only depend on isOnline
+  }, [isOnline, isSwipedAway, showToast, clearTimers, dismissToast]);
 
   // Touch/mouse event handlers
-  const handleStart = (clientY: number) => {
+  const handleStart = useCallback((clientY: number) => {
     if (isExiting) return;
     clearTimers(); // Pause auto-dismiss while dragging
     setIsDragging(true);
     startYRef.current = clientY;
     startTimeRef.current = Date.now();
-  };
+  }, [isExiting, clearTimers]);
 
-  const handleMove = (clientY: number) => {
+  const handleMove = useCallback((clientY: number) => {
     if (!isDragging || isExiting) return;
     
     const deltaY = clientY - startYRef.current;
     const clampedDelta = Math.max(0, deltaY); // Only allow downward movement
     setDragOffset(clampedDelta);
-  };
+  }, [isDragging, isExiting]);
 
-  const handleEnd = () => {
+  const handleEnd = useCallback(() => {
     if (!isDragging || isExiting) return;
     
     const deltaY = dragOffset;
@@ -110,7 +110,7 @@ export function OfflineToast() {
         setIsExiting(false);
       }, 2300);
     }
-  };
+  }, [isDragging, isExiting, dragOffset, dismissToast]);
 
   // Mouse events
   const handleMouseDown = (e: React.MouseEvent) => {
@@ -118,13 +118,7 @@ export function OfflineToast() {
     handleStart(e.clientY);
   };
 
-  const handleMouseMove = (e: React.MouseEvent) => {
-    handleMove(e.clientY);
-  };
-
-  const handleMouseUp = () => {
-    handleEnd();
-  };
+  // Removed unused mouse move/up handlers (we use global listeners below)
 
   // Touch events
   const handleTouchStart = (e: React.TouchEvent) => {
@@ -158,7 +152,7 @@ export function OfflineToast() {
       document.removeEventListener('mousemove', handleGlobalMouseMove);
       document.removeEventListener('mouseup', handleGlobalMouseUp);
     };
-  }, [isDragging, dragOffset]);
+  }, [isDragging, dragOffset, handleEnd, handleMove]);
 
   if (!showToast) return null;
 
@@ -192,7 +186,7 @@ export function OfflineToast() {
       onTouchEnd={handleTouchEnd}
     >
       <WifiOff className="h-4 w-4 text-orange-600" />
-      <span className="text-sm text-gray-800">You're offline. Some features may be limited.</span>
+  <span className="text-sm text-gray-800">You&apos;re offline. Some features may be limited.</span>
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -32,7 +32,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
   }, [isVisible, onClose]);
   const [currentStep, setCurrentStep] = useState(0);
-  const [targetPosition, setTargetPosition] = useState<{ x: number; y: number; width: number; height: number } | null>(null);
+  // targetPosition was unused; removed to reduce warnings
   const [isPositionReady, setIsPositionReady] = useState(false);
   const [cardOpacity, setCardOpacity] = useState(0);
   const [allPositions, setAllPositions] = useState<{ [key: number]: { x: number; y: number; width: number; height: number } | null }>({});
@@ -40,11 +40,11 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const [shouldMoveToFinalPosition, setShouldMoveToFinalPosition] = useState(false);
   
   // Function to calculate step-specific initial positions
-  const getInitialCardPosition = (step: number) => {
+  const getInitialCardPosition = useCallback((step: number) => {
     if (step === 3) { // Step 4 (0-indexed) - habit card step
       // Use the same logic as the viewport clipping detection
       const isMobile = window.innerWidth < 640;
-      const cardWidth = isMobile ? 288 : 320;
+  // Removed unused local cardWidth to satisfy lint; sizing handled later
       
       if (!isMobile) {
         // On desktop, assume we have enough space for right positioning initially
@@ -75,7 +75,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       left: '50%',
       transform: 'translate(-50%, -50%)'
     };
-  };
+  }, []);
 
   const [cardPosition, setCardPosition] = useState<{ top: string | number; left: string | number; transform: string }>(
     getInitialCardPosition(0)
@@ -100,7 +100,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       const newInitialPosition = getInitialCardPosition(currentStep);
       setCardPosition(newInitialPosition);
     }
-  }, [currentStep, isVisible]);
+  }, [currentStep, isVisible, getInitialCardPosition]);
 
   // Notify parent of step changes
   useEffect(() => {
@@ -110,7 +110,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   }, [currentStep, onStepChange]);
 
   // Dynamic steps based on whether user has habits
-  const getWelcomeSteps = (): WelcomeStep[] => [
+  const getWelcomeSteps = useCallback((): WelcomeStep[] => [
     {
       id: 'welcome',
       title: '🎉 Welcome to Habit Tracker!',
@@ -153,11 +153,10 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       targetSelector: '',
       position: 'bottom'
     }
-  ];
+  ], [hasHabits]);
 
-  const welcomeSteps = getWelcomeSteps();
+  const welcomeSteps = useMemo(() => getWelcomeSteps(), [getWelcomeSteps]);
   const currentStepData = welcomeSteps[currentStep];
-  const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === welcomeSteps.length - 1;
 
   // Calculate position for current step only when needed
@@ -169,8 +168,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     const calculateCurrentStepPosition = () => {
-      const steps = getWelcomeSteps();
-      const currentStepData = steps[currentStep];
+  const steps = getWelcomeSteps();
+  const currentStepData = steps[currentStep];
       
       if (!currentStepData?.targetSelector) {
         // No target selector, use center position
@@ -243,7 +242,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       window.removeEventListener('resize', handleResize);
       window.removeEventListener('scroll', handleResize);
     };
-  }, [isVisible, currentStep]);
+  }, [isVisible, currentStep, getWelcomeSteps, currentStepData.id, getInitialCardPosition]);
 
   // Calculate and set card position when position data is ready AND we should move to final position
   useEffect(() => {
@@ -252,8 +251,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     const stepTargetPosition = allPositions[currentStep];
-    const steps = getWelcomeSteps();
-    const step = steps[currentStep];
+  const steps = getWelcomeSteps();
+  const step = steps[currentStep];
     
     if (!stepTargetPosition) {
       // For center-positioned steps (welcome, complete), use the initial position
@@ -360,7 +359,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
         transform: calculatedTransform
       });
     }
-  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition]);
+  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition, getWelcomeSteps, getInitialCardPosition]);
 
   // Simple fade control - card fades in when position is ready
   useEffect(() => {
@@ -374,7 +373,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     if (isPositionReady) {
       // For habit-card step, ensure we wait for position calculation to complete
       // before making the card visible to prevent "blinking"
-      const currentStepData = getWelcomeSteps()[currentStep];
+  const currentStepData = getWelcomeSteps()[currentStep];
       const extraDelay = currentStepData.id === 'habit-card' ? 50 : 0;
       
       const timer = setTimeout(() => {
@@ -393,7 +392,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       // Position not ready, keep card hidden
       setCardOpacity(0);
     }
-  }, [isVisible, isPositionReady, currentStep]);
+  }, [isVisible, isPositionReady, currentStep, getWelcomeSteps]);
 
   const handleNext = () => {
     if (isLastStep) {

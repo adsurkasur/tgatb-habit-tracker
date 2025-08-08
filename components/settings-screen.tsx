@@ -2,7 +2,6 @@ import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Separator } from "@/components/ui/separator";
 import { 
   ArrowLeft, 
   Moon, 
@@ -46,7 +45,7 @@ export function SettingsScreen({
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
-  const [canInstallPWA, setCanInstallPWA] = useState(false);
+  const [, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
   const { setVisible: setStatusBarVisible, isNative } = useStatusBar();
@@ -66,11 +65,11 @@ export function SettingsScreen({
 
     // Check if app is already installed
     const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (window.navigator as any).standalone === true;
+  const isInWebAppiOS = (navigator as Navigator & { standalone?: boolean }).standalone === true;
     setIsAppInstalled(isStandalone || isInWebAppiOS);
 
     // Listen for install prompt availability
-    const handler = (e: any) => {
+  const handler = (e: Event) => {
       e.preventDefault();
       setCanInstallPWA(true);
     };
@@ -106,7 +105,7 @@ export function SettingsScreen({
           duration: 3000,
         });
       }
-    } catch (error) {
+  } catch {
       toast({
         title: "Export Failed",
         description: "There was an error exporting your data. Please try again.",
@@ -133,7 +132,7 @@ export function SettingsScreen({
     try {
       const { HabitStorage } = await import("@/lib/habit-storage");
       await HabitStorage.saveSettings(newSettings);
-    } catch (e) {
+  } catch {
       // fallback: do nothing
     }
     if (isNative) {

@@ -69,11 +69,11 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 
 ## Tech Stack
 
-- **Framework:** Next.js 14+ (App Router)
+- **Framework:** Next.js 15 (App Router)
 - **Language:** TypeScript
 - **UI:** Shadcn/ui, Radix UI, Tailwind CSS
 - **State Management:** TanStack Query
-- **Storage:** LocalStorage, Service Worker cache
+- **Storage:** LocalStorage (web) and Capacitor Preferences (native), Service Worker cache
 - **Native:** Capacitor (Android/iOS)
 - **Deployment:** Vercel (Web), Android Studio (Native)
 
@@ -86,7 +86,7 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 
 - Node.js 20+
 - npm or yarn
-- For Android: Java JDK 17+, Android Studio (see [ANDROID_SETUP.md](docs/ANDROID_SETUP.md))
+- For Android: Java JDK 21, Android Studio (see [ANDROID_SETUP.md](docs/ANDROID_SETUP.md))
 
 ### Installation
 

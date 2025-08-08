@@ -2,7 +2,7 @@ import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from 
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+// import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
 import { cn } from "@/lib/utils";
 import { 
@@ -23,18 +23,18 @@ import {
 } from "lucide-react";
 import React, { useState, useCallback } from "react";
 import { Habit } from "@shared/schema";
-import { DonationDialog } from "./donation-dialog";
-import { HistoryDialog } from "./history-dialog";
-import { AboutDialog } from "./about-dialog";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
 interface NavigationDrawerProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   goodHabits: Habit[];
   badHabits: Habit[];
   onSettingsClick: () => void;
   onAddHabitClick: () => void;
   onHistoryClick?: () => void;
   onDonateClick?: () => void;
+  onAboutClick?: () => void;
   onEditHabit?: (habit: Habit) => void;
   onDeleteHabit?: (habitId: string) => void;
   onHelpClick?: () => void;
@@ -117,62 +117,57 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   onAddHabitClick,
   onHistoryClick,
   onDonateClick,
+  onAboutClick,
   onEditHabit,
   onDeleteHabit,
-  onHelpClick
+  onHelpClick,
+  open,
+  onOpenChange
 }) => {
-  const [open, setOpen] = useState(false);
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
   const [badHabitsOpen, setBadHabitsOpen] = useState(false);
-  const [isDonationDialogOpen, setIsDonationDialogOpen] = useState(false);
-  const [isHistoryDialogOpen, setIsHistoryDialogOpen] = useState(false);
-  const [isAboutDialogOpen, setIsAboutDialogOpen] = useState(false);
   
-  const allHabits = [...goodHabits, ...badHabits];
+  // const allHabits = [...goodHabits, ...badHabits];
 
   // Memoize callbacks to prevent child re-renders
   const handleSettingsClick = useCallback(() => {
-    onSettingsClick();
-    setOpen(false);
-  }, [onSettingsClick]);
+  onSettingsClick();
+  onOpenChange(false);
+  }, [onSettingsClick, onOpenChange]);
 
-  const handleAddHabitClick = useCallback(() => {
-    onAddHabitClick();
-    setOpen(false);
-  }, [onAddHabitClick]);
 
   const handleHistoryClick = useCallback(() => {
-    setIsHistoryDialogOpen(true);
-    setOpen(false);
-  }, []);
+  onHistoryClick?.();
+  onOpenChange(false);
+  }, [onHistoryClick, onOpenChange]);
 
   const handleDonateClick = useCallback(() => {
-    setIsDonationDialogOpen(true);
-    setOpen(false);
-  }, []);
+  onDonateClick?.();
+  onOpenChange(false);
+  }, [onDonateClick, onOpenChange]);
 
   const handleAboutClick = useCallback(() => {
-    setIsAboutDialogOpen(true);
-    setOpen(false);
-  }, []);
+  onAboutClick?.();
+  onOpenChange(false);
+  }, [onAboutClick, onOpenChange]);
 
   const handleHelpClick = useCallback(() => {
-    onHelpClick?.();
-    setOpen(false);
-  }, [onHelpClick]);
+  onHelpClick?.();
+  onOpenChange(false);
+  }, [onHelpClick, onOpenChange]);
 
   // Handle mobile back navigation for the navigation drawer
   useMobileBackNavigation({
     onBackPressed: () => {
-      setOpen(false);
+      onOpenChange(false);
     },
     isActive: open
   });
 
   return (
-    <Sheet open={open} onOpenChange={setOpen}>
+  <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="state-layer-hover">
+        <Button variant="ghost" size="icon" className="state-layer-hover" onClick={() => onOpenChange(true)}>
           <Menu className="w-6 h-6" />
         </Button>
       </SheetTrigger>
@@ -190,7 +185,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
               </div>
               <button
-                onClick={() => setOpen(false)}
+                onClick={() => onOpenChange(false)}
                 className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
               >
                 <X className="w-5 h-5" />
@@ -303,6 +298,14 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"
+                onClick={() => { onAddHabitClick(); onOpenChange(false); }}
+              >
+                <Plus className="w-5 h-5 mr-3" />
+                <span>Add Habit</span>
+              </Button>
+              <Button
+                variant="ghost"
+                className="w-full justify-start p-3 h-auto state-layer-hover"
                 onClick={handleHelpClick}
               >
                 <HelpCircle className="w-5 h-5 mr-3" />
@@ -349,24 +352,6 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
         </div>
       </SheetContent>
       
-      {/* Donation Dialog */}
-      <DonationDialog 
-        open={isDonationDialogOpen} 
-        onOpenChange={setIsDonationDialogOpen} 
-      />
-      
-      {/* History Dialog */}
-      <HistoryDialog 
-        open={isHistoryDialogOpen} 
-        onOpenChange={setIsHistoryDialogOpen}
-        habits={allHabits}
-      />
-      
-      {/* About Dialog */}
-      <AboutDialog 
-        open={isAboutDialogOpen} 
-        onOpenChange={setIsAboutDialogOpen} 
-      />
     </Sheet>
   );
 });

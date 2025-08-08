@@ -2,7 +2,6 @@ import React, { useState, useRef } from 'react';
 import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
@@ -152,7 +151,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
       timerRef.current = setTimeout(() => {
         setCopiedAddress(null);
       }, 3000);
-    } catch (error) {
+  } catch {
       toast({
         title: "Failed to copy",
         description: "Please copy the address manually",

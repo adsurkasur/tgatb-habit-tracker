@@ -8,7 +8,7 @@ export function isStandalone(): boolean {
   
   return (
     window.matchMedia('(display-mode: standalone)').matches ||
-    (window.navigator as any).standalone === true
+  (navigator as Navigator & { standalone?: boolean }).standalone === true
   );
 }
 
@@ -80,7 +80,7 @@ export function showNotification(title: string, options?: NotificationOptions): 
 }
 
 // Cache habit data for offline use
-export function cacheHabitData(data: any): void {
+export function cacheHabitData<T>(data: T): void {
   if (typeof window === 'undefined') return;
   
   try {
@@ -94,14 +94,14 @@ export function cacheHabitData(data: any): void {
 }
 
 // Get cached habit data
-export function getCachedHabitData(): any | null {
+export function getCachedHabitData<T = unknown>(): T | null {
   if (typeof window === 'undefined') return null;
   
   try {
     const cached = localStorage.getItem('cached-habit-data');
     if (!cached) return null;
     
-    const { data, timestamp } = JSON.parse(cached);
+  const { data, timestamp } = JSON.parse(cached) as { data: T; timestamp: number };
     
     // Check if cache is older than 24 hours
     const twentyFourHours = 24 * 60 * 60 * 1000;
@@ -137,7 +137,8 @@ export async function registerBackgroundSync(tag: string): Promise<boolean> {
   try {
     const registration = await navigator.serviceWorker.ready;
     if ('sync' in registration) {
-      await (registration as any).sync.register(tag);
+      // @ts-expect-error SyncManager is not in TS lib by default
+      await registration.sync.register(tag);
       return true;
     }
   } catch (error) {

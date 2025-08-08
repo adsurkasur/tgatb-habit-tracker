@@ -1,6 +1,6 @@
 {
   "name": "tgatb-habit-tracker",
-  "version": "0.1.2",
+  "version": "0.2.0",
   "description": "The Good and The Bad: Habit Tracker - A minimalist habit tracking application",
   "type": "module",
   "license": "apache 2.0",
@@ -27,7 +27,6 @@
     "@capacitor/preferences": "^7.0.2",
     "@capacitor/splash-screen": "^7.0.2",
     "@capacitor/status-bar": "^7.0.2",
-    "@capacitor/storage": "^1.2.5",
     "@capawesome/capacitor-android-edge-to-edge-support": "^7.2.2",
     "@hookform/resolvers": "^3.10.0",
     "@jridgewell/trace-mapping": "^0.3.25",
