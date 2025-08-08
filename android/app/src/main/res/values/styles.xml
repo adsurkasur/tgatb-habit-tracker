@@ -3,20 +3,20 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:statusBarColor">@android:color/transparent</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">#6750a4</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <item name="android:windowTranslucentStatus">true</item>
-        <item name="android:statusBarColor">@color/status_bar_color</item>
+    <item name="android:windowTranslucentStatus">false</item>
+    <item name="android:statusBarColor">@color/status_bar_color</item>
         <!-- Prevent fullscreen popup/dialog -->
         <item name="android:windowFullscreen">false</item>
-        <item name="android:windowTranslucentNavigation">true</item>
-        <item name="android:navigationBarColor">@android:color/transparent</item>
+    <item name="android:windowTranslucentNavigation">false</item>
+    <item name="android:navigationBarColor">#6750a4</item>
     </style>
 
 
