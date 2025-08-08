@@ -21,30 +21,12 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const shouldHideStatusBar = settings?.fullscreenMode ?? false;
     
     if (platform === 'android') {
-      // Basic setup - colors will be managed by useSystemBars hook
+      // One-time basic setup; ongoing control is handled by hooks
       await StatusBar.show();
-      
-      try {
-        // Show navigation bar by default (Note: @squareetlabs plugin only supports hide/show)
-        await NavigationBar.show();
-      } catch (e) {
-        console.warn('NavigationBar.show failed:', e);
-      }
 
-      // Handle fullscreen mode with enhanced hiding
       if (shouldHideStatusBar) {
         await StatusBar.hide();
-        try {
-          // Use the specialized plugin for hiding navigation bar
-          await NavigationBar.hide();
-          
-          // Re-apply after a short delay to ensure persistence
-          setTimeout(async () => {
-            await NavigationBar.hide();
-          }, 100);
-        } catch (e) {
-          console.warn('NavigationBar.hide failed:', e);
-        }
+        // Do not loop or force nav bar state here to avoid flicker
       }
     } else if (platform === 'ios') {
       // iOS configuration

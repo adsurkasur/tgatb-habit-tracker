@@ -24,8 +24,8 @@ declare global {
  */
 export const useSystemBars = () => {
   const { resolvedTheme } = useTheme();
-  const retryIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const isInitializedRef = useRef(false);
+  const reapplyTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') {
@@ -47,7 +47,7 @@ export const useSystemBars = () => {
       }
     };
 
-  const setBars = async () => {
+    const setBars = async () => {
       const isDarkMode = resolvedTheme === 'dark';
       
       // Define colors based on your app's purple theme
@@ -81,13 +81,6 @@ export const useSystemBars = () => {
       console.log(`Fallback: Status bar set to ${selectedColor} (nav bar stays transparent)`);
         }
 
-        // Respect OS navigation bar (do not hide). Explicitly show to avoid edge cases.
-        try {
-          await NavigationBar.show();
-        } catch (e) {
-          console.warn("NavigationBar.show failed:", e);
-        }
-        
       } catch (e) {
         console.error("Failed to set system bar colors:", e);
       }
@@ -95,34 +88,21 @@ export const useSystemBars = () => {
 
     // Initialize EdgeToEdge on first run
     initializeEdgeToEdge();
-
-    // Clear any existing retry interval
-    if (retryIntervalRef.current) {
-      clearInterval(retryIntervalRef.current);
-    }
-
-    // Set immediately
+    
+    // Apply once on mount
     setBars();
-    
-    // Set up persistent retry mechanism for Android 15
-    retryIntervalRef.current = setInterval(setBars, 3000); // Retry every 3 seconds
-    
-    // Also retry with delays to handle Android 15 timing issues
-    const timeouts = [100, 500, 1000, 2000, 5000];
-    timeouts.forEach(delay => {
-      setTimeout(setBars, delay);
-    });
 
     // Add visibility change listener to re-apply colors when app comes to foreground
     const handleVisibilityChange = () => {
       if (!document.hidden) {
-        setTimeout(setBars, 100);
-        setTimeout(setBars, 500);
+        if (reapplyTimeoutRef.current) clearTimeout(reapplyTimeoutRef.current);
+        reapplyTimeoutRef.current = setTimeout(setBars, 150);
       }
     };
 
     const handleFocus = () => {
-      setBars();
+      if (reapplyTimeoutRef.current) clearTimeout(reapplyTimeoutRef.current);
+      reapplyTimeoutRef.current = setTimeout(setBars, 150);
     };
 
     document.addEventListener('visibilitychange', handleVisibilityChange);
@@ -130,9 +110,7 @@ export const useSystemBars = () => {
 
     // Cleanup
     return () => {
-      if (retryIntervalRef.current) {
-        clearInterval(retryIntervalRef.current);
-      }
+      if (reapplyTimeoutRef.current) clearTimeout(reapplyTimeoutRef.current);
       document.removeEventListener('visibilitychange', handleVisibilityChange);
       window.removeEventListener('focus', handleFocus);
     };
