@@ -50,85 +50,81 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
 
     const targetFullscreen = forceFullscreen ?? fullscreenMode ?? globalState.isFullscreen;
     
+    console.log(`🔧 [SystemBars] Starting application: fullscreen=${targetFullscreen}, platform=${Capacitor.getPlatform()}`);
+    console.log(`🔧 [SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
+    
     try {
       if (isAndroid) {
-        // Primary approach: Use Safe Area plugin for consistent system bar management
-        try {
-          const { SafeArea } = (window as any).Capacitor?.Plugins || {};
-          if (SafeArea) {
-            if (targetFullscreen) {
-              // Fullscreen: Hide both status and navigation bars
-              await StatusBar.hide();
-              try {
-                await NavigationBar.setNavigationBarColor({ 
-                  color: '#000000', 
-                  darkButtons: false 
-                });
-              } catch (e) {
-                console.warn('NavigationBar hide failed:', e);
-              }
-              
-              // Configure Safe Area for edge-to-edge
-              await SafeArea.enable({
-                config: {
-                  customColorsForSystemBars: true,
-                  statusBarColor: '#00000000', // transparent
-                  statusBarContent: 'light',
-                  navigationBarColor: '#00000000', // transparent
-                  navigationBarContent: 'light',
-                }
+        // Debug: Check what plugins are available
+        const availablePlugins = Object.keys((window as any).Capacitor?.Plugins || {});
+        console.log(`🔧 [SystemBars] Available plugins: ${availablePlugins.join(', ')}`);
+        
+        // Primary approach: Use StatusBar API directly with proper configuration
+        console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
+        
+        if (targetFullscreen) {
+          console.log(`🔧 [SystemBars] Applying fullscreen mode`);
+          await StatusBar.hide();
+          
+          // Set navigation bar to black/transparent for fullscreen
+          try {
+            const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
+            if (NavigationBar) {
+              await NavigationBar.setNavigationBarColor({ 
+                color: '#000000', 
+                darkButtons: false 
               });
+              console.log(`🔧 [SystemBars] NavigationBar set to black for fullscreen`);
             } else {
-              // Normal mode: Show purple system bars
-              await StatusBar.show();
-              await StatusBar.setStyle({ style: StatusBarStyles.Light });
-              await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
-              
-              try {
-                await NavigationBar.setNavigationBarColor({ 
-                  color: PURPLE_COLOR, 
-                  darkButtons: false 
-                });
-              } catch (e) {
-                console.warn('NavigationBar color failed:', e);
-              }
-              
-              // Configure Safe Area with purple theme
-              await SafeArea.enable({
-                config: {
-                  customColorsForSystemBars: true,
-                  statusBarColor: PURPLE_COLOR,
-                  statusBarContent: 'light',
-                  navigationBarColor: PURPLE_COLOR,
-                  navigationBarContent: 'light',
-                }
-              });
+              console.warn('🔧 [SystemBars] NavigationBar plugin not available');
             }
-            
-            globalState.isFullscreen = targetFullscreen;
-            console.log(`System bars applied via Safe Area: fullscreen=${targetFullscreen}`);
-            return;
+          } catch (e) {
+            console.warn('🔧 [SystemBars] NavigationBar fullscreen failed:', e);
           }
-        } catch (e) {
-          console.warn('SafeArea plugin failed, falling back to StatusBar API:', e);
-        }
-
-        // Fallback: Native SystemUi plugin
-        const { SystemUi } = (window as any).Capacitor?.Plugins || {};
-        if (SystemUi) {
-          await SystemUi.setFullscreen({ enabled: targetFullscreen });
-          globalState.isFullscreen = targetFullscreen;
-          console.log(`System bars applied via SystemUi: fullscreen=${targetFullscreen}`);
-          return;
+        } else {
+          console.log(`🔧 [SystemBars] Applying normal mode with purple bars`);
+          
+          // Show status bar first
+          await StatusBar.show();
+          console.log(`🔧 [SystemBars] StatusBar shown`);
+          
+          // CRITICAL: Set style to Light (white text/icons on purple background)
+          await StatusBar.setStyle({ style: StatusBarStyles.Light });
+          console.log(`🔧 [SystemBars] StatusBar style set to Light (white icons)`);
+          
+          // Set purple background color
+          await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
+          console.log(`🔧 [SystemBars] StatusBar background set to: ${PURPLE_COLOR}`);
+          
+          // Set navigation bar to purple
+          try {
+            const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
+            if (NavigationBar) {
+              await NavigationBar.setNavigationBarColor({ 
+                color: PURPLE_COLOR, 
+                darkButtons: false 
+              });
+              console.log(`🔧 [SystemBars] NavigationBar set to purple: ${PURPLE_COLOR}`);
+            } else {
+              console.warn('🔧 [SystemBars] NavigationBar plugin not available');
+            }
+          } catch (e) {
+            console.warn('🔧 [SystemBars] NavigationBar color failed:', e);
+          }
         }
         
-        // Last resort: Basic StatusBar API
-        if (targetFullscreen) {
-          await StatusBar.hide();
-        } else {
-          await StatusBar.show();
-          await StatusBar.setStyle({ style: StatusBarStyles.Light });
-          await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
+        // Secondary: Try SystemUi plugin for native system UI control
+        try {
+          const { SystemUi } = (window as any).Capacitor?.Plugins || {};
+          if (SystemUi) {
+            console.log(`🔧 [SystemBars] Enhancing with native SystemUi plugin`);
+            await SystemUi.setFullscreen({ enabled: targetFullscreen });
+            console.log(`🔧 [SystemBars] SystemUi plugin applied: fullscreen=${targetFullscreen}`);
+          } else {
+            console.log(`🔧 [SystemBars] SystemUi plugin not available`);
+          }
+        } catch (e) {
+          console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e);
         }
       } else if (isIOS) {
         // iOS implementation
@@ -142,7 +138,10 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
       }
       
       globalState.isFullscreen = targetFullscreen;
-      console.log(`System bars applied: fullscreen=${targetFullscreen}`);
+      console.log(`🔧 [SystemBars] System bars configuration completed: fullscreen=${targetFullscreen}`);
+      
+      // Small delay to ensure all settings are applied
+      await new Promise(resolve => setTimeout(resolve, 100));
       
     } catch (error) {
       console.error('Failed to apply system bars:', error);
@@ -168,24 +167,24 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     }, DEBOUNCE_MS);
   }, [applySystemBars]);
 
-  // Initialize system bars on first mount
+  // Initialize system bars on first mount and handle fullscreen changes
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
     
-    if (!globalState.isInitialized) {
-      globalState.isInitialized = true;
-      // Apply immediately on first initialization
-      applySystemBars();
+    // Only apply if this is the first initialization OR if fullscreen mode has explicitly changed
+    const shouldApply = !globalState.isInitialized || (fullscreenMode !== undefined && fullscreenMode !== globalState.isFullscreen);
+    
+    if (shouldApply) {
+      if (!globalState.isInitialized) {
+        globalState.isInitialized = true;
+        // Apply immediately on first initialization
+        applySystemBars(fullscreenMode);
+      } else {
+        // Use debounced apply for subsequent changes
+        debouncedApply(fullscreenMode);
+      }
     }
-  }, [applySystemBars]);
-
-  // Apply changes when fullscreen mode changes
-  useEffect(() => {
-    if (!Capacitor.isNativePlatform()) return;
-    if (fullscreenMode !== undefined) {
-      debouncedApply(fullscreenMode);
-    }
-  }, [fullscreenMode, debouncedApply]);
+  }, [applySystemBars, debouncedApply, fullscreenMode]);
 
   // Cleanup
   useEffect(() => {

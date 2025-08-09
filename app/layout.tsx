@@ -6,7 +6,6 @@ import { Providers } from "./providers";
 // import { ServiceWorkerRegistration } from "@/components/sw-registration";
 // import { AnalyticsNotice } from "@/components/analytics-notice";
 import { CapacitorInit } from "@/components/capacitor-init";
-import { SystemBarInit } from "./system-bar-init";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -86,7 +85,6 @@ export default function RootLayout({
       </head>
       <body>
   <CapacitorInit />
-  <SystemBarInit />
         {/* <ServiceWorkerRegistration /> */}
         <Providers>
           {children}

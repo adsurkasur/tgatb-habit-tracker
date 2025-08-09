@@ -18,7 +18,7 @@ interface NavigationBarPlugin {
 }
 const navBar: Partial<NavigationBarPlugin> = NavigationBar as unknown as Partial<NavigationBarPlugin>;
 
-// Simplified initializer (v0.1.0 style) – hook will manage bar colors
+// Simplified initializer (v0.1.0 style) – unified hook manages system bars
 export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
   if (!isNativePlatform()) return;
   try {
@@ -26,18 +26,8 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     const platform = getPlatform();
     fullscreenPref = settings?.fullscreenMode ?? false;
 
-    if (platform === 'android') {
-      await StatusBar.show().catch(()=>{});
-      try { await navBar.show?.(); } catch(e) { console.warn('NavigationBar.show failed:', e); }
-      if (fullscreenPref) {
-        await StatusBar.hide().catch(()=>{});
-        try { await navBar.hide?.(); } catch(e) { console.warn('NavigationBar.hide failed:', e); }
-      }
-    } else if (platform === 'ios') {
-      // CRITICAL FIX: Light style = WHITE text for purple background
-      await StatusBar.setStyle({ style: StatusBarStyles.Light }).catch(()=>{});
-      if (fullscreenPref) await StatusBar.hide().catch(()=>{}); else await StatusBar.show().catch(()=>{});
-    }
+    // NOTE: Status bar and navigation bar management is now handled by useSystemBarsUnified hook
+    // This prevents conflicts and ensures single source of truth for system UI
 
     // Basic CSS insets
     try {
@@ -56,22 +46,14 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
   }
 };
 
-// Simple fullscreen toggle (no immersive custom plugin)
+// Simple fullscreen toggle (delegated to unified hook)
 export async function setFullscreenMode(enabled: boolean) {
   if (!isNativePlatform()) return;
   fullscreenPref = enabled;
-  const platform = getPlatform();
-  if (platform === 'android') {
-    if (enabled) {
-      await StatusBar.hide().catch(()=>{});
-      try { await navBar.hide?.(); } catch {}
-    } else {
-      await StatusBar.show().catch(()=>{});
-      try { await navBar.show?.(); } catch {}
-    }
-  } else if (platform === 'ios') {
-    if (enabled) await StatusBar.hide().catch(()=>{}); else await StatusBar.show().catch(()=>{});
-  }
+  
+  // NOTE: Actual system bar changes are handled by useSystemBarsUnified hook
+  // This just tracks the preference for other parts of the app
+  console.log(`🔧 [CapacitorLib] Fullscreen preference set to: ${enabled} (actual UI changes handled by unified hook)`);
 }
 
 // Haptic feedback helpers
