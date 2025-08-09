@@ -134,25 +134,11 @@ public class SystemUiPlugin extends Plugin {
             
             // ANDROID 15+ COMPATIBILITY: Use WindowInsets API instead of deprecated window.statusBarColor
             if (Build.VERSION.SDK_INT >= 35) { // Android 15+ (API 35)
-                // Use WindowInsets API for Android 15+
-                View decorView = window.getDecorView();
-                decorView.setOnApplyWindowInsetsListener((view, insets) -> {
-                    // Convert to WindowInsetsCompat for consistent API
-                    WindowInsetsCompat insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets, view);
-                    
-                    // Set status bar background using view background
-                    view.setBackgroundColor(purple);
-                    
-                    // Get status bar insets for proper padding  
-                    androidx.core.graphics.Insets statusBarInsets = insetsCompat.getInsets(WindowInsetsCompat.Type.statusBars());
-                    
-                    // Apply padding to avoid content overlap
-                    view.setPadding(0, statusBarInsets.top, 0, 0);
-                    
-                    return insets;
-                });
-                
-                // Still set navigation bar color if possible
+                // FIX: Do NOT override the existing insets listener or add padding –
+                // doing so duplicated the status bar height (system already applies
+                // insets when decorFitsSystemWindows=true). We just set colors.
+                try { window.setStatusBarColor(purple); } catch (Throwable ignored) {}
+
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     window.setNavigationBarColor(purple);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
