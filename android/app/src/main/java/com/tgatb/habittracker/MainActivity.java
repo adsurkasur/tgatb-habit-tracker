@@ -32,10 +32,21 @@ public class MainActivity extends BridgeActivity {
      if (hasFocus) SystemUiPlugin.reapply(this);
  }
 
- @Override
- public void onBackPressed() {
-     super.onBackPressed();
-     // Reapply immersive after back navigation to avoid bars sticking
-     SystemUiPlugin.reapply(this);
+ // Let back press navigate directly; immersive sticky prevents bars from intercepting
+
+    @Override
+    public void onBackPressed() {
+        if (SystemUiPlugin.isFullscreenEnabled()) {
+            // Perform WebView back navigation directly without exiting immersive first
+            if (getBridge() != null && getBridge().getWebView().canGoBack()) {
+                getBridge().getWebView().goBack();
+            } else {
+                // Mimic existing JS logic: exit app if no back stack
+                moveTaskToBack(true);
+            }
+            SystemUiPlugin.reapply(this);
+            return; // consume
+        }
+        super.onBackPressed();
     }
 }
