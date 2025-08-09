@@ -1,27 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Remove transparency so we can show solid purple bar -->
+        <!-- CRITICAL FIX: Consistent purple theming with proper light icons -->
         <item name="android:statusBarColor">@color/status_bar_color</item>
         <item name="android:navigationBarColor">@color/status_bar_color</item>
-        <!-- We want light (white) icons, so DO NOT request light status bar (which would make dark icons) -->
+        <!-- Light icons = false (white icons on purple background) -->
         <item name="android:windowLightStatusBar">false</item>
+        <!-- Also ensure navigation bar has light icons -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="O">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <!-- Ensure status bar doesn't overlay content -->
+        <!-- CRITICAL FIX: Proper window insets handling for system bars -->
         <item name="android:fitsSystemWindows">true</item>
         <!-- Remove translucent status bar and set solid color -->
         <item name="android:windowTranslucentStatus">false</item>
-    <item name="android:statusBarColor">@color/status_bar_color</item>
-    <item name="android:navigationBarColor">@color/status_bar_color</item>
-    <!-- Force white icons/text -->
-    <item name="android:windowLightStatusBar">false</item>
+        <item name="android:statusBarColor">@color/status_bar_color</item>
+        <item name="android:navigationBarColor">@color/status_bar_color</item>
+        <!-- Force white icons/text on purple background -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="O">false</item>
     </style>
 
 

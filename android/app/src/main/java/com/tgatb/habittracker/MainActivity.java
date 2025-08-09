@@ -12,12 +12,16 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(SystemUiPlugin.class);
         super.onCreate(savedInstanceState);
 
-    // Revert webview background to default (transparent -> white via CSS) so content background is unchanged
-    getBridge().getWebView().setBackgroundColor(Color.TRANSPARENT);
+        // FIXED: Revert WebView background to default transparent/white
+        getBridge().getWebView().setBackgroundColor(Color.TRANSPARENT);
 
-    // Respect system bars by default; plugin will adjust after JS preference
-    WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
-    SystemUiPlugin.reapply(this);
+        // IMPROVED: Proper window insets handling based on fullscreen state
+        if (SystemUiPlugin.isFullscreenEnabled()) {
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        } else {
+            WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
+        }
+        SystemUiPlugin.reapply(this);
     }
 
     @Override

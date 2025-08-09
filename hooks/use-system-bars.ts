@@ -13,11 +13,10 @@ export const useSystemBars = () => {
     if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== 'android') return;
 
   const setBars = async () => {
-  // Consistent purple for light mode requirement (white icons on purple). For dark mode we still use dark to blend.
+  // Consistent purple background with white icons/text
   const purple = '#6750a4';
-  const darkThemeColor = '#1e1b2e';
       try {
-  // Always white (light) icons
+  // CRITICAL FIX: Light style = WHITE text on dark background (purple)
   await StatusBar.setStyle({ style: StatusBarStyles.Light });
   await StatusBar.setBackgroundColor({ color: purple });
         try {

@@ -44,7 +44,8 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
             } else {
               await StatusBar.setBackgroundColor({ color: '#6750a4' });
             }
-            await StatusBar.setStyle({ style: StatusBarStyles.Dark });
+            // CRITICAL FIX: Light style = WHITE text on purple background
+            await StatusBar.setStyle({ style: StatusBarStyles.Light });
             try { await NavigationBar.setNavigationBarColor({ color: '#6750a4', darkButtons: false }); } catch {}
           }
         } catch (error) {

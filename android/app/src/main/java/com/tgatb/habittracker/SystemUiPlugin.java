@@ -54,8 +54,14 @@ public class SystemUiPlugin extends Plugin {
         final View decor = window.getDecorView();
         final WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, decor);
 
-        // Edge-to-edge always: we manage insets ourselves (prevents layout jump when bars appear)
-        WindowCompat.setDecorFitsSystemWindows(window, false);
+        // CRITICAL FIX: Use proper window insets handling instead of edge-to-edge conflicts
+        if (fullscreenEnabled) {
+            // For fullscreen, allow edge-to-edge layout
+            WindowCompat.setDecorFitsSystemWindows(window, false);
+        } else {
+            // For normal mode, let system handle window insets properly
+            WindowCompat.setDecorFitsSystemWindows(window, true);
+        }
 
         // Capture insets and expose status bar height to web via CSS var
         ViewCompat.setOnApplyWindowInsetsListener(decor, (v, insets) -> {
@@ -71,7 +77,7 @@ public class SystemUiPlugin extends Plugin {
             return insets;
         });
 
-        // Always recolor bars & icons
+        // Always recolor bars & icons BEFORE showing/hiding
         applyColorsAndAppearance(window, controller);
 
         if (controller != null) {
@@ -79,27 +85,43 @@ public class SystemUiPlugin extends Plugin {
         }
 
         if (fullscreenEnabled) {
-            // Hide only status bar (immersive sticky) so swipe reveals transiently
-            if (controller != null) controller.hide(WindowInsetsCompat.Type.statusBars());
+            // IMPROVED: Hide both status and navigation bars with proper behavior
+            if (controller != null) {
+                controller.hide(WindowInsetsCompat.Type.statusBars());
+                // Also hide navigation bar for true fullscreen experience
+                controller.hide(WindowInsetsCompat.Type.navigationBars());
+            }
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+                // Legacy fullscreen for older Android versions
                 int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
                         View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
                         View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY; // no nav hide
+                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
                 decor.setSystemUiVisibility(flags);
-            } else {
-                decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             }
+            // Add listener to re-hide bars if they appear during fullscreen
             decor.setOnSystemUiVisibilityChangeListener(visibility -> {
                 if (!fullscreenEnabled) return;
                 boolean statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
-                if (statusVisible && controller != null) {
-                    decor.postDelayed(() -> { if (fullscreenEnabled) controller.hide(WindowInsetsCompat.Type.statusBars()); }, 1500);
+                boolean navVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+                if ((statusVisible || navVisible) && controller != null) {
+                    // Re-hide with delay to prevent fight with system
+                    decor.postDelayed(() -> {
+                        if (fullscreenEnabled && controller != null) {
+                            controller.hide(WindowInsetsCompat.Type.statusBars());
+                            controller.hide(WindowInsetsCompat.Type.navigationBars());
+                        }
+                    }, 1000);
                 }
             });
         } else {
-            // Show bars (status + nav) without affecting layout space
-            if (controller != null) controller.show(WindowInsetsCompat.Type.systemBars());
+            // Show both status and navigation bars
+            if (controller != null) {
+                controller.show(WindowInsetsCompat.Type.statusBars());
+                controller.show(WindowInsetsCompat.Type.navigationBars());
+            }
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             decor.setOnSystemUiVisibilityChangeListener(null);
         }

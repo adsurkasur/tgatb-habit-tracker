@@ -21,7 +21,8 @@ import { useRef, useState, useEffect } from "react";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
-import { setFullscreenMode } from "@/lib/capacitor";
+// MAJOR FIX: Use unified system bars instead of conflicting implementations
+import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { Capacitor } from '@capacitor/core';
 
 interface SettingsScreenProps {
@@ -135,7 +136,8 @@ export function SettingsScreen({
       // fallback: do nothing
     }
     if (isNative) {
-      await setFullscreenMode(enabled);
+      // MAJOR FIX: Use unified system bars implementation
+      await systemBarsUtils.setFullscreen(enabled);
       toast({
         title: enabled ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
         description: enabled 

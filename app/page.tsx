@@ -18,9 +18,8 @@ import { useHabits } from "@/hooks/use-habits";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
-// import { useSystemBars } from "@/hooks/use-system-bars"; // Deprecated: centralized manager handles system bars
-// Re-enable legacy system bar hook (v0.1.0 implementation)
-import { useSystemBars } from "@/hooks/use-system-bars";
+// MAJOR FIX: Replace conflicting system bar hooks with unified implementation
+import { useSystemBarsUnified } from "@/hooks/use-system-bars-unified";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
 import { HabitType, Habit } from "@shared/schema";
@@ -76,9 +75,6 @@ export default function Home() {
     return () => { handler.then(h => h.remove()); };
   }, [toast, hasOpenModals, closeTopModal]);
   
-  // Apply system bar theming
-  useSystemBars();
-  
   // Navigation bar handling centralized in Capacitor layer
   
   const {
@@ -101,6 +97,9 @@ export default function Home() {
     exportData,
     importData,
   } = useHabits();
+
+  // MAJOR FIX: Apply unified system bar theming with fullscreen support
+  useSystemBarsUnified(settings.fullscreenMode);
 
   const handleTrackHabit = (completed: boolean) => {
     if (currentHabit) {

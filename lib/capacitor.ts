@@ -34,6 +34,7 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
         try { await navBar.hide?.(); } catch(e) { console.warn('NavigationBar.hide failed:', e); }
       }
     } else if (platform === 'ios') {
+      // CRITICAL FIX: Light style = WHITE text for purple background
       await StatusBar.setStyle({ style: StatusBarStyles.Light }).catch(()=>{});
       if (fullscreenPref) await StatusBar.hide().catch(()=>{}); else await StatusBar.show().catch(()=>{});
     }

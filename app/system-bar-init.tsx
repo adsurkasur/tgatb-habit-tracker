@@ -12,6 +12,7 @@ export const SystemBarInit: React.FC = () => {
     let cancelled = false;
     const apply = async () => {
       try {
+        // CRITICAL FIX: Light style = WHITE text on purple background
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
         await StatusBar.setBackgroundColor({ color: purple });
         try { await NavigationBar.setNavigationBarColor({ color: purple, darkButtons: false }); } catch {}
