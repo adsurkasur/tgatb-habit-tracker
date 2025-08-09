@@ -4,7 +4,7 @@ import { useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 
 // Restored v0.1.0 behavior: actively set both status & navigation bar colors per theme.
 export const useSystemBars = () => {

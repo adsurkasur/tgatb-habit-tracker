@@ -3,7 +3,7 @@
 import { useEffect, useRef } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 import { App } from '@capacitor/app';
 
 /**

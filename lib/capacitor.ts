@@ -1,6 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
+import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
@@ -9,6 +9,14 @@ export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
 
 let fullscreenPref = false; // mirrors saved settings
+
+// Narrow NavigationBar plugin interface (only what we use)
+interface NavigationBarPlugin {
+  show: () => Promise<void>;
+  hide: () => Promise<void>;
+  setColor: (options: { color: string; darkButtons: boolean }) => Promise<void>;
+}
+const navBar: Partial<NavigationBarPlugin> = NavigationBar as unknown as Partial<NavigationBarPlugin>;
 
 // Simplified initializer (v0.1.0 style) – hook will manage bar colors
 export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
@@ -20,10 +28,10 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
 
     if (platform === 'android') {
       await StatusBar.show().catch(()=>{});
-      try { await (NavigationBar as any).show(); } catch(e) { console.warn('NavigationBar.show failed:', e); }
+      try { await navBar.show?.(); } catch(e) { console.warn('NavigationBar.show failed:', e); }
       if (fullscreenPref) {
         await StatusBar.hide().catch(()=>{});
-        try { await (NavigationBar as any).hide(); } catch(e) { console.warn('NavigationBar.hide failed:', e); }
+        try { await navBar.hide?.(); } catch(e) { console.warn('NavigationBar.hide failed:', e); }
       }
     } else if (platform === 'ios') {
       await StatusBar.setStyle({ style: StatusBarStyles.Light }).catch(()=>{});
@@ -55,10 +63,10 @@ export async function setFullscreenMode(enabled: boolean) {
   if (platform === 'android') {
     if (enabled) {
       await StatusBar.hide().catch(()=>{});
-      try { await (NavigationBar as any).hide(); } catch {}
+      try { await navBar.hide?.(); } catch {}
     } else {
       await StatusBar.show().catch(()=>{});
-      try { await (NavigationBar as any).show(); } catch {}
+      try { await navBar.show?.(); } catch {}
     }
   } else if (platform === 'ios') {
     if (enabled) await StatusBar.hide().catch(()=>{}); else await StatusBar.show().catch(()=>{});
