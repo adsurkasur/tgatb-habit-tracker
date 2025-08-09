@@ -12,6 +12,9 @@ export const getPlatform = () => Capacitor.getPlatform();
 let fullscreenEnabled = false;
 
 // Initialize Capacitor plugins
+interface SystemUiPluginApi { setFullscreen: (options: { enabled: boolean }) => Promise<{ enabled: boolean }>; }
+interface CapacitorWindow extends Window { Capacitor?: { Plugins?: { SystemUi?: SystemUiPluginApi } } }
+
 export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
   if (!isNativePlatform()) return;
 
@@ -19,11 +22,19 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
     await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
 
     const platform = getPlatform();
-  fullscreenEnabled = settings?.fullscreenMode ?? false;
+    fullscreenEnabled = settings?.fullscreenMode ?? false;
 
-  await configureSystemBars(platform, fullscreenEnabled);
+    await configureSystemBars(platform, fullscreenEnabled); // fallback + iOS/web styling
+    if (platform === 'android') {
+      try {
+        const SystemUi = (window as unknown as CapacitorWindow)?.Capacitor?.Plugins?.SystemUi;
+        if (SystemUi?.setFullscreen) {
+          await SystemUi.setFullscreen({ enabled: fullscreenEnabled });
+        }
+      } catch (e) { console.warn('SystemUi.setFullscreen (init) failed:', e); }
+    }
     await setCssInsets(platform);
-  registerAppListeners();
+    registerAppListeners();
 
   } catch (error) {
     console.error('Error initializing Capacitor:', error);
@@ -36,11 +47,11 @@ async function configureSystemBars(platform: string, shouldHideStatusBar: boolea
 }
 
 async function configureAndroidBars(shouldHideStatusBar: boolean) {
-  const applyFullscreen = async () => {
+  // Lightweight early application; React SystemBarsManager will maintain state thereafter.
+  const applyOnce = async () => {
     try {
       if (shouldHideStatusBar) {
         await StatusBar.hide();
-        // Make nav bar transparent and hidden
         try {
           if (typeof NavigationBar.setTransparency === 'function') {
             await NavigationBar.setTransparency({ isTransparent: true });
@@ -50,9 +61,23 @@ async function configureAndroidBars(shouldHideStatusBar: boolean) {
           console.warn('NavigationBar adjustments failed:', e);
         }
       } else {
-        await StatusBar.show();
-        // Show nav bar and set a stable color
         try {
+          await StatusBar.setOverlaysWebView({ overlay: false });
+          await StatusBar.show();
+          await StatusBar.setBackgroundColor({ color: '#6750a4' });
+          await StatusBar.setStyle({ style: StatusBarStyles.Light });
+          // Reinforce passes
+          [100,250].forEach(ms => setTimeout(() => {
+            StatusBar.setBackgroundColor({ color: '#6750a4' }).catch(()=>{});
+            StatusBar.setStyle({ style: StatusBarStyles.Light }).catch(()=>{});
+          }, ms));
+        } catch (e) {
+          console.warn('StatusBar styling failed:', e);
+        }
+        try {
+          if (typeof NavigationBar.setTransparency === 'function') {
+            await NavigationBar.setTransparency({ isTransparent: false });
+          }
           await NavigationBar.show();
           if (typeof NavigationBar.setColor === 'function') {
             await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
@@ -62,13 +87,12 @@ async function configureAndroidBars(shouldHideStatusBar: boolean) {
         }
       }
     } catch (e) {
-      console.warn('applyFullscreen error:', e);
+      console.warn('configureAndroidBars error:', e);
     }
   };
 
-  await applyFullscreen();
-  // Re-apply shortly after to combat race conditions with window insets
-  setTimeout(applyFullscreen, 150);
+  await applyOnce();
+  setTimeout(applyOnce, 140);
 }
 
 async function configureIosBars(shouldHideStatusBar: boolean) {
@@ -112,6 +136,15 @@ export async function setFullscreenMode(enabled: boolean) {
   if (!isNativePlatform()) return;
   fullscreenEnabled = enabled;
   const platform = getPlatform();
+  if (platform === 'android') {
+    try {
+      const SystemUi = (window as unknown as CapacitorWindow)?.Capacitor?.Plugins?.SystemUi;
+      if (SystemUi?.setFullscreen) {
+        await SystemUi.setFullscreen({ enabled });
+        return; // native handles immersive + colors
+      }
+    } catch (e) { console.warn('SystemUi.setFullscreen failed:', e); }
+  }
   await configureSystemBars(platform, fullscreenEnabled);
 }
 

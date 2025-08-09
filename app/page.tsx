@@ -1,3 +1,4 @@
+// System bars handled centrally by SystemBarsManager
 "use client";
 
 import { useState, useEffect, useRef } from "react";
@@ -17,7 +18,8 @@ import { useHabits } from "@/hooks/use-habits";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
-import { useSystemBars } from "@/hooks/use-system-bars";
+// import { useSystemBars } from "@/hooks/use-system-bars"; // Deprecated: centralized manager handles system bars
+import { SystemBarsManager } from "@/components/system-bars-manager";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
 import { HabitType, Habit } from "@shared/schema";
@@ -73,8 +75,7 @@ export default function Home() {
     return () => { handler.then(h => h.remove()); };
   }, [toast, hasOpenModals, closeTopModal]);
   
-  // Initialize system bars for Android 15 theme colors
-  useSystemBars();
+  // SystemBarsManager will manage system bars state (mounted below)
   
   // Navigation bar handling centralized in Capacitor layer
   
@@ -233,7 +234,9 @@ export default function Home() {
   }, [goodHabits.length, badHabits.length, moveToPreviousHabit, moveToNextHabit]);
 
   return (
-    <ContentWrapper>
+    <>
+      <SystemBarsManager fullscreen={settings.fullscreenMode} />
+      <ContentWrapper>
       <div className="min-h-screen bg-background text-foreground">
         {/* Top App Bar */}
         <header className="bg-header border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
@@ -421,6 +424,7 @@ export default function Home() {
           onStepChange={setWelcomeStep}
         />
       </div>
-    </ContentWrapper>
+      </ContentWrapper>
+    </>
   );
 }

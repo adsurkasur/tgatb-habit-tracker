@@ -7,8 +7,8 @@ import { NavigationBar } from '@squareetlabs/capacitor-navigation-bar';
 import { App } from '@capacitor/app';
 
 /**
- * Enhanced fullscreen hook that provides persistent navigation bar hiding
- * using the better @squareetlabs/capacitor-navigation-bar plugin.
+ * DEPRECATED: Replaced by SystemBarsManager component for centralized fullscreen & bar control.
+ * (Legacy) Enhanced fullscreen hook that provided persistent navigation bar hiding.
  */
 export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
   const debounceRef = useRef<number | null>(null);

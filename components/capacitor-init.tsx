@@ -1,12 +1,12 @@
+  // Only initialize Capacitor here; SystemBarsManager handles bars
 'use client';
 
 import { useEffect } from 'react';
 import { initializeCapacitor } from '@/lib/capacitor';
 import { HabitStorage } from '@/lib/habit-storage';
-import { useSystemBars } from '@/hooks/use-system-bars';
 
 export function CapacitorInit() {
-  useSystemBars(); // Hook to manage system bar colors based on theme
+  // System bar styling handled by SystemBarsManager; only initialize Capacitor here
 
   useEffect(() => {
     // Delay initialization to ensure the app is fully loaded

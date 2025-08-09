@@ -48,7 +48,7 @@ export function SettingsScreen({
   const [, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  const { setVisible: setStatusBarVisible, isNative } = useStatusBar();
+  const { isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
   
   // Fullscreen managed centrally via Capacitor helpers

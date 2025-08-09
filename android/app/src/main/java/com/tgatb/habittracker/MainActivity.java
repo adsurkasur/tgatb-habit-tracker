@@ -2,35 +2,40 @@ package com.tgatb.habittracker;
 
 import android.os.Bundle;
 import android.graphics.Color;
-import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        // Register custom plugin before super so bridge picks it up
+        registerPlugin(SystemUiPlugin.class);
         super.onCreate(savedInstanceState);
 
         // Set the web view's background color to solid white
         getBridge().getWebView().setBackgroundColor(Color.WHITE);
 
-    // Respect system bars: let the OS apply insets to content
+    // Respect system bars by default; plugin will adjust after JS preference
     WindowCompat.setDecorFitsSystemWindows(getWindow(), true);
-    // Keep current theme color for navigation bar (styles.xml) or leave as-is
-    // getWindow().setNavigationBarColor(Color.TRANSPARENT); // optional; rely on theme
+    SystemUiPlugin.reapply(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-    // No-op: respect system navigation bar
+    SystemUiPlugin.reapply(this);
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-    // No-op: respect system navigation bar
+     if (hasFocus) SystemUiPlugin.reapply(this);
+ }
+
+ @Override
+ public void onBackPressed() {
+     super.onBackPressed();
+     // Reapply immersive after back navigation to avoid bars sticking
+     SystemUiPlugin.reapply(this);
     }
 }

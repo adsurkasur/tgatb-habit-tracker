@@ -5,7 +5,8 @@ import { useTheme } from 'next-themes';
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 
-// Minimal, non-intrusive system bar styling to avoid conflicts and blinking
+// DEPRECATED: Replaced by SystemBarsManager. Avoid using this hook going forward.
+// Minimal, non-intrusive system bar styling to avoid conflicts and blinking (legacy)
 export const useSystemBars = () => {
   const { resolvedTheme } = useTheme();
 
