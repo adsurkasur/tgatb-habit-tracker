@@ -12,8 +12,8 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(SystemUiPlugin.class);
         super.onCreate(savedInstanceState);
 
-    // Set the web view's background color to brand purple so any transient transparency shows purple
-    getBridge().getWebView().setBackgroundColor(Color.parseColor("#6750A4"));
+    // Revert webview background to default (transparent -> white via CSS) so content background is unchanged
+    getBridge().getWebView().setBackgroundColor(Color.TRANSPARENT);
 
     // Respect system bars by default; plugin will adjust after JS preference
     WindowCompat.setDecorFitsSystemWindows(getWindow(), true);

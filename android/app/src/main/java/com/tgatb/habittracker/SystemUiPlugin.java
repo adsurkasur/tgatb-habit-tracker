@@ -8,6 +8,8 @@ import android.view.Window;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
+import androidx.core.view.ViewCompat;
+import androidx.core.graphics.Insets;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -52,47 +54,52 @@ public class SystemUiPlugin extends Plugin {
         final View decor = window.getDecorView();
         final WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, decor);
 
-        // Always apply our brand colors & icon styles first so any transient reveal is themed.
+        // Edge-to-edge always: we manage insets ourselves (prevents layout jump when bars appear)
+        WindowCompat.setDecorFitsSystemWindows(window, false);
+
+        // Capture insets and expose status bar height to web via CSS var
+        ViewCompat.setOnApplyWindowInsetsListener(decor, (v, insets) -> {
+            Insets sb = insets.getInsets(WindowInsetsCompat.Type.statusBars());
+            int top = sb.top;
+            try {
+                if (activity instanceof com.getcapacitor.BridgeActivity) {
+                    ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
+                        .post(() -> ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
+                            .evaluateJavascript("document.documentElement.style.setProperty('--status-bar-height', '"+top+"px')", null));
+                }
+            } catch (Throwable ignored) {}
+            return insets;
+        });
+
+        // Always recolor bars & icons
         applyColorsAndAppearance(window, controller);
 
-        if (fullscreenEnabled) {
-            WindowCompat.setDecorFitsSystemWindows(window, false);
-            if (controller != null) {
-                // Use modern API for immersive when available
-                controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
-                controller.hide(WindowInsetsCompat.Type.systemBars());
-            }
+        if (controller != null) {
+            controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+        }
 
+        if (fullscreenEnabled) {
+            // Hide only status bar (immersive sticky) so swipe reveals transiently
+            if (controller != null) controller.hide(WindowInsetsCompat.Type.statusBars());
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-                // Fallback legacy flags for older devices
-                int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+                int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_FULLSCREEN |
+                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY; // no nav hide
                 decor.setSystemUiVisibility(flags);
             } else {
-                // Clear legacy flags that could conflict
                 decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             }
-
-            // Listener (legacy APIs) to keep immersive after system attempts to reveal on BACK.
             decor.setOnSystemUiVisibilityChangeListener(visibility -> {
                 if (!fullscreenEnabled) return;
-                // If either status or nav bar became visible (flags cleared) re-hide via controller
                 boolean statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
-                boolean navVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
-                if ((statusVisible || navVisible) && controller != null) {
-                    controller.hide(WindowInsetsCompat.Type.systemBars());
+                if (statusVisible && controller != null) {
+                    decor.postDelayed(() -> { if (fullscreenEnabled) controller.hide(WindowInsetsCompat.Type.statusBars()); }, 1500);
                 }
             });
         } else {
-            if (controller != null) {
-                controller.show(WindowInsetsCompat.Type.systemBars());
-            }
-            WindowCompat.setDecorFitsSystemWindows(window, true);
-            // Ensure no stale legacy immersive flags remain
+            // Show bars (status + nav) without affecting layout space
+            if (controller != null) controller.show(WindowInsetsCompat.Type.systemBars());
             decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
             decor.setOnSystemUiVisibilityChangeListener(null);
         }
