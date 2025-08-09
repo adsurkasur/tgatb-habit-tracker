@@ -51,8 +51,8 @@ jobs:
       - name: Build web assets
         run: npm run build
 
-      - name: Copy web build to Android (Capacitor sync)
-        run: npx cap copy android
+      - name: Capacitor sync (regenerate native + plugins)
+        run: npx cap sync android
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
@@ -87,21 +87,39 @@ jobs:
       - name: List generated APKs
         run: ls -R android/app/build/outputs/apk || true
 
+      - name: Normalize APK filenames
+        id: rename
+        run: |
+          VERSION=${{ steps.version.outputs.tag }}
+          VERSION=${VERSION#v}
+          OUTDIR=android/app/build/outputs/apk
+          mkdir -p renamed
+          # Debug APK
+          for f in $(ls $OUTDIR/debug/*.apk 2>/dev/null || true); do
+            cp "$f" "renamed/tgatb-${VERSION}-debug.apk"
+          done
+          # Release APK(s)
+          for f in $(ls $OUTDIR/release/*.apk 2>/dev/null || true); do
+            base=$(basename "$f")
+            if echo "$base" | grep -qi 'unsigned'; then
+              cp "$f" "renamed/tgatb-${VERSION}-unsigned.apk"
+            else
+              cp "$f" "renamed/tgatb-${VERSION}.apk"
+            fi
+          done
+          ls -l renamed || true
+
       - name: Upload build artifacts
         uses: actions/upload-artifact@v4
         with:
           name: android-apks
-          path: |
-            android/app/build/outputs/apk/debug/*.apk
-            android/app/build/outputs/apk/release/*.apk
+          path: renamed/*.apk
           if-no-files-found: error
 
       - name: Upload to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          files: |
-            android/app/build/outputs/apk/debug/*.apk
-            android/app/build/outputs/apk/release/*.apk
+          files: renamed/*.apk
           fail_on_unmatched_files: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
