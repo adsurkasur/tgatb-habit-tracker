@@ -293,7 +293,7 @@ export function SettingsScreen({
               onClick={isExporting ? undefined : handleExportClick}
             >
               <div className="flex items-center space-x-3">
-                <Download className="w-5 h-5 text-muted-foreground" />
+                <Upload className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">
                   {isExporting ? "Exporting..." : "Export Data"}
                 </span>
@@ -306,7 +306,7 @@ export function SettingsScreen({
               onClick={handleImportClick}
             >
               <div className="flex items-center space-x-3">
-                <Upload className="w-5 h-5 text-muted-foreground" />
+                <Download className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Import Data</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
