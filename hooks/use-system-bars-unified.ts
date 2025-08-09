@@ -42,120 +42,80 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
 
   const applySystemBars = useCallback(async (forceFullscreen?: boolean) => {
     if (!Capacitor.isNativePlatform()) return;
-    
-    const now = Date.now();
-    // Prevent rapid successive calls
-    if (now - lastApplyRef.current < DEBOUNCE_MS) return;
-    lastApplyRef.current = now;
-
-    const targetFullscreen = forceFullscreen ?? fullscreenMode ?? globalState.isFullscreen;
-    
-    console.log(`🔧 [SystemBars] Starting application: fullscreen=${targetFullscreen}, platform=${Capacitor.getPlatform()}`);
-    console.log(`🔧 [SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
-    
+    if (!shouldRun(lastApplyRef, DEBOUNCE_MS)) return;
+    const targetFullscreen = resolveTargetFullscreen(forceFullscreen, fullscreenMode);
+    logStart(targetFullscreen);
     try {
       if (isAndroid) {
-        // Debug: Check what plugins are available
-        const availablePlugins = Object.keys((window as any).Capacitor?.Plugins || {});
-        console.log(`🔧 [SystemBars] Available plugins: ${availablePlugins.join(', ')}`);
-        
-        // Primary approach: Use StatusBar API directly with proper configuration
-        console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
-        
-        if (targetFullscreen) {
-          console.log(`🔧 [SystemBars] Applying fullscreen mode`);
-          await StatusBar.hide();
-          // Keep purple nav bar; only system gesture pill should adapt (native plugin handles appearance)
-          try {
-            const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
-            if (NavigationBar) {
-              await NavigationBar.setNavigationBarColor({ 
-                color: PURPLE_COLOR, 
-                darkButtons: false // keep light (white) gesture indicator/icons
-              });
-              console.log(`🔧 [SystemBars] NavigationBar kept purple in fullscreen`);
-            } else {
-              console.warn('🔧 [SystemBars] NavigationBar plugin not available');
-            }
-          } catch (e) {
-            console.warn('🔧 [SystemBars] NavigationBar fullscreen failed:', e);
-          }
-        } else {
-          console.log(`🔧 [SystemBars] Applying normal mode with purple bars`);
-          
-          // Show status bar first
-          await StatusBar.show();
-          console.log(`🔧 [SystemBars] StatusBar shown`);
-          
-          // CRITICAL: Set style to Light (white text/icons on purple background)
-          await StatusBar.setStyle({ style: StatusBarStyles.Light });
-          console.log(`🔧 [SystemBars] StatusBar style set to Light (white icons)`);
-          
-          // Set purple background color
-          await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
-          console.log(`🔧 [SystemBars] StatusBar background set to: ${PURPLE_COLOR}`);
-          
-          // Set navigation bar to purple
-          try {
-            const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
-            if (NavigationBar) {
-              await NavigationBar.setNavigationBarColor({ 
-                color: PURPLE_COLOR, 
-                darkButtons: false 
-              });
-              console.log(`🔧 [SystemBars] NavigationBar set to purple: ${PURPLE_COLOR}`);
-            } else {
-              console.warn('🔧 [SystemBars] NavigationBar plugin not available');
-            }
-          } catch (e) {
-            console.warn('🔧 [SystemBars] NavigationBar color failed:', e);
-          }
-        }
-        
-        // Secondary: Try SystemUi plugin for native system UI control
-        try {
-          const { SystemUi } = (window as any).Capacitor?.Plugins || {};
-          if (SystemUi) {
-            console.log(`🔧 [SystemBars] Enhancing with native SystemUi plugin`);
-            await SystemUi.setFullscreen({ enabled: targetFullscreen });
-            console.log(`🔧 [SystemBars] SystemUi plugin applied: fullscreen=${targetFullscreen}`);
-          } else {
-            console.log(`🔧 [SystemBars] SystemUi plugin not available`);
-          }
-        } catch (e) {
-          console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e);
-        }
+        await applyAndroidBars(targetFullscreen);
       } else if (isIOS) {
-        // iOS implementation
-        if (targetFullscreen) {
-          await StatusBar.hide();
-        } else {
-          await StatusBar.show();
-          // Use Light style for white text on dark backgrounds
-          await StatusBar.setStyle({ style: StatusBarStyles.Light });
-        }
+        await applyIOSBars(targetFullscreen);
       }
-      
-      globalState.isFullscreen = targetFullscreen;
-      console.log(`🔧 [SystemBars] System bars configuration completed: fullscreen=${targetFullscreen}`);
-      
-      // Small delay to ensure all settings are applied
-      await new Promise(resolve => setTimeout(resolve, 100));
-      
+      finalizeState(targetFullscreen);
+      await smallSettleDelay();
     } catch (error) {
-      console.error('Failed to apply system bars:', error);
-      // Recovery: try basic configuration
-      try {
-        if (!targetFullscreen) {
-          await StatusBar.show();
-          await StatusBar.setStyle({ style: StatusBarStyles.Light });
-          await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
-        }
-      } catch (recoveryError) {
-        console.error('Recovery failed:', recoveryError);
-      }
+      await attemptRecovery(error, targetFullscreen);
     }
   }, [fullscreenMode, isAndroid, isIOS]);
+
+  // --- Helper functions (declared below) ---
+  const shouldRun = (last: React.MutableRefObject<number>, debounce: number) => {
+    const now = Date.now();
+    if (now - last.current < debounce) return false;
+    last.current = now; return true;
+  };
+  const resolveTargetFullscreen = (force?: boolean, modeParam?: boolean) => force ?? modeParam ?? globalState.isFullscreen;
+  const logStart = (target: boolean) => {
+    console.log(`🔧 [SystemBars] Starting application: fullscreen=${target}, platform=${Capacitor.getPlatform()}`);
+    console.log(`🔧 [SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
+  };
+  const applyAndroidBars = async (target: boolean) => {
+    const plugins = Object.keys((window as any).Capacitor?.Plugins || {});
+    console.log(`🔧 [SystemBars] Available plugins: ${plugins.join(', ')}`);
+    console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
+    if (target) {
+      await StatusBar.hide();
+      await setNavColor(PURPLE_COLOR);
+    } else {
+      await StatusBar.show();
+      await StatusBar.setStyle({ style: StatusBarStyles.Light });
+      await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
+      await setNavColor(PURPLE_COLOR);
+    }
+    await maybeApplySystemUi(target);
+  };
+  const setNavColor = async (color: string) => {
+    try {
+      const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
+      if (NavigationBar) {
+        await NavigationBar.setNavigationBarColor({ color, darkButtons: false });
+      }
+    } catch (e) { console.warn('🔧 [SystemBars] NavigationBar color failed:', e); }
+  };
+  const maybeApplySystemUi = async (target: boolean) => {
+    try {
+      const { SystemUi } = (window as any).Capacitor?.Plugins || {};
+      if (SystemUi) { await SystemUi.setFullscreen({ enabled: target }); }
+    } catch (e) { console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e); }
+  };
+  const applyIOSBars = async (target: boolean) => {
+    if (target) { await StatusBar.hide(); } else { await StatusBar.show(); await StatusBar.setStyle({ style: StatusBarStyles.Light }); }
+  };
+  const finalizeState = (target: boolean) => {
+    globalState.isFullscreen = target;
+    console.log(`🔧 [SystemBars] System bars configuration completed: fullscreen=${target}`);
+  };
+  const smallSettleDelay = () => new Promise(r => setTimeout(r, 100));
+  const attemptRecovery = async (err: unknown, target: boolean) => {
+    console.error('Failed to apply system bars:', err);
+    if (!target) {
+      try {
+        await StatusBar.show();
+        await StatusBar.setStyle({ style: StatusBarStyles.Light });
+        await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
+      } catch (recoveryError) { console.error('Recovery failed:', recoveryError); }
+    }
+  };
 
   const debouncedApply = useCallback((forceFullscreen?: boolean) => {
     if (debounceRef.current) {

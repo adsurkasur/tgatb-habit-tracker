@@ -19,3 +19,25 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+
+# ---- Project specific additions (Capacitor / WebView / Reflection) ----
+
+# Keep Capacitor bridge & plugin classes (reflection-based discovery)
+-keep class com.getcapacitor.** { *; }
+-keep class * extends com.getcapacitor.Plugin { *; }
+
+# Keep webview JS interface methods if any added dynamically
+-keepclassmembers class * {
+	@android.webkit.JavascriptInterface <methods>;
+}
+
+# Keep names for serialization (if using JSON to map model classes)
+-keepclassmembers class ** implements java.io.Serializable { *; }
+
+# Avoid stripping enums used via name()
+-keepclassmembers enum * { *; }
+
+# (Optional) Remove logging in release to reduce size (uncomment if desired)
+#-assumenosideeffects class android.util.Log { *; }
+
+# ---- End additions ----

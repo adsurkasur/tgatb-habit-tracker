@@ -55,131 +55,147 @@ public class SystemUiPlugin extends Plugin {
         final View decor = window.getDecorView();
         final WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, decor);
 
-        // CRITICAL FIX: Use proper window insets handling instead of edge-to-edge conflicts
-        if (fullscreenEnabled) {
-            // For fullscreen, allow edge-to-edge layout
-            WindowCompat.setDecorFitsSystemWindows(window, false);
-        } else {
-            // For normal mode, let system handle window insets properly
-            WindowCompat.setDecorFitsSystemWindows(window, true);
-        }
+        configureEdgeToEdge(window);
+        installStatusBarHeightCssVarBridge(activity, decor);
+        applyColorsAndAppearance(window, controller); // recolor first
+        configureControllerBehavior(controller);
 
-        // Capture insets and expose status bar height to web via CSS var
+        if (fullscreenEnabled) {
+            enterFullscreen(decor, controller);
+        } else {
+            exitFullscreen(decor, controller);
+        }
+    }
+
+    private static void configureEdgeToEdge(Window window) {
+        WindowCompat.setDecorFitsSystemWindows(window, !fullscreenEnabled);
+    }
+
+    private static void installStatusBarHeightCssVarBridge(Activity activity, View decor) {
         ViewCompat.setOnApplyWindowInsetsListener(decor, (v, insets) -> {
             Insets sb = insets.getInsets(WindowInsetsCompat.Type.statusBars());
             int top = sb.top;
             try {
                 if (activity instanceof com.getcapacitor.BridgeActivity) {
-                    ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
-                        .post(() -> ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
-                            .evaluateJavascript("document.documentElement.style.setProperty('--status-bar-height', '"+top+"px')", null));
+                    ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView().post(() ->
+                        ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
+                            .evaluateJavascript("document.documentElement.style.setProperty('--status-bar-height', '" + top + "px')", null)
+                    );
                 }
             } catch (Throwable ignored) {}
             return insets;
         });
+    }
 
-        // Always recolor bars & icons BEFORE showing/hiding
-        applyColorsAndAppearance(window, controller);
-
+    private static void configureControllerBehavior(WindowInsetsControllerCompat controller) {
         if (controller != null) {
             controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
+    }
 
-    if (fullscreenEnabled) {
-            // IMPROVED: Hide both status and navigation bars with proper behavior
-            if (controller != null) {
-                controller.hide(WindowInsetsCompat.Type.statusBars());
-                // Also hide navigation bar for true fullscreen experience
-                controller.hide(WindowInsetsCompat.Type.navigationBars());
-            }
-            if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
-                // Legacy fullscreen for older Android versions
-                int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
-                        View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_FULLSCREEN |
-                        View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
-                        View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
-                decor.setSystemUiVisibility(flags);
-            }
-            // Add listener to re-hide bars if they appear during fullscreen
-            decor.setOnSystemUiVisibilityChangeListener(visibility -> {
-                if (!fullscreenEnabled) return;
-                boolean statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
-                boolean navVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
-                if ((statusVisible || navVisible) && controller != null) {
-                    // Re-hide with delay to prevent fight with system
-                    decor.postDelayed(() -> {
-                        if (fullscreenEnabled && controller != null) {
-                            controller.hide(WindowInsetsCompat.Type.statusBars());
-                            controller.hide(WindowInsetsCompat.Type.navigationBars());
-                        }
-                    }, 1000);
-                }
-            });
-        } else {
-            // Show both status and navigation bars
-            if (controller != null) {
-                controller.show(WindowInsetsCompat.Type.statusBars());
-                controller.show(WindowInsetsCompat.Type.navigationBars());
-            }
-            decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
-            decor.setOnSystemUiVisibilityChangeListener(null);
+    private static void enterFullscreen(View decor, WindowInsetsControllerCompat controller) {
+        if (controller != null) {
+            controller.hide(WindowInsetsCompat.Type.statusBars());
+            controller.hide(WindowInsetsCompat.Type.navigationBars());
         }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.R) {
+            int flags = View.SYSTEM_UI_FLAG_LAYOUT_STABLE |
+                    View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_FULLSCREEN |
+                    View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_HIDE_NAVIGATION |
+                    View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY;
+            decor.setSystemUiVisibility(flags);
+        }
+        addRehideListener(decor, controller);
+    }
+
+    private static void addRehideListener(View decor, WindowInsetsControllerCompat controller) {
+        decor.setOnSystemUiVisibilityChangeListener(visibility -> {
+            if (!fullscreenEnabled) return;
+            boolean statusVisible = (visibility & View.SYSTEM_UI_FLAG_FULLSCREEN) == 0;
+            boolean navVisible = (visibility & View.SYSTEM_UI_FLAG_HIDE_NAVIGATION) == 0;
+            boolean needsRehide = (statusVisible || navVisible) && controller != null;
+            if (needsRehide) {
+                decor.postDelayed(() -> {
+                    if (fullscreenEnabled) {
+                        controller.hide(WindowInsetsCompat.Type.statusBars());
+                        controller.hide(WindowInsetsCompat.Type.navigationBars());
+                    }
+                }, 1000);
+            }
+        });
+    }
+
+    private static void exitFullscreen(View decor, WindowInsetsControllerCompat controller) {
+        if (controller != null) {
+            controller.show(WindowInsetsCompat.Type.statusBars());
+            controller.show(WindowInsetsCompat.Type.navigationBars());
+        }
+        decor.setSystemUiVisibility(View.SYSTEM_UI_FLAG_LAYOUT_STABLE);
+        decor.setOnSystemUiVisibilityChangeListener(null);
     }
 
     private static void applyColorsAndAppearance(Window window, WindowInsetsControllerCompat controller) {
-        try {
-            int purple = Color.parseColor(PURPLE);
-            
-            // ANDROID 15+ COMPATIBILITY: Use WindowInsets API instead of deprecated window.statusBarColor
-            if (Build.VERSION.SDK_INT >= 35) { // Android 15+ (API 35)
-                // RESTORE: Use an insets listener ONLY to paint background (no padding)
-                // This reliably gives us a solid purple status bar without doubling height.
-                View decorView = window.getDecorView();
-                decorView.setOnApplyWindowInsetsListener((view, insets) -> {
-                    view.setBackgroundColor(purple); // paint full root background
-                    return insets; // do NOT modify or add padding
-                });
+        int purple = parsePurple();
+        applyBarColors(window, purple);
+        enforceLightIcons(controller);
+        clearLegacyLightFlags(window);
+    }
 
-                try { window.setStatusBarColor(purple); } catch (Throwable ignored) {}
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    // Keep brand purple even in fullscreen; gesture pill contrasts automatically
-                    window.setNavigationBarColor(purple);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        window.setNavigationBarDividerColor(purple);
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        try { window.setNavigationBarContrastEnforced(true); } catch (Throwable ignored) {}
-                    }
-                }
+    private static int parsePurple() {
+        try { return Color.parseColor(PURPLE); } catch (Exception e) { return Color.BLACK; }
+    }
+
+    private static void applyBarColors(Window window, int purple) {
+        try {
+            if (Build.VERSION.SDK_INT >= 35) { // Android 15+
+                applyColorsAndroid15Plus(window, purple);
             } else {
-                // For Android 14 and below - use legacy method
-                window.setStatusBarColor(purple);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    window.setNavigationBarColor(purple);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                        window.setNavigationBarDividerColor(purple);
-                    }
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
-                    }
-                }
+                applyColorsLegacy(window, purple);
             }
-        } catch (Exception ignored) {}
-        
-        if (controller != null) {
-            // Force white icons (light content) by disabling light appearance flags
-            controller.setAppearanceLightStatusBars(false);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                controller.setAppearanceLightNavigationBars(false);
+        } catch (Throwable ignored) {}
+    }
+
+    private static void applyColorsAndroid15Plus(Window window, int purple) {
+        View decorView = window.getDecorView();
+        decorView.setOnApplyWindowInsetsListener((view, insets) -> {
+            view.setBackgroundColor(purple);
+            return insets;
+        });
+        try { window.setStatusBarColor(purple); } catch (Throwable ignored) {}
+        tintNavBars(window, purple, true);
+    }
+
+    private static void applyColorsLegacy(Window window, int purple) {
+        window.setStatusBarColor(purple);
+        tintNavBars(window, purple, false);
+    }
+
+    private static void tintNavBars(Window window, int purple, boolean enforceContrast) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            window.setNavigationBarColor(purple);
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                window.setNavigationBarDividerColor(purple);
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                try { window.setNavigationBarContrastEnforced(enforceContrast); } catch (Throwable ignored) {}
             }
         }
+    }
 
-        // Also clear legacy LIGHT flags directly on decor view where applicable (< API 30 effect)
+    private static void enforceLightIcons(WindowInsetsControllerCompat controller) {
+        if (controller == null) return;
+        controller.setAppearanceLightStatusBars(false);
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            controller.setAppearanceLightNavigationBars(false);
+        }
+    }
+
+    private static void clearLegacyLightFlags(Window window) {
         View decor = window.getDecorView();
         int vis = decor.getSystemUiVisibility();
-        vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR; // ensure dark icons flag removed
+        vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
         }

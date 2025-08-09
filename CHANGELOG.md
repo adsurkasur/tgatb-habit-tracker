@@ -40,7 +40,6 @@ All notable changes to this project will be documented in this file.
 - Enhanced native plugin for conditional edge-to-edge and proper fullscreen.
 - Updated Android themes for consistent purple theming with white icons.
 
-
 ## 0.2.3 - 2025-08-09
 
 Release automation polish & deterministic Android artifacts.
