@@ -13,14 +13,10 @@ export function CapacitorInit() {
     const timer = setTimeout(() => {
         (async () => {
           try {
-            // Load user settings to apply fullscreen mode
-            const userSettings = await HabitStorage.getSettings();
-            initializeCapacitor({ fullscreenMode: userSettings.fullscreenMode });
-          } catch (error) {
-            console.error('CapacitorInit error:', error);
-            // Fallback initialization without settings
-            initializeCapacitor();
-          }
+            // Settings no longer needed for initialization; unified system bars hook manages fullscreen
+            await HabitStorage.getSettings().catch(()=>{}); // pre-warm storage (ignore errors)
+          } catch {}
+          initializeCapacitor();
         })();
     }, 1000);
 

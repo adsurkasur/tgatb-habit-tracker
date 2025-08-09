@@ -1,6 +1,5 @@
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
-import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
 import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
@@ -8,23 +7,15 @@ import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
 
-let fullscreenPref = false; // mirrors saved settings
-
-// Narrow NavigationBar plugin interface (only what we use)
-interface NavigationBarPlugin {
-  show: () => Promise<void>;
-  hide: () => Promise<void>;
-  setColor: (options: { color: string; darkButtons: boolean }) => Promise<void>;
-}
-const navBar: Partial<NavigationBarPlugin> = NavigationBar as unknown as Partial<NavigationBarPlugin>;
+// Removed unused fullscreen preference & nav bar shim – unified system bars hook owns that state now.
 
 // Simplified initializer (v0.1.0 style) – unified hook manages system bars
-export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean }) => {
+export const initializeCapacitor = async () => {
   if (!isNativePlatform()) return;
   try {
     await SplashScreen.hide().catch(e => console.warn('SplashScreen.hide failed:', e));
     const platform = getPlatform();
-    fullscreenPref = settings?.fullscreenMode ?? false;
+  // (fullscreen preference now tracked exclusively inside useSystemBarsUnified)
 
     // NOTE: Status bar and navigation bar management is now handled by useSystemBarsUnified hook
     // This prevents conflicts and ensures single source of truth for system UI
@@ -49,11 +40,8 @@ export const initializeCapacitor = async (settings?: { fullscreenMode?: boolean 
 // Simple fullscreen toggle (delegated to unified hook)
 export async function setFullscreenMode(enabled: boolean) {
   if (!isNativePlatform()) return;
-  fullscreenPref = enabled;
-  
-  // NOTE: Actual system bar changes are handled by useSystemBarsUnified hook
-  // This just tracks the preference for other parts of the app
-  console.log(`🔧 [CapacitorLib] Fullscreen preference set to: ${enabled} (actual UI changes handled by unified hook)`);
+  // NOTE: Actual system bar changes & preference are handled by useSystemBarsUnified hook
+  console.log(`🔧 [CapacitorLib] Fullscreen preference change requested: ${enabled} (handled by unified hook)`);
 }
 
 // Haptic feedback helpers

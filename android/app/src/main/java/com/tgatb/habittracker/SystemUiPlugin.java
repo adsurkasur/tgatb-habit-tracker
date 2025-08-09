@@ -85,7 +85,7 @@ public class SystemUiPlugin extends Plugin {
             controller.setSystemBarsBehavior(WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
         }
 
-        if (fullscreenEnabled) {
+    if (fullscreenEnabled) {
             // IMPROVED: Hide both status and navigation bars with proper behavior
             if (controller != null) {
                 controller.hide(WindowInsetsCompat.Type.statusBars());
@@ -144,12 +144,13 @@ public class SystemUiPlugin extends Plugin {
 
                 try { window.setStatusBarColor(purple); } catch (Throwable ignored) {}
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    // Keep brand purple even in fullscreen; gesture pill contrasts automatically
                     window.setNavigationBarColor(purple);
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                         window.setNavigationBarDividerColor(purple);
                     }
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                        try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
+                        try { window.setNavigationBarContrastEnforced(true); } catch (Throwable ignored) {}
                     }
                 }
             } else {

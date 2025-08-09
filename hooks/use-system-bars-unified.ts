@@ -65,16 +65,15 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
         if (targetFullscreen) {
           console.log(`🔧 [SystemBars] Applying fullscreen mode`);
           await StatusBar.hide();
-          
-          // Set navigation bar to black/transparent for fullscreen
+          // Keep purple nav bar; only system gesture pill should adapt (native plugin handles appearance)
           try {
             const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
             if (NavigationBar) {
               await NavigationBar.setNavigationBarColor({ 
-                color: '#000000', 
-                darkButtons: false 
+                color: PURPLE_COLOR, 
+                darkButtons: false // keep light (white) gesture indicator/icons
               });
-              console.log(`🔧 [SystemBars] NavigationBar set to black for fullscreen`);
+              console.log(`🔧 [SystemBars] NavigationBar kept purple in fullscreen`);
             } else {
               console.warn('🔧 [SystemBars] NavigationBar plugin not available');
             }
