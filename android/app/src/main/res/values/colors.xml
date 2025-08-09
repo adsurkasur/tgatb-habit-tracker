@@ -6,6 +6,7 @@
     
     <!-- Status bar color - using purple theme color -->
     <color name="status_bar_color">#6750a4</color>
+    <color name="navigation_bar_color">#6750a4</color>
     
     <!-- Alternative status bar colors for different themes -->
     <color name="status_bar_color_dark">#1e1b2e</color>
