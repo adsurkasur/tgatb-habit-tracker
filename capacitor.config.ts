@@ -8,7 +8,8 @@ const config: CapacitorConfig = {
   webDir: 'out',
   plugins: {
     StatusBar: {
-      style: 'dark',
+      // Let runtime JS/native plugin force white icons; avoid dark style which produces dark icons on white
+      style: 'light',
       backgroundColor: '#6750a4',
       overlaysWebView: false
     },

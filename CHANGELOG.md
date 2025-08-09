@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.2 - 2025-08-09
+
+Focused Android system bar stabilization and CI workflow corrections.
+
+### Changes
+
+- Added `SystemBarInit` root component with multi-pass (timed) enforcement of purple (`#6750a4`) status & navigation bar colors plus white icons to eliminate white-on-white race on cold start.
+- Updated Capacitor `StatusBar` plugin config (`style: "light"`) to force white icons over brand purple.
+- Re-enabled legacy `useSystemBars` hook on home page for redundant safety until fully confident native + init component cover all lifecycle paths.
+- Ensured root layout imports `SystemBarInit` so it runs before most UI paints.
+
+### CI / Workflow
+
+- Preparing GitHub Actions fix for Android release job failures (investigating missing sync / build step nuances); version bump to `0.2.2` for next tag once workflow passes.
+
+### Pending / Next
+
+- If emulator still shows dark icons on white at launch, next step: move color & icon enforcement into native `onCreate` before splash and double-check splash theme status bar icon contrast flags.
+- Potential optimization: remove redundant JS enforcement after confirmed stable behavior across resume / orientation / keyboard.
+
 ## 0.2.1 - 2025-08-09
 
 Android system bar theming groundwork and minor native tweaks.

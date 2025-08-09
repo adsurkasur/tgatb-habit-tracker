@@ -6,6 +6,7 @@ import { Providers } from "./providers";
 // import { ServiceWorkerRegistration } from "@/components/sw-registration";
 // import { AnalyticsNotice } from "@/components/analytics-notice";
 import { CapacitorInit } from "@/components/capacitor-init";
+import { SystemBarInit } from "./system-bar-init";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -84,7 +85,8 @@ export default function RootLayout({
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
       </head>
       <body>
-        <CapacitorInit />
+  <CapacitorInit />
+  <SystemBarInit />
         {/* <ServiceWorkerRegistration /> */}
         <Providers>
           {children}
