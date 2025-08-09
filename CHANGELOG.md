@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.3 - 2025-08-09
+
+Release automation polish & deterministic Android artifacts.
+
+### Pipeline Changes
+
+- GitHub Actions: switched from `cap copy` to `cap sync` to regenerate native plugin directory instead of committing generated files.
+- Re-ignored `capacitor-cordova-android-plugins` (generated) keeping repo clean.
+- Normalized APK artifact naming: `tgatb-vX.Y.Z.apk`, `tgatb-vX.Y.Z-unsigned.apk` (if unsigned release produced), and `tgatb-vX.Y.Z-debug.apk`.
+- Build workflow now resilient to missing plugin folder (auto-regenerated) and ensures Gradle plugin resolution via restored `buildscript` repositories.
+
+### Notes
+
+- Next: optional AAB (`bundleRelease`) + checksum generation + automated release notes injection.
+
 ## 0.2.2 - 2025-08-09
 
 Focused Android system bar stabilization and CI workflow corrections.
