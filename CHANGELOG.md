@@ -4,38 +4,41 @@ All notable changes to this project will be documented in this file.
 
 ## 0.2.4 - 2025-08-09
 
-**MAJOR SYSTEM BARS FIX** - Complete overhaul of Android system bar styling and fullscreen mode.
-
-### Fixed
-
-- **White-on-white status bar visibility issue**: Corrected `StatusBarStyles.Dark` vs `StatusBarStyles.Light` usage. Now consistently uses `Light` style (white text) on purple background (#6750a4).
-- **System bar glitches and race conditions**: Eliminated multiple competing system bar management systems that were fighting for control.
-- **Fullscreen mode bugs**: Fixed incomplete fullscreen implementation that only hid status bar. Now properly hides both status and navigation bars with immersive behavior.
-- **Edge-to-edge layout conflicts**: Resolved `WindowCompat.setDecorFitsSystemWindows()` conflicts that caused layout issues.
+**MAJOR SYSTEM BARS FIX** — Complete overhaul of Android system bar styling, fullscreen mode, and edge-to-edge support.
 
 ### Added
 
-- **Unified system bar management**: New `useSystemBarsUnified()` hook provides single source of truth for all system bar operations.
-- **Robust error handling**: Added graceful fallbacks and recovery mechanisms for system bar failures.
-- **Enhanced native plugin**: Improved `SystemUiPlugin.java` with proper synchronization and fullscreen behavior.
-- **Comprehensive documentation**: Added detailed fix documentation in `docs/SYSTEM_BARS_FIX.md`.
+- Unified system bar management: new `useSystemBarsUnified()` hook consolidates all system bar logic.
+- Robust error handling for system bar failures.
+- Comprehensive documentation in `docs/SYSTEM_BARS_FIX.md`.
+- Enhanced native plugin: improved `SystemUiPlugin.java` for proper synchronization and fullscreen behavior.
+- Safe Area plugin integration for better edge-to-edge and system bar handling.
 
 ### Changed
 
-- **Consistent purple theming**: All system bars now use Material Design purple (#6750a4) with white icons/text.
-- **Better performance**: Implemented debouncing and proper state management to prevent rapid system bar changes.
-- **Android theme improvements**: Updated `styles.xml` with correct light icon flags and window insets handling.
+- All system bars now use Material Design purple (#6750a4) with white icons/text for consistent theming.
+- Debouncing and proper state management to prevent rapid system bar changes.
+- Updated Android theme (`styles.xml`) for correct light icon flags and window insets.
+- Refactored and removed legacy Safe Area plugin and navigation bar plugin integrations.
+
+### Fixed
+
+- White-on-white status bar visibility issue: consistently uses `Light` style (white text) on purple background.
+- System bar glitches and race conditions: removed multiple competing management systems.
+- Fullscreen mode bugs: now properly hides both status and navigation bars with immersive behavior.
+- Edge-to-edge layout conflicts: resolved `WindowCompat.setDecorFitsSystemWindows()` issues.
+- Status bar handling for Android 15+: restored proper insets listener to avoid height duplication.
 
 ### Deprecated
 
-- **Legacy system bar hooks**: `useSystemBars()` and `useEnhancedFullscreen()` are now replaced by unified implementation.
+- Legacy system bar hooks: `useSystemBars()` and `useEnhancedFullscreen()` replaced by unified implementation.
 
 ### Technical Details
 
-- Fixed StatusBar style confusion: `Light` = white text on dark bg, `Dark` = dark text on light bg
-- Consolidated 4+ competing system bar systems into single `useSystemBarsUnified()` hook
-- Enhanced native `SystemUiPlugin.java` with conditional edge-to-edge and proper fullscreen
-- Updated Android themes for consistent purple theming with white icons
+- Fixed StatusBar style confusion: `Light` = white text on dark bg, `Dark` = dark text on light bg.
+- Consolidated 4+ competing system bar systems into single hook.
+- Enhanced native plugin for conditional edge-to-edge and proper fullscreen.
+- Updated Android themes for consistent purple theming with white icons.
 
 
 ## 0.2.3 - 2025-08-09
