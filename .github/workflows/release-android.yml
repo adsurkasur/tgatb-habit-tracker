@@ -76,11 +76,11 @@ jobs:
           if [ -f release.keystore ]; then
             echo 'Applying signing config via gradle properties'
             cat >> ../gradle.properties <<'EOF'
-MYAPP_UPLOAD_STORE_FILE=release.keystore
-MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD
-MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS
-MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD
-EOF
+          MYAPP_UPLOAD_STORE_FILE=release.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD
+          MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS
+          MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD
+          EOF
           fi
           ./gradlew assembleDebug assembleRelease --stacktrace
 
