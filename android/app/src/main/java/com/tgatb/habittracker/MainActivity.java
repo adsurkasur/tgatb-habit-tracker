@@ -40,17 +40,8 @@ public class MainActivity extends BridgeActivity {
 
     @Override
     public void onBackPressed() {
-        if (SystemUiPlugin.isFullscreenEnabled()) {
-            // Perform WebView back navigation directly without exiting immersive first
-            if (getBridge() != null && getBridge().getWebView().canGoBack()) {
-                getBridge().getWebView().goBack();
-            } else {
-                // Mimic existing JS logic: exit app if no back stack
-                moveTaskToBack(true);
-            }
-            SystemUiPlugin.reapply(this);
-            return; // consume
-        }
+        // FIXED: Always delegate to Capacitor's back button handling
+        // This ensures the JS-side "press again to exit" logic works in all modes
         super.onBackPressed();
     }
 }

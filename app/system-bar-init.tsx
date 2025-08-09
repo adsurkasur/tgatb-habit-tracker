@@ -12,6 +12,31 @@ export const SystemBarInit: React.FC = () => {
     let cancelled = false;
     const apply = async () => {
       try {
+        // Initialize Safe Area plugin first for proper edge-to-edge support
+        interface CapacitorPlugins {
+          SafeArea?: {
+            enable: (config: { config: Record<string, unknown> }) => Promise<void>;
+          };
+        }
+        interface CapacitorGlobal {
+          Capacitor?: {
+            Plugins?: CapacitorPlugins;
+          };
+        }
+        const plugins = ((window as CapacitorGlobal).Capacitor?.Plugins || {}) as CapacitorPlugins;
+        if (plugins.SafeArea) {
+          await plugins.SafeArea.enable({
+            config: {
+              customColorsForSystemBars: true,
+              statusBarColor: purple,
+              statusBarContent: 'light',
+              navigationBarColor: purple,
+              navigationBarContent: 'light',
+              offset: 0
+            }
+          });
+        }
+        
         // CRITICAL FIX: Light style = WHITE text on purple background
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
         await StatusBar.setBackgroundColor({ color: purple });

@@ -1,4 +1,5 @@
 /// <reference types="@capawesome/capacitor-android-edge-to-edge-support" />
+/// <reference types="@capacitor-community/safe-area" />
 
 import type { CapacitorConfig } from '@capacitor/cli';
 
@@ -7,6 +8,15 @@ const config: CapacitorConfig = {
   appName: 'TGATB Habit Tracker',
   webDir: 'out',
   plugins: {
+    SafeArea: {
+      enabled: true,
+      customColorsForSystemBars: true,
+      statusBarColor: '#6750a4',
+      statusBarContent: 'light',
+      navigationBarColor: '#6750a4', 
+      navigationBarContent: 'light',
+      offset: 0
+    },
     StatusBar: {
       // Let runtime JS/native plugin force white icons; avoid dark style which produces dark icons on white
       style: 'light',

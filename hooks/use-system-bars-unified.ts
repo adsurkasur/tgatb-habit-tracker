@@ -17,6 +17,7 @@ import { NavigationBar } from '@capgo/capacitor-navigation-bar';
  * - Proper synchronization and debouncing
  * - Consistent purple theming (#6750a4)
  * - Robust error handling and recovery
+ * - Integration with Safe Area plugin for proper edge-to-edge support
  */
 
 const PURPLE_COLOR = '#6750a4';
@@ -51,40 +52,83 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     
     try {
       if (isAndroid) {
-        // Use native SystemUi plugin for Android when available
+        // Primary approach: Use Safe Area plugin for consistent system bar management
+        try {
+          const { SafeArea } = (window as any).Capacitor?.Plugins || {};
+          if (SafeArea) {
+            if (targetFullscreen) {
+              // Fullscreen: Hide both status and navigation bars
+              await StatusBar.hide();
+              try {
+                await NavigationBar.setNavigationBarColor({ 
+                  color: '#000000', 
+                  darkButtons: false 
+                });
+              } catch (e) {
+                console.warn('NavigationBar hide failed:', e);
+              }
+              
+              // Configure Safe Area for edge-to-edge
+              await SafeArea.enable({
+                config: {
+                  customColorsForSystemBars: true,
+                  statusBarColor: '#00000000', // transparent
+                  statusBarContent: 'light',
+                  navigationBarColor: '#00000000', // transparent
+                  navigationBarContent: 'light',
+                }
+              });
+            } else {
+              // Normal mode: Show purple system bars
+              await StatusBar.show();
+              await StatusBar.setStyle({ style: StatusBarStyles.Light });
+              await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
+              
+              try {
+                await NavigationBar.setNavigationBarColor({ 
+                  color: PURPLE_COLOR, 
+                  darkButtons: false 
+                });
+              } catch (e) {
+                console.warn('NavigationBar color failed:', e);
+              }
+              
+              // Configure Safe Area with purple theme
+              await SafeArea.enable({
+                config: {
+                  customColorsForSystemBars: true,
+                  statusBarColor: PURPLE_COLOR,
+                  statusBarContent: 'light',
+                  navigationBarColor: PURPLE_COLOR,
+                  navigationBarContent: 'light',
+                }
+              });
+            }
+            
+            globalState.isFullscreen = targetFullscreen;
+            console.log(`System bars applied via Safe Area: fullscreen=${targetFullscreen}`);
+            return;
+          }
+        } catch (e) {
+          console.warn('SafeArea plugin failed, falling back to StatusBar API:', e);
+        }
+
+        // Fallback: Native SystemUi plugin
         const { SystemUi } = (window as any).Capacitor?.Plugins || {};
-        
         if (SystemUi) {
-          // Prefer native plugin for consistent behavior
           await SystemUi.setFullscreen({ enabled: targetFullscreen });
           globalState.isFullscreen = targetFullscreen;
+          console.log(`System bars applied via SystemUi: fullscreen=${targetFullscreen}`);
           return;
         }
         
-        // Fallback to Capacitor StatusBar API
+        // Last resort: Basic StatusBar API
         if (targetFullscreen) {
           await StatusBar.hide();
-          try {
-            await NavigationBar.setNavigationBarColor({ 
-              color: '#000000', 
-              darkButtons: false 
-            });
-          } catch (e) {
-            console.warn('NavigationBar.setNavigationBarColor failed:', e);
-          }
         } else {
           await StatusBar.show();
-          // CRITICAL: Light style = WHITE text on purple background
           await StatusBar.setStyle({ style: StatusBarStyles.Light });
           await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
-          try {
-            await NavigationBar.setNavigationBarColor({ 
-              color: PURPLE_COLOR, 
-              darkButtons: false 
-            });
-          } catch (e) {
-            console.warn('NavigationBar.setNavigationBarColor failed:', e);
-          }
         }
       } else if (isIOS) {
         // iOS implementation

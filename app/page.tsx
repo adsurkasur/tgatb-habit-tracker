@@ -54,27 +54,6 @@ export default function Home() {
     registerModal('welcome', { isOpen: isWelcomeVisible, onClose: closeWelcome, priority: 11 });
   }, [drawerOpen, showSettings, showDonate, showHistory, showAbout, showAddHabit, showEditHabit, isWelcomeVisible, closeWelcome, registerModal]);
 
-  // Back again to exit logic (Android only)
-  const lastBackPressRef = useRef<number>(0);
-  useEffect(() => {
-    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
-    const handler = App.addListener('backButton', () => {
-      const now = Date.now();
-      if (hasOpenModals()) {
-        // Close the topmost modal via manager
-        closeTopModal();
-        return;
-      }
-      if (now - lastBackPressRef.current < 2000) {
-        App.exitApp();
-      } else {
-        lastBackPressRef.current = now;
-        toast({ title: "Press back again to exit", duration: 2000 });
-      }
-    });
-    return () => { handler.then(h => h.remove()); };
-  }, [toast, hasOpenModals, closeTopModal]);
-  
   // Navigation bar handling centralized in Capacitor layer
   
   const {
@@ -100,6 +79,34 @@ export default function Home() {
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
   useSystemBarsUnified(settings.fullscreenMode);
+
+  // Back again to exit logic (Android only) - MOVED after settings are available
+  const lastBackPressRef = useRef<number>(0);
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform() || Capacitor.getPlatform() !== "android") return;
+    const handler = App.addListener('backButton', () => {
+      const now = Date.now();
+      
+      // DEBUG: Log back button press and modal state
+      console.log('Back button pressed, hasOpenModals:', hasOpenModals(), 'fullscreen:', settings.fullscreenMode);
+      
+      if (hasOpenModals()) {
+        // Close the topmost modal via manager
+        closeTopModal();
+        return;
+      }
+      
+      // FIXED: Ensure back-to-exit works in both normal and fullscreen mode
+      if (now - lastBackPressRef.current < 2000) {
+        console.log('Double back press detected, exiting app');
+        App.exitApp();
+      } else {
+        lastBackPressRef.current = now;
+        toast({ title: "Press back again to exit", duration: 2000 });
+      }
+    });
+    return () => { handler.then(h => h.remove()); };
+  }, [toast, hasOpenModals, closeTopModal, settings.fullscreenMode]);
 
   const handleTrackHabit = (completed: boolean) => {
     if (currentHabit) {

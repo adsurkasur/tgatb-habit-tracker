@@ -5,6 +5,7 @@ import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
+import android.view.WindowInsets;
 import androidx.core.view.WindowCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
@@ -130,18 +131,52 @@ public class SystemUiPlugin extends Plugin {
     private static void applyColorsAndAppearance(Window window, WindowInsetsControllerCompat controller) {
         try {
             int purple = Color.parseColor(PURPLE);
-            window.setStatusBarColor(purple);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                window.setNavigationBarColor(purple);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                    // Optional: unify divider
-                    window.setNavigationBarDividerColor(purple);
+            
+            // ANDROID 15+ COMPATIBILITY: Use WindowInsets API instead of deprecated window.statusBarColor
+            if (Build.VERSION.SDK_INT >= 35) { // Android 15+ (API 35)
+                // Use WindowInsets API for Android 15+
+                View decorView = window.getDecorView();
+                decorView.setOnApplyWindowInsetsListener((view, insets) -> {
+                    // Convert to WindowInsetsCompat for consistent API
+                    WindowInsetsCompat insetsCompat = WindowInsetsCompat.toWindowInsetsCompat(insets, view);
+                    
+                    // Set status bar background using view background
+                    view.setBackgroundColor(purple);
+                    
+                    // Get status bar insets for proper padding  
+                    androidx.core.graphics.Insets statusBarInsets = insetsCompat.getInsets(WindowInsetsCompat.Type.statusBars());
+                    
+                    // Apply padding to avoid content overlap
+                    view.setPadding(0, statusBarInsets.top, 0, 0);
+                    
+                    return insets;
+                });
+                
+                // Still set navigation bar color if possible
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setNavigationBarColor(purple);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        window.setNavigationBarDividerColor(purple);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
+                    }
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                    try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
+            } else {
+                // For Android 14 and below - use legacy method
+                window.setStatusBarColor(purple);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setNavigationBarColor(purple);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        window.setNavigationBarDividerColor(purple);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
+                    }
                 }
             }
         } catch (Exception ignored) {}
+        
         if (controller != null) {
             // Force white icons (light content) by disabling light appearance flags
             controller.setAppearanceLightStatusBars(false);
