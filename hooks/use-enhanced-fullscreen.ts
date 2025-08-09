@@ -27,14 +27,9 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       debounceRef.current = window.setTimeout(async () => {
         try {
           const { EdgeToEdge } = (window as any).Capacitor?.Plugins || {};
-          // Ensure nav bar is fully hidden & transparent
+          // @capgo plugin cannot hide the bar, only set color; rely on fullscreen flag for status bar
           try {
-            if (typeof NavigationBar.setTransparency === 'function') {
-              await NavigationBar.setTransparency({ isTransparent: true });
-            }
-            await NavigationBar.hide();
-            // Re-apply shortly after to fight insets race conditions
-            setTimeout(() => { NavigationBar.hide().catch(() => {}); }, 120);
+            await NavigationBar.setNavigationBarColor({ color: '#000000', darkButtons: false });
           } catch {}
           // Optionally, for Android 11+, make nav bar fully transparent:
           if (isFullscreenEnabled) {
@@ -50,12 +45,7 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
               await StatusBar.setBackgroundColor({ color: '#6750a4' });
             }
             await StatusBar.setStyle({ style: StatusBarStyles.Dark });
-            try {
-              await NavigationBar.show();
-              if (typeof NavigationBar.setColor === 'function') {
-                await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
-              }
-            } catch {}
+            try { await NavigationBar.setNavigationBarColor({ color: '#6750a4', darkButtons: false }); } catch {}
           }
         } catch (error) {
           console.warn('Failed to apply fullscreen settings:', error);
@@ -110,17 +100,9 @@ export const useEnhancedFullscreen = (isFullscreenEnabled: boolean) => {
       
       try {
         // Always hide navigation bar using better plugin
-        if (isFullscreenEnabled) {
-          await NavigationBar.hide();
-          if (typeof NavigationBar.setTransparency === 'function') {
-            await NavigationBar.setTransparency({ isTransparent: true });
-          }
-        } else {
-          await NavigationBar.show();
-          if (typeof NavigationBar.setColor === 'function') {
-            await NavigationBar.setColor({ color: '#6750a4', darkButtons: false });
-          }
-        }
+  // Only color adjustment available
+  const navColor = isFullscreenEnabled ? '#000000' : '#6750a4';
+  await NavigationBar.setNavigationBarColor({ color: navColor, darkButtons: false });
         
         if (isFullscreenEnabled) {
           await StatusBar.hide();

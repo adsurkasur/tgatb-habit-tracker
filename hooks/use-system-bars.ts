@@ -21,11 +21,12 @@ export const useSystemBars = () => {
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
         await StatusBar.setBackgroundColor({ color: isDarkMode ? darkThemeColor : lightThemeColor });
         try {
-          await (NavigationBar as any).setColor({
+          await NavigationBar.setNavigationBarColor({
             color: isDarkMode ? darkThemeColor : lightThemeColor,
+            // We want white (light) icons on our purple/dark backgrounds => darkButtons false
             darkButtons: false
           });
-        } catch (e) { console.warn('NavigationBar.setColor failed:', e); }
+        } catch (e) { console.warn('NavigationBar.setNavigationBarColor failed:', e); }
       } catch (e) {
         console.warn('useSystemBars setBars failed:', e);
       }
