@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.5 - 2025-08-09
+
+### Changed
+
+- Refactored Android SystemUiPlugin for improved edge-to-edge and fullscreen handling.
+- Enhanced proguard rules for Capacitor, WebView, and reflection-based plugins.
+- Updated Android build configuration: enabled R8 shrinking, resource shrinking, and improved signing config placeholders.
+- Deprecated `useEnhancedFullscreen` hook in favor of `useSystemBarsUnified` for unified system bar control.
+- Refactored `use-system-bars-unified.ts` for better maintainability and clarity.
+- Improved project metadata in `package.json` (repository, bugs, homepage, engines).
+
+### Documentation
+
+- Improved overall project documentation and accessibility for contributors and users.
+
 ## 0.2.4 - 2025-08-09
 
 **MAJOR SYSTEM BARS FIX** — Complete overhaul of Android system bar styling, fullscreen mode, and edge-to-edge support.
