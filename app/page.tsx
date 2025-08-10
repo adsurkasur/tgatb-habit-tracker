@@ -1,7 +1,7 @@
 // System bars handled centrally by SystemBarsManager
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback, useMemo } from "react";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
@@ -108,17 +108,18 @@ export default function Home() {
     return () => { handler.then(h => h.remove()); };
   }, [toast, hasOpenModals, closeTopModal, settings.fullscreenMode]);
 
-  const handleTrackHabit = (completed: boolean) => {
+  const handleTrackHabit = useCallback((completed: boolean) => {
     if (currentHabit) {
       trackHabit(currentHabit.id, completed);
     }
-  };
+  }, [currentHabit, trackHabit]);
 
-  const handleUndoHabit = () => {
+  const demoTrackHandler = useCallback(() => {}, []);
+  const handleUndoHabit = useCallback(() => {
     if (currentHabit) {
       undoHabitTracking(currentHabit.id);
     }
-  };
+  }, [currentHabit, undoHabitTracking]);
 
   const handleAddHabit = (name: string, type: HabitType) => {
   addHabit({ name, type });
@@ -164,9 +165,9 @@ export default function Home() {
   };
 
   // Get current habit completion status
-  const currentHabitStatus = currentHabit 
-    ? getHabitCompletionStatus(currentHabit.id) 
-    : null;
+  const currentHabitStatus = useMemo(() => (
+    currentHabit ? getHabitCompletionStatus(currentHabit.id) : null
+  ), [currentHabit, getHabitCompletionStatus]);
 
   // Demo habit for welcome tour step 4
   const demoHabit: Habit = {
@@ -289,7 +290,7 @@ export default function Home() {
 
                   <HabitCard 
                     habit={displayedHabit} 
-                    onTrack={shouldShowDemoHabit ? () => {} : handleTrackHabit}
+                    onTrack={shouldShowDemoHabit ? demoTrackHandler : handleTrackHabit}
                     onUndo={shouldShowDemoHabit ? undefined : handleUndoHabit}
                     isCompletedToday={shouldShowDemoHabit ? false : currentHabitStatus?.isCompletedToday}
                     completedAt={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog?.timestamp}

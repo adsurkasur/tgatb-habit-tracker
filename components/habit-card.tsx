@@ -69,7 +69,21 @@ function HabitCardComponent({
 }
 
 // Only re-render if props actually change
-export const HabitCard = memo(HabitCardComponent);
+function areEqual(prevProps: HabitCardProps, nextProps: HabitCardProps) {
+  // Only re-render if habit id, navigationEvent.seq, isCompletedToday, completedAt, or todayLog change
+  return (
+    prevProps.habit.id === nextProps.habit.id &&
+    prevProps.isCompletedToday === nextProps.isCompletedToday &&
+    prevProps.completedAt === nextProps.completedAt &&
+    prevProps.onTrack === nextProps.onTrack &&
+    prevProps.onUndo === nextProps.onUndo &&
+    JSON.stringify(prevProps.todayLog) === JSON.stringify(nextProps.todayLog) &&
+    ((prevProps.navigationEvent && nextProps.navigationEvent && prevProps.navigationEvent.seq === nextProps.navigationEvent.seq) ||
+      (!prevProps.navigationEvent && !nextProps.navigationEvent))
+  );
+}
+
+export const HabitCard = memo(HabitCardComponent, areEqual);
 
 function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo }: {
   habit: Habit;
