@@ -1,7 +1,7 @@
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-import { App } from '@capacitor/app';
+// import { App } from '@capacitor/app';
 import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 export const isNativePlatform = () => Capacitor.isNativePlatform();
@@ -28,10 +28,7 @@ export const initializeCapacitor = async () => {
       root.style.setProperty('--safe-area-top', '0px');
     } catch {}
 
-    // Back button
-    App.addListener('backButton', ({ canGoBack }) => {
-      if (!canGoBack) App.exitApp().catch(()=>{}); else window.history.back();
-    }).catch(()=>{});
+    // Back button listener removed to avoid conflict with page-specific handler
   } catch (error) {
     console.error('Error initializing Capacitor:', error);
   }
