@@ -8,6 +8,8 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 
 export function useHabits() {
+  // Animation timing constant (must match CSS animation duration in globals.css)
+  const HABIT_ANIMATION_DURATION = 250; // ms
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   const [navigationDirection, setNavigationDirection] = useState<'left' | 'right' | null>(null);
@@ -154,7 +156,8 @@ export function useHabits() {
         const nextIndex = (prev + 1) % habits.length;
         if (nextIndex !== prev) {
           setNavigationDirection('right');
-          setTimeout(() => setNavigationDirection(null), 250);
+          // Sync navigationDirection reset with animation duration
+          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
         }
         return nextIndex;
       });
@@ -167,7 +170,8 @@ export function useHabits() {
         const prevIndex = (prev - 1 + habits.length) % habits.length;
         if (prevIndex !== prev) {
           setNavigationDirection('left');
-          setTimeout(() => setNavigationDirection(null), 250);
+          // Sync navigationDirection reset with animation duration
+          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
         }
         return prevIndex;
       });
@@ -185,7 +189,8 @@ export function useHabits() {
       }
       setCurrentHabitIndex(index);
       // Clear direction after animation
-  setTimeout(() => setNavigationDirection(null), 250);
+  // Sync navigationDirection reset with animation duration
+  setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
     }
   };
 
