@@ -29,8 +29,8 @@
     "android:build": "npm run build && node scripts/fix-paths.js && npx cap sync android",
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
-  "android:sync": "npx cap sync android",
-  "upver": "node scripts/upver.cjs"
+    "android:sync": "npx cap sync android",
+    "syncver": "node scripts/syncver.cjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",

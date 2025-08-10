@@ -1,4 +1,4 @@
-// scripts/upver.cjs
+// scripts/syncver.cjs
 // Syncs Android versionName and versionCode in build.gradle with package.json
 
 const fs = require('fs');
