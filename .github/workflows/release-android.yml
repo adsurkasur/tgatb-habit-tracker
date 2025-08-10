@@ -120,9 +120,8 @@ jobs:
 
       - name: Verify APK signature
         run: |
-          VERSION=${{ steps.version.outputs.tag }}
-          VERSION=${VERSION#v}
-          jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
+            VERSION=${{ steps.version.outputs.tag }}
+            jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
         continue-on-error: false
 
       - name: Upload signed release APK to GitHub Release
