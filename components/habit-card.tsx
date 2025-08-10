@@ -33,7 +33,7 @@ function HabitCardComponent({
   }, []);
   const isPositiveAction = todayLog ? (habit.type === "good" ? todayLog.completed : !todayLog.completed) : false;
   // Debug: log every render and animation class
-  if (navigationEvent) {
+  if (navigationEvent && process.env.NODE_ENV !== 'production') {
     // Throttle duplicate logs in the same microtask (React strict mode double render in dev)
     type HabitCardWindow = Window & { __habitCardLastLog?: { seq: number | null } };
     const win = window as HabitCardWindow;
@@ -142,10 +142,14 @@ function useSlideAnimation(
       if (seq !== previousSeqRef.current) {
         previousSeqRef.current = seq;
         setAnimationClass(dir === 'left' ? 'slide-from-left' : 'slide-from-right');
-        console.debug('[useSlideAnimation] Trigger animation for habit', habitId, 'seq:', seq, 'dir:', dir);
+        if (process.env.NODE_ENV !== 'production') {
+          console.debug('[useSlideAnimation] Trigger animation for habit', habitId, 'seq:', seq, 'dir:', dir);
+        }
         const timer = setTimeout(() => {
           setAnimationClass('');
-          console.debug('[useSlideAnimation] Animation cleared for habit', habitId, 'seq:', seq);
+          if (process.env.NODE_ENV !== 'production') {
+            console.debug('[useSlideAnimation] Animation cleared for habit', habitId, 'seq:', seq);
+          }
         }, 250);
         return () => clearTimeout(timer);
       }

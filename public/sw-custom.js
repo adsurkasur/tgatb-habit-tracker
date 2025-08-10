@@ -24,7 +24,9 @@ self.addEventListener('push', handlePushNotification);
 self.addEventListener('notificationclick', handleNotificationClick);
 
 async function handleInstall(event) {
-  console.log('[SW] Installing service worker');
+  if (self.location.hostname === 'localhost') {
+    console.log('[SW] Installing service worker');
+  }
   
   event.waitUntil(
     cacheStaticAssets()
@@ -35,7 +37,9 @@ async function handleInstall(event) {
 }
 
 async function handleActivate(event) {
-  console.log('[SW] Activating service worker');
+  if (self.location.hostname === 'localhost') {
+    console.log('[SW] Activating service worker');
+  }
   
   event.waitUntil(
     Promise.all([
@@ -64,7 +68,9 @@ async function handleFetch(event) {
 
 async function handleBackgroundSync(event) {
   // Background sync removed - app uses client-side storage only
-  console.log('[SW] Background sync not needed - using client-side storage');
+  if (self.location.hostname === 'localhost') {
+    console.log('[SW] Background sync not needed - using client-side storage');
+  }
 }
 
 async function handlePushNotification(event) {
@@ -157,7 +163,9 @@ async function fetchAndCache(request, cache) {
 }
 
 async function syncOfflineHabits() {
-  console.log('[SW] Syncing offline habits...');
+  if (self.location.hostname === 'localhost') {
+    console.log('[SW] Syncing offline habits...');
+  }
   // This would implement actual sync logic
   // For now, just log the intent
 }

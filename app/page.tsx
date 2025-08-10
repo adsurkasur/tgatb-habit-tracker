@@ -87,8 +87,6 @@ export default function Home() {
     const handler = App.addListener('backButton', () => {
       const now = Date.now();
       
-      // DEBUG: Log back button press and modal state
-      console.log('Back button pressed, hasOpenModals:', hasOpenModals(), 'fullscreen:', settings.fullscreenMode);
       
       if (hasOpenModals()) {
         // Close the topmost modal via manager
@@ -98,7 +96,6 @@ export default function Home() {
       
       // FIXED: Ensure back-to-exit works in both normal and fullscreen mode
       if (now - lastBackPressRef.current < 2000) {
-        console.log('Double back press detected, exiting app');
         App.exitApp();
       } else {
         lastBackPressRef.current = now;
