@@ -96,28 +96,27 @@ jobs:
       - name: Normalize APK filenames
         id: rename
         run: |
-          VERSION=${{ steps.version.outputs.tag }}
-          VERSION=${VERSION#v}
-          OUTDIR=android/app/build/outputs/apk
-          mkdir -p renamed
-          # Debug APK
-          if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
-            cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
-          fi
-          # Release APK (signed)
-          if [ -f "$OUTDIR/release/app-release.apk" ]; then
-            cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
-          else
-            echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
-            echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
-            ls -l $OUTDIR/release
-            exit 1
-          fi
-          # Release APK (unsigned)
-          if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
-            cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
-          fi
-          ls -l renamed || true
+            VERSION=${{ steps.version.outputs.tag }}
+            OUTDIR=android/app/build/outputs/apk
+            mkdir -p renamed
+            # Debug APK
+            if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
+              cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
+            fi
+            # Release APK (signed)
+            if [ -f "$OUTDIR/release/app-release.apk" ]; then
+              cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
+            else
+              echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
+              echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
+              ls -l $OUTDIR/release
+              exit 1
+            fi
+            # Release APK (unsigned)
+            if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
+              cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
+            fi
+            ls -l renamed || true
 
       - name: Verify APK signature
         run: |
