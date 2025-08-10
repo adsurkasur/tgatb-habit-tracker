@@ -2,6 +2,36 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.8 - 2025-08-11
+
+**Overview:**  
+Minor improvements, bug fixes, and UI polish. Focused on stability and user experience.
+
+### Added (0.2.8)
+
+- Added new UI polish for habit cards and dialogs.
+- Introduced additional logging for export/import actions.
+- Added support for Android 15+ system bar edge cases.
+
+### Changes (0.2.8)
+
+- Improved error handling in data export and import flows.
+- Updated dependencies for better compatibility and security.
+- Refined navigation animation timing for smoother transitions.
+- Enhanced offline indicator and toast for clarity.
+
+### Fixed (0.2.8)
+
+- Fixed rare crash on habit deletion.
+- Resolved layout glitches on certain Android devices.
+- Addressed minor PWA install prompt issues.
+- Fixed edge-to-edge rendering bug on Android 15+.
+
+### Technical Details (0.2.8)
+
+- Updated documentation for new Android system bar handling.
+- Minor refactoring in hooks and shared utilities for maintainability.
+
 ## 0.2.7 - 2025-08-10
 
 **Overview:**  
