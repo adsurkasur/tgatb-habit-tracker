@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, memo } from "react";
 
 interface HabitCardProps {
   habit: Habit;
@@ -16,7 +16,7 @@ interface HabitCardProps {
   todayLog?: HabitLog; // Log for today to determine positive/negative
 }
 
-export function HabitCard({ 
+function HabitCardComponent({ 
   habit, 
   onTrack, 
   onUndo, 
@@ -67,6 +67,9 @@ export function HabitCard({
     />
   );
 }
+
+// Only re-render if props actually change
+export const HabitCard = memo(HabitCardComponent);
 
 function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo }: {
   habit: Habit;
