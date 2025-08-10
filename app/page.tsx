@@ -59,7 +59,7 @@ export default function Home() {
   const {
     currentHabit,
     currentHabitIndex,
-    navigationDirection,
+    navigationEvent,
     goodHabits,
     badHabits,
     settings,
@@ -293,7 +293,7 @@ export default function Home() {
                     onUndo={shouldShowDemoHabit ? undefined : handleUndoHabit}
                     isCompletedToday={shouldShowDemoHabit ? false : currentHabitStatus?.isCompletedToday}
                     completedAt={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog?.timestamp}
-                    navigationDirection={shouldShowDemoHabit ? null : navigationDirection}
+                    navigationEvent={shouldShowDemoHabit ? null : navigationEvent}
                     todayLog={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog}
                   />
 

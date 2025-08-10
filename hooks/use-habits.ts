@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Habit, HabitType, UserSettings } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
@@ -71,29 +71,17 @@ export function useHabits() {
     URL.revokeObjectURL(url);
     return true;
   }
-  // Shared navigation logic for habits
-  function navigateHabit(direction: 'next' | 'prev') {
-    if (habits.length > 1) {
-      setCurrentHabitIndex(prev => {
-        let newIndex = prev;
-        if (direction === 'next') {
-          newIndex = (prev + 1) % habits.length;
-        } else if (direction === 'prev') {
-          newIndex = (prev - 1 + habits.length) % habits.length;
-        }
-        if (newIndex !== prev) {
-          setNavigationDirection(direction === 'next' ? 'right' : 'left');
-          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
-        }
-        return newIndex;
-      });
-    }
-  }
   // Animation timing constant (must match CSS animation duration in globals.css)
   const HABIT_ANIMATION_DURATION = 250; // ms
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
-  const [navigationDirection, setNavigationDirection] = useState<'left' | 'right' | null>(null);
+  /**
+  * navigationEvent emits a new object with an ever-increasing sequence number for each logical navigation.
+  * Consumers trigger animations exactly once per event (seq) instead of relying on transient
+  * direction state and timeouts, avoiding duplicate animations.
+   */
+  const [navigationEvent, setNavigationEvent] = useState<{ dir: 'left' | 'right'; seq: number } | null>(null);
+  const navSeqRef = useRef(0);
   const [settings, setSettings] = useState<UserSettings>({
     darkMode: false,
     language: "en",
@@ -217,28 +205,38 @@ export function useHabits() {
     };
   };
 
-  const moveToNextHabit = () => {
-    navigateHabit('next');
-  };
+  // Shared navigation logic for habits (event-based)
+  function navigateHabit(direction: 'next' | 'prev') {
+    if (habits.length > 1) {
+      setCurrentHabitIndex(prev => {
+        let newIndex = prev;
+        if (direction === 'next') {
+          newIndex = (prev + 1) % habits.length;
+        } else if (direction === 'prev') {
+          newIndex = (prev - 1 + habits.length) % habits.length;
+        }
+        if (newIndex !== prev) {
+          const dir = direction === 'next' ? 'right' : 'left';
+          navSeqRef.current += 1;
+            setNavigationEvent({ dir, seq: navSeqRef.current });
+        }
+        return newIndex;
+      });
+    }
+  }
 
-  const moveToPreviousHabit = () => {
-    navigateHabit('prev');
-  };
+  const moveToNextHabit = () => navigateHabit('next');
+  const moveToPreviousHabit = () => navigateHabit('prev');
 
   const navigateToHabitIndex = (index: number) => {
     const isValidIndex = index >= 0 && index < habits.length;
     const isDifferentIndex = index !== currentHabitIndex;
     if (isValidIndex && isDifferentIndex) {
-      // Determine direction based on index difference
       const currentIndex = currentHabitIndex;
-      if (index > currentIndex) {
-        setNavigationDirection('right');
-      } else if (index < currentIndex) {
-        setNavigationDirection('left');
-      }
+      const dir: 'left' | 'right' = index > currentIndex ? 'right' : 'left';
       setCurrentHabitIndex(index);
-      // Clear direction after animation
-      setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
+      navSeqRef.current += 1;
+        setNavigationEvent({ dir, seq: navSeqRef.current });
     }
   };
 
@@ -287,7 +285,7 @@ export function useHabits() {
     badHabits: habits.filter(h => h.type === 'bad'),
     currentHabit,
     currentHabitIndex,
-    navigationDirection,
+  navigationEvent,
     settings,
     addHabit,
     updateHabit,

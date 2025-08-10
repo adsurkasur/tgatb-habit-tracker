@@ -11,7 +11,8 @@ interface HabitCardProps {
   onUndo?: () => void;
   isCompletedToday?: boolean;
   completedAt?: Date;
-  navigationDirection?: 'left' | 'right' | null;
+  /** navigationEvent triggers slide animation once per sequence increment. */
+  navigationEvent?: { dir: 'left' | 'right'; seq: number } | null;
   todayLog?: HabitLog; // Log for today to determine positive/negative
 }
 
@@ -21,11 +22,27 @@ export function HabitCard({
   onUndo, 
   isCompletedToday = false,
   completedAt,
-  navigationDirection = null,
+  navigationEvent = null,
   todayLog
 }: HabitCardProps) {
-  const animationClass = useSlideAnimation(habit?.id, navigationDirection);
+  const animationClass = useSlideAnimation(habit?.id, navigationEvent);
+  const [initialApplied, setInitialApplied] = useState(true);
+  useEffect(() => {
+    const t = setTimeout(() => setInitialApplied(false), 250);
+    return () => clearTimeout(t);
+  }, []);
   const isPositiveAction = todayLog ? (habit.type === "good" ? todayLog.completed : !todayLog.completed) : false;
+  // Debug: log every render and animation class
+  if (navigationEvent) {
+    // Throttle duplicate logs in the same microtask (React strict mode double render in dev)
+    const lastLogRef = (window as any).__habitCardLastLog || { seq: null };
+    if (lastLogRef.seq !== navigationEvent.seq) {
+      console.debug('[HabitCard] Render (seq change) habit', habit?.id, navigationEvent, 'anim:', animationClass, 'initial:', initialApplied);
+      (window as any).__habitCardLastLog = { seq: navigationEvent.seq };
+    } else {
+      console.debug('[HabitCard] Re-render same seq (likely StrictMode) habit', habit?.id, 'anim:', animationClass);
+    }
+  }
   if (!habit) {
     return (
       <Card className="w-full max-w-md mx-auto p-6 bg-muted/50">
@@ -39,7 +56,7 @@ export function HabitCard({
   return (
     <HabitCardContent
       habit={habit}
-      animationClass={animationClass}
+      animationClass={initialApplied ? `${animationClass} habit-card-initial` : animationClass}
       isCompletedToday={isCompletedToday}
       completedAt={completedAt}
       isPositiveAction={isPositiveAction}
@@ -97,26 +114,26 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
 
 function useSlideAnimation(
   habitId: string | number | undefined,
-  navigationDirection: 'left' | 'right' | null,
+  navigationEvent: { dir: 'left' | 'right'; seq: number } | null | undefined,
 ) {
   const [animationClass, setAnimationClass] = useState('');
-  const previousHabitId = useRef(habitId);
+  const previousSeqRef = useRef<number | null>(null);
 
   useEffect(() => {
-    if (
-      habitId &&
-      habitId !== previousHabitId.current &&
-      navigationDirection !== null
-    ) {
-      if (navigationDirection === 'left') setAnimationClass('slide-from-left');
-      else if (navigationDirection === 'right') setAnimationClass('slide-from-right');
-      else setAnimationClass('');
-
-      previousHabitId.current = habitId;
-      const timer = setTimeout(() => setAnimationClass(''), 250);
-      return () => clearTimeout(timer);
+    if (navigationEvent && habitId) {
+      const { seq, dir } = navigationEvent;
+      if (seq !== previousSeqRef.current) {
+        previousSeqRef.current = seq;
+        setAnimationClass(dir === 'left' ? 'slide-from-left' : 'slide-from-right');
+        console.debug('[useSlideAnimation] Trigger animation for habit', habitId, 'seq:', seq, 'dir:', dir);
+        const timer = setTimeout(() => {
+          setAnimationClass('');
+          console.debug('[useSlideAnimation] Animation cleared for habit', habitId, 'seq:', seq);
+        }, 250);
+        return () => clearTimeout(timer);
+      }
     }
-  }, [habitId, navigationDirection]);
+  }, [habitId, navigationEvent]);
 
   return animationClass;
 }

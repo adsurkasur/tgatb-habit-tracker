@@ -162,14 +162,17 @@
     transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
-  /* Habit Card Cycling Animations - Fixed */
-  .habit-card-animated {
-    animation: habit-card-slide-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Habit Card Animations */
+  /* Base class no longer applies animation directly to avoid double animations with directional slides */
+  .habit-card-animated { }
+
+  /* Initial mount animation (applied only on first render before any navigation) */
+  .habit-card-initial {
+    animation: habit-card-initial-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: both;
   }
   
-  /* Default slide in animation */
-  @keyframes habit-card-slide-in {
+  @keyframes habit-card-initial-in {
     0% {
       opacity: 0;
       transform: translateX(10px) scale(0.995);
