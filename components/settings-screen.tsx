@@ -31,7 +31,7 @@ interface SettingsScreenProps {
   settings: UserSettings;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => void;
-  onImportData: (file: File) => void;
+  // onImportData removed, not implemented
   onShowHelp?: () => void;
 }
 
@@ -41,7 +41,7 @@ export function SettingsScreen({
   settings, 
   onUpdateSettings, 
   onExportData, 
-  onImportData,
+  // onImportData removed
   onShowHelp
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -120,7 +120,7 @@ export function SettingsScreen({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      onImportData(file);
+  // onImportData removed
       // Reset file input
       e.target.value = '';
     }

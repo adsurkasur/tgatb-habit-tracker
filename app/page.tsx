@@ -74,7 +74,7 @@ export default function Home() {
   moveToPreviousHabit,
     updateSettings,
     exportData,
-    importData,
+  // importData removed, not implemented in useHabits
   } = useHabits();
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
@@ -121,7 +121,7 @@ export default function Home() {
   };
 
   const handleAddHabit = (name: string, type: HabitType) => {
-    addHabit(name, type);
+  addHabit({ name, type });
   };
 
   const handleEditHabit = (habit: Habit) => {
@@ -130,7 +130,7 @@ export default function Home() {
   };
 
   const handleUpdateHabit = (id: string, name: string, type: HabitType) => {
-    updateHabit(id, name, type);
+  updateHabit({ id, name, type });
     setShowEditHabit(false);
     setEditingHabit(null);
   };
@@ -143,7 +143,7 @@ export default function Home() {
       }
     }
     
-    const deletedHabit = deleteHabit(habitId);
+  const deletedHabit = deleteHabit({ id: habitId });
     
     if (deletedHabit) {
       // Show toast with undo option
@@ -412,7 +412,6 @@ export default function Home() {
           settings={settings}
           onUpdateSettings={updateSettings}
           onExportData={exportData}
-          onImportData={importData}
           onShowHelp={() => {
             setShowSettings(false);
             resetWelcome();

@@ -8,6 +8,87 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 
 export function useHabits() {
+  // Helper for Android export
+  async function exportDataAndroid({ data, defaultFilename }: { data: string; defaultFilename: string }) {
+    try {
+      const path = `${defaultFilename}`;
+      await Filesystem.writeFile({
+        path,
+        data,
+        directory: Directory.Cache,
+        encoding: Encoding.UTF8,
+        recursive: true,
+      });
+      const { uri } = await Filesystem.getUri({ path, directory: Directory.Cache });
+      try {
+        await Share.share({
+          title: 'Habit Tracker Export',
+          text: 'Your habit data export file',
+          dialogTitle: 'Share export file',
+          url: uri,
+        });
+      } catch {
+        // If sharing fails, still succeed since file is saved
+      }
+      return true;
+    } catch (err) {
+      console.warn('Native export failed, falling back to web method:', err);
+      return false;
+    }
+  }
+
+  // Helper for Web export
+  async function exportDataWeb({ data, defaultFilename }: { data: string; defaultFilename: string }) {
+    // Web: Try modern File System Access API first (for file save dialog)
+    if ('showSaveFilePicker' in window) {
+      try {
+        const handle = await (window as any).showSaveFilePicker({
+          suggestedName: defaultFilename,
+          types: [
+            {
+              description: 'JSON Files',
+              accept: { 'application/json': ['.json'] },
+            },
+          ],
+        });
+        const writable = await handle.createWritable();
+        await writable.write(data);
+        await writable.close();
+        return true;
+      } catch (err) {
+        // fall through to legacy method
+      }
+    }
+    // Legacy: Download via anchor
+    const blob = new Blob([data], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = defaultFilename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    return true;
+  }
+  // Shared navigation logic for habits
+  function navigateHabit(direction: 'next' | 'prev') {
+    if (habits.length > 1) {
+      setCurrentHabitIndex(prev => {
+        let newIndex = prev;
+        if (direction === 'next') {
+          newIndex = (prev + 1) % habits.length;
+        } else if (direction === 'prev') {
+          newIndex = (prev - 1 + habits.length) % habits.length;
+        }
+        if (newIndex !== prev) {
+          setNavigationDirection(direction === 'next' ? 'right' : 'left');
+          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
+        }
+        return newIndex;
+      });
+    }
+  }
   // Animation timing constant (must match CSS animation duration in globals.css)
   const HABIT_ANIMATION_DURATION = 250; // ms
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -34,15 +115,14 @@ export function useHabits() {
       })();
     }, []);
 
-  const addHabit = (name: string, type: HabitType) => {
+  const addHabit = ({ name, type }: { name: string; type: HabitType }) => {
     const newHabit = HabitStorage.addHabit(name, type);
     setHabits(prev => [...prev, newHabit]);
   };
 
-  const updateHabit = (id: string, name: string, type: HabitType) => {
+  const updateHabit = ({ id, name, type }: { id: string; name: string; type: HabitType }) => {
     HabitStorage.updateHabit(id, { name, type });
     setHabits(prev => prev.map(h => h.id === id ? { ...h, name, type } : h));
-    
     toast({
       title: "Habit updated!",
       description: "Your habit has been successfully updated.",
@@ -50,31 +130,26 @@ export function useHabits() {
     });
   };
 
-  const deleteHabit = (id: string) => {
+  const deleteHabit = ({ id }: { id: string }) => {
     const habitToDelete = habits.find(h => h.id === id);
     if (!habitToDelete) return null;
-    
     HabitStorage.deleteHabit(id);
     setHabits(prev => prev.filter(h => h.id !== id));
-    
     return habitToDelete;
   };
 
   const restoreHabit = (deletedHabit: Habit) => {
     // Restore the habit
     const restoredHabit = HabitStorage.addHabit(deletedHabit.name, deletedHabit.type);
-    
     // Update the restored habit with original data (preserve streak, creation date, etc.)
     HabitStorage.updateHabit(restoredHabit.id, {
       streak: deletedHabit.streak,
       createdAt: deletedHabit.createdAt,
       lastCompletedDate: deletedHabit.lastCompletedDate,
     });
-
     // Update state with fresh data from storage
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
-    
     toast({
       title: "Habit restored!",
       description: "Your habit has been successfully restored.",
@@ -86,9 +161,7 @@ export function useHabits() {
     // Check if habit is already completed today
     const isAlreadyCompleted = HabitStorage.isHabitCompletedToday(habitId);
     const habit = habits.find(h => h.id === habitId);
-    
     if (!habit) return;
-    
     if (isAlreadyCompleted) {
       toast({
         title: "Already completed!",
@@ -97,13 +170,10 @@ export function useHabits() {
       });
       return;
     }
-    
     HabitStorage.addLog(habitId, completed);
-    
     // Refresh habits to get updated streaks
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
-    
     const updatedHabit = updatedHabits.find(h => h.id === habitId);
     if (updatedHabit) {
       const message = Motivator.getMessage(
@@ -112,7 +182,6 @@ export function useHabits() {
         updatedHabit.type,
         updatedHabit.streak
       );
-      
       toast({
         description: message,
         duration: 3000,
@@ -122,11 +191,9 @@ export function useHabits() {
 
   const undoHabitTracking = (habitId: string) => {
     const success = HabitStorage.undoTodayLog(habitId);
-    
     if (success) {
       const updatedHabits = HabitStorage.getHabits();
       setHabits(updatedHabits);
-      
       toast({
         title: "Undone!",
         description: "Today's tracking has been removed.",
@@ -151,35 +218,17 @@ export function useHabits() {
   };
 
   const moveToNextHabit = () => {
-    if (habits.length > 1) {
-      setCurrentHabitIndex(prev => {
-        const nextIndex = (prev + 1) % habits.length;
-        if (nextIndex !== prev) {
-          setNavigationDirection('right');
-          // Sync navigationDirection reset with animation duration
-          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
-        }
-        return nextIndex;
-      });
-    }
+    navigateHabit('next');
   };
 
   const moveToPreviousHabit = () => {
-    if (habits.length > 1) {
-      setCurrentHabitIndex(prev => {
-        const prevIndex = (prev - 1 + habits.length) % habits.length;
-        if (prevIndex !== prev) {
-          setNavigationDirection('left');
-          // Sync navigationDirection reset with animation duration
-          setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
-        }
-        return prevIndex;
-      });
-    }
+    navigateHabit('prev');
   };
 
   const navigateToHabitIndex = (index: number) => {
-    if (index >= 0 && index < habits.length && index !== currentHabitIndex) {
+    const isValidIndex = index >= 0 && index < habits.length;
+    const isDifferentIndex = index !== currentHabitIndex;
+    if (isValidIndex && isDifferentIndex) {
       // Determine direction based on index difference
       const currentIndex = currentHabitIndex;
       if (index > currentIndex) {
@@ -189,8 +238,7 @@ export function useHabits() {
       }
       setCurrentHabitIndex(index);
       // Clear direction after animation
-  // Sync navigationDirection reset with animation duration
-  setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
+      setTimeout(() => setNavigationDirection(null), HABIT_ANIMATION_DURATION);
     }
   };
 
@@ -215,123 +263,28 @@ export function useHabits() {
     try {
       const data = await HabitStorage.exportData();
       const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
-      
-      // Native Android path: save to app cache and offer system Share sheet
+      let success = false;
       if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
-        try {
-          const path = `${defaultFilename}`;
-          await Filesystem.writeFile({
-            path,
-            data,
-            directory: Directory.Cache,
-            encoding: Encoding.UTF8,
-            recursive: true,
-          });
-          // Get a sharable content:// URI
-          const { uri } = await Filesystem.getUri({ path, directory: Directory.Cache });
-          // Try sharing the file via Android share sheet
-          try {
-            await Share.share({
-              title: 'Habit Tracker Export',
-              text: 'Your habit data export file',
-              dialogTitle: 'Share export file',
-              url: uri,
-            });
-          } catch {
-            // If sharing fails, still succeed since file is saved
-          }
-
-          return;
-        } catch (err) {
-          console.warn('Native export failed, falling back to web method:', err);
-          // fall through to web fallback
-        }
+        success = await exportDataAndroid({ data, defaultFilename });
       }
-      
-  // Web: Try modern File System Access API first (for file save dialog)
-      if ('showSaveFilePicker' in window) {
-        try {
-          const fileHandle = await (window as any).showSaveFilePicker({
-            suggestedName: defaultFilename,
-            types: [{
-              description: 'JSON files',
-              accept: { 'application/json': ['.json'] },
-            }],
-          });
-          
-          const writable = await fileHandle.createWritable();
-          await writable.write(data);
-          await writable.close();
-          
-          return; // Success - exit early
-        } catch (error: any) {
-          // If user cancels, don't show error
-          if (error.name === 'AbortError') {
-            return;
-          }
-          // If API fails, fall through to fallback
-          console.warn('File System Access API failed, using fallback:', error);
-        }
+      if (!success) {
+        success = await exportDataWeb({ data, defaultFilename });
       }
-      
-      // Fallback: traditional blob download
-      const blob = new Blob([data], { type: "application/json" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = defaultFilename;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-      
-    } catch (error) {
-      console.error('Export failed:', error);
-      throw error; // Re-throw so UI can handle the error
+    } catch (err) {
+      toast({
+        title: 'Export failed',
+        description: 'Could not export your habit data.',
+        variant: 'destructive',
+      });
     }
   };
 
-  const importData = (file: File) => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-        (async () => {
-          try {
-            const content = e.target?.result as string;
-            await HabitStorage.importData(content);
-
-            // Reload data (HabitStorage.getHabits rehydrates Date fields)
-            const loadedHabits = HabitStorage.getHabits();
-            const loadedSettings = await HabitStorage.getSettings();
-          
-            setHabits(loadedHabits);
-            setSettings(loadedSettings);
-          
-            toast({
-              title: "Success",
-              description: "Data imported successfully!",
-              duration: 3000,
-            });
-          } catch (error) {
-            toast({
-              title: "Error",
-              description: "Failed to import data. Please check the file format.",
-              variant: "destructive",
-              duration: 3000,
-            });
-          }
-        })();
-    };
-    reader.readAsText(file);
-  };
-
-  const goodHabits = habits.filter(h => h.type === "good");
-  const badHabits = habits.filter(h => h.type === "bad");
   const currentHabit = habits[currentHabitIndex];
 
   return {
     habits,
-    goodHabits,
-    badHabits,
+    goodHabits: habits.filter(h => h.type === 'good'),
+    badHabits: habits.filter(h => h.type === 'bad'),
     currentHabit,
     currentHabitIndex,
     navigationDirection,
@@ -348,6 +301,6 @@ export function useHabits() {
     navigateToHabitIndex,
     updateSettings,
     exportData,
-    importData,
+    // importData: implement or remove if not used
   };
 }

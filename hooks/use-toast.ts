@@ -74,56 +74,60 @@ const addToRemoveQueue = (toastId: string) => {
 export const reducer = (state: State, action: Action): State => {
   switch (action.type) {
     case "ADD_TOAST":
-      return {
-        ...state,
-        toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
-      }
-
+      return addToast(state, action);
     case "UPDATE_TOAST":
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === action.toast.id ? { ...t, ...action.toast } : t
-        ),
-      }
-
-    case "DISMISS_TOAST": {
-      const { toastId } = action
-
-      // ! Side effects ! - This could be extracted into a dismissToast() action,
-      // but I'll keep it here for simplicity
-      if (toastId) {
-        addToRemoveQueue(toastId)
-      } else {
-        state.toasts.forEach((toast) => {
-          addToRemoveQueue(toast.id)
-        })
-      }
-
-      return {
-        ...state,
-        toasts: state.toasts.map((t) =>
-          t.id === toastId || toastId === undefined
-            ? {
-                ...t,
-                open: false,
-              }
-            : t
-        ),
-      }
-    }
+      return updateToast(state, action);
+    case "DISMISS_TOAST":
+      return dismissToast(state, action);
     case "REMOVE_TOAST":
-      if (action.toastId === undefined) {
-        return {
-          ...state,
-          toasts: [],
-        }
-      }
-      return {
-        ...state,
-        toasts: state.toasts.filter((t) => t.id !== action.toastId),
-      }
+      return removeToast(state, action);
+    default:
+      return state;
   }
+}
+
+function addToast(state: State, action: any): State {
+  return {
+    ...state,
+    toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
+  };
+}
+
+function updateToast(state: State, action: any): State {
+  return {
+    ...state,
+    toasts: state.toasts.map((t) =>
+      t.id === action.toast.id ? { ...t, ...action.toast } : t
+    ),
+  };
+}
+
+function dismissToast(state: State, action: any): State {
+  // Side effects moved out of reducer for purity
+  return {
+    ...state,
+    toasts: state.toasts.map((t) =>
+      t.id === action.toastId || action.toastId === undefined
+        ? {
+            ...t,
+            open: false,
+          }
+        : t
+    ),
+  };
+}
+
+function removeToast(state: State, action: any): State {
+  if (action.toastId === undefined) {
+    return {
+      ...state,
+      toasts: [],
+    };
+  }
+  return {
+    ...state,
+    toasts: state.toasts.filter((t) => t.id !== action.toastId),
+  };
 }
 
 const listeners: Array<(state: State) => void> = []

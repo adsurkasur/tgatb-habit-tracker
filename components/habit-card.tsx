@@ -25,14 +25,7 @@ export function HabitCard({
   todayLog
 }: HabitCardProps) {
   const animationClass = useSlideAnimation(habit?.id, navigationDirection);
-
-  // Determine if today's action was positive or negative
-  const isPositiveAction = todayLog ? 
-    (habit.type === "good" ? todayLog.completed : !todayLog.completed) : 
-    false;
-
-  // Handle habit changes and animation direction is encapsulated in useSlideAnimation
-
+  const isPositiveAction = todayLog ? (habit.type === "good" ? todayLog.completed : !todayLog.completed) : false;
   if (!habit) {
     return (
       <Card className="w-full max-w-md mx-auto p-6 bg-muted/50">
@@ -43,7 +36,30 @@ export function HabitCard({
       </Card>
     );
   }
+  return (
+    <HabitCardContent
+      habit={habit}
+      animationClass={animationClass}
+      isCompletedToday={isCompletedToday}
+      completedAt={completedAt}
+      isPositiveAction={isPositiveAction}
+      todayLog={todayLog}
+      onTrack={onTrack}
+      onUndo={onUndo}
+    />
+  );
+}
 
+function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, todayLog, onTrack, onUndo }: {
+  habit: Habit;
+  animationClass: string;
+  isCompletedToday: boolean;
+  completedAt?: Date;
+  isPositiveAction: boolean;
+  todayLog?: HabitLog;
+  onTrack: (completed: boolean) => void;
+  onUndo?: () => void;
+}) {
   const cardToneClass = () => {
     if (!isCompletedToday) {
       return habit.type === 'bad' ? 'bg-card border-red-100 dark:border-red-900' : 'bg-card border-green-200 dark:border-green-700';
@@ -55,32 +71,24 @@ export function HabitCard({
     }
     return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
   };
-
-  // (Rendering moved to StatusBadge component)
-
   const questionText = () => {
     if (!isCompletedToday) return 'Did you do it?';
     if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it!" : 'Already done today!';
     return habit.type === 'good' ? "You didn't do it today!" : 'You did it today!';
   };
-
   return (
-    <Card 
+    <Card
       key={`habit-${habit.id}`}
       data-tour="habit-card"
       className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${cardToneClass()}`}
     >
       <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
-
       <StreakBadge type={habit.type} streak={habit.streak} />
-
       <div className="space-y-6 mt-8">
         <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
-
         <div className="text-center">
           <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
         </div>
-
         <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
       </div>
     </Card>
