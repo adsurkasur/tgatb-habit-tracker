@@ -75,12 +75,16 @@ jobs:
         run: |
           if [ -f release.keystore ]; then
             echo 'Applying signing config via gradle properties'
-            cat >> ../gradle.properties <<'EOF'
-          MYAPP_UPLOAD_STORE_FILE=release.keystore
-          MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD
-          MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS
-          MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD
-          EOF
+            # Write to android/gradle.properties
+            echo "MYAPP_UPLOAD_STORE_FILE=release.keystore" >> gradle.properties
+            echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD" >> gradle.properties
+            echo "MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS" >> gradle.properties
+            echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> gradle.properties
+            # Also write to project root gradle.properties for compatibility
+            echo "MYAPP_UPLOAD_STORE_FILE=android/release.keystore" >> ../gradle.properties
+            echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD" >> ../gradle.properties
+            echo "MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS" >> ../gradle.properties
+            echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> ../gradle.properties
           fi
           ./gradlew assembleDebug assembleRelease --stacktrace
 
@@ -95,18 +99,22 @@ jobs:
           OUTDIR=android/app/build/outputs/apk
           mkdir -p renamed
           # Debug APK
-          for f in $(ls $OUTDIR/debug/*.apk 2>/dev/null || true); do
-            cp "$f" "renamed/tgatb-${VERSION}-debug.apk"
-          done
-          # Release APK(s)
-          for f in $(ls $OUTDIR/release/*.apk 2>/dev/null || true); do
-            base=$(basename "$f")
-            if echo "$base" | grep -qi 'unsigned'; then
-              cp "$f" "renamed/tgatb-${VERSION}-unsigned.apk"
-            else
-              cp "$f" "renamed/tgatb-${VERSION}.apk"
-            fi
-          done
+          if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
+            cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
+          fi
+          # Release APK (signed)
+          if [ -f "$OUTDIR/release/app-release.apk" ]; then
+            cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
+          else
+            echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
+            echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
+            ls -l $OUTDIR/release
+            exit 1
+          fi
+          # Release APK (unsigned)
+          if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
+            cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
+          fi
           ls -l renamed || true
 
       - name: Verify APK signature

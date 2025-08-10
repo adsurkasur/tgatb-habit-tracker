@@ -21,15 +21,15 @@ android {
     sourceCompatibility JavaVersion.VERSION_21
     targetCompatibility JavaVersion.VERSION_21
     }
-    // Signing config placeholder (configure via gradle.properties / environment for CI)
-    /*signingConfigs {
+    signingConfigs {
         release {
-            // storeFile file(System.getenv("SIGNING_STORE_FILE") ?: "release.keystore")
-            // storePassword System.getenv("SIGNING_STORE_PASSWORD")
-            // keyAlias System.getenv("SIGNING_KEY_ALIAS")
-            // keyPassword System.getenv("SIGNING_KEY_PASSWORD")
+            def storeFilePath = project.hasProperty('MYAPP_UPLOAD_STORE_FILE') ? project.property('MYAPP_UPLOAD_STORE_FILE') : 'release.keystore'
+            storeFile file(storeFilePath)
+            storePassword project.hasProperty('MYAPP_UPLOAD_STORE_PASSWORD') ? project.property('MYAPP_UPLOAD_STORE_PASSWORD') : ''
+            keyAlias project.hasProperty('MYAPP_UPLOAD_KEY_ALIAS') ? project.property('MYAPP_UPLOAD_KEY_ALIAS') : ''
+            keyPassword project.hasProperty('MYAPP_UPLOAD_KEY_PASSWORD') ? project.property('MYAPP_UPLOAD_KEY_PASSWORD') : ''
         }
-    }*/
+    }
     buildTypes {
         release {
             // Enable R8 shrinking & resource shrinking for production
@@ -37,7 +37,7 @@ android {
             shrinkResources true
             // Use optimized default proguard + project rules
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-            // signingConfig signingConfigs.release // Uncomment when signing is configured
+            signingConfig signingConfigs.release
         }
     }
 }
