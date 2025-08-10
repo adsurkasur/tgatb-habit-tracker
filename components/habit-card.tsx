@@ -95,7 +95,11 @@ function useSlideAnimation(
   const previousHabitId = useRef(habitId);
 
   useEffect(() => {
-    if (habitId && habitId !== previousHabitId.current) {
+    if (
+      habitId &&
+      habitId !== previousHabitId.current &&
+      navigationDirection !== null
+    ) {
       if (navigationDirection === 'left') setAnimationClass('slide-from-left');
       else if (navigationDirection === 'right') setAnimationClass('slide-from-right');
       else setAnimationClass('');

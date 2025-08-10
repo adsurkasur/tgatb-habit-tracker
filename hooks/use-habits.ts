@@ -150,24 +150,32 @@ export function useHabits() {
 
   const moveToNextHabit = () => {
     if (habits.length > 1) {
-      setNavigationDirection('right');
-      setCurrentHabitIndex(prev => (prev + 1) % habits.length);
-      // Clear direction after animation
-      setTimeout(() => setNavigationDirection(null), 300);
+      setCurrentHabitIndex(prev => {
+        const nextIndex = (prev + 1) % habits.length;
+        if (nextIndex !== prev) {
+          setNavigationDirection('right');
+          setTimeout(() => setNavigationDirection(null), 250);
+        }
+        return nextIndex;
+      });
     }
   };
 
   const moveToPreviousHabit = () => {
     if (habits.length > 1) {
-      setNavigationDirection('left');
-      setCurrentHabitIndex(prev => (prev - 1 + habits.length) % habits.length);
-      // Clear direction after animation
-      setTimeout(() => setNavigationDirection(null), 300);
+      setCurrentHabitIndex(prev => {
+        const prevIndex = (prev - 1 + habits.length) % habits.length;
+        if (prevIndex !== prev) {
+          setNavigationDirection('left');
+          setTimeout(() => setNavigationDirection(null), 250);
+        }
+        return prevIndex;
+      });
     }
   };
 
   const navigateToHabitIndex = (index: number) => {
-    if (index >= 0 && index < habits.length) {
+    if (index >= 0 && index < habits.length && index !== currentHabitIndex) {
       // Determine direction based on index difference
       const currentIndex = currentHabitIndex;
       if (index > currentIndex) {
@@ -177,7 +185,7 @@ export function useHabits() {
       }
       setCurrentHabitIndex(index);
       // Clear direction after animation
-      setTimeout(() => setNavigationDirection(null), 300);
+  setTimeout(() => setNavigationDirection(null), 250);
     }
   };
 
