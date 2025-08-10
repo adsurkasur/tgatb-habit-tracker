@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
+import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
@@ -49,6 +50,8 @@ export function SettingsScreen({
   const [, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
+  // Persistent guard to block duplicate export triggers (see: https://react.dev/reference/react/useRef)
+  const exportInProgressRef = useRef(false);
   const { isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
   
@@ -90,32 +93,49 @@ export function SettingsScreen({
     fileInputRef.current?.click();
   };
 
-  const handleExportClick = async () => {
-    if (isExporting) return;
-    
+  // Citation: https://kentcdodds.com/blog/preventing-double-form-submission
+  // Citation: https://www.joshwcomeau.com/react/throttle-debounce/
+  const handleExportClick = debounce(async () => {
+    // Persistent guard blocks duplicate triggers from React/browser quirks
+    if (exportInProgressRef.current) return;
+    exportInProgressRef.current = true;
     setIsExporting(true);
     try {
       await onExportData();
-      
-  // Show success toast only on web non-FSA fallback; skip on native (share UI handles feedback)
-  if (!('showSaveFilePicker' in window) && !isCapacitorApp) {
+      // Show success toast only on web non-FSA fallback; skip on native (share UI handles feedback)
+      if (!('showSaveFilePicker' in window) && !isCapacitorApp) {
         toast({
           title: "Export Successful",
           description: "Data has been downloaded to your Downloads folder",
           duration: 3000,
         });
       }
-  } catch {
-      toast({
-        title: "Export Failed",
-        description: "There was an error exporting your data. Please try again.",
-        variant: "destructive",
-        duration: 3000,
-      });
+  } catch (err: unknown) {
+      // Citation: https://developer.mozilla.org/en-US/docs/Web/API/showSaveFilePicker
+      // Citation: https://stackoverflow.com/questions/67716344/download-event-triggers-twice-in-chrome
+      if (
+        err &&
+        typeof err === 'object' &&
+        ((
+          'name' in err && (err as { name?: string }).name === 'AbortError'
+        ) || (
+          'message' in err && typeof (err as { message?: string }).message === 'string' && (err as { message?: string }).message !== undefined && (err as { message?: string }).message!.includes('The user aborted a request')
+        ))
+      ) {
+        // User canceled the file dialog, do nothing (no error toast)
+      } else {
+        toast({
+          title: "Export Failed",
+          description: "There was an error exporting your data. Please try again.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
     } finally {
       setIsExporting(false);
+      exportInProgressRef.current = false;
     }
-  };
+  }, 500); // 500ms debounce for robustness
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -290,7 +310,7 @@ export function SettingsScreen({
               className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
                 isExporting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
               }`}
-              onClick={isExporting ? undefined : handleExportClick}
+              onClick={isExporting ? undefined : handleExportClick} // Debounced for robustness
             >
               <div className="flex items-center space-x-3">
                 <Upload className="w-5 h-5 text-muted-foreground" />

@@ -19,7 +19,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start",
+  "start": "npx serve@latest out",
     "lint": "next lint",
     "check": "tsc",
     "setup:android": "node scripts/setup-android.js",
