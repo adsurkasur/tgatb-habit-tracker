@@ -35,10 +35,12 @@ export function HabitCard({
   // Debug: log every render and animation class
   if (navigationEvent) {
     // Throttle duplicate logs in the same microtask (React strict mode double render in dev)
-    const lastLogRef = (window as any).__habitCardLastLog || { seq: null };
+    type HabitCardWindow = Window & { __habitCardLastLog?: { seq: number | null } };
+    const win = window as HabitCardWindow;
+    const lastLogRef = win.__habitCardLastLog || { seq: null };
     if (lastLogRef.seq !== navigationEvent.seq) {
       console.debug('[HabitCard] Render (seq change) habit', habit?.id, navigationEvent, 'anim:', animationClass, 'initial:', initialApplied);
-      (window as any).__habitCardLastLog = { seq: navigationEvent.seq };
+      win.__habitCardLastLog = { seq: navigationEvent.seq };
     } else {
       console.debug('[HabitCard] Re-render same seq (likely StrictMode) habit', habit?.id, 'anim:', animationClass);
     }
@@ -60,20 +62,18 @@ export function HabitCard({
       isCompletedToday={isCompletedToday}
       completedAt={completedAt}
       isPositiveAction={isPositiveAction}
-      todayLog={todayLog}
       onTrack={onTrack}
       onUndo={onUndo}
     />
   );
 }
 
-function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, todayLog, onTrack, onUndo }: {
+function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo }: {
   habit: Habit;
   animationClass: string;
   isCompletedToday: boolean;
   completedAt?: Date;
   isPositiveAction: boolean;
-  todayLog?: HabitLog;
   onTrack: (completed: boolean) => void;
   onUndo?: () => void;
 }) {
