@@ -4,7 +4,6 @@ on:
   push:
     tags:
       - 'v*.*.*' # Triggers on version tags like v1.0.0
-      - 'test-*' # Triggers on test tags like test-0.2.7
 
 jobs:
   build-android:
