@@ -1,6 +1,6 @@
 {
   "name": "tgatb-habit-tracker",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "The Good and The Bad: Habit Tracker - A minimalist habit tracking application",
   "type": "module",
   "license": "Apache-2.0",
@@ -29,7 +29,8 @@
     "android:build": "npm run build && node scripts/fix-paths.js && npx cap sync android",
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
-    "android:sync": "npx cap sync android"
+  "android:sync": "npx cap sync android",
+  "upver": "node scripts/upver.cjs"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
