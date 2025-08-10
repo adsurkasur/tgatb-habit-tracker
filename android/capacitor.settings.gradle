@@ -28,3 +28,6 @@ project(':capawesome-capacitor-android-edge-to-edge-support').projectDir = new F
 
 include ':capgo-capacitor-navigation-bar'
 project(':capgo-capacitor-navigation-bar').projectDir = new File('../node_modules/@capgo/capacitor-navigation-bar/android')
+
+include ':capacitor-save-as'
+project(':capacitor-save-as').projectDir = new File('../node_modules/capacitor-save-as/android')

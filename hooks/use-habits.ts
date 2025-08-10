@@ -3,36 +3,26 @@ import { Habit, HabitType, UserSettings } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { Share } from "@capacitor/share";
+import { SaveAs } from "capacitor-save-as";
 import { HabitStorage } from "@/lib/habit-storage";
 import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 
 export function useHabits() {
   // Helper for Android export
+  // Use published capacitor-save-as plugin for Android export
   async function exportDataAndroid({ data, defaultFilename }: { data: string; defaultFilename: string }) {
     try {
-      const path = `${defaultFilename}`;
-      await Filesystem.writeFile({
-        path,
-        data,
-        directory: Directory.Cache,
-        encoding: Encoding.UTF8,
-        recursive: true,
+      // Base64-encode the data as required by the plugin
+      const encodedData = btoa(data);
+      await SaveAs.showSaveAsPicker({
+        filename: defaultFilename,
+        mimeType: 'application/json',
+        data: encodedData,
       });
-      const { uri } = await Filesystem.getUri({ path, directory: Directory.Cache });
-      try {
-        await Share.share({
-          title: 'Habit Tracker Export',
-          text: 'Your habit data export file',
-          dialogTitle: 'Share export file',
-          url: uri,
-        });
-      } catch {
-        // If sharing fails, still succeed since file is saved
-      }
       return true;
     } catch (err) {
-      console.warn('Native export failed, falling back to web method:', err);
+      console.warn('SaveAs plugin failed, falling back to web method:', err);
       return false;
     }
   }
