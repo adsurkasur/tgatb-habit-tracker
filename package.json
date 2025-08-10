@@ -17,18 +17,19 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
+  "dev": "next dev",
+  "build": "next build",
   "start": "npx serve@latest out",
-    "lint": "next lint",
-    "check": "tsc",
-    "setup:android": "node scripts/setup-android.js",
-    "generate-icons": "node scripts/generate-android-icons.cjs",
-    "generate-splash-screens": "node scripts/generate-splash-screens.js",
-    "android:build": "npm run build && node scripts/fix-paths.js && npx cap sync android",
-    "android:open": "npx cap open android",
-    "android:run": "npm run android:build && npx cap run android",
-    "android:sync": "npx cap sync android"
+  "test": "npm run build && npm run start",
+  "lint": "next lint",
+  "check": "tsc",
+  "setup:android": "node scripts/setup-android.js",
+  "generate-icons": "node scripts/generate-android-icons.cjs",
+  "generate-splash-screens": "node scripts/generate-splash-screens.js",
+  "android:build": "npm run build && node scripts/fix-paths.js && npx cap sync android",
+  "android:open": "npx cap open android",
+  "android:run": "npm run android:build && npx cap run android",
+  "android:sync": "npx cap sync android"
   },
   "dependencies": {
     "@capacitor/android": "^7.4.2",
