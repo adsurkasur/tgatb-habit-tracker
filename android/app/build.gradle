@@ -23,8 +23,7 @@ android {
     }
     signingConfigs {
         release {
-            def storeFilePath = project.hasProperty('MYAPP_UPLOAD_STORE_FILE') ? project.property('MYAPP_UPLOAD_STORE_FILE') : 'release.keystore'
-            storeFile file(storeFilePath)
+            storeFile file('release.keystore')
             storePassword project.hasProperty('MYAPP_UPLOAD_STORE_PASSWORD') ? project.property('MYAPP_UPLOAD_STORE_PASSWORD') : ''
             keyAlias project.hasProperty('MYAPP_UPLOAD_KEY_ALIAS') ? project.property('MYAPP_UPLOAD_KEY_ALIAS') : ''
             keyPassword project.hasProperty('MYAPP_UPLOAD_KEY_PASSWORD') ? project.property('MYAPP_UPLOAD_KEY_PASSWORD') : ''
