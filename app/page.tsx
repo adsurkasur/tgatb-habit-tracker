@@ -273,33 +273,6 @@ export default function Home() {
             {displayedHabit ? (
               <>
                 <div className="relative w-full max-w-md mx-auto">
-                  {/* Navigation container for mobile - only show if not demo */}
-                  {!shouldShowDemoHabit && (
-                    <div className="hidden max-sm:flex nav-container-mobile mb-4">
-                      {(goodHabits.length + badHabits.length) > 1 && (
-                        <>
-                          <button
-                            onClick={moveToPreviousHabit}
-                            className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group"
-                            aria-label="Previous habit"
-                          >
-                            <svg className="w-5 h-5 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
-                            </svg>
-                          </button>
-                          <button
-                            onClick={moveToNextHabit}
-                            className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group"
-                            aria-label="Next habit"
-                          >
-                            <svg className="w-5 h-5 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                            </svg>
-                          </button>
-                        </>
-                      )}
-                    </div>
-                  )}
 
                   {/* Previous button - Desktop - only show if not demo */}
                   {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
@@ -341,14 +314,37 @@ export default function Home() {
 
                 {/* Habit counter indicator - positioned outside the habit card container to avoid clipping */}
                 {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
-                  <div className="flex justify-center mt-4">
-                    <div className="text-xs text-muted-foreground text-center">
-                      {currentHabitIndex + 1} of {goodHabits.length + badHabits.length} habits
-                      <div className="text-[10px] opacity-60 mt-1">
-                        Use ← → keys or swipe to navigate
+                  <>
+                    <div className="flex justify-center mt-4">
+                      <div className="text-xs text-muted-foreground text-center">
+                        {currentHabitIndex + 1} of {goodHabits.length + badHabits.length} habits
+                        <div className="text-[10px] opacity-60 mt-1">
+                          Use ← → keys, navigation buttons, or swipe to navigate
+                        </div>
                       </div>
                     </div>
-                  </div>
+                    {/* Mobile navigation buttons below legend */}
+                    <div className="max-sm:flex hidden justify-center mt-4 nav-container-mobile">
+                      <button
+                        onClick={moveToPreviousHabit}
+                        className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group mx-2"
+                        aria-label="Previous habit"
+                      >
+                        <svg className="w-5 h-5 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                      </button>
+                      <button
+                        onClick={moveToNextHabit}
+                        className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group mx-2"
+                        aria-label="Next habit"
+                      >
+                        <svg className="w-5 h-5 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                        </svg>
+                      </button>
+                    </div>
+                  </>
                 )}
 
                 {/* Demo indicator - positioned outside the habit card container */}
