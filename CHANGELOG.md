@@ -5,32 +5,25 @@ All notable changes to this project will be documented in this file.
 ## 0.2.8 - 2025-08-11
 
 **Overview:**  
-Minor improvements, bug fixes, and UI polish. Focused on stability and user experience.
+Release workflow improvements, APK signing fixes, and minor bug fixes.
 
 ### Added (0.2.8)
 
-- Added new UI polish for habit cards and dialogs.
-- Introduced additional logging for export/import actions.
-- Added support for Android 15+ system bar edge cases.
+- Added support for triggering release workflow on test tags.
+- Simplified release signing configuration with a fixed keystore path.
+- Updated signing configuration to copy keystore for compatibility and improved error handling.
+- Release workflow now verifies APK signature before uploading to GitHub Release.
 
 ### Changes (0.2.8)
 
-- Improved error handling in data export and import flows.
-- Updated dependencies for better compatibility and security.
-- Refined navigation animation timing for smoother transitions.
-- Enhanced offline indicator and toast for clarity.
+- Streamlined APK normalization process in release workflow.
+- Removed support for triggering workflow on test tags (now handled differently).
+- Updated version to 0.2.8.
+- Removed duplicate back button listener to avoid navigation conflicts and improve stability.
 
 ### Fixed (0.2.8)
 
-- Fixed rare crash on habit deletion.
-- Resolved layout glitches on certain Android devices.
-- Addressed minor PWA install prompt issues.
-- Fixed edge-to-edge rendering bug on Android 15+.
-
-### Technical Details (0.2.8)
-
-- Updated documentation for new Android system bar handling.
-- Minor refactoring in hooks and shared utilities for maintainability.
+- Corrected variable assignment for APK signature verification.
 
 ## 0.2.7 - 2025-08-10
 
