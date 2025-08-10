@@ -64,6 +64,8 @@ jobs:
         run: |
           if [ -n "$SIGNING_KEYSTORE_BASE64" ]; then
             echo "$SIGNING_KEYSTORE_BASE64" | base64 -d > android/release.keystore
+            # Also copy to android/app/release.keystore for compatibility
+            cp android/release.keystore android/app/release.keystore
           fi
 
       - name: Build release & debug APKs
@@ -76,12 +78,12 @@ jobs:
           if [ -f release.keystore ]; then
             echo 'Applying signing config via gradle properties'
             # Write to android/gradle.properties
-            echo "MYAPP_UPLOAD_STORE_FILE=release.keystore" >> gradle.properties
+            echo "MYAPP_UPLOAD_STORE_FILE=app/release.keystore" >> gradle.properties
             echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD" >> gradle.properties
             echo "MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS" >> gradle.properties
             echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> gradle.properties
             # Also write to project root gradle.properties for compatibility
-            echo "MYAPP_UPLOAD_STORE_FILE=android/release.keystore" >> ../gradle.properties
+            echo "MYAPP_UPLOAD_STORE_FILE=android/app/release.keystore" >> ../gradle.properties
             echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD" >> ../gradle.properties
             echo "MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS" >> ../gradle.properties
             echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> ../gradle.properties
