@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.7 - 2025-08-10
+
+**Overview:**  
+Major improvements to data export, navigation, and habit management. Enhanced performance and debugging for HabitCard, and improved Android versioning automation.
+
+### Added (0.2.7)
+
+- Integrated `capacitor-save-as` plugin for enhanced data export functionality.
+- Added debounce utility for robust event handling in export function.
+- Added npm run test script.
+
+### Changes (0.2.7)
+
+- Updated version of `capacitor-save-as` to 0.1.6 in dependencies.
+- Updated versioning in `build.gradle` and `package.json`; added script to sync version codes.
+- Replaced upver script with syncver for Android versioning automation.
+- Unified habit management functions and removed unused importData method.
+- Enhanced mobile navigation with dedicated buttons and updated instructions.
+- Improved navigation direction handling and synchronized direction reset with animation duration.
+- Updated habit navigation to use event-based system for animations.
+- Enhanced HabitCard memoization logic to prevent unnecessary re-renders.
+- Optimized HabitCard component by memoizing to prevent unnecessary re-renders.
+- Improved logging mechanism in HabitCard for better debugging.
+- Conditionally log service worker events and animations in development mode.
+
 ## 0.2.6 - 2025-08-09
 
 **Overview:**  
@@ -114,7 +139,7 @@ Focused Android system bar stabilization and CI workflow corrections.
 **Overview:**  
 Android system bar theming groundwork and minor native tweaks.
 
-### Added / Changed (0.2.1)
+### Added / Changes (0.2.1)
 
 - Android: Explicit purple (`#6750a4`) system bar colors (status & navigation) defined in native styles; removed translucent flags that caused white fallback.
 - Added `navigation_bar_color` resource; launch (splash) theme now sets both bar colors to avoid white flash on startup.
