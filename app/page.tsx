@@ -130,9 +130,26 @@ export default function Home() {
     }
   }, [currentHabit, undoHabitTracking]);
 
+  // Ref to track last added habit
+  const lastAddedHabitRef = useRef<{ name: string; type: HabitType } | null>(null);
+
   const handleAddHabit = (name: string, type: HabitType) => {
-  addHabit({ name, type });
+    lastAddedHabitRef.current = { name, type };
+    addHabit({ name, type });
+    setShowAddHabit(false);
   };
+
+  useEffect(() => {
+    if (lastAddedHabitRef.current) {
+      const { name, type } = lastAddedHabitRef.current;
+      const allHabits = [...goodHabits, ...badHabits];
+      const newIndex = allHabits.findIndex(h => h.name === name && h.type === type);
+      if (newIndex !== -1) {
+        navigateToHabitIndex(newIndex);
+        lastAddedHabitRef.current = null;
+      }
+    }
+  }, [goodHabits, badHabits, navigateToHabitIndex]);
 
   const handleEditHabit = (habit: Habit) => {
     setEditingHabit(habit);
