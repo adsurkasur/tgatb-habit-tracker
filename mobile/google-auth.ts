@@ -5,13 +5,20 @@ import { FirebaseAuthentication } from '@capacitor-firebase/authentication';
 
 export async function signInWithGoogle(): Promise<string | null> {
 	try {
+		console.debug('[GoogleAuth] signInWithGoogle called');
 		const result = await FirebaseAuthentication.signInWithGoogle({
 			scopes: ['openid', 'email', 'profile', 'https://www.googleapis.com/auth/drive.file'],
 		});
-		// Return accessToken for Drive API usage
-		return result.credential?.accessToken ?? null;
+		console.debug('[GoogleAuth] signInWithGoogle result:', result);
+		if (result.credential?.accessToken) {
+			console.debug('[GoogleAuth] Access token received:', result.credential.accessToken);
+			return result.credential.accessToken;
+		} else {
+			console.error('[GoogleAuth] No access token in result:', result);
+			return null;
+		}
 	} catch (err) {
-		// Handle error (show toast, etc.)
+		console.error('[GoogleAuth] signInWithGoogle error:', err);
 		return null;
 	}
 }
