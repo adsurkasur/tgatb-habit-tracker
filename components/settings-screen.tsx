@@ -1,4 +1,5 @@
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import { DeleteAllHabitsModal } from "@/components/delete-all-habits-modal";
 import { SUPPORT_AUTHOR, SUPPORT_EMAIL } from "@/lib/support-email";
 import { Switch } from "@/components/ui/switch";
@@ -33,14 +34,14 @@ import { Capacitor } from '@capacitor/core';
 // Import mobile auth and drive helpers
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../web/firebase"; // Ensure Firebase is initialized for web
-import { uploadHabitsToDrive } from "@/mobile/drive-sync";
+// Removed unused import: uploadHabitsToDrive
 
 
 type SettingsScreenProps = {
   open: boolean;
   onClose: () => void;
   settings: UserSettings;
-  habits: Habit[];
+  // Removed unused prop: habits
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => void;
   onImportData: (jsonData: string) => void;
@@ -52,7 +53,7 @@ export function SettingsScreen({
   open, 
   onClose, 
   settings, 
-  habits,
+  // Removed unused prop: habits
   onUpdateSettings, 
   onExportData, 
   onImportData,
@@ -333,8 +334,8 @@ export function SettingsScreen({
   const handleBackupClick = async () => {
     try {
       // Use full export bundle for Drive backup
-      let accessToken: string | null = null;
-      let result: any = null;
+  let accessToken: string | null = null;
+  let result: unknown = null;
       // Get full export bundle
   const { HabitStorage } = await import("@/lib/habit-storage");
   const exportJson = await HabitStorage.exportData();
@@ -495,17 +496,14 @@ export function SettingsScreen({
               >
                 <div className="flex items-center space-x-3">
                   {isLoggedIn && profile?.photoUrl ? (
-                    <img
+                    <Image
                       src={profile.photoUrl}
                       alt={profile.name || "Profile"}
+                      width={24}
+                      height={24}
                       className="w-6 h-6 rounded-full object-cover"
                       referrerPolicy="no-referrer"
-                      onError={e => {
-                        e.currentTarget.style.display = 'none';
-                        const fallback = document.createElement('span');
-                        fallback.innerHTML = '<svg class="w-5 h-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>';
-                        e.currentTarget.parentNode?.appendChild(fallback);
-                      }}
+                      onError={() => {}}
                     />
                   ) : (
                     <User className="w-5 h-5 text-muted-foreground" />
@@ -538,7 +536,7 @@ export function SettingsScreen({
               onClick={async () => {
                 try {
                   let accessToken: string | null = null;
-                  let cloudJson: any = "";
+                  let cloudJson: string = "";
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
                     const { signInWithGoogleWeb } = await import("../web/google-auth");
@@ -571,10 +569,13 @@ export function SettingsScreen({
                     if (!accessToken) throw new Error("Not signed in");
                     const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
                     // Download latest backup
-                    cloudJson = await downloadLatestHabitsFromDrive(accessToken);
+                    const rawCloudJson = await downloadLatestHabitsFromDrive(accessToken);
                     // If mobile helper returns an array, convert to string
-                    if (Array.isArray(cloudJson)) {
-                      cloudJson = JSON.stringify(cloudJson);
+                    let cloudJson: string;
+                    if (Array.isArray(rawCloudJson)) {
+                      cloudJson = JSON.stringify(rawCloudJson);
+                    } else {
+                      cloudJson = typeof rawCloudJson === 'string' ? rawCloudJson : JSON.stringify(rawCloudJson);
                     }
                     console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
                   }
@@ -593,10 +594,12 @@ export function SettingsScreen({
                       duration: 3000,
                     });
                   }
-                } catch (err: any) {
+                } catch (err) {
+                  let message = "An error occurred during cloud import.";
+                  if (err instanceof Error) message = err.message;
                   toast({
                     title: "Import Error",
-                    description: err?.message || "An error occurred during cloud import.",
+                    description: message,
                     variant: "destructive",
                     duration: 3000,
                   });
