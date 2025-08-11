@@ -460,7 +460,7 @@ export function SettingsScreen({
             
             <div 
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
-              onClick={() => window.open('mailto:superyusuf55@gmail.com?subject=Habit%20Tracker%20Support&body=Hi%2C%20I%20need%20support.', '_blank')}
+              onClick={() => window.open('mailto:adsurkasur.dev@gmail.com?subject=Habit%20Tracker%20Support&body=Hi%2C%20I%20need%20support.', '_blank')}
             >
               <div className="flex items-center space-x-3">
                 <Mail className="w-5 h-5 text-muted-foreground" />
