@@ -5,7 +5,8 @@ import { exportHabitsToJson, importHabitsFromJson } from "../../shared/data-sync
 
 export default function Home() {
   const { data: session } = useSession();
-  const [habits, setHabits] = useState<any[]>([]);
+  // Replace with your actual habit data source in production
+  const [habits, setHabits] = useState<any[]>([{ name: "Drink Water", completed: false }]);
   const [importedHabits, setImportedHabits] = useState<any[]>([]);
   const [fileId, setFileId] = useState<string>("");
   const [status, setStatus] = useState<string>("");
@@ -13,12 +14,10 @@ export default function Home() {
   const handleExport = async () => {
     setStatus("Exporting...");
     try {
-      // Example habit data
-      const habitsToExport = habits.length ? habits : [{ name: "Drink Water", completed: false }];
       const res = await fetch("/api/drive", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ habits: habitsToExport }),
+        body: JSON.stringify({ habits }),
       });
       if (!res.ok) throw new Error("Network error");
       const data = await res.json();
@@ -55,19 +54,19 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: 32 }}>
-  <h1>Google Auth + Drive Sync</h1>
+    <div style={{ padding: 32, maxWidth: 480, margin: '0 auto' }}>
+      <h1>Google Auth & Drive Sync</h1>
       {!session ? (
         <button onClick={() => signIn("google")}>Sign In with Google</button>
       ) : (
         <>
-          <p>Signed in as {session.user?.name}</p>
+          <p>Signed in as <strong>{session.user?.name}</strong></p>
           <button onClick={() => signOut()}>Sign Out</button>
           <hr />
-          <h2>Export Habits to Drive</h2>
-          <button onClick={handleExport}>Export</button>
-          <h2>Import Habits from Drive</h2>
-          <button onClick={handleImport}>Import</button>
+          <h2>Export Habits</h2>
+          <button onClick={handleExport}>Export to Google Drive</button>
+          <h2>Import Habits</h2>
+          <button onClick={handleImport}>Import from Google Drive</button>
           <div style={{ marginTop: 16 }}>
             <strong>Status:</strong> <span>{status}</span>
           </div>
