@@ -9,6 +9,19 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 
 export function useHabits() {
+  // Clear all habits and logs from storage and state
+  const clearAllHabits = async () => {
+    if (Capacitor.isNativePlatform()) {
+      // Mobile: clear Capacitor Preferences
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.remove({ key: 'habits' });
+      await Preferences.remove({ key: 'habit_logs' });
+    } else {
+      // Web: clear localStorage
+      HabitStorage.clearAllHabits();
+    }
+    setHabits([]);
+  };
   // Helper for Android export
   // Use published capacitor-save-as plugin for Android export
   async function exportDataAndroid({ data, defaultFilename }: { data: string; defaultFilename: string }) {
@@ -318,6 +331,7 @@ export function useHabits() {
     undoHabitTracking,
     getHabitCompletionStatus,
     moveToNextHabit,
+  clearAllHabits,
     moveToPreviousHabit,
     navigateToHabitIndex,
     updateSettings,
