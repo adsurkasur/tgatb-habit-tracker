@@ -10,6 +10,7 @@ import {
   ChevronRight, 
   User, 
   CloudUpload, 
+  CloudDownload,
   Download, 
   Upload,
   HelpCircle,
@@ -62,30 +63,30 @@ export function SettingsScreen({
   const exportInProgressRef = useRef(false);
   const { isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
-    if (typeof window !== 'undefined' && !isCapacitorApp) {
-      return !!localStorage.getItem('googleAccessToken');
-    }
-    return false;
-  });
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [profile, setProfile] = useState<{ name?: string; photoUrl?: string } | null>(null);
+  const [clientReady, setClientReady] = useState(false);
 
   // Load profile info on mount (web)
   useEffect(() => {
-    if (typeof window !== 'undefined' && !isCapacitorApp) {
-      const name = localStorage.getItem('googleProfileName') || undefined;
-      const photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
-      if (name || photoUrl) setProfile({ name, photoUrl });
-    } else if (isCapacitorApp) {
-      // Mobile: load profile info from Preferences
-      (async () => {
+    (async () => {
+      if (typeof window !== 'undefined' && !isCapacitorApp) {
+        const accessToken = localStorage.getItem('googleAccessToken');
+        setIsLoggedIn(!!accessToken);
+        const name = localStorage.getItem('googleProfileName') || undefined;
+        const photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
+        if (name || photoUrl) setProfile({ name, photoUrl });
+      } else if (isCapacitorApp) {
         const { Preferences } = await import('@capacitor/preferences');
+        const accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+        setIsLoggedIn(!!accessToken);
         const name = (await Preferences.get({ key: 'googleProfileName' })).value || undefined;
         const photoUrl = (await Preferences.get({ key: 'googleProfilePhoto' })).value || undefined;
         if (name || photoUrl) setProfile({ name, photoUrl });
-      })();
-    }
-  }, [isLoggedIn, isCapacitorApp]);
+      }
+      setClientReady(true);
+    })();
+  }, [isCapacitorApp]);
   
   // Fullscreen managed centrally via Capacitor helpers
 
@@ -331,11 +332,10 @@ export function SettingsScreen({
       if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         // Web platform
         const { signInWithGoogleWeb } = await import("../web/google-auth");
-        const { exportHabitsToJson } = await import("../shared/data-sync");
         const { uploadToDrive } = await import("../web/drive-sync");
         accessToken = await signInWithGoogleWeb();
         if (!accessToken) throw new Error("Not signed in");
-        const json = exportHabitsToJson(habitsToExport);
+        const json = JSON.stringify({ habits: habitsToExport });
         result = await uploadToDrive(json, accessToken);
         console.debug('[SettingsScreen] Web Drive backup result:', result);
         toast({
@@ -353,7 +353,9 @@ export function SettingsScreen({
           accessToken = resultObj.accessToken || null;
         }
         if (!accessToken) throw new Error("Not signed in");
-        result = await uploadHabitsToDrive(habitsToExport, accessToken);
+    // Mobile: pass array, helper wraps as { habits: [...] }
+    const { uploadHabitsToDrive } = await import("@/mobile/drive-sync");
+    result = await uploadHabitsToDrive(habitsToExport, accessToken);
         console.debug('[SettingsScreen] Mobile Drive backup result:', result);
         if (result) {
           toast({
@@ -477,43 +479,126 @@ export function SettingsScreen({
           <h2 className="text-lg font-semibold">Account & Data</h2>
           
           <div className="space-y-2">
-            <div 
-              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
-              onClick={handleLoginClick}
-            >
-              <div className="flex items-center space-x-3">
-                {isLoggedIn && profile?.photoUrl ? (
-                  <img
-                    src={profile.photoUrl}
-                    alt={profile.name || "Profile"}
-                    className="w-6 h-6 rounded-full object-cover"
-                    referrerPolicy="no-referrer"
-                    onError={e => {
-                      e.currentTarget.style.display = 'none';
-                      const fallback = document.createElement('span');
-                      fallback.innerHTML = '<svg class="w-5 h-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>';
-                      e.currentTarget.parentNode?.appendChild(fallback);
-                    }}
-                  />
-                ) : (
-                  <User className="w-5 h-5 text-muted-foreground" />
-                )}
-                <span className="font-medium">
-                  {isLoggedIn
-                    ? `Logout from${profile?.name ? ` ${profile.name}` : ''}`
-                    : 'Login'}
-                </span>
+            {!clientReady ? null : (
+              <div 
+                className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+                onClick={handleLoginClick}
+              >
+                <div className="flex items-center space-x-3">
+                  {isLoggedIn && profile?.photoUrl ? (
+                    <img
+                      src={profile.photoUrl}
+                      alt={profile.name || "Profile"}
+                      className="w-6 h-6 rounded-full object-cover"
+                      referrerPolicy="no-referrer"
+                      onError={e => {
+                        e.currentTarget.style.display = 'none';
+                        const fallback = document.createElement('span');
+                        fallback.innerHTML = '<svg class="w-5 h-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>';
+                        e.currentTarget.parentNode?.appendChild(fallback);
+                      }}
+                    />
+                  ) : (
+                    <User className="w-5 h-5 text-muted-foreground" />
+                  )}
+                  <span className="font-medium">
+                    {isLoggedIn
+                      ? `Logout from${profile?.name ? ` ${profile.name}` : ''}`
+                      : 'Login'}
+                  </span>
+                </div>
+                <ChevronRight className="w-5 h-5 text-muted-foreground" />
               </div>
-              <ChevronRight className="w-5 h-5 text-muted-foreground" />
-            </div>
+            )}
 
+            {/* Export to Cloud Button */}
             <div 
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={handleBackupClick}
             >
               <div className="flex items-center space-x-3">
                 <CloudUpload className="w-5 h-5 text-muted-foreground" />
-                <span className="font-medium">Backup to Cloud</span>
+                <span className="font-medium">Export to Cloud</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+
+            {/* Import from Cloud Button */}
+            <div
+              className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+              onClick={async () => {
+                try {
+                  let accessToken: string | null = null;
+                  let habitsFromCloud: any[] = [];
+                  if (typeof window !== 'undefined' && !isCapacitorApp) {
+                    // Web platform
+                    const { signInWithGoogleWeb } = await import("../web/google-auth");
+                    accessToken = await signInWithGoogleWeb();
+                    if (!accessToken) throw new Error("Not signed in");
+                    // Find the latest backup file from Drive
+                    const { importHabitsFromJson } = await import("../shared/data-sync");
+                    // List files named 'habits-backup.json' in Drive
+                    const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
+                      headers: { Authorization: `Bearer ${accessToken}` }
+                    });
+                    const listJson = await listRes.json();
+                    const files = listJson.files || [];
+                    if (!files.length) throw new Error("No backup file found in Drive");
+                    const fileId = files[0].id;
+                    // Download habits from Drive
+                    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                      headers: { Authorization: `Bearer ${accessToken}` }
+                    });
+                    const cloudJson = await res.text();
+                    const parsed = JSON.parse(cloudJson);
+                    // Extract habits array from backup object
+                    const habitsArray = Array.isArray(parsed.habits) ? parsed.habits : [];
+                    habitsFromCloud = importHabitsFromJson(JSON.stringify(habitsArray));
+                  } else {
+                    // Mobile (Capacitor)
+                    const { Preferences } = await import('@capacitor/preferences');
+                    const result = await signInWithGoogle();
+                    if (typeof result === 'string') {
+                      accessToken = result;
+                    } else if (result && typeof result === 'object') {
+                      accessToken = result.accessToken || null;
+                    }
+                    if (!accessToken) throw new Error("Not signed in");
+                    const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
+                    // Download and parse latest backup
+                    const cloudJson = await downloadLatestHabitsFromDrive(accessToken);
+                    // For mobile, cloudJson is already the habits array
+                    habitsFromCloud = Array.isArray(cloudJson) ? cloudJson : [];
+                  }
+                  if (habitsFromCloud && habitsFromCloud.length > 0) {
+                    onImportData(JSON.stringify(habitsFromCloud));
+                    toast({
+                      title: "Import Successful",
+                      description: "Your habits have been imported from Google Drive.",
+                      duration: 3000,
+                    });
+                  } else {
+                    toast({
+                      title: "Import Failed",
+                      description: "No habits found in cloud.",
+                      variant: "destructive",
+                      duration: 3000,
+                    });
+                  }
+                } catch (err: any) {
+                  toast({
+                    title: "Import Error",
+                    description: err?.message || "An error occurred during cloud import.",
+                    variant: "destructive",
+                    duration: 3000,
+                  });
+                  console.error('[SettingsScreen] Cloud import error:', err);
+                }
+              }}
+            >
+              <div className="flex items-center space-x-3">
+                <CloudDownload className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Import from Cloud</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>
