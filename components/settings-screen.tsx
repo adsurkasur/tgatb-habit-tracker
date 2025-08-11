@@ -16,7 +16,8 @@ import {
   HelpCircle,
   Mail,
   Smartphone,
-  Maximize
+  Maximize,
+  Trash2
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import type { Habit } from "@shared/schema";
@@ -43,6 +44,7 @@ type SettingsScreenProps = {
   onExportData: () => void;
   onImportData: (jsonData: string) => void;
   onShowHelp?: () => void;
+  onDeleteAllHabits?: () => Promise<void>;
 };
 
 export function SettingsScreen({ 
@@ -53,7 +55,8 @@ export function SettingsScreen({
   onUpdateSettings, 
   onExportData, 
   onImportData,
-  onShowHelp
+  onShowHelp,
+  onDeleteAllHabits
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
@@ -66,6 +69,7 @@ export function SettingsScreen({
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [profile, setProfile] = useState<{ name?: string; photoUrl?: string } | null>(null);
   const [clientReady, setClientReady] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   // Load profile info on mount (web)
   useEffect(() => {
@@ -444,6 +448,7 @@ export function SettingsScreen({
                   <span className="font-medium">Dark Mode</span>
                   <p className="text-sm text-muted-foreground">Switch between light and dark themes</p>
                 </div>
+
               </div>
               <Switch
                 checked={settings.darkMode}
@@ -729,6 +734,42 @@ export function SettingsScreen({
               </div>
             </RadioGroup>
           </div>
+        </div>
+
+        {/* Habit Management Section */}
+        <div className="space-y-4">
+          <h2 className="text-lg font-semibold">Habit Management</h2>
+          <div
+            className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+            onClick={() => setShowDeleteModal(true)}
+          >
+            <div className="flex items-center space-x-3">
+              <Trash2 className="w-5 h-5 text-destructive" />
+              <span className="font-medium text-destructive">Delete All Habits</span>
+            </div>
+            <ChevronRight className="w-5 h-5 text-destructive" />
+          </div>
+          {/* Modal for delete confirmation, styled like other modals */}
+          {showDeleteModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 animate-fade-in">
+              <div className="bg-background rounded-xl shadow-xl p-6 w-full max-w-sm animate-modal-pop">
+                <h3 className="text-lg font-semibold text-destructive mb-2">Delete All Habits?</h3>
+                <p className="text-sm mb-4">This action cannot be undone. Are you sure you want to delete all habits?</p>
+                <div className="flex justify-end space-x-2">
+                  <Button variant="ghost" onClick={() => setShowDeleteModal(false)}>Cancel</Button>
+                  <Button variant="destructive" onClick={async () => {
+                    await onDeleteAllHabits?.();
+                    setShowDeleteModal(false);
+                    toast({
+                      title: 'All habits deleted',
+                      description: 'Your habit list has been cleared.',
+                      duration: 3000,
+                    });
+                  }}>Delete</Button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Help & Support Section */}
