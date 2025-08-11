@@ -2,6 +2,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
+import { useTheme } from "@/components/theme-provider";
 import { HabitCard } from "@/components/habit-card";
 import { NavigationDrawer } from "@/components/navigation-drawer";
 import { AddHabitDialog } from "@/components/add-habit-dialog";
@@ -28,7 +29,7 @@ import { App } from "@capacitor/app";
 
 export default function Home() {
   // Theme context for instant dark mode update
-  const { setIsDark } = require("@/components/theme-provider").useTheme();
+  const { setIsDark } = useTheme();
   // ...existing code...
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [showEditHabit, setShowEditHabit] = useState(false);
@@ -430,11 +431,11 @@ export default function Home() {
           onOpenChange={setShowDonate}
         />
 
-        <HistoryDialog 
-          open={showHistory}
-          onOpenChange={setShowHistory}
-          habits={allHabits}
-        />
+               <HistoryDialog 
+                 open={showHistory}
+                 onOpenChange={setShowHistory}
+                 habits={allHabits}
+               />
 
         <AboutDialog 
           open={showAbout}
@@ -445,7 +446,6 @@ export default function Home() {
           open={showSettings}
           onClose={() => setShowSettings(false)}
           settings={settings}
-          habits={allHabits}
           onUpdateSettings={updateSettings}
           onExportData={exportData}
           onImportData={importData}
