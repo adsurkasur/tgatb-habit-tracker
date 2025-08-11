@@ -1,15 +1,23 @@
-// Google Auth logic for web (Next.js, Vercel)
-// Uses NextAuth.js for Google authentication and Drive API access
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import { app } from "./firebase";
 
-// Usage:
-// 1. Configure NextAuth.js in web/next-auth.config.ts
-// 2. Add API routes for Drive operations (see web/drive-api.ts)
-// 3. Use useSession() from next-auth/react in your components to access user and accessToken
-
-// Example (React component):
-// import { useSession, signIn, signOut } from "next-auth/react";
-// const { data: session } = useSession();
-// if (!session) signIn("google");
-// session.accessToken can be used for Drive API calls
-
-// For Drive sync, call your API route (see drive-api.ts) with the user's accessToken
+export async function signInWithGoogleWeb(): Promise<string | null> {
+		try {
+			console.debug('[GoogleAuthWeb] signInWithGoogleWeb called');
+			const auth = getAuth(app);
+			const provider = new GoogleAuthProvider();
+			provider.addScope("https://www.googleapis.com/auth/drive.file");
+			provider.addScope("email");
+			provider.addScope("profile");
+			const result = await signInWithPopup(auth, provider);
+			console.debug('[GoogleAuthWeb] signInWithGoogleWeb result:', result);
+			// Try to get the OAuth access token for Drive API
+			const credential = GoogleAuthProvider.credentialFromResult(result);
+			const accessToken = credential?.accessToken || null;
+			console.debug('[GoogleAuthWeb] Access token:', accessToken);
+			return accessToken;
+		} catch (err) {
+			console.error('[GoogleAuthWeb] signInWithGoogleWeb error:', err);
+			return null;
+		}
+}

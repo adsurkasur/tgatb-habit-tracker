@@ -29,6 +29,7 @@ import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { Capacitor } from '@capacitor/core';
 // Import mobile auth and drive helpers
 import { signInWithGoogle } from "@/mobile/google-auth";
+import { app } from "../web/firebase"; // Ensure Firebase is initialized for web
 import { uploadHabitsToDrive } from "@/mobile/drive-sync";
 
 
@@ -58,10 +59,15 @@ export function SettingsScreen({
   const [, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
-  // Persistent guard to block duplicate export triggers (see: https://react.dev/reference/react/useRef)
   const exportInProgressRef = useRef(false);
   const { isNative } = useStatusBar();
   const isCapacitorApp = Capacitor.isNativePlatform();
+  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(() => {
+    if (typeof window !== 'undefined' && !isCapacitorApp) {
+      return !!localStorage.getItem('googleAccessToken');
+    }
+    return false;
+  });
   
   // Fullscreen managed centrally via Capacitor helpers
 
@@ -191,59 +197,134 @@ export function SettingsScreen({
 
   const handleLoginClick = async () => {
     try {
-      const accessToken = await signInWithGoogle();
-      if (accessToken) {
-        toast({
-          title: "Sign-in Successful",
-          description: "You are now signed in with Google.",
-          duration: 3000,
-        });
+      if (!isLoggedIn) {
+        // Login flow
+        console.debug('[GoogleAuth] Attempting sign-in...');
+        let accessToken: string | null = null;
+        if (typeof window !== 'undefined' && !isCapacitorApp) {
+          // Web platform
+          const { signInWithGoogleWeb } = await import("../web/google-auth");
+          accessToken = await signInWithGoogleWeb();
+          if (accessToken) {
+            localStorage.setItem('googleAccessToken', accessToken);
+            setIsLoggedIn(true);
+            toast({
+              title: "Sign-in Successful",
+              description: "You are now signed in with Google.",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Sign-in Failed",
+              description: "Could not sign in with Google.",
+              variant: "destructive",
+              duration: 3000,
+            });
+            console.error('[GoogleAuth] No access token returned from sign-in');
+          }
+        } else {
+          // Mobile (Capacitor)
+          const { Preferences } = await import('@capacitor/preferences');
+          accessToken = await signInWithGoogle();
+          if (accessToken) {
+            await Preferences.set({ key: 'googleAccessToken', value: accessToken });
+            setIsLoggedIn(true);
+            toast({
+              title: "Sign-in Successful",
+              description: "You are now signed in with Google.",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Sign-in Failed",
+              description: "Could not sign in with Google.",
+              variant: "destructive",
+              duration: 3000,
+            });
+            console.error('[GoogleAuth] No access token returned from sign-in');
+          }
+        }
       } else {
-        toast({
-          title: "Sign-in Failed",
-          description: "Could not sign in with Google.",
-          variant: "destructive",
-          duration: 3000,
-        });
+        // Logout flow
+        if (typeof window !== 'undefined' && !isCapacitorApp) {
+          localStorage.removeItem('googleAccessToken');
+          setIsLoggedIn(false);
+          toast({
+            title: "Logged Out",
+            description: "You have been logged out of Google.",
+            duration: 3000,
+          });
+        } else {
+          const { Preferences } = await import('@capacitor/preferences');
+          await Preferences.remove({ key: 'googleAccessToken' });
+          setIsLoggedIn(false);
+          toast({
+            title: "Logged Out",
+            description: "You have been logged out of Google.",
+            duration: 3000,
+          });
+        }
       }
-    } catch {
+    } catch (err) {
       toast({
-        title: "Sign-in Error",
-        description: "An error occurred during sign-in.",
+        title: isLoggedIn ? "Logout Error" : "Sign-in Error",
+        description: `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
         variant: "destructive",
         duration: 3000,
       });
+      console.error(`[GoogleAuth] ${isLoggedIn ? 'logout' : 'sign-in'} threw error:`, err);
     }
   };
 
   const handleBackupClick = async () => {
     try {
-      // Example: backup current habits
       const habitsToExport = habits || [];
-      const accessToken = await signInWithGoogle();
-      if (!accessToken) throw new Error("Not signed in");
-      const fileId = await uploadHabitsToDrive(habitsToExport, accessToken);
-      if (fileId) {
+      let accessToken: string | null = null;
+      let result: any = null;
+      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
+        // Web platform
+        const { signInWithGoogleWeb } = await import("../web/google-auth");
+        const { exportHabitsToJson } = await import("../shared/data-sync");
+        const { uploadToDrive } = await import("../web/drive-sync");
+        accessToken = await signInWithGoogleWeb();
+        if (!accessToken) throw new Error("Not signed in");
+        const json = exportHabitsToJson(habitsToExport);
+        result = await uploadToDrive(json, accessToken);
+        console.debug('[SettingsScreen] Web Drive backup result:', result);
         toast({
           title: "Backup Successful",
-          description: "Your habits have been backed up to Google Drive.",
+          description: "Your habits have been backed up to Google Drive (web).",
           duration: 3000,
         });
       } else {
-        toast({
-          title: "Backup Failed",
-          description: "Could not upload habits to Drive.",
-          variant: "destructive",
-          duration: 3000,
-        });
+        // Mobile (Capacitor)
+        accessToken = await signInWithGoogle();
+        if (!accessToken) throw new Error("Not signed in");
+        result = await uploadHabitsToDrive(habitsToExport, accessToken);
+        console.debug('[SettingsScreen] Mobile Drive backup result:', result);
+        if (result) {
+          toast({
+            title: "Backup Successful",
+            description: "Your habits have been backed up to Google Drive (mobile).",
+            duration: 3000,
+          });
+        } else {
+          toast({
+            title: "Backup Failed",
+            description: "Could not upload habits to Drive.",
+            variant: "destructive",
+            duration: 3000,
+          });
+        }
       }
-    } catch {
+    } catch (err) {
       toast({
         title: "Backup Error",
         description: "An error occurred during backup.",
         variant: "destructive",
         duration: 3000,
       });
+      console.error('[SettingsScreen] Drive backup error:', err);
     }
   };
 
@@ -349,7 +430,7 @@ export function SettingsScreen({
             >
               <div className="flex items-center space-x-3">
                 <User className="w-5 h-5 text-muted-foreground" />
-                <span className="font-medium">Login / Logout</span>
+                <span className="font-medium">{isLoggedIn ? 'Logout' : 'Login'}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>
