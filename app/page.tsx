@@ -27,6 +27,8 @@ import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 
 export default function Home() {
+  // Theme context for instant dark mode update
+  const { setIsDark } = require("@/components/theme-provider").useTheme();
   // ...existing code...
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [showEditHabit, setShowEditHabit] = useState(false);
@@ -91,6 +93,11 @@ export default function Home() {
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
   useSystemBarsUnified(settings.fullscreenMode);
+
+  // Update theme immediately when settings.darkMode changes
+  useEffect(() => {
+    setIsDark(settings.darkMode);
+  }, [settings.darkMode, setIsDark]);
 
   // Back again to exit logic (Android only) - MOVED after settings are available
   const lastBackPressRef = useRef<number>(0);
