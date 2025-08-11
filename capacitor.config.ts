@@ -7,6 +7,10 @@ const config: CapacitorConfig = {
   appName: 'TGATB Habit Tracker',
   webDir: 'out',
   plugins: {
+    FirebaseAuthentication: {
+      skipNativeAuth: false,
+      providers: ["google.com"],
+    },
     StatusBar: {
       // Let runtime JS/native plugin force white icons; avoid dark style which produces dark icons on white
       style: 'light',
