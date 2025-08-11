@@ -558,7 +558,6 @@ export function SettingsScreen({
                     console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
                   } else {
                     // Mobile (Capacitor)
-                    const { Preferences } = await import('@capacitor/preferences');
                     const result = await signInWithGoogle();
                     if (typeof result === 'string') {
                       accessToken = result;
