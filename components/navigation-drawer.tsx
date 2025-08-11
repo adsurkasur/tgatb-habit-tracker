@@ -36,6 +36,7 @@ interface NavigationDrawerProps {
   onEditHabit?: (habit: Habit) => void;
   onDeleteHabit?: (habitId: string) => void;
   onHelpClick?: () => void;
+  onHabitSelect?: (habit: Habit) => void;
 }
 
 // Memoized habit item component to prevent unnecessary re-renders
@@ -46,22 +47,23 @@ const HabitItem = React.memo<{
   type: 'good' | 'bad';
   onEdit?: (habit: Habit) => void;
   onDelete?: (habitId: string) => void;
-}>(({ habit, index, isOpen, type, onEdit, onDelete }) => {
+  onSelect?: (habit: Habit) => void;
+}>(({ habit, index, isOpen, type, onEdit, onDelete, onSelect }) => {
   const colorClasses = type === 'good' 
     ? "bg-green-500/10 text-green-600 border-green-500/20"
     : "bg-red-500/10 text-red-600 border-red-500/20";
     
   return (
-    <div 
-      className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item state-layer-hover"
+    <div
+      className="flex items-center justify-between p-3 bg-muted material-radius collapsible-item state-layer-hover cursor-pointer"
       style={{
-        // Only animate on opening, not closing to reduce lag
         animationName: isOpen ? 'fadeInSlideUp' : 'none',
         animationDuration: isOpen ? '0.25s' : '0s',
         animationTimingFunction: isOpen ? 'ease-out' : 'linear',
         animationDelay: isOpen ? `${index * 30}ms` : '0ms',
         animationFillMode: 'both'
       }}
+      onClick={() => onSelect?.(habit)}
     >
       <div className="flex items-center justify-between flex-1">
         <span className="text-foreground text-sm">{habit.name}</span>
@@ -70,7 +72,6 @@ const HabitItem = React.memo<{
             <Flame className="w-3 h-3 mr-1" />
             {habit.streak} days
           </Badge>
-          
           {/* Action buttons */}
           <div className="flex items-center space-x-1">
             {onEdit && (
@@ -118,6 +119,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   onEditHabit,
   onDeleteHabit,
   onHelpClick,
+  onHabitSelect,
   open,
   onOpenChange
 }) => {
@@ -232,6 +234,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           type="good"
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
+                          onSelect={onHabitSelect}
                         />
                       ))}
                     </div>
@@ -280,6 +283,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           type="bad"
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
+                          onSelect={onHabitSelect}
                         />
                       ))}
                     </div>

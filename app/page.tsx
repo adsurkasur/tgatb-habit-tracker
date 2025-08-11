@@ -27,6 +27,7 @@ import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 
 export default function Home() {
+  // ...existing code...
   const [showAddHabit, setShowAddHabit] = useState(false);
   const [showEditHabit, setShowEditHabit] = useState(false);
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
@@ -57,25 +58,36 @@ export default function Home() {
   // Navigation bar handling centralized in Capacitor layer
   
   const {
-    currentHabit,
-    currentHabitIndex,
-    navigationEvent,
-    goodHabits,
-    badHabits,
-    settings,
-    addHabit,
-    updateHabit,
-    deleteHabit,
-    restoreHabit,
-    trackHabit,
-    undoHabitTracking,
-    getHabitCompletionStatus,
-    moveToNextHabit,
-    moveToPreviousHabit,
-    updateSettings,
-    exportData,
-    importData,
+  // ...existing code...
+  currentHabit,
+  currentHabitIndex,
+  navigationEvent,
+  goodHabits,
+  badHabits,
+  settings,
+  addHabit,
+  updateHabit,
+  deleteHabit,
+  restoreHabit,
+  trackHabit,
+  undoHabitTracking,
+  getHabitCompletionStatus,
+  moveToNextHabit,
+  moveToPreviousHabit,
+  navigateToHabitIndex,
+  updateSettings,
+  exportData,
+  importData,
   } = useHabits();
+  // Handler for jump-to navigation from drawer (must be after useHabits)
+  const handleHabitSelect = useCallback((habit: Habit) => {
+    const allHabits = [...goodHabits, ...badHabits];
+    const index = allHabits.findIndex(h => h.id === habit.id);
+    if (index !== -1) {
+      navigateToHabitIndex(index);
+      setDrawerOpen(false); // Close drawer after selection
+    }
+  }, [goodHabits, badHabits, navigateToHabitIndex]);
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
   useSystemBarsUnified(settings.fullscreenMode);
@@ -259,6 +271,7 @@ export default function Home() {
               onHelpClick={resetWelcome}
               open={drawerOpen}
               onOpenChange={setDrawerOpen}
+              onHabitSelect={handleHabitSelect}
             />
           </div>
           <h1 className="text-xl font-semibold">The Good and The Bad</h1>
