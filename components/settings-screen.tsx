@@ -760,10 +760,26 @@ export function SettingsScreen({
           onDelete={async () => {
             setDeleteLoading(true);
             try {
-              await onDeleteAllHabits?.();
+              if (onDeleteAllHabits) {
+                await onDeleteAllHabits();
+                toast({
+                  title: 'All habits deleted',
+                  description: 'Your habit list has been cleared.',
+                  duration: 3000,
+                });
+              } else {
+                toast({
+                  title: 'Delete Failed',
+                  description: 'No delete handler provided.',
+                  variant: 'destructive',
+                  duration: 3000,
+                });
+              }
+            } catch (err) {
               toast({
-                title: 'All habits deleted',
-                description: 'Your habit list has been cleared.',
+                title: 'Delete Failed',
+                description: 'An error occurred while deleting habits.',
+                variant: 'destructive',
                 duration: 3000,
               });
             } finally {
