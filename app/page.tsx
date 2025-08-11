@@ -453,6 +453,12 @@ export default function Home() {
             setShowSettings(false);
             resetWelcome();
           }}
+          onDeleteAllHabits={async () => {
+            // Delete all habits logic
+            for (const habit of allHabits) {
+              await deleteHabit({ id: habit.id });
+            }
+          }}
         />
 
         {/* Welcome Overlay */}
