@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.10 - 2025-08-11
+
+**Overview:**  
+Patch release: improved support metadata and dynamic usage in UI.
+
+### Changes (0.2.10)
+
+- Switched to separate `author` and `email` fields in `package.json` for support metadata.
+- Updated `settings-screen.tsx` to use both support author and email dynamically from metadata (no hardcoded values).
+
 ## 0.2.9 - 2025-08-11
 
 **Overview:**  

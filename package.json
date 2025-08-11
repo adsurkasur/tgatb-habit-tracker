@@ -1,6 +1,6 @@
 {
   "name": "tgatb-habit-tracker",
-  "version": "0.2.9",
+  "version": "0.2.10",
   "description": "The Good and The Bad: Habit Tracker - A minimalist habit tracking application",
   "type": "module",
   "license": "Apache-2.0",
@@ -11,7 +11,9 @@
   "bugs": {
     "url": "https://github.com/adsurkasur/tgatb-habit-tracker/issues"
   },
-  "homepage": "https://github.com/adsurkasur/tgatb-habit-tracker#readme",
+  "author": "adsurkasur",
+  "email": "adsurkasur.dev@gmail.com",
+  "homepage": "https://github.com/adsurkasur/tgatb-habit-tracker",
   "engines": {
     "node": ">=18.18.0",
     "npm": ">=9.0.0"
