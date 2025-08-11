@@ -22,7 +22,6 @@ import {
   Trash2
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
-import type { Habit } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
@@ -778,7 +777,7 @@ export function SettingsScreen({
                   duration: 3000,
                 });
               }
-            } catch (err) {
+            } catch {
               toast({
                 title: 'Delete Failed',
                 description: 'An error occurred while deleting habits.',
