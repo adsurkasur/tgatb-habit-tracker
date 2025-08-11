@@ -263,11 +263,36 @@ export function useHabits() {
         title: 'Export failed',
         description: 'Could not export your habit data.',
         variant: 'destructive',
+        duration: 3000,
       });
     }
   };
 
   const currentHabit = habits[currentHabitIndex];
+
+  // Import data function: imports JSON, refreshes habits, and shows feedback
+  const importData = async (jsonData: string) => {
+    try {
+      await HabitStorage.importData(jsonData);
+      // Refresh habits and settings after import
+      const loadedHabits = HabitStorage.getHabits();
+      const loadedSettings = await HabitStorage.getSettings();
+      setHabits(loadedHabits);
+      setSettings(loadedSettings);
+      toast({
+        title: 'Import successful',
+        description: 'Your habit data has been imported.',
+        duration: 3000,
+      });
+    } catch (err) {
+      toast({
+        title: 'Import failed',
+        description: (err as Error).message || 'Could not import your habit data.',
+        variant: 'destructive',
+        duration: 3000,
+      });
+    }
+  };
 
   return {
     habits,
@@ -275,7 +300,7 @@ export function useHabits() {
     badHabits: habits.filter(h => h.type === 'bad'),
     currentHabit,
     currentHabitIndex,
-  navigationEvent,
+    navigationEvent,
     settings,
     addHabit,
     updateHabit,
@@ -289,6 +314,6 @@ export function useHabits() {
     navigateToHabitIndex,
     updateSettings,
     exportData,
-    // importData: implement or remove if not used
+    importData,
   };
 }

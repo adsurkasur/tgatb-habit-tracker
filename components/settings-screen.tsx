@@ -32,7 +32,7 @@ interface SettingsScreenProps {
   settings: UserSettings;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => void;
-  // onImportData removed, not implemented
+  onImportData: (jsonData: string) => void;
   onShowHelp?: () => void;
 }
 
@@ -42,7 +42,7 @@ export function SettingsScreen({
   settings, 
   onUpdateSettings, 
   onExportData, 
-  // onImportData removed
+  onImportData,
   onShowHelp
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -140,7 +140,14 @@ export function SettingsScreen({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-  // onImportData removed
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        const jsonData = event.target?.result as string;
+        if (jsonData) {
+          onImportData(jsonData);
+        }
+      };
+      reader.readAsText(file);
       // Reset file input
       e.target.value = '';
     }
@@ -206,9 +213,9 @@ export function SettingsScreen({
     window.dispatchEvent(event);
 
     toast({
-      title: "Install Prompt",
-      description: "If supported, an install prompt should appear. Look for the install button in your browser's address bar if no popup appears.",
-      duration: 5000,
+  title: "Install Prompt",
+  description: "If supported, an install prompt should appear. Look for the install button in your browser's address bar if no popup appears.",
+  duration: 3000,
     });
   };
 

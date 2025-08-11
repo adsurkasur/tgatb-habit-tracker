@@ -147,9 +147,9 @@ export function PWAInstallPrompt() {
     setShowInstallPrompt(false);
     sessionStorage.setItem('pwa-install-dismissed', 'true');
     toast({
-      title: "App installation available",
-      description: "You can install the app anytime from Settings → Install App",
-      duration: 4000,
+  title: "App installation available",
+  description: "You can install the app anytime from Settings  Install App",
+  duration: 3000,
     });
   };
 

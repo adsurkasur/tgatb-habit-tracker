@@ -71,10 +71,10 @@ export default function Home() {
     undoHabitTracking,
     getHabitCompletionStatus,
     moveToNextHabit,
-  moveToPreviousHabit,
+    moveToPreviousHabit,
     updateSettings,
     exportData,
-  // importData removed, not implemented in useHabits
+    importData,
   } = useHabits();
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
@@ -99,7 +99,7 @@ export default function Home() {
         App.exitApp();
       } else {
         lastBackPressRef.current = now;
-        toast({ title: "Press back again to exit", duration: 2000 });
+  toast({ title: "Press back again to exit", duration: 3000 });
       }
     });
     return () => { handler.then(h => h.remove()); };
@@ -410,6 +410,7 @@ export default function Home() {
           settings={settings}
           onUpdateSettings={updateSettings}
           onExportData={exportData}
+          onImportData={importData}
           onShowHelp={() => {
             setShowSettings(false);
             resetWelcome();
