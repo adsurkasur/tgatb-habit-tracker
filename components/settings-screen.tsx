@@ -18,6 +18,7 @@ import {
   Maximize
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
+import type { Habit } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
@@ -26,21 +27,27 @@ import { useStatusBar } from "@/hooks/use-status-bar";
 // MAJOR FIX: Use unified system bars instead of conflicting implementations
 import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { Capacitor } from '@capacitor/core';
+// Import mobile auth and drive helpers
+import { signInWithGoogle } from "@/mobile/google-auth";
+import { uploadHabitsToDrive } from "@/mobile/drive-sync";
 
-interface SettingsScreenProps {
+
+type SettingsScreenProps = {
   open: boolean;
   onClose: () => void;
   settings: UserSettings;
+  habits: Habit[];
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => void;
   onImportData: (jsonData: string) => void;
   onShowHelp?: () => void;
-}
+};
 
 export function SettingsScreen({ 
   open, 
   onClose, 
   settings, 
+  habits,
   onUpdateSettings, 
   onExportData, 
   onImportData,
@@ -180,20 +187,64 @@ export function SettingsScreen({
     }
   };
 
-  const handleLoginClick = () => {
-    toast({
-      title: "Upcoming Feature!",
-      description: "User authentication and cloud sync coming soon. Stay tuned! 🚀",
-      duration: 3000,
-    });
+
+
+  const handleLoginClick = async () => {
+    try {
+      const accessToken = await signInWithGoogle();
+      if (accessToken) {
+        toast({
+          title: "Sign-in Successful",
+          description: "You are now signed in with Google.",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Sign-in Failed",
+          description: "Could not sign in with Google.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
+    } catch {
+      toast({
+        title: "Sign-in Error",
+        description: "An error occurred during sign-in.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
 
-  const handleBackupClick = () => {
-    toast({
-      title: "Upcoming Feature!",
-      description: "Cloud backup functionality will be available soon. Stay tuned! ☁️",
-      duration: 3000,
-    });
+  const handleBackupClick = async () => {
+    try {
+      // Example: backup current habits
+      const habitsToExport = habits || [];
+      const accessToken = await signInWithGoogle();
+      if (!accessToken) throw new Error("Not signed in");
+      const fileId = await uploadHabitsToDrive(habitsToExport, accessToken);
+      if (fileId) {
+        toast({
+          title: "Backup Successful",
+          description: "Your habits have been backed up to Google Drive.",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: "Backup Failed",
+          description: "Could not upload habits to Drive.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
+    } catch {
+      toast({
+        title: "Backup Error",
+        description: "An error occurred during backup.",
+        variant: "destructive",
+        duration: 3000,
+      });
+    }
   };
 
   const handleInstallPWA = () => {

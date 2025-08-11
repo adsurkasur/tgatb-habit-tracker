@@ -438,6 +438,7 @@ export default function Home() {
           open={showSettings}
           onClose={() => setShowSettings(false)}
           settings={settings}
+          habits={allHabits}
           onUpdateSettings={updateSettings}
           onExportData={exportData}
           onImportData={importData}
