@@ -258,7 +258,6 @@ export function SettingsScreen({
           }
         } else {
           // Mobile (Capacitor)
-          const { Preferences } = await import('@capacitor/preferences');
           const result = await signInWithGoogle();
           // result can be string (legacy) or object (new)
           let accessToken: string | null = null;
@@ -272,6 +271,7 @@ export function SettingsScreen({
             photoUrl = result.photoUrl || undefined;
           }
           if (accessToken) {
+            const { Preferences } = await import('@capacitor/preferences');
             await Preferences.set({ key: 'googleAccessToken', value: accessToken });
             if (name) await Preferences.set({ key: 'googleProfileName', value: name });
             if (photoUrl) await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
