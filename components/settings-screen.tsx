@@ -68,6 +68,24 @@ export function SettingsScreen({
     }
     return false;
   });
+  const [profile, setProfile] = useState<{ name?: string; photoUrl?: string } | null>(null);
+
+  // Load profile info on mount (web)
+  useEffect(() => {
+    if (typeof window !== 'undefined' && !isCapacitorApp) {
+      const name = localStorage.getItem('googleProfileName') || undefined;
+      const photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
+      if (name || photoUrl) setProfile({ name, photoUrl });
+    } else if (isCapacitorApp) {
+      // Mobile: load profile info from Preferences
+      (async () => {
+        const { Preferences } = await import('@capacitor/preferences');
+        const name = (await Preferences.get({ key: 'googleProfileName' })).value || undefined;
+        const photoUrl = (await Preferences.get({ key: 'googleProfilePhoto' })).value || undefined;
+        if (name || photoUrl) setProfile({ name, photoUrl });
+      })();
+    }
+  }, [isLoggedIn, isCapacitorApp]);
   
   // Fullscreen managed centrally via Capacitor helpers
 
@@ -204,9 +222,18 @@ export function SettingsScreen({
         if (typeof window !== 'undefined' && !isCapacitorApp) {
           // Web platform
           const { signInWithGoogleWeb } = await import("../web/google-auth");
+          const { getAuth } = await import("firebase/auth");
           accessToken = await signInWithGoogleWeb();
           if (accessToken) {
             localStorage.setItem('googleAccessToken', accessToken);
+            // Get user profile info from Firebase Auth
+            const auth = getAuth(app);
+            const user = auth.currentUser;
+            if (user) {
+              localStorage.setItem('googleProfileName', user.displayName || '');
+              localStorage.setItem('googleProfilePhoto', user.photoURL || '');
+              setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
+            }
             setIsLoggedIn(true);
             toast({
               title: "Sign-in Successful",
@@ -225,9 +252,23 @@ export function SettingsScreen({
         } else {
           // Mobile (Capacitor)
           const { Preferences } = await import('@capacitor/preferences');
-          accessToken = await signInWithGoogle();
+          const result = await signInWithGoogle();
+          // result can be string (legacy) or object (new)
+          let accessToken: string | null = null;
+          let name: string | undefined = undefined;
+          let photoUrl: string | undefined = undefined;
+          if (typeof result === 'string') {
+            accessToken = result;
+          } else if (result && typeof result === 'object') {
+            accessToken = result.accessToken || null;
+            name = result.name || undefined;
+            photoUrl = result.photoUrl || undefined;
+          }
           if (accessToken) {
             await Preferences.set({ key: 'googleAccessToken', value: accessToken });
+            if (name) await Preferences.set({ key: 'googleProfileName', value: name });
+            if (photoUrl) await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
+            setProfile({ name, photoUrl });
             setIsLoggedIn(true);
             toast({
               title: "Sign-in Successful",
@@ -248,7 +289,10 @@ export function SettingsScreen({
         // Logout flow
         if (typeof window !== 'undefined' && !isCapacitorApp) {
           localStorage.removeItem('googleAccessToken');
+          localStorage.removeItem('googleProfileName');
+          localStorage.removeItem('googleProfilePhoto');
           setIsLoggedIn(false);
+          setProfile(null);
           toast({
             title: "Logged Out",
             description: "You have been logged out of Google.",
@@ -257,7 +301,10 @@ export function SettingsScreen({
         } else {
           const { Preferences } = await import('@capacitor/preferences');
           await Preferences.remove({ key: 'googleAccessToken' });
+          await Preferences.remove({ key: 'googleProfileName' });
+          await Preferences.remove({ key: 'googleProfilePhoto' });
           setIsLoggedIn(false);
+          setProfile(null);
           toast({
             title: "Logged Out",
             description: "You have been logged out of Google.",
@@ -298,7 +345,13 @@ export function SettingsScreen({
         });
       } else {
         // Mobile (Capacitor)
-        accessToken = await signInWithGoogle();
+        const resultObj = await signInWithGoogle();
+        let accessToken: string | null = null;
+        if (typeof resultObj === 'string') {
+          accessToken = resultObj;
+        } else if (resultObj && typeof resultObj === 'object') {
+          accessToken = resultObj.accessToken || null;
+        }
         if (!accessToken) throw new Error("Not signed in");
         result = await uploadHabitsToDrive(habitsToExport, accessToken);
         console.debug('[SettingsScreen] Mobile Drive backup result:', result);
@@ -429,8 +482,16 @@ export function SettingsScreen({
               onClick={handleLoginClick}
             >
               <div className="flex items-center space-x-3">
-                <User className="w-5 h-5 text-muted-foreground" />
-                <span className="font-medium">{isLoggedIn ? 'Logout' : 'Login'}</span>
+                {isLoggedIn && profile?.photoUrl ? (
+                  <img src={profile.photoUrl} alt="Profile" className="w-6 h-6 rounded-full object-cover" />
+                ) : (
+                  <User className="w-5 h-5 text-muted-foreground" />
+                )}
+                <span className="font-medium">
+                  {isLoggedIn
+                    ? `Logout from${profile?.name ? ` ${profile.name}` : ''}`
+                    : 'Login'}
+                </span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>
