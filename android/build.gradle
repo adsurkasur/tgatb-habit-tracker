@@ -8,7 +8,7 @@ buildscript {
     dependencies {
         // Use an AGP version that pairs with Gradle 8.13
         classpath 'com.android.tools.build:gradle:8.12.0'
-        classpath 'com.google.gms:google-services:4.4.2'
+    classpath 'com.google.gms:google-services:4.4.3'
     }
 }
 

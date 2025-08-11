@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "171393870035",
+    "project_id": "tgatb-habit-tracker",
+    "storage_bucket": "tgatb-habit-tracker.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:171393870035:android:808adcd4643f21075b8c26",
+        "android_client_info": {
+          "package_name": "com.tgatb.habittracker"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "171393870035-s0eanll4b2q1o4t7o4glsrrkgdjl9omq.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.tgatb.habittracker",
+            "certificate_hash": "804fbfd1270b3511ee41d6a922103cb4b9c24cd6"
+          }
+        },
+        {
+          "client_id": "171393870035-fjnpjt9bvqom7ts1d0ej6r3nrq2jk0u8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDbsKrbKKlSsc9RkgnuYa5Wc7XohQo0WhU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "171393870035-fjnpjt9bvqom7ts1d0ej6r3nrq2jk0u8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
