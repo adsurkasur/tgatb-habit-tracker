@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.0 - 2025-08-11
+
+**Overview:**
+This release focuses on integrating Firebase authentication and Google Drive for cloud backup and restore. It also includes significant improvements to error handling and the overall user experience.
+
+### Features (0.3.0)
+
+- **Google Sign-In:** Users can now sign in with their Google account on both web and mobile platforms.
+- **Cloud Backup & Restore:** Added functionality to export and import user data to/from Google Drive.
+- **Firebase Integration:** Integrated the Firebase SDK for authentication and future cloud services.
+
+### Fixes (0.3.0)
+
+- **Graceful Error Handling:** Implemented more user-friendly error messages for common issues like "No credentials available" and "Not signed in".
+- **UI Improvements:** Various UI tweaks to improve the user experience.
+
+### Refactoring (0.3.0)
+
+- **Habit Management:** Refactored habit management logic for better performance and maintainability.
+- **Theme Handling:** Improved theme handling for a more consistent look and feel.
+
 ## 0.2.11 - 2025-08-11
 
 **Overview:**  
