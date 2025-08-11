@@ -279,6 +279,14 @@ export function useHabits() {
       const loadedSettings = await HabitStorage.getSettings();
       setHabits(loadedHabits);
       setSettings(loadedSettings);
+      // Immediately update theme if darkMode changed
+      try {
+        const { useTheme } = await import("@/components/theme-provider");
+        const theme = useTheme();
+        theme.setIsDark(loadedSettings.darkMode);
+      } catch (e) {
+        // If theme context not available, ignore
+      }
       toast({
         title: 'Import successful',
         description: 'Your habit data has been imported.',

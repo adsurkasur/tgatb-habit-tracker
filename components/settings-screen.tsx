@@ -531,14 +531,12 @@ export function SettingsScreen({
               onClick={async () => {
                 try {
                   let accessToken: string | null = null;
-                  let habitsFromCloud: any[] = [];
+                  let cloudJson: any = "";
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
                     const { signInWithGoogleWeb } = await import("../web/google-auth");
                     accessToken = await signInWithGoogleWeb();
                     if (!accessToken) throw new Error("Not signed in");
-                    // Find the latest backup file from Drive
-                    const { importHabitsFromJson } = await import("../shared/data-sync");
                     // List files named 'habits-backup.json' in Drive
                     const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
                       headers: { Authorization: `Bearer ${accessToken}` }
@@ -548,13 +546,12 @@ export function SettingsScreen({
                     console.debug('[SettingsScreen] Web Drive file list:', files);
                     if (!files.length) throw new Error("No backup file found in Drive");
                     const fileId = files[0].id;
-                    // Download habits from Drive
+                    // Download backup from Drive
                     const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
                       headers: { Authorization: `Bearer ${accessToken}` }
                     });
-                    const cloudJson = await res.text();
+                    cloudJson = await res.text();
                     console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
-                    habitsFromCloud = cloudJson;
                   } else {
                     // Mobile (Capacitor)
                     const { Preferences } = await import('@capacitor/preferences');
@@ -566,14 +563,16 @@ export function SettingsScreen({
                     }
                     if (!accessToken) throw new Error("Not signed in");
                     const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
-                    // Download and parse latest backup
-                    const cloudJson = await downloadLatestHabitsFromDrive(accessToken);
-                    // For mobile, cloudJson is already the full bundle JSON string
+                    // Download latest backup
+                    cloudJson = await downloadLatestHabitsFromDrive(accessToken);
+                    // If mobile helper returns an array, convert to string
+                    if (Array.isArray(cloudJson)) {
+                      cloudJson = JSON.stringify(cloudJson);
+                    }
                     console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
-                    habitsFromCloud = cloudJson;
                   }
-                  if (habitsFromCloud && habitsFromCloud.length > 0) {
-                    onImportData(habitsFromCloud);
+                  if (cloudJson && cloudJson.length > 0) {
+                    onImportData(cloudJson);
                     toast({
                       title: "Import Successful",
                       description: "Your habits have been imported from Google Drive.",
