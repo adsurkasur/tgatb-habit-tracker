@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.9 - 2025-08-11
+
+**Overview:**  
+Critical bugfix for import/export functionality and UI wiring. All toast durations unified. Import now updates habits immediately after file selection.
+
+### Fixed (0.2.9)
+
+- Fixed import functionality: file input now reads and passes JSON to import logic, updating habits instantly.
+- Wired up `SettingsScreen` to receive and call the correct import handler from `useHabits`.
+- Resolved `onImportData is not a function` error by passing the correct prop from parent.
+- Unified all toast durations to 3000ms for consistent UX.
+
+### Changes (0.2.9)
+
+- Updated `SettingsScreen` and main app to ensure import/export workflow is robust and user-friendly.
+
 ## 0.2.8 - 2025-08-11
 
 **Overview:**  
