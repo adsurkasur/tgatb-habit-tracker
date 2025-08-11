@@ -1,3 +1,26 @@
+// Upload full export bundle (string) to Drive
+export async function uploadDataToDrive(jsonData: string, accessToken: string): Promise<string | null> {
+	const metadata = {
+		name: 'habits-backup.json',
+		mimeType: 'application/json',
+	};
+	const form = new FormData();
+	form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
+	form.append('file', new Blob([jsonData], { type: 'application/json' }));
+	try {
+		const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
+			method: 'POST',
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+			body: form,
+		});
+		const data = await res.json();
+		return data.id ?? null;
+	} catch {
+		return null;
+	}
+}
 // Download the latest habits backup from Drive
 export async function downloadLatestHabitsFromDrive(accessToken: string): Promise<any[]> {
 	try {
