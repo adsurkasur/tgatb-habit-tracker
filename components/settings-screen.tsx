@@ -326,21 +326,24 @@ export function SettingsScreen({
 
   const handleBackupClick = async () => {
     try {
-      const habitsToExport = habits || [];
+      // Use full export bundle for Drive backup
       let accessToken: string | null = null;
       let result: any = null;
+      // Get full export bundle
+  const { HabitStorage } = await import("@/lib/habit-storage");
+  const exportJson = await HabitStorage.exportData();
+      console.debug('[SettingsScreen] Exporting full bundle:', exportJson);
       if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         // Web platform
         const { signInWithGoogleWeb } = await import("../web/google-auth");
         const { uploadToDrive } = await import("../web/drive-sync");
         accessToken = await signInWithGoogleWeb();
         if (!accessToken) throw new Error("Not signed in");
-        const json = JSON.stringify({ habits: habitsToExport });
-        result = await uploadToDrive(json, accessToken);
+        result = await uploadToDrive(exportJson, accessToken);
         console.debug('[SettingsScreen] Web Drive backup result:', result);
         toast({
           title: "Backup Successful",
-          description: "Your habits have been backed up to Google Drive (web).",
+          description: "Your data has been backed up to Google Drive (web).",
           duration: 3000,
         });
       } else {
@@ -353,20 +356,19 @@ export function SettingsScreen({
           accessToken = resultObj.accessToken || null;
         }
         if (!accessToken) throw new Error("Not signed in");
-    // Mobile: pass array, helper wraps as { habits: [...] }
-    const { uploadHabitsToDrive } = await import("@/mobile/drive-sync");
-    result = await uploadHabitsToDrive(habitsToExport, accessToken);
+  const { uploadDataToDrive } = await import("@/mobile/drive-sync");
+  result = await uploadDataToDrive(exportJson, accessToken);
         console.debug('[SettingsScreen] Mobile Drive backup result:', result);
         if (result) {
           toast({
             title: "Backup Successful",
-            description: "Your habits have been backed up to Google Drive (mobile).",
+            description: "Your data has been backed up to Google Drive (mobile).",
             duration: 3000,
           });
         } else {
           toast({
             title: "Backup Failed",
-            description: "Could not upload habits to Drive.",
+            description: "Could not upload data to Drive.",
             variant: "destructive",
             duration: 3000,
           });
@@ -379,7 +381,7 @@ export function SettingsScreen({
         variant: "destructive",
         duration: 3000,
       });
-      console.error('[SettingsScreen] Drive backup error:', err);
+      console.error('[SettingsScreen] Drive backup error:', err instanceof Error ? err.stack : err);
     }
   };
 
@@ -543,6 +545,7 @@ export function SettingsScreen({
                     });
                     const listJson = await listRes.json();
                     const files = listJson.files || [];
+                    console.debug('[SettingsScreen] Web Drive file list:', files);
                     if (!files.length) throw new Error("No backup file found in Drive");
                     const fileId = files[0].id;
                     // Download habits from Drive
@@ -550,10 +553,8 @@ export function SettingsScreen({
                       headers: { Authorization: `Bearer ${accessToken}` }
                     });
                     const cloudJson = await res.text();
-                    const parsed = JSON.parse(cloudJson);
-                    // Extract habits array from backup object
-                    const habitsArray = Array.isArray(parsed.habits) ? parsed.habits : [];
-                    habitsFromCloud = importHabitsFromJson(JSON.stringify(habitsArray));
+                    console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
+                    habitsFromCloud = cloudJson;
                   } else {
                     // Mobile (Capacitor)
                     const { Preferences } = await import('@capacitor/preferences');
@@ -567,11 +568,12 @@ export function SettingsScreen({
                     const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
                     // Download and parse latest backup
                     const cloudJson = await downloadLatestHabitsFromDrive(accessToken);
-                    // For mobile, cloudJson is already the habits array
-                    habitsFromCloud = Array.isArray(cloudJson) ? cloudJson : [];
+                    // For mobile, cloudJson is already the full bundle JSON string
+                    console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
+                    habitsFromCloud = cloudJson;
                   }
                   if (habitsFromCloud && habitsFromCloud.length > 0) {
-                    onImportData(JSON.stringify(habitsFromCloud));
+                    onImportData(habitsFromCloud);
                     toast({
                       title: "Import Successful",
                       description: "Your habits have been imported from Google Drive.",
@@ -592,7 +594,7 @@ export function SettingsScreen({
                     variant: "destructive",
                     duration: 3000,
                   });
-                  console.error('[SettingsScreen] Cloud import error:', err);
+                  console.error('[SettingsScreen] Cloud import error:', err instanceof Error ? err.stack : err);
                 }
               }}
             >
