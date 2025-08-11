@@ -483,7 +483,18 @@ export function SettingsScreen({
             >
               <div className="flex items-center space-x-3">
                 {isLoggedIn && profile?.photoUrl ? (
-                  <img src={profile.photoUrl} alt="Profile" className="w-6 h-6 rounded-full object-cover" />
+                  <img
+                    src={profile.photoUrl}
+                    alt={profile.name || "Profile"}
+                    className="w-6 h-6 rounded-full object-cover"
+                    referrerPolicy="no-referrer"
+                    onError={e => {
+                      e.currentTarget.style.display = 'none';
+                      const fallback = document.createElement('span');
+                      fallback.innerHTML = '<svg class="w-5 h-5 text-muted-foreground" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5.121 17.804A13.937 13.937 0 0112 15c2.5 0 4.847.657 6.879 1.804M15 11a3 3 0 11-6 0 3 3 0 016 0z" /></svg>';
+                      e.currentTarget.parentNode?.appendChild(fallback);
+                    }}
+                  />
                 ) : (
                   <User className="w-5 h-5 text-muted-foreground" />
                 )}
