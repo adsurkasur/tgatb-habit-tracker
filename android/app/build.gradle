@@ -56,6 +56,8 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:34.1.0')
     implementation 'com.google.firebase:firebase-analytics'
     // Add other Firebase SDKs as needed
+    // Facebook Android SDK for Firebase Authentication Facebook provider
+    implementation 'com.facebook.android:facebook-android-sdk:latest.release'
 }
 
 apply from: 'capacitor.build.gradle'

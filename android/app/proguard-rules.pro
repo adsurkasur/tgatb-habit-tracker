@@ -38,6 +38,14 @@
 -keepclassmembers enum * { *; }
 
 # (Optional) Remove logging in release to reduce size (uncomment if desired)
+# --- Facebook Android SDK ProGuard rules ---
+# Official rules from https://developers.facebook.com/docs/android/getting-started/#proguard-keep-rules
+-keep class com.facebook.** { *; }
+-keep class com.facebook.internal.** { *; }
+-keep class com.facebook.login.** { *; }
+-keep class com.facebook.CallbackManager { *; }
+-keep class com.facebook.FacebookCallback { *; }
+-keep class com.facebook.login.widget.LoginButton { *; }
 #-assumenosideeffects class android.util.Log { *; }
 
 # ---- End additions ----
