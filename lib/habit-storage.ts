@@ -6,6 +6,10 @@ const LOGS_KEY = "habit_logs";
 const SETTINGS_KEY = "user_settings";
 
 export class HabitStorage {
+  static clearAllHabits(): void {
+    localStorage.removeItem(HABITS_KEY);
+    localStorage.removeItem(LOGS_KEY);
+  }
   static getHabits(): Habit[] {
     try {
       const data = localStorage.getItem(HABITS_KEY);
