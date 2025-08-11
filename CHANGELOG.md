@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.2.11 - 2025-08-11
+
+**Overview:**  
+Improved habit creation and navigation experience.
+
+### Added / Changed (0.2.11)
+
+- When adding a new habit, the app now immediately displays the new habit card and jumps to it in the main view.
+- Navigation drawer now supports jump-to-habit selection, allowing users to quickly switch to any habit from the drawer.
+
+### Fixed (0.2.11)
+
+- Ensured new habit is shown instantly after creation.
+- Improved navigation logic for more intuitive habit selection.
+
 ## 0.2.10 - 2025-08-11
 
 **Overview:**  
