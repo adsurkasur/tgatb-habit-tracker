@@ -320,12 +320,21 @@ export function SettingsScreen({
         }
       }
     } catch (err) {
-      toast({
-        title: isLoggedIn ? "Logout Error" : "Sign-in Error",
-        description: `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
-        variant: "destructive",
-        duration: 3000,
-      });
+      if (err instanceof Error && err.message.includes('No credentials available')) {
+        toast({
+          title: "Sign-in Error",
+          description: "No Google account found on this device. Please add an account and try again.",
+          variant: "destructive",
+          duration: 3000,
+        });
+      } else {
+        toast({
+          title: isLoggedIn ? "Logout Error" : "Sign-in Error",
+          description: `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
+          variant: "destructive",
+          duration: 3000,
+        });
+      }
       console.error(`[GoogleAuth] ${isLoggedIn ? 'logout' : 'sign-in'} threw error:`, err);
     }
   };
@@ -594,7 +603,13 @@ export function SettingsScreen({
                   }
                 } catch (err) {
                   let message = "An error occurred during cloud import.";
-                  if (err instanceof Error) message = err.message;
+                  if (err instanceof Error) {
+                    if (err.message === 'Not signed in') {
+                      message = "You must be signed in to import from the cloud.";
+                    } else {
+                      message = err.message;
+                    }
+                  }
                   toast({
                     title: "Import Error",
                     description: message,
