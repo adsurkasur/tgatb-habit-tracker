@@ -19,10 +19,18 @@ export async function exportDataAndroid({ data, defaultFilename }: { data: strin
 
 // Web export using File System Access API or anchor download
 export async function exportDataWeb({ data, defaultFilename }: { data: string; defaultFilename: string }) {
-  // Use 'window as any' to access showSaveFilePicker for TypeScript compatibility
-  if (typeof (window as any).showSaveFilePicker === "function") {
+  // Use a targeted type assertion for window.showSaveFilePicker
+  interface WindowWithSavePicker extends Window {
+    showSaveFilePicker?: (options: SaveFilePickerOptions) => Promise<any>;
+  }
+  interface SaveFilePickerOptions {
+    suggestedName?: string;
+    types?: Array<{ description: string; accept: Record<string, string[]> }>;
+  }
+  const win = window as WindowWithSavePicker;
+  if (typeof win.showSaveFilePicker === "function") {
     try {
-      const handle = await (window as any).showSaveFilePicker({
+      const handle = await win.showSaveFilePicker({
         suggestedName: defaultFilename,
         types: [
           {
