@@ -77,18 +77,35 @@ jobs:
           ORG_GRADLE_PROJECT_androidKeystorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_androidKeyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
-      - name: Find APK file
-        id: find_apk
+      - name: Rename APK
+        id: find_and_rename_apk
         run: |
-          APK_PATH=$(find android/app/build/outputs/apk/release/ -name "*.apk" | head -n 1)
-          echo "Found APK at: $APK_PATH"
-          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          # Find the original APK path
+          ORIGINAL_PATH=$(find android/app/build/outputs/apk/release/ -name "*.apk" | head -n 1)
+          echo "Original APK found at: $ORIGINAL_PATH"
+          
+          # Define the new name using the Git tag
+          NEW_NAME="tgatb-${{ github.ref_name }}.apk"
+          echo "New APK name will be: $NEW_NAME"
+          
+          # Get the directory of the original file
+          APK_DIR=$(dirname "$ORIGINAL_PATH")
+          
+          # Create the new full path
+          NEW_PATH="$APK_DIR/$NEW_NAME"
+          
+          # Rename the file
+          mv "$ORIGINAL_PATH" "$NEW_PATH"
+          
+          # Output the new path for the release step
+          echo "apk_path=$NEW_PATH" >> $GITHUB_OUTPUT
 
       # This step creates the release and intelligently marks it
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
+          draft: false # This ensures the release is not a draft
           # This is the magic part! It checks if the tag name contains '-alpha' or '-beta'.
           # If it does, the release is marked as a "Pre-release".
           # If it doesn't, it's marked as the "Latest release".
@@ -98,4 +115,4 @@ jobs:
           name: Release ${{ github.ref_name }}
           
           # This attaches your APK to the release
-          files: ${{ steps.find_apk.outputs.apk_path }}
+          files: ${{ steps.find_and_rename_apk.outputs.apk_path }} # Use the new step ID
