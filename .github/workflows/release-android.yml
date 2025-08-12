@@ -124,24 +124,13 @@ jobs:
 
       - name: Build release & debug APKs
         working-directory: android
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD || '' }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS || '' }}
-          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD || '' }}
         run: |
-          if [ -f app/release.keystore ]; then
-            echo 'Applying signing config via gradle properties'
-            # Write to android/gradle.properties only
-            echo "MYAPP_UPLOAD_STORE_FILE=app/release.keystore" >> gradle.properties
-            echo "MYAPP_UPLOAD_STORE_PASSWORD=$KEYSTORE_PASSWORD" >> gradle.properties
-            echo "MYAPP_UPLOAD_KEY_ALIAS=$KEY_ALIAS" >> gradle.properties
-            echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> gradle.properties
-          fi
-          ./gradlew assembleDebug assembleRelease --stacktrace
-          ./gradlew assembleRelease \
+          ./gradlew assembleDebug assembleRelease \
+            -PMYAPP_UPLOAD_STORE_FILE="app/release.keystore" \
             -PMYAPP_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
             -PMYAPP_UPLOAD_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}" \
-            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
+            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}" \
+            --stacktrace
 
       - name: List generated APKs
         run: ls -R android/app/build/outputs/apk || true
