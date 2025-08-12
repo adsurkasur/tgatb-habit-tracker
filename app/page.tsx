@@ -16,11 +16,9 @@ import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
-import { HabitStorage } from "@/lib/habit-storage";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
-// MAJOR FIX: Replace conflicting system bar hooks with unified implementation
 import { useSystemBarsUnified } from "@/hooks/use-system-bars-unified";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";

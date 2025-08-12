@@ -19,7 +19,8 @@ export async function exportDataAndroid({ data, defaultFilename }: { data: strin
 
 // Web export using File System Access API or anchor download
 export async function exportDataWeb({ data, defaultFilename }: { data: string; defaultFilename: string }) {
-  if ("showSaveFilePicker" in window) {
+  // Use 'window as any' to access showSaveFilePicker for TypeScript compatibility
+  if (typeof (window as any).showSaveFilePicker === "function") {
     try {
       const handle = await (window as any).showSaveFilePicker({
         suggestedName: defaultFilename,
@@ -34,7 +35,7 @@ export async function exportDataWeb({ data, defaultFilename }: { data: string; d
       await writable.write(data);
       await writable.close();
       return true;
-    } catch (err) {
+    } catch {
       // fall through to legacy method
     }
   }

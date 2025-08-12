@@ -247,8 +247,6 @@ export function SettingsScreen({
     }
   };
 
-
-
   const handleLoginClick = async () => {
     try {
       if (!isLoggedIn) {
