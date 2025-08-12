@@ -17,11 +17,12 @@ jobs:
         with:
           node-version: '20' # Or your project's Node.js version
 
+
       - name: Install dependencies
         run: npm install
 
-      - name: Add Android platform
-        run: npx cap add android
+      - name: Sync Android version (package.json → build.gradle)
+        run: npm run sync-ver
 
       - name: Decode Google Services JSON
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
@@ -35,6 +36,10 @@ jobs:
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/gradle.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/gradle.properties
+
+
+      - name: Build web app (Next.js)
+        run: npm run build
 
       - name: Sync Capacitor project
         run: npx cap sync android
@@ -58,5 +63,5 @@ jobs:
         with:
           upload_url: ${{ github.event.release.upload_url }}
           asset_path: ${{ steps.find_apk.outputs.apk_path }}
-          asset_name: app-release.apk # You might want to make this more dynamic, e.g., app-${{ github.event.release.tag_name }}.apk
+          asset_name: tgatb-${{ github.event.release.tag_name }}.apk
           asset_content_type: application/vnd.android.package-archive
