@@ -58,10 +58,6 @@ jobs:
       - name: List contents of out directory
         run: ls -lR out
 
-      - name: List contents of android/app/src/main/assets/public
-        run: ls -lR android/app/src/main/assets/public
-
-
       - name: Capacitor sync (regenerate native + plugins)
         run: npx cap sync android
 
