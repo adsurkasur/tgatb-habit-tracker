@@ -22,58 +22,7 @@ export function useHabits() {
     }
     setHabits([]);
   };
-  // Helper for Android export
-  // Use published capacitor-save-as plugin for Android export
-  async function exportDataAndroid({ data, defaultFilename }: { data: string; defaultFilename: string }) {
-    try {
-      // Base64-encode the data as required by the plugin
-      const encodedData = btoa(data);
-      await SaveAs.showSaveAsPicker({
-        filename: defaultFilename,
-        mimeType: 'application/json',
-        data: encodedData,
-      });
-      return true;
-    } catch (err) {
-      console.warn('SaveAs plugin failed, falling back to web method:', err);
-      return false;
-    }
-  }
-
-  // Helper for Web export
-  async function exportDataWeb({ data, defaultFilename }: { data: string; defaultFilename: string }) {
-    // Web: Try modern File System Access API first (for file save dialog)
-    if ('showSaveFilePicker' in window) {
-      try {
-        const handle = await (window as any).showSaveFilePicker({
-          suggestedName: defaultFilename,
-          types: [
-            {
-              description: 'JSON Files',
-              accept: { 'application/json': ['.json'] },
-            },
-          ],
-        });
-        const writable = await handle.createWritable();
-        await writable.write(data);
-        await writable.close();
-        return true;
-      } catch (err) {
-        // fall through to legacy method
-      }
-    }
-    // Legacy: Download via anchor
-    const blob = new Blob([data], { type: 'application/json' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = defaultFilename;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-    return true;
-  }
+  // ...existing code...
   // Animation timing constant (must match CSS animation duration in globals.css)
   const HABIT_ANIMATION_DURATION = 250; // ms
   const [habits, setHabits] = useState<Habit[]>([]);
@@ -260,28 +209,17 @@ export function useHabits() {
     }
   };
 
-  // Unified exportData: returns validated export JSON string
+  // Unified exportData: returns validated export JSON string only
   const exportData = async (): Promise<string> => {
     const data = await HabitStorage.exportData();
     // Validate the generated export JSON using the shared schema
-    try {
-      const parsed = JSON.parse(data);
-      // Use the same schema as import
-      const { exportBundleSchema } = await import("@/shared/schema");
-      const result = exportBundleSchema.safeParse(parsed);
-      if (!result.success) {
-        throw new Error("Exported data does not match schema");
-      }
-      return data;
-    } catch (err) {
-      toast({
-        title: 'Export failed',
-        description: (err as Error).message || 'Could not export your habit data.',
-        variant: 'destructive',
-        duration: 3000,
-      });
-      throw err;
+    const parsed = JSON.parse(data);
+    const { exportBundleSchema } = await import("@/shared/schema");
+    const result = exportBundleSchema.safeParse(parsed);
+    if (!result.success) {
+      throw new Error("Exported data does not match schema");
     }
+    return data;
   };
 
   const currentHabit = habits[currentHabitIndex];

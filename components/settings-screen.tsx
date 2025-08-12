@@ -25,6 +25,7 @@ import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
 import { validateExportImportJson } from "@/lib/validate-export-import";
+import { exportDataPlatform } from "@/lib/platform-export";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
@@ -145,45 +146,14 @@ export function SettingsScreen({
     });
     try {
       // Get export data as JSON string
-      let result: string | undefined;
-      if (onExportData.length === 0) {
-        // If onExportData is a no-arg function, call and expect Promise<void>
-        // But we need the JSON string, so fallback to HabitStorage.exportData
-        const { HabitStorage } = await import("@/lib/habit-storage");
-        result = await HabitStorage.exportData();
-      } else {
-        // If onExportData returns a string, use it
-        result = await onExportData();
-      }
-      let jsonObj: unknown;
-      try {
-        jsonObj = JSON.parse(result ?? "");
-      } catch {
-        toast({
-          title: "Export Failed",
-          description: "Exported data is not valid JSON.",
-          variant: "destructive",
-          duration: 3000,
-        });
-        return;
-      }
-      const validation = validateExportImportJson(jsonObj);
-      if (!validation.success) {
-        toast({
-          title: "Export Failed",
-          description: `Exported data is invalid: ${validation.errors?.join(", ")}`,
-          variant: "destructive",
-          duration: 4000,
-        });
-        return;
-      }
-      if (!('showSaveFilePicker' in window) && !isCapacitorApp) {
-        toast({
-          title: "Export Successful",
-          description: "Data has been downloaded to your Downloads folder",
-          duration: 3000,
-        });
-      }
+      const result = await onExportData();
+      const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
+      // Use platform export utility for file saving and feedback
+      await exportDataPlatform({
+        data: result,
+        defaultFilename,
+        toast,
+      });
     } catch (err: unknown) {
       if (
         err &&
