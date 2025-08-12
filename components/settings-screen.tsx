@@ -352,16 +352,15 @@ export function SettingsScreen({
   };
 
   const handleBackupClick = async () => {
+    // Show 'Exporting to Cloud...' toast
+    toast({
+      title: "Exporting to Cloud...",
+      description: "Your data is being exported to Google Drive. Please wait.",
+      duration: 3000,
+    });
+    let accessToken: string | null = null;
+    let result: unknown = null;
     try {
-      // Show 'Exporting to Cloud...' toast
-      toast({
-        title: "Exporting to Cloud...",
-        description: "Your data is being exported to Google Drive. Please wait.",
-        duration: 3000,
-      });
-      // Use full export bundle for Drive backup
-      let accessToken: string | null = null;
-      let result: unknown = null;
       // Get full export bundle
       const { HabitStorage } = await import("@/lib/habit-storage");
       const exportJson = await HabitStorage.exportData();
@@ -379,13 +378,24 @@ export function SettingsScreen({
           return;
         }
         const { uploadToDrive } = await import("../web/drive-sync");
-        result = await uploadToDrive(exportJson, accessToken);
-        console.debug('[SettingsScreen] Web Drive backup result:', result);
-        toast({
-          title: "Backup Successful",
-          description: "Your data has been backed up to Google Drive (web).",
-          duration: 3000,
-        });
+        try {
+          result = await uploadToDrive(exportJson, accessToken);
+          console.debug('[SettingsScreen] Web Drive backup result:', result);
+          toast({
+            title: "Backup Successful",
+            description: "Your data has been backed up to Google Drive (web).",
+            duration: 3000,
+          });
+        } catch (err: any) {
+          // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
+          const message = err?.message || "Drive upload failed.";
+          toast({
+            title: "Backup Error",
+            description: message + " Please log in again using the Login button.",
+            variant: "destructive",
+            duration: 3000,
+          });
+        }
       } else {
         // Mobile (Capacitor)
         const { Preferences } = await import('@capacitor/preferences');
@@ -400,18 +410,28 @@ export function SettingsScreen({
           return;
         }
         const { uploadDataToDrive } = await import("@/mobile/drive-sync");
-        result = await uploadDataToDrive(exportJson, accessToken);
-        console.debug('[SettingsScreen] Mobile Drive backup result:', result);
-        if (result) {
+        try {
+          result = await uploadDataToDrive(exportJson, accessToken);
+          console.debug('[SettingsScreen] Mobile Drive backup result:', result);
+          if (result) {
+            toast({
+              title: "Backup Successful",
+              description: "Your data has been backed up to Google Drive (mobile).",
+              duration: 3000,
+            });
+          } else {
+            toast({
+              title: "Backup Failed",
+              description: "Could not upload data to Drive.",
+              variant: "destructive",
+              duration: 3000,
+            });
+          }
+        } catch (err: any) {
+          const message = err?.message || "Drive upload failed.";
           toast({
-            title: "Backup Successful",
-            description: "Your data has been backed up to Google Drive (mobile).",
-            duration: 3000,
-          });
-        } else {
-          toast({
-            title: "Backup Failed",
-            description: "Could not upload data to Drive.",
+            title: "Backup Error",
+            description: message + " Please log in again using the Login button.",
             variant: "destructive",
             duration: 3000,
           });
@@ -420,7 +440,7 @@ export function SettingsScreen({
     } catch (err) {
       toast({
         title: "Backup Error",
-        description: "An error occurred during backup.",
+        description: "An unexpected error occurred during backup.",
         variant: "destructive",
         duration: 3000,
       });
@@ -570,15 +590,15 @@ export function SettingsScreen({
             <div
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={async () => {
+                // Show 'Importing from Cloud...' toast
+                toast({
+                  title: "Importing from Cloud...",
+                  description: "Your data is being imported from the cloud. Please wait.",
+                  duration: 3000,
+                });
+                let accessToken: string | null = null;
+                let cloudJson: string = "";
                 try {
-                  // Show 'Importing from Cloud...' toast
-                  toast({
-                    title: "Importing from Cloud...",
-                    description: "Your data is being imported from the cloud. Please wait.",
-                    duration: 3000,
-                  });
-                  let accessToken: string | null = null;
-                  let cloudJson: string = "";
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
                     accessToken = localStorage.getItem('googleAccessToken');
@@ -591,21 +611,33 @@ export function SettingsScreen({
                       });
                       return;
                     }
-                    // List files named 'habits-backup.json' in Drive
-                    const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
-                      headers: { Authorization: `Bearer ${accessToken}` }
-                    });
-                    const listJson = await listRes.json();
-                    const files = listJson.files || [];
-                    console.debug('[SettingsScreen] Web Drive file list:', files);
-                    if (!files.length) throw new Error("No backup file found in Drive");
-                    const fileId = files[0].id;
-                    // Download backup from Drive
-                    const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
-                      headers: { Authorization: `Bearer ${accessToken}` }
-                    });
-                    cloudJson = await res.text();
-                    console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
+                    try {
+                      // List files named 'habits-backup.json' in Drive
+                      const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                      });
+                      const listJson = await listRes.json();
+                      const files = listJson.files || [];
+                      console.debug('[SettingsScreen] Web Drive file list:', files);
+                      if (!files.length) throw new Error("No backup file found in Drive");
+                      const fileId = files[0].id;
+                      // Download backup from Drive
+                      const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
+                        headers: { Authorization: `Bearer ${accessToken}` }
+                      });
+                      cloudJson = await res.text();
+                      console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
+                    } catch (err: any) {
+                      // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
+                      const message = err?.message || "Drive import failed.";
+                      toast({
+                        title: "Import Error",
+                        description: message + " Please log in again using the Login button.",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
+                      return;
+                    }
                   } else {
                     // Mobile (Capacitor)
                     const { Preferences } = await import('@capacitor/preferences');
@@ -619,16 +651,27 @@ export function SettingsScreen({
                       });
                       return;
                     }
-                    const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
-                    // Download latest backup
-                    const rawCloudJson = await downloadLatestHabitsFromDrive(accessToken);
-                    // If mobile helper returns an array, convert to string
-                    if (Array.isArray(rawCloudJson)) {
-                      cloudJson = JSON.stringify(rawCloudJson);
-                    } else {
-                      cloudJson = typeof rawCloudJson === 'string' ? rawCloudJson : JSON.stringify(rawCloudJson);
+                    try {
+                      const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
+                      // Download latest backup
+                      const rawCloudJson = await downloadLatestHabitsFromDrive(accessToken);
+                      // If mobile helper returns an array, convert to string
+                      if (Array.isArray(rawCloudJson)) {
+                        cloudJson = JSON.stringify(rawCloudJson);
+                      } else {
+                        cloudJson = typeof rawCloudJson === 'string' ? rawCloudJson : JSON.stringify(rawCloudJson);
+                      }
+                      console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
+                    } catch (err: any) {
+                      const message = err?.message || "Drive import failed.";
+                      toast({
+                        title: "Import Error",
+                        description: message + " Please log in again using the Login button.",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
+                      return;
                     }
-                    console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
                   }
                   if (cloudJson && cloudJson.length > 0) {
                     onImportData(cloudJson);
@@ -646,7 +689,7 @@ export function SettingsScreen({
                     });
                   }
                 } catch (err) {
-                  let message = "An error occurred during cloud import.";
+                  let message = "An unexpected error occurred during cloud import.";
                   if (err instanceof Error) {
                     message = err.message;
                   }
