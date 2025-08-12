@@ -22,6 +22,7 @@ import {
   Trash2
 } from "lucide-react";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
+import type { ExportBundle } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
 import { validateExportImportJson } from "@/lib/validate-export-import";
@@ -619,7 +620,7 @@ export function SettingsScreen({
                 });
                 let accessToken: string | null = null;
                 let cloudJson: string = "";
-                let cloudBundle: any = null;
+                let cloudBundle: ExportBundle | null = null;
                 try {
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
