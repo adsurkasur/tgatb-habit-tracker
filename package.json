@@ -1,6 +1,6 @@
 {
   "name": "tgatb-habit-tracker",
-  "version": "0.3.2-alpha.2",
+  "version": "0.3.2-alpha.5",
   "description": "The Good and The Bad: Habit Tracker - A minimalist habit tracking application",
   "type": "module",
   "license": "Apache-2.0",
@@ -33,7 +33,7 @@
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android",
     "syncver": "node scripts/syncver.cjs",
-    "release:tag": "npm run syncver && TAG_VERSION=$(node -p \"require('./package.json').version\") && git tag v$TAG_VERSION && git push origin v$TAG_VERSION"
+    "release:tag": "npm run syncver && node scripts/release.cjs"
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
