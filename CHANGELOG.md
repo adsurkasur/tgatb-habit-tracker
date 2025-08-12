@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.2 - 2025-08-12
+
+**Overview:**
+This release enhances data import/export functionality with improved validation and user feedback, and adds necessary dependencies for future integrations.
+
+### Features
+- **Data Import/Export:** Implemented full bundle handling and validation for data import and export, ensuring data integrity.
+- **Improved Feedback:** Enhanced error handling for backup and import processes with detailed user feedback via toasts.
+
+### Internal
+- Added Facebook Android SDK dependencies and ProGuard rules for future integrations.
+
+## 0.3.1 - 2025-08-12
+
+**Overview:**
+This release focused on unifying system-level UI components and improving data export capabilities.
+
+### Features
+- **Unified System Bars:** Implemented a unified system bar approach for a more consistent look and feel across the application.
+- **Platform-Specific Export:** Added a platform-specific export utility for more robust data handling.
+
+### Refactoring
+- **Type Safety:** Enhanced type safety and TypeScript compatibility for web data export.
+
 ## 0.3.0 - 2025-08-11
 
 **Overview:**
