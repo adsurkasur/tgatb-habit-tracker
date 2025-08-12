@@ -61,8 +61,17 @@ jobs:
       - name: List contents of android/app/src/main/assets/public
         run: ls -lR android/app/src/main/assets/public
 
+
       - name: Capacitor sync (regenerate native + plugins)
         run: npx cap sync android
+
+      - name: Capacitor copy (force asset copy)
+        run: npx cap copy android
+
+      - name: Manual asset copy fallback (if needed)
+        run: |
+          mkdir -p android/app/src/main/assets/public
+          cp -r out/* android/app/src/main/assets/public/
 
       - name: Make gradlew executable
         run: chmod +x android/gradlew
