@@ -87,3 +87,7 @@ temp/
 
 # Google Services
 google-services.json
+
+# Android build outputs
+output-metadata.json
+app-release.dm

@@ -1,173 +1,62 @@
-name: Release Android APK
+name: Release Android App
 
 on:
-  push:
-    tags:
-      - 'v*.*.*' # Triggers on version tags like v1.0.0
+  release:
+    types: [published]
 
 jobs:
-  build-android:
+  build-and-release:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-      - name: Check Android signing secrets
-        run: |
-          missing=0
-          if [ -z "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
-            echo "ERROR: ANDROID_KEYSTORE_BASE64 secret is missing or empty." >&2
-            missing=1
-          fi
-          if [ -z "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" ]; then
-            echo "ERROR: ANDROID_KEYSTORE_PASSWORD secret is missing or empty." >&2
-            missing=1
-          fi
-          if [ -z "${{ secrets.ANDROID_KEY_ALIAS }}" ]; then
-            echo "ERROR: ANDROID_KEY_ALIAS secret is missing or empty." >&2
-            missing=1
-          fi
-          if [ -z "${{ secrets.ANDROID_KEY_PASSWORD }}" ]; then
-            echo "ERROR: ANDROID_KEY_PASSWORD secret is missing or empty." >&2
-            missing=1
-          fi
-          if [ "$missing" -eq 1 ]; then
-            echo "One or more required Android signing secrets are missing. Failing early."
-            exit 1
-          fi
 
+    steps:
       - name: Checkout code
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
-      - name: Derive version from tag
-        id: version
-        run: |
-          TAG="${GITHUB_REF##*/}"
-          echo "tag=$TAG" >> $GITHUB_OUTPUT
-
-      - name: Set up Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: '20' # Or your project's Node.js version
 
       - name: Install dependencies
-        run: npm ci
+        run: npm install
+
+      - name: Add Android platform
+        run: npx cap add android
 
       - name: Decode Google Services JSON
+        run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+
+      - name: Decode Keystore
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-key.jks
+
+      - name: Create gradle.properties for signing
         run: |
-          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+          echo "storeFile=release-key.jks" >> android/gradle.properties
+          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/gradle.properties
+          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
+          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/gradle.properties
 
-      - name: Set up Java
-        uses: actions/setup-java@v4
-        with:
-          distribution: 'temurin'
-          java-version: '21'
-          cache: 'gradle'
+      - name: Sync Capacitor project
+        run: npx cap sync android
 
-      - name: Verify package version matches tag
-        run: |
-          PKG_VERSION=$(node -p "require('./package.json').version")
-          TAG_VERSION=${GITHUB_REF##*/}
-          TAG_VERSION=${TAG_VERSION#v}
-          if [ "$PKG_VERSION" != "$TAG_VERSION" ]; then
-            echo "Package version $PKG_VERSION does not match tag v$TAG_VERSION" >&2
-            exit 1
-          fi
-
-      - name: Sync Android versionName and versionCode
-        run: node scripts/sync-ver.cjs
-
-      - name: Build web assets
-        run: npm run build
-
-      - name: List contents of out directory
-        run: ls -lR out
-
-      - name: Make gradlew executable
-        run: chmod +x android/gradlew
-
-      - name: Prepare signing keystore
-        run: |
-          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
-          echo "Keystore file created at android/app/release.keystore"
-
-      - name: Validate Keystore
-        env:
-          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-        run: |
-          echo "Verifying keystore..."
-          if [ ! -f android/app/release.keystore ]; then
-            echo "ERROR: Keystore file not found at android/app/release.keystore" >&2
-            exit 1
-          fi
-          keytool -list -v -keystore android/app/release.keystore -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" || (echo "ERROR: keytool failed" >&2; exit 1)
-          echo "Keystore verification successful."
-
-      - name: Build Capacitor Android project
-        run: npx cap build android
-
-      - name: Build release & debug APKs
+      - name: Build Android release with Gradle
+        run: ./gradlew assembleRelease
         working-directory: android
-        env:
-          MYAPP_UPLOAD_STORE_FILE: app/release.keystore
-          MYAPP_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
-          MYAPP_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
-          MYAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+
+      - name: Find APK file
+        id: find_apk
         run: |
-          ./gradlew assembleDebug assembleRelease --stacktrace
+          APK_PATH=$(find android/app/build/outputs/apk/release/ -name "*.apk" | head -n 1)
+          echo "Found APK at: $APK_PATH"
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
 
-      - name: List generated APKs
-        run: ls -R android/app/build/outputs/apk || true
-
-      - name: Normalize APK filenames
-        id: rename
-        run: |
-          VERSION=${{ steps.version.outputs.tag }}
-          OUTDIR=android/app/build/outputs/apk
-          mkdir -p renamed
-          # Debug APK
-          if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
-            cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
-          fi
-          # Release APK (signed)
-          if [ -f "$OUTDIR/release/app-release.apk" ]; then
-            cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
-          else
-            echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
-            echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
-            ls -l $OUTDIR/release
-            exit 1
-          fi
-          # Release APK (unsigned)
-          if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
-            cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
-          fi
-          ls -l renamed || true
-
-      - name: Verify APK signature
-        run: |
-          VERSION=${{ steps.version.outputs.tag }}
-          jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
-        continue-on-error: false
-
-      - name: Determine if pre-release
-        id: prerelease_check
-        run: |
-          TAG_NAME="${{ steps.version.outputs.tag }}"
-          if [[ "$TAG_NAME" == *alpha* || "$TAG_NAME" == *beta* || "$TAG_NAME" == *rc* ]]; then
-            echo "is_prerelease=true" >> $GITHUB_OUTPUT
-          else
-            echo "is_prerelease=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Upload signed release APK to GitHub Release
-        uses: softprops/action-gh-release@v2
-        with:
-          files: renamed/tgatb-${{ steps.version.outputs.tag }}.apk
-          fail_on_unmatched_files: true
-          prerelease: ${{ steps.prerelease_check.outputs.is_prerelease }}
+      - name: Upload APK to Release
+        uses: actions/upload-release-asset@v1
+        if: steps.find_apk.outputs.apk_path != ''
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ github.event.release.upload_url }}
+          asset_path: ${{ steps.find_apk.outputs.apk_path }}
+          asset_name: app-release.apk # You might want to make this more dynamic, e.g., app-${{ github.event.release.tag_name }}.apk
+          asset_content_type: application/vnd.android.package-archive
