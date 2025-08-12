@@ -3,7 +3,7 @@ name: Release Android App
 on:
   push:
     tags:
-      - 'tgatb-v*' # A single, broad trigger for ALL version tags
+      - 'v*' # A single, broad trigger for ALL version tags
 
 jobs:
   build-and-release:
