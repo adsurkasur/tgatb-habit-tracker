@@ -1,16 +1,16 @@
 // Google Drive sync logic for web
 // Use googleapis and shared/data-sync helpers
 
-import { exportHabitsToJson, importHabitsFromJson } from '../shared/data-sync';
+import { exportBundleToJson, importBundleFromJson } from '../shared/data-sync';
 
 // Example: Export habits to Drive
-// const habits = [...];
-// const json = exportHabitsToJson(habits);
+// const bundle = {...};
+// const json = exportBundleToJson(bundle);
 // await uploadToDrive(json, accessToken);
 
 // Example: Import habits from Drive
 // const json = await downloadFromDrive(accessToken);
-// const habits = importHabitsFromJson(json);
+// const bundle = importBundleFromJson(json);
 
 // Upload JSON data to Google Drive
 export async function uploadToDrive(jsonData: string, accessToken: string): Promise<any> {
