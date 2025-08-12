@@ -29,10 +29,29 @@ import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 
 export default function Home() {
-  // Wrapper for exportData that returns the exported JSON string
-  const handleExportData = async () => {
-    return await HabitStorage.exportData();
-  };
+  // Use unified exportData and importData from useHabits
+  const {
+    exportData,
+    importData,
+    // ...existing code...
+    currentHabit,
+    currentHabitIndex,
+    navigationEvent,
+    goodHabits,
+    badHabits,
+    settings,
+    addHabit,
+    updateHabit,
+    deleteHabit,
+    restoreHabit,
+    trackHabit,
+    undoHabitTracking,
+    getHabitCompletionStatus,
+    moveToNextHabit,
+    moveToPreviousHabit,
+    navigateToHabitIndex,
+    updateSettings,
+  } = useHabits();
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
   // ...existing code...
@@ -65,28 +84,7 @@ export default function Home() {
 
   // Navigation bar handling centralized in Capacitor layer
   
-  const {
   // ...existing code...
-  currentHabit,
-  currentHabitIndex,
-  navigationEvent,
-  goodHabits,
-  badHabits,
-  settings,
-  addHabit,
-  updateHabit,
-  deleteHabit,
-  restoreHabit,
-  trackHabit,
-  undoHabitTracking,
-  getHabitCompletionStatus,
-  moveToNextHabit,
-  moveToPreviousHabit,
-  navigateToHabitIndex,
-  updateSettings,
-  exportData,
-  importData,
-  } = useHabits();
   // Handler for jump-to navigation from drawer (must be after useHabits)
   const handleHabitSelect = useCallback((habit: Habit) => {
     const allHabits = [...goodHabits, ...badHabits];
@@ -452,7 +450,7 @@ export default function Home() {
           onClose={() => setShowSettings(false)}
           settings={settings}
           onUpdateSettings={updateSettings}
-          onExportData={handleExportData}
+          onExportData={exportData}
           onImportData={importData}
           onShowHelp={() => {
             setShowSettings(false);

@@ -260,32 +260,43 @@ export function useHabits() {
     }
   };
 
-  const exportData = async () => {
+  // Unified exportData: returns validated export JSON string
+  const exportData = async (): Promise<string> => {
+    const data = await HabitStorage.exportData();
+    // Validate the generated export JSON using the shared schema
     try {
-      const data = await HabitStorage.exportData();
-      const defaultFilename = `habit-tracker-export-${new Date().toISOString().split('T')[0]}.json`;
-      let success = false;
-      if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
-        success = await exportDataAndroid({ data, defaultFilename });
+      const parsed = JSON.parse(data);
+      // Use the same schema as import
+      const { exportBundleSchema } = await import("@/shared/schema");
+      const result = exportBundleSchema.safeParse(parsed);
+      if (!result.success) {
+        throw new Error("Exported data does not match schema");
       }
-      if (!success) {
-        success = await exportDataWeb({ data, defaultFilename });
-      }
+      return data;
     } catch (err) {
       toast({
         title: 'Export failed',
-        description: 'Could not export your habit data.',
+        description: (err as Error).message || 'Could not export your habit data.',
         variant: 'destructive',
         duration: 3000,
       });
+      throw err;
     }
   };
 
   const currentHabit = habits[currentHabitIndex];
 
   // Import data function: imports JSON, refreshes habits, and shows feedback
-  const importData = async (jsonData: string) => {
+  // Unified importData: validates and imports JSON
+  const importData = async (jsonData: string): Promise<void> => {
     try {
+      // Validate before importing
+      const parsed = JSON.parse(jsonData);
+      const { exportBundleSchema } = await import("@/shared/schema");
+      const result = exportBundleSchema.safeParse(parsed);
+      if (!result.success) {
+        throw new Error("Import data does not match schema");
+      }
       await HabitStorage.importData(jsonData);
       // Refresh habits and settings after import
       const loadedHabits = HabitStorage.getHabits();
@@ -312,6 +323,7 @@ export function useHabits() {
         variant: 'destructive',
         duration: 3000,
       });
+      throw err;
     }
   };
 
