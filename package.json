@@ -33,8 +33,9 @@
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android",
     "syncver": "node scripts/syncver.cjs",
+    "commit:release": "node scripts/commit-release.cjs",
     "release:tag": "node scripts/release.cjs",
-    "release:full": "npm run syncver && node scripts/commit-release.cjs && npm run release:tag"
+    "release:full": "npm run syncver && npm run commit:release && npm run release:tag"
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
