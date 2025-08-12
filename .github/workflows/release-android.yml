@@ -41,9 +41,7 @@ jobs:
       - name: Create gradle.properties for signing
         run: |
           echo "storeFile=release.keystore" >> android/gradle.properties
-          echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/gradle.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
-          echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/gradle.properties
 
       - name: Build web app (Next.js)
         run: npm run build
@@ -73,6 +71,9 @@ jobs:
       - name: Build Android release with Gradle
         run: ./gradlew assembleRelease
         working-directory: android
+        env:
+          ORG_GRADLE_PROJECT_androidKeystorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ORG_GRADLE_PROJECT_androidKeyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
       - name: Find APK file
         id: find_apk

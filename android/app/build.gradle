@@ -7,8 +7,8 @@ android {
     applicationId "com.tgatb.habittracker"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 302028
-    versionName "0.3.2-alpha.28"
+    versionCode 302029
+    versionName "0.3.2-alpha.29"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -21,15 +21,18 @@ android {
     sourceCompatibility JavaVersion.VERSION_21
     targetCompatibility JavaVersion.VERSION_21
     }
-    signingConfigs {
+        signingConfigs {
         release {
-            storeFile file(System.getenv("MYAPP_UPLOAD_STORE_FILE") ?: "release.keystore")
-            storePassword System.getenv("MYAPP_UPLOAD_STORE_PASSWORD") ?: ""
-            keyAlias System.getenv("MYAPP_UPLOAD_KEY_ALIAS") ?: ""
-            keyPassword System.getenv("MYAPP_UPLOAD_KEY_PASSWORD") ?: ""
+            // This checks for the properties being passed by your GitHub Actions workflow
+            if (project.hasProperty('androidKeystorePassword')) {
+                storeFile file(project.properties['storeFile'])
+                storePassword project.properties['androidKeystorePassword']
+                keyAlias project.properties['keyAlias']
+                keyPassword project.properties['androidKeyPassword']
+            }
         }
     }
-    buildTypes {
+        buildTypes {
         release {
             // Enable R8 shrinking & resource shrinking for production
             minifyEnabled true
