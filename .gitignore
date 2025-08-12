@@ -92,8 +92,5 @@ google-services.json
 output-metadata.json
 app-release.dm
 
-# Ignore Android signing secrets
-/android/gradle.properties
-
 # Android release keystore
 release.keystore
