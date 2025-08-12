@@ -5,7 +5,7 @@ const path = require('path');
 const pkgPath = path.resolve(__dirname, '../package.json');
 const pkg = JSON.parse(fs.readFileSync(pkgPath, 'utf8'));
 const version = pkg.version;
-const commitMessage = `Release: v${version}`;
+const commitMessage = `Re-release: v${version}`;
 
 try {
   console.log('Staging all changes...');
