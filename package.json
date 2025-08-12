@@ -33,7 +33,7 @@
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android",
     "syncver": "node scripts/syncver.cjs",
-    "release:tag": "npm run syncver && node scripts/release.js",
+    "release:tag": "npm run syncver && node scripts/release.cjs",
     "release:full": "npm run syncver && node scripts/commit-release.cjs && npm run release:tag"
   },
   "dependencies": {
