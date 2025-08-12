@@ -32,7 +32,8 @@
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android",
-    "syncver": "node scripts/syncver.cjs"
+    "syncver": "node scripts/syncver.cjs",
+    "release:tag": "npm run syncver && TAG_VERSION=$(node -p \"require('./package.json').version\") && git tag v$TAG_VERSION && git push origin v$TAG_VERSION"
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
