@@ -45,9 +45,12 @@ jobs:
         
       - name: Create gradle.properties for signing
         run: |
+          # First, add a newline to the file to guarantee separation
+          echo "" >> android/gradle.properties
+          # Then, add the secrets as before
           echo "storeFile=release.keystore" >> android/gradle.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
-
+          
       - name: Build web app (Next.js)
         run: npm run build
 
