@@ -1,8 +1,9 @@
 name: Release Android App
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'tgatb-v*' # A single, broad trigger for ALL version tags
 
 jobs:
   build-and-release:
@@ -35,11 +36,11 @@ jobs:
         run: echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
 
       - name: Decode Keystore
-        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release-key.jks
+        run: echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 --decode > android/app/release.keystore
 
       - name: Create gradle.properties for signing
         run: |
-          echo "storeFile=release-key.jks" >> android/gradle.properties
+          echo "storeFile=release.keystore" >> android/gradle.properties
           echo "storePassword=${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" >> android/gradle.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
           echo "keyPassword=${{ secrets.ANDROID_KEY_PASSWORD }}" >> android/gradle.properties
@@ -80,13 +81,18 @@ jobs:
           echo "Found APK at: $APK_PATH"
           echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
 
-      - name: Upload APK to Release
-        uses: actions/upload-release-asset@v1
-        if: steps.find_apk.outputs.apk_path != ''
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      # This step creates the release and intelligently marks it
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v2
         with:
-          upload_url: ${{ github.event.release.upload_url }}
-          asset_path: ${{ steps.find_apk.outputs.apk_path }}
-          asset_name: tgatb-${{ github.event.release.tag_name }}.apk
-          asset_content_type: application/vnd.android.package-archive
+          # This is the magic part! It checks if the tag name contains '-alpha' or '-beta'.
+          # If it does, the release is marked as a "Pre-release".
+          # If it doesn't, it's marked as the "Latest release".
+          prerelease: ${{ contains(github.ref_name, '-alpha') || contains(github.ref_name, '-beta') }}
+          
+          # This sets the title of the release page
+          name: Release ${{ github.ref_name }}
+          
+          # This attaches your APK to the release
+          files: ${{ steps.find_apk.outputs.apk_path }}
