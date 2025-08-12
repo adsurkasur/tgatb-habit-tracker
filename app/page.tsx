@@ -16,6 +16,7 @@ import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
+import { HabitStorage } from "@/lib/habit-storage";
 import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
@@ -28,6 +29,10 @@ import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 
 export default function Home() {
+  // Wrapper for exportData that returns the exported JSON string
+  const handleExportData = async () => {
+    return await HabitStorage.exportData();
+  };
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
   // ...existing code...
@@ -447,7 +452,7 @@ export default function Home() {
           onClose={() => setShowSettings(false)}
           settings={settings}
           onUpdateSettings={updateSettings}
-          onExportData={exportData}
+          onExportData={handleExportData}
           onImportData={importData}
           onShowHelp={() => {
             setShowSettings(false);
