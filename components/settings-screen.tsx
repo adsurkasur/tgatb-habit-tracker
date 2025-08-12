@@ -135,6 +135,11 @@ export function SettingsScreen({
   // Citation: https://kentcdodds.com/blog/preventing-double-form-submission
   // Citation: https://www.joshwcomeau.com/react/throttle-debounce/
   const handleExportClick = debounce(async () => {
+    toast({
+      title: "Exporting...",
+      description: "Your data is being exported. Please wait.",
+      duration: 2000,
+    });
     // Persistent guard blocks duplicate triggers from React/browser quirks
     if (exportInProgressRef.current) return;
     exportInProgressRef.current = true;
@@ -179,6 +184,11 @@ export function SettingsScreen({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      toast({
+        title: "Importing...",
+        description: "Your data is being imported. Please wait.",
+        duration: 2000,
+      });
       const reader = new FileReader();
       reader.onload = (event) => {
         const jsonData = event.target?.result as string;
@@ -213,23 +223,22 @@ export function SettingsScreen({
       // Reset file input
       e.target.value = '';
     }
-  };
-
-  const handleFullscreenToggle = async (enabled: boolean) => {
-    const newSettings = { ...settings, fullscreenMode: enabled };
-    onUpdateSettings({ fullscreenMode: enabled });
+  // Fullscreen toggle handler for Switch
+  const handleFullscreenToggle = async (checked: boolean) => {
+    const newSettings = { ...settings, fullscreenMode: checked };
+    onUpdateSettings({ fullscreenMode: checked });
     try {
       const { HabitStorage } = await import("@/lib/habit-storage");
       await HabitStorage.saveSettings(newSettings);
-  } catch {
+    } catch {
       // fallback: do nothing
     }
     if (isNative) {
       // MAJOR FIX: Use unified system bars implementation
-      await systemBarsUtils.setFullscreen(enabled);
+      await systemBarsUtils.setFullscreen(checked);
       toast({
-        title: enabled ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
-        description: enabled 
+        title: checked ? "Fullscreen Mode Enabled" : "Fullscreen Mode Disabled",
+        description: checked 
           ? "Status bar is now hidden for immersive experience"
           : "Status bar is now visible",
       });
@@ -363,6 +372,17 @@ export function SettingsScreen({
   };
 
   const handleBackupClick = async () => {
+    toast({
+      title: "Exporting...",
+      description: "Your data is being exported to the cloud. Please wait.",
+      duration: 2000,
+    });
+    if (file) {
+      toast({
+        title: "Importing...",
+        description: "Your data is being imported. Please wait.",
+        duration: 2000,
+      });
     try {
       // Use full export bundle for Drive backup
       let accessToken: string | null = null;
@@ -458,11 +478,7 @@ export function SettingsScreen({
   };
 
   return (
-    <div 
-      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 theme-transition flex flex-col ${
-        open ? 'translate-x-0' : 'translate-x-full'
-      }`}
-    >
+    <div>
       {/* Header */}
       <header className="bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2 flex-shrink-0">
         <Button 
@@ -630,6 +646,11 @@ export function SettingsScreen({
                     console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
                   }
                   if (cloudJson && cloudJson.length > 0) {
+                    toast({
+                      title: "Importing...",
+                      description: "Your data is being imported from the cloud. Please wait.",
+                      duration: 2000,
+                    });
                     try {
                       const parsed = JSON.parse(cloudJson);
                       if (
@@ -899,4 +920,7 @@ export function SettingsScreen({
       </div>
     </div>
   );
+}
+// ...existing code...
+}
 }
