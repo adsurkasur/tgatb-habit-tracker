@@ -82,6 +82,22 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
+        <script dangerouslySetInnerHTML={{__html:`
+          window.onerror = function(message, source, lineno, colno, error) {
+            var errorDiv = document.createElement('div');
+            errorDiv.style.position = 'fixed';
+            errorDiv.style.top = '0';
+            errorDiv.style.left = '0';
+            errorDiv.style.width = '100vw';
+            errorDiv.style.background = 'red';
+            errorDiv.style.color = 'white';
+            errorDiv.style.zIndex = '99999';
+            errorDiv.style.fontSize = '16px';
+            errorDiv.style.padding = '8px';
+            errorDiv.innerText = 'JS Error: ' + message + '\\n' + (error && error.stack ? error.stack : '');
+            document.body.appendChild(errorDiv);
+          };
+        `}} />
       </head>
       <body>
   <CapacitorInit />
