@@ -139,6 +139,12 @@ export function SettingsScreen({
     if (exportInProgressRef.current) return;
     exportInProgressRef.current = true;
     setIsExporting(true);
+      // Show 'Exporting...' toast
+      toast({
+        title: "Exporting...",
+        description: "Your data is being exported. Please wait.",
+        duration: 3000,
+      });
     try {
       await onExportData();
       // Show success toast only on web non-FSA fallback; skip on native (share UI handles feedback)
@@ -179,6 +185,12 @@ export function SettingsScreen({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      // Show 'Importing...' toast
+      toast({
+        title: "Importing...",
+        description: "Your data is being imported. Please wait.",
+        duration: 3000,
+      });
       const reader = new FileReader();
       reader.onload = (event) => {
         const jsonData = event.target?.result as string;
@@ -341,6 +353,12 @@ export function SettingsScreen({
 
   const handleBackupClick = async () => {
     try {
+      // Show 'Exporting to Cloud...' toast
+      toast({
+        title: "Exporting to Cloud...",
+        description: "Your data is being exported to Google Drive. Please wait.",
+        duration: 3000,
+      });
       // Use full export bundle for Drive backup
       let accessToken: string | null = null;
       let result: unknown = null;
@@ -553,6 +571,12 @@ export function SettingsScreen({
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={async () => {
                 try {
+                  // Show 'Importing from Cloud...' toast
+                  toast({
+                    title: "Importing from Cloud...",
+                    description: "Your data is being imported from the cloud. Please wait.",
+                    duration: 3000,
+                  });
                   let accessToken: string | null = null;
                   let cloudJson: string = "";
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
