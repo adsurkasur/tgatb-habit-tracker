@@ -20,8 +20,12 @@ export async function exportDataAndroid({ data, defaultFilename }: { data: strin
 // Web export using File System Access API or anchor download
 export async function exportDataWeb({ data, defaultFilename }: { data: string; defaultFilename: string }) {
   // Use a targeted type assertion for window.showSaveFilePicker
+  // Minimal FileSystemFileHandle type for compatibility
+  interface FileSystemFileHandle {
+    createWritable: () => Promise<{ write: (data: string) => Promise<void>; close: () => Promise<void> }>;
+  }
   interface WindowWithSavePicker extends Window {
-    showSaveFilePicker?: (options: SaveFilePickerOptions) => Promise<any>;
+    showSaveFilePicker?: (options: SaveFilePickerOptions) => Promise<FileSystemFileHandle>;
   }
   interface SaveFilePickerOptions {
     suggestedName?: string;
