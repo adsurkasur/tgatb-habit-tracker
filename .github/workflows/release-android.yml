@@ -138,6 +138,10 @@ jobs:
             echo "MYAPP_UPLOAD_KEY_PASSWORD=$KEY_PASSWORD" >> gradle.properties
           fi
           ./gradlew assembleDebug assembleRelease --stacktrace
+          ./gradlew assembleRelease \
+            -PMYAPP_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
+            -PMYAPP_UPLOAD_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}" \
+            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}"
 
       - name: List generated APKs
         run: ls -R android/app/build/outputs/apk || true
