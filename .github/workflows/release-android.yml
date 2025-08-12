@@ -87,14 +87,26 @@ jobs:
       - name: Prepare signing keystore (if provided)
         run: |
           if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
-            echo "SIGNING_KEYSTORE_BASE64 is populated (first 10 chars): $(echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | head -c 10)"
+            echo "SIGNING_KEYSTORE_BASE64 is populated; decoding..."
             echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
-            ls -l android/app/release.keystore # Debugging: check if file is created
-            echo "Listing keystore aliases and format for debug:"
-            keytool -list -v -keystore android/app/release.keystore -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" || echo "Keystore listing failed"
+            echo "Keystore file created at android/app/release.keystore"
           else
             echo "SIGNING_KEYSTORE_BASE64 is empty. Keystore will not be prepared."
           fi
+
+      - name: Validate Keystore
+        if: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        env:
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          echo "Verifying keystore..."
+          if [ ! -f android/app/release.keystore ]; then
+            echo "ERROR: Keystore file not found at android/app/release.keystore" >&2
+            exit 1
+          fi
+          keytool -list -v -keystore android/app/release.keystore -storepass "$KEYSTORE_PASSWORD" -alias "$KEY_ALIAS" || (echo "ERROR: keytool failed" >&2; exit 1)
+          echo "Keystore verification successful."
 
       - name: Build Capacitor Android project
         run: npx cap build android
