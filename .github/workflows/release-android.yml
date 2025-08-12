@@ -11,6 +11,29 @@ jobs:
     permissions:
       contents: write
     steps:
+      - name: Check Android signing secrets
+        run: |
+          missing=0
+          if [ -z "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
+            echo "ERROR: ANDROID_KEYSTORE_BASE64 secret is missing or empty." >&2
+            missing=1
+          fi
+          if [ -z "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" ]; then
+            echo "ERROR: ANDROID_KEYSTORE_PASSWORD secret is missing or empty." >&2
+            missing=1
+          fi
+          if [ -z "${{ secrets.ANDROID_KEY_ALIAS }}" ]; then
+            echo "ERROR: ANDROID_KEY_ALIAS secret is missing or empty." >&2
+            missing=1
+          fi
+          if [ -z "${{ secrets.ANDROID_KEY_PASSWORD }}" ]; then
+            echo "ERROR: ANDROID_KEY_PASSWORD secret is missing or empty." >&2
+            missing=1
+          fi
+          if [ "$missing" -eq 1 ]; then
+            echo "One or more required Android signing secrets are missing. Failing early."
+            exit 1
+          fi
       - name: Checkout code
         uses: actions/checkout@v4
         with:
