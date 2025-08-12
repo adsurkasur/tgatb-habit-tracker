@@ -34,6 +34,7 @@ jobs:
             echo "One or more required Android signing secrets are missing. Failing early."
             exit 1
           fi
+
       - name: Checkout code
         uses: actions/checkout@v4
         with:
@@ -75,6 +76,9 @@ jobs:
             exit 1
           fi
 
+      - name: Sync Android versionName and versionCode
+        run: node scripts/sync-ver.cjs
+
       - name: Build web assets
         run: npm run build
 
@@ -84,27 +88,10 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      - name: Prepare signing keystore (if provided)
+      - name: Prepare signing keystore
         run: |
-          if [ -n "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" ]; then
-            echo "SIGNING_KEYSTORE_BASE64 is populated; decoding..."
-            echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
-            echo "Keystore file created at android/app/release.keystore"
-          else
-            echo "SIGNING_KEYSTORE_BASE64 is empty. Keystore will not be prepared."
-          fi
-
-      - name: Debug keystore password and alias
-        run: |
-          echo 'Keystore password (hex and length):'
-          echo -n "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" | od -c
-          echo -n "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" | wc -c
-          echo 'Key alias (hex and length):'
-          echo -n "${{ secrets.ANDROID_KEY_ALIAS }}" | od -c
-          echo -n "${{ secrets.ANDROID_KEY_ALIAS }}" | wc -c
-          echo 'Key password (hex and length):'
-          echo -n "${{ secrets.ANDROID_KEY_PASSWORD }}" | od -c
-          echo -n "${{ secrets.ANDROID_KEY_PASSWORD }}" | wc -c
+          echo "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" | base64 -d > android/app/release.keystore
+          echo "Keystore file created at android/app/release.keystore"
 
       - name: Validate Keystore
         env:
@@ -124,13 +111,13 @@ jobs:
 
       - name: Build release & debug APKs
         working-directory: android
+        env:
+          MYAPP_UPLOAD_STORE_FILE: app/release.keystore
+          MYAPP_UPLOAD_STORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          MYAPP_UPLOAD_KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          MYAPP_UPLOAD_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
         run: |
-          ./gradlew assembleDebug assembleRelease \
-            -PMYAPP_UPLOAD_STORE_FILE="app/release.keystore" \
-            -PMYAPP_UPLOAD_STORE_PASSWORD="${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" \
-            -PMYAPP_UPLOAD_KEY_ALIAS="${{ secrets.ANDROID_KEY_ALIAS }}" \
-            -PMYAPP_UPLOAD_KEY_PASSWORD="${{ secrets.ANDROID_KEY_PASSWORD }}" \
-            --stacktrace
+          ./gradlew assembleDebug assembleRelease --stacktrace
 
       - name: List generated APKs
         run: ls -R android/app/build/outputs/apk || true
@@ -138,39 +125,39 @@ jobs:
       - name: Normalize APK filenames
         id: rename
         run: |
-            VERSION=${{ steps.version.outputs.tag }}
-            OUTDIR=android/app/build/outputs/apk
-            mkdir -p renamed
-            # Debug APK
-            if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
-              cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
-            fi
-            # Release APK (signed)
-            if [ -f "$OUTDIR/release/app-release.apk" ]; then
-              cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
-            else
-              echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
-              echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
-              ls -l $OUTDIR/release
-              exit 1
-            fi
-            # Release APK (unsigned)
-            if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
-              cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
-            fi
-            ls -l renamed || true
+          VERSION=${{ steps.version.outputs.tag }}
+          OUTDIR=android/app/build/outputs/apk
+          mkdir -p renamed
+          # Debug APK
+          if [ -f "$OUTDIR/debug/app-debug.apk" ]; then
+            cp "$OUTDIR/debug/app-debug.apk" "renamed/tgatb-${VERSION}-debug.apk"
+          fi
+          # Release APK (signed)
+          if [ -f "$OUTDIR/release/app-release.apk" ]; then
+            cp "$OUTDIR/release/app-release.apk" "renamed/tgatb-${VERSION}.apk"
+          else
+            echo "ERROR: Signed APK not found at $OUTDIR/release/app-release.apk" >&2
+            echo "Check your app/build.gradle signingConfigs and CI secrets." >&2
+            ls -l $OUTDIR/release
+            exit 1
+          fi
+          # Release APK (unsigned)
+          if [ -f "$OUTDIR/release/app-release-unsigned.apk" ]; then
+            cp "$OUTDIR/release/app-release-unsigned.apk" "renamed/tgatb-${VERSION}-unsigned.apk"
+          fi
+          ls -l renamed || true
 
       - name: Verify APK signature
         run: |
-            VERSION=${{ steps.version.outputs.tag }}
-            jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
+          VERSION=${{ steps.version.outputs.tag }}
+          jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
         continue-on-error: false
 
       - name: Determine if pre-release
         id: prerelease_check
         run: |
           TAG_NAME="${{ steps.version.outputs.tag }}"
-          if [[ "$TAG_NAME" == *alpha* ]]; then
+          if [[ "$TAG_NAME" == *alpha* || "$TAG_NAME" == *beta* || "$TAG_NAME" == *rc* ]]; then
             echo "is_prerelease=true" >> $GITHUB_OUTPUT
           else
             echo "is_prerelease=false" >> $GITHUB_OUTPUT

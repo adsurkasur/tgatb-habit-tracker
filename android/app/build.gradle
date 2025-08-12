@@ -23,10 +23,10 @@ android {
     }
     signingConfigs {
         release {
-            storeFile file('release.keystore')
-            storePassword project.hasProperty('MYAPP_UPLOAD_STORE_PASSWORD') ? project.property('MYAPP_UPLOAD_STORE_PASSWORD') : ''
-            keyAlias project.hasProperty('MYAPP_UPLOAD_KEY_ALIAS') ? project.property('MYAPP_UPLOAD_KEY_ALIAS') : ''
-            keyPassword project.hasProperty('MYAPP_UPLOAD_KEY_PASSWORD') ? project.property('MYAPP_UPLOAD_KEY_PASSWORD') : ''
+            storeFile file(System.getenv("MYAPP_UPLOAD_STORE_FILE") ?: "release.keystore")
+            storePassword System.getenv("MYAPP_UPLOAD_STORE_PASSWORD") ?: ""
+            keyAlias System.getenv("MYAPP_UPLOAD_KEY_ALIAS") ?: ""
+            keyPassword System.getenv("MYAPP_UPLOAD_KEY_PASSWORD") ?: ""
         }
     }
     buildTypes {
