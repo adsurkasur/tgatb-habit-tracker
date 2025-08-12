@@ -36,8 +36,7 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: true,
     captureInput: true,
-    webContentsDebuggingEnabled: true, // TEMP: Enable debugging for release APK
-    androidScheme: 'http' // Explicitly set scheme for local file loading
+    webContentsDebuggingEnabled: false
   }
 };
 
