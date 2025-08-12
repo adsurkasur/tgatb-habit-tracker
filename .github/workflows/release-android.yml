@@ -95,6 +95,8 @@ jobs:
             ls -l android/release.keystore # Debugging: check if file is created
             cp android/release.keystore android/app/release.keystore
             ls -l android/app/release.keystore # Debugging: check if file is copied
+              echo "Listing keystore aliases and format for debug:"
+              keytool -list -v -keystore android/app/release.keystore -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" || echo "Keystore listing failed"
           else
             echo "SIGNING_KEYSTORE_BASE64 is empty. Keystore will not be prepared."
           fi
