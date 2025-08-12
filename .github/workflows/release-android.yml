@@ -58,11 +58,11 @@ jobs:
       - name: List contents of out directory
         run: ls -lR out
 
-      - name: Build Capacitor Android project
-        run: npx cap build android
-
       - name: Make gradlew executable
         run: chmod +x android/gradlew
+
+      - name: Build Capacitor Android project
+        run: npx cap build android
 
       - name: Prepare signing keystore (if provided)
         if: env.SIGNING_KEYSTORE_BASE64 != ''
