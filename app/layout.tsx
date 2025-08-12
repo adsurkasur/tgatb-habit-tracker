@@ -88,10 +88,11 @@ export default function RootLayout({
             errorDiv.style.position = 'fixed';
             errorDiv.style.top = '0';
             errorDiv.style.left = '0';
-            errorDiv.style.width = '100vw';
-            errorDiv.style.background = 'red';
-            errorDiv.style.color = 'white';
-            errorDiv.style.zIndex = '99999';
+        <div style={{position:'fixed',top:0,left:0,width:'100vw',background:'yellow',color:'black',zIndex:99999,fontSize:'20px',padding:'16px',textAlign:'center'}}>HTML loaded - if you see this, JS is NOT running!</div>
+        <CapacitorInit />
+        <Providers>
+          {children}
+        </Providers>
             errorDiv.style.fontSize = '16px';
             errorDiv.style.padding = '8px';
             errorDiv.innerText = 'JS Error: ' + message + '\\n' + (error && error.stack ? error.stack : '');
