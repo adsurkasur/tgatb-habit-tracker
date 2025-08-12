@@ -386,9 +386,12 @@ export function SettingsScreen({
             description: "Your data has been backed up to Google Drive (web).",
             duration: 3000,
           });
-        } catch (err: any) {
+        } catch (err: unknown) {
           // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
-          const message = err?.message || "Drive upload failed.";
+          let message = "Drive upload failed.";
+          if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+            message = (err as { message: string }).message;
+          }
           toast({
             title: "Backup Error",
             description: message + " Please log in again using the Login button.",
@@ -427,8 +430,11 @@ export function SettingsScreen({
               duration: 3000,
             });
           }
-        } catch (err: any) {
-          const message = err?.message || "Drive upload failed.";
+        } catch (err: unknown) {
+          let message = "Drive upload failed.";
+          if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+            message = (err as { message: string }).message;
+          }
           toast({
             title: "Backup Error",
             description: message + " Please log in again using the Login button.",
@@ -627,9 +633,12 @@ export function SettingsScreen({
                       });
                       cloudJson = await res.text();
                       console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
-                    } catch (err: any) {
+                    } catch (err: unknown) {
                       // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
-                      const message = err?.message || "Drive import failed.";
+                      let message = "Drive import failed.";
+                      if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+                        message = (err as { message: string }).message;
+                      }
                       toast({
                         title: "Import Error",
                         description: message + " Please log in again using the Login button.",
@@ -662,8 +671,11 @@ export function SettingsScreen({
                         cloudJson = typeof rawCloudJson === 'string' ? rawCloudJson : JSON.stringify(rawCloudJson);
                       }
                       console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
-                    } catch (err: any) {
-                      const message = err?.message || "Drive import failed.";
+                    } catch (err: unknown) {
+                      let message = "Drive import failed.";
+                      if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+                        message = (err as { message: string }).message;
+                      }
                       toast({
                         title: "Import Error",
                         description: message + " Please log in again using the Login button.",
