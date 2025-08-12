@@ -135,10 +135,21 @@ jobs:
             jarsigner -verify -verbose -certs renamed/tgatb-${VERSION}.apk
         continue-on-error: false
 
+      - name: Determine if pre-release
+        id: prerelease_check
+        run: |
+          TAG_NAME="${{ steps.version.outputs.tag }}"
+          if [[ "$TAG_NAME" == *alpha* ]]; then
+            echo "is_prerelease=true" >> $GITHUB_OUTPUT
+          else
+            echo "is_prerelease=false" >> $GITHUB_OUTPUT
+          fi
+
       - name: Upload signed release APK to GitHub Release
         uses: softprops/action-gh-release@v2
         with:
           files: renamed/tgatb-${{ steps.version.outputs.tag }}.apk
           fail_on_unmatched_files: true
+          prerelease: ${{ steps.prerelease_check.outputs.is_prerelease }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
