@@ -619,6 +619,7 @@ export function SettingsScreen({
                 });
                 let accessToken: string | null = null;
                 let cloudJson: string = "";
+                let cloudBundle: any = null;
                 try {
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
@@ -647,7 +648,8 @@ export function SettingsScreen({
                         headers: { Authorization: `Bearer ${accessToken}` }
                       });
                       cloudJson = await res.text();
-                      console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
+                      cloudBundle = JSON.parse(cloudJson);
+                      console.debug('[SettingsScreen] Web Drive raw backup bundle:', cloudBundle);
                     } catch (err: unknown) {
                       // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
                       let message = "Drive import failed.";
@@ -677,15 +679,10 @@ export function SettingsScreen({
                     }
                     try {
                       const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
-                      // Download latest backup
-                      const rawCloudJson = await downloadLatestHabitsFromDrive(accessToken);
-                      // If mobile helper returns an array, convert to string
-                      if (Array.isArray(rawCloudJson)) {
-                        cloudJson = JSON.stringify(rawCloudJson);
-                      } else {
-                        cloudJson = typeof rawCloudJson === 'string' ? rawCloudJson : JSON.stringify(rawCloudJson);
-                      }
-                      console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
+                      // Download latest backup (returns full bundle)
+                      cloudBundle = await downloadLatestHabitsFromDrive(accessToken);
+                      cloudJson = JSON.stringify(cloudBundle);
+                      console.debug('[SettingsScreen] Mobile Drive raw backup bundle:', cloudBundle);
                     } catch (err: unknown) {
                       let message = "Drive import failed.";
                       if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
@@ -701,7 +698,18 @@ export function SettingsScreen({
                     }
                   }
                   if (cloudJson && cloudJson.length > 0) {
-                    onImportData(cloudJson);
+                    // Validate bundle before import
+                    const validation = validateExportImportJson(cloudBundle);
+                    if (!validation.success) {
+                      toast({
+                        title: "Import Failed",
+                        description: `Imported data is invalid: ${validation.errors?.join(", ")}`,
+                        variant: "destructive",
+                        duration: 4000,
+                      });
+                      return;
+                    }
+                    onImportData(JSON.stringify(cloudBundle));
                     toast({
                       title: "Import Successful",
                       description: "Your habits have been imported from Google Drive.",

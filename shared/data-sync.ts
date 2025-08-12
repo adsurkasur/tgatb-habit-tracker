@@ -1,19 +1,19 @@
 // Shared logic for data serialization/deserialization
 
-// Example: Export habit data to JSON
-export function exportHabitsToJson(habits: any[]): string {
-	return JSON.stringify(habits);
+// Export full bundle to JSON
+export function exportBundleToJson(bundle: any): string {
+	return JSON.stringify(bundle);
 }
 
-// Example: Import habit data from JSON
-export function importHabitsFromJson(json: string): any[] {
+// Import full bundle from JSON
+export function importBundleFromJson(json: string): any {
 	try {
 		return JSON.parse(json);
 	} catch {
-		return [];
+		return null;
 	}
 }
 
 // Usage:
-// - Use exportHabitsToJson() before uploading to Drive
-// - Use importHabitsFromJson() after downloading from Drive
+// - Use exportBundleToJson() before uploading to Drive
+// - Use importBundleFromJson() after downloading from Drive
