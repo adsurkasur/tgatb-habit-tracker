@@ -209,7 +209,7 @@ export function SettingsScreen({
                 duration: 3000,
               });
             }
-          } catch (err) {
+          } catch {
             toast({
               title: "Import Failed",
               description: "Invalid JSON format. Please select a valid backup file.",
@@ -223,6 +223,7 @@ export function SettingsScreen({
       // Reset file input
       e.target.value = '';
     }
+  };
   // Fullscreen toggle handler for Switch
   const handleFullscreenToggle = async (checked: boolean) => {
     const newSettings = { ...settings, fullscreenMode: checked };
@@ -377,12 +378,6 @@ export function SettingsScreen({
       description: "Your data is being exported to the cloud. Please wait.",
       duration: 2000,
     });
-    if (file) {
-      toast({
-        title: "Importing...",
-        description: "Your data is being imported. Please wait.",
-        duration: 2000,
-      });
     try {
       // Use full export bundle for Drive backup
       let accessToken: string | null = null;
@@ -920,7 +915,4 @@ export function SettingsScreen({
       </div>
     </div>
   );
-}
-// ...existing code...
-}
 }
