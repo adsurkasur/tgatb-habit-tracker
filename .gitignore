@@ -84,3 +84,6 @@ temp/
 
 # References
 .references
+
+# Google Services
+google-services.json
