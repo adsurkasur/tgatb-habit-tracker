@@ -1,9 +1,5 @@
 # Add project specific ProGuard rules here.
-# You can control the set of applied configuration files using the
-# proguardFiles setting in build.gradle.
-#
-# For more details, see
-#   http://developer.android.com/guide/developing/tools/proguard.html
+# For more details, see http://developer.android.com/guide/developing/tools/proguard.html
 
 # If your project uses WebView with JS, uncomment the following
 # and specify the fully qualified class name to the JavaScript interface
@@ -12,40 +8,39 @@
 #   public *;
 #}
 
-# Uncomment this to preserve the line number information for
-# debugging stack traces.
-#-keepattributes SourceFile,LineNumberTable
+# ---- Recommended additions for Android WebView ----
+-keep public class android.webkit.WebView
+-keep public class android.webkit.WebSettings
+-keep public class android.webkit.ConsoleMessage
+-keep public class android.webkit.GeolocationPermissions
+-keep public class android.webkit.JsResult
+-keep public class android.webkit.PermissionRequest
+-keep public class android.webkit.WebChromeClient
+-keep public class android.webkit.WebResourceRequest
+-keep public class android.webkit.WebResourceResponse
+-keep public class android.webkit.WebViewClient
 
-# If you keep the line number information, uncomment this to
-# hide the original source file name.
-#-renamesourcefileattribute SourceFile
+# ---- Your existing rules (these are great!) ----
 
-# ---- Project specific additions (Capacitor / WebView / Reflection) ----
-
-# Keep Capacitor bridge & plugin classes (reflection-based discovery)
+# Keep Capacitor bridge & plugin classes
 -keep class com.getcapacitor.** { *; }
 -keep class * extends com.getcapacitor.Plugin { *; }
 
-# Keep webview JS interface methods if any added dynamically
+# Keep webview JS interface methods
 -keepclassmembers class * {
-	@android.webkit.JavascriptInterface <methods>;
+    @android.webkit.JavascriptInterface <methods>;
 }
 
-# Keep names for serialization (if using JSON to map model classes)
+# Keep names for serialization and enums
 -keepclassmembers class ** implements java.io.Serializable { *; }
-
-# Avoid stripping enums used via name()
 -keepclassmembers enum * { *; }
 
-# (Optional) Remove logging in release to reduce size (uncomment if desired)
 # --- Facebook Android SDK ProGuard rules ---
-# Official rules from https://developers.facebook.com/docs/android/getting-started/#proguard-keep-rules
 -keep class com.facebook.** { *; }
 -keep class com.facebook.internal.** { *; }
 -keep class com.facebook.login.** { *; }
 -keep class com.facebook.CallbackManager { *; }
 -keep class com.facebook.FacebookCallback { *; }
 -keep class com.facebook.login.widget.LoginButton { *; }
-#-assumenosideeffects class android.util.Log { *; }
 
-# ---- End additions ----
+# ---- End of file ----
