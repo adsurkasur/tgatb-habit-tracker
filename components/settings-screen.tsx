@@ -183,7 +183,30 @@ export function SettingsScreen({
       reader.onload = (event) => {
         const jsonData = event.target?.result as string;
         if (jsonData) {
-          onImportData(jsonData);
+          try {
+            const parsed = JSON.parse(jsonData);
+            // Validate format: must be object and have full export bundle keys
+            if (
+              typeof parsed === 'object' && parsed !== null &&
+              parsed.version && parsed.meta && parsed.habits && parsed.settings
+            ) {
+              onImportData(jsonData);
+            } else {
+              toast({
+                title: "Import Failed",
+                description: "Invalid export format. Please select a valid backup file exported from this app.",
+                variant: "destructive",
+                duration: 3000,
+              });
+            }
+          } catch (err) {
+            toast({
+              title: "Import Failed",
+              description: "Invalid JSON format. Please select a valid backup file.",
+              variant: "destructive",
+              duration: 3000,
+            });
+          }
         }
       };
       reader.readAsText(file);
@@ -607,12 +630,34 @@ export function SettingsScreen({
                     console.debug('[SettingsScreen] Mobile Drive raw backup JSON:', cloudJson);
                   }
                   if (cloudJson && cloudJson.length > 0) {
-                    onImportData(cloudJson);
-                    toast({
-                      title: "Import Successful",
-                      description: "Your habits have been imported from Google Drive.",
-                      duration: 3000,
-                    });
+                    try {
+                      const parsed = JSON.parse(cloudJson);
+                      if (
+                        typeof parsed === 'object' && parsed !== null &&
+                        parsed.version && parsed.meta && parsed.habits && parsed.settings
+                      ) {
+                        onImportData(cloudJson);
+                        toast({
+                          title: "Import Successful",
+                          description: "Your habits have been imported from Google Drive.",
+                          duration: 3000,
+                        });
+                      } else {
+                        toast({
+                          title: "Import Failed",
+                          description: "Invalid export format. Please select a valid backup file exported from this app.",
+                          variant: "destructive",
+                          duration: 3000,
+                        });
+                      }
+                    } catch (err) {
+                      toast({
+                        title: "Import Failed",
+                        description: "Invalid JSON format. Please select a valid backup file.",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
+                    }
                   } else {
                     toast({
                       title: "Import Failed",
