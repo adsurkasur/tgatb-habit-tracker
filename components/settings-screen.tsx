@@ -342,18 +342,25 @@ export function SettingsScreen({
   const handleBackupClick = async () => {
     try {
       // Use full export bundle for Drive backup
-  let accessToken: string | null = null;
-  let result: unknown = null;
+      let accessToken: string | null = null;
+      let result: unknown = null;
       // Get full export bundle
-  const { HabitStorage } = await import("@/lib/habit-storage");
-  const exportJson = await HabitStorage.exportData();
+      const { HabitStorage } = await import("@/lib/habit-storage");
+      const exportJson = await HabitStorage.exportData();
       console.debug('[SettingsScreen] Exporting full bundle:', exportJson);
       if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
         // Web platform
-        const { signInWithGoogleWeb } = await import("../web/google-auth");
+        accessToken = localStorage.getItem('googleAccessToken');
+        if (!accessToken) {
+          toast({
+            title: "Not Signed In",
+            description: "You must be signed in to export to Google Drive.",
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
+        }
         const { uploadToDrive } = await import("../web/drive-sync");
-        accessToken = await signInWithGoogleWeb();
-        if (!accessToken) throw new Error("Not signed in");
         result = await uploadToDrive(exportJson, accessToken);
         console.debug('[SettingsScreen] Web Drive backup result:', result);
         toast({
@@ -363,16 +370,19 @@ export function SettingsScreen({
         });
       } else {
         // Mobile (Capacitor)
-        const resultObj = await signInWithGoogle();
-        let accessToken: string | null = null;
-        if (typeof resultObj === 'string') {
-          accessToken = resultObj;
-        } else if (resultObj && typeof resultObj === 'object') {
-          accessToken = resultObj.accessToken || null;
+        const { Preferences } = await import('@capacitor/preferences');
+        accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+        if (!accessToken) {
+          toast({
+            title: "Not Signed In",
+            description: "You must be signed in to export to Google Drive.",
+            variant: "destructive",
+            duration: 3000,
+          });
+          return;
         }
-        if (!accessToken) throw new Error("Not signed in");
-  const { uploadDataToDrive } = await import("@/mobile/drive-sync");
-  result = await uploadDataToDrive(exportJson, accessToken);
+        const { uploadDataToDrive } = await import("@/mobile/drive-sync");
+        result = await uploadDataToDrive(exportJson, accessToken);
         console.debug('[SettingsScreen] Mobile Drive backup result:', result);
         if (result) {
           toast({
@@ -547,9 +557,16 @@ export function SettingsScreen({
                   let cloudJson: string = "";
                   if (typeof window !== 'undefined' && !isCapacitorApp) {
                     // Web platform
-                    const { signInWithGoogleWeb } = await import("../web/google-auth");
-                    accessToken = await signInWithGoogleWeb();
-                    if (!accessToken) throw new Error("Not signed in");
+                    accessToken = localStorage.getItem('googleAccessToken');
+                    if (!accessToken) {
+                      toast({
+                        title: "Not Signed In",
+                        description: "You must be signed in to import from Google Drive.",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
+                      return;
+                    }
                     // List files named 'habits-backup.json' in Drive
                     const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
                       headers: { Authorization: `Bearer ${accessToken}` }
@@ -567,18 +584,21 @@ export function SettingsScreen({
                     console.debug('[SettingsScreen] Web Drive raw backup JSON:', cloudJson);
                   } else {
                     // Mobile (Capacitor)
-                    const result = await signInWithGoogle();
-                    if (typeof result === 'string') {
-                      accessToken = result;
-                    } else if (result && typeof result === 'object') {
-                      accessToken = result.accessToken || null;
+                    const { Preferences } = await import('@capacitor/preferences');
+                    accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+                    if (!accessToken) {
+                      toast({
+                        title: "Not Signed In",
+                        description: "You must be signed in to import from Google Drive.",
+                        variant: "destructive",
+                        duration: 3000,
+                      });
+                      return;
                     }
-                    if (!accessToken) throw new Error("Not signed in");
                     const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
                     // Download latest backup
                     const rawCloudJson = await downloadLatestHabitsFromDrive(accessToken);
                     // If mobile helper returns an array, convert to string
-                    let cloudJson: string;
                     if (Array.isArray(rawCloudJson)) {
                       cloudJson = JSON.stringify(rawCloudJson);
                     } else {
@@ -604,11 +624,7 @@ export function SettingsScreen({
                 } catch (err) {
                   let message = "An error occurred during cloud import.";
                   if (err instanceof Error) {
-                    if (err.message === 'Not signed in') {
-                      message = "You must be signed in to import from the cloud.";
-                    } else {
-                      message = err.message;
-                    }
+                    message = err.message;
                   }
                   toast({
                     title: "Import Error",
