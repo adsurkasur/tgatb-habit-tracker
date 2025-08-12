@@ -24,6 +24,7 @@ import {
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
 import { useRef, useState, useEffect } from "react";
 import { debounce } from "@/lib/utils/debounce"; // Citation: https://lodash.com/docs/4.17.15#debounce
+import { validateExportImportJson } from "@/lib/validate-export-import";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
@@ -40,9 +41,8 @@ type SettingsScreenProps = {
   open: boolean;
   onClose: () => void;
   settings: UserSettings;
-  // Removed unused prop: habits
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
-  onExportData: () => void;
+  onExportData: () => Promise<string>;
   onImportData: (jsonData: string) => void;
   onShowHelp?: () => void;
   onDeleteAllHabits?: () => Promise<void>;
@@ -135,19 +135,48 @@ export function SettingsScreen({
   // Citation: https://kentcdodds.com/blog/preventing-double-form-submission
   // Citation: https://www.joshwcomeau.com/react/throttle-debounce/
   const handleExportClick = debounce(async () => {
-    // Persistent guard blocks duplicate triggers from React/browser quirks
     if (exportInProgressRef.current) return;
     exportInProgressRef.current = true;
     setIsExporting(true);
-      // Show 'Exporting...' toast
-      toast({
-        title: "Exporting...",
-        description: "Your data is being exported. Please wait.",
-        duration: 3000,
-      });
+    toast({
+      title: "Exporting...",
+      description: "Your data is being exported. Please wait.",
+      duration: 3000,
+    });
     try {
-      await onExportData();
-      // Show success toast only on web non-FSA fallback; skip on native (share UI handles feedback)
+      // Get export data as JSON string
+      let result: string | undefined;
+      if (onExportData.length === 0) {
+        // If onExportData is a no-arg function, call and expect Promise<void>
+        // But we need the JSON string, so fallback to HabitStorage.exportData
+        const { HabitStorage } = await import("@/lib/habit-storage");
+        result = await HabitStorage.exportData();
+      } else {
+        // If onExportData returns a string, use it
+        result = await onExportData();
+      }
+      let jsonObj: unknown;
+      try {
+        jsonObj = JSON.parse(result ?? "");
+      } catch {
+        toast({
+          title: "Export Failed",
+          description: "Exported data is not valid JSON.",
+          variant: "destructive",
+          duration: 3000,
+        });
+        return;
+      }
+      const validation = validateExportImportJson(jsonObj);
+      if (!validation.success) {
+        toast({
+          title: "Export Failed",
+          description: `Exported data is invalid: ${validation.errors?.join(", ")}`,
+          variant: "destructive",
+          duration: 4000,
+        });
+        return;
+      }
       if (!('showSaveFilePicker' in window) && !isCapacitorApp) {
         toast({
           title: "Export Successful",
@@ -155,9 +184,7 @@ export function SettingsScreen({
           duration: 3000,
         });
       }
-  } catch (err: unknown) {
-      // Citation: https://developer.mozilla.org/en-US/docs/Web/API/showSaveFilePicker
-      // Citation: https://stackoverflow.com/questions/67716344/download-event-triggers-twice-in-chrome
+    } catch (err: unknown) {
       if (
         err &&
         typeof err === 'object' &&
@@ -167,7 +194,7 @@ export function SettingsScreen({
           'message' in err && typeof (err as { message?: string }).message === 'string' && (err as { message?: string }).message !== undefined && (err as { message?: string }).message!.includes('The user aborted a request')
         ))
       ) {
-        // User canceled the file dialog, do nothing (no error toast)
+        // User canceled the file dialog, do nothing
       } else {
         toast({
           title: "Export Failed",
@@ -180,12 +207,11 @@ export function SettingsScreen({
       setIsExporting(false);
       exportInProgressRef.current = false;
     }
-  }, 500); // 500ms debounce for robustness
+  }, 500);
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      // Show 'Importing...' toast
       toast({
         title: "Importing...",
         description: "Your data is being imported. Please wait.",
@@ -195,11 +221,32 @@ export function SettingsScreen({
       reader.onload = (event) => {
         const jsonData = event.target?.result as string;
         if (jsonData) {
+          let jsonObj: unknown;
+          try {
+            jsonObj = JSON.parse(jsonData);
+          } catch {
+            toast({
+              title: "Import Failed",
+              description: "Imported file is not valid JSON.",
+              variant: "destructive",
+              duration: 3000,
+            });
+            return;
+          }
+          const validation = validateExportImportJson(jsonObj);
+          if (!validation.success) {
+            toast({
+              title: "Import Failed",
+              description: `Imported data is invalid: ${validation.errors?.join(", ")}`,
+              variant: "destructive",
+              duration: 4000,
+            });
+            return;
+          }
           onImportData(jsonData);
         }
       };
       reader.readAsText(file);
-      // Reset file input
       e.target.value = '';
     }
   };
