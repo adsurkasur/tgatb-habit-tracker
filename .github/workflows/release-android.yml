@@ -94,6 +94,18 @@ jobs:
             echo "SIGNING_KEYSTORE_BASE64 is empty. Keystore will not be prepared."
           fi
 
+      - name: Debug keystore password and alias
+        run: |
+          echo 'Keystore password (hex and length):'
+          echo -n "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" | od -c
+          echo -n "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" | wc -c
+          echo 'Key alias (hex and length):'
+          echo -n "${{ secrets.ANDROID_KEY_ALIAS }}" | od -c
+          echo -n "${{ secrets.ANDROID_KEY_ALIAS }}" | wc -c
+          echo 'Key password (hex and length):'
+          echo -n "${{ secrets.ANDROID_KEY_PASSWORD }}" | od -c
+          echo -n "${{ secrets.ANDROID_KEY_PASSWORD }}" | wc -c
+
       - name: Validate Keystore
         env:
           KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
