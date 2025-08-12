@@ -53,9 +53,7 @@ jobs:
           fi
 
       - name: Build web assets
-        run: |
-          npm run build
-          npx next export
+        run: npm run build
 
       - name: Capacitor sync (regenerate native + plugins)
         run: npx cap sync android
