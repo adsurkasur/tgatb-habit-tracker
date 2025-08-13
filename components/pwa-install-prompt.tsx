@@ -141,7 +141,7 @@ export function PWAInstallPrompt() {
   const isEdge = /Edg/.test(ua);
   const isOpera = /OPR/.test(ua);
   const isSafari = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(ua);
-  const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera;
+  // const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera; // Removed unused variable
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
@@ -172,7 +172,7 @@ export function PWAInstallPrompt() {
           duration: 3000,
         });
       }
-    } catch (err) {
+    } catch {
       toast({
         title: "App install failed",
         description: "Something went wrong while trying to install the app.",
@@ -217,22 +217,22 @@ export function PWAInstallPrompt() {
             </p>
             {(isIOS || (isMac && isSafari)) && (
               <p className="text-xs text-muted-foreground mt-2">
-                On iOS/Safari, tap the Share button and select "Add to Home Screen" to install.
+                On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
               </p>
             )}
             {isAndroid && (
               <p className="text-xs text-muted-foreground mt-2">
-                On Android, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+                On Android, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
               </p>
             )}
             {(isWindows || isLinux) && (
               <p className="text-xs text-muted-foreground mt-2">
-                On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+                On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
               </p>
             )}
             {isMac && !isSafari && (
               <p className="text-xs text-muted-foreground mt-2">
-                On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+                On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
               </p>
             )}
           </div>
