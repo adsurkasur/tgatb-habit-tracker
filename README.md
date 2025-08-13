@@ -8,7 +8,29 @@
 	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" width="128" height="128" />
 </p>
 
+
 <div align="center"><strong>Track your habits simply. Focus on what matters. Now available as a PWA and Android app!</strong></div>
+
+## Table of Contents
+
+- [Demo](#demo)
+- [Screenshots](#screenshots)
+- [Features](#features)
+- [Why Minimalist?](#why-minimalist)
+- [Tech Stack](#tech-stack)
+- [Getting Started](#getting-started)
+- [Available Scripts](#available-scripts)
+- [Project Structure](#project-structure)
+- [Storage & Offline](#storage--offline)
+- [Deployment](#deployment)
+- [Development Workflow](#development-workflow)
+- [Code Style](#code-style)
+- [Contributing](#contributing)
+- [FAQ](#faq)
+- [License](#license)
+- [Support](#support)
+- [Community & Feedback](#community--feedback)
+- [Resources](#resources)
 
 ---
 
