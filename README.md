@@ -4,7 +4,9 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://tgatb.vercel.app/)
 
-![TGATB Logo](public/logo/icon-512x512.png)
+<p align="center">
+	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" />
+</p>
 
 **Track your habits simply. Focus on what matters. Now available as a PWA and Android app!**
 
