@@ -16,11 +16,16 @@ declare global {
 
 export function ServiceWorkerRegistration() {
   useEffect(() => {
-    if (!isServiceWorkerSupported()) {
-      return;
-    }
+      if (!isServiceWorkerSupported()) {
+        return;
+      }
 
-    registerServiceWorker();
+      // Explicitly set the service worker path for Workbox
+      if (typeof window !== 'undefined' && 'workbox' in window && typeof window.Workbox === 'function') {
+        window.workbox = new window.Workbox('/worker/index.js');
+      }
+
+      registerServiceWorker();
   }, []);
 
   return null;
