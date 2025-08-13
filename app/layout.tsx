@@ -1,6 +1,8 @@
+import React from "react";
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { FirebaseErrorBoundary } from "@/components/ui/firebase-error-boundary";
 // import { Analytics } from "@vercel/analytics/react";
 // import { OfflineToast } from "@/components/offline-toast";
 // import { ServiceWorkerRegistration } from "@/components/sw-registration";
@@ -33,35 +35,8 @@ export const metadata: Metadata = {
     other: [
       { rel: "mask-icon", url: "/favicon.svg", color: "#6750a4" }
     ]
-  },
-  manifest: "/manifest.json",
-  appleWebApp: {
-    capable: true,
-    statusBarStyle: "default",
-    title: "TGATB Habit Tracker",
-    startupImage: [
-      {
-        url: "/icons/icon-512x512.png",
-        media: "(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)"
-      }
-    ]
-  },
-  applicationName: "TGATB Habit Tracker",
-  category: "productivity"
+  }
 };
-
-export const viewport: Viewport = {
-  themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#ffffff" },
-    { media: "(prefers-color-scheme: dark)", color: "#6750a4" }
-  ],
-  width: "device-width",
-  initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
-  viewportFit: "cover"
-};
-
 export default function RootLayout({
   children,
 }: {
@@ -82,29 +57,16 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
-        <script dangerouslySetInnerHTML={{__html:`
-          window.onerror = function(message, source, lineno, colno, error) {
-            var errorDiv = document.createElement('div');
-            errorDiv.style.position = 'fixed';
-            errorDiv.style.top = '0';
-            errorDiv.style.left = '0';
-        <CapacitorInit />
-        <Providers>
-          {children}
-        </Providers>
-            errorDiv.style.fontSize = '16px';
-            errorDiv.style.padding = '8px';
-            errorDiv.innerText = 'JS Error: ' + message + '\\n' + (error && error.stack ? error.stack : '');
-            document.body.appendChild(errorDiv);
-          };
-        `}} />
+  {/* <script dangerouslySetInnerHTML={{__html:`window.onerror = ...`}} /> */}
       </head>
       <body>
   <CapacitorInit />
         {/* <ServiceWorkerRegistration /> */}
-        <Providers>
-          {children}
-        </Providers>
+        <FirebaseErrorBoundary>
+          <Providers>
+            {children}
+          </Providers>
+        </FirebaseErrorBoundary>
         {/* <OfflineToast /> */}
         {/* <AnalyticsNotice /> */}
         {/* {process.env.NODE_ENV === 'production' && <Analytics />} */}
