@@ -130,6 +130,19 @@ export function PWAInstallPrompt() {
     }
   }, [showInstallPrompt]);
 
+
+  // Platform detection
+  const ua = typeof window !== 'undefined' ? navigator.userAgent : '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isWindows = /Windows NT/.test(ua);
+  const isLinux = /Linux/.test(ua) && !isAndroid;
+  const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/.test(ua);
+  const isEdge = /Edg/.test(ua);
+  const isOpera = /OPR/.test(ua);
+  const isSafari = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(ua);
+  const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera;
+
   const handleInstallClick = async () => {
     if (!deferredPrompt) {
       toast({
@@ -202,6 +215,26 @@ export function PWAInstallPrompt() {
             <p className="text-xs text-muted-foreground">
               Better experience with offline support and quick access
             </p>
+            {(isIOS || (isMac && isSafari)) && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On iOS/Safari, tap the Share button and select "Add to Home Screen" to install.
+              </p>
+            )}
+            {isAndroid && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On Android, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
+            {(isWindows || isLinux) && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
+            {isMac && !isSafari && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
           </div>
           <Button
             size="sm"
