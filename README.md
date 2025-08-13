@@ -1,6 +1,6 @@
 # The Good and The Bad: Habit Tracker
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/adsurkasur/tgatb-habit-tracker/release-android.yml?branch=main)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
+[![Build Status](https://github.com/adsurkasur/tgatb-habit-tracker/actions/workflows/release-android.yml/badge.svg?branch=main)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://tgatb.vercel.app/)
 
