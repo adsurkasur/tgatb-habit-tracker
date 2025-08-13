@@ -4,6 +4,8 @@ on:
   push:
     tags:
       - 'v*' # A single, broad trigger for ALL version tags
+    branches:
+      - main
 
 jobs:
   build-and-release:
