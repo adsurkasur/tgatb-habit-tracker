@@ -131,14 +131,40 @@ export function PWAInstallPrompt() {
   }, [showInstallPrompt]);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      toast({
+        title: "App install not available",
+        description: "App installation is not supported on this device or browser. Try Chrome or Edge on desktop/mobile.",
+        duration: 3000,
+      });
+      return;
+    }
 
-    deferredPrompt.prompt();
-    const { outcome } = await deferredPrompt.userChoice;
-    
-    if (outcome === 'accepted') {
-      setDeferredPrompt(null);
-      setShowInstallPrompt(false);
+    try {
+      await deferredPrompt.prompt();
+      const { outcome } = await deferredPrompt.userChoice;
+      if (outcome === 'accepted') {
+        setDeferredPrompt(null);
+        setShowInstallPrompt(false);
+        toast({
+          title: "App install started",
+          description: "Follow your browser's instructions to complete installation.",
+          duration: 3000,
+        });
+      } else {
+        // Use the same message as handleDismiss for consistency
+        toast({
+          title: "App install dismissed",
+          description: "You can install the app anytime from Settings → Install App.",
+          duration: 3000,
+        });
+      }
+    } catch (err) {
+      toast({
+        title: "App install failed",
+        description: "Something went wrong while trying to install the app.",
+        duration: 3000,
+      });
     }
   };
 
@@ -147,9 +173,9 @@ export function PWAInstallPrompt() {
     setShowInstallPrompt(false);
     sessionStorage.setItem('pwa-install-dismissed', 'true');
     toast({
-  title: "App installation available",
-  description: "You can install the app anytime from Settings  Install App",
-  duration: 3000,
+      title: "App install dismissed",
+      description: "You can install the app anytime from Settings → Install App.",
+      duration: 3000,
     });
   };
 
