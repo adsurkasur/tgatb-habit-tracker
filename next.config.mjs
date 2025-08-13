@@ -35,7 +35,7 @@ const pwaConfig = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: true, // Disable PWA for Android build
+  disable: false, // Enable PWA support
   // Use InjectManifest with custom worker for additional functionality
   swSrc: 'worker/index.js', // This tells next-pwa to use our custom worker
   // Workbox will handle all the heavy lifting + our custom code
