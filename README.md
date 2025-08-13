@@ -5,7 +5,7 @@
 [![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://tgatb.vercel.app/)
 
 <p align="center">
-	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" />
+	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" width="256" height="256" />
 </p>
 
 **Track your habits simply. Focus on what matters. Now available as a PWA and Android app!**
