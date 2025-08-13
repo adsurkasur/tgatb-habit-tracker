@@ -1,39 +1,29 @@
+"use client";
 import React from "react";
 
-interface FirebaseErrorBoundaryProps {
-  children: React.ReactNode;
-}
+type Props = { children: React.ReactNode };
 
-interface FirebaseErrorBoundaryState {
-  hasError: boolean;
-  error: Error | null;
-}
+export function FirebaseErrorBoundary({ children }: Props) {
+  const [error, setError] = React.useState<Error | null>(null);
 
-export class FirebaseErrorBoundary extends React.Component<FirebaseErrorBoundaryProps, FirebaseErrorBoundaryState> {
-  constructor(props: FirebaseErrorBoundaryProps) {
-    super(props);
-    this.state = { hasError: false, error: null };
+  React.useEffect(() => {
+    const handler = (event: ErrorEvent) => {
+      if (event.error && event.error.message.includes("Firebase configuration error")) {
+        setError(event.error);
+      }
+    };
+    window.addEventListener("error", handler);
+    return () => window.removeEventListener("error", handler);
+  }, []);
+
+  if (error) {
+    return (
+      <div style={{ padding: "2rem", textAlign: "center", color: "#b91c1c", background: "#fff0f0" }}>
+        <h2>⚠️ Firebase Configuration Error</h2>
+        <p>{error.message}</p>
+        <p>Please check your .env or build configuration and try again.</p>
+      </div>
+    );
   }
-
-  static getDerivedStateFromError(error: Error) {
-    return { hasError: true, error };
-  }
-
-  componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-    // You can log errorInfo to an error reporting service here
-    // console.error(error, errorInfo);
-  }
-
-  render() {
-    if (this.state.hasError && this.state.error?.message.includes("Firebase configuration error")) {
-      return (
-        <div style={{ padding: "2rem", textAlign: "center", color: "#b91c1c", background: "#fff0f0" }}>
-          <h2>⚠️ Firebase Configuration Error</h2>
-          <p>{this.state.error.message}</p>
-          <p>Please check your .env or build configuration and try again.</p>
-        </div>
-      );
-    }
-    return this.props.children;
-  }
+  return <>{children}</>;
 }

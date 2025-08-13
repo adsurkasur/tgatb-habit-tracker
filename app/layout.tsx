@@ -1,5 +1,5 @@
 import React from "react";
-import type { Metadata, Viewport } from "next";
+import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { FirebaseErrorBoundary } from "@/components/ui/firebase-error-boundary";
