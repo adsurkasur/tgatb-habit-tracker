@@ -17,7 +17,6 @@ const nextConfig = {
   },
   output: 'export', // Enable static export
   trailingSlash: true, // Required for static export
-  assetPrefix: '.', // Use relative paths for static assets
   basePath: '', // No base path
   env: {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
