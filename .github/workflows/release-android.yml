@@ -40,6 +40,19 @@ jobs:
       - name: Verify google-services.json Checksum
         run: md5sum android/app/google-services.json
 
+      - name: Generate .env from google-services.json
+        run: |
+          jq -r '
+            .project_info as $p
+            | .client[0].api_key[0].current_key as $apiKey
+            | .client[0].client_info.mobilesdk_app_id as $appId
+            | .client[0].client_info.android_client_info.package_name as $packageName
+            | .client[0].client_info.android_client_info as $androidInfo
+            | .client[0].client_info as $clientInfo
+            | .client[0].oauth_client[0].client_id as $messagingSenderId
+            | "NEXT_PUBLIC_FIREBASE_API_KEY=\($apiKey)\nNEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=\($p.firebase_auth_domain)\nNEXT_PUBLIC_FIREBASE_PROJECT_ID=\($p.project_id)\nNEXT_PUBLIC_FIREBASE_STORAGE_BUCKET=\($p.storage_bucket)\nNEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID=\($messagingSenderId)\nNEXT_PUBLIC_FIREBASE_APP_ID=\($appId)"
+          ' android/app/google-services.json > .env
+
       - name: Decode Keystore
         run: base64 --decode <<< "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" > android/app/release.keystore
         
