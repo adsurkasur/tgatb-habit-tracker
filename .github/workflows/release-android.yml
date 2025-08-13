@@ -76,8 +76,8 @@ jobs:
       - name: Make gradlew executable
         run: chmod +x android/gradlew
 
-      - name: Build Android release with Gradle
-        run: ./gradlew assembleRelease
+      - name: Build a DEBUGGABLE Release APK
+        run: ./gradlew assembleRelease -Pandroid:debuggable=true
         working-directory: android
         env:
           ORG_GRADLE_PROJECT_androidKeystorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}

@@ -32,11 +32,12 @@
     "android:open": "npx cap open android",
     "android:run": "npm run android:build && npx cap run android",
     "android:sync": "npx cap sync android",
+    "validate-ver": "node scripts/validate-ver.cjs",
     "sync-ver": "node scripts/sync-ver.cjs",
     "commit:release": "node scripts/commit-release.cjs",
     "release:tag": "node scripts/release.cjs",
     "sync-git": "node scripts/sync-pull-push.cjs",
-    "release:full": "npm run sync-ver && npm run commit:release && npm run release:tag && npm run sync-git"
+    "release:full": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git"  
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
