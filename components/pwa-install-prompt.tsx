@@ -130,12 +130,73 @@ export function PWAInstallPrompt() {
     }
   }, [showInstallPrompt]);
 
-  const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
 
-    deferredPrompt.prompt();
+  // Platform detection
+  const ua = typeof window !== 'undefined' ? navigator.userAgent : '';
+  const isIOS = /iPad|iPhone|iPod/.test(ua);
+  const isAndroid = /Android/.test(ua);
+  const isWindows = /Windows NT/.test(ua);
+  const isLinux = /Linux/.test(ua) && !isAndroid;
+  const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/.test(ua);
+  const isEdge = /Edg/.test(ua);
+  const isOpera = /OPR/.test(ua);
+  const isSafari = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(ua);
+  const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera;
+
+  const handleInstallClick = async () => {
+    // iOS/Safari
+    if (isIOS || (isMac && isSafari)) {
+      toast({
+        title: "Install on iOS/Safari",
+        description: "Tap the Share button and select 'Add to Home Screen' to install.",
+        duration: 5000,
+      });
+      return;
+    }
+    // Android
+    if (isAndroid) {
+      if (!deferredPrompt) {
+        toast({
+          title: "Install not available",
+          description: "Try Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.",
+          duration: 5000,
+        });
+        return;
+      }
+    }
+    // Windows/Linux
+    if (isWindows || isLinux) {
+      if (!deferredPrompt) {
+        toast({
+          title: "Install not available",
+          description: "Try Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.",
+          duration: 5000,
+        });
+        return;
+      }
+    }
+    // Mac/Other
+    if (isMac && !isSafari) {
+      if (!deferredPrompt) {
+        toast({
+          title: "Install not available",
+          description: "Try Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.",
+          duration: 5000,
+        });
+        return;
+      }
+    }
+    // Fallback for unsupported browsers
+    if (!deferredPrompt) {
+      toast({
+        title: "Install not available",
+        description: "The install prompt is not available. Try refreshing or check browser support.",
+        duration: 4000,
+      });
+      return;
+    }
+    await deferredPrompt.prompt();
     const { outcome } = await deferredPrompt.userChoice;
-    
     if (outcome === 'accepted') {
       setDeferredPrompt(null);
       setShowInstallPrompt(false);
@@ -147,9 +208,9 @@ export function PWAInstallPrompt() {
     setShowInstallPrompt(false);
     sessionStorage.setItem('pwa-install-dismissed', 'true');
     toast({
-  title: "App installation available",
-  description: "You can install the app anytime from Settings  Install App",
-  duration: 3000,
+      title: "App installation available",
+      description: "You can install the app anytime from Settings → Install App",
+      duration: 3000,
     });
   };
 
@@ -176,6 +237,26 @@ export function PWAInstallPrompt() {
             <p className="text-xs text-muted-foreground">
               Better experience with offline support and quick access
             </p>
+            {(isIOS || (isMac && isSafari)) && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On iOS/Safari, tap the Share button and select "Add to Home Screen" to install.
+              </p>
+            )}
+            {isAndroid && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On Android, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
+            {(isWindows || isLinux) && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
+            {isMac && !isSafari && (
+              <p className="text-xs text-muted-foreground mt-2">
+                On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
+              </p>
+            )}
           </div>
           <Button
             size="sm"
