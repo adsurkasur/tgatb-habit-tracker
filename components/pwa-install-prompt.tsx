@@ -15,7 +15,45 @@ interface BeforeInstallPromptEvent extends Event {
   prompt(): Promise<void>;
 }
 
-export function PWAInstallPrompt() {
+export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) {
+  // Extra diagnostics for installability
+  if (typeof window !== 'undefined') {
+    // Manifest check
+    fetch('/manifest.json')
+      .then(r => r.json())
+      .then(manifest => console.debug('[PWAInstallPrompt] manifest.json loaded:', manifest))
+      .catch(e => console.debug('[PWAInstallPrompt] manifest.json not found or invalid:', e));
+
+    // Service worker check
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistration()
+        .then(reg => {
+          if (reg) {
+            console.debug('[PWAInstallPrompt] Service worker registered:', reg);
+          } else {
+            console.debug('[PWAInstallPrompt] No service worker registered');
+          }
+        });
+    } else {
+      console.debug('[PWAInstallPrompt] Service worker not supported');
+    }
+
+  // Display mode
+  console.debug('[PWAInstallPrompt] display-mode standalone:', window.matchMedia('(display-mode: standalone)').matches);
+  // iOS standalone
+  console.debug('[PWAInstallPrompt] navigator.standalone:', (window.navigator as Navigator & { standalone?: boolean }).standalone);
+  // BeforeInstallPromptEvent presence
+  console.debug('[PWAInstallPrompt] window.BeforeInstallPromptEvent:', (window as Window & { BeforeInstallPromptEvent?: unknown }).BeforeInstallPromptEvent);
+  // onbeforeinstallprompt presence
+  console.debug('[PWAInstallPrompt] window.onbeforeinstallprompt:', (window as Window & { onbeforeinstallprompt?: unknown }).onbeforeinstallprompt);
+  }
+  // Debug: log platform info and initial state
+  if (typeof window !== 'undefined') {
+    console.debug('[PWAInstallPrompt] UA:', navigator.userAgent);
+    console.debug('[PWAInstallPrompt] Capacitor.isNativePlatform:', Capacitor.isNativePlatform());
+    console.debug('[PWAInstallPrompt] analyticsAcknowledged:', localStorage.getItem('analytics-notice-acknowledged'));
+    console.debug('[PWAInstallPrompt] pwa-install-dismissed:', sessionStorage.getItem('pwa-install-dismissed'));
+  }
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
   
@@ -82,11 +120,14 @@ export function PWAInstallPrompt() {
 
     // Listen for the beforeinstallprompt event
     const handler = (e: BeforeInstallPromptEvent) => {
+      console.debug('[PWAInstallPrompt] beforeinstallprompt event fired:', e);
       e.preventDefault();
       setDeferredPrompt(e);
+      console.debug('[PWAInstallPrompt] deferredPrompt set:', e);
       // Only show if not previously dismissed
       if (!hasDismissed) {
         setShowInstallPrompt(true);
+        console.debug('[PWAInstallPrompt] showInstallPrompt set to true (beforeinstallprompt)');
       }
     };
     window.addEventListener('beforeinstallprompt', handler as unknown as EventListener);
@@ -99,12 +140,7 @@ export function PWAInstallPrompt() {
     };
     window.addEventListener('appinstalled', appInstalledHandler);
 
-    // For testing - show install prompt after 2 seconds if not installed and not dismissed
-    const timer = setTimeout(() => {
-      if (!isStandalone && !isInWebAppiOS && !hasDismissed) {
-        setShowInstallPrompt(true);
-      }
-    }, 2000);
+  // Removed fallback timer for install prompt (only show when browser fires beforeinstallprompt)
 
     // Listen for manual trigger from settings
     const handleManualTrigger = () => {
@@ -119,7 +155,7 @@ export function PWAInstallPrompt() {
       window.removeEventListener('appinstalled', appInstalledHandler);
       window.removeEventListener('trigger-pwa-install', handleManualTrigger);
       window.removeEventListener('storage', handleStorage);
-      clearTimeout(timer);
+  // No timer to clear (removed fallback timer)
     };
   }, []);
 
@@ -138,12 +174,12 @@ export function PWAInstallPrompt() {
   const isWindows = /Windows NT/.test(ua);
   const isLinux = /Linux/.test(ua) && !isAndroid;
   const isMac = /Macintosh|MacIntel|MacPPC|Mac68K/.test(ua);
-  const isEdge = /Edg/.test(ua);
-  const isOpera = /OPR/.test(ua);
+  // Removed unused variables isEdge and isOpera
   const isSafari = typeof window !== 'undefined' && /^((?!chrome|android).)*safari/i.test(ua);
   // const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera; // Removed unused variable
 
   const handleInstallClick = async () => {
+  console.log('[PWAInstallPrompt] Install button clicked. deferredPrompt:', deferredPrompt);
     if (!deferredPrompt) {
       toast({
         title: "App install not available",
@@ -197,6 +233,7 @@ export function PWAInstallPrompt() {
   // Fix: Only check sessionStorage on client
   // Fix: Only render the prompt on the client, never on the server
   if (
+    hidden ||
     typeof window === 'undefined' ||
     isCapacitorApp ||
     isInstalled ||
