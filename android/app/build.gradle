@@ -7,8 +7,8 @@ android {
     applicationId "com.tgatb.habittracker"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 3020406
-    versionName "0.3.2-alpha.406"
+    versionCode 3020407
+    versionName "0.3.2-alpha.407"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         aaptOptions {
             // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
@@ -34,10 +34,8 @@ android {
     }
         buildTypes {
         release {
-            // Enable R8 shrinking & resource shrinking for production
-            minifyEnabled true
-            shrinkResources true
-            // Use optimized default proguard + project rules
+            minifyEnabled false
+            shrinkResources false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
             signingConfig signingConfigs.release
         }
