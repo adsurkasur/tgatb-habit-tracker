@@ -100,3 +100,6 @@ sw.js
 
 # Fallback for Capacitor builds
 fallback-capacitor-build.js 
+
+# Capacitor worker build
+worker-capacitor-build.js 

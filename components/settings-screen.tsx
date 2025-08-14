@@ -489,8 +489,8 @@ export function SettingsScreen({
   const handleInstallPWA = () => {
     if (isAppInstalled) {
       toast({
-        title: "App Already Installed",
-        description: "TGATB is already installed on your device!",
+        title: "Already Installed",
+        description: "You have already installed the app.",
         duration: 3000,
       });
       return;
@@ -797,7 +797,7 @@ export function SettingsScreen({
 
             <div 
               className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
-                isCapacitorApp 
+                isCapacitorApp || isAppInstalled
                   ? 'opacity-50 cursor-not-allowed' 
                   : 'cursor-pointer state-layer-hover'
               }`}
@@ -807,19 +807,22 @@ export function SettingsScreen({
                 <Smartphone className="w-5 h-5 text-muted-foreground" />
                 <div className="flex flex-col">
                   <span className="font-medium">
-                    {isCapacitorApp ? "Native App" : "Install App"}
+                    {isCapacitorApp
+                      ? "Native App"
+                      : isAppInstalled
+                        ? "App Installed"
+                        : "Install App"}
                   </span>
                   <span className="text-xs text-muted-foreground">
-                    {isCapacitorApp 
-                      ? "You're using the native Android app" 
-                      : isAppInstalled 
-                        ? "Already installed" 
-                        : "Add to home screen"
-                    }
+                    {isCapacitorApp
+                      ? "You're using the native Android app"
+                      : isAppInstalled
+                        ? "TGATB is already on your device"
+                        : "Add to home screen"}
                   </span>
                 </div>
               </div>
-              {!isCapacitorApp && (
+              {!isCapacitorApp && !isAppInstalled && (
                 <ChevronRight className="w-5 h-5 text-muted-foreground" />
               )}
             </div>
