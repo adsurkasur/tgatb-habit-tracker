@@ -94,3 +94,9 @@ app-release.dm
 
 # Android release keystore
 release.keystore
+
+# Service Worker
+sw.js
+
+# Fallback for Capacitor builds
+fallback-capacitor-build.js 
