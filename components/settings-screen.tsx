@@ -36,6 +36,7 @@ import { Capacitor } from '@capacitor/core';
 // Import mobile auth and drive helpers
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "./firebase-initializer";
+import { useNetworkStatus } from "@/hooks/use-network-status";
 // Removed unused import: uploadHabitsToDrive
 
 
@@ -63,6 +64,7 @@ export function SettingsScreen({
 }: SettingsScreenProps) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { isOnline } = useNetworkStatus();
   const [, setCanInstallPWA] = useState(false);
   const [isAppInstalled, setIsAppInstalled] = useState(false);
   const [isExporting, setIsExporting] = useState(false);
@@ -249,6 +251,13 @@ export function SettingsScreen({
   };
 
   const handleLoginClick = async () => {
+    if (!isOnline) {
+        return toast({
+            title: "You're offline",
+            description: "You can't login while offline.",
+            variant: "destructive"
+        });
+    }
     try {
       if (!isLoggedIn) {
         // Login flow
@@ -368,6 +377,13 @@ export function SettingsScreen({
   };
 
   const handleBackupClick = async () => {
+    if (!isOnline) {
+        return toast({
+            title: "You're offline",
+            description: "You can't export to the cloud while offline.",
+            variant: "destructive"
+        });
+    }
     // Show 'Exporting to Cloud...' toast
     toast({
       title: "Exporting to Cloud...",
@@ -612,6 +628,13 @@ export function SettingsScreen({
             <div
               className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
               onClick={async () => {
+                if (!isOnline) {
+                    return toast({
+                        title: "You're offline",
+                        description: "You can't import from the cloud while offline.",
+                        variant: "destructive"
+                    });
+                }
                 // Show 'Importing from Cloud...' toast
                 toast({
                   title: "Importing from Cloud...",
