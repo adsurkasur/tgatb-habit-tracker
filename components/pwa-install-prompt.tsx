@@ -17,43 +17,7 @@ interface BeforeInstallPromptEvent extends Event {
 
 export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) {
   // Extra diagnostics for installability
-  if (typeof window !== 'undefined') {
-    // Manifest check
-    fetch('/manifest.json')
-      .then(r => r.json())
-      .then(manifest => console.debug('[PWAInstallPrompt] manifest.json loaded:', manifest))
-      .catch(e => console.debug('[PWAInstallPrompt] manifest.json not found or invalid:', e));
-
-    // Service worker check
-    if ('serviceWorker' in navigator) {
-      navigator.serviceWorker.getRegistration()
-        .then(reg => {
-          if (reg) {
-            console.debug('[PWAInstallPrompt] Service worker registered:', reg);
-          } else {
-            console.debug('[PWAInstallPrompt] No service worker registered');
-          }
-        });
-    } else {
-      console.debug('[PWAInstallPrompt] Service worker not supported');
-    }
-
-  // Display mode
-  console.debug('[PWAInstallPrompt] display-mode standalone:', window.matchMedia('(display-mode: standalone)').matches);
-  // iOS standalone
-  console.debug('[PWAInstallPrompt] navigator.standalone:', (window.navigator as Navigator & { standalone?: boolean }).standalone);
-  // BeforeInstallPromptEvent presence
-  console.debug('[PWAInstallPrompt] window.BeforeInstallPromptEvent:', (window as Window & { BeforeInstallPromptEvent?: unknown }).BeforeInstallPromptEvent);
-  // onbeforeinstallprompt presence
-  console.debug('[PWAInstallPrompt] window.onbeforeinstallprompt:', (window as Window & { onbeforeinstallprompt?: unknown }).onbeforeinstallprompt);
-  }
-  // Debug: log platform info and initial state
-  if (typeof window !== 'undefined') {
-    console.debug('[PWAInstallPrompt] UA:', navigator.userAgent);
-    console.debug('[PWAInstallPrompt] Capacitor.isNativePlatform:', Capacitor.isNativePlatform());
-    console.debug('[PWAInstallPrompt] analyticsAcknowledged:', localStorage.getItem('analytics-notice-acknowledged'));
-    console.debug('[PWAInstallPrompt] pwa-install-dismissed:', sessionStorage.getItem('pwa-install-dismissed'));
-  }
+  // ...existing code...
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
   
@@ -120,14 +84,11 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
 
     // Listen for the beforeinstallprompt event
     const handler = (e: BeforeInstallPromptEvent) => {
-      console.debug('[PWAInstallPrompt] beforeinstallprompt event fired:', e);
       e.preventDefault();
       setDeferredPrompt(e);
-      console.debug('[PWAInstallPrompt] deferredPrompt set:', e);
       // Only show if not previously dismissed
       if (!hasDismissed) {
         setShowInstallPrompt(true);
-        console.debug('[PWAInstallPrompt] showInstallPrompt set to true (beforeinstallprompt)');
       }
     };
     window.addEventListener('beforeinstallprompt', handler as unknown as EventListener);
@@ -179,7 +140,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   // const isChrome = /Chrome/.test(ua) && !isEdge && !isOpera; // Removed unused variable
 
   const handleInstallClick = async () => {
-  console.log('[PWAInstallPrompt] Install button clicked. deferredPrompt:', deferredPrompt);
+  // ...existing code...
     if (!deferredPrompt) {
       toast({
         title: "App install not available",

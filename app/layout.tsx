@@ -3,10 +3,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { FirebaseErrorBoundary } from "@/components/ui/firebase-error-boundary";
-// import { Analytics } from "@vercel/analytics/react";
-// import { OfflineToast } from "@/components/offline-toast";
-// import { ServiceWorkerRegistration } from "@/components/sw-registration";
-// import { AnalyticsNotice } from "@/components/analytics-notice";
+// ...existing code...
 import { CapacitorInit } from "@/components/capacitor-init";
 
 export const metadata: Metadata = {
