@@ -115,14 +115,28 @@ export function SettingsScreen({
     setIsAppInstalled(isStandalone || isInWebAppiOS);
 
     // Listen for install prompt availability
-  const handler = (e: Event) => {
+    const beforeInstallPromptHandler = (e: Event) => {
       e.preventDefault();
       setCanInstallPWA(true);
     };
 
-    window.addEventListener('beforeinstallprompt', handler);
-    return () => window.removeEventListener('beforeinstallprompt', handler);
-  }, [isCapacitorApp]);
+    // Listen for successful installation
+    const appInstalledHandler = () => {
+      setIsAppInstalled(true);
+      toast({
+        title: "Installation Complete",
+        description: "The app has been successfully installed!",
+      });
+    };
+
+    window.addEventListener('beforeinstallprompt', beforeInstallPromptHandler);
+    window.addEventListener('appinstalled', appInstalledHandler);
+
+    return () => {
+      window.removeEventListener('beforeinstallprompt', beforeInstallPromptHandler);
+      window.removeEventListener('appinstalled', appInstalledHandler);
+    };
+  }, [isCapacitorApp, toast]);
 
   // Handle mobile back navigation
   useMobileBackNavigation({

@@ -40,7 +40,7 @@ export function ServiceWorkerRegistration() {
               }
             });
           })
-          .catch(_error => {
+          .catch(() => {
             // ...existing code...
           });
       }
