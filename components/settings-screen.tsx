@@ -35,7 +35,7 @@ import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { Capacitor } from '@capacitor/core';
 // Import mobile auth and drive helpers
 import { signInWithGoogle } from "@/mobile/google-auth";
-import { app } from "../web/firebase"; // Ensure Firebase is initialized for web
+import { app } from "./firebase-initializer";
 // Removed unused import: uploadHabitsToDrive
 
 

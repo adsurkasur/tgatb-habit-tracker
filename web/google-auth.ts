@@ -1,5 +1,5 @@
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import { app } from "./firebase";
+import { app } from "../components/firebase-initializer";
 
 export async function signInWithGoogleWeb(): Promise<string | null> {
 		try {

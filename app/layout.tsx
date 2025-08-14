@@ -2,7 +2,7 @@ import React from "react";
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
-import { FirebaseErrorBoundary } from "@/components/ui/firebase-error-boundary";
+import { FirebaseInitializer } from "@/components/firebase-initializer";
 // ...existing code...
 import { CapacitorInit } from "@/components/capacitor-init";
 
@@ -60,11 +60,11 @@ export default function RootLayout({
       <body>
   <CapacitorInit />
         {/* <ServiceWorkerRegistration /> */}
-        <FirebaseErrorBoundary>
+        <FirebaseInitializer>
           <Providers>
             {children}
           </Providers>
-        </FirebaseErrorBoundary>
+        </FirebaseInitializer>
         {/* <OfflineToast /> */}
         {/* <AnalyticsNotice /> */}
         {/* {process.env.NODE_ENV === 'production' && <Analytics />} */}
