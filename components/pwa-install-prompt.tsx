@@ -298,14 +298,14 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               Install
             </Button>
           )}
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={handleDismiss}
-            className="h-8 px-2 text-xs"
-          >
-            Not now
-          </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={handleDismiss}
+              className="h-8 px-2 text-xs"
+            >
+              {fallbackInstall ? "OK" : "Not now"}
+            </Button>
         </div>
       </div>
     </div>
