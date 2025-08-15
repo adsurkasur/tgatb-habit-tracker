@@ -20,7 +20,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   // ...existing code...
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
-  
+
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
     typeof window !== 'undefined' && localStorage.getItem('analytics-notice-acknowledged') === 'true'
@@ -28,6 +28,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
   const [isInstalled, setIsInstalled] = useState(false);
+  const [fallbackInstall, setFallbackInstall] = useState(false); // NEW: fallback for browsers without beforeinstallprompt
   const { toast } = useToast();
 
   // Note: do not early-return before hooks (rules-of-hooks)
@@ -83,7 +84,9 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     const hasDismissed = sessionStorage.getItem('pwa-install-dismissed') === 'true';
 
     // Listen for the beforeinstallprompt event
+    let beforeInstallPromptFired = false;
     const handler = (e: BeforeInstallPromptEvent) => {
+      beforeInstallPromptFired = true;
       e.preventDefault();
       setDeferredPrompt(e);
       // Only show if not previously dismissed
@@ -101,8 +104,6 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     };
     window.addEventListener('appinstalled', appInstalledHandler);
 
-  // Removed fallback timer for install prompt (only show when browser fires beforeinstallprompt)
-
     // Listen for manual trigger from settings
     const handleManualTrigger = () => {
       sessionStorage.removeItem('pwa-install-dismissed');
@@ -111,12 +112,19 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     };
     window.addEventListener('trigger-pwa-install', handleManualTrigger);
 
+    // Fallback: If beforeinstallprompt is not fired after a short delay, show fallback UI
+    setTimeout(() => {
+      if (!beforeInstallPromptFired && !isInstalled && !isCapacitorApp && !hasDismissed) {
+        setFallbackInstall(true);
+        setShowInstallPrompt(true);
+      }
+    }, 2000); // 2s delay to allow event to fire
+
     return () => {
       window.removeEventListener('beforeinstallprompt', handler as unknown as EventListener);
       window.removeEventListener('appinstalled', appInstalledHandler);
       window.removeEventListener('trigger-pwa-install', handleManualTrigger);
       window.removeEventListener('storage', handleStorage);
-  // No timer to clear (removed fallback timer)
     };
   }, []);
 
@@ -213,25 +221,60 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
             <p className="text-xs text-muted-foreground">
               Better experience with offline support and quick access
             </p>
-            {(isIOS || (isMac && isSafari)) && (
-              <p className="text-xs text-muted-foreground mt-2">
-                On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
-              </p>
+            {/* Fallback instructions for browsers without beforeinstallprompt */}
+            {fallbackInstall && (
+              <>
+                {isIOS || (isMac && isSafari) ? (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                  </p>
+                ) : isAndroid ? (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On Android, use Chrome, Edge, or Samsung Internet. If you see a <b>+</b> icon in your browser&apos;s address bar, tap it to install.<br />
+                    If you don&apos;t see the icon, open browser menu and look for &quot;Add to Home screen&quot; or &quot;Install app&quot;.
+                  </p>
+                ) : (isWindows || isLinux) ? (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On Windows/Linux, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
+                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to desktop&quot;.
+                  </p>
+                ) : isMac ? (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On macOS, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
+                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to dock&quot;.
+                  </p>
+                ) : (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    If you see an install icon in your browser&apos;s address bar, use it.<br />
+                    Otherwise, open browser menu and look for &quot;Install app&quot; or &quot;Add to Home screen&quot;.
+                  </p>
+                )}
+              </>
             )}
-            {isAndroid && (
-              <p className="text-xs text-muted-foreground mt-2">
-                On Android, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
-              </p>
-            )}
-            {(isWindows || isLinux) && (
-              <p className="text-xs text-muted-foreground mt-2">
-                On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
-              </p>
-            )}
-            {isMac && !isSafari && (
-              <p className="text-xs text-muted-foreground mt-2">
-                On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
-              </p>
+            {/* Default instructions for browsers with beforeinstallprompt */}
+            {!fallbackInstall && (
+              <>
+                {(isIOS || (isMac && isSafari)) && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                  </p>
+                )}
+                {isAndroid && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On Android, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                  </p>
+                )}
+                {(isWindows || isLinux) && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                  </p>
+                )}
+                {isMac && !isSafari && (
+                  <p className="text-xs text-muted-foreground mt-2">
+                    On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                  </p>
+                )}
+              </>
             )}
           </div>
           <Button
@@ -244,14 +287,17 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
           </Button>
         </div>
         <div className="flex gap-1.5">
-          <Button
-            size="sm"
-            onClick={handleInstallClick}
-            className="flex items-center gap-1 h-8 px-2 text-xs"
-          >
-            <Download className="h-3 w-3" />
-            Install
-          </Button>
+          {/* Only show install button if beforeinstallprompt is available */}
+          {!fallbackInstall && (
+            <Button
+              size="sm"
+              onClick={handleInstallClick}
+              className="flex items-center gap-1 h-8 px-2 text-xs"
+            >
+              <Download className="h-3 w-3" />
+              Install
+            </Button>
+          )}
           <Button
             size="sm"
             variant="outline"

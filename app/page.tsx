@@ -54,6 +54,15 @@ export default function Home() {
   const { setIsDark } = useTheme();
   // ...existing code...
   const [showAddHabit, setShowAddHabit] = useState(false);
+    // Open Add Habit dialog if ?action=add-habit is present in the URL (for PWA shortcut)
+    useEffect(() => {
+      if (typeof window !== "undefined") {
+        const params = new URLSearchParams(window.location.search);
+        if (params.get("action") === "add-habit") {
+          setShowAddHabit(true);
+        }
+      }
+    }, []);
   const [showEditHabit, setShowEditHabit] = useState(false);
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   const [showSettings, setShowSettings] = useState(false);
