@@ -24,6 +24,22 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
     setStatus(completed);
   }, [completed, habit, date]);
 
+  // Helper to get status labels based on habit type
+  const getStatusLabels = (type: "good" | "bad") =>
+    type === "good"
+      ? { "true": "Completed", "false": "Missed" }
+      : { "true": "Avoided", "false": "Done" };
+
+  // Helper to get button color classes based on habit type and status, only when selected
+  const getButtonClass = (type: "good" | "bad", value: boolean, selected: boolean) => {
+    if (!selected) return "";
+    if (type === "good" && value === true) return "bg-green-500 text-white hover:bg-green-600";
+    if (type === "good" && value === false) return "bg-red-500 text-white hover:bg-red-600";
+    if (type === "bad" && value === true) return "bg-blue-500 text-white hover:bg-blue-600";
+    if (type === "bad" && value === false) return "bg-red-500 text-white hover:bg-red-600";
+    return "";
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (status !== null) {
@@ -38,6 +54,8 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
   };
 
   if (!habit) return null;
+
+  const labels = getStatusLabels(habit.type);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -72,17 +90,17 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
                   type="button"
                   variant={status === true ? "default" : "outline"}
                   onClick={() => setStatus(true)}
-                  className="flex-1"
+                  className={`flex-1 ${getButtonClass(habit.type, true, status === true)}`}
                 >
-                  Completed
+                  {labels["true"]}
                 </Button>
                 <Button
                   type="button"
                   variant={status === false ? "destructive" : "outline"}
                   onClick={() => setStatus(false)}
-                  className="flex-1"
+                  className={`flex-1 ${getButtonClass(habit.type, false, status === false)}`}
                 >
-                  Missed
+                  {labels["false"]}
                 </Button>
               </div>
             </div>
