@@ -58,6 +58,7 @@ export function useHabits() {
   const addHabit = ({ name, type }: { name: string; type: HabitType }) => {
     const newHabit = HabitStorage.addHabit(name, type);
     setHabits(prev => [...prev, newHabit]);
+    return newHabit;
   };
 
   const updateHabit = ({ id, name, type }: { id: string; name: string; type: HabitType }) => {
@@ -265,6 +266,16 @@ export function useHabits() {
     }
   };
 
+  /**
+   * Add or update a log for any habit and date (for missed entries)
+   */
+  const addOrUpdateLog = (habitId: string, date: string, completed: boolean) => {
+    HabitStorage.addOrUpdateLog(habitId, date, completed);
+    // Refresh habits to get updated streaks
+    const updatedHabits = HabitStorage.getHabits();
+    setHabits(updatedHabits);
+  };
+
   return {
     habits,
     goodHabits: habits.filter(h => h.type === 'good'),
@@ -281,11 +292,12 @@ export function useHabits() {
     undoHabitTracking,
     getHabitCompletionStatus,
     moveToNextHabit,
-  clearAllHabits,
+    clearAllHabits,
     moveToPreviousHabit,
     navigateToHabitIndex,
     updateSettings,
     exportData,
     importData,
+    addOrUpdateLog,
   };
 }

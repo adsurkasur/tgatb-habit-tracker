@@ -115,6 +115,26 @@ export class HabitStorage {
     
     return newLog;
   }
+    /**
+     * Add or update a log for any habit and date. Overwrites existing log for habit/date.
+     */
+    static addOrUpdateLog(habitId: string, date: string, completed: boolean): HabitLog {
+      const logs = this.getLogs();
+      // Remove any existing log for this habit/date
+      const filteredLogs = logs.filter(log => !(log.habitId === habitId && log.date === date));
+      const newLog: HabitLog = {
+        id: generateId(),
+        habitId,
+        date,
+        completed,
+        timestamp: new Date(),
+      };
+      filteredLogs.push(newLog);
+      this.saveLogs(filteredLogs);
+      // Update streak for this habit
+      this.updateStreak(habitId);
+      return newLog;
+    }
 
   private static updateStreak(habitId: string): void {
     const habits = this.getHabits();

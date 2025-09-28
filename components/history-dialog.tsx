@@ -1,5 +1,8 @@
 import React, { useState, useMemo } from 'react';
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
+import { EditEntryDialog } from './edit-entry-dialog';
+import { AddEntryDialog } from './add-entry-dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -25,11 +28,13 @@ import { buildDailyLogs, computeStatSummary, DayLog } from '@/lib/history';
 import { format, isToday } from 'date-fns';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
+import { useHabits } from '@/hooks/use-habits';
 
 interface HistoryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   habits: Habit[];
+  addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
 }
 
 // DayLog moved to lib/history.ts
@@ -42,7 +47,7 @@ interface StatCard {
   color: string;
 }
 
-export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps) {
+export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
   const isMobile = useIsMobile();
@@ -92,7 +97,7 @@ export function HistoryDialog({ open, onOpenChange, habits }: HistoryDialogProps
             </TabsContent>
 
             <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} dailyLogs={dailyLogs} selectedDayLog={selectedDayLog} />
+              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} dailyLogs={dailyLogs} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} habits={habits} addHabit={useHabits().addHabit} />
             </TabsContent>
 
             <TabsContent value="timeline" className="flex-1 overflow-hidden mt-0">
@@ -273,12 +278,60 @@ function CalendarTabContent({
   setSelectedDate,
   dailyLogs,
   selectedDayLog,
+  addOrUpdateLog,
+  habits,
+  addHabit,
 }: {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
   dailyLogs: DayLog[];
   selectedDayLog: DayLog | null | undefined;
+  addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
+  habits: Habit[];
+  addHabit: (habit: { name: string; type: "good" | "bad" }) => Habit;
 }) {
+  // Edit Entry dialog state
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editHabit, setEditHabit] = useState<Habit | null>(null);
+  const [editCompleted, setEditCompleted] = useState<boolean | null>(null);
+
+  // Add Entry dialog state
+  const [addEntryDialogOpen, setAddEntryDialogOpen] = useState(false);
+
+  // Get formatted date string
+  const formattedDate = selectedDate ? formatLocalDate(selectedDate) : "";
+
+
+  // Accept the DayLog habit type for editing
+  type DayLogHabit = {
+    id: string;
+    name: string;
+    type: Habit["type"];
+    completed: boolean;
+  };
+
+  const handleEditClick = (habit: DayLogHabit, completed: boolean) => {
+    // Convert to Habit type with minimal fields for dialog
+    setEditHabit({
+      id: habit.id,
+      name: habit.name,
+      type: habit.type,
+      streak: 0,
+      createdAt: new Date(),
+    } as Habit);
+    setEditCompleted(completed);
+    setEditDialogOpen(true);
+  };
+
+  const handleSaveEdit = (completed: boolean) => {
+    if (editHabit && formattedDate) {
+      addOrUpdateLog(editHabit.id, formattedDate, completed);
+    }
+    setEditDialogOpen(false);
+    setEditHabit(null);
+    setEditCompleted(null);
+  };
+
   return (
     <div className="h-full overflow-y-auto">
       <div className="flex flex-col items-center gap-4 sm:gap-6">
@@ -321,15 +374,61 @@ function CalendarTabContent({
                         )}
                         <span className={`text-xs sm:text-sm truncate ${habit.completed ? 'font-medium' : 'text-muted-foreground'}`}>{habit.name}</span>
                       </div>
-                      {habit.completed && (
-                        <Badge variant="outline" className="text-green-600 border-green-600 text-xs flex-shrink-0">✓</Badge>
-                      )}
+                      <div className="flex items-center gap-2">
+                        {habit.completed && (
+                          <Badge variant="outline" className="text-green-600 border-green-600 text-xs flex-shrink-0">✓</Badge>
+                        )}
+                        <Button
+                          type="button"
+                          size="sm"
+                          variant="outline"
+                          onClick={() => handleEditClick(habit, habit.completed)}
+                          className="ml-2"
+                        >
+                          Edit Entry
+                        </Button>
+                      </div>
                     </div>
                   ))}
                 </div>
               </ScrollArea>
             ) : (
-              <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm">No data available for this date</div>
+              <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm">
+                No data available for this date
+                <Button
+                  type="button"
+                  size="sm"
+                  variant="default"
+                  className="mt-4"
+                  onClick={() => setAddEntryDialogOpen(true)}
+                >
+                  Add Entry
+                </Button>
+                {/* AddEntryDialog modal will go here */}
+                {addEntryDialogOpen && (
+                  <AddEntryDialog
+                    open={addEntryDialogOpen}
+                    onOpenChange={setAddEntryDialogOpen}
+                    habits={habits}
+                    date={formattedDate}
+                    addOrUpdateLog={addOrUpdateLog}
+                    addHabit={addHabit}
+                  />
+                )}
+              </div>
+            )}
+            {/* Edit Entry Dialog */}
+            {editHabit && (
+              <React.Suspense fallback={null}>
+                <EditEntryDialog
+                  open={editDialogOpen}
+                  onOpenChange={setEditDialogOpen}
+                  habit={editHabit}
+                  date={formattedDate}
+                  completed={editCompleted}
+                  onSave={handleSaveEdit}
+                />
+              </React.Suspense>
             )}
           </div>
         )}

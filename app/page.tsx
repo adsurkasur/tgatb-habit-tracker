@@ -49,10 +49,11 @@ export default function Home() {
     moveToPreviousHabit,
     navigateToHabitIndex,
     updateSettings,
+    addOrUpdateLog,
   } = useHabits();
+
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
-  // ...existing code...
   const [showAddHabit, setShowAddHabit] = useState(false);
     // Open Add Habit dialog if ?action=add-habit is present in the URL (for PWA shortcut)
     useEffect(() => {
@@ -441,11 +442,12 @@ export default function Home() {
           onOpenChange={setShowDonate}
         />
 
-               <HistoryDialog 
-                 open={showHistory}
-                 onOpenChange={setShowHistory}
-                 habits={allHabits}
-               />
+        <HistoryDialog 
+          open={showHistory}
+          onOpenChange={setShowHistory}
+          habits={allHabits}
+          addOrUpdateLog={addOrUpdateLog}
+        />
 
         <AboutDialog 
           open={showAbout}
