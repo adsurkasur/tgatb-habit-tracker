@@ -379,52 +379,57 @@ function CalendarTabContent({
             </h3>
 
             {/* Habit list or no data message */}
-            {selectedDayLog && selectedDayLog.habits.length > 0 ? (
-              <ScrollArea className="max-h-64 sm:max-h-72">
-                <div className="space-y-2">
-                  {selectedDayLog.habits.map(habit => (
-                    <div
-                      key={habit.id}
-                      className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${habit.completed ? 'bg-green-50 dark:bg-green-900/20' : 'bg-muted'}`}
-                    >
-                      <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                        {habit.type === 'good' ? (
-                          <CheckCircle className={`w-4 h-4 ${habit.completed ? 'text-green-500' : 'text-muted-foreground'} flex-shrink-0`} />
-                        ) : (
-                          <XCircle className={`w-4 h-4 ${habit.completed ? 'text-red-500' : 'text-muted-foreground'} flex-shrink-0`} />
-                        )}
-                        <span className={`text-xs sm:text-sm truncate ${habit.completed ? 'font-medium' : 'text-muted-foreground'}`}>{habit.name}</span>
+              {selectedDayLog && selectedDayLog.habits.length > 0 ? (
+                <ScrollArea className="max-h-64 sm:max-h-72">
+                  <div className="space-y-2">
+                    {selectedDayLog.habits.map(habit => (
+                      <div
+                        key={habit.id}
+                        className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${habit.completed ? 'bg-green-50 dark:bg-green-900/20' : 'bg-muted'}`}
+                      >
+                        <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
+                          {habit.type === 'good' ? (
+                            <CheckCircle className={`w-4 h-4 ${habit.completed ? 'text-green-500' : 'text-muted-foreground'} flex-shrink-0`} />
+                          ) : (
+                            <XCircle className={`w-4 h-4 ${habit.completed ? 'text-red-500' : 'text-muted-foreground'} flex-shrink-0`} />
+                          )}
+                          <span className={`text-xs sm:text-sm truncate ${habit.completed ? 'font-medium' : 'text-muted-foreground'}`}>{habit.name}</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          {habit.completed && (
+                            <Badge variant="outline" className="text-green-600 border-green-600 text-xs flex-shrink-0">✓</Badge>
+                          )}
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="outline"
+                            onClick={() => handleEditClick(habit, habit.completed)}
+                            className="ml-2"
+                          >
+                            Edit Entry
+                          </Button>
+                        </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        {habit.completed && (
-                          <Badge variant="outline" className="text-green-600 border-green-600 text-xs flex-shrink-0">✓</Badge>
-                        )}
-                        <Button
-                          type="button"
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleEditClick(habit, habit.completed)}
-                          className="ml-2"
-                        >
-                          Edit Entry
-                        </Button>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </ScrollArea>
-            ) : (
-              selectedDate && isPastOrToday(selectedDate) && (
-                <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
-                  <span>No data available for this date</span>
-                </div>
-              )
-            )}
-            {/* Modular AddEntryButton always rendered below */}
-            <AddEntryButton
-              show={!!selectedDate && isPastOrToday(selectedDate)}
-              onClick={() => setAddEntryDialogOpen(true)}
-            />
+                    ))}
+                  </div>
+                </ScrollArea>
+              ) : (
+                selectedDate && (
+                  <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
+                    <span>No data available for this date</span>
+                  </div>
+                )
+              )}
+              {/* Only show AddEntryButton for today/past dates with no logs */}
+              <AddEntryButton
+                show={
+                  !!selectedDate && (
+                    isToday(selectedDate) ||
+                    (isPastOrToday(selectedDate) && !isToday(selectedDate) && (!selectedDayLog || selectedDayLog.habits.length === 0))
+                  )
+                }
+                onClick={() => setAddEntryDialogOpen(true)}
+              />
             {/* AddEntryDialog modal */}
             {addEntryDialogOpen && (
               <AddEntryDialog
