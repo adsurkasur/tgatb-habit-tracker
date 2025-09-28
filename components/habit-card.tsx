@@ -162,7 +162,7 @@ function useSlideAnimation(
 function StatusBadge({ visible, isPositiveAction, type }: { visible: boolean; isPositiveAction: boolean; type: Habit['type'] }) {
   if (!visible) return null;
   const tone = isPositiveAction ? (type === 'good' ? 'bg-green-500 border-green-600' : 'bg-blue-500 border-blue-600') : 'bg-red-500 border-red-600';
-  const label = isPositiveAction ? (type === 'good' ? 'Completed' : 'Avoided') : (type === 'good' ? 'Not Completed' : 'Done');
+  const label = isPositiveAction ? (type === 'good' ? 'Completed' : 'Avoided') : (type === 'good' ? 'Missed' : 'Done');
   return (
     <div className="absolute top-4 left-4">
       <Badge className={`text-white border-opacity-60 ${tone}`}>

@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.4.2 - 2025-09-28
+
+**Overview:**  
+This micro patch improves user experience clarity by refining status messaging in habit cards.
+
+### Improvements (0.3.4.2)
+
+- **Habit Card Status Text:**
+  - Changed "Not Completed" to "Missed" for better clarity and conciseness
+  - Improved user understanding of habit completion status
+
 ## 0.3.4.1 - 2025-09-28
 
 **Overview:**  
