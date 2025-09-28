@@ -2,6 +2,42 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.4.1 - 2025-09-28
+
+**Overview:**  
+This patch release enhances the user interface with improved responsive design and smooth animations. It introduces differentiated settings screens for desktop and mobile, along with polished modal transitions throughout the app.
+
+### Features (0.3.4.1)
+
+- **Responsive Settings Screen:**
+  - Desktop users now see a modal dialog for settings instead of full-screen overlay
+  - Mobile users continue to experience the familiar full-screen slide-in navigation
+  - Automatic switching based on screen size and device type
+
+- **Enhanced Modal Animations:**
+  - Added smooth slide-in/slide-out animations to all modal dialogs
+  - Consistent 200ms transition timing with fade and zoom effects
+  - Improved visual polish and professional feel across the application
+
+### Refactoring (0.3.4.1)
+
+- **Settings Component Architecture:**
+  - Created `ResponsiveSettings` wrapper component for adaptive UI
+  - Introduced `SettingsDialog` component for desktop modal experience
+  - Maintained `SettingsScreen` for mobile full-screen navigation
+
+- **Modal Animation System:**
+  - Enhanced `MobileDialogContent` with slide transition animations
+  - Unified animation behavior across all modal components
+  - Improved animation consistency and performance
+
+### Internal & Build (0.3.4.1)
+
+- **Component Structure:**
+  - Better separation of mobile and desktop UI patterns
+  - Improved component reusability and maintainability
+  - Enhanced responsive design architecture
+
 ## 0.3.4 - 2025-09-28
 
 **Overview:**  
