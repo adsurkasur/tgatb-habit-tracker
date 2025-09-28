@@ -11,7 +11,7 @@ import { DonationDialog } from "@/components/donation-dialog";
 import { HistoryDialog } from "@/components/history-dialog";
 import { AboutDialog } from "@/components/about-dialog";
 import { AddHabitCTA } from "@/components/add-habit-cta";
-import { SettingsScreen } from "@/components/settings-screen";
+import { ResponsiveSettings } from "@/components/responsive-settings";
 import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
@@ -453,7 +453,7 @@ export default function Home() {
           onOpenChange={setShowAbout}
         />
 
-        <SettingsScreen
+        <ResponsiveSettings
           open={showSettings}
           onClose={() => setShowSettings(false)}
           settings={settings}
