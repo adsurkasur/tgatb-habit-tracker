@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.4.3 - 2025-09-28
+
+**Overview:**  
+This patch release fixes Android cloud export/import functionality by implementing proper network status detection for mobile devices.
+
+### Fixes (0.3.4.3)
+
+- **Android Cloud Functionality:**
+  - Added Capacitor Network plugin for accurate network connectivity detection on Android
+  - Fixed cloud export/import operations that were blocked due to incorrect offline detection
+  - Improved network status handling across all platforms with proper fallbacks
+
+### Internal & Build (0.3.4.3)
+
+- **Network Detection:**
+  - Implemented Capacitor Network plugin for native platforms
+  - Maintained browser-based detection for web platforms
+  - Added proper error handling and fallback mechanisms
+
 ## 0.3.4.2 - 2025-09-28
 
 **Overview:**  
