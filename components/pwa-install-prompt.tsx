@@ -126,7 +126,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
       window.removeEventListener('trigger-pwa-install', handleManualTrigger);
       window.removeEventListener('storage', handleStorage);
     };
-  }, []);
+  }, [isCapacitorApp, isInstalled]);
 
   // Ensure prompt hides if dismissed in this session
   useEffect(() => {

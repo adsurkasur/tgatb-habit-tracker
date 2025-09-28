@@ -1,7 +1,6 @@
 import { Dialog, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState, useEffect } from "react";
 import { Habit } from "@shared/schema";

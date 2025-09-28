@@ -387,7 +387,7 @@ function CalendarTabContent({
                       // Determine status and colors
                       let bgClass = "bg-muted";
                       let icon = null;
-                      let iconClass = "w-4 h-4 flex-shrink-0";
+                      const iconClass = "w-4 h-4 flex-shrink-0";
                       let nameClass = "text-xs sm:text-sm truncate text-muted-foreground";
                       if (habit.completed === null || habit.completed === undefined) {
                         // Unknown state
