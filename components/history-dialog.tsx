@@ -1,3 +1,19 @@
+// Modular AddEntryButton component
+function AddEntryButton({ show, onClick }: { show: boolean; onClick: () => void }) {
+  if (!show) return null;
+  return (
+    <div className="w-full flex justify-center mt-4">
+      <Button
+        type="button"
+        size="sm"
+        variant="default"
+        onClick={onClick}
+      >
+        + Add Entry
+      </Button>
+    </div>
+  );
+}
 import React, { useState, useMemo } from 'react';
 // Helper to check if a date is today or in the past (date-only, local)
 function isPastOrToday(date: Date) {
@@ -14,11 +30,11 @@ import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import { 
-  Calendar as CalendarIcon, 
-  TrendingUp, 
-  Target, 
-  Flame, 
+import {
+  Calendar as CalendarIcon,
+  TrendingUp,
+  Target,
+  Flame,
   CheckCircle,
   XCircle,
   BarChart3,
@@ -362,8 +378,9 @@ function CalendarTabContent({
               {isToday(selectedDate) && <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>}
             </h3>
 
+            {/* Habit list or no data message */}
             {selectedDayLog && selectedDayLog.habits.length > 0 ? (
-              <ScrollArea className="h-48 sm:h-64">
+              <ScrollArea className="max-h-64 sm:max-h-72">
                 <div className="space-y-2">
                   {selectedDayLog.habits.map(habit => (
                     <div
@@ -400,29 +417,24 @@ function CalendarTabContent({
               selectedDate && isPastOrToday(selectedDate) && (
                 <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
                   <span>No data available for this date</span>
-                  <div className="w-full flex justify-center mt-4">
-                    <Button
-                      type="button"
-                      size="sm"
-                      variant="default"
-                      onClick={() => setAddEntryDialogOpen(true)}
-                    >
-                      + Add Entry
-                    </Button>
-                  </div>
-                  {/* AddEntryDialog modal will go here */}
-                  {addEntryDialogOpen && (
-                    <AddEntryDialog
-                      open={addEntryDialogOpen}
-                      onOpenChange={setAddEntryDialogOpen}
-                      habits={habits}
-                      date={formattedDate}
-                      addOrUpdateLog={addOrUpdateLog}
-                      addHabit={addHabit}
-                    />
-                  )}
                 </div>
               )
+            )}
+            {/* Modular AddEntryButton always rendered below */}
+            <AddEntryButton
+              show={!!selectedDate && isPastOrToday(selectedDate)}
+              onClick={() => setAddEntryDialogOpen(true)}
+            />
+            {/* AddEntryDialog modal */}
+            {addEntryDialogOpen && (
+              <AddEntryDialog
+                open={addEntryDialogOpen}
+                onOpenChange={setAddEntryDialogOpen}
+                habits={habits}
+                date={formattedDate}
+                addOrUpdateLog={addOrUpdateLog}
+                addHabit={addHabit}
+              />
             )}
             {/* Edit Entry Dialog */}
             {editHabit && (
