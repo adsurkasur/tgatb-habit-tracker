@@ -2,6 +2,56 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.4 - 2025-09-28
+
+**Overview:**  
+This release focuses on code quality improvements, enhanced development experience, and new habit tracking features. It includes significant refactoring for better maintainability and adds cloud backup/import functionality.
+
+### Features (0.3.4)
+
+- **Cloud Backup & Import:**
+  - Added account data settings component with cloud backup functionality
+  - Implemented import/export capabilities for user data
+  - Enhanced data portability and backup options
+
+- **Habit Logging Enhancements:**
+  - Added ability to edit and add habit logs for any date
+  - Improved calendar interaction for habit tracking
+  - Better date validation and handling
+
+### Fixes (0.3.4)
+
+- **PWA Development Experience:**
+  - Disabled PWA in development mode to eliminate `InjectManifest` warnings during development
+  - Added clear instructions for enabling PWA testing when needed
+  - Improved service worker registration error handling
+
+### Refactoring (0.3.4)
+
+- **Calendar Component:**
+  - Refactored `CalendarTabContent` for improved readability and maintainability
+  - Enhanced habit status display with better conditional rendering
+  - Improved no data message handling and layout
+  - Modularized `AddEntryButton` component
+
+- **Service Worker Registration:**
+  - Cleaned up service worker registration component
+  - Removed unnecessary code and improved error handling
+
+- **Code Structure:**
+  - General code structure improvements for better readability
+  - Enhanced maintainability across multiple components
+
+### Internal & Build (0.3.4)
+
+- **Build Configuration:**
+  - Updated `.gitignore` for Next.js + Capacitor + PWA project
+  - Improved build file exclusions and repository cleanliness
+
+- **Development:**
+  - Enhanced development workflow with cleaner console output
+  - Better error handling and debugging capabilities
+
 ## 0.3.3 - 2025-08-15
 
 **Overview:**  

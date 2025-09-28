@@ -35,11 +35,12 @@ const pwaConfig = withPWA({
   dest: 'public',
   register: true,
   skipWaiting: true,
-  disable: false, // Enable PWA support
+  disable: process.env.NODE_ENV === 'development', // Disable PWA in dev to avoid InjectManifest warnings
+  // NOTE: To test PWA features in development, temporarily change to: disable: false
+  // Then run: npm run dev
   // Use InjectManifest with custom worker for additional functionality
   swSrc: 'worker/index.js', // This tells next-pwa to use our custom worker
   // Workbox will handle all the heavy lifting + our custom code
-  
   // Configure manifest generation to exclude problematic files
   buildExcludes: [
     /app-build-manifest\.json$/,

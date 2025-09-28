@@ -20,32 +20,25 @@ export function ServiceWorkerRegistration() {
     if ('serviceWorker' in navigator) {
       // Try Workbox registration first
       if (window.workbox) {
-  // ...existing code...
         registerServiceWorkerWorkbox(window.workbox);
       } else {
         // Fallback: register /sw.js directly
-  // ...existing code...
         navigator.serviceWorker.register('/sw.js')
           .then(reg => {
-            // ...existing code...
             reg.addEventListener('updatefound', () => {
-              // ...existing code...
               const newWorker = reg.installing;
               if (newWorker) {
                 newWorker.addEventListener('statechange', () => {
                   if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                    // ...existing code...
                   }
                 });
               }
             });
           })
           .catch(() => {
-            // ...existing code...
           });
       }
     } else {
-  // ...existing code...
     }
   }, []);
 
