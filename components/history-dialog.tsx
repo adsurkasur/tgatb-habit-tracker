@@ -347,7 +347,6 @@ function CalendarTabContent({
                 return dailyLogs.some(log => formatLocalDate(log.date) === dateStr && log.habits.some(h => h.completed === true));
               },
             }}
-            modifiersStyles={{ completed: { backgroundColor: 'hsl(var(--primary))', color: 'white' } }}
           />
         </div>
 
