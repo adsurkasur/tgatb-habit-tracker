@@ -1,4 +1,9 @@
 import React, { useState, useMemo } from 'react';
+// Helper to check if a date is today or in the past (date-only, local)
+function isPastOrToday(date: Date) {
+  const today = new Date();
+  return formatLocalDate(date) <= formatLocalDate(today);
+}
 import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { EditEntryDialog } from './edit-entry-dialog';
@@ -357,7 +362,7 @@ function CalendarTabContent({
               {isToday(selectedDate) && <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>}
             </h3>
 
-            {selectedDayLog ? (
+            {selectedDayLog && selectedDayLog.habits.length > 0 ? (
               <ScrollArea className="h-48 sm:h-64">
                 <div className="space-y-2">
                   {selectedDayLog.habits.map(habit => (
@@ -392,30 +397,32 @@ function CalendarTabContent({
                 </div>
               </ScrollArea>
             ) : (
-              <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm flex flex-col items-center">
-                <span>No data available for this date</span>
-                <div className="w-full flex justify-center mt-4">
-                  <Button
-                    type="button"
-                    size="sm"
-                    variant="default"
-                    onClick={() => setAddEntryDialogOpen(true)}
-                  >
-                    + Add Entry
-                  </Button>
+              selectedDate && isPastOrToday(selectedDate) && (
+                <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
+                  <span>No data available for this date</span>
+                  <div className="w-full flex justify-center mt-4">
+                    <Button
+                      type="button"
+                      size="sm"
+                      variant="default"
+                      onClick={() => setAddEntryDialogOpen(true)}
+                    >
+                      + Add Entry
+                    </Button>
+                  </div>
+                  {/* AddEntryDialog modal will go here */}
+                  {addEntryDialogOpen && (
+                    <AddEntryDialog
+                      open={addEntryDialogOpen}
+                      onOpenChange={setAddEntryDialogOpen}
+                      habits={habits}
+                      date={formattedDate}
+                      addOrUpdateLog={addOrUpdateLog}
+                      addHabit={addHabit}
+                    />
+                  )}
                 </div>
-                {/* AddEntryDialog modal will go here */}
-                {addEntryDialogOpen && (
-                  <AddEntryDialog
-                    open={addEntryDialogOpen}
-                    onOpenChange={setAddEntryDialogOpen}
-                    habits={habits}
-                    date={formattedDate}
-                    addOrUpdateLog={addOrUpdateLog}
-                    addHabit={addHabit}
-                  />
-                )}
-              </div>
+              )
             )}
             {/* Edit Entry Dialog */}
             {editHabit && (
