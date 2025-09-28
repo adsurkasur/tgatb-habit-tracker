@@ -393,17 +393,18 @@ function CalendarTabContent({
                 </div>
               </ScrollArea>
             ) : (
-              <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm">
-                No data available for this date
-                <Button
-                  type="button"
-                  size="sm"
-                  variant="default"
-                  className="mt-4"
-                  onClick={() => setAddEntryDialogOpen(true)}
-                >
-                  Add Entry
-                </Button>
+              <div className="text-center text-muted-foreground py-6 sm:py-8 text-sm flex flex-col items-center">
+                <span>No data available for this date</span>
+                <div className="w-full flex justify-center mt-4">
+                  <Button
+                    type="button"
+                    size="sm"
+                    variant="default"
+                    onClick={() => setAddEntryDialogOpen(true)}
+                  >
+                    + Add Entry
+                  </Button>
+                </div>
                 {/* AddEntryDialog modal will go here */}
                 {addEntryDialogOpen && (
                   <AddEntryDialog

@@ -31,7 +31,6 @@ export default function Home() {
   const {
     exportData,
     importData,
-    // ...existing code...
     currentHabit,
     currentHabitIndex,
     navigationEvent,
