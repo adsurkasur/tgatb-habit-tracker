@@ -303,33 +303,35 @@ export default function Home() {
 
   return (
     <>
-  {/* SystemBarsManager removed in favor of v0.1.0 hook restoration */}
+      {/* SystemBarsManager removed in favor of v0.1.0 hook restoration */}
       <ContentWrapper>
-      <div className="min-h-screen bg-background text-foreground">
-        {/* Top App Bar */}
-        <header className="bg-header border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
-          <div data-tour="navigation">
-            <NavigationDrawer
-              goodHabits={goodHabits}
-              badHabits={badHabits}
-              onSettingsClick={() => setShowSettings(true)}
-              onHistoryClick={() => setShowHistory(true)}
-              onDonateClick={() => setShowDonate(true)}
-              onAboutClick={() => setShowAbout(true)}
-              onEditHabit={handleEditHabit}
-              onDeleteHabit={handleDeleteHabit}
-              onHelpClick={resetWelcome}
-              open={drawerOpen}
-              onOpenChange={setDrawerOpen}
-              onHabitSelect={handleHabitSelect}
-            />
-          </div>
-          <h1 className="text-xl font-semibold">The Good and The Bad</h1>
-          <OfflineHeaderIndicator />
-        </header>
+        <div className="min-h-screen bg-background text-foreground">
+          {/* Top App Bar: Only render when not in fullscreen mode */}
+          {!settings.fullscreenMode && (
+            <header className="bg-header border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
+              <div data-tour="navigation">
+                <NavigationDrawer
+                  goodHabits={goodHabits}
+                  badHabits={badHabits}
+                  onSettingsClick={() => setShowSettings(true)}
+                  onHistoryClick={() => setShowHistory(true)}
+                  onDonateClick={() => setShowDonate(true)}
+                  onAboutClick={() => setShowAbout(true)}
+                  onEditHabit={handleEditHabit}
+                  onDeleteHabit={handleDeleteHabit}
+                  onHelpClick={resetWelcome}
+                  open={drawerOpen}
+                  onOpenChange={setDrawerOpen}
+                  onHabitSelect={handleHabitSelect}
+                />
+              </div>
+              <h1 className="text-xl font-semibold">The Good and The Bad</h1>
+              <OfflineHeaderIndicator />
+            </header>
+          )}
 
-        {/* Main Content */}
-        <main className="flex-1 p-6 flex items-center justify-center min-h-[calc(100vh-80px)] main-content-container">
+  {/* Main Content */}
+  <main className="flex-1 p-6 flex items-center justify-center min-h-[calc(100vh-80px)] main-content-container">
           <div data-tour="habit-area" className="w-full max-w-md mx-auto">
             {displayedHabit ? (
               <>
@@ -495,7 +497,7 @@ export default function Home() {
           hasHabits={(goodHabits.length + badHabits.length) > 0}
           onStepChange={setWelcomeStep}
         />
-      </div>
+        </div>
       </ContentWrapper>
     </>
   );
