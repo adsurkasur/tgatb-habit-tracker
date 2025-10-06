@@ -37,4 +37,4 @@ We may update these Terms of Service from time to time. Changes will be posted i
 
 ## Contact Us
 
-If you have any questions, contact us at: [support@example.com](mailto:support@example.com)
+If you have any questions, contact us at: [adsurkasur.dev@gmail.com](mailto:adsurkasur.dev@gmail.com)
