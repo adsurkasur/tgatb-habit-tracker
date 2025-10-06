@@ -73,6 +73,9 @@ jobs:
       - name: Clear Gradle cache
         run: rm -rf ~/.gradle/caches ~/.gradle/wrapper
 
+      - name: Make gradlew executable
+        run: chmod +x android/gradlew
+
       - name: Clean Gradle
         run: ./gradlew clean
         working-directory: android
