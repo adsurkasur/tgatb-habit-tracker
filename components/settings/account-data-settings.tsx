@@ -23,13 +23,18 @@ export function AccountDataSettings({
   onExportData,
   onImportData
 }: AccountDataSettingsProps) {
+
   const { isLoggedIn, profile, clientReady, handleAuth } = useAuth();
   const { handleBackup, handleRestore } = useCloudBackup();
   const { fileInputRef, isExporting, handleExportClick, handleImportClick, handleFileChange } = useDataExport(onExportData, onImportData);
   const { isAppInstalled, isCapacitorApp, handleInstallPWA } = usePWAInstall();
   const { isNative } = useStatusBar();
 
+  // Always force fullscreenMode to false if not native
+  const effectiveFullscreenMode = isNative ? settings.fullscreenMode : false;
+
   const handleFullscreenToggle = async (enabled: boolean) => {
+    if (!isNative) return;
     const newSettings = { ...settings, fullscreenMode: enabled };
     onUpdateSettings({ fullscreenMode: enabled });
     try {
@@ -162,8 +167,9 @@ export function AccountDataSettings({
 
         {/* Fullscreen Mode Toggle */}
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
-          onClick={() => handleFullscreenToggle(!settings.fullscreenMode)}
+          className={"flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition"}
+          style={!isNative ? { pointerEvents: 'none' } : undefined}
+          {...(isNative ? { onClick: () => handleFullscreenToggle(!settings.fullscreenMode) } : {})}
         >
           <div className="flex items-center space-x-3">
             <Maximize className="w-5 h-5 text-muted-foreground" />
@@ -175,7 +181,7 @@ export function AccountDataSettings({
             </div>
           </div>
           <Switch
-            checked={settings.fullscreenMode}
+            checked={effectiveFullscreenMode}
             onCheckedChange={handleFullscreenToggle}
             disabled={!isNative}
             onClick={e => e.stopPropagation()}
