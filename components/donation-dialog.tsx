@@ -1,4 +1,5 @@
 import React, { useState, useRef } from 'react';
+import Image from 'next/image';
 import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
@@ -261,7 +262,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                     </button>
                   </DialogHeader>
                   <div className="flex flex-col items-center justify-center w-full p-6">
-                    <img src="/payment/qris-ade.jpg" alt="QRIS Payment" className="rounded-lg shadow-lg w-full max-w-xs" />
+                    <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg shadow-lg w-full max-w-xs" />
                     <button
                       type="button"
                       className="mt-6 px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/80 transition-colors"

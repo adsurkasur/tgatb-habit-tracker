@@ -9,7 +9,7 @@ export interface DayLog {
     id: string;
     name: string;
     type: HabitType;
-    completed: boolean;
+    completed: boolean | null;
   }[];
 }
 

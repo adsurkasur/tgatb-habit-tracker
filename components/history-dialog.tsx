@@ -335,10 +335,10 @@ function CalendarTabContent({
     id: string;
     name: string;
     type: Habit["type"];
-    completed: boolean;
+    completed: boolean | null;
   };
 
-  const handleEditClick = (habit: DayLogHabit, completed: boolean) => {
+  const handleEditClick = (habit: DayLogHabit, completed: boolean | null) => {
     // Convert to Habit type with minimal fields for dialog
     setEditHabit({
       id: habit.id,

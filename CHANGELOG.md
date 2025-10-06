@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.1 - 2025-10-07
+
+**Overview:**
+This patch release focuses on code quality and type safety improvements, ensuring optimal performance and maintainability.
+
+### Fixes & Improvements (0.3.5.1)
+
+- **Lint Warning Resolved:**
+  - Replaced `<img>` with Next.js `<Image />` in donation dialog for better LCP and image optimization
+- **Type Safety:**
+  - Updated habit log types to allow `completed: boolean | null` for untracked days
+  - Fixed type errors in history dialog and related components
+
+### Internal & Build (0.3.5.1)
+
+- Improved type definitions for habit logs and editing
+- Ensured all builds and lints pass with zero warnings or errors
+
 ## 0.3.5 - 2025-10-06
 
 **Overview:**
