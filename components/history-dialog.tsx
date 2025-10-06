@@ -257,10 +257,16 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
         <div className="space-y-2 sm:space-y-3">
           {habits.map(habit => {
             const stats = getHabitStats(habit.id);
+            // Determine if habit is untracked for today
+            const todayLog = buildDailyLogs([habit], 1)[0];
+            const log = todayLog?.habits?.[0];
+            const isUntracked = log && (log.completed === null || log.completed === undefined);
             return (
               <div key={habit.id} className="flex items-center justify-between p-2 sm:p-3 bg-muted rounded-lg">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
-                  {habit.type === 'good' ? (
+                  {isUntracked ? (
+                    <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                  ) : habit.type === 'good' ? (
                     <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
                   ) : (
                     <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
@@ -381,20 +387,25 @@ function CalendarTabContent({
 
             {/* Habit list or no data message */}
               {selectedDayLog && selectedDayLog.habits.length > 0 ? (
-                <ScrollArea className="max-h-64 sm:max-h-72">
+                <ScrollArea className="max-h-64 sm:max-h-72 overflow-y-auto">
                   <div className="space-y-2">
                     {selectedDayLog.habits.map(habit => {
                       // Determine status and colors
                       let bgClass = "bg-muted";
                       let icon = null;
                       const iconClass = "w-4 h-4 flex-shrink-0";
-                      let nameClass = "text-xs sm:text-sm truncate text-muted-foreground";
-                      if (habit.completed === null || habit.completed === undefined) {
-                        // Unknown state
-                        bgClass = "bg-gray-100 dark:bg-gray-800";
-                        icon = <HelpCircle className={iconClass + " text-gray-400"} />;
-                        nameClass = "text-xs sm:text-sm truncate text-gray-500 italic";
-                      } else if (habit.type === "good") {
+                        let nameClass = "text-xs sm:text-sm truncate text-muted-foreground";
+                        if (habit.completed === null || habit.completed === undefined) {
+                          // Untracked state: grey background, question mark icon, tooltip
+                          bgClass = "bg-gray-100 dark:bg-gray-800";
+                          icon = (
+                            <span title="Not Tracked" aria-label="Not Tracked">
+                              <HelpCircle className={iconClass + " text-gray-400"} />
+                            </span>
+                          );
+                          // Keep font style and color normal for untracked
+                          nameClass = "text-xs sm:text-sm truncate text-muted-foreground";
+                        } else if (habit.type === "good") {
                         if (habit.completed) {
                           bgClass = "bg-green-50 dark:bg-green-900/20";
                           icon = <CheckCircle className={iconClass + " text-green-500"} />;
@@ -511,13 +522,28 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
                   </p>
                 </div>
                 <div className="flex gap-1 flex-wrap max-w-[100px] sm:max-w-none">
-                  {log.habits.map(habit => (
-                    <div
-                      key={habit.id}
-                      className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${habit.completed ? (habit.type === 'good' ? 'bg-green-500' : 'bg-red-500') : 'bg-muted-foreground/20'}`}
-                      title={`${habit.name}: ${habit.completed ? 'Completed' : 'Not completed'}`}
-                    />
-                  ))}
+                  {log.habits.map(habit => {
+                    if (habit.completed === null || habit.completed === undefined) {
+                      // Untracked: grey dot, question mark tooltip
+                      return (
+                        <div
+                          key={habit.id}
+                          className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-400"
+                          title={`${habit.name}: Not Tracked`}
+                          aria-label="Not Tracked"
+                        >
+                          {/* Optionally, could use a small ? icon inside dot, but keep simple for now */}
+                        </div>
+                      );
+                    }
+                    return (
+                      <div
+                        key={habit.id}
+                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${habit.completed ? (habit.type === 'good' ? 'bg-green-500' : 'bg-red-500') : 'bg-muted-foreground/20'}`}
+                        title={`${habit.name}: ${habit.completed ? 'Completed' : 'Not completed'}`}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             </Card>

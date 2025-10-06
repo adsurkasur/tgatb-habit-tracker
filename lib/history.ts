@@ -88,8 +88,13 @@ export function buildDailyLogs(habits: Habit[], days = 30): DayLog[] {
         .map(habit => {
           const habitLogs = getAllHabitLogs(habit.id);
           const dateStr = formatLocalDate(date);
-          const completed = habitLogs.some(log => log.date === dateStr && log.completed === true);
-
+          const logForDay = habitLogs.find(log => log.date === dateStr);
+          let completed: boolean | null = null;
+          if (logForDay) {
+            completed = logForDay.completed;
+          } else {
+            completed = null; // No log for this day
+          }
           return { id: habit.id, name: habit.name, type: habit.type, completed };
         }),
     };
