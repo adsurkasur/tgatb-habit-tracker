@@ -55,7 +55,7 @@ jobs:
 
       - name: Decode Keystore
         run: base64 --decode <<< "${{ secrets.ANDROID_KEYSTORE_BASE64 }}" > android/app/release.keystore
-        
+
       - name: Create gradle.properties for signing
         run: |
           # First, add a newline to the file to guarantee separation

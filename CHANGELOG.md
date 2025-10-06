@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.3 - 2025-10-07
+
+**Overview:**
+This patch fixes a YAML syntax error in the Android release workflow and documents manual workflow improvements.
+
+### CI/CD & Workflow (0.3.5.3)
+
+- **Android Release Workflow:**
+  - Fixed YAML indentation error on line 69 in `.github/workflows/release-android.yml`
+  - Unindented Gradle cache and clean steps for valid workflow execution
+  - Improved reliability and maintainability of release automation
+
+### Internal (0.3.5.3)
+
+- Documented manual workflow edits and validation steps
+
 ## 0.3.5.2 - 2025-10-07
 
 **Overview:**
