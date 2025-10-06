@@ -334,7 +334,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           </div>
 
           {/* Thank You Message */}
-          <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
+          <div className="text-center mt-4">
             <p className="text-sm text-muted-foreground">
               Thank you for considering supporting this project! 🙏
             </p>
