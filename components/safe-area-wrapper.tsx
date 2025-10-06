@@ -11,22 +11,15 @@ interface SafeAreaWrapperProps {
 export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperProps) => {
   const { visible, height, overlays, isNative } = useStatusBar();
 
+  // Remove all top padding/margin/background for native platforms
   useEffect(() => {
     if (isNative) {
-      // Apply safe area insets as CSS custom properties
       const root = document.documentElement;
-      
-      // For status bar
-      root.style.setProperty('--status-bar-height', `${height}px`);
-      root.style.setProperty('--safe-area-top', overlays ? `${height}px` : '0px');
-      
-  // Respect OS-provided bottom inset when not in immersive nav mode
-  // Do not override here; CSS env will handle it
-      
-      // Apply to body to prevent content from going under status bar
-      document.body.style.paddingTop = overlays ? `${height}px` : '0px';
+      root.style.setProperty('--status-bar-height', '0px');
+      root.style.setProperty('--safe-area-top', '0px');
+      document.body.style.paddingTop = '0px';
     }
-  }, [visible, height, overlays, isNative]);
+  }, [isNative]);
 
   if (!isNative) {
     // For web, use CSS env() variables
@@ -45,14 +38,13 @@ export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperPro
     );
   }
 
-  // For native platforms
+  // For native platforms, do not render any top padding or reserved area
   return (
     <div 
       className={`min-h-screen ${className}`}
       style={{
-        paddingTop: overlays ? `${height}px` : '0px',
-  // Respect platform bottom inset (Android 3-button or gesture)
-  paddingBottom: 'env(safe-area-inset-bottom)'
+        paddingTop: '0px',
+        paddingBottom: 'env(safe-area-inset-bottom)'
       }}
     >
       {children}
