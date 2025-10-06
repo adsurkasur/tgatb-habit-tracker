@@ -127,31 +127,34 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
   const isMobile = useIsMobile();
+  const [showQrisModal, setShowQrisModal] = useState(false);
 
   // Handle mobile back navigation
   useMobileBackNavigation({
     onBackPressed: () => {
+      if (showQrisModal) {
+        setShowQrisModal(false);
+        return;
+      }
       onOpenChange(false);
     },
-    isActive: open
+    isActive: open || showQrisModal
   });
 
   const handleCopy = async (address: string) => {
     try {
       await navigator.clipboard.writeText(address);
       setCopiedAddress(address);
-      
       toast({
         title: "Copied!",
         description: "Address copied to clipboard",
         duration: 3000,
       });
-
       if (timerRef.current) clearTimeout(timerRef.current);
       timerRef.current = setTimeout(() => {
         setCopiedAddress(null);
       }, 3000);
-  } catch {
+    } catch {
       toast({
         title: "Failed to copy",
         description: "Please copy the address manually",
@@ -165,7 +168,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-auto gap-0" : "w-[500px] h-auto max-w-[500px] flex flex-col items-stretch justify-start"}`}>
+  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-[500px] h-[90vh] max-h-[90vh] flex flex-col items-stretch justify-start"}`}>
         <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
           <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
@@ -183,7 +186,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           </div>
         </DialogHeader>
 
-        <div className="flex-1 overflow-y-auto px-6 pt-4 pb-6">
+  <div className="flex-1 overflow-y-auto px-6 pt-4 pb-6" style={{ minHeight: 0 }}>
           <DialogDescription className="text-center mb-6">
             If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!
           </DialogDescription>
@@ -194,7 +197,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               <ExternalLink className="w-4 h-4" />
               Payment Platforms
             </h3>
-            
+            {/* Render Trakteer and Ko-fi cards */}
             {supportContacts.map((contact) => (
               <Card
                 key={contact.name}
@@ -219,6 +222,69 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                 </a>
               </Card>
             ))}
+            {/* QRIS Card */}
+            <Card
+              className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
+              onClick={() => setShowQrisModal(true)}
+            >
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center space-x-3">
+                  <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    {/* QR code icon (Lucide) - theme adaptive */}
+                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                  </div>
+                  <div>
+                    <h4 className="font-medium">QRIS</h4>
+                    <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">Support me with QRIS!</p>
+                  </div>
+                </div>
+                <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
+              </div>
+            </Card>
+            {/* QRIS Modal */}
+            {showQrisModal && (
+              <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
+                <MobileDialogContent className={`material-radius-lg surface-elevation-3 w-[340px] max-w-full flex flex-col items-center justify-center p-0`}>
+                  <DialogHeader className="w-full px-6 py-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative justify-between items-center">
+                    <DialogTitle className="flex items-center gap-2">
+                      {/* QR code icon - theme adaptive */}
+                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                      QRIS
+                    </DialogTitle>
+                    <button
+                      type="button"
+                      onClick={() => setShowQrisModal(false)}
+                      className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+                    >
+                      <X className="h-4 w-4" />
+                      <span className="sr-only">Close</span>
+                    </button>
+                  </DialogHeader>
+                  <div className="flex flex-col items-center justify-center w-full p-6">
+                    <img src="/payment/qris-ade.jpg" alt="QRIS Payment" className="rounded-lg shadow-lg w-full max-w-xs" />
+                    <button
+                      type="button"
+                      className="mt-6 px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/80 transition-colors"
+                      onClick={() => {
+                        // Download image
+                        const link = document.createElement('a');
+                        link.href = '/payment/qris-ade.jpg';
+                        link.download = 'qris-ade.jpg';
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                      }}
+                    >
+                      <span className="flex items-center gap-2">
+                        {/* Download icon (Lucide) */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg>
+                        Download QRIS
+                      </span>
+                    </button>
+                  </div>
+                </MobileDialogContent>
+              </Dialog>
+            )}
           </div>
 
           {/* Cryptocurrency */}
@@ -271,8 +337,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           <div className="text-center p-4 bg-primary/5 rounded-lg border border-primary/20">
             <p className="text-sm text-muted-foreground">
               Thank you for considering supporting this project! 🙏
-              <br />
-              Your support helps keep this app free and continuously improving.
             </p>
           </div>
         </div>
