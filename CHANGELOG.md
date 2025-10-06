@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.6 - 2025-10-07
+
+**Overview:**
+Updated to the latest version of capacitor-save-as plugin for improved compatibility and future support.
+
+### Internal (0.3.5.6)
+
+- Upgraded capacitor-save-as to the latest release in package.json
+- No functional changes; release is for dependency update and workflow validation
+
 ## 0.3.5.5 - 2025-10-07
 
 **Overview:**
