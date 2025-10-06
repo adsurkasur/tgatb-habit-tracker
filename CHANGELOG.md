@@ -2,13 +2,29 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.8 - 2025-10-07
+
+**Overview:**
+Restricts fullscreen mode toggle to native mobile app only, adds toast warning, and standardizes toast duration.
+
+### UI & Settings (0.3.5.8)
+
+- **Fullscreen Mode:**
+  - Fullscreen mode toggle is now only interactable in the native mobile app (Android/iOS via Capacitor).
+  - Toggle and row are completely disabled/uninteractable on web/PWA.
+  - If settings are loaded with fullscreen enabled on web, it is automatically set to disabled.
+- **Toast Warning:**
+  - When enabling fullscreen mode, a toast appears: "Fullscreen mode may not display perfectly on all devices. If you notice issues, you can turn it off in settings."
+- **Toast Duration:**
+  - All toast durations are now standardized to 3000ms for consistent UX.
+
 
 ## 0.3.5.7 - 2025-10-07
 
 **Overview:**
 Ran npm install and npm update.
 
-### Internal (0.3.5.6)
+### Internal (0.3.5.7)
 
 - Ran npm install to ensure the latest version of packages are installed, especially capacitor-save-as.
 - Ran npm update to ensure the latest version of packages are installed, especially capacitor-save-as.
