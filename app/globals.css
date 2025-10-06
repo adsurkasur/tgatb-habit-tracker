@@ -786,3 +786,37 @@
     overflow: hidden;
   }
 }
+
+  /* Global Scrollbar Styling */
+  /* Chrome, Edge, Safari */
+  ::-webkit-scrollbar {
+    width: 3px;
+    height: 3px;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border-radius: 8px;
+    border: 2px solid var(--surface);
+  }
+  ::-webkit-scrollbar-track {
+    background: var(--surface-variant);
+    border-radius: 8px;
+  }
+
+  /* Firefox */
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: var(--primary) var(--surface-variant);
+  }
+
+  /* Dark mode overrides */
+  .dark ::-webkit-scrollbar-thumb {
+    background: var(--primary);
+    border: 2px solid var(--surface);
+  }
+  .dark ::-webkit-scrollbar-track {
+    background: var(--surface-variant);
+  }
+  .dark html {
+    scrollbar-color: var(--primary) var(--surface-variant);
+  }
