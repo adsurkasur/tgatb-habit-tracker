@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.4 - 2025-10-07
+
+**Overview:**
+This patch fixes the Android release workflow by ensuring gradlew has executable permissions in CI.
+
+### CI/CD & Workflow (0.3.5.4)
+
+- **Android Release Workflow:**
+  - Added step to set executable permissions on gradlew before running clean
+  - Resolved "Permission denied" error for ./gradlew in GitHub Actions
+  - Improved reliability of Android build and release automation
+
 ## 0.3.5.3 - 2025-10-07
 
 **Overview:**

@@ -112,20 +112,20 @@ jobs:
           # Find the original APK path
           ORIGINAL_PATH=$(find android/app/build/outputs/apk/release/ -name "*.apk" | head -n 1)
           echo "Original APK found at: $ORIGINAL_PATH"
-          
+
           # Define the new name using the Git tag
           NEW_NAME="tgatb-${{ github.ref_name }}.apk"
           echo "New APK name will be: $NEW_NAME"
-          
+
           # Get the directory of the original file
           APK_DIR=$(dirname "$ORIGINAL_PATH")
-          
+
           # Create the new full path
           NEW_PATH="$APK_DIR/$NEW_NAME"
-          
+
           # Rename the file
           mv "$ORIGINAL_PATH" "$NEW_PATH"
-          
+
           # Output the new path for the release step
           echo "apk_path=$NEW_PATH" >> $GITHUB_OUTPUT
 
