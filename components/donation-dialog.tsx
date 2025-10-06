@@ -246,20 +246,22 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {showQrisModal && (
               <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
                 <MobileDialogContent className={`material-radius-lg surface-elevation-3 w-[340px] max-w-full flex flex-col items-center justify-center p-0`}>
-                  <DialogHeader className="w-full px-6 py-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative justify-between items-center">
-                    <DialogTitle className="flex items-center gap-2">
-                      {/* QR code icon - theme adaptive */}
-                      <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
-                      QRIS
-                    </DialogTitle>
-                    <button
-                      type="button"
-                      onClick={() => setShowQrisModal(false)}
-                      className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
-                    >
-                      <X className="h-4 w-4" />
-                      <span className="sr-only">Close</span>
-                    </button>
+                  <DialogHeader className="w-full px-6 py-4 border-b bg-background z-10 flex-shrink-0">
+                    <div className="flex items-center justify-between">
+                      <DialogTitle className="flex items-center gap-2">
+                        {/* QR code icon - theme adaptive */}
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                        QRIS
+                      </DialogTitle>
+                      <button
+                        type="button"
+                        onClick={() => setShowQrisModal(false)}
+                        className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+                      >
+                        <X className="h-4 w-4" />
+                        <span className="sr-only">Close</span>
+                      </button>
+                    </div>
                   </DialogHeader>
                   <div className="flex flex-col items-center justify-center w-full p-6">
                     <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg shadow-lg w-full max-w-xs" />
