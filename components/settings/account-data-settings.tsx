@@ -161,7 +161,10 @@ export function AccountDataSettings({
         </div>
 
         {/* Fullscreen Mode Toggle */}
-        <div className="flex items-center justify-between p-4 bg-muted material-radius theme-transition">
+        <div
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          onClick={() => handleFullscreenToggle(!settings.fullscreenMode)}
+        >
           <div className="flex items-center space-x-3">
             <Maximize className="w-5 h-5 text-muted-foreground" />
             <div className="flex flex-col">
@@ -175,6 +178,7 @@ export function AccountDataSettings({
             checked={settings.fullscreenMode}
             onCheckedChange={handleFullscreenToggle}
             disabled={!isNative}
+            onClick={e => e.stopPropagation()}
           />
         </div>
 
