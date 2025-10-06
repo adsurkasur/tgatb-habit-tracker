@@ -74,8 +74,10 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     console.log(`🔧 [SystemBars] Available plugins: ${plugins.join(', ')}`);
     console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
     if (target) {
+      // Set status bar color to transparent for fullscreen/cutout devices
+      await StatusBar.setBackgroundColor({ color: '#00000000' });
       await StatusBar.hide();
-      await setNavColor(PURPLE_COLOR);
+      await setNavColor('#00000000');
     } else {
       await StatusBar.show();
       await StatusBar.setStyle({ style: StatusBarStyles.Light });
