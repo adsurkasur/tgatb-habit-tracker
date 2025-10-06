@@ -2,7 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
-## 0.3.5.6 - 2025-10-07
+
+## 0.3.5.7 - 2025-10-07
+
+**Overview:**
+Ran npm install and npm update.
+
+### Internal (0.3.5.6)
+
+- Ran npm install to ensure the latest version of packages are installed, especially capacitor-save-as.
+- Ran npm update to ensure the latest version of packages are installed, especially capacitor-save-as.
 
 **Overview:**
 Updated to the latest version of capacitor-save-as plugin for improved compatibility and future support.
