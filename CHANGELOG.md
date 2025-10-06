@@ -2,28 +2,54 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5 - 2025-10-06
+
+**Overview:**
+This release brings major UI polish, new donation method support, and improved interaction handling. Scrollbars are now globally themed, donation options are expanded, and habit log clarity is improved.
+
+### Features & Improvements (0.3.5)
+
+- **Global Scrollbar Styling:**
+  - Added thin, purple, rounded scrollbars across the app, adapting to light and dark themes
+
+- **Donation Dialog Enhancements:**
+  - Added QRIS donation method with modal image display and download functionality
+  - Improved thank you message layout for donations
+
+- **Habit Log UI:**
+  - Untracked log entries now show a grey color and question mark icon for clarity
+
+- **Touch Event Handling:**
+  - Enhanced swipe logic to ignore toast notification swipes, preventing accidental dismissals
+
+- **Legal & Info:**
+  - Updated contact email in Terms of Service
+
+### Internal & Build (0.3.5)
+
+- Improved code structure for donation dialog and habit log UI
+- Refined theme variable usage for consistent styling
+
 ## 0.3.4.3 - 2025-09-28
 
-**Overview:**  
+**Overview:**
 This patch release fixes Android cloud export/import functionality by implementing proper network status detection for mobile devices.
 
 ### Fixes (0.3.4.3)
 
-- **Android Cloud Functionality:**
-  - Added Capacitor Network plugin for accurate network connectivity detection on Android
-  - Fixed cloud export/import operations that were blocked due to incorrect offline detection
-  - Improved network status handling across all platforms with proper fallbacks
+- Added Capacitor Network plugin for accurate network connectivity detection on Android
+- Fixed cloud export/import operations that were blocked due to incorrect offline detection
+- Improved network status handling across all platforms with proper fallbacks
 
 ### Internal & Build (0.3.4.3)
 
-- **Network Detection:**
-  - Implemented Capacitor Network plugin for native platforms
-  - Maintained browser-based detection for web platforms
-  - Added proper error handling and fallback mechanisms
+- Implemented Capacitor Network plugin for native platforms
+- Maintained browser-based detection for web platforms
+- Added proper error handling and fallback mechanisms
 
 ## 0.3.4.2 - 2025-09-28
 
-**Overview:**  
+**Overview:**
 This micro patch improves user experience clarity by refining status messaging in habit cards.
 
 ### Improvements (0.3.4.2)
@@ -34,7 +60,7 @@ This micro patch improves user experience clarity by refining status messaging i
 
 ## 0.3.4.1 - 2025-09-28
 
-**Overview:**  
+**Overview:**
 This patch release enhances the user interface with improved responsive design and smooth animations. It introduces differentiated settings screens for desktop and mobile, along with polished modal transitions throughout the app.
 
 ### Features (0.3.4.1)
@@ -70,7 +96,7 @@ This patch release enhances the user interface with improved responsive design a
 
 ## 0.3.4 - 2025-09-28
 
-**Overview:**  
+**Overview:**
 This release focuses on code quality improvements, enhanced development experience, and new habit tracking features. It includes significant refactoring for better maintainability and adds cloud backup/import functionality.
 
 ### Features (0.3.4)
@@ -120,7 +146,7 @@ This release focuses on code quality improvements, enhanced development experien
 
 ## 0.3.3 - 2025-08-15
 
-**Overview:**  
+**Overview:**
 This is a comprehensive release focused on improving PWA functionality, user feedback, and overall stability. It includes a significant refactoring of the Firebase integration, enhanced offline support, and numerous fixes and documentation updates.
 
 ### Features (0.3.3)
@@ -167,7 +193,7 @@ This is a comprehensive release focused on improving PWA functionality, user fee
 
 ## 0.3.2 - 2025-08-12
 
-**Overview:**  
+**Overview:**
 This release enhances data import/export functionality with improved validation and user feedback, and adds necessary dependencies for future integrations.
 
 ### Features (0.3.2)
@@ -182,7 +208,7 @@ This release enhances data import/export functionality with improved validation 
 
 ## 0.3.1 - 2025-08-12
 
-**Overview:**  
+**Overview:**
 This release focused on unifying system-level UI components and improving data export capabilities.
 
 ### Features (0.3.1)
@@ -197,7 +223,7 @@ This release focused on unifying system-level UI components and improving data e
 
 ## 0.3.0 - 2025-08-11
 
-**Overview:**  
+**Overview:**
 This release focuses on integrating Firebase authentication and Google Drive for cloud backup and restore. It also includes significant improvements to error handling and the overall user experience.
 
 ### Features (0.3.0)
@@ -222,7 +248,7 @@ This release focuses on integrating Firebase authentication and Google Drive for
 
 ## 0.2.11 - 2025-08-11
 
-**Overview:**  
+**Overview:**
 Improved habit creation and navigation experience.
 
 ### Added / Changed (0.2.11)
@@ -239,7 +265,7 @@ Improved habit creation and navigation experience.
 
 ## 0.2.10 - 2025-08-11
 
-**Overview:**  
+**Overview:**
 Patch release: improved support metadata and dynamic usage in UI.
 
 ### Changes (0.2.10)
@@ -250,7 +276,7 @@ Patch release: improved support metadata and dynamic usage in UI.
 
 ## 0.2.9 - 2025-08-11
 
-**Overview:**  
+**Overview:**
 Critical bugfix for import/export functionality and UI wiring. All toast durations unified. Import now updates habits immediately after file selection.
 
 ### Fixed (0.2.9)
@@ -269,7 +295,7 @@ Critical bugfix for import/export functionality and UI wiring. All toast duratio
 
 ## 0.2.8 - 2025-08-11
 
-**Overview:**  
+**Overview:**
 Release workflow improvements, APK signing fixes, and minor bug fixes.
 
 ### Added (0.2.8)
@@ -298,7 +324,7 @@ Release workflow improvements, APK signing fixes, and minor bug fixes.
 
 ## 0.2.7 - 2025-08-10
 
-**Overview:**  
+**Overview:**
 Major improvements to data export, navigation, and habit management. Enhanced performance and debugging for HabitCard, and improved Android versioning automation.
 
 ### Added (0.2.7)
@@ -335,7 +361,7 @@ Major improvements to data export, navigation, and habit management. Enhanced pe
 
 ## 0.2.6 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Swapped icons for export and import data actions in settings (7a59380).
 
 ### Changes (0.2.6)
@@ -344,7 +370,7 @@ Swapped icons for export and import data actions in settings (7a59380).
 
 ## 0.2.5 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Refactored Android SystemUiPlugin for improved edge-to-edge and fullscreen handling. Enhanced proguard rules, build configuration, and project metadata. Deprecated legacy fullscreen hook.
 
 ### Changes (0.2.5)
@@ -367,7 +393,7 @@ Refactored Android SystemUiPlugin for improved edge-to-edge and fullscreen handl
 
 ## 0.2.4 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Complete overhaul of Android system bar styling, fullscreen mode, and edge-to-edge support.
 
 ### Major System Bars Fix (0.2.4)
@@ -424,7 +450,7 @@ Complete overhaul of Android system bar styling, fullscreen mode, and edge-to-ed
 
 ## 0.2.3 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Release automation polish & deterministic Android artifacts.
 
 ### Pipeline Changes (0.2.3)
@@ -443,7 +469,7 @@ Release automation polish & deterministic Android artifacts.
 
 ## 0.2.2 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Focused Android system bar stabilization and CI workflow corrections.
 
 ### Changes (0.2.2)
@@ -468,7 +494,7 @@ Focused Android system bar stabilization and CI workflow corrections.
 
 ## 0.2.1 - 2025-08-09
 
-**Overview:**  
+**Overview:**
 Android system bar theming groundwork and minor native tweaks.
 
 ### Added / Changes (0.2.1)
@@ -491,7 +517,7 @@ Android system bar theming groundwork and minor native tweaks.
 
 ## 0.2.0 - 2025-08-08
 
-**Overview:**  
+**Overview:**
 Major update with platform persistence, Android build fixes, and UX improvements.
 
 ### Changes (0.2.0)
@@ -514,7 +540,7 @@ Major update with platform persistence, Android build fixes, and UX improvements
 
 ## 0.1.1 - 2025-08-08
 
-**Overview:**  
+**Overview:**
 System bar improvements and Android theming polish.
 
 ### Changes (0.1.1)
@@ -525,7 +551,7 @@ System bar improvements and Android theming polish.
 
 ## 0.1.0 - 2025-08-08
 
-**Overview:**  
+**Overview:**
 Initial release.
 
 ### Changes (0.1.0)
