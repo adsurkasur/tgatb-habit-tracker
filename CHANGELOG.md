@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.2 - 2025-10-07
+
+**Overview:**
+This release standardizes the About dialog header and close button implementation for UI consistency.
+
+### UI Consistency & Dialogs (0.3.5.2)
+
+- **About Dialog:**
+  - Header structure now matches Support Me (Donation) dialog
+  - Manual "X" close button added to header, floating close button hidden
+  - Improved accessibility and alignment
+
+### Internal, Refactoring & Workflow (0.3.5.2)
+
+- **Android Build Workflow:**
+  - Updated GitHub Actions workflow to clear Gradle and npm caches before build
+  - Added explicit `gradle clean` step to resolve build errors
+  - Improved reliability of Android release builds
+- Removed unused imports and redundant close button logic from About dialog
+- Ensured dialog content matches shared modal patterns
+
 ## 0.3.5.1 - 2025-10-07
 
 **Overview:**

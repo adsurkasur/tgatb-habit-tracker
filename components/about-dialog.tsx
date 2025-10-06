@@ -5,7 +5,7 @@ import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ExternalLink, Github, Heart, Zap, X } from "lucide-react";
+import { ExternalLink, Github, Heart, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AboutDialogProps {
@@ -19,23 +19,21 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}>
-        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : ""}`}>
-          <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
+  <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}> 
+        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+          <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-primary" />
               About TGATB Habit Tracker
             </DialogTitle>
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            )}
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+              <span className="sr-only">Close</span>
+            </button>
           </div>
         </DialogHeader>
         
