@@ -250,13 +250,29 @@ export default function Home() {
   useEffect(() => {
     let touchStartX = 0;
     let touchEndX = 0;
+    let touchStartTarget: EventTarget | null = null;
+
+    // Utility: check if event target is inside a toast notification
+    function isToastTarget(target: EventTarget | null): boolean {
+      if (!(target instanceof HTMLElement)) return false;
+      // Check for radix toast viewport or toast root
+      return Boolean(
+        target.closest('.radix-toast') ||
+        target.closest('[data-radix-toast]') ||
+        target.closest('.ToastViewport') ||
+        target.closest('.Toast')
+      );
+    }
 
     const handleTouchStart = (event: TouchEvent) => {
       touchStartX = event.changedTouches[0].screenX;
+      touchStartTarget = event.target;
     };
 
     const handleTouchEnd = (event: TouchEvent) => {
       touchEndX = event.changedTouches[0].screenX;
+      // If swipe started on a toast, ignore
+      if (isToastTarget(touchStartTarget)) return;
       handleSwipe();
     };
 
@@ -264,7 +280,6 @@ export default function Home() {
       if ((goodHabits.length + badHabits.length) > 1) {
         const swipeThreshold = 50; // minimum distance for swipe
         const diff = touchStartX - touchEndX;
-        
         if (Math.abs(diff) > swipeThreshold) {
           if (diff > 0) {
             // Swipe left - next habit
@@ -279,7 +294,7 @@ export default function Home() {
 
     window.addEventListener('touchstart', handleTouchStart);
     window.addEventListener('touchend', handleTouchEnd);
-    
+
     return () => {
       window.removeEventListener('touchstart', handleTouchStart);
       window.removeEventListener('touchend', handleTouchEnd);
