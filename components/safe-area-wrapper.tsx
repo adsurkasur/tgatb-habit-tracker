@@ -12,6 +12,9 @@ export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperPro
   const { visible, height, overlays, isNative } = useStatusBar();
 
   // Remove all top padding/margin/background for native platforms
+  // Edge-to-edge best practice: Do NOT render any app bar, background, or padding in the status bar area.
+  // The system (Android 15+, Samsung, etc.) will render the native status bar and may enforce a colored bar for cutout protection.
+  // This is expected and cannot be reliably overridden by the app. See ai-context.md for rationale.
   useEffect(() => {
     if (isNative) {
       const root = document.documentElement;
