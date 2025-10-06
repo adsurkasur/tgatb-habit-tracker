@@ -70,12 +70,12 @@ jobs:
       - name: Sync Capacitor project
         run: npx cap sync android
 
-        - name: Clear Gradle cache
-          run: rm -rf ~/.gradle/caches ~/.gradle/wrapper
+      - name: Clear Gradle cache
+        run: rm -rf ~/.gradle/caches ~/.gradle/wrapper
 
-        - name: Clean Gradle
-          run: ./gradlew clean
-          working-directory: android
+      - name: Clean Gradle
+        run: ./gradlew clean
+        working-directory: android
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v4
