@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.5 - 2025-10-07
+
+**Overview:**
+Version bump to trigger workflow after updating capacitor-save-as plugin for Android SDK compatibility.
+
+### Internal (0.3.5.5)
+
+- Updated capacitor-save-as plugin to use compileSdkVersion 35 in [this repo here](https://github.com/adsurkasur/capacitor-save-as)
+- No functional changes; release is for workflow validation
+
 ## 0.3.5.4 - 2025-10-07
 
 **Overview:**

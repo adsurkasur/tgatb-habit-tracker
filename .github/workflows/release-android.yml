@@ -139,9 +139,9 @@ jobs:
           # If it does, the release is marked as a "Pre-release".
           # If it doesn't, it's marked as the "Latest release".
           prerelease: ${{ contains(github.ref_name, '-alpha') || contains(github.ref_name, '-beta') }}
-          
+
           # This sets the title of the release page
           name: ${{ github.ref_name }}
-          
+
           # This attaches your APK to the release
           files: ${{ steps.find_and_rename_apk.outputs.apk_path }} # Use the new step ID
