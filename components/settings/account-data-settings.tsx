@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { useToast } from "@/hooks/use-toast";
 import { ChevronRight, User, CloudUpload, CloudDownload, Download, Upload, Smartphone, Maximize } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { UserSettings } from "@shared/schema";
@@ -33,8 +34,16 @@ export function AccountDataSettings({
   // Always force fullscreenMode to false if not native
   const effectiveFullscreenMode = isNative ? settings.fullscreenMode : false;
 
+  const { toast } = useToast();
   const handleFullscreenToggle = async (enabled: boolean) => {
     if (!isNative) return;
+    if (enabled) {
+      toast({
+        title: "Fullscreen mode enabled",
+        description: "Fullscreen mode may not display perfectly on all devices. If you notice issues, you can turn it off in settings.",
+        duration: 3000,
+      });
+    }
     const newSettings = { ...settings, fullscreenMode: enabled };
     onUpdateSettings({ fullscreenMode: enabled });
     try {
