@@ -246,16 +246,17 @@ export default function Home() {
     return () => window.removeEventListener('keydown', handleKeyPress);
   }, [goodHabits.length, badHabits.length, moveToPreviousHabit, moveToNextHabit]);
 
-  // Touch/swipe navigation
+  // Touch/swipe navigation (main area only)
+  const mainRef = useRef<HTMLElement | null>(null);
   useEffect(() => {
+    const main = mainRef.current;
+    if (!main) return;
     let touchStartX = 0;
     let touchEndX = 0;
     let touchStartTarget: EventTarget | null = null;
 
-    // Utility: check if event target is inside a toast notification
     function isToastTarget(target: EventTarget | null): boolean {
       if (!(target instanceof HTMLElement)) return false;
-      // Check for radix toast viewport or toast root
       return Boolean(
         target.closest('.radix-toast') ||
         target.closest('[data-radix-toast]') ||
@@ -271,33 +272,29 @@ export default function Home() {
 
     const handleTouchEnd = (event: TouchEvent) => {
       touchEndX = event.changedTouches[0].screenX;
-      // If swipe started on a toast, ignore
       if (isToastTarget(touchStartTarget)) return;
       handleSwipe();
     };
 
     const handleSwipe = () => {
       if ((goodHabits.length + badHabits.length) > 1) {
-        const swipeThreshold = 50; // minimum distance for swipe
+        const swipeThreshold = 50;
         const diff = touchStartX - touchEndX;
         if (Math.abs(diff) > swipeThreshold) {
           if (diff > 0) {
-            // Swipe left - next habit
             moveToNextHabit();
           } else {
-            // Swipe right - previous habit
             moveToPreviousHabit();
           }
         }
       }
     };
 
-    window.addEventListener('touchstart', handleTouchStart);
-    window.addEventListener('touchend', handleTouchEnd);
-
+    main.addEventListener('touchstart', handleTouchStart);
+    main.addEventListener('touchend', handleTouchEnd);
     return () => {
-      window.removeEventListener('touchstart', handleTouchStart);
-      window.removeEventListener('touchend', handleTouchEnd);
+      main.removeEventListener('touchstart', handleTouchStart);
+      main.removeEventListener('touchend', handleTouchEnd);
     };
   }, [goodHabits.length, badHabits.length, moveToPreviousHabit, moveToNextHabit]);
 
@@ -328,7 +325,7 @@ export default function Home() {
           </header>
 
           {/* Main Content - scrollable area below header */}
-          <main className="flex-1 overflow-y-auto p-6 flex items-center justify-center main-content-container">
+          <main ref={mainRef} className="flex-1 overflow-y-auto p-6 flex items-center justify-center main-content-container">
             <div data-tour="habit-area" className="w-full max-w-md mx-auto">
               {displayedHabit ? (
                 <>

@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.10 - 2025-10-07
+
+**Overview:**
+Swipe-to-switch-habit-card gesture is now only active within the main content area, not globally.
+
+### UI/UX (0.3.5.10)
+
+- **Habit Card Navigation:**
+  - Swiping left or right to switch habits now only works when the gesture starts inside the main content area (below the header).
+  - Swipes on the header or outside the main area no longer trigger habit navigation.
+  - This prevents accidental habit switching and improves UX on mobile and desktop.
+
+---
+
 ## 0.3.5.9 - 2025-10-07
 
 **Overview:**
@@ -30,7 +44,6 @@ Restricts fullscreen mode toggle to native mobile app only, adds toast warning, 
   - When enabling fullscreen mode, a toast appears: "Fullscreen mode may not display perfectly on all devices. If you notice issues, you can turn it off in settings."
 - **Toast Duration:**
   - All toast durations are now standardized to 3000ms for consistent UX.
-
 
 ## 0.3.5.7 - 2025-10-07
 
