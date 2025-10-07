@@ -245,12 +245,12 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {/* QRIS Modal */}
             {showQrisModal && (
               <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
-                <MobileDialogContent className={`material-radius-lg surface-elevation-3 w-[340px] max-w-full flex flex-col items-center justify-center p-0`}>
-                  <DialogHeader className="w-full px-6 py-4 border-b bg-background z-10 flex-shrink-0">
-                    <div className="flex items-center justify-between">
+                <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 [&>button]:hidden p-0 flex flex-col gap-0`}>
+                  <DialogHeader className={`px-6 py-2 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+                    <div className="flex items-center w-full justify-between">
                       <DialogTitle className="flex items-center gap-2">
                         {/* QR code icon - theme adaptive */}
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
                         QRIS
                       </DialogTitle>
                       <button
@@ -258,24 +258,55 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                         onClick={() => setShowQrisModal(false)}
                         className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
                       >
-                        <X className="h-4 w-4" />
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
                         <span className="sr-only">Close</span>
                       </button>
                     </div>
                   </DialogHeader>
-                  <div className="flex flex-col items-center justify-center w-full p-6">
+                  <div className="overflow-y-auto px-6 pt-4 pb-4 flex flex-col items-center">
                     <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg shadow-lg w-full max-w-xs" />
                     <button
                       type="button"
                       className="mt-6 px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/80 transition-colors"
-                      onClick={() => {
-                        // Download image
-                        const link = document.createElement('a');
-                        link.href = '/payment/qris-ade.jpg';
-                        link.download = 'qris-ade.jpg';
-                        document.body.appendChild(link);
-                        link.click();
-                        document.body.removeChild(link);
+                      onClick={async () => {
+                        const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
+                        const filename = 'qris-ade.jpg';
+                        const imageUrl = '/payment/qris-ade.jpg';
+                        if (isNative) {
+                          try {
+                            // Fetch image as blob
+                            const res = await fetch(imageUrl);
+                            const blob = await res.blob();
+                            // Convert to base64
+                            const reader = new FileReader();
+                            reader.onloadend = async () => {
+                              const base64 = reader.result?.toString().split(',')[1];
+                              if (!base64) throw new Error('Failed to convert image');
+                              try {
+                                const { SaveAs } = await import('capacitor-save-as');
+                                await SaveAs.showSaveAsPicker({
+                                  filename,
+                                  mimeType: 'image/jpeg',
+                                  data: base64,
+                                });
+                                toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
+                              } catch (err) {
+                                toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
+                              }
+                            };
+                            reader.readAsDataURL(blob);
+                          } catch {
+                            toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
+                          }
+                        } else {
+                          // Web: anchor download
+                          const link = document.createElement('a');
+                          link.href = imageUrl;
+                          link.download = filename;
+                          document.body.appendChild(link);
+                          link.click();
+                          document.body.removeChild(link);
+                        }
                       }}
                     >
                       <span className="flex items-center gap-2">
