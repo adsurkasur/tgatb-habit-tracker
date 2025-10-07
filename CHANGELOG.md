@@ -2,6 +2,19 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.9 - 2025-10-07
+
+**Overview:**
+QRIS (Support Me) modal now provides a native-feeling download experience for the QRIS image on Android/iOS, and its header/layout is fully consistent with other dialogs.
+
+### UI Consistency & Native Download (0.3.5.9)
+
+- **QRIS Modal:**
+  - Header, close button, and layout now match the About dialog for full modal consistency.
+  - Download button uses Capacitor's `capacitor-save-as` plugin to save the QRIS image on native apps (Android/iOS), with a toast for success/failure.
+  - On web/PWA, download uses the standard anchor method as before.
+  - Users always receive a toast notification for download success or failure.
+
 ## 0.3.5.8 - 2025-10-07
 
 **Overview:**
