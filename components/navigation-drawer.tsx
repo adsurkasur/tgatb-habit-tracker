@@ -1,6 +1,7 @@
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetDescription } from "@/components/ui/sheet";
 import * as VisuallyHidden from "@radix-ui/react-visually-hidden";
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import { Badge } from "@/components/ui/badge";
 // import { Separator } from "@/components/ui/separator";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/components/ui/collapsible";
@@ -18,9 +19,10 @@ import {
   Trash2,
   X,
   HelpCircle,
-  Info
+  Info,
+  Search
 } from "lucide-react";
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useMemo } from "react";
 import { Habit } from "@shared/schema";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
@@ -125,8 +127,26 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
 }) => {
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
   const [badHabitsOpen, setBadHabitsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
   
-  // const allHabits = [...goodHabits, ...badHabits];
+  // Filter habits based on search query
+  const filteredGoodHabits = useMemo(() => {
+    if (!searchQuery.trim()) return goodHabits;
+    return goodHabits.filter(habit => 
+      habit.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [goodHabits, searchQuery]);
+
+  const filteredBadHabits = useMemo(() => {
+    if (!searchQuery.trim()) return badHabits;
+    return badHabits.filter(habit => 
+      habit.name.toLowerCase().includes(searchQuery.toLowerCase())
+    );
+  }, [badHabits, searchQuery]);
+
+  // Auto-expand sections when searching
+  const effectiveGoodHabitsOpen = searchQuery ? true : goodHabitsOpen;
+  const effectiveBadHabitsOpen = searchQuery ? true : badHabitsOpen;
 
   // Memoize callbacks to prevent child re-renders
   const handleSettingsClick = useCallback(() => {
@@ -191,46 +211,72 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               </button>
             </div>
           </div>
-          
+          {/* Search Bar */}
+          <div className="px-4 py-2 border-b border-border bg-card">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
+              <Input
+                type="text"
+                placeholder="Search habits..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 pr-10 material-radius"
+              />
+              {searchQuery && (
+                <button
+                  onClick={() => setSearchQuery("")}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-foreground transition-colors"
+                  aria-label="Clear search"
+                >
+                  <X className="w-4 h-4" />
+                </button>
+              )}
+            </div>
+          </div>
           {/* Content - Scrollable Habits Area */}
           <div className="flex-1 p-4 space-y-2 overflow-y-auto">
             {/* Good Habits Accordion */}
-            <Collapsible open={goodHabitsOpen} onOpenChange={setGoodHabitsOpen}>
+            <Collapsible open={effectiveGoodHabitsOpen} onOpenChange={setGoodHabitsOpen}>
               <div className="bg-card material-radius-lg overflow-hidden">
                 <CollapsibleTrigger asChild>
-                  <Button 
-                    variant="ghost" 
+                  <Button
+                    variant="ghost"
                     className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
+                    disabled={searchQuery ? true : false}
                   >
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
                       <span className="font-medium">Good Habits</span>
                       <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20 ml-2 badge-count">
-                        {goodHabits.length}
+                        {filteredGoodHabits.length}
                       </Badge>
                     </div>
-                    <ChevronDown className={cn(
-                      "w-5 h-5",
-                      // Faster closing, slower opening for better UX
-                      goodHabitsOpen 
-                        ? "transition-transform duration-250 ease-out rotate-180"
-                        : "transition-transform duration-150 ease-in"
-                    )} />
+                    {!searchQuery && (
+                      <ChevronDown className={cn(
+                        "w-5 h-5",
+                        // Faster closing, slower opening for better UX
+                        goodHabitsOpen 
+                          ? "transition-transform duration-250 ease-out rotate-180"
+                          : "transition-transform duration-150 ease-in"
+                      )} />
+                    )}
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="px-4 pb-4 space-y-2">
-                  {goodHabits.length === 0 ? (
+                  {filteredGoodHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
-                      <span className="text-muted-foreground text-sm">No good habits yet</span>
+                      <span className="text-muted-foreground text-sm">
+                        {searchQuery ? "No good habits found" : "No good habits yet"}
+                      </span>
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {goodHabits.map((habit, index) => (
+                      {filteredGoodHabits.map((habit, index) => (
                         <HabitItem
                           key={habit.id}
                           habit={habit}
                           index={index}
-                          isOpen={goodHabitsOpen}
+                          isOpen={effectiveGoodHabitsOpen}
                           type="good"
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
@@ -244,42 +290,47 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
             </Collapsible>
 
             {/* Bad Habits Accordion */}
-            <Collapsible open={badHabitsOpen} onOpenChange={setBadHabitsOpen}>
+            <Collapsible open={effectiveBadHabitsOpen} onOpenChange={setBadHabitsOpen}>
               <div className="bg-card material-radius-lg overflow-hidden">
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
                     className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
+                    disabled={searchQuery ? true : false}
                   >
                     <div className="flex items-center space-x-3">
                       <XCircle className="w-5 h-5 text-red-500" />
                       <span className="font-medium">Bad Habits</span>
                       <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/20 ml-2 badge-count">
-                        {badHabits.length}
+                        {filteredBadHabits.length}
                       </Badge>
                     </div>
-                    <ChevronDown className={cn(
-                      "w-5 h-5",
-                      // Faster closing, slower opening for better UX
-                      badHabitsOpen 
-                        ? "transition-transform duration-250 ease-out rotate-180"
-                        : "transition-transform duration-150 ease-in"
-                    )} />
+                    {!searchQuery && (
+                      <ChevronDown className={cn(
+                        "w-5 h-5",
+                        // Faster closing, slower opening for better UX
+                        badHabitsOpen 
+                          ? "transition-transform duration-250 ease-out rotate-180"
+                          : "transition-transform duration-150 ease-in"
+                      )} />
+                    )}
                   </Button>
                 </CollapsibleTrigger>
                 <CollapsibleContent className="px-4 pb-4 space-y-2">
-                  {badHabits.length === 0 ? (
+                  {filteredBadHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
-                      <span className="text-muted-foreground text-sm">No bad habits tracked</span>
+                      <span className="text-muted-foreground text-sm">
+                        {searchQuery ? "No bad habits found" : "No bad habits tracked"}
+                      </span>
                     </div>
                   ) : (
                     <div className="space-y-2">
-                      {badHabits.map((habit, index) => (
+                      {filteredBadHabits.map((habit, index) => (
                         <HabitItem
                           key={habit.id}
                           habit={habit}
                           index={index}
-                          isOpen={badHabitsOpen}
+                          isOpen={effectiveBadHabitsOpen}
                           type="bad"
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
