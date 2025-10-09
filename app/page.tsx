@@ -95,13 +95,12 @@ export default function Home() {
   // ...existing code...
   // Handler for jump-to navigation from drawer (must be after useHabits)
   const handleHabitSelect = useCallback((habit: Habit) => {
-    const allHabits = [...goodHabits, ...badHabits];
-    const index = allHabits.findIndex(h => h.id === habit.id);
+    const index = habits.findIndex(h => h.id === habit.id);
     if (index !== -1) {
       navigateToHabitIndex(index);
       setDrawerOpen(false); // Close drawer after selection
     }
-  }, [goodHabits, badHabits, navigateToHabitIndex]);
+  }, [habits, navigateToHabitIndex]);
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
   useSystemBarsUnified(settings.fullscreenMode);
