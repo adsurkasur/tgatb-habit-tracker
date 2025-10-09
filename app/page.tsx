@@ -31,6 +31,7 @@ export default function Home() {
   const {
     exportData,
     importData,
+    habits,
     currentHabit,
     currentHabitIndex,
     navigationEvent,
@@ -160,14 +161,13 @@ export default function Home() {
   useEffect(() => {
     if (lastAddedHabitRef.current) {
       const { name, type } = lastAddedHabitRef.current;
-      const allHabits = [...goodHabits, ...badHabits];
-      const newIndex = allHabits.findIndex(h => h.name === name && h.type === type);
+      const newIndex = habits.findIndex(h => h.name === name && h.type === type);
       if (newIndex !== -1) {
         navigateToHabitIndex(newIndex);
         lastAddedHabitRef.current = null;
       }
     }
-  }, [goodHabits, badHabits, navigateToHabitIndex]);
+  }, [habits, navigateToHabitIndex]);
 
   const handleEditHabit = (habit: Habit) => {
     setEditingHabit(habit);
