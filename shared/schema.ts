@@ -26,6 +26,7 @@ export interface UserSettings {
   language: "en" | "id";
   motivatorPersonality: MotivatorPersonality;
   fullscreenMode: boolean;
+  autoSync?: boolean;
 }
 
 export const habitSchema = z.object({
@@ -58,6 +59,7 @@ export const userSettingsSchema = z.object({
   language: z.enum(["en", "id"]),
   motivatorPersonality: z.enum(["positive", "adaptive", "harsh"]),
   fullscreenMode: z.boolean(),
+  autoSync: z.boolean().optional(),
 });
 
 // Export bundle schema and types

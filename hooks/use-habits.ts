@@ -5,6 +5,8 @@ import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
 import { Share } from "@capacitor/share";
 import { SaveAs } from "capacitor-save-as";
 import { HabitStorage } from "@/lib/habit-storage";
+import { useAuth } from "@/hooks/use-auth";
+import { useCloudSync } from "@/hooks/use-cloud-sync";
 import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 
@@ -34,11 +36,15 @@ export function useHabits() {
    */
   const [navigationEvent, setNavigationEvent] = useState<{ dir: 'left' | 'right'; seq: number } | null>(null);
   const navSeqRef = useRef(0);
+  const { isLoggedIn } = useAuth();
+  const { schedulePush, pushNow, pullOnce } = useCloudSync();
+
   const [settings, setSettings] = useState<UserSettings>({
     darkMode: false,
     language: "en",
     motivatorPersonality: "positive",
     fullscreenMode: false,
+    autoSync: false,
   });
   const { toast } = useToast();
 
@@ -58,6 +64,8 @@ export function useHabits() {
   const addHabit = ({ name, type }: { name: string; type: HabitType }) => {
     const newHabit = HabitStorage.addHabit(name, type);
     setHabits(prev => [...prev, newHabit]);
+    // schedule cloud push if enabled
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     return newHabit;
   };
 
@@ -69,6 +77,7 @@ export function useHabits() {
       description: "Your habit has been successfully updated.",
       duration: 3000,
     });
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
 
   const deleteHabit = ({ id }: { id: string }) => {
@@ -76,6 +85,7 @@ export function useHabits() {
     if (!habitToDelete) return null;
     HabitStorage.deleteHabit(id);
     setHabits(prev => prev.filter(h => h.id !== id));
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     return habitToDelete;
   };
 
@@ -128,6 +138,7 @@ export function useHabits() {
         duration: 3000,
       });
     }
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
 
   const undoHabitTracking = (habitId: string) => {
@@ -140,6 +151,7 @@ export function useHabits() {
         description: "Today's tracking has been removed.",
         duration: 3000,
       });
+      try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     } else {
       toast({
         title: "Nothing to undo",
@@ -255,6 +267,8 @@ export function useHabits() {
         description: 'Your habit data has been imported.',
         duration: 3000,
       });
+      // After import, push to cloud immediately if autoSync enabled
+      try { if (settings.autoSync && isLoggedIn) await pushNow(jsonData); } catch {}
     } catch (err) {
       toast({
         title: 'Import failed',
@@ -274,7 +288,30 @@ export function useHabits() {
     // Refresh habits to get updated streaks
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
+
+  // After initial load, if autoSync enabled and user is logged in, pull remote data once
+  useEffect(() => {
+    (async () => {
+      try {
+        const loadedSettings = await HabitStorage.getSettings();
+        if (loadedSettings.autoSync && isLoggedIn) {
+          // Pull and import
+          await pullOnce(async (json) => {
+            try {
+              await importData(json);
+            } catch (e) {
+              // importData already shows toasts
+            }
+          });
+        }
+      } catch (e) {
+        // ignore
+      }
+    })();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isLoggedIn]);
 
   return {
     habits,
