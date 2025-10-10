@@ -5,7 +5,9 @@ export function validateExportImportJson(json: unknown): { success: boolean; err
   if (result.success) {
     return { success: true, data: result.data };
   } else {
-    const errors = result.error.errors.map(e => `${e.path.join(".")}: ${e.message}`);
+    // Zod v4 uses `issues` instead of `errors`
+    const issues = (result.error as any).issues || [];
+    const errors = issues.map((e: any) => `${(e.path || []).join(".")}: ${e.message}`);
     return { success: false, errors };
   }
 }

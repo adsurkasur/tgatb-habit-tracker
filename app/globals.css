@@ -110,7 +110,8 @@
 
 @layer base {
   * {
-    @apply border-border;
+    /* Set default border color using CSS variable to avoid @apply issues with Tailwind v4 */
+    border-color: var(--border);
     transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
                 background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
                 border-color 0.3s cubic-bezier(0.2, 0, 0, 1),
@@ -118,7 +119,10 @@
   }
 
   body {
-    @apply antialiased bg-background text-foreground;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: 'Inter', sans-serif;
   }
 }
