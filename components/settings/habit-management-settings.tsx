@@ -2,6 +2,7 @@ import { useState } from "react";
 import { ChevronRight, Trash2 } from "lucide-react";
 import { DeleteAllHabitsModal } from "@/components/delete-all-habits-modal";
 import { useToast } from "@/hooks/use-toast";
+import { useLoading } from "@/hooks/use-loading";
 
 interface HabitManagementSettingsProps {
   onDeleteAllHabits?: () => Promise<void>;
@@ -9,6 +10,7 @@ interface HabitManagementSettingsProps {
 
 export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSettingsProps) {
   const { toast } = useToast();
+  const { show: showLoading, hide: hideLoading } = useLoading();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
 
@@ -32,6 +34,7 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
         onCancel={() => setShowDeleteModal(false)}
         onDelete={async () => {
           setDeleteLoading(true);
+          showLoading();
           try {
             if (onDeleteAllHabits) {
               await onDeleteAllHabits();
@@ -58,6 +61,7 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
           } finally {
             setDeleteLoading(false);
             setShowDeleteModal(false);
+            hideLoading();
           }
         }}
       />

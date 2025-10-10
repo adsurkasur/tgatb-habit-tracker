@@ -1,6 +1,5 @@
 import React, { type ReactNode } from "react";
 import type { Metadata } from "next";
-import "../global.d";
 import "./globals.css";
 import { Providers } from "./providers";
 import { GlobalLoadingOverlay } from "@/components/global-loading-overlay";
