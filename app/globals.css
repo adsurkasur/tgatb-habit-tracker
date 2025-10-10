@@ -164,7 +164,6 @@
   
   /* Habit Card Animations */
   /* Base class no longer applies animation directly to avoid double animations with directional slides */
-  .habit-card-animated { }
 
   /* Initial mount animation (applied only on first render before any navigation) */
   .habit-card-initial {
@@ -509,19 +508,17 @@
   }
 
   /* Navigation button animations */
-  .nav-button {
-    backdrop-filter: blur(10px);
-    /* Minimal shadow when not hovered - same as habit cards */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s ease, box-shadow 0.2s ease, backdrop-filter 0.2s ease;
+  /* CTA color-only hover utility (no elevation) */
+  .cta-color-hover {
+    background: var(--cta-button-bg);
+    color: white;
+    transition: background-color 0.18s ease;
+  }
+
+  .cta-color-hover:hover {
+    background: var(--cta-button-hover);
   }
   
-  .nav-button:hover {
-    backdrop-filter: blur(15px);
-    /* Floating hover effect - same as habit cards */
-    transform: translate(-50%, -50%) translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
-  }
   
   .nav-button:active {
     transform: translate(-50%, -50%) scale(0.95);

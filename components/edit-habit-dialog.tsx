@@ -137,7 +137,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
             </Button>
             <Button
               type="submit"
-              className="flex-1 material-radius cta-button text-white"
+              className="flex-1 material-radius cta-color-hover text-white"
               disabled={!name.trim()}
             >
               Save Changes

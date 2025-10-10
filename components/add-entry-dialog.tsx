@@ -155,11 +155,11 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
               </div>
               <Button
                 type="button"
-                className="mt-4 w-full"
+                className="mt-4 w-full cta-color-hover"
                 disabled={!selectedHabit || status === null}
                 onClick={handleAddEntry}
               >
-                + Add Entry
+                Add Entry
               </Button>
             </div>
           </TabsContent>
@@ -209,7 +209,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
               </div>
               <Button
                 type="button"
-                className="mt-4 w-full"
+                className="mt-4 w-full cta-color-hover"
                 disabled={!newHabitName.trim() || newHabitStatus === null}
                 onClick={handleAddNewHabit}
               >

@@ -2,11 +2,12 @@
 function AddEntryButton({ show, onClick }: { show: boolean; onClick: () => void }) {
   if (!show) return null;
   return (
-    <div className="w-full flex justify-center mt-4">
+      <div className="w-full flex justify-center mt-4">
       <Button
         type="button"
         size="sm"
         variant="default"
+        className="cta-color-hover"
         onClick={onClick}
       >
         + Add Entry

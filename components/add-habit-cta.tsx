@@ -83,7 +83,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
         {/* CTA Button */}
         <Button
           onClick={onAddHabit}
-          className="w-full h-12 cta-button cta-button-animated font-medium group"
+          className="w-full h-12 cta-color-hover cta-button-animated font-medium group"
         >
           <Plus className="w-5 h-5 mr-2 transition-transform duration-200 group-hover:rotate-90" />
           Add Your First Habit
