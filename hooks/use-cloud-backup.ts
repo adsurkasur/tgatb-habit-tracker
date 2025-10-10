@@ -1,10 +1,13 @@
 import { Capacitor } from '@capacitor/core';
+
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from "@/hooks/use-network-status";
+import { useLoading } from "@/hooks/use-loading";
 
 export function useCloudBackup() {
   const { toast } = useToast();
   const { isOnline } = useNetworkStatus();
+  const { show: showLoading, hide: hideLoading } = useLoading();
   const isCapacitorApp = Capacitor.isNativePlatform();
 
   const handleBackup = async () => {
@@ -123,6 +126,7 @@ export function useCloudBackup() {
     }
   };
 
+
   const handleRestore = async (onImportData: (jsonData: string) => void) => {
     if (!isOnline) {
       return toast({
@@ -132,18 +136,20 @@ export function useCloudBackup() {
       });
     }
 
-    // Show 'Importing from Cloud...' toast
-    toast({
-      title: "Importing from Cloud...",
-      description: "Your data is being imported from the cloud. Please wait.",
-      duration: 3000,
-    });
-
     let accessToken: string | null = null;
     let cloudJson: string = "";
     let cloudBundle: any = null;
 
+    // Show loading overlay after precondition checks
+    showLoading();
     try {
+      // Show 'Importing from Cloud...' toast
+      toast({
+        title: "Importing from Cloud...",
+        description: "Your data is being imported from the cloud. Please wait.",
+        duration: 3000,
+      });
+
       if (typeof window !== 'undefined' && !isCapacitorApp) {
         // Web platform
         accessToken = localStorage.getItem('googleAccessToken');
@@ -265,6 +271,8 @@ export function useCloudBackup() {
         duration: 3000,
       });
       console.error('[useCloudBackup] Cloud import error:', err instanceof Error ? err.stack : err);
+    } finally {
+      hideLoading();
     }
   };
 

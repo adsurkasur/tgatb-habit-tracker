@@ -3,10 +3,12 @@ import { debounce } from "@/lib/utils/debounce";
 import { validateExportImportJson } from "@/lib/validate-export-import";
 import { exportDataPlatform } from "@/lib/platform-export";
 import { useToast } from "@/hooks/use-toast";
+import { useLoading } from "@/hooks/use-loading";
 
 export function useDataExport(onExportData: () => Promise<string>, onImportData: (jsonData: string) => void) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
+  const { show: showLoading, hide: hideLoading } = useLoading();
   const [isExporting, setIsExporting] = useState(false);
   const exportInProgressRef = useRef(false);
 
@@ -15,6 +17,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
     exportInProgressRef.current = true;
     setIsExporting(true);
 
+    showLoading();
     toast({
       title: "Exporting...",
       description: "Your data is being exported. Please wait.",
@@ -53,6 +56,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
     } finally {
       setIsExporting(false);
       exportInProgressRef.current = false;
+      hideLoading();
     }
   }, 500);
 
@@ -63,6 +67,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      showLoading();
       toast({
         title: "Importing...",
         description: "Your data is being imported. Please wait.",
@@ -71,33 +76,37 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
 
       const reader = new FileReader();
       reader.onload = (event) => {
-        const jsonData = event.target?.result as string;
-        if (jsonData) {
-          let jsonObj: unknown;
-          try {
-            jsonObj = JSON.parse(jsonData);
-          } catch {
-            toast({
-              title: "Import Failed",
-              description: "Imported file is not valid JSON.",
-              variant: "destructive",
-              duration: 3000,
-            });
-            return;
-          }
+        try {
+          const jsonData = event.target?.result as string;
+          if (jsonData) {
+            let jsonObj: unknown;
+            try {
+              jsonObj = JSON.parse(jsonData);
+            } catch {
+              toast({
+                title: "Import Failed",
+                description: "Imported file is not valid JSON.",
+                variant: "destructive",
+                duration: 3000,
+              });
+              return;
+            }
 
-          const validation = validateExportImportJson(jsonObj);
-          if (!validation.success) {
-            toast({
-              title: "Import Failed",
-              description: `Imported data is invalid: ${validation.errors?.join(", ")}`,
-              variant: "destructive",
-              duration: 4000,
-            });
-            return;
-          }
+            const validation = validateExportImportJson(jsonObj);
+            if (!validation.success) {
+              toast({
+                title: "Import Failed",
+                description: `Imported data is invalid: ${validation.errors?.join(", ")}`,
+                variant: "destructive",
+                duration: 4000,
+              });
+              return;
+            }
 
-          onImportData(jsonData);
+            onImportData(jsonData);
+          }
+        } finally {
+          hideLoading();
         }
       };
       reader.readAsText(file);
