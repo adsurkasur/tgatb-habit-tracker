@@ -1,9 +1,10 @@
-import React from "react";
+import React, { type ReactNode } from "react";
 import type { Metadata } from "next";
+import "../global.d";
 import "./globals.css";
 import { Providers } from "./providers";
+import { GlobalLoadingOverlay } from "@/components/global-loading-overlay";
 import { FirebaseInitializer } from "@/components/firebase-initializer";
-// ...existing code...
 import { CapacitorInit } from "@/components/capacitor-init";
 
 export const metadata: Metadata = {
@@ -34,11 +35,7 @@ export const metadata: Metadata = {
     ]
   }
 };
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -55,13 +52,14 @@ export default function RootLayout({
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
-  {/* <script dangerouslySetInnerHTML={{__html:`window.onerror = ...`}} /> */}
+        {/* <script dangerouslySetInnerHTML={{__html:`window.onerror = ...`}} /> */}
       </head>
       <body>
-  <CapacitorInit />
+        <CapacitorInit />
         {/* <ServiceWorkerRegistration /> */}
         <FirebaseInitializer>
           <Providers>
+            <GlobalLoadingOverlay />
             {children}
           </Providers>
         </FirebaseInitializer>
@@ -69,6 +67,7 @@ export default function RootLayout({
         {/* <AnalyticsNotice /> */}
         {/* {process.env.NODE_ENV === 'production' && <Analytics />} */}
       </body>
+
     </html>
   );
 }
