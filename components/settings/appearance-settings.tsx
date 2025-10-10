@@ -86,8 +86,9 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
         </div>
 
         <div
-          className={"flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition"}
-          style={!isNative ? { pointerEvents: 'none' } : undefined}
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+            !isNative ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
+          }`}
           {...(isNative ? { onClick: () => handleFullscreenToggle(!settings.fullscreenMode) } : {})}
         >
           <div className="flex items-center space-x-3">

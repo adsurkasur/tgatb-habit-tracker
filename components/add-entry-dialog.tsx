@@ -2,9 +2,17 @@ import { Dialog, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Habit } from "@shared/schema";
 import { CheckCircle, XCircle } from "lucide-react";
+import {
+  Select,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+  SelectValue,
+} from "@/components/ui/select";
+import { Input } from "@/components/ui/input";
 
 interface AddEntryDialogProps {
   open: boolean;
@@ -23,6 +31,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const [newHabitStatus, setNewHabitStatus] = useState<boolean | null>(null);
   const [lastAddedHabitId, setLastAddedHabitId] = useState<string | null>(null);
   const [tab, setTab] = useState("entry");
+  const habitNameRef = useRef<HTMLInputElement | null>(null);
 
   // When habits prop updates, select the last added habit if present
   // This ensures the dropdown and selection reflect the latest habits
@@ -36,6 +45,17 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
       }
     }
   }, [habits, lastAddedHabitId]);
+
+  // Focus habit name input when user switches to Add Habit tab
+  useEffect(() => {
+    if (tab === "habit") {
+      // small delay to ensure the input is mounted
+      const t = window.setTimeout(() => {
+        habitNameRef.current?.focus();
+      }, 50);
+      return () => window.clearTimeout(t);
+    }
+  }, [tab]);
 
   const handleAddEntry = () => {
     if (selectedHabit && status !== null) {
@@ -77,20 +97,43 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
           </TabsList>
           <TabsContent value="entry">
             <div className="space-y-2">
-              <select
-                className="w-full p-2 border rounded"
-                value={selectedHabit?.id || ""}
-                onChange={e => {
-                  const habit = habits.find(h => h.id === e.target.value) || null;
-                  setSelectedHabit(habit);
-                  setStatus(null);
+              <div
+                // Make the disabled select area act as a CTA to switch to the Add Habit tab
+                role={habits.length === 0 ? "button" : undefined}
+                tabIndex={habits.length === 0 ? 0 : undefined}
+                onClick={() => {
+                  if (habits.length === 0) setTab("habit");
+                }}
+                onKeyDown={(e) => {
+                  if (habits.length === 0 && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    setTab("habit");
+                  }
                 }}
               >
-                <option value="">Select habit...</option>
-                {habits.map(habit => (
-                  <option key={habit.id} value={habit.id}>{habit.name}</option>
-                ))}
-              </select>
+                <Select
+                  value={selectedHabit?.id || ""}
+                  onValueChange={(val) => {
+                    const habit = habits.find((h) => h.id === val) || null;
+                    setSelectedHabit(habit);
+                    setStatus(null);
+                  }}
+                >
+                  <SelectTrigger
+                    // keep trigger enabled but block pointer events so the wrapper can catch clicks
+                    className={habits.length === 0 ? "pointer-events-none opacity-50 cursor-not-allowed" : undefined}
+                  >
+                    <SelectValue placeholder={habits.length === 0 ? "No habit available, add now!" : "Select habit..."} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {habits.map((habit) => (
+                      <SelectItem key={habit.id} value={habit.id}>
+                        {habit.name}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
               <div className="flex gap-2 mt-2">
                 <Button
                   type="button"
@@ -122,12 +165,13 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
           </TabsContent>
           <TabsContent value="habit">
             <div className="space-y-2">
-              <input
+              <Input
                 type="text"
-                className="w-full p-2 border rounded"
+                ref={habitNameRef}
+                className="w-full"
                 placeholder="Habit name..."
                 value={newHabitName}
-                onChange={e => setNewHabitName(e.target.value)}
+                onChange={(e) => setNewHabitName(e.target.value)}
               />
               <div className="flex gap-2">
                 <Button
