@@ -102,8 +102,11 @@ ${colorConfig
 
 const ChartTooltip = RechartsPrimitive.Tooltip
 
-const ChartTooltipContent = React.forwardRef<HTMLDivElement, any>(
-  (props: any, ref) => {
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const isPayloadItem = (v: unknown): v is { payload?: any; name?: string; dataKey?: string; value?: unknown } =>
+  typeof v === "object" && v !== null;
+
+const ChartTooltipContent = React.forwardRef<HTMLDivElement, any>((props: any, ref) => {
     const {
       active,
       payload,
@@ -173,21 +176,24 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, any>(
       >
         {!nestLabel ? tooltipLabel : null}
         <div className="grid gap-1.5">
-          {payload.map((item: any, index: number) => {
-            const key = `${nameKey || item.name || item.dataKey || "value"}`
-            const itemConfig = getPayloadConfigFromPayload(config, item, key)
-            const indicatorColor = color || item.payload.fill || item.color
+          {/* eslint-disable @typescript-eslint/no-explicit-any */}
+          {payload.map((item: unknown, index: number) => {
+            /* eslint-disable @typescript-eslint/no-explicit-any */
+            const it = isPayloadItem(item) ? (item as any) : ({} as any)
+            const key = `${nameKey || it.name || it.dataKey || "value"}`
+            const itemConfig = getPayloadConfigFromPayload(config, it, key)
+            const indicatorColor = color || it.payload?.fill || it.color
 
             return (
               <div
-                key={item.dataKey}
+                key={it.dataKey}
                 className={cn(
                   "flex w-full flex-wrap items-stretch gap-2 [&>svg]:h-2.5 [&>svg]:w-2.5 [&>svg]:text-muted-foreground",
                   indicator === "dot" && "items-center"
                 )}
               >
-                {formatter && item?.value !== undefined && item.name ? (
-                  formatter(item.value, item.name, item, index, item.payload)
+                {formatter && it?.value !== undefined && it.name ? (
+                  formatter(it.value, it.name, it, index, it.payload)
                 ) : (
                   <>
                     {itemConfig?.icon ? (
@@ -223,12 +229,12 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, any>(
                       <div className="grid gap-1.5">
                         {nestLabel ? tooltipLabel : null}
                         <span className="text-muted-foreground">
-                          {itemConfig?.label || item.name}
+                          {itemConfig?.label || it.name}
                         </span>
                       </div>
-                      {item.value && (
+                      {it.value && (
                         <span className="font-mono font-medium tabular-nums text-foreground">
-                          {item.value.toLocaleString()}
+                          {it.value.toLocaleString()}
                         </span>
                       )}
                     </div>
@@ -237,6 +243,7 @@ const ChartTooltipContent = React.forwardRef<HTMLDivElement, any>(
               </div>
             )
           })}
+          {/* eslint-enable @typescript-eslint/no-explicit-any */}
         </div>
       </div>
     )
@@ -246,9 +253,10 @@ ChartTooltipContent.displayName = "ChartTooltip"
 
 const ChartLegend = RechartsPrimitive.Legend
 
-const ChartLegendContent = React.forwardRef<HTMLDivElement, any>(
-  (props: any, ref) => {
-    const { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey } = props
+/* eslint-disable @typescript-eslint/no-explicit-any */
+const ChartLegendContent = React.forwardRef<HTMLDivElement, any>((props: any, ref) => {
+  const { className, hideIcon = false, payload, verticalAlign = "bottom", nameKey } = props
+/* eslint-enable @typescript-eslint/no-explicit-any */
     const { config } = useChart()
 
     if (!payload?.length) {
@@ -264,13 +272,15 @@ const ChartLegendContent = React.forwardRef<HTMLDivElement, any>(
           className
         )}
       >
-  {payload.map((item: any) => {
-          const key = `${nameKey || item.dataKey || "value"}`
-          const itemConfig = getPayloadConfigFromPayload(config, item, key)
+  {payload.map((item: unknown) => {
+    /* eslint-disable @typescript-eslint/no-explicit-any */
+    const it = isPayloadItem(item) ? (item as any) : ({} as any)
+    const key = `${nameKey || it.dataKey || "value"}`
+    const itemConfig = getPayloadConfigFromPayload(config, it, key)
 
           return (
             <div
-              key={item.value}
+              key={it.value}
               className={cn(
                 "flex items-center gap-1.5 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:text-muted-foreground"
               )}
@@ -281,7 +291,7 @@ const ChartLegendContent = React.forwardRef<HTMLDivElement, any>(
                 <div
                   className="h-2 w-2 shrink-0 rounded-[2px]"
                   style={{
-                    backgroundColor: item.color,
+                    backgroundColor: it.color,
                   }}
                 />
               )}

@@ -290,12 +290,14 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                                   data: base64,
                                 });
                                 toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
-                              } catch (err) {
-                                toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
-                              }
+                              } catch (error) {
+                                    console.error(error);
+                                    toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
+                                  }
                             };
                             reader.readAsDataURL(blob);
-                          } catch {
+                          } catch (error) {
+                            console.error(error);
                             toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
                           }
                         } else {
