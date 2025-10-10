@@ -3,6 +3,9 @@ import tsPlugin from '@typescript-eslint/eslint-plugin';
 import tsParser from '@typescript-eslint/parser';
 
 export default [
+  {
+    ignores: ['**/*.d.ts', 'public/', '.next/', 'out/', 'node_modules/'],
+  },
   js.configs.recommended,
   {
     languageOptions: {
