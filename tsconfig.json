@@ -47,8 +47,7 @@
         "./shared/*"
       ]
     },
-  "target": "ES2017",
-  "ignoreDeprecations": "6.0"
+  "target": "ES2017"
   },
   "plugins": [
     {
