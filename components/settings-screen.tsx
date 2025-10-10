@@ -3,9 +3,10 @@ import { ArrowLeft } from 'lucide-react';
 import { UserSettings } from '@shared/schema';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { AppearanceSettings } from '@/components/settings/appearance-settings';
-import { AccountDataSettings } from '@/components/settings/account-data-settings';
 import { MotivatorSettings } from '@/components/settings/motivator-settings';
 import { HabitManagementSettings } from '@/components/settings/habit-management-settings';
+import { AccountDataSettings } from '@/components/settings/account-data-settings';
+import { AppDeviceSettings } from '@/components/settings/app-device-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
 
 type SettingsScreenProps = {
@@ -62,13 +63,6 @@ export function SettingsScreen({
           onUpdateSettings={onUpdateSettings}
         />
 
-        <AccountDataSettings
-          settings={settings}
-          onUpdateSettings={onUpdateSettings}
-          onExportData={onExportData}
-          onImportData={onImportData}
-        />
-
         <MotivatorSettings
           settings={settings}
           onUpdateSettings={onUpdateSettings}
@@ -77,6 +71,15 @@ export function SettingsScreen({
         <HabitManagementSettings
           onDeleteAllHabits={onDeleteAllHabits}
         />
+
+        <AccountDataSettings
+          settings={settings}
+          onUpdateSettings={onUpdateSettings}
+          onExportData={onExportData}
+          onImportData={onImportData}
+        />
+
+        <AppDeviceSettings />
 
         <HelpSupportSettings
           onShowHelp={onShowHelp}

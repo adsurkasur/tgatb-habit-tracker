@@ -1,7 +1,10 @@
 import { Switch } from "@/components/ui/switch";
-import { ChevronRight, Moon, Globe } from "lucide-react";
+import { ChevronRight, Moon, Globe, Maximize } from "lucide-react";
 import { UserSettings } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
+import { useStatusBar } from "@/hooks/use-status-bar";
+// MAJOR FIX: Use unified system bars instead of conflicting implementations
+import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 
 interface AppearanceSettingsProps {
   settings: UserSettings;
@@ -10,6 +13,32 @@ interface AppearanceSettingsProps {
 
 export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSettingsProps) {
   const { toast } = useToast();
+  const { isNative } = useStatusBar();
+
+  // Always force fullscreenMode to false if not native
+  const effectiveFullscreenMode = isNative ? settings.fullscreenMode : false;
+
+  const handleFullscreenToggle = async (enabled: boolean) => {
+    if (!isNative) return;
+    if (enabled) {
+      toast({
+        title: "Fullscreen mode enabled",
+        description: "Fullscreen mode may not display perfectly on all devices. If you notice issues, you can turn it off in settings.",
+        duration: 3000,
+      });
+    }
+    const newSettings = { ...settings, fullscreenMode: enabled };
+    onUpdateSettings({ fullscreenMode: enabled });
+    try {
+      const { HabitStorage } = await import("@/lib/habit-storage");
+      await HabitStorage.saveSettings(newSettings);
+    } catch {
+      // fallback: do nothing
+    }
+    if (isNative) {
+      await systemBarsUtils.setFullscreen(enabled);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -54,6 +83,28 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
             </div>
           </div>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
+        </div>
+
+        <div
+          className={"flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition"}
+          style={!isNative ? { pointerEvents: 'none' } : undefined}
+          {...(isNative ? { onClick: () => handleFullscreenToggle(!settings.fullscreenMode) } : {})}
+        >
+          <div className="flex items-center space-x-3">
+            <Maximize className="w-5 h-5 text-muted-foreground" />
+            <div className="flex flex-col">
+              <span className="font-medium">Fullscreen Mode</span>
+              <span className="text-xs text-muted-foreground">
+                {isNative ? "Hide status bar for immersive experience" : "Mobile app setting"}
+              </span>
+            </div>
+          </div>
+          <Switch
+            checked={effectiveFullscreenMode}
+            onCheckedChange={handleFullscreenToggle}
+            disabled={!isNative}
+            onClick={e => e.stopPropagation()}
+          />
         </div>
       </div>
     </div>

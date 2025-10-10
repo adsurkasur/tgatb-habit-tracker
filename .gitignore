@@ -157,3 +157,4 @@ storybook-static/
 *.log
 *.cache
 .cache/ 
+ai-context.md

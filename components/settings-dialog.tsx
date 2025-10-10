@@ -2,9 +2,10 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { X } from 'lucide-react';
 import { UserSettings } from '@shared/schema';
 import { AppearanceSettings } from '@/components/settings/appearance-settings';
-import { AccountDataSettings } from '@/components/settings/account-data-settings';
 import { MotivatorSettings } from '@/components/settings/motivator-settings';
 import { HabitManagementSettings } from '@/components/settings/habit-management-settings';
+import { AccountDataSettings } from '@/components/settings/account-data-settings';
+import { AppDeviceSettings } from '@/components/settings/app-device-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
 
 type SettingsDialogProps = {
@@ -46,30 +47,32 @@ export function SettingsDialog({
         </DialogHeader>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-6">
-          <AppearanceSettings
-            settings={settings}
-            onUpdateSettings={onUpdateSettings}
-          />
+            <AppearanceSettings
+              settings={settings}
+              onUpdateSettings={onUpdateSettings}
+            />
 
-          <AccountDataSettings
-            settings={settings}
-            onUpdateSettings={onUpdateSettings}
-            onExportData={onExportData}
-            onImportData={onImportData}
-          />
+            <MotivatorSettings
+              settings={settings}
+              onUpdateSettings={onUpdateSettings}
+            />
 
-          <MotivatorSettings
-            settings={settings}
-            onUpdateSettings={onUpdateSettings}
-          />
+            <HabitManagementSettings
+              onDeleteAllHabits={onDeleteAllHabits}
+            />
 
-          <HabitManagementSettings
-            onDeleteAllHabits={onDeleteAllHabits}
-          />
+            <AccountDataSettings
+              settings={settings}
+              onUpdateSettings={onUpdateSettings}
+              onExportData={onExportData}
+              onImportData={onImportData}
+            />
 
-          <HelpSupportSettings
-            onShowHelp={onShowHelp}
-          />
+            <AppDeviceSettings />
+
+            <HelpSupportSettings
+              onShowHelp={onShowHelp}
+            />
         </div>
       </DialogContent>
     </Dialog>
