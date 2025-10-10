@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.5.11 - 2025-10-10
+
+**Overview:**
+Small UX and settings refinements, loading/feedback improvements, navigation search, and a few bugfixes to improve discoverability and reliability.
+
+### UX & Settings (0.3.5.11)
+
+- Moved device-related controls into clearer places: Fullscreen Mode was relocated to the Appearance card and the Install App control was extracted into a new "App & Device" settings card for accurate labeling and discoverability.
+- Added `App & Device` settings card to separate app-install and device-specific controls from account and backup actions.
+
+### Loading & Feedback (0.3.5.11)
+
+- Implemented a global loading overlay and context to provide consistent progress feedback across long-running actions (cloud backup, data export, destructive operations).
+- Added explicit loading feedback during cloud backup and data export flows.
+- Improved modal UX to better show and handle loading states.
+
+### Navigation & Habits (0.3.5.11)
+
+- Added a search/filter field in the navigation drawer to filter visible habits (good / bad) for faster navigation.
+- Simplified habit selection logic by unifying habit arrays and streamlining selection behavior.
+
+### Fixes (0.3.5.11)
+
+- Increased the z-index of the ToastViewport so toast notifications remain visible above new overlays and loading UI.
+
 ## 0.3.5.10 - 2025-10-07
 
 **Overview:**
