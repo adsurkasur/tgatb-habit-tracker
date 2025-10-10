@@ -9,7 +9,7 @@ interface SafeAreaWrapperProps {
 }
 
 export const SafeAreaWrapper = ({ children, className = '' }: SafeAreaWrapperProps) => {
-  const { visible, height, overlays, isNative } = useStatusBar();
+  const { isNative } = useStatusBar();
 
   // Remove all top padding/margin/background for native platforms
   // Edge-to-edge best practice: Do NOT render any app bar, background, or padding in the status bar area.
