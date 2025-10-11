@@ -38,6 +38,7 @@
         "name": "next"
       }
     ],
+    "ignoreDeprecations": "6.0",
     "baseUrl": ".",
     "paths": {
       "@/*": [
@@ -47,8 +48,7 @@
         "./shared/*"
       ]
     },
-  "target": "ES2017",
-  "ignoreDeprecations": "5.0"
+  "target": "ES2017"
   },
   "plugins": [
     {
