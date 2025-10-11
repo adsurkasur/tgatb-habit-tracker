@@ -14,7 +14,6 @@ interface Props { fullscreen: boolean; }
 /**
  * @deprecated Use useSystemBarsUnified() hook instead
  */
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function SystemBarsManager({ fullscreen }: Props) {
   console.warn('SystemBarsManager is deprecated. Use useSystemBarsUnified() hook instead.');
   return null;

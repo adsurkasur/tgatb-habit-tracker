@@ -137,7 +137,6 @@ export async function registerBackgroundSync(tag: string): Promise<boolean> {
   try {
     const registration = await navigator.serviceWorker.ready;
     if ('sync' in registration) {
-      // @ts-expect-error SyncManager is not in TS lib by default
       await registration.sync.register(tag);
       return true;
     }
