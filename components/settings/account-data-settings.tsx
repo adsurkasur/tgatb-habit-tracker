@@ -1,5 +1,4 @@
 import Image from "next/image";
-import { useToast } from "@/hooks/use-toast";
 import { ChevronRight, User, CloudUpload, CloudDownload, Download, Upload, RefreshCw } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
 import { UserSettings } from "@shared/schema";
@@ -24,7 +23,6 @@ export function AccountDataSettings({
   const { isLoggedIn, profile, clientReady, handleAuth } = useAuth();
   const { handleBackup, handleRestore } = useCloudBackup();
   const { fileInputRef, isExporting, handleExportClick, handleImportClick, handleFileChange } = useDataExport(onExportData, onImportData);
-  const { toast } = useToast();
   
   const toggleAutoSync = () => {
     onUpdateSettings({ autoSync: !settings.autoSync });

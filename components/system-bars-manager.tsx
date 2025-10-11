@@ -9,12 +9,10 @@
 //
 // See docs/SYSTEM_BARS_FIX.md for migration details.
 
-interface Props { fullscreen: boolean; }
-
 /**
  * @deprecated Use useSystemBarsUnified() hook instead
  */
-export function SystemBarsManager({ fullscreen }: Props) {
+export function SystemBarsManager() {
   console.warn('SystemBarsManager is deprecated. Use useSystemBarsUnified() hook instead.');
   return null;
 }

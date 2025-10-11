@@ -290,7 +290,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                                   data: base64,
                                 });
                                 toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
-                              } catch (err) {
+                              } catch {
                                 toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
                               }
                             };
