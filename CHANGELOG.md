@@ -2,6 +2,34 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.6 - 2025-10-12
+
+**Overview:**
+This release introduces auto-sync functionality for cloud data, implements a global loading overlay system, and includes various UX improvements and technical updates.
+
+### Features (0.3.6)
+
+- **Auto-Sync for Cloud Data:** Added automatic synchronization option for cloud habit data to keep user data up-to-date across devices.
+- **Global Loading Overlay:** Implemented a comprehensive loading overlay and context system to provide consistent progress feedback across long-running operations.
+- **Enhanced Loading Feedback:** Added explicit loading indicators during cloud backup and data export processes for better user experience.
+
+### Improvements (0.3.6)
+
+- **Modal UX Enhancements:** Improved modal user experience with better loading states and global loading feedback integration.
+- **Habit Selection UX:** Enhanced habit selection interface and improved focus handling for add habit input.
+- **Settings Organization:** Moved fullscreen and install app controls to a new dedicated "App & Device" settings section for better organization.
+- **UI Consistency:** Unified CTA button hover effects with the cta-color-hover utility for consistent styling.
+
+### Fixes (0.3.6)
+
+- **Toast Visibility:** Increased z-index of ToastViewport to ensure toast notifications remain visible above new overlays and UI elements.
+
+### Technical Updates (0.3.6)
+
+- **TypeScript Configuration:** Updated TypeScript settings to ignore deprecations for versions 5.0 and 6.0.
+- **Code Quality:** Refactored error handling in DonationDialog, removed unused variables, and cleaned up ESLint disable comments.
+- **Dependencies:** Updated project dependencies and aligned tooling for latest support.
+
 ## 0.3.5.11 - 2025-10-10
 
 **Overview:**
