@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.6.1 - 2025-10-12
+
+**Overview:**
+Small patch release to fix Android Google Drive authorization failures and prepare the repository for an automated APK release.
+
+### Fixes (0.3.6.1)
+
+- **Android Drive 401 / OAuth:** Added mitigation + diagnostics for Android-only Drive 401s (clear invalid stored access token on 401, improved logs) and updated mobile Google sign-in debug warnings. Root cause addressed by updating the Android OAuth configuration (SHA-1 fingerprint added) and replacing `google-services.json` for the Android app.
+
+- **Release prep:** Uploaded updated `google-services.json` and the `release.keystore` (base64) to the repository (for CI use) and prepared the GitHub Actions workflow to publish `0.3.6.1` APK. Follow-up: confirm CI secrets and workflow decode steps are correct before final release.
+
+### Notes
+
+- This is a small compatibility & release-prep patch only; web/PWA behaviour is unchanged.
+
+
 ## 0.3.6 - 2025-10-12
 
 **Overview:**
