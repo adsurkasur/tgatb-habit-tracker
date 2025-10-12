@@ -16,9 +16,25 @@ export async function uploadDataToDrive(jsonData: string, accessToken: string): 
 			body: form,
 		});
 		const data = await res.json();
+		if (!res.ok) {
+			// Detect unauthorized and proactively clear stored token on mobile so callers can trigger re-auth
+			if (res.status === 401) {
+				console.error('[DriveSync] uploadDataToDrive 401', { status: res.status, result: data });
+				try {
+					const { Preferences } = await import('@capacitor/preferences');
+					await Preferences.remove({ key: 'googleAccessToken' });
+				} catch (e) {
+					console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
+				}
+				throw new Error('Drive Unauthorized (401)');
+			}
+			console.error('[DriveSync] uploadDataToDrive error', { status: res.status, result: data });
+			throw new Error(data?.error?.message || 'Drive upload failed');
+		}
 		return data.id ?? null;
-	} catch {
-		return null;
+	} catch (err) {
+		// Re-throw so callers can show UX to re-authenticate
+		throw err;
 	}
 }
 // Download the latest habits backup from Drive
@@ -29,6 +45,19 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 			 headers: { Authorization: `Bearer ${accessToken}` }
 		 });
 		 const listJson = await listRes.json();
+		 if (!listRes.ok) {
+			 if (listRes.status === 401) {
+				 console.error('[DriveSync] list files 401', { status: listRes.status, result: listJson });
+				 try {
+					 const { Preferences } = await import('@capacitor/preferences');
+					 await Preferences.remove({ key: 'googleAccessToken' });
+				 } catch (e) {
+					 console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
+				 }
+				 throw new Error('Drive Unauthorized (401)');
+			 }
+			 throw new Error(listJson?.error?.message || 'Drive file list failed');
+		 }
 		 const files = listJson.files || [];
 		 if (!files.length) throw new Error("No backup file found in Drive");
 		 const fileId = files[0].id;
@@ -37,6 +66,20 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 			 headers: { Authorization: `Bearer ${accessToken}` }
 		 });
 		 const cloudJson = await res.text();
+		 if (!res.ok) {
+			 const parsed = (() => { try { return JSON.parse(cloudJson); } catch { return cloudJson; } })();
+			 if (res.status === 401) {
+				 console.error('[DriveSync] download file 401', { status: res.status, result: parsed });
+				 try {
+					 const { Preferences } = await import('@capacitor/preferences');
+					 await Preferences.remove({ key: 'googleAccessToken' });
+				 } catch (e) {
+					 console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
+				 }
+				 throw new Error('Drive Unauthorized (401)');
+			 }
+			 throw new Error(parsed?.error?.message || 'Drive download failed');
+		 }
 		 return JSON.parse(cloudJson);
 	 } catch {
 		 return null;

@@ -213,7 +213,21 @@ export function useCloudBackup() {
         try {
           const { downloadLatestHabitsFromDrive } = await import("@/mobile/drive-sync");
           // Download latest backup (returns full bundle)
-          cloudBundle = await downloadLatestHabitsFromDrive(accessToken);
+          try {
+            cloudBundle = await downloadLatestHabitsFromDrive(accessToken);
+          } catch (err: unknown) {
+            // If mobile drive-sync threw a 401 unauthorized, ensure we show a clear message
+            if (err instanceof Error && err.message.includes('Drive Unauthorized')) {
+              toast({
+                title: "Import Error",
+                description: "Drive authorization expired or invalid on this device. Please sign in again.",
+                variant: "destructive",
+                duration: 4000,
+              });
+              return;
+            }
+            throw err;
+          }
           cloudJson = JSON.stringify(cloudBundle);
           console.debug('[useCloudBackup] Mobile Drive raw backup bundle:', cloudBundle);
         } catch (err: unknown) {

@@ -26,7 +26,7 @@ export async function signInWithGoogle(): Promise<GoogleAuthResult | null> {
 					photoUrl,
 				};
 			} else {
-				console.error('[GoogleAuth] No access token in result:', result);
+				console.warn('[GoogleAuth] No access token in result; check Android OAuth client config (SHA fingerprints) and requested scopes', result);
 				return null;
 			}
 	} catch (err) {
