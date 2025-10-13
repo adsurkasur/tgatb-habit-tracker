@@ -267,8 +267,9 @@ export function useHabits() {
         description: 'Your habit data has been imported.',
         duration: 3000,
       });
-      // After import, push to cloud immediately if autoSync enabled
-      try { if (settings.autoSync && isLoggedIn) await pushNow(jsonData); } catch {}
+  // After import, push to cloud immediately if autoSync enabled
+  // Use pushNow with showToast=false to avoid duplicate import+autosync toasts
+  try { if (settings.autoSync && isLoggedIn) await pushNow({ payload: jsonData, showToast: false }); } catch {}
     } catch (err) {
       toast({
         title: 'Import failed',

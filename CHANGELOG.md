@@ -2,6 +2,30 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.3.6.2 - 2025-10-13
+
+**Overview:**
+Patch release improving auto-sync reliability and UX. This update hardens the automatic cloud sync engine, reduces noisy toasts during background operations, and integrates the global loading overlay for clearer progress feedback.
+
+### Improvements (0.3.6.2)
+
+- **Robust Auto-Sync:** Added a sync mutex to prevent concurrent pushes, exponential backoff with jitter and capped retries for transient failures, and persisted pending sync state so retries survive app restarts.
+- **Network-aware retries:** Pending syncs are automatically retried when the device regains connectivity (silent background retry by default).
+- **Loading overlay for sync:** Global loading overlay is shown during sync operations to provide consistent feedback; this can be suppressed for silent/background retries.
+- **Toast UX:** Coalesced success toasts to avoid repetition, and suppressed duplicate import + autosync toasts. Background retries are quieter and show a single aggregated failure message.
+- **Auth handling:** Special-case handling for Drive 401 responses — retries stop and user is prompted to re-authenticate; mobile behavior clears invalid tokens on 401 as implemented previously.
+- **API additions:** `pushNow` now accepts options (`payload`, `showToast`, `force`) to distinguish manual vs background syncs.
+
+### Files Modified
+
+- `hooks/use-cloud-sync.ts` — added backoff, persistence, mutex, loading integration, and toast coalescing.
+- `hooks/use-habits.ts` — suppressed autosync toast after import to avoid duplicate toasts.
+
+### Notes
+
+- Manual/forced syncs still show toasts by default. Persisted storage keys used: `syncPending` and `syncFailedCount`.
+
+
 ## 0.3.6.1 - 2025-10-12
 
 **Overview:**
