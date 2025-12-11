@@ -154,4 +154,4 @@ Recommendation: Option 1. Add SW update prompt and cache versioning.
 
 ---
 
-If you want, I can now run a grep for `TODO|FIXME` to extract code-level todos, or start a local `pnpm dev` run to surface runtime errors — tell me which next step to perform.
+Repository scan: `TODO|FIXME` search completed. See `docs/TODOs.md` for consolidated items and next steps.

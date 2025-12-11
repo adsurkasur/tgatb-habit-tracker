@@ -49,7 +49,13 @@ This guide documents how the project integrates Google authentication and Google
 2. Add migration scaffolding in `lib/` and unit tests around `shared/schema.ts` validators.
 3. Add clear UI for manual export/restore and confirm-before-import.
 
-If you'd like, I can run a grep for `TODO|FIXME` across the repo, scaffold a migration runner, or draft a merge strategy proposal — tell me which you'd prefer.
+Repository housekeeping: a filtered `TODO|FIXME` scan has been run and results are consolidated in `docs/TODOs.md`.
+
+Next recommended actions:
+
+- Create concrete GitHub Issues from the consolidated TODOs (see `docs/ISSUES_PROPOSED.md`).
+- Design and implement a per-item merge strategy and add migration scaffolding in `lib/`.
+
 
 # TGATB Habit Tracker: Google Auth + Drive Sync Integration Guide
 
