@@ -2,6 +2,8 @@
 
 This guide helps you set up Android development for the TGATB Habit Tracker on **Windows**, **macOS**, and **Linux**.
 
+> Audit note (2025-12-12): The codebase includes a working Capacitor configuration and Android Gradle settings (AGP `8.13.0`). System bar handling is centralized in `hooks/use-system-bars-unified.ts`. Before building, confirm your local JDK, Gradle and Android SDK versions match the project requirements and consult `docs/ANDROID_15_COMPATIBILITY.md` for Android 15 specifics.
+
 ## 🚀 Quick Start
 
 1. **Check prerequisites**: `npm run setup:android`

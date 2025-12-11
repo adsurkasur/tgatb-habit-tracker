@@ -1,5 +1,7 @@
 # Android 15+ System Bars Compatibility
 
+> Audit note (2025-12-12): The codebase includes native support and guidance for Android 15 compatibility. The JS side uses `use-system-bars-unified.ts` to coordinate system bar state; ensure native `SystemUiPlugin` and opt-out flags are kept in sync with the hook behavior during testing.
+
 ## Overview
 
 Starting with Android 15 (API level 35), directly setting `window.statusBarColor` is deprecated. This implementation provides forward-compatible system bar management using the WindowInsets API while maintaining backward compatibility.

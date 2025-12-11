@@ -1,3 +1,55 @@
+## TGATB Habit Tracker: Google Auth & Drive Sync Integration Guide
+
+### Overview
+
+This guide documents how the project integrates Google authentication and Google Drive backups for web and mobile, points to the implementation files, and highlights known risks and recommended precautions.
+
+### Where the code lives
+
+- Web Drive/auth helpers: `web/drive-sync.ts`
+- Mobile Drive/auth helpers: `mobile/drive-sync.ts`
+- Cloud sync orchestration: `hooks/use-cloud-sync.ts`, `hooks/use-cloud-backup.ts`
+- Shared schema & validation: `shared/schema.ts`, `lib/validate-export-import.ts`
+- Local persistence: `lib/habit-storage.ts`, `lib/platform-storage.ts`
+- Firebase initializer (analytics/auth): `components/firebase-initializer.tsx`
+
+### Authentication & Scopes
+
+- The app uses OAuth access tokens to call the Google Drive REST API. The implementation expects an access token with Drive file scope (for example `https://www.googleapis.com/auth/drive.file`).
+- Mobile uses Capacitor + Firebase authentication plugins to obtain tokens; see `mobile/` for platform specifics.
+- Web uses platform-appropriate OAuth flows implemented in `web/drive-sync.ts` to obtain access tokens for upload/download.
+
+### Backup / Restore Flow (current behavior)
+
+- Export: `lib/habit-storage.ts` exports the full data bundle (habits, logs, metadata) validated by `shared/schema.ts`.
+- Upload: `web/drive-sync.ts` / `mobile/drive-sync.ts` perform multipart uploads of the export bundle to Google Drive and return Drive file metadata.
+- Download/Restore: Drive helpers list and download the latest backup file; `lib/validate-export-import.ts` validates the bundle before import.
+
+### Important Caveats & Risks
+
+- Current sync performs full-bundle push/pull. Importing a downloaded bundle may overwrite local data and can cause data loss when multiple devices change data concurrently.
+- There is no per-item merge/conflict resolution implemented. `hooks/use-cloud-sync.ts` schedules pushes/pulls and retries, but does not implement item-level merging.
+- There is no migration runner for versioned data schema. Importing older/newer formats can break the app without migrations.
+
+### Recommendations
+
+- Implement conflict-aware merge logic before enabling automatic background sync across multiple devices (per-item timestamps, version vectors, or operation logs / CRDTs).
+- Add a migration runner (e.g., `lib/migrations/*`) and run migrations at startup with pre-migration backup.
+- Provide an explicit user-facing restore confirmation and an easy manual export option before performing destructive imports.
+- Gate analytics and tracking on explicit user consent; update `components/firebase-initializer.tsx` to respect consent state.
+
+### Testing & Deployment notes
+
+- Test Drive uploads/downloads on real devices for mobile flows (OAuth and native plugins behave differently on emulators).
+- Configure OAuth client IDs and redirect URIs in Google Cloud Console and in your hosting platform for web flows.
+
+### Suggested next steps
+
+1. Review `hooks/use-cloud-sync.ts` and `web/drive-sync.ts` to design a merge strategy.
+2. Add migration scaffolding in `lib/` and unit tests around `shared/schema.ts` validators.
+3. Add clear UI for manual export/restore and confirm-before-import.
+
+If you'd like, I can run a grep for `TODO|FIXME` across the repo, scaffold a migration runner, or draft a merge strategy proposal — tell me which you'd prefer.
 
 # TGATB Habit Tracker: Google Auth + Drive Sync Integration Guide
 

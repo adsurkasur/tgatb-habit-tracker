@@ -2,6 +2,8 @@
 
 ## Last updated: August 15, 2025
 
+**Audit note (2025-12-12):** The codebase includes an analytics notice (`components/analytics-notice.tsx`) that records acknowledgment in local storage. However, `components/firebase-initializer.tsx` currently initializes Firebase Analytics when online and does not explicitly check the acknowledgement flag before calling `getAnalytics`. Recommend gating analytics initialization on the stored `analytics-notice-acknowledged` flag to ensure consent is respected.
+
 This Privacy Policy describes how TGATB Habit Tracker ("we", "us", or "our") collects, uses, and shares information when you use our web and mobile applications.
 
 ## Information We Collect

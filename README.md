@@ -38,6 +38,8 @@
 
 Try it live: [tgatb.vercel.app](https://tgatb.vercel.app/)
 
+Note: For a current, code-level review and outstanding issues, see [docs/REVIEW_AND_ISSUES.md](docs/REVIEW_AND_ISSUES.md).
+
 ---
 
 ## Screenshots
@@ -73,14 +75,14 @@ Try it live: [tgatb.vercel.app](https://tgatb.vercel.app/)
 - Shadcn/ui, Radix UI, Tailwind CSS for UI
 - TanStack Query for state management
 
-### Roadmap / Upcoming
+### Roadmap / Status
 
-- 🗄️ Cloud sync and backup
-- 👤 User authentication and multi-device support
-- 📅 Calendar view and advanced analytics
-- 🛠️ Customizable habit categories and reminders
-- 🌙 Dark mode toggle
-- More notification and motivational features
+- 🗄️ Cloud sync and backup — implemented (Google Drive full-bundle upload/download). NOTE: merge/conflict handling is still required to avoid overwrites; see `docs/REVIEW_AND_ISSUES.md` for details.
+- 👤 User authentication and multi-device support — partially implemented via Firebase/Capacitor plugin (initializer present), but consent gating and complete auth UX need validation.
+- 📅 Calendar view and advanced analytics — planned
+- 🛠️ Customizable habit categories and reminders — planned
+- 🌙 Dark mode toggle — implemented (settings persisted via platform storage)
+- More notification and motivational features — ongoing
 
 ---
 

@@ -2,6 +2,8 @@
 
 ## Last updated: August 15, 2025
 
+**Audit note (2025-12-12):** No changes required to legal terms from the recent code audit. Implementation notes: cloud sync uses Google Drive and Firebase components; ensure the privacy policy reflects third-party processing and user consent flows.
+
 Welcome to TGATB Habit Tracker ("we", "us", "our"). By using our web and mobile applications, you agree to these Terms of Service.
 
 ## Use of the App

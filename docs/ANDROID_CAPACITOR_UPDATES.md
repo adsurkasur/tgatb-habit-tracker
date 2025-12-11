@@ -2,6 +2,8 @@
 
 This document describes the recent changes made to improve the Android native app experience.
 
+> Audit note (2025-12-12): The repository's Capacitor configuration and status bar changes are present (see `capacitor.config.ts` and `lib/capacitor.ts`). Confirm the Android theme and system UI native plugin are tested on Android 15 devices; the unified JS hook (`hooks/use-system-bars-unified.ts`) is intended to coordinate with native behavior.
+
 ## 🔧 Changes Made
 
 ### 1. Mobile View Detection

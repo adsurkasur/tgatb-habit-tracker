@@ -2,6 +2,8 @@
 
 This document explains the implemented native solution to prevent your Capacitor app from overlapping with the status bar, ensuring a solid status bar by default with proper content positioning.
 
+> Audit note (2025-12-12): The JS hooks (`hooks/use-status-bar.ts` and `hooks/use-system-bars-unified.ts`) and native theme updates are present in the repository. Ensure analytics/consent gating does not initialize native analytics before user consent during testing.
+
 ## Implementation Overview
 
 The solution consists of both native Android configuration and dynamic JavaScript/TypeScript control through the Capacitor StatusBar plugin.

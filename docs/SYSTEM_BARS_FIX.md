@@ -1,5 +1,7 @@
 # System Bars Fix Implementation - August 9, 2025
 
+> Audit note (2025-12-12): The unified JS hook `hooks/use-system-bars-unified.ts` is present and wired into `app/page.tsx`. The native plugin and theme updates referenced here should be tested end-to-end on Android 15 devices to ensure parity with the JS behavior.
+
 ## Problems Fixed
 
 ### 1. White-on-White Status Bar Issue
