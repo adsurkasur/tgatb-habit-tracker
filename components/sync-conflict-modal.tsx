@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useState } from 'react';
-import { Modal } from './ui/modal';
+import React, { useEffect, useState } from 'react';
+import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import { Button } from './ui/button';
 import { HabitStorage } from '@/lib/habit-storage';
 
@@ -109,9 +109,11 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
   };
 
   return (
-    <Modal open={open} onClose={onClose} title="Sync Conflicts Detected">
-      <div className="space-y-4">
-        <div className="text-sm text-muted-foreground">Conflicts were detected while merging cloud backup. Choose per-field resolutions below, or accept remote/keep local globally.</div>
+    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <DialogContent>
+        <DialogTitle>Sync Conflicts Detected</DialogTitle>
+        <DialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</DialogDescription>
+        <div className="space-y-4">
         <div className="max-h-72 overflow-auto">
           {payload.conflicts.map((c: any) => (
             <div key={c.id} className="p-3 border rounded mb-2 bg-muted">
@@ -133,13 +135,16 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
           ))}
         </div>
 
-        <div className="flex justify-end space-x-2">
-          <Button variant="ghost" onClick={keepLocal}>Keep Local</Button>
-          <Button variant="secondary" onClick={applyResolutions}>Apply Resolutions</Button>
-          <Button onClick={acceptRemote}>Accept Remote</Button>
-        </div>
+        <DialogFooter>
+          <div className="flex justify-end space-x-2 w-full">
+            <Button variant="ghost" onClick={keepLocal}>Keep Local</Button>
+            <Button variant="secondary" onClick={applyResolutions}>Apply Selected</Button>
+            <Button onClick={acceptRemote}>Accept Remote</Button>
+          </div>
+        </DialogFooter>
       </div>
-    </Modal>
+      </DialogContent>
+    </Dialog>
   );
 }
 
