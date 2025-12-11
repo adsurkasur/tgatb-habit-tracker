@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { ChevronRight, User, CloudUpload, CloudDownload, Download, Upload, RefreshCw } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import SyncConflictModal from '@/components/sync-conflict-modal';
 import { UserSettings } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useCloudBackup } from "@/hooks/use-cloud-backup";
@@ -27,6 +28,18 @@ export function AccountDataSettings({
   const toggleAutoSync = () => {
     onUpdateSettings({ autoSync: !settings.autoSync });
   };
+
+  const [conflictOpen, setConflictOpen] = useState(false);
+  const [hasConflict, setHasConflict] = useState(false);
+
+  useEffect(() => {
+    try {
+      const raw = localStorage.getItem('sync:conflict');
+      setHasConflict(!!raw);
+    } catch {
+      setHasConflict(false);
+    }
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -110,6 +123,30 @@ export function AccountDataSettings({
           </div>
         </div>
 
+        {/* Analytics Consent Toggle */}
+        <div
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+            !clientReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
+          }`}
+          onClick={clientReady ? () => onUpdateSettings({ analyticsConsent: !settings.analyticsConsent }) : undefined}
+        >
+          <div className="flex items-center space-x-3">
+            <User className="w-5 h-5 text-muted-foreground" />
+            <div>
+              <div className="font-medium">Analytics</div>
+              <div className="text-sm text-muted-foreground">Allow anonymous analytics to help improve the app.</div>
+            </div>
+          </div>
+          <div className="flex items-center space-x-3">
+            <Switch
+              checked={!!settings.analyticsConsent}
+              onCheckedChange={(checked) => onUpdateSettings({ analyticsConsent: checked })}
+              disabled={!clientReady}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+        </div>
+
         <div
           className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
             isExporting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
@@ -143,6 +180,18 @@ export function AccountDataSettings({
           onChange={handleFileChange}
           className="hidden"
         />
+        {hasConflict ? (
+          <div className="mt-3">
+            <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition" onClick={() => setConflictOpen(true)}>
+              <div className="flex items-center space-x-3">
+                <CloudDownload className="w-5 h-5 text-muted-foreground" />
+                <span className="font-medium">Resolve Sync Conflicts</span>
+              </div>
+              <ChevronRight className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <SyncConflictModal open={conflictOpen} onClose={() => { setConflictOpen(false); setHasConflict(false); }} />
+          </div>
+        ) : null}
       </div>
     </div>
   );

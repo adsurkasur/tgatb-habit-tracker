@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import { initializeApp, getApp, getApps, type FirebaseApp } from 'firebase/app';
 import { getAnalytics, type Analytics } from 'firebase/analytics';
 import { useNetworkStatus } from '@/hooks/use-network-status';
+import { HabitStorage } from '@/lib/habit-storage';
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY,
@@ -23,15 +24,24 @@ export function FirebaseInitializer({ children }: { children: ReactNode }) {
     const [initialized, setInitialized] = useState(false);
 
     useEffect(() => {
-        if (isOnline && !initialized) {
-            if (!getApps().length) {
-                app = initializeApp(firebaseConfig);
-                analytics = typeof window !== 'undefined' ? getAnalytics(app) : undefined;
-            } else {
-                app = getApp();
+            if (isOnline && !initialized) {
+                // Initialize only when user granted analytics consent
+                (async () => {
+                    try {
+                        const settings = await HabitStorage.getSettings();
+                        if (!settings?.analyticsConsent) return;
+                        if (!getApps().length) {
+                            app = initializeApp(firebaseConfig);
+                            analytics = typeof window !== 'undefined' ? getAnalytics(app) : undefined;
+                        } else {
+                            app = getApp();
+                        }
+                        setInitialized(true);
+                    } catch (e) {
+                        // ignore errors and avoid initializing analytics
+                    }
+                })();
             }
-            setInitialized(true);
-        }
     }, [isOnline, initialized]);
 
     return <>{children}</>;

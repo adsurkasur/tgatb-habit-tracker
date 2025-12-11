@@ -29,6 +29,7 @@ export function useCloudSync() {
   // Storage keys
   const SYNC_PENDING_KEY = 'syncPending';
   const SYNC_FAILED_COUNT_KEY = 'syncFailedCount';
+  const SYNC_LAST_SNAPSHOT_KEY = 'sync:lastSnapshot';
 
   // Backoff config
   const MAX_ATTEMPTS = 5;
@@ -115,6 +116,8 @@ export function useCloudSync() {
 
           // success
           lastSuccessAtRef.current = Date.now();
+          // persist last snapshot for three-way merges
+          try { await storageSet(SYNC_LAST_SNAPSHOT_KEY, data); } catch {}
           pendingRef.current = false;
           try { await storageRemove(SYNC_PENDING_KEY); await storageRemove(SYNC_FAILED_COUNT_KEY); } catch {}
           // coalesce success toast: only show once every 10s
@@ -216,9 +219,80 @@ export function useCloudSync() {
           headers: { Authorization: `Bearer ${accessToken}` }
         });
         const cloudJson = await res.text();
-        if (onImport) onImport(cloudJson);
-        toast({ title: 'Auto-sync', description: 'Pulled latest data from cloud.', duration: 2500 });
-        return true;
+        // Run migrations and attempt per-item merge with local data
+        try {
+          const parsed = JSON.parse(cloudJson);
+          const { runMigrations } = await import('@/lib/migrations');
+          const migrated = await runMigrations(parsed).catch(() => parsed);
+
+          const { mergeHabit, mergeLog } = await import('@/lib/sync/merge');
+          const { HabitStorage } = await import('@/lib/habit-storage');
+
+          const localHabits = HabitStorage.getHabits();
+          const localLogs = HabitStorage.getLogs();
+
+          // load last snapshot for base if available
+          let baseSnapshot: any = null;
+          try { const last = await storageGet(SYNC_LAST_SNAPSHOT_KEY); baseSnapshot = last ? JSON.parse(last) : null; } catch {}
+
+          const remoteHabits = migrated.habits || [];
+          const remoteLogs = migrated.logs || [];
+
+          const localMap = new Map(localHabits.map((h:any)=>[h.id,h]));
+          const baseMap = new Map((baseSnapshot?.habits||[]).map((h:any)=>[h.id,h]));
+
+          const mergedHabits: any[] = [];
+          const conflictsCollected: any[] = [];
+          for (const r of remoteHabits) {
+            const l = localMap.get(r.id) || null;
+            const b = baseMap.get(r.id) || null;
+            const res = mergeHabit(l as any, r as any, b as any);
+            mergedHabits.push(res.merged);
+            if (res.conflict) conflictsCollected.push({ id: r.id, conflicts: res.conflicts, local: l, remote: r, migrated });
+          }
+          // include local-only habits
+          for (const l of localHabits) if (!mergedHabits.find((m:any)=>m.id===l.id)) mergedHabits.push(l);
+
+          // logs
+          const localLogMap = new Map(localLogs.map((l:any)=>[l.id,l]));
+          const baseLogMap = new Map((baseSnapshot?.logs||[]).map((l:any)=>[l.id,l]));
+          const mergedLogs: any[] = [];
+          for (const r of remoteLogs) {
+            const l = localLogMap.get(r.id) || null;
+            const b = baseLogMap.get(r.id) || null;
+            const res = mergeLog(l as any, r as any, b as any);
+            mergedLogs.push(res.merged);
+            if (res.conflict) conflictsCollected.push({ id: r.id, conflicts: res.conflicts, local: l, remote: r, migrated });
+          }
+          for (const l of localLogs) if (!mergedLogs.find((m:any)=>m.id===l.id)) mergedLogs.push(l);
+
+          // If conflicts detected, persist conflict payload and notify user
+          if (conflictsCollected.length > 0) {
+            try {
+              await storageSet('sync:conflict', JSON.stringify({ conflicts: conflictsCollected, migrated }));
+            } catch {}
+            toast({ title: 'Sync Conflicts', description: 'Conflicts detected during merge. Resolve them in Settings → Account & Data.', variant: 'destructive' });
+            // do not overwrite local state automatically when conflicts exist
+            syncRunningRef.current = false;
+            hideLoading();
+            return false;
+          }
+
+          // Persist merged results
+          HabitStorage.saveHabits(mergedHabits);
+          HabitStorage.saveLogs(mergedLogs);
+
+          // persist new last snapshot as the migrated remote bundle
+          try { await storageSet(SYNC_LAST_SNAPSHOT_KEY, JSON.stringify(migrated)); } catch {}
+
+          if (onImport) onImport(JSON.stringify(migrated));
+          toast({ title: 'Auto-sync', description: 'Pulled latest data from cloud and merged.', duration: 2500 });
+          return true;
+        } catch (mergeErr) {
+          console.error('pullOnce merge error', mergeErr);
+          toast({ title: 'Sync Error', description: 'Failed to merge cloud data. Import aborted.', variant: 'destructive' });
+          return false;
+        }
       } else {
         const { Preferences } = await import('@capacitor/preferences');
         const accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;

@@ -233,22 +233,32 @@ export class HabitStorage {
 
   static async importData(jsonData: string): Promise<void> {
     try {
-      const parsed = exportBundleSchema.safeParse(JSON.parse(jsonData));
-      if (!parsed.success) {
-        throw new Error("Invalid export file format");
-      }
-      const data = parsed.data;
-      
-      // Persist habits/logs (as-is JSON with strings for dates)
-      localStorage.setItem(HABITS_KEY, JSON.stringify(data.habits));
-      localStorage.setItem(LOGS_KEY, JSON.stringify(data.logs));
-
-      // Persist settings via platform storage when available
+      // Parse and run migrations before validation
+      const parsedRaw = JSON.parse(jsonData);
       try {
-        const { saveSettings } = await import('./platform-storage');
-        await saveSettings(data.settings as UserSettings);
-      } catch {
-        localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+        const { runMigrations } = await import('./migrations');
+        // runMigrations expects an ExportBundle-like object and returns migrated bundle
+        // If migrations not present or fail, fall back to original parsedRaw
+        // eslint-disable-next-line no-await-in-loop
+        // @ts-ignore
+        const migrated = await runMigrations(parsedRaw).catch(() => parsedRaw);
+        const validated = exportBundleSchema.safeParse(migrated);
+        if (!validated.success) throw new Error('Invalid export file format');
+        const data = validated.data;
+
+        // Persist habits/logs (as-is JSON with strings for dates)
+        localStorage.setItem(HABITS_KEY, JSON.stringify(data.habits));
+        localStorage.setItem(LOGS_KEY, JSON.stringify(data.logs));
+
+        // Persist settings via platform storage when available
+        try {
+          const { saveSettings } = await import('./platform-storage');
+          await saveSettings(data.settings as UserSettings);
+        } catch {
+          localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+        }
+      } catch (migErr) {
+        throw migErr;
       }
   } catch (e) {
       throw new Error((e as Error).message || "Invalid JSON data format");

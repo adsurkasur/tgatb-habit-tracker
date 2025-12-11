@@ -19,6 +19,7 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
+    "test:unit": "node -r ts-node/register tests/merge.test.ts && node -r ts-node/register tests/migrations.test.ts && node -r ts-node/register tests/merge_conflict.test.ts && node -r ts-node/register tests/merge_edgecases.test.ts && node -r ts-node/register tests/migration_idempotent.test.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve@latest out",
@@ -124,6 +125,7 @@
   "undici": "^6.21.0"
 },
   "devDependencies": {
+    "ts-node": "^10.9.1",
     "@tailwindcss/typography": "^0.5.16",
     "@types/node": "^24.7.2",
     "@types/react": "^18.3.3",

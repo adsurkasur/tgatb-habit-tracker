@@ -11,6 +11,10 @@ export interface Habit {
   streak: number;
   createdAt: Date;
   lastCompletedDate?: Date;
+  // optional metadata for sync/migrations
+  updatedAt?: Date;
+  deviceId?: string;
+  version?: number;
 }
 
 export interface HabitLog {
@@ -19,6 +23,10 @@ export interface HabitLog {
   date: string; // YYYY-MM-DD format
   completed: boolean;
   timestamp: Date;
+  // optional metadata for sync/migrations
+  updatedAt?: Date;
+  deviceId?: string;
+  version?: number;
 }
 
 export interface UserSettings {
@@ -27,6 +35,7 @@ export interface UserSettings {
   motivatorPersonality: MotivatorPersonality;
   fullscreenMode: boolean;
   autoSync?: boolean;
+  analyticsConsent?: boolean;
 }
 
 export const habitSchema = z.object({
@@ -36,6 +45,9 @@ export const habitSchema = z.object({
   streak: z.number(),
   createdAt: z.date(),
   lastCompletedDate: z.date().optional(),
+  updatedAt: z.date().optional(),
+  deviceId: z.string().optional(),
+  version: z.number().int().optional(),
 });
 
 export const habitLogSchema = z.object({
@@ -44,6 +56,9 @@ export const habitLogSchema = z.object({
   date: z.string(),
   completed: z.boolean(),
   timestamp: z.date(),
+  updatedAt: z.date().optional(),
+  deviceId: z.string().optional(),
+  version: z.number().int().optional(),
 });
 
 export const createHabitSchema = z.object({
@@ -60,6 +75,7 @@ export const userSettingsSchema = z.object({
   motivatorPersonality: z.enum(["positive", "adaptive", "harsh"]),
   fullscreenMode: z.boolean(),
   autoSync: z.boolean().optional(),
+  analyticsConsent: z.boolean().optional(),
 });
 
 // Export bundle schema and types
@@ -80,6 +96,9 @@ export const exportBundleSchema = z.object({
       streak: z.number(),
       createdAt: z.string(),
       lastCompletedDate: z.string().optional(),
+      updatedAt: z.string().optional(),
+      deviceId: z.string().optional(),
+      version: z.number().int().optional(),
     })
   ),
   logs: z.array(
@@ -89,6 +108,9 @@ export const exportBundleSchema = z.object({
       date: z.string(),
       completed: z.boolean(),
       timestamp: z.string(),
+      updatedAt: z.string().optional(),
+      deviceId: z.string().optional(),
+      version: z.number().int().optional(),
     })
   ),
   settings: userSettingsSchema,
