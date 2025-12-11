@@ -16,26 +16,80 @@ export function useAuth() {
   const [clientReady, setClientReady] = useState(false);
   const isCapacitorApp = Capacitor.isNativePlatform();
 
+  // Validate access token by making a lightweight Drive API call
+  const validateAccessToken = async (accessToken: string): Promise<boolean> => {
+    try {
+      // Make a lightweight API call to check if token is valid
+      const response = await fetch('https://www.googleapis.com/drive/v3/files?pageSize=1&fields=files(id)', {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+        },
+      });
+      return response.ok;
+    } catch (error) {
+      console.warn('[useAuth] Token validation failed:', error);
+      return false;
+    }
+  };
+
+  // Clear login state and show toast for expired token
+  const handleExpiredToken = async () => {
+    if (typeof window !== 'undefined' && !isCapacitorApp) {
+      localStorage.removeItem('googleAccessToken');
+      localStorage.removeItem('googleProfileName');
+      localStorage.removeItem('googleProfilePhoto');
+    } else if (isCapacitorApp) {
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.remove({ key: 'googleAccessToken' });
+      await Preferences.remove({ key: 'googleProfileName' });
+      await Preferences.remove({ key: 'googleProfilePhoto' });
+    }
+    setIsLoggedIn(false);
+    setProfile(null);
+    toast({
+      title: "Logged Out Automatically",
+      description: "Your login has expired. Please sign in again to access sync and cloud features.",
+      variant: "destructive",
+      duration: 5000,
+    });
+  };
+
   // Load profile info on mount (web)
   useEffect(() => {
     (async () => {
+      let accessToken: string | null = null;
+      let name: string | undefined = undefined;
+      let photoUrl: string | undefined = undefined;
+
       if (typeof window !== 'undefined' && !isCapacitorApp) {
-        const accessToken = localStorage.getItem('googleAccessToken');
-        setIsLoggedIn(!!accessToken);
-        const name = localStorage.getItem('googleProfileName') || undefined;
-        const photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
-        if (name || photoUrl) setProfile({ name, photoUrl });
+        accessToken = localStorage.getItem('googleAccessToken');
+        name = localStorage.getItem('googleProfileName') || undefined;
+        photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
       } else if (isCapacitorApp) {
         const { Preferences } = await import('@capacitor/preferences');
-        const accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
-        setIsLoggedIn(!!accessToken);
-        const name = (await Preferences.get({ key: 'googleProfileName' })).value || undefined;
-        const photoUrl = (await Preferences.get({ key: 'googleProfilePhoto' })).value || undefined;
-        if (name || photoUrl) setProfile({ name, photoUrl });
+        accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+        name = (await Preferences.get({ key: 'googleProfileName' })).value || undefined;
+        photoUrl = (await Preferences.get({ key: 'googleProfilePhoto' })).value || undefined;
       }
+
+      if (accessToken) {
+        // Validate the stored token
+        const isValid = await validateAccessToken(accessToken);
+        if (isValid) {
+          setIsLoggedIn(true);
+          if (name || photoUrl) setProfile({ name, photoUrl });
+        } else {
+          // Token is expired, clear login state and show toast
+          await handleExpiredToken();
+        }
+      } else {
+        setIsLoggedIn(false);
+      }
+
       setClientReady(true);
     })();
-  }, [isCapacitorApp]);
+  }, [isCapacitorApp, toast]);
 
   const handleAuth = async () => {
     try {
