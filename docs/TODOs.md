@@ -43,4 +43,10 @@ Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notmatch '\\android\\
 2. Remove or update the stale guidance lines in docs to avoid confusion.
 3. If you enable hook scripts, replace the TODOs in `.git/hooks/sendemail-validate.sample` with the checks you want, or document them in `docs/`.
 
-If you want, I can (A) open and edit the three files to apply the suggested changes, or (B) create GitHub Issues for each actionable item — tell me which. 
+### Status update (2025-12-12)
+
+- Repo scan completed and `docs/TODOs.md` created to centralize prompts and samples.
+- Unit tests and migration/merge tests added and executed locally; all passing.
+- Suggested doc prompts in `docs/REVIEW_AND_ISSUES.md` and `INTEGRATION_GUIDE.md` were updated to reflect work done.
+
+If you want, I can (A) open and edit the remaining docs to remove obsolete prompts, (B) create GitHub Issues for each actionable item, or (C) open a PR with the current changes — tell me which.

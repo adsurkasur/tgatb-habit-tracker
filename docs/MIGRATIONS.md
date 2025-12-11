@@ -31,5 +31,7 @@ Example (Node, TypeScript with `ts-node`):
 
 ```bash
 pnpm add -D ts-node
-npx ts-node -e "import fs from 'fs'; import { runMigrations } from './lib/migrations'; const b=JSON.parse(fs.readFileSync('export.json','utf8')); runMigrations(b).then(r=>console.log(r));"
+npx ts-node -e "import fs from 'fs'; import { runMigrations } from './lib/migrations/index.ts'; const b=JSON.parse(fs.readFileSync('export.json','utf8')); runMigrations(b).then(r=>console.log(r));"
 ```
+
+Status note (2025-12-12): Unit tests for migrations were added and executed locally (`tests/migrations.test.ts`, `tests/migration_idempotent.test.ts`) to ensure idempotency and correct metadata backfill.

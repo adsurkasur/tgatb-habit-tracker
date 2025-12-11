@@ -19,24 +19,28 @@ This guide documents how the project integrates Google authentication and Google
 - Mobile uses Capacitor + Firebase authentication plugins to obtain tokens; see `mobile/` for platform specifics.
 - Web uses platform-appropriate OAuth flows implemented in `web/drive-sync.ts` to obtain access tokens for upload/download.
 
-### Backup / Restore Flow (current behavior)
+### Backup / Restore Flow (current behavior and updates)
 
 - Export: `lib/habit-storage.ts` exports the full data bundle (habits, logs, metadata) validated by `shared/schema.ts`.
-- Upload: `web/drive-sync.ts` / `mobile/drive-sync.ts` perform multipart uploads of the export bundle to Google Drive and return Drive file metadata.
-- Download/Restore: Drive helpers list and download the latest backup file; `lib/validate-export-import.ts` validates the bundle before import.
+- Upload/Download: `web/drive-sync.ts` / `mobile/drive-sync.ts` perform multipart uploads/downloads of the export bundle to Google Drive and return Drive file metadata.
 
-### Important Caveats & Risks
+### Recent improvements
 
-- Current sync performs full-bundle push/pull. Importing a downloaded bundle may overwrite local data and can cause data loss when multiple devices change data concurrently.
-- There is no per-item merge/conflict resolution implemented. `hooks/use-cloud-sync.ts` schedules pushes/pulls and retries, but does not implement item-level merging.
-- There is no migration runner for versioned data schema. Importing older/newer formats can break the app without migrations.
+- A migration runner has been added in `lib/migrations/` and is executed on import to upgrade older bundles before validation.
+- A three-way merge utility and per-item merge integration were implemented and wired into `hooks/use-cloud-sync.ts`. The pull flow runs migrations, three-way merges using the last known snapshot as the base, and collects conflicts for user resolution instead of silently overwriting local data.
+- A conflict-resolution UI exists to let users resolve per-field conflicts when automatic merging is ambiguous.
 
-### Recommendations
+### Important Caveats & Risks (updated)
 
-- Implement conflict-aware merge logic before enabling automatic background sync across multiple devices (per-item timestamps, version vectors, or operation logs / CRDTs).
-- Add a migration runner (e.g., `lib/migrations/*`) and run migrations at startup with pre-migration backup.
-- Provide an explicit user-facing restore confirmation and an easy manual export option before performing destructive imports.
-- Gate analytics and tracking on explicit user consent; update `components/firebase-initializer.tsx` to respect consent state.
+- The sync flow now performs conservative merges instead of immediate destructive overwrites, but the UI and UX around conflict resolution should be validated with real multi-device scenarios.
+- Pushes still currently upload the full bundle; consider delta/patched uploads to reduce bandwidth and improve merge fidelity.
+
+### Recommendations (next steps)
+
+- Validate the merge and migration behavior with end-to-end tests simulating multiple devices and concurrent edits.
+- Polish the conflict-resolution UX and add clear user guidance (when and how to resolve conflicts) and an audit log of resolved conflicts.
+- Add pre-migration backup prompts for manual restores, and ensure the app writes automatic backups prior to major migrations.
+- Gate analytics and tracking on explicit user consent; verify the `components/firebase-initializer.tsx` behavior in QA.
 
 ### Testing & Deployment notes
 

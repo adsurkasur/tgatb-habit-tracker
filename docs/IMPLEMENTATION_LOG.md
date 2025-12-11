@@ -54,3 +54,9 @@ Recent additions:
 
 - Per-field conflict resolution modal: `components/sync-conflict-modal.tsx` — lets users pick local/remote values per conflicting field and apply resolutions.
 - Conflict detection test: `tests/merge_conflict.test.ts`.
+
+10) Test fixes and verification
+- Files: various (tests/, lib/migrations/, lib/sync/merge.ts)
+- Change: Adjusted test imports to be ESM-friendly by adding explicit `.ts` extensions and using `import type` for TypeScript-only types; updated test scripts to run under `ts-node/register` in dev.
+- Result: All unit tests pass locally (run: `npm run test:unit`) — `merge`, `migrations`, `merge_conflict`, `merge_edgecases`, `migration_idempotent` observed OK.
+- Rationale: Ensure migration and merge logic remain stable under the project's ESM+TypeScript setup and that CI can validate regressions.

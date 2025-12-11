@@ -132,6 +132,14 @@ Recommendation: Option 1. Add SW update prompt and cache versioning.
 
 ---
 
+## Recent status update
+
+- **2025-12-12**: Unit test harness added and executed locally — all unit tests pass (`merge`, `migrations`, conflict and edge-case tests).
+- ESM compatibility fixes applied to test imports (`.ts` extensions) and some `import type` updates to avoid runtime export expectations.
+- Migration runner and three-way merge with conflict detection implemented and covered by unit tests.
+
+- **Next immediate steps**: push changes and open a PR so CI can run these tests on the repository, add E2E multi-device sync tests, and polish the conflict-resolution UX.
+
 ## Summary of problems and offered solutions
 
 - Problem: Unverified builds and potential runtime/build breakages.

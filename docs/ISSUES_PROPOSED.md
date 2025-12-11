@@ -61,4 +61,10 @@ Below are suggested GitHub Issue bodies you can create directly (via the web UI,
 
 ---
 
-If you want, I can create these Issues using the `gh` CLI (`gh issue create`) — tell me and I will create them and report links. Alternatively I can open PRs that implement the smaller doc/hook changes.
+Status note (2025-12-12): many of the items below have scaffolding implemented locally in this workspace — specifically:
+
+- Migration runner and initial migration (`lib/migrations/*`) — tests added under `tests/migrations.test.ts`.
+- Three-way merge and conflict detection (`lib/sync/merge.ts`) plus integration into `hooks/use-cloud-sync.ts` and a conflict-resolution modal.
+- Analytics consent gating changes added to `components/firebase-initializer.tsx` and settings UI.
+
+If you want, I can create the GitHub Issues (via `gh issue create`) and/or open PRs for the doc-only changes. Tell me which (create issues / open PR / both). 

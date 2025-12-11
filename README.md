@@ -149,6 +149,7 @@ npm run android:open    # Open in Android Studio
 - `npm run start` — Start production server
 - `npm run lint` — Run ESLint for code quality
 - `npm run check` — Run TypeScript type checking
+- `npm run test:unit` — Run local unit tests for migrations/merge (uses `ts-node` in dev)
 - `npm run setup:android` — Check Android prerequisites
 - `npm run android:build` — Build Android APK
 - `npm run android:open` — Open project in Android Studio
@@ -183,6 +184,18 @@ npm run android:open    # Open in Android Studio
 - Native (Android): data and settings stored with **Capacitor Preferences**.
 - A platform-aware storage layer keeps them in sync so toggles (like fullscreen) persist across web/native.
 - Offline support via Service Worker and custom caching (see `public/sw-custom.js`).
+
+---
+
+## Testing
+
+- Unit tests: a lightweight set of TypeScript test scripts is provided under `tests/` to validate migration and merge behavior. Run locally with:
+
+```bash
+npm run test:unit
+```
+
+- CI: a GitHub Actions workflow runs typecheck, lint, and tests on PRs and pushes. Ensure tests pass locally before opening a PR.
 
 ---
 
