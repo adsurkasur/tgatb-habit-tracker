@@ -40,22 +40,51 @@ export function formatLocalDate(date: Date): string {
 export const TokenStorage = {
   async getAccessToken(): Promise<string | null> {
     try {
-      const { PlatformStorage } = await import('./platform-storage');
-      return await PlatformStorage.getItem('googleAccessToken');
-    } catch {
-      return null;
+      try {
+        const { SecureStorage } = await import('./secure-storage');
+        const v = await SecureStorage.getItem('googleAccessToken');
+        console.debug('[TokenStorage] getAccessToken via SecureStorage ->', v);
+        return v;
+      } catch {
+        const { SecureStorage } = await import('./secure-storage.ts');
+        const v = await SecureStorage.getItem('googleAccessToken');
+        console.debug('[TokenStorage] getAccessToken via SecureStorage (ts) ->', v);
+        return v;
+      }
+    } catch (e) {
+      console.debug('[TokenStorage] getAccessToken secure error', e);
+      // fallback
+      try { const { PlatformStorage } = await import('./platform-storage'); const v = await PlatformStorage.getItem('googleAccessToken'); console.debug('[TokenStorage] getAccessToken via PlatformStorage ->', v); return v; } catch { return null; }
     }
   },
   async setAccessToken(token: string): Promise<void> {
     try {
-      const { PlatformStorage } = await import('./platform-storage');
-      await PlatformStorage.setItem('googleAccessToken', token);
-    } catch { /* ignore */ }
+      try {
+        const { SecureStorage } = await import('./secure-storage');
+        await SecureStorage.setItem('googleAccessToken', token);
+        return;
+      } catch {
+        const { SecureStorage } = await import('./secure-storage.ts');
+        await SecureStorage.setItem('googleAccessToken', token);
+        return;
+      }
+    } catch {
+      try { const { PlatformStorage } = await import('./platform-storage'); await PlatformStorage.setItem('googleAccessToken', token); } catch { /* ignore */ }
+    }
   },
   async removeAccessToken(): Promise<void> {
     try {
-      const { PlatformStorage } = await import('./platform-storage');
-      await PlatformStorage.removeItem('googleAccessToken');
-    } catch { /* ignore */ }
+      try {
+        const { SecureStorage } = await import('./secure-storage');
+        await SecureStorage.removeItem('googleAccessToken');
+        return;
+      } catch {
+        const { SecureStorage } = await import('./secure-storage.ts');
+        await SecureStorage.removeItem('googleAccessToken');
+        return;
+      }
+    } catch {
+      try { const { PlatformStorage } = await import('./platform-storage'); await PlatformStorage.removeItem('googleAccessToken'); } catch { /* ignore */ }
+    }
   }
 };
