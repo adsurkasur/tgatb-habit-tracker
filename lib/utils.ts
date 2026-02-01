@@ -46,10 +46,17 @@ export const TokenStorage = {
         console.debug('[TokenStorage] getAccessToken via SecureStorage ->', v);
         return v;
       } catch {
-        const { SecureStorage } = await import('./secure-storage.ts');
-        const v = await SecureStorage.getItem('googleAccessToken');
-        console.debug('[TokenStorage] getAccessToken via SecureStorage (ts) ->', v);
-        return v;
+        try {
+          const alt = './secure-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { SecureStorage } = await import(/* webpackIgnore: true */ alt);
+          const v = await SecureStorage.getItem('googleAccessToken');
+          console.debug('[TokenStorage] getAccessToken via SecureStorage (ts) ->', v);
+          return v;
+        } catch {
+          // final fallback
+        }
       }
     } catch (e) {
       console.debug('[TokenStorage] getAccessToken secure error', e);
@@ -64,9 +71,16 @@ export const TokenStorage = {
         await SecureStorage.setItem('googleAccessToken', token);
         return;
       } catch {
-        const { SecureStorage } = await import('./secure-storage.ts');
-        await SecureStorage.setItem('googleAccessToken', token);
-        return;
+        try {
+          const alt = './secure-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { SecureStorage } = await import(/* webpackIgnore: true */ alt);
+          await SecureStorage.setItem('googleAccessToken', token);
+          return;
+        } catch {
+          // final fallback
+        }
       }
     } catch {
       try { const { PlatformStorage } = await import('./platform-storage'); await PlatformStorage.setItem('googleAccessToken', token); } catch { /* ignore */ }
@@ -79,9 +93,16 @@ export const TokenStorage = {
         await SecureStorage.removeItem('googleAccessToken');
         return;
       } catch {
-        const { SecureStorage } = await import('./secure-storage.ts');
-        await SecureStorage.removeItem('googleAccessToken');
-        return;
+        try {
+          const alt = './secure-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { SecureStorage } = await import(/* webpackIgnore: true */ alt);
+          await SecureStorage.removeItem('googleAccessToken');
+          return;
+        } catch {
+          // final fallback
+        }
       }
     } catch {
       try { const { PlatformStorage } = await import('./platform-storage'); await PlatformStorage.removeItem('googleAccessToken'); } catch { /* ignore */ }

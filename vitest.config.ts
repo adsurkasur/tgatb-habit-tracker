@@ -8,6 +8,7 @@ export default defineConfig({
     setupFiles: './tests/setupTests.ts',
     isolate: true,
     include: ['tests/**/*.test.tsx', 'tests/**/*.spec.ts', 'tests/**/*.spec.tsx', 'tests/integration/**'],
+    exclude: ['tests/e2e/**'],
     deps: {
       inline: ['msw']
     }
