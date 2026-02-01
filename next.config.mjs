@@ -10,9 +10,10 @@ const nextConfig = {
   webpack: (config) => {
     return config;
   },
+  turbopack: {}, // Add empty turbopack config so Next.js won't error when a custom webpack config exists
   reactStrictMode: true,
   images: {
-    domains: [],
+    remotePatterns: [],
     unoptimized: true, // Required for static export
   },
   output: 'export', // Enable static export
