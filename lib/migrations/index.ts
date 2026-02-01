@@ -5,6 +5,12 @@ let migrationsLoaded = false;
 
 async function loadMigrations(): Promise<void> {
   if (migrationsLoaded) return;
+  // Avoid dynamic imports from client-side bundles; migrations are server-only
+  if (typeof window !== 'undefined') {
+    migrationsLoaded = true;
+    return;
+  }
+
   const baseNoExt = new URL('./0001-add-meta', import.meta.url).href;
   const baseTs = new URL('./0001-add-meta.ts', import.meta.url).href;
   try {
@@ -13,15 +19,12 @@ async function loadMigrations(): Promise<void> {
   } catch {
     // Try explicit .ts path if file exists (useful for ts-node test runs)
     try {
-      // Only attempt to check FS on server-side
-      if (typeof window === 'undefined') {
-        const { fileURLToPath } = await import('url');
-        const tsPath = fileURLToPath(new URL('./0001-add-meta.ts', import.meta.url));
-        const { existsSync } = await import('fs');
-        if (existsSync(tsPath)) {
-          const m = await import(baseTs);
-          migrations.push(m.default || m);
-        }
+      const { fileURLToPath } = await import('url');
+      const tsPath = fileURLToPath(new URL('./0001-add-meta.ts', import.meta.url));
+      const { existsSync } = await import('fs');
+      if (existsSync(tsPath)) {
+        const m = await import(baseTs);
+        migrations.push(m.default || m);
       }
     } catch {
       // No migration loaded; this is non-fatal
