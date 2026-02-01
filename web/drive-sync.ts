@@ -13,7 +13,7 @@ import { exportBundleToJson, importBundleFromJson } from '../shared/data-sync';
 // const bundle = importBundleFromJson(json);
 
 // Upload JSON data to Google Drive
-export async function uploadToDrive(jsonData: string, accessToken: string): Promise<any> {
+export async function uploadToDrive(jsonData: string, accessToken: string): Promise<{ id?: string } | null> {
 	try {
 		console.debug('[DriveSync] uploadToDrive called', { jsonData, accessToken });
 		const metadata = {
@@ -46,9 +46,9 @@ export async function uploadToDrive(jsonData: string, accessToken: string): Prom
 				});
 				throw new Error(result.error?.message || 'Drive upload failed');
 			}
-			return result;
+			return { id: result.id };
 	} catch (err) {
 		console.error('[DriveSync] uploadToDrive exception', err);
 		throw err;
 	}
-}
+} 

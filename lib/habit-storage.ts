@@ -211,10 +211,12 @@ export class HabitStorage {
       ...h,
       createdAt: h.createdAt.toISOString(),
       lastCompletedDate: h.lastCompletedDate ? h.lastCompletedDate.toISOString() : undefined,
+      updatedAt: h.updatedAt ? h.updatedAt.toISOString() : undefined,
     }));
     const logs = this.getLogs().map(l => ({
       ...l,
       timestamp: l.timestamp.toISOString(),
+      updatedAt: l.updatedAt ? l.updatedAt.toISOString() : undefined,
     }));
 
     const bundle: ExportBundle = {

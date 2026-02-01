@@ -136,9 +136,9 @@ export async function registerBackgroundSync(tag: string): Promise<boolean> {
   
   try {
     const registration = await navigator.serviceWorker.ready;
-    if ('sync' in registration) {
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      await (registration as any).sync.register(tag);
+    const sync = (registration as ServiceWorkerRegistration & { sync?: { register?: (tag: string) => Promise<void> } }).sync;
+    if (sync && typeof sync.register === 'function') {
+      await sync.register(tag);
       return true;
     }
   } catch (error) {

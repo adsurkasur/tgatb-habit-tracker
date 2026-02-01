@@ -1,4 +1,5 @@
 import { Capacitor } from '@capacitor/core';
+import type { ExportBundle } from '@shared/schema';
 
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from "@/hooks/use-network-status";
@@ -138,7 +139,7 @@ export function useCloudBackup() {
 
     let accessToken: string | null = null;
     let cloudJson: string = "";
-    let cloudBundle: any = null;
+    let cloudBundle: ExportBundle | null = null;
 
     // Show loading overlay after precondition checks
     showLoading();

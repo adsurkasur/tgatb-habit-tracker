@@ -9,7 +9,7 @@ export function useNetworkStatus() {
   const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
-    let networkListener: any = null;
+    let networkListener: { remove?: () => void } | null = null;
 
     const setupNetworkDetection = async () => {
       if (Capacitor.isNativePlatform()) {
@@ -21,7 +21,7 @@ export function useNetworkStatus() {
           setIsInitialized(true);
 
           // Listen for network changes
-          networkListener = Network.addListener('networkStatusChange', (status) => {
+          networkListener = await Network.addListener('networkStatusChange', (status) => {
             setIsOnline(status.connected);
             if (!status.connected) {
               setWasOffline(true);
@@ -29,8 +29,8 @@ export function useNetworkStatus() {
               setWasOffline(false);
             }
           });
-        } catch (error) {
-          console.warn('Failed to load Capacitor Network plugin, falling back to browser API', error);
+        } catch (err: unknown) {
+          console.warn('Failed to load Capacitor Network plugin, falling back to browser API', err);
           // Fallback to browser API
           setupBrowserNetworkDetection();
         }
@@ -93,8 +93,8 @@ export function useNetworkStatus() {
     const cleanup = setupNetworkDetection();
 
     return () => {
-      if (networkListener) {
-        networkListener.remove();
+      if (networkListener && typeof networkListener.remove === 'function') {
+        try { networkListener.remove(); } catch (err) { /* ignore */ }
       }
     };
   }, []);
