@@ -1,9 +1,11 @@
-import type { Habit, HabitLog } from "../../shared/schema.ts";
+import type { Habit, HabitLog } from "@shared/schema";
+
+export type MergeConflictEntry = { base: unknown; local: unknown; remote: unknown };
 
 export type MergeResult<T> = {
   merged: T;
   conflict: boolean;
-  conflicts?: Record<string, { base: any; local: any; remote: any }>;
+  conflicts?: Record<string, MergeConflictEntry>;
 };
 
 function parseTime(v?: string | Date | number): number {
@@ -14,39 +16,35 @@ function parseTime(v?: string | Date | number): number {
   return isNaN(n) ? 0 : n;
 }
 
-function isPrimitive(val: any) {
-  return val === null || (typeof val !== 'object' && typeof val !== 'function');
-}
-
 // Three-way merge with basic conflict detection.
-export function mergeByTimestamp<T extends { id: string; updatedAt?: any }>(
+export function mergeByTimestamp<T extends { id: string; updatedAt?: string | number | Date }>(
   local: T | null,
   remote: T | null,
   base?: T | null
 ): MergeResult<T> {
-  // If only one side exists, return it
-  if (!local && !remote) throw new Error('Both local and remote are null');
+  if (!local && !remote) throw new Error("Both local and remote are null");
   if (!local && remote) return { merged: remote, conflict: false } as MergeResult<T>;
   if (!remote && local) return { merged: local, conflict: false } as MergeResult<T>;
 
-  // Both exist
-  const merged: any = { ...(base || {}), ...(local || {}), ...(remote || {}) };
-  const conflicts: Record<string, any> = {};
+  const merged: Record<string, unknown> = { ...(base || {}), ...(local || {}), ...(remote || {}) };
+  const conflicts: Record<string, MergeConflictEntry> = {};
 
-  // For each key in union of fields, decide outcome
-  const keys = new Set<string>([...Object.keys(base || {}), ...Object.keys(local || {}), ...Object.keys(remote || {})]);
+  const keys = new Set<string>([
+    ...Object.keys((base as Record<string, unknown>) || {}),
+    ...Object.keys((local as Record<string, unknown>) || {}),
+    ...Object.keys((remote as Record<string, unknown>) || {}),
+  ]);
+
   for (const k of keys) {
-    const b = base ? (base as any)[k] : undefined;
-    const l = local ? (local as any)[k] : undefined;
-    const r = remote ? (remote as any)[k] : undefined;
+    const b = base ? (base as Record<string, unknown>)[k] : undefined;
+    const l = local ? (local as Record<string, unknown>)[k] : undefined;
+    const r = remote ? (remote as Record<string, unknown>)[k] : undefined;
 
-    // If identical between local and remote, take either
     if (JSON.stringify(l) === JSON.stringify(r)) {
       merged[k] = l !== undefined ? l : r;
       continue;
     }
 
-    // If base equals one side, take the other (simple change)
     if (JSON.stringify(b) === JSON.stringify(l) && JSON.stringify(b) !== JSON.stringify(r)) {
       merged[k] = r;
       continue;
@@ -56,9 +54,8 @@ export function mergeByTimestamp<T extends { id: string; updatedAt?: any }>(
       continue;
     }
 
-    // Neither equal to base -> concurrent changes; resolve by timestamp
-    const lTs = parseTime((local as any)?.updatedAt);
-    const rTs = parseTime((remote as any)?.updatedAt);
+    const lTs = parseTime((local as unknown as { updatedAt?: string | number | Date })?.updatedAt);
+    const rTs = parseTime((remote as unknown as { updatedAt?: string | number | Date })?.updatedAt);
     if (lTs > rTs) {
       merged[k] = l;
       continue;
@@ -68,9 +65,8 @@ export function mergeByTimestamp<T extends { id: string; updatedAt?: any }>(
       continue;
     }
 
-    // Timestamps tie or unavailable — mark conflict
     conflicts[k] = { base: b, local: l, remote: r };
-    merged[k] = l; // default to local for determinism
+    merged[k] = l;
   }
 
   return { merged: merged as T, conflict: Object.keys(conflicts).length > 0, conflicts };
@@ -84,8 +80,5 @@ export function mergeLog(local: HabitLog | null, remote: HabitLog | null, base?:
   return mergeByTimestamp<HabitLog>(local, remote, base);
 }
 
-export default {
-  mergeByTimestamp,
-  mergeHabit,
-  mergeLog,
-};
+const MergeUtils = { mergeByTimestamp, mergeHabit, mergeLog };
+export default MergeUtils;

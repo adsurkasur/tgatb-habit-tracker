@@ -5,10 +5,26 @@ import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } f
 import { Button } from './ui/button';
 import { HabitStorage } from '@/lib/habit-storage';
 
+import type { Habit, HabitLog } from '@shared/schema';
+
 type FieldChoice = 'local' | 'remote';
 
+type ConflictItem = {
+  id: string;
+  local?: Record<string, unknown>;
+  remote?: Record<string, unknown>;
+  conflicts?: Record<string, unknown>;
+};
+
+type ConflictPayload = {
+  conflicts?: ConflictItem[];
+  migrated?: { habits?: Habit[]; logs?: HabitLog[] } | null;
+  migratedRemote?: Record<string, unknown> | null;
+  remote?: Record<string, unknown> | null;
+};
+
 export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: () => void }) {
-  const [payload, setPayload] = useState<any>(null);
+  const [payload, setPayload] = useState<ConflictPayload | null>(null);
   const [choices, setChoices] = useState<Record<string, Record<string, FieldChoice>>>({});
 
   useEffect(() => {
@@ -16,12 +32,13 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
     try {
       const raw = localStorage.getItem('sync:conflict');
       const parsed = raw ? JSON.parse(raw) : null;
-      setPayload(parsed);
+      const asPayload: ConflictPayload | null = parsed as ConflictPayload | null;
+      setPayload(asPayload);
 
       // Initialize choices default to local for each conflict field
       const byItem: Record<string, Record<string, FieldChoice>> = {};
-      if (parsed?.conflicts && Array.isArray(parsed.conflicts)) {
-        for (const item of parsed.conflicts) {
+      if (asPayload?.conflicts && Array.isArray(asPayload.conflicts)) {
+        for (const item of asPayload.conflicts) {
           const id = item.id;
           byItem[id] = {};
           const confFields = item.conflicts || {};
@@ -45,37 +62,41 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
 
   const applyResolutions = async () => {
     try {
-      const resolvedHabits = [] as any[];
-      const resolvedLogs = [] as any[];
+      const resolvedHabits: Habit[] = [];
+      const resolvedLogs: HabitLog[] = [];
 
       // Start from migrated remote as base for applying chosen fields
       const migrated = payload.migrated || payload.migratedRemote || null;
 
-      for (const c of payload.conflicts) {
+      const conflicts = payload.conflicts ?? [];
+      for (const c of conflicts) {
         const id = c.id;
-        const local = c.local || {};
-        const remote = c.remote || {};
+        const local = c.local ?? {};
+        const remote = c.remote ?? {};
         const cho = choices[id] || {};
-        const merged: any = { ...(remote || {}), ...(local || {}) };
+        const merged: Record<string, unknown> = { ...(remote || {}), ...(local || {}) };
         for (const f of Object.keys(c.conflicts || {})) {
           const choice = cho[f] || 'local';
-          merged[f] = choice === 'local' ? local[f] : remote[f];
+          merged[f] = choice === 'local' ? (local as Record<string, unknown>)[f] : (remote as Record<string, unknown>)[f];
         }
 
         // classify by presence of habitId (log) or name (habit)
-        if (merged.habitId) resolvedLogs.push(merged);
-        else resolvedHabits.push(merged);
+        if ((merged as Record<string, unknown>).hasOwnProperty('habitId')) {
+          resolvedLogs.push(merged as unknown as HabitLog);
+        } else {
+          resolvedHabits.push(merged as unknown as Habit);
+        }
       }
 
       // Merge with existing local items: overwrite matching ids, keep others
       const localHabits = HabitStorage.getHabits();
       const localLogs = HabitStorage.getLogs();
 
-      const localHabMap = new Map(localHabits.map(h=>[h.id,h]));
+      const localHabMap = new Map(localHabits.map((h) => [h.id, h] as const));
       for (const h of resolvedHabits) localHabMap.set(h.id, h);
       const finalHabits = Array.from(localHabMap.values());
 
-      const localLogMap = new Map(localLogs.map(l=>[l.id,l]));
+      const localLogMap = new Map(localLogs.map((l) => [l.id, l] as const));
       for (const l of resolvedLogs) localLogMap.set(l.id, l);
       const finalLogs = Array.from(localLogMap.values());
 
@@ -84,22 +105,22 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
 
       localStorage.removeItem('sync:conflict');
       onClose();
-    } catch (e) {
-      console.error('applyResolutions error', e);
+    } catch (err) {
+      console.error('applyResolutions error', err);
     }
   };
 
   const acceptRemote = async () => {
     try {
-      const migrated = payload.migrated || payload.remote || null;
+      const migrated = payload.migrated || (payload.remote as unknown as { habits?: Habit[]; logs?: HabitLog[] }) || null;
       if (migrated) {
-        if (migrated.habits) HabitStorage.saveHabits(migrated.habits);
-        if (migrated.logs) HabitStorage.saveLogs(migrated.logs);
+        if ((migrated as { habits?: Habit[] }).habits) HabitStorage.saveHabits((migrated as { habits?: Habit[] }).habits as Habit[]);
+        if ((migrated as { logs?: HabitLog[] }).logs) HabitStorage.saveLogs((migrated as { logs?: HabitLog[] }).logs as HabitLog[]);
       }
       localStorage.removeItem('sync:conflict');
       onClose();
-    } catch (e) {
-      console.error('acceptRemote error', e);
+    } catch (err) {
+      console.error('acceptRemote error', err);
     }
   };
 
