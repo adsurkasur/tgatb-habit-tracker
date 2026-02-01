@@ -1,4 +1,3 @@
-import { Capacitor } from '@capacitor/core';
 import type { UserSettings } from "@shared/schema";
 
 export const SETTINGS_KEY = 'user_settings';

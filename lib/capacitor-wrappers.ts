@@ -8,7 +8,7 @@ export const NetworkWrapper = {
         const s = await Network.getStatus();
         return { connected: !!s.connected };
       }
-    } catch (e) {
+    } catch {
       // ignore and fall through to web
     }
     // Fallback: use navigator.onLine
@@ -22,7 +22,7 @@ export const NetworkWrapper = {
         const listener = await Network.addListener(eventName, (status) => callback({ connected: !!status.connected }));
         return listener as { remove: () => void };
       }
-    } catch (e) {
+    } catch {
       // ignore
     }
 

@@ -47,6 +47,9 @@ export const SecureStorage = {
         }
       }
     } catch (err) { console.debug('[SecureStorage] fallback getItem error', err); return null; }
+
+    // Ensure we always return a value in all code paths
+    return null;
   },
 
 

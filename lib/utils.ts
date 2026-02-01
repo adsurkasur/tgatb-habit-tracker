@@ -63,6 +63,9 @@ export const TokenStorage = {
       // fallback
       try { const { PlatformStorage } = await import('./platform-storage'); const v = await PlatformStorage.getItem('googleAccessToken'); console.debug('[TokenStorage] getAccessToken via PlatformStorage ->', v); return v; } catch { return null; }
     }
+
+    // Ensure the function returns null if all attempts fail
+    return null;
   },
   async setAccessToken(token: string): Promise<void> {
     try {
