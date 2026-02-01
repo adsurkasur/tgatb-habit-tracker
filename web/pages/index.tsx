@@ -3,6 +3,8 @@ import { useSession, signIn, signOut } from "next-auth/react";
 import { useState } from "react";
 import { exportHabitsToJson, importHabitsFromJson } from "../../shared/data-sync";
 
+type LocalHabit = { name: string; completed?: boolean }
+
 export default function Home() {
   const { data: session } = useSession();
   // Replace with your actual habit data source in production
@@ -27,8 +29,9 @@ export default function Home() {
       } else {
         setStatus("Export failed: " + (data.error || "Unknown error"));
       }
-    } catch (err: any) {
-      setStatus("Export failed: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setStatus("Export failed: " + message);
     }
   };
 
@@ -48,8 +51,9 @@ export default function Home() {
       } else {
         setStatus("Import failed: " + (data.error || "Unknown error"));
       }
-    } catch (err: any) {
-      setStatus("Import failed: " + err.message);
+    } catch (err: unknown) {
+      const message = err instanceof Error ? err.message : String(err);
+      setStatus("Import failed: " + message);
     }
   };
 

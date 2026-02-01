@@ -18,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     if (req.method === "POST") {
       // Export: Upload habit data to Drive
       const { habits } = req.body;
+      if (!Array.isArray(habits)) return res.status(400).json({ error: 'Invalid habits payload' });
       const fileMetadata = { name: "habits-export.json" };
       const media = {
         mimeType: "application/json",
@@ -37,12 +38,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         alt: "media",
       }, { responseType: "text" });
       const habits = importHabitsFromJson(fileResponse.data as string);
+      if (!habits) return res.status(422).json({ error: 'Invalid export bundle' });
       return res.status(200).json({ habits });
     } else {
       res.setHeader("Allow", ["GET", "POST"]);
       res.status(405).end(`Method ${req.method} Not Allowed`);
     }
-  } catch (error: any) {
-    return res.status(500).json({ error: error?.message || "Internal server error" });
+  } catch (error: unknown) {
+    const message = error instanceof Error ? error.message : String(error);
+    return res.status(500).json({ error: message || "Internal server error" });
   }
 }
