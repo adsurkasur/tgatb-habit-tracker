@@ -226,9 +226,21 @@ export function useCloudSync() {
         const cloudJson = await res.text();
         // Run migrations and attempt per-item merge with local data
         try {
-          const parsed = JSON.parse(cloudJson);
+          const parsed = (() => { try { return JSON.parse(cloudJson); } catch { return null; } })();
           const { runMigrations } = await import('@/lib/migrations');
-          const migrated = await runMigrations(parsed).catch(() => parsed);
+          let migrated = await runMigrations(parsed).catch(() => parsed);
+
+          // Validate migrated bundle before attempting merges
+          const { validateExportImportJson } = await import('@/lib/validate-export-import');
+          const validation = validateExportImportJson(migrated);
+          if (!validation.success) {
+            console.error('[useCloudSync] remote bundle validation failed', validation.errors);
+            toast({ title: 'Sync Error', description: 'Downloaded data is invalid. Import aborted.', variant: 'destructive' });
+            syncRunningRef.current = false;
+            hideLoading();
+            return false;
+          }
+          migrated = validation.data as typeof migrated;
 
           const { mergeHabit, mergeLog } = await import('@/lib/sync/merge');
           const { HabitStorage } = await import('@/lib/habit-storage');

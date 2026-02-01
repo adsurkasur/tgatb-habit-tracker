@@ -80,8 +80,8 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 			 }
 			 throw new Error(parsed?.error?.message || 'Drive download failed');
 		 }
-		 const parsed = (() => { try { return JSON.parse(cloudJson); } catch { return null; } })();
-		 return parsed as ExportBundle | null;
+			 const validated = await importBundleFromJson(cloudJson);
+		 return validated;
 	 } catch {
 		 return null;
 	 }

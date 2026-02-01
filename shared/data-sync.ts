@@ -1,5 +1,4 @@
 import type { ExportBundle } from './schema';
-import { exportBundleSchema } from './schema';
 
 // Serialize a validated export bundle to JSON
 export function exportBundleToJson(bundle: ExportBundle): string {
@@ -7,11 +6,23 @@ export function exportBundleToJson(bundle: ExportBundle): string {
 }
 
 // Deserialize and validate a JSON string as an ExportBundle
-export function importBundleFromJson(json: string): ExportBundle | null {
+export async function importBundleFromJson(json: string): Promise<ExportBundle | null> {
   try {
     const parsed = JSON.parse(json);
-    const validated = exportBundleSchema.safeParse(parsed);
-    return validated.success ? validated.data : null;
+
+    // Lightweight structural validation to avoid pulling heavy schema imports
+    const isLikelyExportBundle = (v: unknown): v is ExportBundle => {
+      if (!v || typeof v !== 'object') return false;
+      const obj = v as Record<string, unknown>;
+      if (!('version' in obj) || typeof obj.version !== 'string') return false;
+      if (!('habits' in obj) || !Array.isArray(obj.habits)) return false;
+      if (!('logs' in obj) || !Array.isArray(obj.logs)) return false;
+      if (!('settings' in obj) || typeof obj.settings !== 'object') return false;
+      return true;
+    };
+
+    if (!isLikelyExportBundle(parsed)) return null;
+    return parsed as ExportBundle;
   } catch {
     return null;
   }
@@ -32,8 +43,8 @@ export function exportHabitsToJson(habits: ExportBundle['habits']): string {
   return exportBundleToJson(bundle);
 }
 
-export function importHabitsFromJson(json: string): ExportBundle['habits'] | null {
-  const bundle = importBundleFromJson(json);
+export async function importHabitsFromJson(json: string): Promise<ExportBundle['habits'] | null> {
+  const bundle = await importBundleFromJson(json);
   return bundle ? bundle.habits : null;
 }
 

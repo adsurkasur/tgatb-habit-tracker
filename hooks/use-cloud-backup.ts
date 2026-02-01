@@ -168,7 +168,12 @@ export function useCloudBackup() {
             headers: { Authorization: `Bearer ${accessToken}` }
           });
           cloudJson = await res.text();
-          cloudBundle = JSON.parse(cloudJson);
+          const { importBundleFromJson } = await import('../shared/data-sync');
+          cloudBundle = await importBundleFromJson(cloudJson as string);
+          if (!cloudBundle) {
+            toast({ title: 'Import Failed', description: 'Downloaded backup is invalid and cannot be imported.', variant: 'destructive', duration: 4000 });
+            return;
+          }
           console.debug('[useCloudBackup] Web Drive raw backup bundle:', cloudBundle);
         } catch (err: unknown) {
           // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
