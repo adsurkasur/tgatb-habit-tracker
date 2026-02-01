@@ -236,12 +236,10 @@ export class HabitStorage {
       // Parse and run migrations before validation
       const parsedRaw = JSON.parse(jsonData);
       try {
-        const { runMigrations } = await import('./migrations');
-        // runMigrations expects an ExportBundle-like object and returns migrated bundle
-        // If migrations not present or fail, fall back to original parsedRaw
-        // eslint-disable-next-line no-await-in-loop
-        // @ts-ignore
-        const migrated = await runMigrations(parsedRaw).catch(() => parsedRaw);
+        const migrationsModule = await import('./migrations');
+        // runMigrations may or may not be exported; if present, call it with parsedRaw
+        const runMigrations = (migrationsModule.runMigrations as ((b: unknown) => Promise<ExportBundle>) | undefined);
+        const migrated = runMigrations ? await runMigrations(parsedRaw).catch(() => parsedRaw as ExportBundle) : (parsedRaw as ExportBundle);
         const validated = exportBundleSchema.safeParse(migrated);
         if (!validated.success) throw new Error('Invalid export file format');
         const data = validated.data;
