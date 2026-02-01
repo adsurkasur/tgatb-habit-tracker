@@ -120,7 +120,9 @@
   }
 
   body {
-    @apply antialiased bg-background text-foreground;
+    @apply antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: 'Inter', sans-serif;
   }
 }
