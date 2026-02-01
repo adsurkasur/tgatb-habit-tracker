@@ -1,5 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import type { ExportBundle } from '@shared/schema';
+import { TokenStorage } from '@/lib/utils';
 
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from "@/hooks/use-network-status";
@@ -36,9 +37,7 @@ export function useCloudBackup() {
       const exportJson = await HabitStorage.exportData();
       console.debug('[useCloudBackup] Exporting full bundle:', exportJson);
 
-      if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
-        // Web platform
-        accessToken = localStorage.getItem('googleAccessToken');
+      const accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
           toast({
             title: "Not Signed In",
@@ -49,73 +48,61 @@ export function useCloudBackup() {
           return;
         }
 
-        const { uploadToDrive } = await import("../web/drive-sync");
-        try {
-          result = await uploadToDrive(exportJson, accessToken);
-          console.debug('[useCloudBackup] Web Drive backup result:', result);
-          toast({
-            title: "Backup Successful",
-            description: "Your data has been backed up to Google Drive (web).",
-            duration: 3000,
-          });
-        } catch (err: unknown) {
-          // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
-          let message = "Drive upload failed.";
-          if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
-            message = (err as { message: string }).message;
-          }
-          toast({
-            title: "Backup Error",
-            description: message + " Please log in again using the Login button.",
-            variant: "destructive",
-            duration: 3000,
-          });
-        }
-      } else {
-        // Mobile (Capacitor)
-        const { Preferences } = await import('@capacitor/preferences');
-        accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
-        if (!accessToken) {
-          toast({
-            title: "Not Signed In",
-            description: "You must be signed in to export to Google Drive.",
-            variant: "destructive",
-            duration: 3000,
-          });
-          return;
-        }
-
-        const { uploadDataToDrive } = await import("@/mobile/drive-sync");
-        try {
-          result = await uploadDataToDrive(exportJson, accessToken);
-          console.debug('[useCloudBackup] Mobile Drive backup result:', result);
-          if (result) {
+        if (typeof window !== 'undefined' && !Capacitor.isNativePlatform()) {
+          const { uploadToDrive } = await import("../web/drive-sync");
+          try {
+            result = await uploadToDrive(exportJson, accessToken);
+            console.debug('[useCloudBackup] Web Drive backup result:', result);
             toast({
               title: "Backup Successful",
-              description: "Your data has been backed up to Google Drive (mobile).",
+              description: "Your data has been backed up to Google Drive (web).",
               duration: 3000,
             });
-          } else {
+          } catch (err: unknown) {
+            // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
+            let message = "Drive upload failed.";
+            if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+              message = (err as { message: string }).message;
+            }
             toast({
-              title: "Backup Failed",
-              description: "Could not upload data to Drive.",
+              title: "Backup Error",
+              description: message + " Please log in again using the Login button.",
               variant: "destructive",
               duration: 3000,
             });
           }
-        } catch (err: unknown) {
-          let message = "Drive upload failed.";
-          if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
-            message = (err as { message: string }).message;
+        } else {
+          const { uploadDataToDrive } = await import("@/mobile/drive-sync");
+          try {
+            result = await uploadDataToDrive(exportJson, accessToken);
+            console.debug('[useCloudBackup] Mobile Drive backup result:', result);
+            if (result) {
+              toast({
+                title: "Backup Successful",
+                description: "Your data has been backed up to Google Drive (mobile).",
+                duration: 3000,
+              });
+            } else {
+              toast({
+                title: "Backup Failed",
+                description: "Could not upload data to Drive.",
+                variant: "destructive",
+                duration: 3000,
+              });
+            }
+          } catch (err: unknown) {
+            let message = "Drive upload failed.";
+            if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {
+              message = (err as { message: string }).message;
+            }
+            toast({
+              title: "Backup Error",
+              description: message + " Please log in again using the Login button.",
+              variant: "destructive",
+              duration: 3000,
+            });
           }
-          toast({
-            title: "Backup Error",
-            description: message + " Please log in again using the Login button.",
-            variant: "destructive",
-            duration: 3000,
-          });
         }
-      }
     } catch (err) {
       toast({
         title: "Backup Error",
@@ -153,7 +140,7 @@ export function useCloudBackup() {
 
       if (typeof window !== 'undefined' && !isCapacitorApp) {
         // Web platform
-        accessToken = localStorage.getItem('googleAccessToken');
+        accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
           toast({
             title: "Not Signed In",
@@ -199,8 +186,7 @@ export function useCloudBackup() {
         }
       } else {
         // Mobile (Capacitor)
-        const { Preferences } = await import('@capacitor/preferences');
-        accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+        accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
           toast({
             title: "Not Signed In",

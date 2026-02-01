@@ -21,10 +21,9 @@ export async function uploadDataToDrive(jsonData: string, accessToken: string): 
 			if (res.status === 401) {
 				console.error('[DriveSync] uploadDataToDrive 401', { status: res.status, result: data });
 				try {
-					const { Preferences } = await import('@capacitor/preferences');
-					await Preferences.remove({ key: 'googleAccessToken' });
+					await TokenStorage.removeAccessToken();
 				} catch (e) {
-					console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
+					console.warn('[DriveSync] failed to clear googleAccessToken', e);
 				}
 				throw new Error('Drive Unauthorized (401)');
 			}
@@ -38,6 +37,7 @@ export async function uploadDataToDrive(jsonData: string, accessToken: string): 
 	}
 }
 import type { ExportBundle } from '../shared/schema';
+import { TokenStorage } from '../lib/utils';
 
 // Download the latest habits backup from Drive
 export async function downloadLatestHabitsFromDrive(accessToken: string): Promise<ExportBundle | null> {
@@ -51,8 +51,7 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 			 if (listRes.status === 401) {
 				 console.error('[DriveSync] list files 401', { status: listRes.status, result: listJson });
 				 try {
-					 const { Preferences } = await import('@capacitor/preferences');
-					 await Preferences.remove({ key: 'googleAccessToken' });
+							await TokenStorage.removeAccessToken();
 				 } catch (e) {
 					 console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
 				 }
@@ -73,8 +72,7 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 			 if (res.status === 401) {
 				 console.error('[DriveSync] download file 401', { status: res.status, result: parsed });
 				 try {
-					 const { Preferences } = await import('@capacitor/preferences');
-					 await Preferences.remove({ key: 'googleAccessToken' });
+						await TokenStorage.removeAccessToken();
 				 } catch (e) {
 					 console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
 				 }

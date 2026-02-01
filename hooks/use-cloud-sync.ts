@@ -1,5 +1,6 @@
 import { useRef, useCallback, useEffect } from "react";
 import { Capacitor } from '@capacitor/core';
+import { TokenStorage } from '@/lib/utils';
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { useLoading } from "@/hooks/use-loading";
@@ -104,23 +105,16 @@ export function useCloudSync() {
       while (attempt < MAX_ATTEMPTS) {
         attempt += 1;
         try {
+          const accessToken = await TokenStorage.getAccessToken();
+          if (!accessToken) {
+            if (showToast) toast({ title: "Not Signed In", description: "Sign in to enable cloud sync.", variant: "destructive" });
+            failed = true;
+            break;
+          }
           if (typeof window !== 'undefined' && !isCapacitorApp) {
-            const accessToken = localStorage.getItem('googleAccessToken');
-            if (!accessToken) {
-              if (showToast) toast({ title: "Not Signed In", description: "Sign in to enable cloud sync.", variant: "destructive" });
-              failed = true;
-              break;
-            }
             const { uploadToDrive } = await import("../web/drive-sync");
             await uploadToDrive(data, accessToken);
           } else {
-            const { Preferences } = await import('@capacitor/preferences');
-            const accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
-            if (!accessToken) {
-              if (showToast) toast({ title: "Not Signed In", description: "Sign in to enable cloud sync.", variant: "destructive" });
-              failed = true;
-              break;
-            }
             const { uploadDataToDrive } = await import("@/mobile/drive-sync");
             await uploadDataToDrive(data, accessToken);
           }
@@ -210,7 +204,7 @@ export function useCloudSync() {
     }
     try {
       if (typeof window !== 'undefined' && !isCapacitorApp) {
-        const accessToken = localStorage.getItem('googleAccessToken');
+        const accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
           toast({ title: "Not Signed In", description: "Sign in to enable cloud sync.", variant: "destructive" });
           return false;
@@ -304,9 +298,9 @@ export function useCloudSync() {
           toast({ title: 'Sync Error', description: 'Failed to merge cloud data. Import aborted.', variant: 'destructive' });
           return false;
         }
-      } else {
-        const { Preferences } = await import('@capacitor/preferences');
-        const accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
+      }
+      else {
+        const accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
           toast({ title: "Not Signed In", description: "Sign in to enable cloud sync.", variant: "destructive" });
           return false;

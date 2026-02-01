@@ -35,3 +35,37 @@ export function formatLocalDate(date: Date): string {
   const day = String(date.getDate()).padStart(2, '0');
   return `${year}-${month}-${day}`;
 }
+
+// Token storage abstraction to centralize where access tokens are stored.
+export const TokenStorage = {
+  async getAccessToken(): Promise<string | null> {
+    const { Capacitor } = await import('@capacitor/core');
+    if (Capacitor.isNativePlatform()) {
+      const { Preferences } = await import('@capacitor/preferences');
+      const res = await Preferences.get({ key: 'googleAccessToken' });
+      return res.value ?? null;
+    }
+    if (typeof window === 'undefined') return null;
+    return localStorage.getItem('googleAccessToken');
+  },
+  async setAccessToken(token: string): Promise<void> {
+    const { Capacitor } = await import('@capacitor/core');
+    if (Capacitor.isNativePlatform()) {
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.set({ key: 'googleAccessToken', value: token });
+      return;
+    }
+    if (typeof window === 'undefined') return;
+    localStorage.setItem('googleAccessToken', token);
+  },
+  async removeAccessToken(): Promise<void> {
+    const { Capacitor } = await import('@capacitor/core');
+    if (Capacitor.isNativePlatform()) {
+      const { Preferences } = await import('@capacitor/preferences');
+      await Preferences.remove({ key: 'googleAccessToken' });
+      return;
+    }
+    if (typeof window === 'undefined') return;
+    localStorage.removeItem('googleAccessToken');
+  }
+};

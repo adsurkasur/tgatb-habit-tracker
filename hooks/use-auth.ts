@@ -3,6 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
+import { TokenStorage } from '@/lib/utils';
 
 export interface AuthProfile {
   name?: string;
@@ -36,12 +37,12 @@ export function useAuth() {
   // Clear login state and show toast for expired token
   const handleExpiredToken = async () => {
     if (typeof window !== 'undefined' && !isCapacitorApp) {
-      localStorage.removeItem('googleAccessToken');
+      await TokenStorage.removeAccessToken();
       localStorage.removeItem('googleProfileName');
       localStorage.removeItem('googleProfilePhoto');
     } else if (isCapacitorApp) {
+      await TokenStorage.removeAccessToken();
       const { Preferences } = await import('@capacitor/preferences');
-      await Preferences.remove({ key: 'googleAccessToken' });
       await Preferences.remove({ key: 'googleProfileName' });
       await Preferences.remove({ key: 'googleProfilePhoto' });
     }
@@ -63,12 +64,12 @@ export function useAuth() {
       let photoUrl: string | undefined = undefined;
 
       if (typeof window !== 'undefined' && !isCapacitorApp) {
-        accessToken = localStorage.getItem('googleAccessToken');
+        accessToken = await TokenStorage.getAccessToken();
         name = localStorage.getItem('googleProfileName') || undefined;
         photoUrl = localStorage.getItem('googleProfilePhoto') || undefined;
       } else if (isCapacitorApp) {
+        accessToken = await TokenStorage.getAccessToken();
         const { Preferences } = await import('@capacitor/preferences');
-        accessToken = (await Preferences.get({ key: 'googleAccessToken' })).value;
         name = (await Preferences.get({ key: 'googleProfileName' })).value || undefined;
         photoUrl = (await Preferences.get({ key: 'googleProfilePhoto' })).value || undefined;
       }
@@ -103,7 +104,7 @@ export function useAuth() {
           const { getAuth } = await import("firebase/auth");
           accessToken = await signInWithGoogleWeb();
           if (accessToken) {
-            localStorage.setItem('googleAccessToken', accessToken);
+            await TokenStorage.setAccessToken(accessToken);
             // Get user profile info from Firebase Auth
             const auth = getAuth(app);
             const user = auth.currentUser;
@@ -142,10 +143,15 @@ export function useAuth() {
             photoUrl = result.photoUrl || undefined;
           }
           if (accessToken) {
-            const { Preferences } = await import('@capacitor/preferences');
-            await Preferences.set({ key: 'googleAccessToken', value: accessToken });
-            if (name) await Preferences.set({ key: 'googleProfileName', value: name });
-            if (photoUrl) await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
+            await TokenStorage.setAccessToken(accessToken);
+            if (name) {
+              const { Preferences } = await import('@capacitor/preferences');
+              await Preferences.set({ key: 'googleProfileName', value: name });
+            }
+            if (photoUrl) {
+              const { Preferences } = await import('@capacitor/preferences');
+              await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
+            }
             setProfile({ name, photoUrl });
             setIsLoggedIn(true);
             toast({
@@ -166,7 +172,7 @@ export function useAuth() {
       } else {
         // Logout flow
         if (typeof window !== 'undefined' && !isCapacitorApp) {
-          localStorage.removeItem('googleAccessToken');
+          await TokenStorage.removeAccessToken();
           localStorage.removeItem('googleProfileName');
           localStorage.removeItem('googleProfilePhoto');
           setIsLoggedIn(false);
@@ -177,8 +183,8 @@ export function useAuth() {
             duration: 3000,
           });
         } else {
+          await TokenStorage.removeAccessToken();
           const { Preferences } = await import('@capacitor/preferences');
-          await Preferences.remove({ key: 'googleAccessToken' });
           await Preferences.remove({ key: 'googleProfileName' });
           await Preferences.remove({ key: 'googleProfilePhoto' });
           setIsLoggedIn(false);
