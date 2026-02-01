@@ -7,7 +7,10 @@ export default defineConfig({
     globals: true,
     setupFiles: './tests/setupTests.ts',
     isolate: true,
-    include: ['tests/**/*.test.tsx'],
+    include: ['tests/**/*.test.tsx', 'tests/**/*.spec.ts', 'tests/**/*.spec.tsx', 'tests/integration/**'],
+    deps: {
+      inline: ['msw']
+    }
   },
   resolve: {
     alias: {

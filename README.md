@@ -80,6 +80,20 @@ Note: For a current, code-level review and outstanding issues, see [docs/REVIEW_
 - 🗄️ Cloud sync and backup — implemented (Google Drive full-bundle upload/download). NOTE: merge/conflict handling is still required to avoid overwrites; see `docs/REVIEW_AND_ISSUES.md` for details.
 - 👤 User authentication and multi-device support — partially implemented via Firebase/Capacitor plugin (initializer present), but consent gating and complete auth UX need validation.
 - 📅 Calendar view and advanced analytics — planned
+
+## Observability (Sentry) 🔧
+
+Sentry integration is optional. The app will only initialize Sentry on the client when:
+
+- `NEXT_PUBLIC_SENTRY_DSN` is set in the environment (Vercel secret or local env), and
+- The user has enabled **Analytics** in the app settings (`analyticsConsent`).
+
+To enable Sentry in CI/Production:
+
+1. Add `NEXT_PUBLIC_SENTRY_DSN` in your deployment secrets.
+2. Optionally add `SENTRY_AUTH_TOKEN` and follow Sentry docs to enable releases/upload sourcemaps.
+3. Sentry initialization is performed dynamically and will not block the app if it fails.
+
 - 🛠️ Customizable habit categories and reminders — planned
 - 🌙 Dark mode toggle — implemented (settings persisted via platform storage)
 - More notification and motivational features — ongoing

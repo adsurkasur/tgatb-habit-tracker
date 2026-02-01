@@ -7,7 +7,9 @@ import { ThemeProvider } from "@/components/theme-provider";
 import { LoadingProvider } from "@/hooks/use-loading";
 import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { HabitStorage } from "@/lib/habit-storage";
+import { initSentryClient } from "@/lib/sentry";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [queryClient] = useState(() => new QueryClient({
@@ -18,6 +20,21 @@ export function Providers({ children }: { children: React.ReactNode }) {
       },
     },
   }));
+
+  useEffect(() => {
+    // initialize client-only observability (Sentry) only when user opted into analytics
+    (async () => {
+      try {
+        const settings = await HabitStorage.getSettings();
+        await initSentryClient(!!settings?.analyticsConsent);
+      } catch (err) {
+        // initialization failures should not block app
+        // eslint-disable-next-line no-console
+        console.debug('Sentry client init skipped', err);
+      }
+    })();
+  }, []);
+
 
   return (
     <ThemeProvider>

@@ -17,6 +17,16 @@ Thanks for contributing! Please follow these guidelines to make PRs easier to re
 - Add unit tests for new features and bug fixes.
 - Use existing test patterns; prefer pure functions and avoid heavy integration where possible.
 
+E2E tests (Playwright)
+
+- Install browsers: `npx playwright install --with-deps`
+- Run the app locally: `npm run build && npm run start`
+- Run E2E: `npm run test:e2e`
+
+Integration tests
+
+- Integration tests using MSW are located under `tests/integration` and can be run with `npm run test:integration`.
+
 ## CI & Reviews
 - PRs require passing CI (lint/check/tests/build) and at least one approving review before merge.
 

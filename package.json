@@ -21,6 +21,8 @@
   "scripts": {
     "test:unit": "node -r ts-node/register tests/merge.test.ts && node -r ts-node/register tests/migrations.test.ts && node -r ts-node/register tests/token_storage.test.ts && node -r ts-node/register tests/merge_conflict.test.ts && node -r ts-node/register tests/merge_edgecases.test.ts && node -r ts-node/register tests/migration_idempotent.test.ts",
     "test:ui": "vitest run",
+    "test:e2e": "npx playwright test",
+    "test:integration": "vitest run tests/integration",
     "dev": "next dev",
     "build": "next build",
     "start": "npx serve@latest out",
@@ -41,6 +43,7 @@
     "sync-git": "node scripts/sync-pull-push.cjs",
     "release:full": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git"
   },
+
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
     "@capacitor/android": "^7.4.2",
@@ -126,6 +129,10 @@
     "undici": "^6.21.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.38.1",
+    "msw": "^1.2.3",
+    "@sentry/nextjs": "^7.81.0",
+    "@types/msw": "^0.47.0",
     "@tailwindcss/typography": "^0.5.16",
     "@testing-library/jest-dom": "^6.0.0",
     "@testing-library/react": "^14.0.0",

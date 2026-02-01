@@ -8,8 +8,8 @@ export const SecureStorage = {
         try {
           const plugin = await import('@capacitor/secure-storage');
           if (plugin && typeof plugin.get === 'function') {
-            const res = await plugin.get({ key });
-            return (res && (res as any).value) ?? null;
+            const res = await plugin.get({ key }) as { value?: string } | undefined;
+            return (res && res.value) ?? null;
           }
         } catch {
           // plugin not available, fall through to PlatformStorage
