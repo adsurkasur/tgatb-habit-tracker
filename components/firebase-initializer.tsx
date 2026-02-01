@@ -37,7 +37,8 @@ export function FirebaseInitializer({ children }: { children: ReactNode }) {
                             app = getApp();
                         }
                         setInitialized(true);
-                    } catch (e) {
+                    } catch (err) {
+                        console.warn('Firebase initialization skipped:', err);
                         // ignore errors and avoid initializing analytics
                     }
                 })();

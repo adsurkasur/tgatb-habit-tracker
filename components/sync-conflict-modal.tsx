@@ -48,7 +48,8 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
         }
       }
       setChoices(byItem);
-    } catch (e) {
+    } catch (err) {
+      console.warn('Failed to parse sync:conflict payload', err);
       setPayload(null);
       setChoices({});
     }
@@ -66,8 +67,6 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
       const resolvedLogs: HabitLog[] = [];
 
       // Start from migrated remote as base for applying chosen fields
-      const migrated = payload.migrated || payload.migratedRemote || null;
-
       const conflicts = payload.conflicts ?? [];
       for (const c of conflicts) {
         const id = c.id;
@@ -136,7 +135,7 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
         <DialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</DialogDescription>
         <div className="space-y-4">
         <div className="max-h-72 overflow-auto">
-          {payload.conflicts.map((c: any) => (
+          {(payload.conflicts ?? []).map((c: ConflictItem) => (
             <div key={c.id} className="p-3 border rounded mb-2 bg-muted">
               <div className="font-medium">Item: {c.id}</div>
               <div className="text-xs text-muted-foreground">Local vs Remote differences</div>

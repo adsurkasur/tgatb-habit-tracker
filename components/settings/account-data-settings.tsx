@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { ChevronRight, User, CloudUpload, CloudDownload, Download, Upload, RefreshCw } from "lucide-react";
+import { useEffect, useState } from 'react';
 import { Switch } from "@/components/ui/switch";
 import SyncConflictModal from '@/components/sync-conflict-modal';
 import { UserSettings } from "@shared/schema";

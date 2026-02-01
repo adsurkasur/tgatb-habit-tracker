@@ -1,5 +1,5 @@
-import type { ExportBundle } from "../../shared/schema.ts";
-import migration0001 from "./0001-add-meta.ts";
+import type { ExportBundle } from "../../shared/schema";
+import migration0001 from "./0001-add-meta";
 
 const migrations = [migration0001];
 
@@ -16,4 +16,5 @@ export async function runMigrations(bundle: ExportBundle): Promise<ExportBundle>
   return result;
 }
 
-export default { runMigrations };
+const migrationsModule = { runMigrations };
+export default migrationsModule;
