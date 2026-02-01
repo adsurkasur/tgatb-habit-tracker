@@ -80,36 +80,32 @@ export function showNotification(title: string, options?: NotificationOptions): 
 }
 
 // Cache habit data for offline use
-export function cacheHabitData<T>(data: T): void {
+export async function cacheHabitData<T>(data: T): Promise<void> {
   if (typeof window === 'undefined') return;
-  
   try {
-    localStorage.setItem('cached-habit-data', JSON.stringify({
-      data,
-      timestamp: Date.now()
-    }));
+    const { PlatformStorage } = await import('./platform-storage');
+    await PlatformStorage.setItem('cached-habit-data', JSON.stringify({ data, timestamp: Date.now() }));
   } catch (error) {
     console.warn('Failed to cache habit data:', error);
   }
 }
 
 // Get cached habit data
-export function getCachedHabitData<T = unknown>(): T | null {
+export async function getCachedHabitData<T = unknown>(): Promise<T | null> {
   if (typeof window === 'undefined') return null;
-  
   try {
-    const cached = localStorage.getItem('cached-habit-data');
+    const { PlatformStorage } = await import('./platform-storage');
+    const cached = await PlatformStorage.getItem('cached-habit-data');
     if (!cached) return null;
-    
-  const { data, timestamp } = JSON.parse(cached) as { data: T; timestamp: number };
-    
+    const { data, timestamp } = JSON.parse(cached) as { data: T; timestamp: number };
+
     // Check if cache is older than 24 hours
     const twentyFourHours = 24 * 60 * 60 * 1000;
     if (Date.now() - timestamp > twentyFourHours) {
-      localStorage.removeItem('cached-habit-data');
+      await PlatformStorage.removeItem('cached-habit-data');
       return null;
     }
-    
+
     return data;
   } catch (error) {
     console.warn('Failed to get cached habit data:', error);
@@ -118,11 +114,11 @@ export function getCachedHabitData<T = unknown>(): T | null {
 }
 
 // Clear cached data
-export function clearCachedData(): void {
+export async function clearCachedData(): Promise<void> {
   if (typeof window === 'undefined') return;
-  
   try {
-    localStorage.removeItem('cached-habit-data');
+    const { PlatformStorage } = await import('./platform-storage');
+    await PlatformStorage.removeItem('cached-habit-data');
   } catch (error) {
     console.warn('Failed to clear cached data:', error);
   }

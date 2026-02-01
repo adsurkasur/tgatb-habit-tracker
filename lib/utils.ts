@@ -39,33 +39,23 @@ export function formatLocalDate(date: Date): string {
 // Token storage abstraction to centralize where access tokens are stored.
 export const TokenStorage = {
   async getAccessToken(): Promise<string | null> {
-    const { Capacitor } = await import('@capacitor/core');
-    if (Capacitor.isNativePlatform()) {
-      const { Preferences } = await import('@capacitor/preferences');
-      const res = await Preferences.get({ key: 'googleAccessToken' });
-      return res.value ?? null;
+    try {
+      const { PlatformStorage } = await import('./platform-storage');
+      return await PlatformStorage.getItem('googleAccessToken');
+    } catch {
+      return null;
     }
-    if (typeof window === 'undefined') return null;
-    return localStorage.getItem('googleAccessToken');
   },
   async setAccessToken(token: string): Promise<void> {
-    const { Capacitor } = await import('@capacitor/core');
-    if (Capacitor.isNativePlatform()) {
-      const { Preferences } = await import('@capacitor/preferences');
-      await Preferences.set({ key: 'googleAccessToken', value: token });
-      return;
-    }
-    if (typeof window === 'undefined') return;
-    localStorage.setItem('googleAccessToken', token);
+    try {
+      const { PlatformStorage } = await import('./platform-storage');
+      await PlatformStorage.setItem('googleAccessToken', token);
+    } catch { /* ignore */ }
   },
   async removeAccessToken(): Promise<void> {
-    const { Capacitor } = await import('@capacitor/core');
-    if (Capacitor.isNativePlatform()) {
-      const { Preferences } = await import('@capacitor/preferences');
-      await Preferences.remove({ key: 'googleAccessToken' });
-      return;
-    }
-    if (typeof window === 'undefined') return;
-    localStorage.removeItem('googleAccessToken');
+    try {
+      const { PlatformStorage } = await import('./platform-storage');
+      await PlatformStorage.removeItem('googleAccessToken');
+    } catch { /* ignore */ }
   }
 };

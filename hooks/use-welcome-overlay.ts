@@ -7,33 +7,43 @@ export function useWelcomeOverlay() {
   const [hasShownOnFirstLoad, setHasShownOnFirstLoad] = useState(false);
 
   useEffect(() => {
-    // Check if user has seen the welcome overlay before
-    const hasSeenWelcome = localStorage.getItem(WELCOME_SHOWN_KEY);
-    
-    if (!hasSeenWelcome && !hasShownOnFirstLoad) {
-      // Show welcome overlay after a short delay to let the page load
-      const timer = setTimeout(() => {
-        setIsWelcomeVisible(true);
-        setHasShownOnFirstLoad(true);
-      }, 1000);
-
-      return () => clearTimeout(timer);
-    }
+    // Check if user has seen the welcome overlay before (async for PlatformStorage)
+    (async () => {
+      try {
+        const { PlatformStorage } = await import('../lib/platform-storage');
+        const hasSeenWelcome = await PlatformStorage.getItem(WELCOME_SHOWN_KEY);
+        if (!hasSeenWelcome && !hasShownOnFirstLoad) {
+          const timer = setTimeout(() => {
+            setIsWelcomeVisible(true);
+            setHasShownOnFirstLoad(true);
+          }, 1000);
+          return () => clearTimeout(timer);
+        }
+      } catch (e) {
+        // fallback: do nothing
+      }
+    })();
   }, [hasShownOnFirstLoad]);
 
   const closeWelcome = () => {
     setIsWelcomeVisible(false);
   };
 
-  const completeWelcome = () => {
+  const completeWelcome = async () => {
     // Mark as shown but don't persist state - tour will always restart fresh
-    localStorage.setItem(WELCOME_SHOWN_KEY, 'true');
+    try {
+      const { PlatformStorage } = await import('../lib/platform-storage');
+      await PlatformStorage.setItem(WELCOME_SHOWN_KEY, 'true');
+    } catch { /* ignore */ }
     setIsWelcomeVisible(false);
   };
 
-  const resetWelcome = () => {
+  const resetWelcome = async () => {
     // Temporarily clear the "shown" flag so the overlay can be displayed
-    localStorage.removeItem(WELCOME_SHOWN_KEY);
+    try {
+      const { PlatformStorage } = await import('../lib/platform-storage');
+      await PlatformStorage.removeItem(WELCOME_SHOWN_KEY);
+    } catch { /* ignore */ }
     // Always show the welcome tour from the beginning when requested
     setIsWelcomeVisible(true);
   };

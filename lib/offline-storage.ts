@@ -97,7 +97,8 @@ class OfflineHabitStorage {
   // Clear pending actions after successful sync
   async clearPendingActions(): Promise<void> {
     if (!this.db) {
-      localStorage.removeItem('pending-habit-actions');
+      const { PlatformStorage } = await import('./platform-storage');
+      await PlatformStorage.removeItem('pending-habit-actions');
       return;
     }
 
@@ -109,7 +110,8 @@ class OfflineHabitStorage {
   // Store habits locally
   async storeHabits(habits: Array<Record<string, unknown>>): Promise<void> {
     if (!this.db) {
-      localStorage.setItem('offline-habits', JSON.stringify(habits));
+      const { PlatformStorage } = await import('./platform-storage');
+      await PlatformStorage.setItem('offline-habits', JSON.stringify(habits));
       return;
     }
 
@@ -145,7 +147,8 @@ class OfflineHabitStorage {
   // Get stored habits
   async getStoredHabits(): Promise<Array<Record<string, unknown>>> {
     if (!this.db) {
-      const stored = localStorage.getItem('offline-habits');
+      const { PlatformStorage } = await import('./platform-storage');
+      const stored = await PlatformStorage.getItem('offline-habits');
       return stored ? JSON.parse(stored) : [];
     }
 
@@ -154,19 +157,21 @@ class OfflineHabitStorage {
     );
   }
 
-  // LocalStorage fallback methods
-  private addPendingActionToLocalStorage(action: OfflineHabitAction): void {
-    const pending = this.getPendingActionsFromStorage();
+  // LocalStorage fallback methods (now using PlatformStorage)
+  private async addPendingActionToLocalStorage(action: OfflineHabitAction): Promise<void> {
+    const pending = await this.getPendingActionsFromStorage();
     pending.push(action);
-    localStorage.setItem('pending-habit-actions', JSON.stringify(pending));
+    const { PlatformStorage } = await import('./platform-storage');
+    await PlatformStorage.setItem('pending-habit-actions', JSON.stringify(pending));
   }
 
-  private getPendingActionsFromStorage(): OfflineHabitAction[] {
+  private async getPendingActionsFromStorage(): Promise<OfflineHabitAction[]> {
     try {
-      const pending = localStorage.getItem('pending-habit-actions');
+      const { PlatformStorage } = await import('./platform-storage');
+      const pending = await PlatformStorage.getItem('pending-habit-actions');
       return pending ? JSON.parse(pending) : [];
     } catch (error) {
-      console.warn('Failed to get pending actions from localStorage:', error);
+      console.warn('Failed to get pending actions from storage:', error);
       return [];
     }
   }

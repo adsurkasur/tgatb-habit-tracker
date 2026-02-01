@@ -13,24 +13,24 @@ export function useNetworkStatus() {
 
     const setupNetworkDetection = async () => {
       if (Capacitor.isNativePlatform()) {
-        // Use Capacitor Network plugin for native platforms
+        // Use NetworkWrapper for consistent behavior across platforms
         try {
-          const { Network } = await import('@capacitor/network');
-          const status = await Network.getStatus();
+          const { NetworkWrapper } = await import('@/lib/capacitor-wrappers');
+          const status = await NetworkWrapper.getStatus();
           setIsOnline(status.connected);
           setIsInitialized(true);
 
           // Listen for network changes
-          networkListener = await Network.addListener('networkStatusChange', (status) => {
-            setIsOnline(status.connected);
-            if (!status.connected) {
+          networkListener = await NetworkWrapper.addListener('networkStatusChange', (s) => {
+            setIsOnline(s.connected);
+            if (!s.connected) {
               setWasOffline(true);
             } else {
               setWasOffline(false);
             }
           });
         } catch (err: unknown) {
-          console.warn('Failed to load Capacitor Network plugin, falling back to browser API', err);
+          console.warn('Failed to use NetworkWrapper, falling back to browser API', err);
           // Fallback to browser API
           setupBrowserNetworkDetection();
         }
