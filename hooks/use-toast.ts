@@ -86,14 +86,14 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
-function addToast(state: State, action: any): State {
+function addToast(state: State, action: Extract<Action, { type: ActionType['ADD_TOAST'] }>): State {
   return {
     ...state,
     toasts: [action.toast, ...state.toasts].slice(0, TOAST_LIMIT),
   };
 }
 
-function updateToast(state: State, action: any): State {
+function updateToast(state: State, action: Extract<Action, { type: ActionType['UPDATE_TOAST'] }>): State {
   return {
     ...state,
     toasts: state.toasts.map((t) =>
@@ -102,7 +102,7 @@ function updateToast(state: State, action: any): State {
   };
 }
 
-function dismissToast(state: State, action: any): State {
+function dismissToast(state: State, action: Extract<Action, { type: ActionType['DISMISS_TOAST'] }>): State {
   // Side effects moved out of reducer for purity
   return {
     ...state,
@@ -117,7 +117,7 @@ function dismissToast(state: State, action: any): State {
   };
 }
 
-function removeToast(state: State, action: any): State {
+function removeToast(state: State, action: Extract<Action, { type: ActionType['REMOVE_TOAST'] }>): State {
   if (action.toastId === undefined) {
     return {
       ...state,

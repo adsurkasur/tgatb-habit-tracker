@@ -1,4 +1,5 @@
 import assert from 'assert';
+import type { ExportBundle } from '@shared/schema';
 import { runMigrations } from '../lib/migrations/index.ts';
 
 (async function run() {
@@ -8,7 +9,7 @@ import { runMigrations } from '../lib/migrations/index.ts';
     habits: [{ id: 'h1', name: 'a', type: 'good', streak: 0, createdAt: new Date().toISOString() }],
     logs: [],
     settings: { darkMode: false, language: 'en', motivatorPersonality: 'positive', fullscreenMode: false }
-  } as any;
+  } as ExportBundle;
 
   const first = await runMigrations(bundle);
   const second = await runMigrations(first);

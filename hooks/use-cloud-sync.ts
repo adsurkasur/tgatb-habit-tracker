@@ -3,6 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import { useToast } from "@/hooks/use-toast";
 import { useNetworkStatus } from "@/hooks/use-network-status";
 import { useLoading } from "@/hooks/use-loading";
+import type { Habit, HabitLog, ExportBundle } from '@shared/schema';
 
 type PushOptions = {
   debounceMs?: number;
@@ -61,6 +62,16 @@ export function useCloudSync() {
       if (typeof window !== 'undefined') localStorage.removeItem(key);
     }
   };
+
+  function getErrorStatus(err: unknown): number | undefined {
+    if (err && typeof err === 'object') {
+      const e = err as Record<string, unknown>;
+      if ('status' in e && typeof e.status === 'number') return e.status as number;
+      if ('statusCode' in e && typeof e.statusCode === 'number') return e.statusCode as number;
+      if ('message' in e && typeof e.message === 'string' && (e.message as string).includes('401')) return 401;
+    }
+    return undefined;
+  }
 
   const pushNow = useCallback(async (options?: PushNowOptions) => {
     const { payload, showToast = true, force = false } = options ?? {};
@@ -130,9 +141,9 @@ export function useCloudSync() {
           syncRunningRef.current = false;
           hideLoading();
           return true;
-        } catch (err: any) {
+        } catch (err: unknown) {
           // If 401, do not retry; we expect mobile drive-sync to clear token already
-          const status = err?.status || err?.statusCode || (err && err.message && err.message.includes('401') ? 401 : undefined);
+          const status = getErrorStatus(err);
           console.error('[useCloudSync] push attempt failed:', { attempt, err });
           failed = true;
           // Persist failed count
@@ -164,7 +175,7 @@ export function useCloudSync() {
       }
     } catch (err: unknown) {
       let message = 'Sync failed.';
-      if (err && typeof err === 'object' && 'message' in err) message = (err as any).message;
+      if (err && typeof err === 'object' && 'message' in err) message = String((err as Record<string, unknown>).message);
       if (showToast) toast({ title: 'Sync Error', description: message + ' Please try again or sign in.', variant: 'destructive' });
       console.error('[useCloudSync] pushNow error:', err);
       syncRunningRef.current = false;
@@ -232,39 +243,39 @@ export function useCloudSync() {
           const localLogs = HabitStorage.getLogs();
 
           // load last snapshot for base if available
-          let baseSnapshot: any = null;
-          try { const last = await storageGet(SYNC_LAST_SNAPSHOT_KEY); baseSnapshot = last ? JSON.parse(last) : null; } catch {}
+          let baseSnapshot: ExportBundle | null = null;
+          try { const last = await storageGet(SYNC_LAST_SNAPSHOT_KEY); baseSnapshot = last ? JSON.parse(last) as ExportBundle : null; } catch {}
 
-          const remoteHabits = migrated.habits || [];
-          const remoteLogs = migrated.logs || [];
+          const remoteHabits: Habit[] = (migrated?.habits || []).map((h: unknown) => { const hh = h as Record<string, unknown>; return { ...hh, createdAt: new Date(String(hh.createdAt)), lastCompletedDate: hh.lastCompletedDate ? new Date(String(hh.lastCompletedDate)) : undefined } as Habit; });
+          const remoteLogs: HabitLog[] = (migrated?.logs || []).map((l: unknown) => { const ll = l as Record<string, unknown>; return { ...ll, timestamp: new Date(String(ll.timestamp)) } as HabitLog; });
 
-          const localMap = new Map(localHabits.map((h:any)=>[h.id,h]));
-          const baseMap = new Map((baseSnapshot?.habits||[]).map((h:any)=>[h.id,h]));
+          const localMap = new Map<string, Habit>(localHabits.map((h: Habit) => [h.id, h]));
+          const baseMap = new Map<string, Habit>((baseSnapshot?.habits || []).map((h: unknown) => { const hh = h as Record<string, unknown>; return [hh.id as string, { ...hh, createdAt: new Date(String(hh.createdAt)), lastCompletedDate: hh.lastCompletedDate ? new Date(String(hh.lastCompletedDate)) : undefined } as Habit]; }));
 
-          const mergedHabits: any[] = [];
-          const conflictsCollected: any[] = [];
+          const mergedHabits: Habit[] = [];
+          const conflictsCollected: Array<{ id: string; conflicts?: Record<string, unknown>; local?: Habit | HabitLog | null; remote?: Habit | HabitLog | null; migrated?: ExportBundle | null }> = [];
           for (const r of remoteHabits) {
-            const l = localMap.get(r.id) || null;
-            const b = baseMap.get(r.id) || null;
-            const res = mergeHabit(l as any, r as any, b as any);
+            const l: Habit | null = localMap.get(r.id) || null;
+            const b: Habit | null = baseMap.get(r.id) || null;
+            const res = mergeHabit(l, r, b);
             mergedHabits.push(res.merged);
             if (res.conflict) conflictsCollected.push({ id: r.id, conflicts: res.conflicts, local: l, remote: r, migrated });
           }
           // include local-only habits
-          for (const l of localHabits) if (!mergedHabits.find((m:any)=>m.id===l.id)) mergedHabits.push(l);
+          for (const l of localHabits) if (!mergedHabits.find((m) => m.id === l.id)) mergedHabits.push(l);
 
           // logs
-          const localLogMap = new Map(localLogs.map((l:any)=>[l.id,l]));
-          const baseLogMap = new Map((baseSnapshot?.logs||[]).map((l:any)=>[l.id,l]));
-          const mergedLogs: any[] = [];
+          const localLogMap = new Map<string, HabitLog>(localLogs.map((l: HabitLog) => [l.id, l]));
+          const baseLogMap = new Map<string, HabitLog>((baseSnapshot?.logs || []).map((l: unknown) => { const ll = l as Record<string, unknown>; return [ll.id as string, { ...ll, timestamp: new Date(String(ll.timestamp)) } as HabitLog]; }));
+          const mergedLogs: HabitLog[] = [];
           for (const r of remoteLogs) {
-            const l = localLogMap.get(r.id) || null;
-            const b = baseLogMap.get(r.id) || null;
-            const res = mergeLog(l as any, r as any, b as any);
+            const l: HabitLog | null = localLogMap.get(r.id) || null;
+            const b: HabitLog | null = baseLogMap.get(r.id) || null;
+            const res = mergeLog(l, r, b);
             mergedLogs.push(res.merged);
             if (res.conflict) conflictsCollected.push({ id: r.id, conflicts: res.conflicts, local: l, remote: r, migrated });
           }
-          for (const l of localLogs) if (!mergedLogs.find((m:any)=>m.id===l.id)) mergedLogs.push(l);
+          for (const l of localLogs) if (!mergedLogs.find((m) => m.id === l.id)) mergedLogs.push(l);
 
           // If conflicts detected, persist conflict payload and notify user
           if (conflictsCollected.length > 0) {
@@ -309,7 +320,7 @@ export function useCloudSync() {
       }
     } catch (err: unknown) {
       let message = 'Pull failed.';
-      if (err && typeof err === 'object' && 'message' in err) message = (err as any).message;
+      if (err && typeof err === 'object' && 'message' in err) message = String((err as Record<string, unknown>).message);
       toast({ title: 'Sync Error', description: message + ' Please try again or sign in.', variant: 'destructive' });
       console.error('[useCloudSync] pullOnce error:', err);
       return false;

@@ -8,8 +8,8 @@ type LocalHabit = { name: string; completed?: boolean }
 export default function Home() {
   const { data: session } = useSession();
   // Replace with your actual habit data source in production
-  const [habits, setHabits] = useState<any[]>([{ name: "Drink Water", completed: false }]);
-  const [importedHabits, setImportedHabits] = useState<any[]>([]);
+  const [habits, setHabits] = useState<LocalHabit[]>([{ name: "Drink Water", completed: false }]);
+  const [importedHabits, setImportedHabits] = useState<LocalHabit[]>([]);
   const [fileId, setFileId] = useState<string>("");
   const [status, setStatus] = useState<string>("");
 

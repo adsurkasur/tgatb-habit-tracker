@@ -5,6 +5,9 @@ import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { NavigationBar } from '@capgo/capacitor-navigation-bar';
 
+interface NavigationBarPlugin { setNavigationBarColor?: (opts: { color: string; darkButtons?: boolean }) => Promise<void> }
+interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean }) => Promise<void> }
+
 /**
  * Unified System Bars Management Hook
  * 
@@ -70,7 +73,9 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     console.log(`🔧 [SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
   };
   const applyAndroidBars = async (target: boolean) => {
-    const plugins = Object.keys((window as any).Capacitor?.Plugins || {});
+    type CapacitorPlugins = Record<string, unknown>;
+    const cap = (window as unknown as { Capacitor?: { Plugins?: CapacitorPlugins } }).Capacitor;
+    const plugins = Object.keys(cap?.Plugins || {});
     console.log(`🔧 [SystemBars] Available plugins: ${plugins.join(', ')}`);
     console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
     if (target) {
@@ -88,16 +93,20 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
   };
   const setNavColor = async (color: string) => {
     try {
-      const { NavigationBar } = (window as any).Capacitor?.Plugins || {};
-      if (NavigationBar) {
-        await NavigationBar.setNavigationBarColor({ color, darkButtons: false });
+      const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
+      const { NavigationBar } = cap?.Plugins || {};
+      const nav = NavigationBar as unknown as NavigationBarPlugin | undefined;
+      if (nav && typeof nav.setNavigationBarColor === 'function') {
+        await nav.setNavigationBarColor({ color, darkButtons: false });
       }
     } catch (e) { console.warn('🔧 [SystemBars] NavigationBar color failed:', e); }
   };
   const maybeApplySystemUi = async (target: boolean) => {
     try {
-      const { SystemUi } = (window as any).Capacitor?.Plugins || {};
-      if (SystemUi) { await SystemUi.setFullscreen({ enabled: target }); }
+      const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
+      const { SystemUi } = cap?.Plugins || {};
+    const sys = SystemUi as unknown as SystemUiPlugin | undefined;
+    if (sys && typeof sys.setFullscreen === 'function') { await sys.setFullscreen({ enabled: target }); }
     } catch (e) { console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e); }
   };
   const applyIOSBars = async (target: boolean) => {
@@ -169,9 +178,11 @@ export const systemBarsUtils = {
   setFullscreen: async (enabled: boolean) => {
     if (!Capacitor.isNativePlatform()) return;
     
-    const { SystemUi } = (window as any).Capacitor?.Plugins || {};
-    if (SystemUi) {
-      await SystemUi.setFullscreen({ enabled });
+    const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
+    const { SystemUi } = cap?.Plugins || {};
+    const sys = SystemUi as unknown as SystemUiPlugin | undefined;
+    if (sys && typeof sys.setFullscreen === 'function') {
+      await sys.setFullscreen({ enabled });
     } else {
       // Fallback implementation
       if (enabled) {

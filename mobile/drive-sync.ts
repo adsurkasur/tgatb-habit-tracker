@@ -125,7 +125,7 @@ export async function uploadHabitsToDrive(habitsOrBundle: ExportBundle | ExportB
 	}
 }
 
-export async function downloadHabitsFromDrive(fileId: string, accessToken: string): Promise<any> {
+export async function downloadHabitsFromDrive(fileId: string, accessToken: string): Promise<ExportBundle | null> {
 	 try {
 		 const res = await fetch(`https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`, {
 			 headers: {
@@ -137,7 +137,7 @@ export async function downloadHabitsFromDrive(fileId: string, accessToken: strin
 	 } catch {
 		 return null;
 	 }
-}
+} 
 
 // Usage:
 // const fileId = await uploadHabitsToDrive(habits, accessToken);
