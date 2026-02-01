@@ -1,6 +1,8 @@
 export default {
   plugins: {
-    tailwindcss: {},
+    // Use the new PostCSS wrapper package required for Tailwind integration
+    // with newer Next.js/Turbopack setups.
+    '@tailwindcss/postcss': {},
     autoprefixer: {},
   },
 }
