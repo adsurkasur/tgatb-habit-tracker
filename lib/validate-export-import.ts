@@ -1,4 +1,5 @@
-import { exportBundleSchema, ExportBundle } from "@shared/schema";
+import { exportBundleSchema } from "../shared/schema";
+import type { ExportBundle } from "../shared/schema";
 
 export function validateExportImportJson(json: unknown): { success: boolean; errors?: string[]; data?: ExportBundle } {
   const result = exportBundleSchema.safeParse(json);

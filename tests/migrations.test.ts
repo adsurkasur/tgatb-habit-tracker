@@ -32,4 +32,16 @@ import { runMigrations } from '../lib/migrations/index.ts';
 
   console.log('data validation tests: OK');
 
+  // PlatformStorage basic tests
+  const { PlatformStorage } = await import('../lib/platform-storage.ts');
+  await PlatformStorage.removeItem('__test_key');
+  await PlatformStorage.setItem('__test_key', 'value123');
+  const v = await PlatformStorage.getItem('__test_key');
+  assert(v === 'value123', 'PlatformStorage should store and retrieve values');
+  await PlatformStorage.removeItem('__test_key');
+  const v2 = await PlatformStorage.getItem('__test_key');
+  assert(v2 === null, 'PlatformStorage remove should clear value');
+
+  console.log('platform storage tests: OK');
+
 })().catch(e=>{ console.error(e); process.exit(1); });
