@@ -110,8 +110,7 @@
 
 @layer base {
   * {
-    /* Use explicit border with CSS variable color to avoid unknown utility errors */
-    @apply border;
+    /* Set default border color for elements; do not add borders globally */
     border-color: var(--border);
     transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
                 background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
