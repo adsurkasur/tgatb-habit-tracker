@@ -124,16 +124,16 @@
 }
 
 @layer utilities {
-  .surface-elevation-1 {
+  @utility surface-elevation-1 {
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   }
   
-  .surface-elevation-2 {
+  @utility surface-elevation-2 {
     box-shadow: 0 0 30px rgba(103, 80, 164, 0.25),
                 0 0 60px rgba(103, 80, 164, 0.1);
   }
   
-  .surface-elevation-3 {
+  @utility surface-elevation-3 {
     box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
   }
   
@@ -150,15 +150,15 @@
     background-color: rgba(103, 80, 164, 0.12);
   }
   
-  .material-radius {
+  @utility material-radius {
     border-radius: 12px;
   }
   
-  .material-radius-lg {
+  @utility material-radius-lg {
     border-radius: 16px;
   }
   
-  .card-transition {
+  @utility card-transition {
     transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
@@ -166,7 +166,7 @@
   /* Base class no longer applies animation directly to avoid double animations with directional slides */
 
   /* Initial mount animation (applied only on first render before any navigation) */
-  .habit-card-initial {
+  @utility habit-card-initial {
     animation: habit-card-initial-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: both;
   }
@@ -217,7 +217,7 @@
   }
   
   /* Hover effects - floating hover effect */
-  .habit-card-animated {
+  @utility habit-card-animated {
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     /* Transition for smooth hover effects */
@@ -281,7 +281,7 @@
   }
   
   /* CTA Component Styles */
-  .cta-card {
+  @utility cta-card {
     background: var(--cta-bg);
     /* Minimal shadow when not hovered - same as habit cards */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -355,7 +355,7 @@
     }
   }
   
-  .cta-button {
+@utility cta-button {
     background: var(--cta-button-bg);
     color: white;
     transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
@@ -393,7 +393,7 @@
   }
   
   /* Floating Action Button */
-  .fab {
+  @utility fab {
     background: var(--cta-button-bg) !important;
     color: white !important;
     box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
