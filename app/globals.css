@@ -112,6 +112,11 @@
     box-sizing: border-box;
   }
 
+  /* Preserve v3 default border color behavior by setting a sensible base border color */
+  *, *::before, *::after, ::backdrop, ::file-selector-button {
+    border-color: var(--border, currentColor);
+  }
+
   body {
     @apply antialiased;
     background-color: var(--background);
