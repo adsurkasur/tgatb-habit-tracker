@@ -1,12 +1,23 @@
 // Optional Secure Storage adapter
 // Tries to use a Capacitor secure storage plugin when available; falls back to PlatformStorage.
+
+// Typed interface for the optional Capacitor secure storage plugin
+type SecureStoragePlugin = {
+  get?: (args: { key: string }) => Promise<{ value?: string } | undefined>;
+  set?: (args: { key: string; value: string }) => Promise<void>;
+  remove?: (args: { key: string }) => Promise<void>;
+};
+
 export const SecureStorage = {
   async getItem(key: string): Promise<string | null> {
     try {
       const { Capacitor } = await import('@capacitor/core');
       if (Capacitor.isNativePlatform()) {
         try {
-          const plugin = await import('@capacitor/secure-storage');
+          const pkg = '@capacitor/secure-storage';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const plugin = await import(/* webpackIgnore: true */ pkg) as unknown as SecureStoragePlugin;
           if (plugin && typeof plugin.get === 'function') {
             const res = await plugin.get({ key }) as { value?: string } | undefined;
             return (res && res.value) ?? null;
@@ -24,11 +35,21 @@ export const SecureStorage = {
         console.debug('[SecureStorage] falling back to PlatformStorage.getItem', key);
         return await PlatformStorage.getItem(key);
       } catch {
-        const { PlatformStorage } = await import('./platform-storage.ts');
-        console.debug('[SecureStorage] falling back to PlatformStorage.getItem (ts)', key);
-        return await PlatformStorage.getItem(key);
+        try {
+          const alt = './platform-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { PlatformStorage } = await import(/* webpackIgnore: true */ alt);
+          console.debug('[SecureStorage] falling back to PlatformStorage.getItem (ts)', key);
+          return await PlatformStorage.getItem(key);
+        } catch {
+          // final fallback
+        }
       }
     } catch (err) { console.debug('[SecureStorage] fallback getItem error', err); return null; }
+
+    // Ensure we always return a value in all code paths
+    return null;
   },
 
 
@@ -37,7 +58,10 @@ export const SecureStorage = {
       const { Capacitor } = await import('@capacitor/core');
       if (Capacitor.isNativePlatform()) {
         try {
-          const plugin = await import('@capacitor/secure-storage');
+          const pkg = '@capacitor/secure-storage';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const plugin = await import(/* webpackIgnore: true */ pkg) as unknown as SecureStoragePlugin;
           if (plugin && typeof plugin.set === 'function') {
             await plugin.set({ key, value });
             return;
@@ -54,9 +78,16 @@ export const SecureStorage = {
         console.debug('[SecureStorage] falling back to PlatformStorage.setItem', key);
         await PlatformStorage.setItem(key, value);
       } catch {
-        const { PlatformStorage } = await import('./platform-storage.ts');
-        console.debug('[SecureStorage] falling back to PlatformStorage.setItem (ts)', key);
-        await PlatformStorage.setItem(key, value);
+        try {
+          const alt = './platform-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { PlatformStorage } = await import(/* webpackIgnore: true */ alt);
+          console.debug('[SecureStorage] falling back to PlatformStorage.setItem (ts)', key);
+          await PlatformStorage.setItem(key, value);
+        } catch {
+          // final fallback
+        }
       }
     } catch (err) { console.debug('[SecureStorage] fallback setItem error', err); }
   },
@@ -66,7 +97,10 @@ export const SecureStorage = {
       const { Capacitor } = await import('@capacitor/core');
       if (Capacitor.isNativePlatform()) {
         try {
-          const plugin = await import('@capacitor/secure-storage');
+          const pkg = '@capacitor/secure-storage';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const plugin = await import(/* webpackIgnore: true */ pkg) as unknown as SecureStoragePlugin;
           if (plugin && typeof plugin.remove === 'function') {
             await plugin.remove({ key });
             return;
@@ -83,9 +117,16 @@ export const SecureStorage = {
         console.debug('[SecureStorage] falling back to PlatformStorage.removeItem', key);
         await PlatformStorage.removeItem(key);
       } catch {
-        const { PlatformStorage } = await import('./platform-storage.ts');
-        console.debug('[SecureStorage] falling back to PlatformStorage.removeItem (ts)', key);
-        await PlatformStorage.removeItem(key);
+        try {
+          const alt = './platform-storage.ts';
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          const { PlatformStorage } = await import(/* webpackIgnore: true */ alt);
+          console.debug('[SecureStorage] falling back to PlatformStorage.removeItem (ts)', key);
+          await PlatformStorage.removeItem(key);
+        } catch {
+          // final fallback
+        }
       }
     } catch (err) { console.debug('[SecureStorage] fallback removeItem error', err); }
   }
