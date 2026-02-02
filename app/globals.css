@@ -3,6 +3,9 @@
 @import "tailwindcss"; /* Tailwind v4: use @import instead of @tailwind directives */
 @import "tw-animate-css"; /* Tailwind v4 compatible animation utilities (replaces tailwindcss-animate plugin) */
 
+/* Load JavaScript config file - required in Tailwind v4 (not auto-detected) */
+@config "../tailwind.config.ts";
+
 :root {
   /* Safe Area Variables for Mobile Apps */
   --status-bar-height: 0px;
