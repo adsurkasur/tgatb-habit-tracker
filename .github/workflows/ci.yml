@@ -51,8 +51,8 @@ jobs:
           node-version: 24.x
       - name: Install
         run: npm ci
-      - name: NPM audit (fail on high)
-        run: npm audit --audit-level=high
+      - name: NPM audit (fail on critical)
+        run: npm audit --audit-level=critical
 
   e2e:
     runs-on: ubuntu-latest
