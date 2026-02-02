@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
 @import "tailwindcss"; /* Tailwind v4: use @import instead of @tailwind directives */
+@import "tw-animate-css"; /* Tailwind v4 compatible animation utilities (replaces tailwindcss-animate plugin) */
 
 :root {
   /* Safe Area Variables for Mobile Apps */
@@ -319,84 +320,10 @@
     animation: none;
   }
 
-  /* Compatibility: Explicit animations for components (v4 migration)
-     Many components rely on utility classes provided by animation plugins
-     (e.g., animate-in, fade-in-0, zoom-in-95, slide-in-from-*) which
-     were not present after the Tailwind v4 migration. Define the
-     subset of keyframes and helper classes used throughout the UI so
-     interactive components keep their expected behavior. */
-
-  /* Animation helpers */
-  .animate-in {
-    animation-duration: var(--tw-duration, 0.2s);
-    animation-timing-function: cubic-bezier(.4, 0, .2, 1);
-    animation-fill-mode: both;
-  }
-
-  .animate-out {
-    animation-duration: var(--tw-duration, 0.2s);
-    animation-timing-function: cubic-bezier(.4, 0, .2, 1);
-    animation-fill-mode: both;
-  }
-
-  /* Fade */
-  @keyframes fade-in-0 {
-    from { opacity: 0; }
-    to   { opacity: 1; }
-  }
-  @keyframes fade-out-0 {
-    from { opacity: 1; }
-    to   { opacity: 0; }
-  }
-  @keyframes fade-in-80 {
-    from { opacity: 0.8; }
-    to   { opacity: 1; }
-  }
-  @keyframes fade-out-80 {
-    from { opacity: 1; }
-    to   { opacity: 0.8; }
-  }
-
-  .fade-in-0 { animation: fade-in-0 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .fade-out-0 { animation: fade-out-0 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .fade-in-80 { animation: fade-in-80 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .fade-out-80 { animation: fade-out-80 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-
-  /* Zoom */
-  @keyframes zoom-in-95 {
-    from { transform: scale(.95); opacity: .9; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-  @keyframes zoom-out-95 {
-    from { transform: scale(1); opacity: 1; }
-    to   { transform: scale(.95); opacity: .9; }
-  }
-  @keyframes zoom-in-90 {
-    from { transform: scale(.9); opacity: .9; }
-    to   { transform: scale(1); opacity: 1; }
-  }
-  .zoom-in-95 { animation: zoom-in-95 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
-  .zoom-out-95 { animation: zoom-out-95 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
-  .zoom-in-90 { animation: zoom-in-90 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
-
-  /* Slide (small offsets use spacing units like '2' => 0.5rem) */
-  @keyframes slide-in-from-top-2 { from { transform: translateY(-0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-in-from-bottom-2 { from { transform: translateY(0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-in-from-top-full { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-in-from-bottom-full { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-in-from-left-1\/2 { from { transform: translateX(-50%); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-in-from-right-2 { from { transform: translateX(0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
-  @keyframes slide-out-to-right-full { from { transform: none; opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
-  @keyframes slide-out-to-left-1\/2 { from { transform: none; opacity: 1; } to { transform: translateX(-50%); opacity: 0; } }
-
-  .slide-in-from-top-2 { animation: slide-in-from-top-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-in-from-bottom-2 { animation: slide-in-from-bottom-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-in-from-top-full { animation: slide-in-from-top-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-in-from-bottom-full { animation: slide-in-from-bottom-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-in-from-left-1\/2 { animation: slide-in-from-left-1\/2 var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-in-from-right-2 { animation: slide-in-from-right-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-out-to-right-full { animation: slide-out-to-right-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
-  .slide-out-to-left-1\/2 { animation: slide-out-to-left-1\/2 var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
+  /* Animation utilities are now provided by tw-animate-css import above.
+     That package provides: animate-in, animate-out, fade-in-*, fade-out-*,
+     zoom-in-*, zoom-out-*, slide-in-from-*, slide-out-to-*, etc.
+     No manual definitions needed here. */
   
   @keyframes cta-card-pulse {
     0%, 100% {
@@ -720,24 +647,17 @@
     }
   }
 
-  /* Mobile full-screen dialog override */
+  /* Mobile full-screen dialog override
+     IMPORTANT: Only affects dialogs that explicitly opt-in via [data-mobile-fullscreen].
+     Standard dialog/sheet overlays should keep their bg-black/80 background. */
   @media (max-width: 640px) {
-    /* Target the dialog overlay */
-    [data-state="open"] .fixed.inset-0 {
+    /* For dialogs with [data-mobile-fullscreen], hide the overlay and make content fullscreen */
+    [data-mobile-fullscreen] ~ [data-radix-dialog-overlay],
+    [data-mobile-fullscreen] ~ .fixed.inset-0 {
       background-color: transparent !important;
     }
     
-    /* Target the dialog content container */
-    [data-state="open"] .fixed.left-0.top-0 {
-      left: 0 !important;
-      top: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-    
-    /* Target the actual dialog content */
+    /* Target the actual dialog content when it has the fullscreen attribute */
     [data-mobile-fullscreen] {
       position: fixed !important;
       top: 0 !important;
@@ -753,11 +673,6 @@
       transform: none !important;
       border: none !important;
       box-shadow: none !important;
-    }
-    
-    /* Hide the dialog overlay background */
-    [data-state="open"] .fixed.inset-0.z-50 {
-      background-color: transparent !important;
     }
   }
 
