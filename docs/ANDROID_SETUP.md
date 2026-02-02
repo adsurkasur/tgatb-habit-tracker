@@ -278,4 +278,17 @@ Once your environment is set up:
 1. Customize app icon and splash screen in `android/app/src/main/res/`
 2. Configure app permissions in `android/app/src/main/AndroidManifest.xml`
 3. Build release APK: `cd android && ./gradlew assembleRelease`
-4. Prepare for Play Store: [Publishing Guide](https://developer.android.com/studio/publish)
+
+4. CI: Upload to Play Store (internal test)
+
+   - A CI job `upload-playstore` is available which builds a signed AAB and uploads it to the **internal** test track using the Play Console API.
+   - Triggers: `workflow_dispatch` (manual) or tag push matching `v*`.
+   - Required GitHub Secrets (add these to the repository Settings → Secrets & variables → Actions):
+     - `ANDROID_KEYSTORE_BASE64` (base64 of your keystore file)
+     - `ANDROID_KEYSTORE_PASSWORD`
+     - `ANDROID_KEY_ALIAS`
+     - `ANDROID_KEY_PASSWORD`
+     - `GOOGLE_PLAY_SERVICE_ACCOUNT_JSON` (content of service account JSON)
+   - To test locally before adding secrets: add `release.keystore` to `android/app/` and set `android/gradle.properties` with `storeFile`, `androidKeystorePassword`, `androidKeyPassword`, and `androidKeyAlias` (do NOT commit these values).
+
+5. Prepare for Play Store: [Publishing Guide](https://developer.android.com/studio/publish)
