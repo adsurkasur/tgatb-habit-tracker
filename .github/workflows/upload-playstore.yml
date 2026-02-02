@@ -71,6 +71,20 @@ jobs:
           echo "Android gradle.properties (android/):" ; sed -n '1,200p' android/gradle.properties || true
           echo "Check for android.useAndroidX:" ; grep -n 'android.useAndroidX' android/gradle.properties || true
 
+      - name: Normalize gradle properties (remove BOM & CRLF)
+        run: |
+          echo "Removing BOM and normalizing line endings in android/gradle.properties"
+          python - <<'PY'
+    import io
+    p='android/gradle.properties'
+    b=open(p,'rb').read()
+    b=b.lstrip(b'\xef\xbb\xbf')
+    b=b.replace(b'\r\n',b'\n')
+    open(p,'wb').write(b)
+    print(open(p,'rb').read(160))
+    PY
+          echo "After normalization content:" ; sed -n '1,200p' android/gradle.properties || true
+
       - name: Build AAB
         run: ./gradlew --no-daemon bundleRelease --stacktrace --info
         working-directory: android
