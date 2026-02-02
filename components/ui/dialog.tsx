@@ -6,6 +6,20 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Dialog Component - Unified motion architecture
+ * 
+ * Structure:
+ * - DialogOverlay: bg-black/80, fade animation only (never slide)
+ * - DialogContent: centered via Tailwind translate, fade+scale animation only (never slide)
+ * 
+ * Why no slide animations on centered dialogs:
+ * - Tailwind v4 uses individual `translate` CSS property for positioning
+ * - tw-animate-css uses `transform: translate3d()` for slide animations
+ * - These are separate CSS properties that don't compose correctly
+ * - Dialogs use fade+scale which work correctly with translate centering
+ */
+
 const Dialog = DialogPrimitive.Root
 
 const DialogTrigger = DialogPrimitive.Trigger

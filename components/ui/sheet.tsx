@@ -7,6 +7,19 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Sheet Component - Edge-anchored panels with slide animations
+ * 
+ * Structure:
+ * - SheetOverlay: bg-black/80, fade animation only
+ * - SheetContent: edge-anchored (inset-x-0, inset-y-0), slide + fade animation
+ * 
+ * Why slide animations work here but not on centered dialogs:
+ * - Sheet content is edge-anchored (left:0, right:0, etc.) - no centering translate
+ * - tw-animate-css slide animations use transform: translate3d() 
+ * - Since there's no Tailwind translate for centering, no conflict occurs
+ */
+
 const Sheet = SheetPrimitive.Root
 
 const SheetTrigger = SheetPrimitive.Trigger

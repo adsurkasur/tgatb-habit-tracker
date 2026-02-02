@@ -5,6 +5,14 @@ import { cn } from "@/lib/utils";
 import { useVirtualKeyboard } from "@/hooks/use-virtual-keyboard";
 import { useIsMobile } from "@/hooks/use-mobile";
 
+/**
+ * MobileDialogContent - Unified dialog component for desktop and mobile
+ * 
+ * Architecture:
+ * - Overlay: bg-black/80, fade animation only
+ * - Content: centered via Tailwind translate, fade+scale animation only
+ * - NO slide animations on centered dialogs (incompatible with Tailwind v4 translate)
+ */
 const MobileDialogContent = React.forwardRef<
   React.ElementRef<typeof DialogPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof DialogPrimitive.Content>
@@ -38,52 +46,39 @@ const MobileDialogContent = React.forwardRef<
   }, [isKeyboardOpen, isMobile]);
 
   // Calculate responsive positioning
+  // Uses Tailwind translate utilities for consistency with animation system
   const getPositioning = () => {
     if (!isMobile) {
-      // Desktop: use default centering
+      // Desktop: centered via Tailwind translate utilities
       return {
-        className: "fixed left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
-        style: {}
+        className: "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
+        style: {} as React.CSSProperties
       };
     }
 
-    // Mobile positioning
-    const baseStyle = {
-      position: 'fixed' as const,
-      left: '50%',
-      transform: 'translateX(-50%)',
-      width: 'calc(100vw - 2rem)', // Less margin, wider modal
-      maxWidth: '500px', // Slightly larger max width
-      minWidth: '300px', // Minimum width to prevent too narrow
-    };
-
+    // Mobile: centered with responsive constraints
     if (isKeyboardOpen) {
-      // Center vertically in available viewport space when keyboard is open
+      // When keyboard is open, position higher to stay visible
       const availableHeight = viewportHeight;
-      const modalHeight = Math.min(400, availableHeight * 0.8); // Use 80% of available space or 400px max
-      const topPosition = (availableHeight - modalHeight) / 2; // Center in available space
+      const topPosition = Math.max(20, availableHeight * 0.1);
       
       return {
-        className: "fixed",
+        className: "left-[50%] translate-x-[-50%]",
         style: {
-          ...baseStyle,
-          top: `${Math.max(20, topPosition)}px`, // Ensure minimum 20px from top
-          transform: 'translateX(-50%)', // Only center horizontally, not vertically (since we calculated top)
-          height: 'fit-content',
-          maxHeight: `${modalHeight}px`,
-        }
+          top: `${topPosition}px`,
+          maxHeight: `${availableHeight * 0.8}px`,
+        } as React.CSSProperties
       };
     }
 
-    // Center vertically when keyboard is closed - more even spacing
+    // Mobile default: centered like desktop
     return {
-      className: "fixed",
+      className: "left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]",
       style: {
-        ...baseStyle,
-        top: '50%',
-        transform: 'translateX(-50%) translateY(-50%)', // Perfect center
-        maxHeight: '75vh', // Slightly more height allowance
-      }
+        width: 'calc(100vw - 2rem)',
+        maxWidth: '500px',
+        maxHeight: '75vh',
+      } as React.CSSProperties
     };
   };
 
@@ -91,49 +86,40 @@ const MobileDialogContent = React.forwardRef<
 
   return (
     <DialogPrimitive.Portal>
+      {/* Overlay: solid bg-black/80, fade animation only, never slide */}
       <DialogPrimitive.Overlay 
         className="fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0"
         style={{
-          // Make overlay responsive to virtual keyboard
-          ...(isMobile && isKeyboardOpen && {
-            height: `${viewportHeight}px`,
-            bottom: 'auto'
-          }),
-          // Completely prevent scrolling on the overlay
+          // Prevent scroll events on overlay
           touchAction: 'none',
           overscrollBehavior: 'none',
           overflow: 'hidden'
         }}
         onTouchMove={(e) => {
-          // Only prevent scroll-related touch moves, not taps/clicks
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onWheel={(e) => {
-          e.preventDefault();
-          e.stopPropagation();
-        }}
-        onScroll={(e) => {
           e.preventDefault();
           e.stopPropagation();
         }}
       />
+      {/* Content: centered via Tailwind translate, fade+scale animation only */}
       <DialogPrimitive.Content
         ref={ref}
         className={cn(
-          "z-50 grid gap-4 border bg-background p-6 shadow-lg duration-200",
-          "data-[state=open]:animate-in data-[state=closed]:animate-out",
+          // Base layout
+          "fixed z-50 grid gap-4 border bg-background p-6 shadow-lg",
+          // Animation: fade + scale only (no slide - incompatible with translate centering)
+          "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
           "data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
+          // Styling
           "overflow-y-auto rounded-lg",
-          // Apply responsive width - more proportionate sizing
-          isMobile ? "w-auto" : "w-full max-w-lg",
+          // Responsive width
+          isMobile ? "w-[calc(100vw-2rem)] max-w-[500px] min-w-[300px]" : "w-full max-w-lg",
+          // Positioning (from getPositioning)
           positioning.className,
           className
         )}
         style={{
           ...positioning.style,
-          // Prevent overscroll behavior
           overscrollBehavior: isMobile ? 'contain' : undefined,
         }}
         {...props}

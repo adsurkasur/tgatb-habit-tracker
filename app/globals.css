@@ -222,18 +222,21 @@
     }
   }
   
-  /* Hover effects - floating hover effect */
+  /* Hover effects - floating hover effect
+   * Uses individual CSS properties (scale, translate) for Tailwind v4 compatibility.
+   * Never use combined transform on elements that might use Tailwind translate utilities.
+   */
   @utility habit-card-animated {
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Transition for smooth hover effects - use individual properties for Tailwind v4 */
-    transition: transform 0.2s ease, scale 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform, scale;
+    /* Transition for smooth hover effects - individual properties for Tailwind v4 */
+    transition: scale 0.2s ease, translate 0.2s ease, box-shadow 0.2s ease;
   }
   
   .habit-card-animated:hover {
-    /* Floating hover effect - same pattern as nav buttons */
-    transform: translateY(-4px) scale(1.02);
+    /* Floating hover effect using individual CSS properties */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
@@ -244,8 +247,9 @@
   }
   
   .dark .habit-card-animated:hover {
-    /* Strong purple glow on hover in dark mode - same pattern as nav buttons */
-    transform: translateY(-4px) scale(1.02);
+    /* Strong purple glow on hover in dark mode - individual properties */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   
@@ -286,17 +290,18 @@
     backdrop-filter: blur(4px);
   }
   
-  /* CTA Component Styles */
+  /* CTA Component Styles - uses individual CSS properties for Tailwind v4 */
   @utility cta-card {
     background: var(--cta-bg);
-    /* Minimal shadow when not hovered - same as habit cards */
+    /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s ease, scale 0.2s ease, translate 0.2s ease;
   }
   
   .cta-card:hover {
-    /* Floating hover effect with lift - same as habit cards */
-    transform: translateY(-4px) scale(1.02);
+    /* Floating hover effect using individual CSS properties */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
@@ -308,6 +313,8 @@
   
   .dark .cta-card:hover {
     /* Strong purple glow on hover in dark mode */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   
@@ -343,14 +350,10 @@
   
   .cta-card:hover .cta-icon-container {
     background-color: hsl(var(--primary) / 0.15);
-    transform: scale(1.05);
+    scale: 1.05;
   }
   
-  .cta-card:hover {
-    transform: scale(1.02);
-  }
-  
-  /* CTA Sparkle Animation */
+  /* CTA Sparkle Animation - uses transform in keyframes (isolated, no conflict) */
   .cta-sparkle {
     animation: sparkle 2s ease-in-out infinite;
   }
@@ -358,24 +361,25 @@
   @keyframes sparkle {
     0%, 100% {
       opacity: 0.7;
-      transform: scale(1);
+      scale: 1;
     }
     50% {
       opacity: 1;
-      transform: scale(1.2);
+      scale: 1.2;
     }
   }
   
-@utility cta-button {
+  /* CTA Button - uses individual CSS properties */
+  @utility cta-button {
     background: var(--cta-button-bg);
     color: white;
     transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+                scale 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-button:hover {
     background: var(--cta-button-hover);
-    transform: scale(1.02);
+    scale: 1.02;
   }
   
   /* Enhanced CTA Button Animations */
@@ -403,21 +407,23 @@
     color: hsl(var(--primary-foreground));
   }
   
-  /* Floating Action Button */
+  /* Floating Action Button - uses individual CSS properties */
   @utility fab {
     background: var(--cta-button-bg) !important;
     color: white !important;
     box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
+                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1),
+                scale 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .fab:hover {
     background: var(--cta-button-hover) !important;
     box-shadow: 0 6px 20px rgba(103, 80, 164, 0.4);
-    transform: scale(1.05);
+    scale: 1.05;
   }
   
-  /* Enhanced FAB Animations */
+  /* Enhanced FAB Animations - transform in keyframes is isolated */
   .fab-animated {
     position: relative;
     overflow: hidden;
@@ -432,7 +438,7 @@
     height: 0;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     transition: width 0.3s ease, height 0.3s ease;
   }
   
@@ -441,7 +447,7 @@
     height: 200%;
   }
   
-  /* State change animation for FAB */
+  /* State change animation for FAB - keyframe animations are isolated */
   .fab-animated {
     animation: fab-appear 0.4s cubic-bezier(0.2, 0, 0, 1);
   }
@@ -449,11 +455,13 @@
   @keyframes fab-appear {
     0% {
       opacity: 0;
-      transform: scale(0.3) rotate(-180deg);
+      scale: 0.3;
+      rotate: -180deg;
     }
     100% {
       opacity: 1;
-      transform: scale(1) rotate(0deg);
+      scale: 1;
+      rotate: 0deg;
     }
   }
   
@@ -577,30 +585,26 @@
     opacity: 1 !important;
   }
 
-  /* Enhanced collapsible animations - Ultra performance optimized with hardware acceleration */
+  /* Enhanced collapsible animations - uses individual CSS properties */
   .collapsible-item {
-    transition: transform 0.1s ease-out, background-color 0.1s ease-out;
-    will-change: auto;
-    /* Force GPU layer for better performance */
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    transition: translate 0.1s ease-out, background-color 0.1s ease-out;
   }
 
   .collapsible-item:hover {
-    /* Use transform instead of layout-shifting properties */
-    transform: translate3d(1px, 0, 0);
+    /* Use individual translate property */
+    translate: 1px 0;
     background-color: rgba(var(--muted), 0.8);
   }
 
-  /* Smooth accordion item entrance animation - hardware accelerated */
+  /* Smooth accordion item entrance animation */
   @keyframes fadeInSlideUp {
     from {
       opacity: 0;
-      transform: translate3d(0, 6px, 0);
+      translate: 0 6px;
     }
     to {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      translate: 0 0;
     }
   }
 
@@ -612,30 +616,26 @@
   @keyframes fadeOutSlideDown {
     from {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      translate: 0 0;
     }
     to {
       opacity: 0;
-      transform: translate3d(0, -4px, 0);
+      translate: 0 -4px;
     }
   }
 
-  /* Sidebar accordion trigger enhanced animations - Ultra performance optimized */
+  /* Sidebar accordion trigger enhanced animations */
   .accordion-trigger {
     transition: background-color 0.1s ease-out;
-    will-change: auto;
-    /* Prevent unnecessary layer creation unless needed */
-    contain: layout style;
   }
 
   .accordion-trigger:hover {
     background-color: rgba(var(--muted), 0.5) !important;
   }
 
-  /* Badge count animations - Simplified */
+  /* Badge count animations - uses individual scale property */
   .badge-count {
-    transition: transform 0.1s ease-out;
-    will-change: auto;
+    transition: scale 0.1s ease-out;
   }
 
   .badge-count.updated {
@@ -644,7 +644,7 @@
 
   @keyframes pulse-badge {
     50% {
-      transform: scale3d(1.05, 1.05, 1);
+      scale: 1.05;
     }
   }
 

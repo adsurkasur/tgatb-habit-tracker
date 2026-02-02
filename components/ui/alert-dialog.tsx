@@ -4,6 +4,16 @@ import * as AlertDialogPrimitive from "@radix-ui/react-alert-dialog"
 import { cn } from "@/lib/utils"
 import { buttonVariants } from "@/components/ui/button"
 
+/**
+ * AlertDialog Component - Unified motion architecture
+ * 
+ * Structure:
+ * - AlertDialogOverlay: bg-black/80, fade animation only
+ * - AlertDialogContent: centered via Tailwind translate, fade+scale animation only
+ * 
+ * See dialog.tsx for detailed explanation of why slide animations are not used.
+ */
+
 const AlertDialog = AlertDialogPrimitive.Root
 
 const AlertDialogTrigger = AlertDialogPrimitive.Trigger
