@@ -230,7 +230,9 @@
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
     /* Transition for smooth hover effects - individual properties for Tailwind v4 */
-    transition: scale 0.2s ease, translate 0.2s ease, box-shadow 0.2s ease;
+    transition: scale 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                translate 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .habit-card-animated:hover {
@@ -295,7 +297,9 @@
     background: var(--cta-bg);
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease, scale 0.2s ease, translate 0.2s ease;
+    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                scale 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                translate 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover {
@@ -343,9 +347,10 @@
     }
   }
   
-  /* CTA Icon Animations */
+  /* CTA Icon Animations - uses explicit properties for Tailwind v4 compatibility */
   .cta-icon-container {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 0.25s cubic-bezier(0.2, 0, 0, 1), 
+                scale 0.25s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover .cta-icon-container {
@@ -538,6 +543,12 @@
     background: var(--cta-button-hover);
   }
   
+  /* Navigation button transitions for smooth hover/active effects */
+  .nav-button {
+    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1), 
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
+                background-color 0.15s ease;
+  }
   
   .nav-button:active {
     /* Use individual scale property to compose with Tailwind v4's translate */
@@ -587,7 +598,8 @@
 
   /* Enhanced collapsible animations - uses individual CSS properties */
   .collapsible-item {
-    transition: translate 0.1s ease-out, background-color 0.1s ease-out;
+    transition: translate 0.15s cubic-bezier(0.2, 0, 0, 1), 
+                background-color 0.15s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .collapsible-item:hover {
@@ -635,7 +647,7 @@
 
   /* Badge count animations - uses individual scale property */
   .badge-count {
-    transition: scale 0.1s ease-out;
+    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .badge-count.updated {
