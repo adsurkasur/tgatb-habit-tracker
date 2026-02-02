@@ -116,8 +116,17 @@ jobs:
           echo "storeFile=release.keystore" >> android/gradle.properties
           echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
 
-      - name: Build AAB
-        run: ./gradlew bundleRelease
+      - name: Debug: List files and keystore info
+        run: |
+          pwd
+          ls -la android
+          echo "---- android/gradle.properties ----"
+          sed -n '1,200p' android/gradle.properties || true
+          echo "---- keystore info ----"
+          keytool -list -v -keystore android/app/release.keystore -storepass ${{ secrets.ANDROID_KEYSTORE_PASSWORD }} -alias ${{ secrets.ANDROID_KEY_ALIAS }} || true
+
+      - name: Build AAB (debug)
+        run: ./gradlew bundleRelease --stacktrace --info
         working-directory: android
         env:
           ORG_GRADLE_PROJECT_androidKeystorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
