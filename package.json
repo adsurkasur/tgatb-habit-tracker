@@ -19,7 +19,7 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "test:unit": "node -r ts-node/register tests/merge.test.ts && node -r ts-node/register tests/migrations.test.ts && node -r ts-node/register tests/token_storage.test.ts && node -r ts-node/register tests/merge_conflict.test.ts && node -r ts-node/register tests/merge_edgecases.test.ts && node -r ts-node/register tests/migration_idempotent.test.ts",
+    "test:unit": "npx tsx tests/merge.test.ts && npx tsx tests/migrations.test.ts && npx tsx tests/token_storage.test.ts && npx tsx tests/merge_conflict.test.ts && npx tsx tests/merge_edgecases.test.ts && npx tsx tests/migration_idempotent.test.ts",
     "test:ui": "vitest run",
     "test:e2e": "npx playwright test",
     "test:integration": "vitest run tests/integration",
