@@ -732,14 +732,20 @@
     }
   }
   
-  /* Enhanced theme transition: keep scoped to top-level elements to avoid broad layout/interaction side-effects */
-  html, body {
-    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.3s cubic-bezier(0.2, 0, 0, 1);
+  /* Enhanced theme transition: apply to all elements for smooth dark/light mode toggle */
+  /* Uses specific properties to avoid interfering with layout animations */
+  *, *::before, *::after {
+    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                border-color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
+                fill 0.2s cubic-bezier(0.2, 0, 0, 1),
+                stroke 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
 
   /* Override transition for specific elements that need faster/different transitions */
   .theme-transition {
-    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
   }
   
   /* Loading screen specific styles */

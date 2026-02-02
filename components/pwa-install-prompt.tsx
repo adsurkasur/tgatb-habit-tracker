@@ -213,7 +213,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 z-50 bg-background border border-border rounded-lg shadow-xl max-w-sm animate-slide-up">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-background border border-border rounded-lg shadow-xl max-w-sm animate-slide-up">
       <div className="p-3">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-w-0">
@@ -281,7 +281,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
             size="sm"
             variant="ghost"
             onClick={handleDismiss}
-            className="p-1 h-6 w-6 flex-shrink-0 ml-2"
+            className="p-1 h-6 w-6 shrink-0 ml-2"
           >
             <X className="h-3 w-3" />
           </Button>
