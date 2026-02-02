@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
@@ -47,12 +47,14 @@ function HabitCardComponent({
   }
   if (!habit) {
     return (
-      <Card className="w-full max-w-md mx-auto p-6 bg-muted/50">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold text-muted-foreground">No habits yet</h2>
-          <p className="text-muted-foreground">Add your first habit to get started!</p>
+      <div className="w-full max-w-md mx-auto">
+        <div className="rounded-lg border p-6 bg-muted/50">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold text-muted-foreground">No habits yet</h2>
+            <p className="text-muted-foreground">Add your first habit to get started!</p>
+          </div>
         </div>
-      </Card>
+      </div>
     );
   }
   return (
@@ -111,13 +113,9 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
     return habit.type === 'good' ? "You didn't do it today!" : 'You did it today!';
   };
   return (
-    <Card
-      key={`habit-${habit.id}`}
-      data-tour="habit-card"
-      className={`w-full max-w-md mx-auto surface-elevation-2 card-transition habit-card-animated overflow-visible ${animationClass} ${cardToneClass()}`}
-    >
-      {/* Inner surface for hover animations - parent does NOT scale */}
-      <div className="habit-card-surface p-6 relative">
+    <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
+      {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
+      <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
         <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
         <StreakBadge type={habit.type} streak={habit.streak} />
         <div className="space-y-6 mt-8">
@@ -128,7 +126,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
           <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
         </div>
       </div>
-    </Card>
+    </div>
   );
 }
 

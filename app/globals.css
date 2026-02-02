@@ -237,7 +237,7 @@
     overflow: visible;
   }
   
-  /* Inner surface animates instead of parent */
+  /* Surface owns ALL visuals and animates on hover */
   .habit-card-surface {
     transition-property: scale, translate, box-shadow, background-color, border-color;
     transition-duration: 200ms;
@@ -246,7 +246,7 @@
     translate: 0 0;
   }
   
-  .habit-card-animated:hover .habit-card-surface {
+  .habit-card-surface:hover {
     /* Subtle optical lift - micro-scale + shadow */
     scale: 1.015;
     translate: 0 -2px;
@@ -256,12 +256,12 @@
   }
   
   /* Dark mode hover effects */
-  .dark .habit-card-animated {
+  .dark .habit-card-surface {
     /* Minimal glow when not hovered in dark mode */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
   
-  .dark .habit-card-animated:hover .habit-card-surface {
+  .dark .habit-card-surface:hover {
     /* Strong purple glow on hover in dark mode */
     box-shadow:
       rgba(103, 80, 164, 0.45) 0px 6px 24px,
