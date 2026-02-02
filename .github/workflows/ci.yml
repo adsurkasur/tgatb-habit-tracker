@@ -112,9 +112,7 @@ jobs:
 
       - name: Create gradle.properties for signing
         run: |
-          echo "" >> android/gradle.properties
-          echo "storeFile=release.keystore" >> android/gradle.properties
-          echo "keyAlias=${{ secrets.ANDROID_KEY_ALIAS }}" >> android/gradle.properties
+          printf '\nstoreFile=release.keystore\nkeyAlias=${{ secrets.ANDROID_KEY_ALIAS }}\n' >> android/gradle.properties
 
       - name: Debug: List files and keystore info
         run: |
