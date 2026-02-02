@@ -114,16 +114,19 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
     <Card
       key={`habit-${habit.id}`}
       data-tour="habit-card"
-      className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${cardToneClass()}`}
+      className={`w-full max-w-md mx-auto surface-elevation-2 card-transition habit-card-animated overflow-visible ${animationClass} ${cardToneClass()}`}
     >
-      <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
-      <StreakBadge type={habit.type} streak={habit.streak} />
-      <div className="space-y-6 mt-8">
-        <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
-        <div className="text-center">
-          <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
+      {/* Inner surface for hover animations - parent does NOT scale */}
+      <div className="habit-card-surface p-6 relative">
+        <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
+        <StreakBadge type={habit.type} streak={habit.streak} />
+        <div className="space-y-6 mt-8">
+          <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
+          </div>
+          <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
         </div>
-        <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
       </div>
     </Card>
   );

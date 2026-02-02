@@ -213,8 +213,10 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   }
 
   return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 bg-background border border-border rounded-lg shadow-xl max-w-sm animate-slide-up">
-      <div className="p-3">
+    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50">
+      {/* Inner surface animates - fixed anchor does NOT animate */}
+      <div className="pwa-prompt-surface bg-background border border-border rounded-lg shadow-xl max-w-sm animate-slide-up">
+        <div className="p-3">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-w-0">
             <h3 className="font-medium text-sm mb-1">Install TGATB App</h3>
@@ -307,6 +309,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               {fallbackInstall ? "OK" : "Not now"}
             </Button>
         </div>
+      </div>
       </div>
     </div>
   );

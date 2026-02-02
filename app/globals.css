@@ -227,22 +227,32 @@
   
   /* Hover effects - floating hover effect
    * Uses individual CSS properties (scale, translate) for Tailwind v4 compatibility.
-   * Never use combined transform on elements that might use Tailwind translate utilities.
+   * ARCHITECTURE: Parent container does NOT scale. Inner .habit-card-surface scales.
+   * This prevents layout shift and matches CTA card motion philosophy.
    */
   @utility habit-card-animated {
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Transition for smooth hover effects - individual properties for Tailwind v4 */
-    transition: scale 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                translate 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
+    /* Container has no scaling transition - surface handles it */
+    overflow: visible;
   }
   
-  .habit-card-animated:hover {
-    /* Floating hover effect using individual CSS properties */
-    scale: 1.02;
-    translate: 0 -4px;
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Inner surface animates instead of parent */
+  .habit-card-surface {
+    transition-property: scale, translate, box-shadow, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    scale: 1;
+    translate: 0 0;
+  }
+  
+  .habit-card-animated:hover .habit-card-surface {
+    /* Subtle optical lift - micro-scale + shadow */
+    scale: 1.015;
+    translate: 0 -2px;
+    box-shadow:
+      rgba(103, 80, 164, 0.23) 0px 6px 24px,
+      rgba(103, 80, 164, 0.12) 0px 0px 48px;
   }
   
   /* Dark mode hover effects */
@@ -251,14 +261,14 @@
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
   }
   
-  .dark .habit-card-animated:hover {
-    /* Strong purple glow on hover in dark mode - individual properties */
-    scale: 1.02;
-    translate: 0 -4px;
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  .dark .habit-card-animated:hover .habit-card-surface {
+    /* Strong purple glow on hover in dark mode */
+    box-shadow:
+      rgba(103, 80, 164, 0.45) 0px 6px 24px,
+      rgba(103, 80, 164, 0.25) 0px 0px 48px;
   }
   
-  /* Offline Toast Animation */
+  /* Offline Toast Animation - uses individual translate property for Tailwind v4 */
   .animate-slide-up {
     animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: both;
@@ -269,25 +279,32 @@
     animation-fill-mode: both;
   }
   
+  /* PWA Prompt Surface - animates independently of fixed anchor */
+  .pwa-prompt-surface {
+    transition-property: scale, box-shadow, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  
   @keyframes slide-up {
     0% {
       opacity: 0;
-      transform: translate(-50%, 100px);
+      translate: 0 100px;
     }
     100% {
       opacity: 1;
-      transform: translate(-50%, 0);
+      translate: 0 0;
     }
   }
   
   @keyframes slide-down {
     0% {
       opacity: 1;
-      transform: translate(-50%, 0);
+      translate: 0 0;
     }
     100% {
       opacity: 0;
-      transform: translate(-50%, 100px);
+      translate: 0 100px;
     }
   }
   
