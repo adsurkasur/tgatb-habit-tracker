@@ -226,9 +226,9 @@
   @utility habit-card-animated {
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Transition for smooth hover effects */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform;
+    /* Transition for smooth hover effects - use individual properties for Tailwind v4 */
+    transition: transform 0.2s ease, scale 0.2s ease, box-shadow 0.2s ease;
+    will-change: transform, scale;
   }
   
   .habit-card-animated:hover {
@@ -532,7 +532,8 @@
   
   
   .nav-button:active {
-    transform: translate(-50%, -50%) scale(0.95);
+    /* Use individual scale property to compose with Tailwind v4's translate */
+    scale: 0.95;
   }
   
   /* Dark mode navigation button effects */
