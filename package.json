@@ -27,7 +27,7 @@
     "build": "next build",
     "start": "npx serve@latest out",
     "test": "npm run build && npm run start",
-    "lint": "next lint",
+    "lint": "eslint .",
     "check": "tsc",
     "setup:android": "node scripts/setup-android.js",
     "generate-icons": "node scripts/generate-android-icons.cjs",
