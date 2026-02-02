@@ -109,7 +109,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   };
   const questionText = () => {
     if (!isCompletedToday) return 'Did you do it?';
-    if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it!" : 'Already done today!';
+    if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it today!" : 'Already done today!';
     return habit.type === 'good' ? "You didn't do it today!" : 'You did it today!';
   };
   return (
