@@ -1,4 +1,4 @@
-import { Card } from "@/components/ui/card";
+
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
@@ -47,12 +47,14 @@ function HabitCardComponent({
   }
   if (!habit) {
     return (
-      <Card className="w-full max-w-md mx-auto p-6 bg-muted/50">
-        <div className="text-center space-y-4">
-          <h2 className="text-2xl font-bold text-muted-foreground">No habits yet</h2>
-          <p className="text-muted-foreground">Add your first habit to get started!</p>
+      <div className="w-full max-w-md mx-auto">
+        <div className="rounded-lg border p-6 bg-muted/50">
+          <div className="text-center space-y-4">
+            <h2 className="text-2xl font-bold text-muted-foreground">No habits yet</h2>
+            <p className="text-muted-foreground">Add your first habit to get started!</p>
+          </div>
         </div>
-      </Card>
+      </div>
     );
   }
   return (
@@ -107,25 +109,24 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   };
   const questionText = () => {
     if (!isCompletedToday) return 'Did you do it?';
-    if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it!" : 'Already done today!';
+    if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it today!" : 'Already done today!';
     return habit.type === 'good' ? "You didn't do it today!" : 'You did it today!';
   };
   return (
-    <Card
-      key={`habit-${habit.id}`}
-      data-tour="habit-card"
-      className={`w-full max-w-md mx-auto p-6 surface-elevation-2 card-transition habit-card-animated ${animationClass} relative ${cardToneClass()}`}
-    >
-      <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
-      <StreakBadge type={habit.type} streak={habit.streak} />
-      <div className="space-y-6 mt-8">
-        <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
-        <div className="text-center">
-          <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
+    <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
+      {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
+      <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
+        <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
+        <StreakBadge type={habit.type} streak={habit.streak} />
+        <div className="space-y-6 mt-8">
+          <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
+          <div className="text-center">
+            <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
+          </div>
+          <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
         </div>
-        <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
       </div>
-    </Card>
+    </div>
   );
 }
 

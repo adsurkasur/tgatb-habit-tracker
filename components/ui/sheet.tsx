@@ -7,6 +7,19 @@ import { X } from "lucide-react"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Sheet Component - Edge-anchored panels with slide animations
+ * 
+ * Structure:
+ * - SheetOverlay: bg-black/80, fade animation only
+ * - SheetContent: edge-anchored (inset-x-0, inset-y-0), slide + fade animation
+ * 
+ * Why slide animations work here but not on centered dialogs:
+ * - Sheet content is edge-anchored (left:0, right:0, etc.) - no centering translate
+ * - tw-animate-css slide animations use transform: translate3d() 
+ * - Since there's no Tailwind translate for centering, no conflict occurs
+ */
+
 const Sheet = SheetPrimitive.Root
 
 const SheetTrigger = SheetPrimitive.Trigger
@@ -65,7 +78,7 @@ const SheetContent = React.forwardRef<
       {...props}
     >
       {children}
-      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-secondary">
+      <SheetPrimitive.Close className="absolute right-4 top-4 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none disabled:cursor-not-allowed cursor-pointer data-[state=open]:bg-secondary">
         <X className="h-4 w-4" />
         <span className="sr-only">Close</span>
       </SheetPrimitive.Close>

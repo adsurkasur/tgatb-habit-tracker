@@ -1,8 +1,10 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
 @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss"; /* Tailwind v4: use @import instead of @tailwind directives */
+@import "tw-animate-css"; /* Tailwind v4 compatible animation utilities (replaces tailwindcss-animate plugin) */
+
+/* Load JavaScript config file - required in Tailwind v4 (not auto-detected) */
+@config "../tailwind.config.ts";
 
 :root {
   /* Safe Area Variables for Mobile Apps */
@@ -109,31 +111,38 @@
 }
 
 @layer base {
-  * {
-    @apply border-border;
-    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                border-color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+  /* Basic reset */
+  *, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+  /* Preserve v3 default border color behavior by setting a sensible base border color */
+  *, *::before, *::after, ::backdrop, ::file-selector-button {
+    border-color: var(--border, currentColor);
   }
 
   body {
-    @apply antialiased bg-background text-foreground;
+    @apply antialiased;
+    background-color: var(--background);
+    color: var(--foreground);
     font-family: 'Inter', sans-serif;
+    /* Keep smooth transitions on the body only */
+    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
+                background-color 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
 }
 
-@layer utilities {
-  .surface-elevation-1 {
+/* Utilities are defined using @utility or top-level classes for Tailwind v4 compatibility */
+  @utility surface-elevation-1 {
     box-shadow: 0px 1px 2px rgba(0, 0, 0, 0.3), 0px 1px 3px 1px rgba(0, 0, 0, 0.15);
   }
   
-  .surface-elevation-2 {
+  @utility surface-elevation-2 {
     box-shadow: 0 0 30px rgba(103, 80, 164, 0.25),
                 0 0 60px rgba(103, 80, 164, 0.1);
   }
   
-  .surface-elevation-3 {
+  @utility surface-elevation-3 {
     box-shadow: 0px 4px 8px 3px rgba(0, 0, 0, 0.15), 0px 1px 3px rgba(0, 0, 0, 0.3);
   }
   
@@ -150,15 +159,15 @@
     background-color: rgba(103, 80, 164, 0.12);
   }
   
-  .material-radius {
+  @utility material-radius {
     border-radius: 12px;
   }
   
-  .material-radius-lg {
+  @utility material-radius-lg {
     border-radius: 16px;
   }
   
-  .card-transition {
+  @utility card-transition {
     transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
@@ -166,7 +175,7 @@
   /* Base class no longer applies animation directly to avoid double animations with directional slides */
 
   /* Initial mount animation (applied only on first render before any navigation) */
-  .habit-card-initial {
+  @utility habit-card-initial {
     animation: habit-card-initial-in 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: both;
   }
@@ -216,34 +225,50 @@
     }
   }
   
-  /* Hover effects - floating hover effect */
-  .habit-card-animated {
+  /* Hover effects - floating hover effect
+   * Uses individual CSS properties (scale, translate) for Tailwind v4 compatibility.
+   * ARCHITECTURE: Parent container does NOT scale. Inner .habit-card-surface scales.
+   * This prevents layout shift and matches CTA card motion philosophy.
+   */
+  @utility habit-card-animated {
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    /* Transition for smooth hover effects */
-    transition: transform 0.2s ease, box-shadow 0.2s ease;
-    will-change: transform;
+    /* Container has no scaling transition - surface handles it */
+    overflow: visible;
   }
   
-  .habit-card-animated:hover {
-    /* Floating hover effect - same pattern as nav buttons */
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
+  /* Surface owns ALL visuals and animates on hover */
+  .habit-card-surface {
+    transition-property: scale, translate, box-shadow, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    scale: 1;
+    translate: 0 0;
+  }
+  
+  .habit-card-surface:hover {
+    /* Subtle optical lift - micro-scale + shadow */
+    scale: 1.015;
+    translate: 0 -2px;
+    box-shadow:
+      rgba(103, 80, 164, 0.23) 0px 6px 24px,
+      rgba(103, 80, 164, 0.12) 0px 0px 48px;
   }
   
   /* Dark mode hover effects */
-  .dark .habit-card-animated {
+  .dark .habit-card-surface {
     /* Minimal glow when not hovered in dark mode */
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2) !important;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
   }
   
-  .dark .habit-card-animated:hover {
-    /* Strong purple glow on hover in dark mode - same pattern as nav buttons */
-    transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+  .dark .habit-card-surface:hover {
+    /* Strong purple glow on hover in dark mode */
+    box-shadow:
+      rgba(103, 80, 164, 0.45) 0px 6px 24px,
+      rgba(103, 80, 164, 0.25) 0px 0px 48px;
   }
   
-  /* Offline Toast Animation */
+  /* Offline Toast Animation - uses individual translate property for Tailwind v4 */
   .animate-slide-up {
     animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     animation-fill-mode: both;
@@ -254,25 +279,32 @@
     animation-fill-mode: both;
   }
   
+  /* PWA Prompt Surface - animates independently of fixed anchor */
+  .pwa-prompt-surface {
+    transition-property: scale, box-shadow, opacity;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+  }
+  
   @keyframes slide-up {
     0% {
       opacity: 0;
-      transform: translate(-50%, 100px);
+      translate: 0 100px;
     }
     100% {
       opacity: 1;
-      transform: translate(-50%, 0);
+      translate: 0 0;
     }
   }
   
   @keyframes slide-down {
     0% {
       opacity: 1;
-      transform: translate(-50%, 0);
+      translate: 0 0;
     }
     100% {
       opacity: 0;
-      transform: translate(-50%, 100px);
+      translate: 0 100px;
     }
   }
   
@@ -280,17 +312,20 @@
     backdrop-filter: blur(4px);
   }
   
-  /* CTA Component Styles */
-  .cta-card {
+  /* CTA Component Styles - uses individual CSS properties for Tailwind v4 */
+  @utility cta-card {
     background: var(--cta-bg);
-    /* Minimal shadow when not hovered - same as habit cards */
+    /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s ease, transform 0.2s ease;
+    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                scale 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                translate 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover {
-    /* Floating hover effect with lift - same as habit cards */
-    transform: translateY(-4px) scale(1.02);
+    /* Floating hover effect using individual CSS properties */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.25), 0 4px 12px rgba(0, 0, 0, 0.15);
   }
   
@@ -302,6 +337,8 @@
   
   .dark .cta-card:hover {
     /* Strong purple glow on hover in dark mode */
+    scale: 1.02;
+    translate: 0 -4px;
     box-shadow: 0 8px 30px rgba(103, 80, 164, 0.5), 0 4px 12px rgba(0, 0, 0, 0.6) !important;
   }
   
@@ -313,6 +350,11 @@
   .cta-card-animated:hover {
     animation: none;
   }
+
+  /* Animation utilities are now provided by tw-animate-css import above.
+     That package provides: animate-in, animate-out, fade-in-*, fade-out-*,
+     zoom-in-*, zoom-out-*, slide-in-from-*, slide-out-to-*, etc.
+     No manual definitions needed here. */
   
   @keyframes cta-card-pulse {
     0%, 100% {
@@ -325,21 +367,18 @@
     }
   }
   
-  /* CTA Icon Animations */
+  /* CTA Icon Animations - uses explicit properties for Tailwind v4 compatibility */
   .cta-icon-container {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 0.25s cubic-bezier(0.2, 0, 0, 1), 
+                scale 0.25s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover .cta-icon-container {
     background-color: hsl(var(--primary) / 0.15);
-    transform: scale(1.05);
+    scale: 1.05;
   }
   
-  .cta-card:hover {
-    transform: scale(1.02);
-  }
-  
-  /* CTA Sparkle Animation */
+  /* CTA Sparkle Animation - uses transform in keyframes (isolated, no conflict) */
   .cta-sparkle {
     animation: sparkle 2s ease-in-out infinite;
   }
@@ -347,24 +386,25 @@
   @keyframes sparkle {
     0%, 100% {
       opacity: 0.7;
-      transform: scale(1);
+      scale: 1;
     }
     50% {
       opacity: 1;
-      transform: scale(1.2);
+      scale: 1.2;
     }
   }
   
-  .cta-button {
+  /* CTA Button - uses individual CSS properties */
+  @utility cta-button {
     background: var(--cta-button-bg);
     color: white;
     transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                transform 0.2s cubic-bezier(0.2, 0, 0, 1);
+                scale 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-button:hover {
     background: var(--cta-button-hover);
-    transform: scale(1.02);
+    scale: 1.02;
   }
   
   /* Enhanced CTA Button Animations */
@@ -392,21 +432,23 @@
     color: hsl(var(--primary-foreground));
   }
   
-  /* Floating Action Button */
-  .fab {
+  /* Floating Action Button - uses individual CSS properties */
+  @utility fab {
     background: var(--cta-button-bg) !important;
     color: white !important;
     box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
+                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1),
+                scale 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .fab:hover {
     background: var(--cta-button-hover) !important;
     box-shadow: 0 6px 20px rgba(103, 80, 164, 0.4);
-    transform: scale(1.05);
+    scale: 1.05;
   }
   
-  /* Enhanced FAB Animations */
+  /* Enhanced FAB Animations - transform in keyframes is isolated */
   .fab-animated {
     position: relative;
     overflow: hidden;
@@ -421,7 +463,7 @@
     height: 0;
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
-    transform: translate(-50%, -50%);
+    translate: -50% -50%;
     transition: width 0.3s ease, height 0.3s ease;
   }
   
@@ -430,7 +472,7 @@
     height: 200%;
   }
   
-  /* State change animation for FAB */
+  /* State change animation for FAB - keyframe animations are isolated */
   .fab-animated {
     animation: fab-appear 0.4s cubic-bezier(0.2, 0, 0, 1);
   }
@@ -438,11 +480,13 @@
   @keyframes fab-appear {
     0% {
       opacity: 0;
-      transform: scale(0.3) rotate(-180deg);
+      scale: 0.3;
+      rotate: -180deg;
     }
     100% {
       opacity: 1;
-      transform: scale(1) rotate(0deg);
+      scale: 1;
+      rotate: 0deg;
     }
   }
   
@@ -519,9 +563,16 @@
     background: var(--cta-button-hover);
   }
   
+  /* Navigation button transitions for smooth hover/active effects */
+  .nav-button {
+    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1), 
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
+                background-color 0.15s ease;
+  }
   
   .nav-button:active {
-    transform: translate(-50%, -50%) scale(0.95);
+    /* Use individual scale property to compose with Tailwind v4's translate */
+    scale: 0.95;
   }
   
   /* Dark mode navigation button effects */
@@ -565,30 +616,27 @@
     opacity: 1 !important;
   }
 
-  /* Enhanced collapsible animations - Ultra performance optimized with hardware acceleration */
+  /* Enhanced collapsible animations - uses individual CSS properties */
   .collapsible-item {
-    transition: transform 0.1s ease-out, background-color 0.1s ease-out;
-    will-change: auto;
-    /* Force GPU layer for better performance */
-    transform: translateZ(0);
-    backface-visibility: hidden;
+    transition: translate 0.15s cubic-bezier(0.2, 0, 0, 1), 
+                background-color 0.15s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .collapsible-item:hover {
-    /* Use transform instead of layout-shifting properties */
-    transform: translate3d(1px, 0, 0);
+    /* Use individual translate property */
+    translate: 1px 0;
     background-color: rgba(var(--muted), 0.8);
   }
 
-  /* Smooth accordion item entrance animation - hardware accelerated */
+  /* Smooth accordion item entrance animation */
   @keyframes fadeInSlideUp {
     from {
       opacity: 0;
-      transform: translate3d(0, 6px, 0);
+      translate: 0 6px;
     }
     to {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      translate: 0 0;
     }
   }
 
@@ -600,30 +648,26 @@
   @keyframes fadeOutSlideDown {
     from {
       opacity: 1;
-      transform: translate3d(0, 0, 0);
+      translate: 0 0;
     }
     to {
       opacity: 0;
-      transform: translate3d(0, -4px, 0);
+      translate: 0 -4px;
     }
   }
 
-  /* Sidebar accordion trigger enhanced animations - Ultra performance optimized */
+  /* Sidebar accordion trigger enhanced animations */
   .accordion-trigger {
     transition: background-color 0.1s ease-out;
-    will-change: auto;
-    /* Prevent unnecessary layer creation unless needed */
-    contain: layout style;
   }
 
   .accordion-trigger:hover {
     background-color: rgba(var(--muted), 0.5) !important;
   }
 
-  /* Badge count animations - Simplified */
+  /* Badge count animations - uses individual scale property */
   .badge-count {
-    transition: transform 0.1s ease-out;
-    will-change: auto;
+    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1);
   }
 
   .badge-count.updated {
@@ -632,28 +676,21 @@
 
   @keyframes pulse-badge {
     50% {
-      transform: scale3d(1.05, 1.05, 1);
+      scale: 1.05;
     }
   }
 
-  /* Mobile full-screen dialog override */
+  /* Mobile full-screen dialog override
+     IMPORTANT: Only affects dialogs that explicitly opt-in via [data-mobile-fullscreen].
+     Standard dialog/sheet overlays should keep their bg-black/80 background. */
   @media (max-width: 640px) {
-    /* Target the dialog overlay */
-    [data-state="open"] .fixed.inset-0 {
+    /* For dialogs with [data-mobile-fullscreen], hide the overlay and make content fullscreen */
+    [data-mobile-fullscreen] ~ [data-radix-dialog-overlay],
+    [data-mobile-fullscreen] ~ .fixed.inset-0 {
       background-color: transparent !important;
     }
     
-    /* Target the dialog content container */
-    [data-state="open"] .fixed.left-0.top-0 {
-      left: 0 !important;
-      top: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      padding: 0 !important;
-      margin: 0 !important;
-    }
-    
-    /* Target the actual dialog content */
+    /* Target the actual dialog content when it has the fullscreen attribute */
     [data-mobile-fullscreen] {
       position: fixed !important;
       top: 0 !important;
@@ -669,11 +706,6 @@
       transform: none !important;
       border: none !important;
       box-shadow: none !important;
-    }
-    
-    /* Hide the dialog overlay background */
-    [data-state="open"] .fixed.inset-0.z-50 {
-      background-color: transparent !important;
     }
   }
 
@@ -717,14 +749,17 @@
     }
   }
   
-  /* Enhanced theme transition for all elements */
-  * {
-    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                border-color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+  /* Enhanced theme transition: apply to all elements for smooth dark/light mode toggle */
+  /* Uses specific properties to avoid interfering with layout animations */
+  *, *::before, *::after {
+    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                border-color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                color 0.2s cubic-bezier(0.2, 0, 0, 1),
+                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
+                fill 0.2s cubic-bezier(0.2, 0, 0, 1),
+                stroke 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
-  
+
   /* Override transition for specific elements that need faster/different transitions */
   .theme-transition {
     transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
@@ -749,7 +784,8 @@
       transform: translateY(-20px);
     }
   }
-}
+
+/* End of utilities */
 
 /* Mobile Dialog Optimizations */
 @media (max-width: 767px) {

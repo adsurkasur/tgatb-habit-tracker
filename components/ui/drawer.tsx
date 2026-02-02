@@ -5,6 +5,17 @@ import { Drawer as DrawerPrimitive } from "vaul"
 
 import { cn } from "@/lib/utils"
 
+/**
+ * Drawer Component - Bottom-anchored panel (uses vaul library)
+ * 
+ * Structure:
+ * - DrawerOverlay: bg-black/80, fade animation only
+ * - DrawerContent: bottom-anchored, slide animation handled by vaul
+ * 
+ * Vaul handles its own gesture-based animations internally.
+ * Overlay animation added for consistency with other overlay components.
+ */
+
 const Drawer = ({
   shouldScaleBackground = true,
   ...props
@@ -28,7 +39,10 @@ const DrawerOverlay = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DrawerPrimitive.Overlay
     ref={ref}
-    className={cn("fixed inset-0 z-50 bg-black/80", className)}
+    className={cn(
+      "fixed inset-0 z-50 bg-black/80 data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
+      className
+    )}
     {...props}
   />
 ))
