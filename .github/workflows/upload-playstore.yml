@@ -63,6 +63,14 @@ jobs:
           cat /tmp/play.json >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
+      - name: Debug gradle properties (for CI troubleshooting)
+        run: |
+          echo "PWD: $(pwd)"
+          echo "Listing android dir:" ; ls -la android || true
+          echo "Root gradle.properties (root):" ; sed -n '1,200p' gradle.properties || true
+          echo "Android gradle.properties (android/):" ; sed -n '1,200p' android/gradle.properties || true
+          echo "Check for android.useAndroidX:" ; grep -n 'android.useAndroidX' android/gradle.properties || true
+
       - name: Build AAB
         run: ./gradlew --no-daemon bundleRelease --stacktrace --info
         working-directory: android
