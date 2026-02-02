@@ -318,6 +318,85 @@
   .cta-card-animated:hover {
     animation: none;
   }
+
+  /* Compatibility: Explicit animations for components (v4 migration)
+     Many components rely on utility classes provided by animation plugins
+     (e.g., animate-in, fade-in-0, zoom-in-95, slide-in-from-*) which
+     were not present after the Tailwind v4 migration. Define the
+     subset of keyframes and helper classes used throughout the UI so
+     interactive components keep their expected behavior. */
+
+  /* Animation helpers */
+  .animate-in {
+    animation-duration: var(--tw-duration, 0.2s);
+    animation-timing-function: cubic-bezier(.4, 0, .2, 1);
+    animation-fill-mode: both;
+  }
+
+  .animate-out {
+    animation-duration: var(--tw-duration, 0.2s);
+    animation-timing-function: cubic-bezier(.4, 0, .2, 1);
+    animation-fill-mode: both;
+  }
+
+  /* Fade */
+  @keyframes fade-in-0 {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+  }
+  @keyframes fade-out-0 {
+    from { opacity: 1; }
+    to   { opacity: 0; }
+  }
+  @keyframes fade-in-80 {
+    from { opacity: 0.8; }
+    to   { opacity: 1; }
+  }
+  @keyframes fade-out-80 {
+    from { opacity: 1; }
+    to   { opacity: 0.8; }
+  }
+
+  .fade-in-0 { animation: fade-in-0 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .fade-out-0 { animation: fade-out-0 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .fade-in-80 { animation: fade-in-80 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .fade-out-80 { animation: fade-out-80 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+
+  /* Zoom */
+  @keyframes zoom-in-95 {
+    from { transform: scale(.95); opacity: .9; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  @keyframes zoom-out-95 {
+    from { transform: scale(1); opacity: 1; }
+    to   { transform: scale(.95); opacity: .9; }
+  }
+  @keyframes zoom-in-90 {
+    from { transform: scale(.9); opacity: .9; }
+    to   { transform: scale(1); opacity: 1; }
+  }
+  .zoom-in-95 { animation: zoom-in-95 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
+  .zoom-out-95 { animation: zoom-out-95 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
+  .zoom-in-90 { animation: zoom-in-90 var(--tw-duration, 0.18s) cubic-bezier(.4,.0,.2,1) both; }
+
+  /* Slide (small offsets use spacing units like '2' => 0.5rem) */
+  @keyframes slide-in-from-top-2 { from { transform: translateY(-0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-in-from-bottom-2 { from { transform: translateY(0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-in-from-top-full { from { transform: translateY(-100%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-in-from-bottom-full { from { transform: translateY(100%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-in-from-left-1\/2 { from { transform: translateX(-50%); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-in-from-right-2 { from { transform: translateX(0.5rem); opacity: 0; } to { transform: none; opacity: 1; } }
+  @keyframes slide-out-to-right-full { from { transform: none; opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
+  @keyframes slide-out-to-left-1\/2 { from { transform: none; opacity: 1; } to { transform: translateX(-50%); opacity: 0; } }
+
+  .slide-in-from-top-2 { animation: slide-in-from-top-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-in-from-bottom-2 { animation: slide-in-from-bottom-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-in-from-top-full { animation: slide-in-from-top-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-in-from-bottom-full { animation: slide-in-from-bottom-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-in-from-left-1\/2 { animation: slide-in-from-left-1\/2 var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-in-from-right-2 { animation: slide-in-from-right-2 var(--tw-duration, 0.2s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-out-to-right-full { animation: slide-out-to-right-full var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
+  .slide-out-to-left-1\/2 { animation: slide-out-to-left-1\/2 var(--tw-duration, 0.3s) cubic-bezier(.4,.0,.2,1) both; }
   
   @keyframes cta-card-pulse {
     0%, 100% {
@@ -722,17 +801,14 @@
     }
   }
   
-  /* Enhanced theme transition for all elements */
-  * {
-    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                border-color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                color 0.3s cubic-bezier(0.2, 0, 0, 1),
-                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+  /* Enhanced theme transition: keep scoped to top-level elements to avoid broad layout/interaction side-effects */
+  html, body {
+    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), background-color 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
-  
+
   /* Override transition for specific elements that need faster/different transitions */
   .theme-transition {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
   }
   
   /* Loading screen specific styles */
