@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.0.0 - 2026-02-02
+
+**Overview:**
+Major upgrade: Next.js 16, Tailwind v4 migration, dependency upgrades, and UX/motion architecture improvements.
+
+### Highlights (0.4.0.0)
+
+- **Framework upgrades:** Upgraded to Next.js 16.1.6 and Tailwind CSS v4 with migration fixes.
+- **UX & motion polish:** Corrected habit card motion architecture (surface owns visuals), improved PWA prompt behavior, global theme transition fixes, and refined cursor semantics.
+- **Stability:** Various build and type fixes for Next.js 16 compatibility.
+
+### Files Modified (Selected)
+
+- `components/habit-card.tsx` — refactored motion architecture, surface owns visuals, and fixed empty state.
+- `app/globals.css` — updated habit card hover selectors and motion properties.
+- `package.json` — dependency upgrades.
+
+---
+
 ## 0.3.6.2 - 2025-10-13
 
 **Overview:**
