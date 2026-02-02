@@ -1,10 +1,32 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
+// ESLint 9 flat config for Next.js 16
+// https://nextjs.org/docs/app/api-reference/config/eslint
 import nextVitals from 'eslint-config-next/core-web-vitals'
 import nextTs from 'eslint-config-next/typescript'
 
-const eslintConfig = defineConfig([
+const eslintConfig = [
   ...nextVitals,
   ...nextTs,
+  {
+    // Explicit ignores - safety net (main protection is scoped lint command)
+    ignores: [
+      'node_modules/**',
+      '.next/**',
+      'out/**',
+      'build/**',
+      'android/**',
+      'public/**',
+      'worker/**',
+      'web/**',
+      'tests/**',
+      'scripts/**',
+      'tools/**',
+      'docs/**',
+      '*.config.js',
+      '*.config.mjs',
+      '*.config.ts',
+      'next-env.d.ts',
+    ],
+  },
   {
     // Downgrade strict rules for incremental adoption
     rules: {
@@ -19,26 +41,7 @@ const eslintConfig = defineConfig([
       'react-hooks/preserve-manual-memoization': 'warn',
     },
   },
-  // Override default ignores of eslint-config-next.
-  globalIgnores([
-    // Default ignores of eslint-config-next:
-    '.next/**',
-    'out/**',
-    'build/**',
-    'next-env.d.ts',
-    // Additional project ignores:
-    'node_modules/**',
-    'android/**',
-    'public/**',
-    'worker/**',
-    'web/**',
-    'tests/**',
-    'scripts/**',
-    '*.config.js',
-    '*.config.mjs',
-    '*.config.ts',
-  ]),
-])
+]
 
 // Downgrade set-state-in-effect to warn for incremental adoption
 for (const config of eslintConfig) {
