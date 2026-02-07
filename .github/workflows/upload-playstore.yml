@@ -80,13 +80,27 @@ jobs:
           ORG_GRADLE_PROJECT_androidKeystorePassword: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
           ORG_GRADLE_PROJECT_androidKeyPassword: ${{ secrets.ANDROID_KEY_PASSWORD }}
 
+      - name: Upload AAB as artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: android/app/build/outputs/bundle/release/app-release.aab
+
       - name: Upload AAB to Play Internal track
         uses: r0adkll/upload-google-play@v1
+        continue-on-error: true
+        id: upload_play
         with:
           serviceAccountJson: /tmp/play-service-account.json
           packageName: com.tgatb.habittracker
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
+
+      - name: Note if Play Store upload failed
+        if: steps.upload_play.outcome == 'failure'
+        run: |
+          echo "::warning::Play Store upload failed. If this is the first release, you need to manually upload the AAB via Play Console first."
+          echo "Download the AAB artifact from this workflow run and upload it at: https://play.google.com/console"
 
       - name: List generated AAB
         run: ls -l android/app/build/outputs/bundle/release
