@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import { X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 import {
   Dialog,
@@ -39,10 +40,12 @@ import { cn } from "@/lib/utils";
 // ─── Context ─────────────────────────────────────────────
 interface ResponsiveDialogContextValue {
   isMobile: boolean;
+  onOpenChange: (open: boolean) => void;
 }
 
 const ResponsiveDialogContext = React.createContext<ResponsiveDialogContextValue>({
   isMobile: false,
+  onOpenChange: () => {},
 });
 
 function useResponsiveDialog() {
@@ -60,7 +63,7 @@ function ResponsiveDialog({ open, onOpenChange, children }: ResponsiveDialogProp
   const isMobile = useIsMobile();
 
   return (
-    <ResponsiveDialogContext.Provider value={{ isMobile }}>
+    <ResponsiveDialogContext.Provider value={{ isMobile, onOpenChange }}>
       {isMobile ? (
         <Drawer open={open} onOpenChange={onOpenChange}>
           {children}
@@ -109,7 +112,7 @@ function ResponsiveDialogContent({
   return (
     <DialogContent
       className={cn(
-        "material-radius-lg surface-elevation-3",
+        "material-radius-lg surface-elevation-3 [&>button]:hidden",
         className,
         dialogClassName,
       )}
@@ -125,12 +128,31 @@ interface ResponsiveDialogHeaderProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 function ResponsiveDialogHeader({ className, children, ...props }: ResponsiveDialogHeaderProps) {
-  const { isMobile } = useResponsiveDialog();
+  const { isMobile, onOpenChange } = useResponsiveDialog();
   const Comp = isMobile ? DrawerHeader : DialogHeader;
 
   return (
-    <Comp className={cn(isMobile ? "px-4 pb-2 pt-0 text-left" : "", className)} {...props}>
-      {children}
+    <Comp
+      className={cn(
+        "shrink-0 border-b border-border",
+        isMobile ? "px-4 pb-3 pt-0 text-left" : "pb-4",
+        className,
+      )}
+      {...props}
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex-1 min-w-0">{children}</div>
+        {!isMobile && (
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            className="shrink-0 mt-0.5 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 p-1 flex items-center justify-center cursor-pointer"
+          >
+            <X className="h-4 w-4" />
+            <span className="sr-only">Close</span>
+          </button>
+        )}
+      </div>
     </Comp>
   );
 }

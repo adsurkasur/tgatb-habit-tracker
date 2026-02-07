@@ -205,7 +205,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               </div>
               <button
                 onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground"
+                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>

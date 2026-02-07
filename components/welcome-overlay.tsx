@@ -451,7 +451,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
             </div>
             <button
               onClick={handleSkip}
-              className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50 ml-3"
+              className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50 ml-3 cursor-pointer"
             >
               <X className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
             </button>
