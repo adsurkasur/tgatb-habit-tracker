@@ -1,11 +1,12 @@
 # Review: Remaining Issues and Recommendations
 
-Last reviewed: 2025-12-12
+Last reviewed: 2026-02-07
 
 This document summarizes a comprehensive study of the repository, lists remaining issues by priority, describes risks and impacted files, and offers recommended solutions and next steps.
 
 ## Current stage
-- Status: Late development / pre-release. Core features implemented (habit CRUD, history, UI components, PWA helpers, cloud sync hooks and Firebase initializer, Android/Capacitor scaffolding). Primary work remaining is verification, platform-specific fixes, resiliency, testing, and release automation.
+
+- Status: Released on Google Play Store (internal track) and Vercel (web). Version 0.4.0.2. Core features implemented: habit CRUD, history, UI components, PWA, cloud sync with three-way merge and conflict resolution, Firebase Auth (Google Sign-In) for web and Android, automated CI/CD and Play Store upload, privacy policy page.
 
 ## Scope of this review
 - Focus areas: build & run, Android/Capacitor, cloud sync & auth, local storage & migrations, PWA/service-worker, UI/accessibility, testing, CI/release, privacy/analytics, documentation.
@@ -134,11 +135,21 @@ Recommendation: Option 1. Add SW update prompt and cache versioning.
 
 ## Recent status update
 
+- **2026-02-07**: Version 0.4.0.2 released. Mobile Google sign-in fixed (`useCredentialManager: false`). Auth cancellation handling improved (silent ignore instead of error toasts). Privacy policy page added. Domain migrated to `www.tgatb.click`. CI badge fixed. Play Store upload workflow hardened. Version automation scripts added (`bump-ver.cjs`, `sync-ver.cjs`).
+- **2026-02-02**: Version 0.4.0.0 released. Next.js 16 upgrade, Tailwind v4 migration, UX/motion architecture improvements.
 - **2025-12-12**: Unit test harness added and executed locally — all unit tests pass (`merge`, `migrations`, conflict and edge-case tests).
 - ESM compatibility fixes applied to test imports (`.ts` extensions) and some `import type` updates to avoid runtime export expectations.
 - Migration runner and three-way merge with conflict detection implemented and covered by unit tests.
 
-- **Next immediate steps**: push changes and open a PR so CI can run these tests on the repository, add E2E multi-device sync tests, and polish the conflict-resolution UX.
+- **Resolved since last review**:
+  - ✅ CI/CD pipeline: CI workflow runs lint/check/tests on push/PR. Release Android workflow builds AAB and uploads to Play Store.
+  - ✅ Cloud sync conflict handling: Three-way merge with conflict resolution UI implemented.
+  - ✅ Data migrations: Versioned migration runner with idempotent migrations.
+  - ✅ Analytics consent gating: Firebase analytics gated on explicit user consent.
+  - ✅ Authentication: Google Sign-In working on both web and Android.
+  - ✅ Build and release automation: Automated version bumping, Android AAB signing, Play Store upload.
+
+- **Next immediate steps**: Add E2E multi-device sync tests, polish conflict-resolution UX, expand test coverage.
 
 ## Summary of problems and offered solutions
 

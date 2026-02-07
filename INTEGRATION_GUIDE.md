@@ -15,9 +15,11 @@ This guide documents how the project integrates Google authentication and Google
 
 ### Authentication & Scopes
 
-- The app uses OAuth access tokens to call the Google Drive REST API. The implementation expects an access token with Drive file scope (for example `https://www.googleapis.com/auth/drive.file`).
-- Mobile uses Capacitor + Firebase authentication plugins to obtain tokens; see `mobile/` for platform specifics.
-- Web uses platform-appropriate OAuth flows implemented in `web/drive-sync.ts` to obtain access tokens for upload/download.
+- The app uses Firebase Authentication (Google Sign-In) on both web and mobile platforms.
+- Web uses `signInWithPopup` from Firebase JS SDK to obtain access tokens.
+- Mobile uses `@capacitor-firebase/authentication` with `useCredentialManager: false` (required for obtaining OAuth access tokens when extra scopes like Drive are requested).
+- The implementation expects an access token with Drive file scope (`https://www.googleapis.com/auth/drive.file`).
+- Auth cancellations (popup closed, back button) are detected and silently ignored — see `isAuthCancellation()` in `hooks/use-auth.ts`.
 
 ### Backup / Restore Flow (current behavior and updates)
 
@@ -57,84 +59,59 @@ Repository housekeeping: a filtered `TODO|FIXME` scan has been run and results a
 
 Next recommended actions:
 
-- Create concrete GitHub Issues from the consolidated TODOs (see `docs/ISSUES_PROPOSED.md`).
-- Design and implement a per-item merge strategy and add migration scaffolding in `lib/`.
-
-
-# TGATB Habit Tracker: Google Auth + Drive Sync Integration Guide
-
-## Overview
-
-This guide covers the setup and usage of Google Authentication and Google Drive sync for both web (Next.js/Vercel) and mobile (Capacitor) platforms, using shared business logic for habit data export/import.
+- Add E2E multi-device sync tests.
+- Polish conflict-resolution UX with clear user guidance.
 
 ---
 
-## Platform Structure
+## Web Setup
 
-- `web/`: Web-specific Google Auth and Drive logic (Next.js, Vercel)
-- `mobile/`: Mobile-specific Google Auth and Drive logic (Capacitor, Android/iOS)
-- `shared/`: Shared business/data logic for export/import
+### Dependencies
 
----
+The web platform uses Firebase JS SDK directly (no NextAuth.js):
 
-### 1. Mobile Dependencies
+- `firebase` — Firebase Auth (`signInWithPopup`) and app initialization
+- Google Drive REST API called directly with OAuth access tokens
 
-```bash
-npm install next-auth googleapis
+### Google Auth Logic
 
-### 2. Environment Variables
-```env
-NEXTAUTH_SECRET=your-nextauth-secret
-### 1. Mobile Dependencies
-```
+File: `web/google-auth.ts`
 
-### 3. NextAuth.js API Route
+- Uses Firebase `signInWithPopup` with `GoogleAuthProvider` to sign in and obtain access tokens.
+- Errors propagate to the caller for proper classification (cancellation vs. failure).
 
-File: `web/pages/api/auth/[...nextauth].ts`
+### Drive Sync Logic
 
-- Handles Google sign-in and provides access token for Drive API.
-- Uses the recommended scope: `https://www.googleapis.com/auth/drive.file`
+File: `web/drive-sync.ts`
 
-### 4. Drive API Route
-
-File: `web/pages/api/drive.ts`
-
-- POST: Uploads habit data to Drive as JSON.
-- GET: Downloads habit data from Drive by file ID.
+- Uploads habit data to Drive using REST API and access token.
+- Downloads habit data from Drive using REST API and access token.
 - Uses shared helpers for serialization/deserialization.
-
-### 5. React UI
-
-File: `web/pages/index.tsx`
-
-- Sign in/out with Google.
-- Export habits to Drive.
-- Import habits from Drive.
-- Displays status and imported data.
 
 ---
 
 ## Mobile Setup (Capacitor)
 
-### 1. Dependencies
+### Dependencies
 
 ```bash
 npm install @capacitor-firebase/authentication firebase
 npx cap sync
 ```
 
-### 2. Firebase Setup
+### Firebase Setup
 
 - Enable Google provider in Firebase Console.
-- Configure plugin in `capacitor.config.ts`.
+- Configure plugin in `capacitor.config.ts` with `skipNativeAuth: false` and `providers: ["google.com"]`.
 
-### 3. Google Auth Logic
+### Google Auth Logic
 
 File: `mobile/google-auth.ts`
 
-- Uses `@capacitor-firebase/authentication` to sign in and retrieve access token.
+- Uses `@capacitor-firebase/authentication` with `useCredentialManager: false` (Credential Manager API doesn't return OAuth access tokens when extra scopes like Drive are requested).
+- Errors propagate to the caller for proper classification.
 
-### 4. Drive Sync Logic
+### Drive Sync Logic
 
 File: `mobile/drive-sync.ts`
 
@@ -142,50 +119,50 @@ File: `mobile/drive-sync.ts`
 - Downloads habit data from Drive using REST API and access token.
 - Uses shared helpers for serialization/deserialization.
 
-### 5. Example Usage
-
-File: `mobile/README.md`
+### Example Usage
 
 ```typescript
 import { signInWithGoogle } from './google-auth';
-const accessToken = await signInWithGoogle();
+const result = await signInWithGoogle();
 
 import { uploadHabitsToDrive, downloadHabitsFromDrive } from './drive-sync';
-const fileId = await uploadHabitsToDrive(habits, accessToken);
-const habits = await downloadHabitsFromDrive(fileId, accessToken);
+const fileId = await uploadHabitsToDrive(habits, result.accessToken);
+const habits = await downloadHabitsFromDrive(fileId, result.accessToken);
 ```
 
 ---
 
 ## Shared Logic
 
-File: `shared/data-sync.ts`
+File: `shared/schema.ts`
 
-- `exportHabitsToJson(habits: any[]): string` — Serializes habit data to JSON.
-- `importHabitsFromJson(json: string): any[]` — Deserializes habit data from JSON.
+- Defines export bundle schema with Zod validation.
+- Shared types for habits, logs, and metadata.
 
 ---
 
 ## Integration Flow
 
-- Web and mobile platforms use shared helpers for habit data export/import.
-- Web uses NextAuth.js and Google APIs; mobile uses Capacitor plugins and REST API.
-- All flows are robust, error-handled, and ready for production.
+- Web and mobile platforms use shared schema and validation for habit data export/import.
+- Web uses Firebase Auth (`signInWithPopup`); mobile uses `@capacitor-firebase/authentication`.
+- Both platforms call the Google Drive REST API directly with OAuth access tokens.
+- Three-way merge with conflict resolution handles concurrent edits across devices.
 
 ---
 
 ## Troubleshooting & Notes
 
-- Ensure all environment variables and Firebase/Google Cloud credentials are set correctly.
-- For mobile, test on real devices for OAuth and Drive API flows.
-- For web, deploy to Vercel and set production OAuth redirect URIs.
-- Use the provided UI and API routes for all major flows.
+- Ensure Firebase project configuration and OAuth client IDs are set correctly in Google Cloud Console.
+- For mobile, test on real devices — OAuth flows behave differently on emulators.
+- For web, ensure production OAuth redirect URIs are configured.
+- If mobile sign-in fails to return access tokens, verify `useCredentialManager: false` is set.
+- Auth cancellations are silently ignored — check `isAuthCancellation()` in `hooks/use-auth.ts`.
 
 ---
 
 ## References
 
-- [NextAuth.js Documentation](https://next-auth.js.org/)
+- [Firebase Authentication](https://firebase.google.com/docs/auth)
 - [Google Drive API Reference](https://developers.google.com/drive)
 - [Capacitor Firebase Auth](https://capawesome.io/plugins/firebase/authentication/)
 - [Google OAuth Scopes](https://developers.google.com/identity/protocols/oauth2/scopes)

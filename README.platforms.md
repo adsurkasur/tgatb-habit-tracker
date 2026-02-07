@@ -8,12 +8,12 @@
 
 ### Web
 
-- Use NextAuth.js for Google Auth (see web/google-auth.ts)
-- Use googleapis for Drive sync (see web/drive-sync.ts)
-- Use shared/data-sync.ts for export/import helpers
+- Use Firebase Auth (`signInWithPopup`) for Google Auth (see `web/google-auth.ts`)
+- Use Google Drive REST API for Drive sync (see `web/drive-sync.ts`)
+- Use `shared/schema.ts` for data validation
 
 ### Mobile
 
-- Use @capacitor-firebase/authentication for Google Auth (see mobile/google-auth.ts)
-- Use REST API for Drive sync (see mobile/drive-sync.ts)
-- Use shared/data-sync.ts for export/import helpers
+- Use `@capacitor-firebase/authentication` with `useCredentialManager: false` for Google Auth (see `mobile/google-auth.ts`)
+- Use Google Drive REST API for Drive sync (see `mobile/drive-sync.ts`)
+- Use `shared/schema.ts` for data validation

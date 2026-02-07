@@ -2,6 +2,51 @@
 
 All notable changes to this project will be documented in this file.
 
+## 0.4.0.2 - 2026-02-07
+
+**Overview:**
+Fix mobile Google sign-in and improve cancellation UX.
+
+### Fixes (0.4.0.2)
+
+- **Mobile Google sign-in:** Disabled Credential Manager API (`useCredentialManager: false`) in `@capacitor-firebase/authentication` to fix missing OAuth access tokens when requesting Drive API scopes.
+- **Graceful cancellation handling:** Auth cancellations (popup closed, back button) are now silently ignored instead of showing error toasts. Added `isAuthCancellation()` helper detecting `auth/popup-closed-by-user`, `auth/cancelled-popup-request`, "cancel" messages, and status code 12501.
+- **Error propagation:** Removed try-catch wrappers from `mobile/google-auth.ts` and `web/google-auth.ts` so errors propagate to the caller for proper classification.
+
+### Files Modified
+
+- `mobile/google-auth.ts` — added `useCredentialManager: false`, removed try-catch
+- `web/google-auth.ts` — removed try-catch
+- `hooks/use-auth.ts` — added `isAuthCancellation()` helper, cancellation-aware catch block
+
+---
+
+## 0.4.0.1 - 2026-02-07
+
+**Overview:**
+Play Store compliance, domain migration, CI/CD improvements, and version automation.
+
+### Features (0.4.0.1)
+
+- **Privacy policy page:** Added `/privacy-policy` route with account deletion and data deletion sections (`#delete-data`, `#delete-account`).
+- **Version automation:** Added `bump-ver.cjs` (supports major/minor/patch/revision bumps) and fixed `sync-ver.cjs` to handle 4-part versions. New scripts: `npm run bump`, `npm run release`.
+- **Domain migration:** Changed all references from `tgatb.vercel.app` to `www.tgatb.click`.
+
+### Fixes (0.4.0.1)
+
+- **Upload workflow:** Removed `continue-on-error: true` from Play Store upload step (was masking failures). Added `changesNotSentForReview: true` and `status: completed`.
+- **sync-ver.cjs:** Fixed 4-part semver parsing (e.g., `0.4.0.1` → versionCode `400901`).
+
+### Files Modified
+
+- `app/privacy-policy/page.tsx` — new privacy policy page
+- `scripts/bump-ver.cjs` — new version bump script
+- `scripts/sync-ver.cjs` — 4-part version fix
+- `.github/workflows/upload-playstore.yml` — workflow hardening
+- Multiple files — domain migration from `tgatb.vercel.app` to `www.tgatb.click`
+
+---
+
 ## 0.4.0.0 - 2026-02-02
 
 **Overview:**

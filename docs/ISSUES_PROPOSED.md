@@ -61,10 +61,17 @@ Below are suggested GitHub Issue bodies you can create directly (via the web UI,
 
 ---
 
-Status note (2025-12-12): many of the items below have scaffolding implemented locally in this workspace — specifically:
+Status note (2026-02-07): All major items have been implemented:
 
-- Migration runner and initial migration (`lib/migrations/*`) — tests added under `tests/migrations.test.ts`.
-- Three-way merge and conflict detection (`lib/sync/merge.ts`) plus integration into `hooks/use-cloud-sync.ts` and a conflict-resolution modal.
-- Analytics consent gating changes added to `components/firebase-initializer.tsx` and settings UI.
+- ✅ Migration runner and initial migration (`lib/migrations/*`) — tests added under `tests/migrations.test.ts`.
+- ✅ Three-way merge and conflict detection (`lib/sync/merge.ts`) plus integration into `hooks/use-cloud-sync.ts` and a conflict-resolution modal.
+- ✅ Analytics consent gating added to `components/firebase-initializer.tsx` and settings UI.
+- ✅ CI/CD pipeline with lint, typecheck, tests, Android build, and Play Store upload.
+- ✅ Doc cleanups and consolidated TODOs.
+- ✅ Google Auth working on both web (Firebase `signInWithPopup`) and mobile (`@capacitor-firebase/authentication` with `useCredentialManager: false`).
+- ✅ Privacy policy page added at `/privacy-policy`.
 
-If you want, I can create the GitHub Issues (via `gh issue create`) and/or open PRs for the doc-only changes. Tell me which (create issues / open PR / both). 
+Remaining items:
+
+- ⏳ Add E2E multi-device sync tests.
+- ⏳ Polish conflict-resolution UX with user guidance. 

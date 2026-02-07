@@ -43,10 +43,10 @@ Get-ChildItem -Recurse -File | Where-Object { $_.FullName -notmatch '\\android\\
 2. Remove or update the stale guidance lines in docs to avoid confusion.
 3. If you enable hook scripts, replace the TODOs in `.git/hooks/sendemail-validate.sample` with the checks you want, or document them in `docs/`.
 
-### Status update (2025-12-12)
+### Status update (2026-02-07)
 
-- Repo scan completed and `docs/TODOs.md` created to centralize prompts and samples.
-- Unit tests and migration/merge tests added and executed locally; all passing.
-- Suggested doc prompts in `docs/REVIEW_AND_ISSUES.md` and `INTEGRATION_GUIDE.md` were updated to reflect work done.
-
-If you want, I can (A) open and edit the remaining docs to remove obsolete prompts, (B) create GitHub Issues for each actionable item, or (C) open a PR with the current changes — tell me which.
+- All major TODO items from the initial scan have been addressed.
+- Migration runner, three-way merge, conflict UI, analytics consent, CI/CD, and Play Store automation are all implemented.
+- Privacy policy page added. Domain migrated to `www.tgatb.click`.
+- Mobile Google sign-in fixed (v0.4.0.2).
+- Remaining work: E2E multi-device sync tests, conflict UX polish.

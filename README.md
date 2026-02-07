@@ -1,8 +1,9 @@
 # The Good and The Bad: Habit Tracker
 
-[![Build Status](https://img.shields.io/github/actions/workflow/status/adsurkasur/tgatb-habit-tracker/release-android.yml)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
+[![Build Status](https://img.shields.io/github/actions/workflow/status/adsurkasur/tgatb-habit-tracker/ci.yml)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 [![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://www.tgatb.click/)
+[![Privacy Policy](https://img.shields.io/badge/privacy-policy-green.svg)](https://www.tgatb.click/privacy-policy)
 
 <p align="center">
 	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" width="128" height="128" />
@@ -90,8 +91,8 @@ Note: For a current, code-level review and outstanding issues, see [docs/REVIEW_
 
 ### Roadmap / Status
 
-- 🗄️ Cloud sync and backup — implemented (Google Drive full-bundle upload/download). NOTE: merge/conflict handling is still required to avoid overwrites; see `docs/REVIEW_AND_ISSUES.md` for details.
-- 👤 User authentication and multi-device support — partially implemented via Firebase/Capacitor plugin (initializer present), but consent gating and complete auth UX need validation.
+- 🗄️ Cloud sync and backup — implemented (Google Drive full-bundle upload/download with three-way merge and conflict resolution UI).
+- 👤 User authentication — implemented via Firebase Auth (Google Sign-In) for both web and Android/Capacitor.
 - 📅 Calendar view and advanced analytics — planned
 
 ## Observability (Sentry) 🔧
@@ -121,7 +122,7 @@ TGATB Habit Tracker is designed for users who want a distraction-free, fast, and
 
 ## Tech Stack
 
-- **Framework:** Next.js 15 (App Router)
+- **Framework:** Next.js 16 (App Router)
 - **Language:** TypeScript
 - **UI:** Shadcn/ui, Radix UI, Tailwind CSS
 - **State Management:** TanStack Query
@@ -182,6 +183,9 @@ npm run android:open    # Open in Android Studio
 - `npm run android:open` — Open project in Android Studio
 - `npm run android:run` — Build and run on connected device
 - `npm run android:sync` — Sync Capacitor plugins
+- `npm run bump` — Bump version (major/minor/patch/revision)
+- `npm run sync-ver` — Sync version from package.json to Android build.gradle
+- `npm run release` — Bump revision, sync version, and prepare release
 
 ---
 
@@ -192,11 +196,15 @@ npm run android:open    # Open in Android Studio
 ├── components/         # UI components (Button, HabitCard, dialogs, overlays)
 ├── hooks/              # Custom React hooks (habits, PWA, offline, status bar)
 ├── lib/                # Utility functions (Capacitor, db, motivator, offline, pwa-utils)
+├── mobile/             # Mobile-specific Google Auth and Drive logic (Capacitor)
+├── web/                # Web-specific Google Auth and Drive logic
+├── shared/             # Shared TypeScript types and schema
+├── scripts/            # Project setup, build, and version management scripts
+├── worker/             # Service worker and background task code
+├── tests/              # Unit and integration tests
 ├── public/             # Static assets (icons, images, manifest, service worker)
 ├── docs/               # Documentation (ANDROID_SETUP.md, etc.)
 ├── android/            # Native Android project (Capacitor)
-├── scripts/            # Project setup and build scripts
-├── shared/             # Shared TypeScript types and schema
 ├── package.json
 ├── tailwind.config.ts
 ├── tsconfig.json
@@ -283,7 +291,7 @@ See [docs/ANDROID_SETUP.md](docs/ANDROID_SETUP.md) for full instructions.
 A: Yes! You can install the PWA on your device, or build/run the native Android app via Capacitor.
 
 **Q: How is my data stored?**  
-A: All data is stored locally in your browser or device. No cloud sync yet.
+A: All data is stored locally in your browser or device. Optional cloud sync via Google Drive is available when signed in.
 
 **Q: Can I use this for teams or groups?**  
 A: Multi-user support is not implemented yet.

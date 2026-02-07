@@ -60,3 +60,13 @@ Recent additions:
 - Change: Adjusted test imports to be ESM-friendly by adding explicit `.ts` extensions and using `import type` for TypeScript-only types; updated test scripts to run under `ts-node/register` in dev.
 - Result: All unit tests pass locally (run: `npm run test:unit`) — `merge`, `migrations`, `merge_conflict`, `merge_edgecases`, `migration_idempotent` observed OK.
 - Rationale: Ensure migration and merge logic remain stable under the project's ESM+TypeScript setup and that CI can validate regressions.
+
+11) Play Store compliance and domain migration (v0.4.0.1)
+- Files: `app/privacy-policy/page.tsx`, `scripts/bump-ver.cjs`, `scripts/sync-ver.cjs`, `.github/workflows/upload-playstore.yml`, multiple files for domain change
+- Change: Added privacy policy page with account/data deletion sections. Created version bump automation (`bump-ver.cjs`) supporting 4-part semver. Fixed `sync-ver.cjs` for 4-part versions. Hardened Play Store upload workflow (removed `continue-on-error`, added `changesNotSentForReview` and `status: completed`). Migrated domain from `tgatb.vercel.app` to `www.tgatb.click`.
+- Rationale: Google Play Store compliance requirements (privacy policy, data safety). Automated version management for faster releases.
+
+12) Mobile Google sign-in fix and cancellation handling (v0.4.0.2)
+- Files: `mobile/google-auth.ts`, `web/google-auth.ts`, `hooks/use-auth.ts`
+- Change: Added `useCredentialManager: false` to mobile Google sign-in (Credential Manager API doesn't return OAuth access tokens for extra scopes like Drive). Removed try-catch from both auth modules so errors propagate to caller. Added `isAuthCancellation()` helper in `use-auth.ts` to detect user cancellations (`auth/popup-closed-by-user`, `auth/cancelled-popup-request`, "cancel" messages, status code 12501) and silently ignore them instead of showing error toasts.
+- Rationale: Mobile login was failing because Credential Manager flow doesn't return access tokens when extra scopes are requested. Cancellation toasts were a poor UX — users expect cancel to just dismiss, not show an error.
