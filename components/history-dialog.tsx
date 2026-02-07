@@ -21,11 +21,9 @@ function isPastOrToday(date: Date) {
   const today = new Date();
   return formatLocalDate(date) <= formatLocalDate(today);
 }
-import { Dialog, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { EditEntryDialog } from './edit-entry-dialog';
 import { AddEntryDialog } from './add-entry-dialog';
-import { MobileDialogContent } from '@/components/ui/mobile-dialog';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -42,15 +40,20 @@ import {
   BarChart3,
   Clock,
   Award,
-  X
 } from 'lucide-react';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogBody,
+} from '@/components/ui/responsive-dialog';
 import { Habit } from '@/shared/schema';
 import { getHabitStats } from '@/lib/habit-storage';
 import { formatLocalDate } from '@/lib/utils';
-import { buildDailyLogs, computeStatSummary, DayLog } from '@/lib/history';
+import { buildDailyLogs, buildDayLog, getCompletedDatesSet, computeStatSummary, DayLog } from '@/lib/history';
 import { format, isToday } from 'date-fns';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
-import { useIsMobile } from '@/hooks/use-mobile';
 import { useHabits } from '@/hooks/use-habits';
 
 interface HistoryDialogProps {
@@ -73,7 +76,6 @@ interface StatCard {
 export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
-  const isMobile = useIsMobile();
 
   // Handle mobile back navigation
   useMobileBackNavigation({
@@ -89,16 +91,27 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
   // Create daily logs for timeline view
   const dailyLogs = useMemo((): DayLog[] => buildDailyLogs(habits, 30), [habits]);
 
-  // Stat cards are rendered via StatGrid
+  // Set of all dates with at least one completion (for calendar dots)
+  const completedDates = useMemo(() => getCompletedDatesSet(habits), [habits]);
 
-  const selectedDayLog = selectedDate ? dailyLogs.find(log => formatLocalDate(log.date) === formatLocalDate(selectedDate)) : null;
+  // Build day log on-demand for any selected date (not limited to 30 days)
+  const selectedDayLog = useMemo(
+    () => (selectedDate && isPastOrToday(selectedDate) ? buildDayLog(habits, selectedDate) : null),
+    [selectedDate, habits]
+  );
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? 'w-full max-w-full p-0 flex flex-col h-auto gap-0' : 'w-full max-w-2xl max-h-[85vh] flex flex-col items-stretch justify-start'}`}>
-        <HistoryHeader onClose={() => onOpenChange(false)} />
-        <div className="flex-1 overflow-y-auto">
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col px-6 pt-4 pb-6">
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle className="flex items-center gap-2">
+            <BarChart3 className="w-5 h-5" />
+            Habit History & Analytics
+          </ResponsiveDialogTitle>
+        </ResponsiveDialogHeader>
+
+        <ResponsiveDialogBody>
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col">
             <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 shrink-0">
               <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -120,37 +133,16 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
             </TabsContent>
 
             <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} dailyLogs={dailyLogs} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} habits={habits} addHabit={useHabits().addHabit} />
+              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} habits={habits} addHabit={useHabits().addHabit} />
             </TabsContent>
 
             <TabsContent value="timeline" className="flex-1 overflow-hidden mt-0">
               <TimelineTabContent dailyLogs={dailyLogs} />
             </TabsContent>
           </Tabs>
-        </div>
-      </MobileDialogContent>
-    </Dialog>
-  );
-}
-
-function HistoryHeader({ onClose }: { onClose: () => void }) {
-  return (
-    <DialogHeader className="shrink-0 border-b border-border pb-4">
-      <div className="flex items-center justify-between">
-        <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-          <BarChart3 className="w-5 h-5" />
-          Habit History & Analytics
-        </DialogTitle>
-        <button
-          type="button"
-          onClick={onClose}
-          className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
-        >
-          <X className="h-4 w-4" />
-          <span className="sr-only">Close</span>
-        </button>
-      </div>
-    </DialogHeader>
+        </ResponsiveDialogBody>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }
 
@@ -305,7 +297,7 @@ function OverviewTabContent({ habits, statistics }: { habits: Habit[]; statistic
 function CalendarTabContent({
   selectedDate,
   setSelectedDate,
-  dailyLogs,
+  completedDates,
   selectedDayLog,
   addOrUpdateLog,
   habits,
@@ -313,7 +305,7 @@ function CalendarTabContent({
 }: {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
-  dailyLogs: DayLog[];
+  completedDates: Set<string>;
   selectedDayLog: DayLog | null | undefined;
   addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
   habits: Habit[];
@@ -369,12 +361,13 @@ function CalendarTabContent({
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="rounded-lg border"
+            className="rounded-lg border [--cell-size:2.25rem]"
+            disabled={{ after: new Date() }}
             modifiers={{
-              completed: date => {
-                const dateStr = formatLocalDate(date);
-                return dailyLogs.some(log => formatLocalDate(log.date) === dateStr && log.habits.some(h => h.completed === true));
-              },
+              completed: date => completedDates.has(formatLocalDate(date)),
+            }}
+            modifiersClassNames={{
+              completed: "!bg-green-100 dark:!bg-green-900/30 !rounded-md",
             }}
           />
         </div>

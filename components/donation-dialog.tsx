@@ -1,14 +1,19 @@
 import React, { useState, useRef } from 'react';
 import Image from 'next/image';
-import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
-import { MobileDialogContent } from '@/components/ui/mobile-dialog';
+import { DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, Download, QrCode, X } from 'lucide-react';
+import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, Download, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
-import { useIsMobile } from '@/hooks/use-mobile';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogBody,
+} from '@/components/ui/responsive-dialog';
 
 interface DonationDialogProps {
   open: boolean;
@@ -128,7 +133,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
-  const isMobile = useIsMobile();
   const [showQrisModal, setShowQrisModal] = useState(false);
 
   // Handle mobile back navigation
@@ -166,208 +170,188 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
     }
   };
 
-  // Choose the appropriate dialog content component - using MobileDialogContent for consistency
-
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
-  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-full max-w-2xl max-h-[85vh] flex flex-col items-stretch justify-start"}`}>
-        <DialogHeader className="shrink-0 border-b border-border pb-4">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-              <Heart className="w-5 h-5 text-red-500" />
-              Support Me
-            </DialogTitle>
-            <button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </button>
-          </div>
-        </DialogHeader>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl max-h-[85vh] flex flex-col">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle className="flex items-center gap-2">
+            <Heart className="w-5 h-5 text-red-500" />
+            Support Me
+          </ResponsiveDialogTitle>
+        </ResponsiveDialogHeader>
 
-  <div className="flex-1 overflow-y-auto px-6 pt-4 pb-6" style={{ minHeight: 0 }}>
+        <ResponsiveDialogBody>
           <DialogDescription className="text-center mb-6">
             If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!
           </DialogDescription>
           <div className="space-y-6">
-          {/* Payment Platforms */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <ExternalLink className="w-4 h-4" />
-              Payment Platforms
-            </h3>
-            {/* Render Trakteer and Ko-fi cards */}
-            {supportContacts.map((contact) => (
-              <Card
-                key={contact.name}
-                className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
-              >
-                <a
-                  href={contact.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex items-center justify-between w-full"
+            {/* Payment Platforms */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <ExternalLink className="w-4 h-4" />
+                Payment Platforms
+              </h3>
+              {/* Render Trakteer and Ko-fi cards */}
+              {supportContacts.map((contact) => (
+                <Card
+                  key={contact.name}
+                  className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
                 >
+                  <a
+                    href={contact.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between w-full"
+                  >
+                    <div className="flex items-center space-x-3">
+                      <div className={`p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors ${contact.color}`}>
+                        {contact.icon}
+                      </div>
+                      <div>
+                        <h4 className="font-medium">{contact.name}</h4>
+                        <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">{contact.label}</p>
+                      </div>
+                    </div>
+                    <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
+                  </a>
+                </Card>
+              ))}
+              {/* QRIS Card */}
+              <Card
+                className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
+                onClick={() => setShowQrisModal(true)}
+              >
+                <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
-                    <div className={`p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors ${contact.color}`}>
-                      {contact.icon}
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                      <QrCode className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-medium">{contact.name}</h4>
-                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">{contact.label}</p>
+                      <h4 className="font-medium">QRIS</h4>
+                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">Support me with QRIS!</p>
                     </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
-                </a>
-              </Card>
-            ))}
-            {/* QRIS Card */}
-            <Card
-              className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
-              onClick={() => setShowQrisModal(true)}
-            >
-              <div className="flex items-center justify-between w-full">
-                <div className="flex items-center space-x-3">
-                  <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    <QrCode className="w-5 h-5" />
-                  </div>
-                  <div>
-                    <h4 className="font-medium">QRIS</h4>
-                    <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">Support me with QRIS!</p>
-                  </div>
                 </div>
-                <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
-              </div>
-            </Card>
-            {/* QRIS Modal */}
-              <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
-                <MobileDialogContent className="w-full max-w-lg material-radius-lg surface-elevation-3 [&>button]:hidden">
-                  <DialogHeader className="shrink-0 border-b border-border pb-4">
-                    <div className="flex items-center justify-between">
-                      <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                        <QrCode className="w-5 h-5 text-primary" />
-                        QRIS
-                      </DialogTitle>
-                      <button
-                        type="button"
-                        onClick={() => setShowQrisModal(false)}
-                        className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
-                      >
-                        <X className="h-4 w-4" />
-                        <span className="sr-only">Close</span>
-                      </button>
-                    </div>
-                  </DialogHeader>
-                  <div className="flex flex-col items-center gap-4">
-                    <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
-                    <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
-                    <Button
-                      variant="outline"
-                      className="w-full max-w-xs"
-                      onClick={async () => {
-                        const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
-                        const filename = 'qris-ade.jpg';
-                        const imageUrl = '/payment/qris-ade.jpg';
-                        if (isNative) {
-                          try {
-                            const res = await fetch(imageUrl);
-                            const blob = await res.blob();
-                            const reader = new FileReader();
-                            reader.onloadend = async () => {
-                              const base64 = reader.result?.toString().split(',')[1];
-                              if (!base64) throw new Error('Failed to convert image');
-                              try {
-                                const { SaveAs } = await import('capacitor-save-as');
-                                await SaveAs.showSaveAsPicker({
-                                  filename,
-                                  mimeType: 'image/jpeg',
-                                  data: base64,
-                                });
-                                toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
-                              } catch {
-                                toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
-                              }
-                            };
-                            reader.readAsDataURL(blob);
-                          } catch {
-                            toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
+              </Card>
+              {/* QRIS Modal */}
+              <ResponsiveDialog open={showQrisModal} onOpenChange={setShowQrisModal}>
+                <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
+                  <ResponsiveDialogHeader>
+                    <ResponsiveDialogTitle className="flex items-center gap-2">
+                      <QrCode className="w-5 h-5 text-primary" />
+                      QRIS
+                    </ResponsiveDialogTitle>
+                  </ResponsiveDialogHeader>
+                  <ResponsiveDialogBody>
+                    <div className="flex flex-col items-center gap-4">
+                      <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
+                      <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
+                      <Button
+                        variant="outline"
+                        className="w-full max-w-xs"
+                        onClick={async () => {
+                          const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
+                          const filename = 'qris-ade.jpg';
+                          const imageUrl = '/payment/qris-ade.jpg';
+                          if (isNative) {
+                            try {
+                              const res = await fetch(imageUrl);
+                              const blob = await res.blob();
+                              const reader = new FileReader();
+                              reader.onloadend = async () => {
+                                const base64 = reader.result?.toString().split(',')[1];
+                                if (!base64) throw new Error('Failed to convert image');
+                                try {
+                                  const { SaveAs } = await import('capacitor-save-as');
+                                  await SaveAs.showSaveAsPicker({
+                                    filename,
+                                    mimeType: 'image/jpeg',
+                                    data: base64,
+                                  });
+                                  toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
+                                } catch {
+                                  toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
+                                }
+                              };
+                              reader.readAsDataURL(blob);
+                            } catch {
+                              toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
+                            }
+                          } else {
+                            const link = document.createElement('a');
+                            link.href = imageUrl;
+                            link.download = filename;
+                            document.body.appendChild(link);
+                            link.click();
+                            document.body.removeChild(link);
                           }
-                        } else {
-                          const link = document.createElement('a');
-                          link.href = imageUrl;
-                          link.download = filename;
-                          document.body.appendChild(link);
-                          link.click();
-                          document.body.removeChild(link);
-                        }
-                      }}
-                    >
-                      <Download className="w-4 h-4" />
-                      Download QRIS
-                    </Button>
-                  </div>
-                </MobileDialogContent>
-              </Dialog>
-          </div>
-
-          {/* Cryptocurrency */}
-          <div className="space-y-3">
-            <h3 className="text-lg font-semibold flex items-center gap-2">
-              <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
-                <path fillRule="evenodd" d="M13.425 6.432c1.983.19 3.538.778 3.71 2.528.117 1.276-.438 2.035-1.355 2.463 1.481.359 2.382 1.202 2.196 3.072-.227 2.343-2.035 2.952-4.62 3.08l.004 2.42-1.522.002-.004-2.42c-.166-.002-.34 0-.519.003-.238.003-.484.006-.731-.001l.004 2.42-1.52.001-.004-2.42-3.044-.058.256-1.768s1.15.024 1.129.012c.423-.002.549-.293.58-.485l-.008-3.878.012-2.76c-.046-.288-.248-.634-.87-.644.033-.03-1.115.001-1.115.001L6 6.38l3.12-.005-.004-2.37 1.571-.002.004 2.37c.304-.008.603-.005.906-.003l.3.002-.005-2.37L13.422 4l.003 2.432zm-2.92 4.46l.076.002c.926.04 3.67.155 3.673-1.457-.004-1.532-2.339-1.482-3.423-1.46-.129.003-.24.006-.327.005v2.91zm.129 4.75l-.134-.005v-2.91c.097.002.218 0 .359-.002 1.282-.015 4.145-.05 4.132 1.494.014 1.597-3.218 1.468-4.357 1.423z" clipRule="evenodd" />
-              </svg>
-              Cryptocurrency
-            </h3>
-            
-            {cryptoList.map((crypto) => (
-              <Card
-                key={crypto.name}
-                className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
-                onClick={() => handleCopy(crypto.address)}
-              >
-                <div className="flex items-center space-x-3">
-                  <div className={crypto.color}>
-                    {crypto.icon}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1">
-                      <h4 className="font-medium">{crypto.name}</h4>
-                      {copiedAddress === crypto.address && (
-                        <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                          Copied!
-                        </Badge>
-                      )}
+                        }}
+                      >
+                        <Download className="w-4 h-4" />
+                        Download QRIS
+                      </Button>
                     </div>
-                    <p className="text-xs text-muted-foreground font-mono break-all group-hover:text-accent-foreground/70 transition-colors">
-                      {crypto.address}
-                    </p>
-                  </div>
-                  <div className="shrink-0">
-                    <div className="relative w-4 h-4">
-                      {copiedAddress === crypto.address ? (
-                        <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />
-                      ) : (
-                        <Copy className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
-                      )}
+                  </ResponsiveDialogBody>
+                </ResponsiveDialogContent>
+              </ResponsiveDialog>
+            </div>
+
+            {/* Cryptocurrency */}
+            <div className="space-y-3">
+              <h3 className="text-lg font-semibold flex items-center gap-2">
+                <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
+                  <path fillRule="evenodd" d="M13.425 6.432c1.983.19 3.538.778 3.71 2.528.117 1.276-.438 2.035-1.355 2.463 1.481.359 2.382 1.202 2.196 3.072-.227 2.343-2.035 2.952-4.62 3.08l.004 2.42-1.522.002-.004-2.42c-.166-.002-.34 0-.519.003-.238.003-.484.006-.731-.001l.004 2.42-1.52.001-.004-2.42-3.044-.058.256-1.768s1.15.024 1.129.012c.423-.002.549-.293.58-.485l-.008-3.878.012-2.76c-.046-.288-.248-.634-.87-.644.033-.03-1.115.001-1.115.001L6 6.38l3.12-.005-.004-2.37 1.571-.002.004 2.37c.304-.008.603-.005.906-.003l.3.002-.005-2.37L13.422 4l.003 2.432zm-2.92 4.46l.076.002c.926.04 3.67.155 3.673-1.457-.004-1.532-2.339-1.482-3.423-1.46-.129.003-.24.006-.327.005v2.91zm.129 4.75l-.134-.005v-2.91c.097.002.218 0 .359-.002 1.282-.015 4.145-.05 4.132 1.494.014 1.597-3.218 1.468-4.357 1.423z" clipRule="evenodd" />
+                </svg>
+                Cryptocurrency
+              </h3>
+              
+              {cryptoList.map((crypto) => (
+                <Card
+                  key={crypto.name}
+                  className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
+                  onClick={() => handleCopy(crypto.address)}
+                >
+                  <div className="flex items-center space-x-3">
+                    <div className={crypto.color}>
+                      {crypto.icon}
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1">
+                        <h4 className="font-medium">{crypto.name}</h4>
+                        {copiedAddress === crypto.address && (
+                          <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
+                            Copied!
+                          </Badge>
+                        )}
+                      </div>
+                      <p className="text-xs text-muted-foreground font-mono break-all group-hover:text-accent-foreground/70 transition-colors">
+                        {crypto.address}
+                      </p>
+                    </div>
+                    <div className="shrink-0">
+                      <div className="relative w-4 h-4">
+                        {copiedAddress === crypto.address ? (
+                          <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />
+                        ) : (
+                          <Copy className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
+                        )}
+                      </div>
                     </div>
                   </div>
-                </div>
-              </Card>
-            ))}
-          </div>
+                </Card>
+              ))}
+            </div>
 
-          {/* Thank You Message */}
-          <div className="text-center mt-4">
-            <p className="text-sm text-muted-foreground">
-              Thank you for considering supporting this project! 🙏
-            </p>
+            {/* Thank You Message */}
+            <div className="text-center mt-4">
+              <p className="text-sm text-muted-foreground">
+                Thank you for considering supporting this project! 🙏
+              </p>
+            </div>
           </div>
-        </div>
-        </div>
-      </MobileDialogContent>
-    </Dialog>
+        </ResponsiveDialogBody>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }

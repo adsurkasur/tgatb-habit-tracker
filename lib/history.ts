@@ -103,3 +103,37 @@ export function buildDailyLogs(habits: Habit[], days = 30): DayLog[] {
 
   return logs.reverse();
 }
+
+/** Build a DayLog for a single specific date (no day-range limit). */
+export function buildDayLog(habits: Habit[], date: Date): DayLog {
+  return {
+    date,
+    habits: habits
+      .filter(habit => startOfDay(habit.createdAt) <= startOfDay(date))
+      .map(habit => {
+        const habitLogs = getAllHabitLogs(habit.id);
+        const dateStr = formatLocalDate(date);
+        const logForDay = habitLogs.find(log => log.date === dateStr);
+        return {
+          id: habit.id,
+          name: habit.name,
+          type: habit.type,
+          completed: logForDay ? logForDay.completed : null,
+        };
+      }),
+  };
+}
+
+/** Get a Set of date strings (YYYY-MM-DD) that have at least one completed habit. */
+export function getCompletedDatesSet(habits: Habit[]): Set<string> {
+  const dates = new Set<string>();
+  for (const habit of habits) {
+    const logs = getAllHabitLogs(habit.id);
+    for (const log of logs) {
+      if (log.completed === true) {
+        dates.add(log.date);
+      }
+    }
+  }
+  return dates;
+}

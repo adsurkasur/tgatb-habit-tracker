@@ -6,6 +6,9 @@ import { useVirtualKeyboard } from "@/hooks/use-virtual-keyboard";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 /**
+ * @deprecated Use `ResponsiveDialog` from `@/components/ui/responsive-dialog` instead.
+ * This component is no longer used by any dialog and will be removed in a future version.
+ *
  * MobileDialogContent - Unified dialog component for desktop and mobile
  * 
  * Architecture:

@@ -1,10 +1,17 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import { Button } from './ui/button';
-import { X } from 'lucide-react';
 import { HabitStorage } from '@/lib/habit-storage';
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogDescription,
+  ResponsiveDialogBody,
+  ResponsiveDialogFooter,
+} from './ui/responsive-dialog';
 
 import type { Habit, HabitLog } from '@shared/schema';
 
@@ -134,54 +141,45 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
   };
 
   return (
-    <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent className="[&>button]:hidden">
-        <DialogHeader className="shrink-0 border-b border-border pb-4">
-          <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold">Sync Conflicts Detected</DialogTitle>
-            <button
-              type="button"
-              onClick={() => onClose()}
-              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </button>
-          </div>
-        </DialogHeader>
-        <DialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</DialogDescription>
-        <div className="space-y-4">
-        <div className="max-h-72 overflow-auto">
-          {(payload.conflicts ?? []).map((c: ConflictItem) => (
-            <div key={c.id} className="p-3 border rounded mb-2 bg-muted">
-              <div className="font-medium">Item: {c.id}</div>
-              <div className="text-xs text-muted-foreground">Local vs Remote differences</div>
-              <pre className="text-xs my-2 p-2 bg-surface overflow-auto">{JSON.stringify({ local: c.local, remote: c.remote }, null, 2)}</pre>
-              <div className="space-y-1">
-                {Object.keys(c.conflicts || {}).map((f: string) => (
-                  <div key={f} className="flex items-center justify-between">
-                    <div className="text-sm">{f}</div>
-                    <div className="space-x-2">
-                      <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'local'} onChange={() => setChoice(c.id, f, 'local')} /> <span className="ml-1">Local</span></label>
-                      <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'remote'} onChange={() => setChoice(c.id, f, 'remote')} /> <span className="ml-1">Remote</span></label>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-        </div>
+    <ResponsiveDialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
+      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>Sync Conflicts Detected</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
 
-        <DialogFooter>
+        <ResponsiveDialogBody>
+          <div className="max-h-72 overflow-auto">
+            {(payload.conflicts ?? []).map((c: ConflictItem) => (
+              <div key={c.id} className="p-3 border rounded mb-2 bg-muted">
+                <div className="font-medium">Item: {c.id}</div>
+                <div className="text-xs text-muted-foreground">Local vs Remote differences</div>
+                <pre className="text-xs my-2 p-2 bg-surface overflow-auto">{JSON.stringify({ local: c.local, remote: c.remote }, null, 2)}</pre>
+                <div className="space-y-1">
+                  {Object.keys(c.conflicts || {}).map((f: string) => (
+                    <div key={f} className="flex items-center justify-between">
+                      <div className="text-sm">{f}</div>
+                      <div className="space-x-2">
+                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'local'} onChange={() => setChoice(c.id, f, 'local')} /> <span className="ml-1">Local</span></label>
+                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'remote'} onChange={() => setChoice(c.id, f, 'remote')} /> <span className="ml-1">Remote</span></label>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </ResponsiveDialogBody>
+
+        <ResponsiveDialogFooter>
           <div className="flex justify-end space-x-2 w-full">
             <Button variant="ghost" onClick={keepLocal}>Keep Local</Button>
             <Button variant="secondary" onClick={applyResolutions}>Apply Selected</Button>
             <Button onClick={acceptRemote}>Accept Remote</Button>
           </div>
-        </DialogFooter>
-      </div>
-      </DialogContent>
-    </Dialog>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
   );
 }
 
