@@ -93,5 +93,5 @@ jobs:
           packageName: com.tgatb.habittracker
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
-          changesNotSentForReview: true
           status: completed
+          debugSymbols: android/app/build/intermediates/merged_native_libs/release/mergeReleaseNativeLibs/out/lib
