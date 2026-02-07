@@ -366,21 +366,16 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
 
     if (isPositionReady) {
-      // For habit-card step, ensure we wait for position calculation to complete
-      // before making the card visible to prevent "blinking"
-      const extraDelay = currentStepData.id === 'habit-card' ? 50 : 0;
+      // Position is ready — trigger final position calculation then fade in
+      setShouldMoveToFinalPosition(true);
 
       const timer = setTimeout(() => {
         setCardOpacity(1);
-        // After card is fully visible, trigger movement to final position
+        // Mark transition complete after opacity fade finishes (200ms matches CSS)
         setTimeout(() => {
-          setShouldMoveToFinalPosition(true);
-          // Mark transition as complete after movement
-          setTimeout(() => {
-            setIsTransitioning(false);
-          }, 300); // Wait for movement animation to complete
-        }, 100); // Small delay to ensure opacity transition is complete
-      }, extraDelay);
+          setIsTransitioning(false);
+        }, 220);
+      }, 20); // Micro-delay to let position apply before fading in
       return () => clearTimeout(timer);
     } else {
       // Position not ready, keep card hidden
@@ -403,10 +398,10 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     setIsTransitioning(true);
     setCardOpacity(0);
 
-    // After fade-out, update step; fade-in handled by effects
+    // After fade-out (200ms CSS duration), update step; fade-in handled by effects
     setTimeout(() => {
       setCurrentStep(prev => prev + direction);
-    }, 300);
+    }, 200);
   }, [currentStep, isLastStep, isTransitioning, onClose, onComplete]);
 
   const handleNext = () => transitionStep(1);
@@ -443,7 +438,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
       {/* Welcome Tour Card - Always rendered but opacity controlled for smooth transitions */}
       <Card
-        className="absolute w-80 max-w-[85vw] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-72 max-sm:max-w-[90vw] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-all duration-300 ease-out"
+        className="absolute w-80 max-w-[85vw] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-72 max-sm:max-w-[90vw] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-[opacity] duration-200 ease-out"
         style={{
           top: cardPosition.top,
           left: cardPosition.left,

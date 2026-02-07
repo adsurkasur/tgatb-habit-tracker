@@ -19,31 +19,35 @@ const firebaseConfig = {
 let app: FirebaseApp;
 let analytics: Analytics | undefined;
 
+// Always initialize Firebase Core (needed for Auth, etc.)
+// Analytics is initialized separately only when user grants consent
+if (!getApps().length) {
+    app = initializeApp(firebaseConfig);
+} else {
+    app = getApp();
+}
+
 export function FirebaseInitializer({ children }: { children: ReactNode }) {
     const { isOnline } = useNetworkStatus();
-    const [initialized, setInitialized] = useState(false);
+    const [analyticsInitialized, setAnalyticsInitialized] = useState(false);
 
     useEffect(() => {
-            if (isOnline && !initialized) {
-                // Initialize only when user granted analytics consent
+            if (isOnline && !analyticsInitialized) {
+                // Initialize analytics only when user granted consent
                 (async () => {
                     try {
                         const settings = await HabitStorage.getSettings();
                         if (!settings?.analyticsConsent) return;
-                        if (!getApps().length) {
-                            app = initializeApp(firebaseConfig);
-                            analytics = typeof window !== 'undefined' ? getAnalytics(app) : undefined;
-                        } else {
-                            app = getApp();
+                        if (typeof window !== 'undefined') {
+                            analytics = getAnalytics(app);
                         }
-                        setInitialized(true);
+                        setAnalyticsInitialized(true);
                     } catch (err) {
-                        console.warn('Firebase initialization skipped:', err);
-                        // ignore errors and avoid initializing analytics
+                        console.warn('Firebase Analytics initialization skipped:', err);
                     }
                 })();
             }
-    }, [isOnline, initialized]);
+    }, [isOnline, analyticsInitialized]);
 
     return <>{children}</>;
 }

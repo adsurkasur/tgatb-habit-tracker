@@ -9,9 +9,9 @@ const Switch = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <SwitchPrimitives.Root
     className={cn(
-      "peer inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input theme-transition",
-      // Ensure consistent sizing on mobile
-      "min-w-[2.75rem] min-h-6 flex-shrink-0",
+      "peer inline-flex shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent shadow-xs transition-colors outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background disabled:cursor-not-allowed disabled:opacity-50 data-[state=checked]:bg-primary data-[state=unchecked]:bg-input theme-transition",
+      // Explicit pill dimensions — width must be > height for pill shape
+      "h-6 w-11 min-w-[2.75rem] min-h-[1.5rem]",
       className
     )}
     {...props}
@@ -19,9 +19,9 @@ const Switch = React.forwardRef<
   >
     <SwitchPrimitives.Thumb
       className={cn(
-        "pointer-events-none block h-5 w-5 rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 theme-transition",
-        // Ensure thumb maintains size on mobile
-        "flex-shrink-0"
+        "pointer-events-none block rounded-full bg-background shadow-lg ring-0 transition-transform data-[state=checked]:translate-x-5 data-[state=unchecked]:translate-x-0 theme-transition",
+        // Explicit thumb size — must be smaller than track height
+        "h-5 w-5 min-h-[1.25rem] min-w-[1.25rem] shrink-0"
       )}
     />
   </SwitchPrimitives.Root>
