@@ -169,8 +169,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-[500px] h-[90vh] max-h-[90vh] flex flex-col items-stretch justify-start"}`}>
-        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-full max-w-2xl h-[90vh] max-h-[90vh] flex flex-col items-stretch justify-start"}`}>
+        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
           <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
               <Heart className="w-5 h-5 text-red-500" />
@@ -245,8 +245,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {/* QRIS Modal */}
             {showQrisModal && (
               <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
-                <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 [&>button]:hidden p-0 flex flex-col gap-0`}>
-                  <DialogHeader className={`px-6 py-2 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+                <MobileDialogContent className={`w-full max-w-lg material-radius-lg surface-elevation-3 [&>button]:hidden p-0 flex flex-col gap-0`}>
+                  <DialogHeader className={`px-6 py-2 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
                     <div className="flex items-center w-full justify-between">
                       <DialogTitle className="flex items-center gap-2">
                         {/* QR code icon - theme adaptive */}
@@ -353,7 +353,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                       {crypto.address}
                     </p>
                   </div>
-                  <div className="flex-shrink-0">
+                  <div className="shrink-0">
                     <div className="relative w-4 h-4">
                       {copiedAddress === crypto.address ? (
                         <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />

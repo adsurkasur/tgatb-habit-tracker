@@ -132,7 +132,7 @@ const MobileDialogContent = React.forwardRef<
         )}>
           <X className={cn(
             "h-4 w-4", 
-            isMobile ? "h-5 w-5 flex-shrink-0" : ""
+            isMobile ? "h-5 w-5 shrink-0" : ""
           )} />
           <span className="sr-only">Close</span>
         </DialogPrimitive.Close>

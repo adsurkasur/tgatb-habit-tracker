@@ -32,7 +32,7 @@ export function SettingsDialog({
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col [&>button]:hidden">
-        <DialogHeader className="flex-shrink-0 border-b border-border pb-4">
+        <DialogHeader className="shrink-0 border-b border-border pb-4">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">Settings</DialogTitle>
             <button

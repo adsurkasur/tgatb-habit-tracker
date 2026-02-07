@@ -45,7 +45,7 @@ export function SettingsScreen({
       }`}
     >
       {/* Header */}
-      <header className='bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2 flex-shrink-0'>
+      <header className='bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2 shrink-0'>
         <Button
           variant='ghost'
           size='icon'

@@ -86,7 +86,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className="w-full max-w-md mx-auto material-radius-lg surface-elevation-3">
+      <MobileDialogContent className="w-full max-w-lg mx-auto material-radius-lg surface-elevation-3">
         <DialogHeader>
           <DialogTitle>Add Entry for {date}</DialogTitle>
         </DialogHeader>

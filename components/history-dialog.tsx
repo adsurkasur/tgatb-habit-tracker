@@ -99,7 +99,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
         <HistoryHeader onClose={() => onOpenChange(false)} />
         <div className="flex-1 overflow-y-auto">
           <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col px-6 pt-4 pb-6">
-            <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 flex-shrink-0">
+            <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 shrink-0">
               <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
                 <span className="hidden sm:inline">Overview</span>
@@ -135,7 +135,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
 
 function HistoryHeader({ onClose }: { onClose: () => void }) {
   return (
-    <DialogHeader className="px-6 py-4 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative">
+    <DialogHeader className="px-6 py-4 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative">
       <div className="flex items-center w-full justify-between">
         <DialogTitle className="flex items-center gap-2">
           <BarChart3 className="w-5 h-5" />
@@ -232,15 +232,15 @@ function TopHabits({ habits }: { habits: Habit[] }) {
               <div key={habit.id} className="flex items-center justify-between p-2 bg-muted rounded-lg">
                 <div className="flex items-center gap-2 min-w-0 flex-1">
                   {habit.type === 'good' ? (
-                    <CheckCircle className="w-4 h-4 text-green-500 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 text-green-500 shrink-0" />
                   ) : (
-                    <XCircle className="w-4 h-4 text-red-500 flex-shrink-0" />
+                    <XCircle className="w-4 h-4 text-red-500 shrink-0" />
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs font-medium truncate">{habit.name}</p>
                   </div>
                 </div>
-                <Badge variant="outline" className="text-xs flex-shrink-0">{stats.currentStreak}</Badge>
+                <Badge variant="outline" className="text-xs shrink-0">{stats.currentStreak}</Badge>
               </div>
             );
           })}
@@ -266,18 +266,18 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
               <div key={habit.id} className="flex items-center justify-between p-2 sm:p-3 bg-muted rounded-lg">
                 <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                   {isUntracked ? (
-                    <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 flex-shrink-0" />
+                    <HelpCircle className="w-4 h-4 sm:w-5 sm:h-5 text-gray-400 shrink-0" />
                   ) : habit.type === 'good' ? (
-                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 flex-shrink-0" />
+                    <CheckCircle className="w-4 h-4 sm:w-5 sm:h-5 text-green-500 shrink-0" />
                   ) : (
-                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 flex-shrink-0" />
+                    <XCircle className="w-4 h-4 sm:w-5 sm:h-5 text-red-500 shrink-0" />
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm font-medium truncate">{habit.name}</p>
                     <p className="text-xs sm:text-sm text-muted-foreground">{stats.totalCompletions} completions</p>
                   </div>
                 </div>
-                <div className="flex items-center gap-2 flex-shrink-0">
+                <div className="flex items-center gap-2 shrink-0">
                   <Badge variant="outline" className="flex items-center gap-1 text-xs">
                     <Flame className="w-3 h-3" />
                     {stats.currentStreak}
@@ -394,7 +394,7 @@ function CalendarTabContent({
                       // Determine status and colors
                       let bgClass = "bg-muted";
                       let icon = null;
-                      const iconClass = "w-4 h-4 flex-shrink-0";
+                      const iconClass = "w-4 h-4 shrink-0";
                         let nameClass = "text-xs sm:text-sm truncate text-muted-foreground";
                         if (habit.completed === null || habit.completed === undefined) {
                           // Untracked state: grey background, question mark icon, tooltip

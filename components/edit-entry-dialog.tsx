@@ -59,8 +59,8 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`w-full max-w-md mx-auto material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-fit max-h-[400px]" : ""}`}>
-        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left" : ""}`}>
+      <MobileDialogContent className={`w-full max-w-lg mx-auto material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-fit max-h-[400px]" : ""}`}>
+        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left!" : ""}`}>
           <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
             <DialogTitle className="text-xl font-semibold">
               {isMobile ? "Edit Entry" : `Edit Entry for ${habit.name}`}
