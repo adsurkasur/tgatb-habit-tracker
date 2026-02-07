@@ -1,5 +1,6 @@
 ﻿import React from "react";
 import type { Metadata } from "next";
+import Link from "next/link";
 
 export const metadata: Metadata = {
   title: "Privacy Policy - TGATB Habit Tracker",
@@ -255,12 +256,12 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <a
+          <Link
             href="/"
             className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors"
           >
             Open TGATB Habit Tracker
-          </a>
+          </Link>
         </div>
       </div>
     </div>
