@@ -25,6 +25,10 @@ jobs:
             head -c 30 "$FILE" | xxd
           fi
 
+      - name: Decode Google Services JSON
+        run: |
+          echo "${{ secrets.GOOGLE_SERVICES_JSON_BASE64 }}" | base64 --decode > android/app/google-services.json
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
