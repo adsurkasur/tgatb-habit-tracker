@@ -64,18 +64,14 @@ jobs:
         run: keytool -list -v -keystore android/app/release.keystore -storepass "${{ secrets.ANDROID_KEYSTORE_PASSWORD }}" || true
 
       - name: Prepare Play service account JSON
-        id: prepare_play_json
         run: |
           if [ -n "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}" ]; then
             echo "Decoding base64 service account"
-            echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 --decode > /tmp/play.json
+            echo "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON_BASE64 }}" | base64 --decode > /tmp/play-service-account.json
           else
             echo "Writing raw JSON service account"
-            printf '%s' "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" > /tmp/play.json
+            printf '%s' "${{ secrets.GOOGLE_PLAY_SERVICE_ACCOUNT_JSON }}" > /tmp/play-service-account.json
           fi
-          echo "json<<EOF" >> $GITHUB_OUTPUT
-          cat /tmp/play.json >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Build AAB
         run: ./gradlew --no-daemon bundleRelease --stacktrace --info
@@ -87,7 +83,7 @@ jobs:
       - name: Upload AAB to Play Internal track
         uses: r0adkll/upload-google-play@v1
         with:
-          serviceAccountJson: ${{ steps.prepare_play_json.outputs.json }}
+          serviceAccountJson: /tmp/play-service-account.json
           packageName: com.tgatb.habittracker
           releaseFiles: android/app/build/outputs/bundle/release/app-release.aab
           track: internal
