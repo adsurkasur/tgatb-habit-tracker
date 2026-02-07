@@ -800,7 +800,7 @@
   }
   
   /* Better touch targets */
-  button,
+  button:not([role="switch"]):not([role="radio"]):not([role="checkbox"]),
   [role="button"] {
     min-height: 44px;
     min-width: 44px;
