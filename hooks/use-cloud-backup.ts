@@ -28,7 +28,6 @@ export function useCloudBackup() {
       duration: 3000,
     });
 
-    let accessToken: string | null = null;
     let result: unknown = null;
 
     try {

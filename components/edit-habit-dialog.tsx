@@ -3,7 +3,7 @@ import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Habit, HabitType } from "@shared/schema";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { useIsMobile } from "@/hooks/use-mobile";
@@ -21,13 +21,15 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
   const [type, setType] = useState<HabitType>("good");
   const isMobile = useIsMobile();
 
-  // Update form when habit changes
-  useEffect(() => {
+  // Adjust state during render when habit prop changes (React-approved pattern)
+  const [prevHabit, setPrevHabit] = useState(habit);
+  if (habit !== prevHabit) {
+    setPrevHabit(habit);
     if (habit) {
       setName(habit.name);
       setType(habit.type);
     }
-  }, [habit]);
+  }
 
   // Handle mobile back navigation
   useMobileBackNavigation({

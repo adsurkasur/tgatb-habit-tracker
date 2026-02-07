@@ -4,22 +4,20 @@ import { useToast } from "@/hooks/use-toast";
 
 export function usePWAInstall() {
   const { toast } = useToast();
-  const [canInstallPWA, setCanInstallPWA] = useState(false);
-  const [isAppInstalled, setIsAppInstalled] = useState(false);
   const isCapacitorApp = Capacitor.isNativePlatform();
+  const [canInstallPWA, setCanInstallPWA] = useState(() => isCapacitorApp ? false : false);
+  const [isAppInstalled, setIsAppInstalled] = useState(() => {
+    if (isCapacitorApp) return true;
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  });
 
   useEffect(() => {
     // Don't show PWA install option if running in Capacitor (native app)
     if (isCapacitorApp) {
-      setCanInstallPWA(false);
-      setIsAppInstalled(true); // Consider it "installed" since it's the native app
       return;
     }
-
-    // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (navigator as Navigator & { standalone?: boolean }).standalone === true;
-    setIsAppInstalled(isStandalone || isInWebAppiOS);
 
     // Listen for install prompt availability
     const beforeInstallPromptHandler = (e: Event) => {

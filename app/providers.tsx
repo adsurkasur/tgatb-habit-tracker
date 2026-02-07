@@ -29,7 +29,6 @@ export function Providers({ children }: { children: React.ReactNode }) {
         await initSentryClient(!!settings?.analyticsConsent);
       } catch (err) {
         // initialization failures should not block app
-        // eslint-disable-next-line no-console
         console.debug('Sentry client init skipped', err);
       }
     })();

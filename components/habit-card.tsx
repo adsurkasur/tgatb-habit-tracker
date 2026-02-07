@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
-import { useEffect, useRef, useState, memo } from "react";
+import { useEffect, useState, memo } from "react";
 
 interface HabitCardProps {
   habit: Habit;
@@ -32,19 +32,11 @@ function HabitCardComponent({
     return () => clearTimeout(t);
   }, []);
   const isPositiveAction = todayLog ? (habit.type === "good" ? todayLog.completed : !todayLog.completed) : false;
-  // Debug: log every render and animation class
-  if (navigationEvent && process.env.NODE_ENV !== 'production') {
-    // Throttle duplicate logs in the same microtask (React strict mode double render in dev)
-    type HabitCardWindow = Window & { __habitCardLastLog?: { seq: number | null } };
-    const win = window as HabitCardWindow;
-    const lastLogRef = win.__habitCardLastLog || { seq: null };
-    if (lastLogRef.seq !== navigationEvent.seq) {
-      console.debug('[HabitCard] Render (seq change) habit', habit?.id, navigationEvent, 'anim:', animationClass, 'initial:', initialApplied);
-      win.__habitCardLastLog = { seq: navigationEvent.seq };
-    } else {
-      console.debug('[HabitCard] Re-render same seq (likely StrictMode) habit', habit?.id, 'anim:', animationClass);
-    }
-  }
+  // Debug: log animation state changes in dev mode (via effect to avoid render side effects)
+  useEffect(() => {
+    if (!navigationEvent || process.env.NODE_ENV === 'production') return;
+    console.debug('[HabitCard] Animation applied', habit?.id, navigationEvent, 'anim:', animationClass, 'initial:', initialApplied);
+  }, [navigationEvent, habit?.id, animationClass, initialApplied]);
   if (!habit) {
     return (
       <div className="w-full max-w-md mx-auto">
@@ -135,27 +127,26 @@ function useSlideAnimation(
   navigationEvent: { dir: 'left' | 'right'; seq: number } | null | undefined,
 ) {
   const [animationClass, setAnimationClass] = useState('');
-  const previousSeqRef = useRef<number | null>(null);
+  const [prevSeq, setPrevSeq] = useState<number | null>(null);
 
+  // Detect navigation change during render (React-approved adjustment pattern)
+  if (navigationEvent && habitId && navigationEvent.seq !== prevSeq) {
+    setPrevSeq(navigationEvent.seq);
+    setAnimationClass(navigationEvent.dir === 'left' ? 'slide-from-left' : 'slide-from-right');
+  }
+
+  // Clear animation class after duration (setTimeout callback, not direct effect setState)
   useEffect(() => {
-    if (navigationEvent && habitId) {
-      const { seq, dir } = navigationEvent;
-      if (seq !== previousSeqRef.current) {
-        previousSeqRef.current = seq;
-        setAnimationClass(dir === 'left' ? 'slide-from-left' : 'slide-from-right');
+    if (animationClass) {
+      const timer = setTimeout(() => {
+        setAnimationClass('');
         if (process.env.NODE_ENV !== 'production') {
-          console.debug('[useSlideAnimation] Trigger animation for habit', habitId, 'seq:', seq, 'dir:', dir);
+          console.debug('[useSlideAnimation] Animation cleared for habit', habitId);
         }
-        const timer = setTimeout(() => {
-          setAnimationClass('');
-          if (process.env.NODE_ENV !== 'production') {
-            console.debug('[useSlideAnimation] Animation cleared for habit', habitId, 'seq:', seq);
-          }
-        }, 250);
-        return () => clearTimeout(timer);
-      }
+      }, 250);
+      return () => clearTimeout(timer);
     }
-  }, [habitId, navigationEvent]);
+  }, [animationClass, habitId]);
 
   return animationClass;
 }

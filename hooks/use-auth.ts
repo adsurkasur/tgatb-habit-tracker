@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { Capacitor } from '@capacitor/core';
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../components/firebase-initializer";
@@ -49,7 +49,7 @@ export function useAuth() {
   };
 
   // Clear login state and show toast for expired token
-  const handleExpiredToken = async () => {
+  const handleExpiredToken = useCallback(async () => {
     if (typeof window !== 'undefined' && !isCapacitorApp) {
       await TokenStorage.removeAccessToken();
       localStorage.removeItem('googleProfileName');
@@ -68,7 +68,7 @@ export function useAuth() {
       variant: "destructive",
       duration: 5000,
     });
-  };
+  }, [isCapacitorApp, toast]);
 
   // Load profile info on mount (web)
   useEffect(() => {
@@ -132,7 +132,7 @@ export function useAuth() {
 
       setClientReady(true);
     })();
-  }, [isCapacitorApp, toast]);
+  }, [isCapacitorApp, toast, handleExpiredToken]);
 
   const handleAuth = async () => {
     try {

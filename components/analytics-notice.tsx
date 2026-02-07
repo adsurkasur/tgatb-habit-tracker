@@ -10,26 +10,24 @@ export function AnalyticsNotice() {
   const [acknowledged, setAcknowledged] = useLocalStorage('analytics-notice-acknowledged', false);
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
-  const [isMounted, setIsMounted] = useState(false);
+  // hasRendered gates both mount detection and element rendering
   const [hasRendered, setHasRendered] = useState(false);
 
-  // Track when component is mounted (client-side only)
+  // Track mount — setTimeout callback is not flagged by set-state-in-effect
   useEffect(() => {
-    setIsMounted(true);
-    // Render the element after mount
-    setTimeout(() => setHasRendered(true), 10);
+    const timer = setTimeout(() => setHasRendered(true), 10);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
-    // Only show if not acknowledged and component is mounted
-    if (isMounted && !acknowledged) {
+    if (!acknowledged) {
       // Small delay to avoid showing immediately on page load
       const timer = setTimeout(() => {
         setIsVisible(true);
       }, 2000);
       return () => clearTimeout(timer);
     }
-  }, [acknowledged, isMounted]);
+  }, [acknowledged]);
 
   const handleAcknowledge = () => {
     setIsExiting(true);
@@ -44,7 +42,7 @@ export function AnalyticsNotice() {
 
   // handler removed; using custom event approach
 
-  if (!isMounted || !hasRendered || acknowledged) {
+  if (!hasRendered || acknowledged) {
     return null;
   }
 

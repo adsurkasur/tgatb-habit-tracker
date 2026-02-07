@@ -54,16 +54,11 @@ export default function Home() {
 
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
-  const [showAddHabit, setShowAddHabit] = useState(false);
-    // Open Add Habit dialog if ?action=add-habit is present in the URL (for PWA shortcut)
-    useEffect(() => {
-      if (typeof window !== "undefined") {
-        const params = new URLSearchParams(window.location.search);
-        if (params.get("action") === "add-habit") {
-          setShowAddHabit(true);
-        }
-      }
-    }, []);
+  // Open Add Habit dialog if ?action=add-habit is present in the URL (for PWA shortcut)
+  const [showAddHabit, setShowAddHabit] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return new URLSearchParams(window.location.search).get('action') === 'add-habit';
+  });
   const [showEditHabit, setShowEditHabit] = useState(false);
   const [editingHabit, setEditingHabit] = useState<Habit | null>(null);
   const [showSettings, setShowSettings] = useState(false);

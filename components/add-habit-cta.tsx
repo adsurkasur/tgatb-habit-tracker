@@ -9,27 +9,26 @@ interface AddHabitCTAProps {
 }
 
 export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
-  const [isVisible, setIsVisible] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [previousHasHabits, setPreviousHasHabits] = useState(hasHabits);
   const [animationKey, setAnimationKey] = useState(0);
 
-  // Handle state transitions with animations
+  // Detect prop change during render (React-approved pattern)
+  if (hasHabits !== previousHasHabits) {
+    setPreviousHasHabits(hasHabits);
+    setIsVisible(false);
+  }
+
+  // After exit animation completes, trigger enter animation
   useEffect(() => {
-    if (hasHabits !== previousHasHabits) {
-      // State is changing, trigger exit animation
-      setIsVisible(false);
-      
-      // After exit animation, update state and trigger enter animation
-      setTimeout(() => {
-        setPreviousHasHabits(hasHabits);
+    if (!isVisible) {
+      const timer = setTimeout(() => {
         setAnimationKey(prev => prev + 1);
         setIsVisible(true);
       }, 200);
-    } else {
-      // Initial render or same state
-      setIsVisible(true);
+      return () => clearTimeout(timer);
     }
-  }, [hasHabits, previousHasHabits]);
+  }, [isVisible]);
 
   if (hasHabits) {
     // Floating Action Button for when habits exist

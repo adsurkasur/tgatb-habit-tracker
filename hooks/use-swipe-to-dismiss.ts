@@ -16,7 +16,6 @@ export interface SwipeHandlers {
 
 export function useSwipeToDismiss(onDismiss: () => void, options?: { snapBackMs?: number; exitDelayMs?: number }) {
   const SNAP_BACK_MS = options?.snapBackMs ?? 2000;
-  const EXIT_DELAY_MS = options?.exitDelayMs ?? 2500;
 
   const [state, setState] = useState<SwipeState>({ isDragging: false, dragOffset: 0, isExiting: false, isSwipedAway: false });
   const exitTimerRef = useRef<NodeJS.Timeout | null>(null);
@@ -82,7 +81,7 @@ export function useSwipeToDismiss(onDismiss: () => void, options?: { snapBackMs?
       clearTimers();
       scheduleAutoDismiss(SNAP_BACK_MS, SNAP_BACK_MS + 300);
     }
-  }, [state.isDragging, state.isExiting, state.dragOffset, clearTimers, scheduleAutoDismiss, onDismiss]);
+  }, [state.isDragging, state.isExiting, state.dragOffset, clearTimers, scheduleAutoDismiss, onDismiss, SNAP_BACK_MS]);
 
   // Global mouse listeners while dragging
   useEffect(() => {

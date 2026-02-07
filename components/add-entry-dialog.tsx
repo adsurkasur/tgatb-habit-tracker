@@ -34,17 +34,17 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const habitNameRef = useRef<HTMLInputElement | null>(null);
 
   // When habits prop updates, select the last added habit if present
-  // This ensures the dropdown and selection reflect the latest habits
-  useEffect(() => {
-    if (lastAddedHabitId) {
-      const habit = habits.find(h => h.id === lastAddedHabitId) || null;
-      if (habit) {
-        setSelectedHabit(habit);
-        setLastAddedHabitId(null);
-        setTab("entry"); // Switch to entry tab after adding habit
-      }
+  // Adjust state during render (React-approved pattern)
+  const [prevHabitsLen, setPrevHabitsLen] = useState(habits.length);
+  if (lastAddedHabitId && habits.length !== prevHabitsLen) {
+    setPrevHabitsLen(habits.length);
+    const habit = habits.find(h => h.id === lastAddedHabitId) || null;
+    if (habit) {
+      setSelectedHabit(habit);
+      setLastAddedHabitId(null);
+      setTab("entry"); // Switch to entry tab after adding habit
     }
-  }, [habits, lastAddedHabitId]);
+  }
 
   // Focus habit name input when user switches to Add Habit tab
   useEffect(() => {

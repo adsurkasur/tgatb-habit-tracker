@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import { Button } from './ui/button';
 import { HabitStorage } from '@/lib/habit-storage';
@@ -26,34 +26,38 @@ type ConflictPayload = {
 export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: () => void }) {
   const [payload, setPayload] = useState<ConflictPayload | null>(null);
   const [choices, setChoices] = useState<Record<string, Record<string, FieldChoice>>>({});
+  const [prevOpen, setPrevOpen] = useState(false);
 
-  useEffect(() => {
-    if (!open) return;
-    try {
-      const raw = localStorage.getItem('sync:conflict');
-      const parsed = raw ? JSON.parse(raw) : null;
-      const asPayload: ConflictPayload | null = parsed as ConflictPayload | null;
-      setPayload(asPayload);
+  // Adjust state during render when dialog opens (React-approved pattern)
+  if (open !== prevOpen) {
+    setPrevOpen(open);
+    if (open) {
+      try {
+        const raw = localStorage.getItem('sync:conflict');
+        const parsed = raw ? JSON.parse(raw) : null;
+        const asPayload: ConflictPayload | null = parsed as ConflictPayload | null;
+        setPayload(asPayload);
 
-      // Initialize choices default to local for each conflict field
-      const byItem: Record<string, Record<string, FieldChoice>> = {};
-      if (asPayload?.conflicts && Array.isArray(asPayload.conflicts)) {
-        for (const item of asPayload.conflicts) {
-          const id = item.id;
-          byItem[id] = {};
-          const confFields = item.conflicts || {};
-          for (const f of Object.keys(confFields)) {
-            byItem[id][f] = 'local';
+        // Initialize choices default to local for each conflict field
+        const byItem: Record<string, Record<string, FieldChoice>> = {};
+        if (asPayload?.conflicts && Array.isArray(asPayload.conflicts)) {
+          for (const item of asPayload.conflicts) {
+            const id = item.id;
+            byItem[id] = {};
+            const confFields = item.conflicts || {};
+            for (const f of Object.keys(confFields)) {
+              byItem[id][f] = 'local';
+            }
           }
         }
+        setChoices(byItem);
+      } catch (err) {
+        console.warn('Failed to parse sync:conflict payload', err);
+        setPayload(null);
+        setChoices({});
       }
-      setChoices(byItem);
-    } catch (err) {
-      console.warn('Failed to parse sync:conflict payload', err);
-      setPayload(null);
-      setChoices({});
     }
-  }, [open]);
+  }
 
   if (!open || !payload) return null;
 

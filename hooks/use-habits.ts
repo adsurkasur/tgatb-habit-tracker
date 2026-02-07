@@ -1,14 +1,12 @@
 import { useState, useEffect, useRef } from "react";
 import { Habit, HabitType, UserSettings } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
-import { Filesystem, Directory, Encoding } from "@capacitor/filesystem";
-import { Share } from "@capacitor/share";
-import { SaveAs } from "capacitor-save-as";
 import { HabitStorage } from "@/lib/habit-storage";
 import { useAuth } from "@/hooks/use-auth";
 import { useCloudSync } from "@/hooks/use-cloud-sync";
 import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
+import { useTheme } from "@/components/theme-provider";
 
 export function useHabits() {
   // Clear all habits and logs from storage and state
@@ -25,8 +23,6 @@ export function useHabits() {
     setHabits([]);
   };
   // ...existing code...
-  // Animation timing constant (must match CSS animation duration in globals.css)
-  const HABIT_ANIMATION_DURATION = 250; // ms
   const [habits, setHabits] = useState<Habit[]>([]);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   /**
@@ -47,6 +43,7 @@ export function useHabits() {
     autoSync: false,
   });
   const { toast } = useToast();
+  const { setIsDark } = useTheme();
 
     useEffect(() => {
       (async () => {
@@ -255,13 +252,7 @@ export function useHabits() {
       setHabits(loadedHabits);
       setSettings(loadedSettings);
       // Immediately update theme if darkMode changed
-      try {
-        const { useTheme } = await import("@/components/theme-provider");
-        const theme = useTheme();
-        theme.setIsDark(loadedSettings.darkMode);
-      } catch (e) {
-        // If theme context not available, ignore
-      }
+      setIsDark(loadedSettings.darkMode);
       toast({
         title: 'Import successful',
         description: 'Your habit data has been imported.',
@@ -293,21 +284,26 @@ export function useHabits() {
   };
 
   // After initial load, if autoSync enabled and user is logged in, pull remote data once
+  const importDataRef = useRef(importData);
+  importDataRef.current = importData;
+  const pullOnceRef = useRef(pullOnce);
+  pullOnceRef.current = pullOnce;
+
   useEffect(() => {
     (async () => {
       try {
         const loadedSettings = await HabitStorage.getSettings();
         if (loadedSettings.autoSync && isLoggedIn) {
           // Pull and import
-          await pullOnce(async (json) => {
+          await pullOnceRef.current(async (json) => {
             try {
-              await importData(json);
-            } catch (e) {
+              await importDataRef.current(json);
+            } catch {
               // importData already shows toasts
             }
           });
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     })();

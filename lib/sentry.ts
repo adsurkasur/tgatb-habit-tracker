@@ -22,7 +22,6 @@ export async function initSentryClient(allow: boolean) {
     }
   } catch (err) {
     // fail safe – don't throw in production if Sentry can't be initialized
-    // eslint-disable-next-line no-console
     console.debug('Sentry initialization skipped or failed', err);
   }
 }

@@ -57,7 +57,7 @@ export function useNetworkStatus() {
               }
             });
             online = response.ok;
-          } catch (error) {
+          } catch {
             // If fetch fails, we're likely offline
             online = false;
           }
@@ -90,11 +90,11 @@ export function useNetworkStatus() {
       };
     };
 
-    const cleanup = setupNetworkDetection();
+    setupNetworkDetection();
 
     return () => {
       if (networkListener && typeof networkListener.remove === 'function') {
-        try { networkListener.remove(); } catch (err) { /* ignore */ }
+        try { networkListener.remove(); } catch { /* ignore */ }
       }
     };
   }, []);

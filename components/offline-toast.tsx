@@ -8,24 +8,32 @@ import { useSwipeToDismiss } from '@/hooks/use-swipe-to-dismiss';
 export function OfflineToast() {
   const { isOnline } = useNetworkStatus();
   const [showToast, setShowToast] = useState(false);
+  const [prevOnline, setPrevOnline] = useState(isOnline);
   const dismissToast = useCallback(() => {
     setShowToast(false);
   }, []);
 
   const { state, handlers, scheduleAutoDismiss, clearTimers } = useSwipeToDismiss(dismissToast, { exitDelayMs: 2500, snapBackMs: 2000 });
 
-  useEffect(() => {
-    clearTimers();
+  // Detect network state change during render (React-approved adjustment pattern)
+  if (isOnline !== prevOnline) {
+    setPrevOnline(isOnline);
     if (!isOnline) {
-      // Going offline - show toast
       setShowToast(true);
-      scheduleAutoDismiss(2500, 2800);
     } else if (showToast) {
-      // Going back online - start exit animation immediately
-      dismissToast();
+      // Dismiss immediately when going back online
+      setShowToast(false);
     }
-    return clearTimers;
-  }, [isOnline, showToast, clearTimers, dismissToast, scheduleAutoDismiss]);
+  }
+
+  // Handle auto-dismiss scheduling
+  useEffect(() => {
+    if (showToast && !isOnline) {
+      clearTimers();
+      scheduleAutoDismiss(2500, 2800);
+      return clearTimers;
+    }
+  }, [showToast, isOnline, clearTimers, scheduleAutoDismiss]);
 
   // Touch/mouse event handlers
   // handlers are provided by hook

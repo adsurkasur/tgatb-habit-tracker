@@ -38,7 +38,7 @@ export function useCloudSync() {
   const BASE_DELAY_MS = 1000; // 1s
 
   // storage helper: Preferences on mobile, localStorage on web
-  const storageGet = async (key: string) => {
+  const storageGet = useCallback(async (key: string) => {
     if (isCapacitorApp) {
       const { Preferences } = await import('@capacitor/preferences');
       const res = await Preferences.get({ key });
@@ -46,23 +46,23 @@ export function useCloudSync() {
     } else {
       return typeof window !== 'undefined' ? localStorage.getItem(key) : null;
     }
-  };
-  const storageSet = async (key: string, value: string) => {
+  }, [isCapacitorApp]);
+  const storageSet = useCallback(async (key: string, value: string) => {
     if (isCapacitorApp) {
       const { Preferences } = await import('@capacitor/preferences');
       await Preferences.set({ key, value });
     } else {
       if (typeof window !== 'undefined') localStorage.setItem(key, value);
     }
-  };
-  const storageRemove = async (key: string) => {
+  }, [isCapacitorApp]);
+  const storageRemove = useCallback(async (key: string) => {
     if (isCapacitorApp) {
       const { Preferences } = await import('@capacitor/preferences');
       await Preferences.remove({ key });
     } else {
       if (typeof window !== 'undefined') localStorage.removeItem(key);
     }
-  };
+  }, [isCapacitorApp]);
 
   function getErrorStatus(err: unknown): number | undefined {
     if (err && typeof err === 'object') {
@@ -180,7 +180,7 @@ export function useCloudSync() {
     syncRunningRef.current = false;
     hideLoading();
     return false;
-  }, [isOnline, isCapacitorApp, toast, showLoading, hideLoading]);
+  }, [isOnline, isCapacitorApp, toast, showLoading, hideLoading, storageSet, storageRemove]);
 
   const schedulePush = useCallback((options?: PushOptions) => {
     const debounceMs = options?.debounceMs ?? 2500;
@@ -195,7 +195,7 @@ export function useCloudSync() {
       await pushNow();
       debounceRef.current = null;
     }, debounceMs) as unknown as number;
-  }, [pushNow]);
+  }, [pushNow, storageSet]);
 
   const pullOnce = useCallback(async (onImport?: (jsonData: string) => void) => {
     if (!isOnline) {
@@ -331,7 +331,7 @@ export function useCloudSync() {
       console.error('[useCloudSync] pullOnce error:', err);
       return false;
     }
-  }, [isOnline, isCapacitorApp, toast]);
+  }, [isOnline, isCapacitorApp, toast, hideLoading, storageGet, storageSet]);
 
   // When network becomes available, attempt a pending sync
   useEffect(() => {
@@ -343,11 +343,11 @@ export function useCloudSync() {
           // try a background push without noisy toasts
           await pushNow({ showToast: false });
         }
-      } catch (e) {
+      } catch {
         // ignore
       }
     })();
-  }, [isOnline, pushNow]);
+  }, [isOnline, pushNow, storageGet]);
 
   return {
     schedulePush,

@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { ChevronRight, User, CloudUpload, CloudDownload, Download, Upload, RefreshCw } from "lucide-react";
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { Switch } from "@/components/ui/switch";
 import SyncConflictModal from '@/components/sync-conflict-modal';
 import { UserSettings } from "@shared/schema";
@@ -31,16 +31,13 @@ export function AccountDataSettings({
   };
 
   const [conflictOpen, setConflictOpen] = useState(false);
-  const [hasConflict, setHasConflict] = useState(false);
-
-  useEffect(() => {
+  const [hasConflict, setHasConflict] = useState(() => {
     try {
-      const raw = localStorage.getItem('sync:conflict');
-      setHasConflict(!!raw);
+      return !!localStorage.getItem('sync:conflict');
     } catch {
-      setHasConflict(false);
+      return false;
     }
-  }, []);
+  });
 
   return (
     <div className="space-y-4">

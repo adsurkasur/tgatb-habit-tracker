@@ -2,7 +2,7 @@ import { Dialog, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Habit } from "@shared/schema";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { X } from "lucide-react";
@@ -20,9 +20,16 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
   const [status, setStatus] = useState<boolean | null>(completed);
   const isMobile = useIsMobile();
 
-  useEffect(() => {
+  // Adjust state during render when props change (React-approved pattern)
+  const [prevCompleted, setPrevCompleted] = useState(completed);
+  const [prevHabit, setPrevHabit] = useState(habit);
+  const [prevDate, setPrevDate] = useState(date);
+  if (completed !== prevCompleted || habit !== prevHabit || date !== prevDate) {
+    setPrevCompleted(completed);
+    setPrevHabit(habit);
+    setPrevDate(date);
     setStatus(completed);
-  }, [completed, habit, date]);
+  }
 
   // Helper to get status labels based on habit type
   const getStatusLabels = (type: "good" | "bad") =>

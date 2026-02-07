@@ -16,8 +16,6 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) {
-  // Extra diagnostics for installability
-  // ...existing code...
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
 
@@ -30,25 +28,24 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   );
   const [deferredPrompt, setDeferredPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [showInstallPrompt, setShowInstallPrompt] = useState(false);
-  const [isInstalled, setIsInstalled] = useState(false);
-  const [fallbackInstall, setFallbackInstall] = useState(false); // NEW: fallback for browsers without beforeinstallprompt
+  const [isInstalled, setIsInstalled] = useState(() => {
+    if (typeof window === 'undefined') return false;
+    return window.matchMedia('(display-mode: standalone)').matches ||
+      (navigator as Navigator & { standalone?: boolean }).standalone === true;
+  });
+  const [fallbackInstall, setFallbackInstall] = useState(false);
   const { toast } = useToast();
 
   // Note: do not early-return before hooks (rules-of-hooks)
 
-  // Suppress on standalone pages (e.g., /privacy-policy)
-  useEffect(() => {
-    if (isStandalonePage && showInstallPrompt) {
-      setShowInstallPrompt(false);
+  // Track analyticsAcknowledged changes during render (React-approved adjustment pattern)
+  const [prevAnalyticsAcknowledged, setPrevAnalyticsAcknowledged] = useState(analyticsAcknowledged);
+  if (analyticsAcknowledged !== prevAnalyticsAcknowledged) {
+    setPrevAnalyticsAcknowledged(analyticsAcknowledged);
+    if (analyticsAcknowledged) {
+      setShowInstallPrompt(true);
     }
-  }, [isStandalonePage, showInstallPrompt]);
-
-  // Hide install prompt immediately if user has already dismissed it
-  useEffect(() => {
-    if (typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true' && showInstallPrompt) {
-      setShowInstallPrompt(false);
-    }
-  }, [showInstallPrompt]);
+  }
 
   // Listen for custom event from analytics notice
   useEffect(() => {
@@ -62,13 +59,6 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     };
   }, []);
 
-  // Watch for analyticsAcknowledged changes in the same tab
-  useEffect(() => {
-    if (analyticsAcknowledged) {
-      setShowInstallPrompt(true);
-    }
-  }, [analyticsAcknowledged]);
-
   useEffect(() => {
     // Listen for changes to analytics notice acknowledgment
     const handleStorage = (e: StorageEvent) => {
@@ -79,12 +69,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     };
     window.addEventListener('storage', handleStorage);
 
-    // Check if app is already installed
-    const isStandalone = window.matchMedia('(display-mode: standalone)').matches;
-    const isInWebAppiOS = (navigator as Navigator & { standalone?: boolean }).standalone === true;
-
-    if (isStandalone || isInWebAppiOS) {
-      setIsInstalled(true);
+    if (isInstalled) {
       return () => {
         window.removeEventListener('storage', handleStorage);
       };
@@ -137,13 +122,6 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
       window.removeEventListener('storage', handleStorage);
     };
   }, [isCapacitorApp, isInstalled]);
-
-  // Ensure prompt hides if dismissed in this session
-  useEffect(() => {
-    if (typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true' && showInstallPrompt) {
-      setShowInstallPrompt(false);
-    }
-  }, [showInstallPrompt]);
 
 
   // Platform detection
@@ -207,16 +185,16 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     });
   };
 
-  // Don't show if already installed or (analytics notice is not acknowledged and not manually triggered)
-  // If manually triggered (via settings), showInstallPrompt will be true even if analyticsAcknowledged is false
-  // Fix: Only check sessionStorage on client
-  // Fix: Only render the prompt on the client, never on the server
+  // Compute visibility guards during render instead of using effects
+  const isDismissedInSession = typeof window !== 'undefined' && sessionStorage.getItem('pwa-install-dismissed') === 'true';
+
   if (
     hidden ||
     typeof window === 'undefined' ||
     isCapacitorApp ||
     isInstalled ||
-    (typeof window !== 'undefined' && window.sessionStorage.getItem('pwa-install-dismissed') === 'true' && !analyticsAcknowledged) ||
+    isStandalonePage ||
+    isDismissedInSession ||
     !showInstallPrompt
   ) {
     return null;

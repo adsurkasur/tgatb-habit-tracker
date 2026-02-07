@@ -77,30 +77,40 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
   }, []);
 
-  const [cardPosition, setCardPosition] = useState<{ top: string | number; left: string | number; transform: string }>(
-    getInitialCardPosition(0)
-  );
+  // cardPosition is derived via useMemo below (not state)
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Reset to first step whenever overlay becomes visible
-  useEffect(() => {
+  // Adjust state during render for visibility and step changes (React-approved pattern)
+  const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
+  const [prevCurrentStep, setPrevCurrentStep] = useState(currentStep);
+  const [prevIsPositionReady, setPrevIsPositionReady] = useState(isPositionReady);
+
+  if (isVisible !== prevIsVisible) {
+    setPrevIsVisible(isVisible);
     if (isVisible) {
       setCurrentStep(0);
-    }
-  }, [isVisible]);
-
-  // Update card position when step changes to use appropriate initial position
-  useEffect(() => {
-    if (isVisible) {
-      // Reset position state and movement flag for new step
+    } else {
+      setAllPositions({});
       setIsPositionReady(false);
+      setCardOpacity(0);
+      setIsTransitioning(false);
       setShouldMoveToFinalPosition(false);
-      
-      // Update the initial position for the new step
-      const newInitialPosition = getInitialCardPosition(currentStep);
-      setCardPosition(newInitialPosition);
     }
-  }, [currentStep, isVisible, getInitialCardPosition]);
+  }
+
+  if (isVisible && currentStep !== prevCurrentStep) {
+    setPrevCurrentStep(currentStep);
+    setIsPositionReady(false);
+    setShouldMoveToFinalPosition(false);
+  }
+
+  // Detect isPositionReady going true → trigger final position calculation
+  if (isPositionReady !== prevIsPositionReady) {
+    setPrevIsPositionReady(isPositionReady);
+    if (isPositionReady && isVisible) {
+      setShouldMoveToFinalPosition(true);
+    }
+  }
 
   // Notify parent of step changes
   useEffect(() => {
@@ -161,11 +171,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
   // Calculate position for current step only when needed
   useEffect(() => {
-    if (!isVisible) {
-      setAllPositions({});
-      setIsPositionReady(false);
-      return;
-    }
+    if (!isVisible) return;
 
     const calculateCurrentStepPosition = () => {
       const stepData = currentStepData;
@@ -241,20 +247,17 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     };
   }, [isVisible, currentStep, currentStepData, currentStepData.id]);
 
-  // Calculate and set card position when position data is ready AND we should move to final position
-  useEffect(() => {
+  // Card position is derived from allPositions + step data (no effect needed)
+  const cardPosition = useMemo(() => {
     if (!isVisible || !isPositionReady || !shouldMoveToFinalPosition) {
-      return;
+      return getInitialCardPosition(currentStep);
     }
 
     const stepTargetPosition = allPositions[currentStep];
     const step = currentStepData;
 
     if (!stepTargetPosition) {
-      // For center-positioned steps (welcome, complete), use the initial position
-      const initialPosition = getInitialCardPosition(currentStep);
-      setCardPosition(initialPosition);
-      return;
+      return getInitialCardPosition(currentStep);
     }
 
     const { x, y, width, height } = stepTargetPosition;
@@ -349,38 +352,26 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       }
     }
 
-    setCardPosition({
+    return {
       top: calculatedTop,
       left: calculatedLeft,
       transform: calculatedTransform
-    });
-  }, [isVisible, isPositionReady, allPositions, currentStep, shouldMoveToFinalPosition, currentStepData, getInitialCardPosition]);
+    };
+  }, [isVisible, isPositionReady, shouldMoveToFinalPosition, allPositions, currentStep, currentStepData, getInitialCardPosition]);
 
   // Simple fade control - card fades in when position is ready
   useEffect(() => {
-    if (!isVisible) {
-      setCardOpacity(0);
-      setIsTransitioning(false);
-      setShouldMoveToFinalPosition(false);
-      return;
-    }
+    if (!isVisible || !isPositionReady) return;
 
-    if (isPositionReady) {
-      // Position is ready — trigger final position calculation then fade in
-      setShouldMoveToFinalPosition(true);
-
-      const timer = setTimeout(() => {
-        setCardOpacity(1);
-        // Mark transition complete after opacity fade finishes (200ms matches CSS)
-        setTimeout(() => {
-          setIsTransitioning(false);
-        }, 220);
-      }, 20); // Micro-delay to let position apply before fading in
-      return () => clearTimeout(timer);
-    } else {
-      // Position not ready, keep card hidden
-      setCardOpacity(0);
-    }
+    // Position is ready — fade in the card
+    const timer = setTimeout(() => {
+      setCardOpacity(1);
+      // Mark transition complete after opacity fade finishes (200ms matches CSS)
+      setTimeout(() => {
+        setIsTransitioning(false);
+      }, 220);
+    }, 20); // Micro-delay to let position apply before fading in
+    return () => clearTimeout(timer);
   }, [isVisible, isPositionReady, currentStep, currentStepData.id]);
 
   const transitionStep = useCallback((direction: 1 | -1) => {

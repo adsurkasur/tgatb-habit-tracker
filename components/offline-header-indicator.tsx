@@ -4,37 +4,36 @@ import { useNetworkStatus } from '@/hooks/use-network-status';
 import { WifiOff } from 'lucide-react';
 import { useState, useEffect } from 'react';
 
+type Phase = 'hidden' | 'entering' | 'visible' | 'hiding';
+
 export function OfflineHeaderIndicator() {
   const { isOnline, isInitialized } = useNetworkStatus();
-  const [shouldShow, setShouldShow] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
+  const [phase, setPhase] = useState<Phase>(!isOnline ? 'visible' : 'hidden');
+  const [prevOnline, setPrevOnline] = useState(isOnline);
 
+  // Detect network state change during render (React-approved adjustment pattern)
+  if (isInitialized && isOnline !== prevOnline) {
+    setPrevOnline(isOnline);
+    setPhase(!isOnline ? 'entering' : 'hiding');
+  }
+  // Handle pre-initialization offline state
+  if (!isInitialized && !isOnline && phase === 'hidden') {
+    setPhase('visible');
+  }
+
+  // Handle delayed phase transitions (timer callbacks, not direct effect setState)
   useEffect(() => {
-    // Only start showing/hiding logic after initialization is complete
-    if (!isInitialized) return;
-
-    if (!isOnline) {
-      // Going offline - show indicator
-      setShouldShow(true);
-      // Trigger fade in after a brief delay to ensure element is mounted
-      setTimeout(() => setIsVisible(true), 10);
-    } else {
-      // Going online - start fade out
-      setIsVisible(false);
-      // Hide element after fade out completes
-      setTimeout(() => setShouldShow(false), 300);
+    if (phase === 'entering') {
+      const t = setTimeout(() => setPhase('visible'), 10);
+      return () => clearTimeout(t);
     }
-  }, [isOnline, isInitialized]);
-
-  // Before initialization is complete, check if we should show based on current state
-  useEffect(() => {
-    if (!isInitialized && !isOnline) {
-      setShouldShow(true);
-      setIsVisible(true);
+    if (phase === 'hiding') {
+      const t = setTimeout(() => setPhase('hidden'), 300);
+      return () => clearTimeout(t);
     }
-  }, [isOnline, isInitialized]);
+  }, [phase]);
 
-  if (!shouldShow) {
+  if (phase === 'hidden') {
     return <div className="w-10" />; // Spacer for balance when online
   }
 
@@ -42,7 +41,7 @@ export function OfflineHeaderIndicator() {
     <div className="flex items-center justify-center w-10">
       <div 
         className={`p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 transition-opacity duration-300 ease-in-out ${
-          isVisible ? 'opacity-100' : 'opacity-0'
+          phase === 'visible' ? 'opacity-100' : 'opacity-0'
         }`}
         title="You are offline"
       >

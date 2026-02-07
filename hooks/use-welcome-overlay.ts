@@ -19,7 +19,7 @@ export function useWelcomeOverlay() {
           }, 1000);
           return () => clearTimeout(timer);
         }
-      } catch (e) {
+      } catch {
         // fallback: do nothing
       }
     })();

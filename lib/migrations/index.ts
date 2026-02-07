@@ -39,7 +39,6 @@ export async function runMigrations(bundle: ExportBundle): Promise<ExportBundle>
   for (const m of migrations) {
     if (typeof m.up === "function") {
       // migration receives and returns bundle (idempotent)
-      // eslint-disable-next-line no-await-in-loop
       result = await m.up(result);
     }
   }

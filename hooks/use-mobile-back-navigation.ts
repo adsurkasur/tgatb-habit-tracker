@@ -63,7 +63,6 @@ interface ModalState {
 export function useMobileModalManager() {
   const isMobile = useIsMobile();
   const modalsRef = useRef<Map<string, ModalState>>(new Map());
-  const isHandlingBack = useRef(false);
 
   // Register a modal with the manager
   const registerModal = (id: string, modalState: ModalState) => {
