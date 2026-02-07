@@ -136,6 +136,16 @@ export class HabitStorage {
       return newLog;
     }
 
+    /**
+     * Remove a log entry for a habit on a given date (revert to untracked).
+     */
+    static removeLog(habitId: string, date: string): void {
+      const logs = this.getLogs();
+      const filteredLogs = logs.filter(log => !(log.habitId === habitId && log.date === date));
+      this.saveLogs(filteredLogs);
+      this.updateStreak(habitId);
+    }
+
   private static updateStreak(habitId: string): void {
     const habits = this.getHabits();
     const habitIndex = habits.findIndex(h => h.id === habitId);

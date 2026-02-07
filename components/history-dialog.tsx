@@ -40,6 +40,8 @@ import {
   BarChart3,
   Clock,
   Award,
+  Pencil,
+  Undo2,
 } from 'lucide-react';
 import {
   ResponsiveDialog,
@@ -61,6 +63,7 @@ interface HistoryDialogProps {
   onOpenChange: (open: boolean) => void;
   habits: Habit[];
   addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
+  removeLog: (habitId: string, date: string) => void;
 }
 
 // DayLog moved to lib/history.ts
@@ -73,7 +76,7 @@ interface StatCard {
   color: string;
 }
 
-export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: HistoryDialogProps) {
+export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, removeLog }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
 
@@ -102,7 +105,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
 
   return (
     <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl max-h-[85vh] flex flex-col">
+      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl h-[85vh] flex flex-col" drawerClassName="h-[85vh] flex flex-col">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
@@ -110,8 +113,8 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
-        <ResponsiveDialogBody>
-          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col">
+        <ResponsiveDialogBody className="flex-1 min-h-0 overflow-hidden">
+          <Tabs value={selectedTab} onValueChange={setSelectedTab} className="h-full flex flex-col">
             <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 shrink-0">
               <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
@@ -128,15 +131,15 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="flex-1 overflow-hidden mt-0">
+            <TabsContent value="overview" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <OverviewTabContent habits={habits} statistics={statistics} />
             </TabsContent>
 
-            <TabsContent value="calendar" className="flex-1 overflow-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} habits={habits} addHabit={useHabits().addHabit} />
+            <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto mt-0">
+              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} removeLog={removeLog} habits={habits} addHabit={useHabits().addHabit} />
             </TabsContent>
 
-            <TabsContent value="timeline" className="flex-1 overflow-hidden mt-0">
+            <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <TimelineTabContent dailyLogs={dailyLogs} />
             </TabsContent>
           </Tabs>
@@ -286,7 +289,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
 
 function OverviewTabContent({ habits, statistics }: { habits: Habit[]; statistics: ReturnType<typeof computeStatSummary> }) {
   return (
-    <div className="h-full overflow-y-auto">
+    <div>
       <StatGrid statistics={statistics} />
       <TopHabits habits={habits} />
       <HabitBreakdown habits={habits} />
@@ -300,6 +303,7 @@ function CalendarTabContent({
   completedDates,
   selectedDayLog,
   addOrUpdateLog,
+  removeLog,
   habits,
   addHabit,
 }: {
@@ -308,6 +312,7 @@ function CalendarTabContent({
   completedDates: Set<string>;
   selectedDayLog: DayLog | null | undefined;
   addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
+  removeLog: (habitId: string, date: string) => void;
   habits: Habit[];
   addHabit: (habit: { name: string; type: "good" | "bad" }) => Habit;
 }) {
@@ -354,14 +359,14 @@ function CalendarTabContent({
   };
 
   return (
-    <div className="h-full overflow-y-auto">
+    <div>
       <div className="flex flex-col items-center gap-4 sm:gap-6">
         <div className="flex justify-center w-full">
           <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="rounded-lg border [--cell-size:2.25rem]"
+            className="rounded-lg border w-full max-w-[350px] sm:max-w-none [--cell-size:2.5rem] sm:[--cell-size:2.75rem]"
             disabled={{ after: new Date() }}
             modifiers={{
               completed: date => completedDates.has(formatLocalDate(date)),
@@ -429,16 +434,33 @@ function CalendarTabContent({
                             {icon}
                             <span className={nameClass}>{habit.name}</span>
                           </div>
-                          <div className="flex items-center gap-2">
+                          <div className="flex items-center gap-1.5 shrink-0 ml-2">
                             <Button
                               type="button"
-                              size="sm"
-                              variant="outline"
+                              size="icon"
+                              variant="ghost"
                               onClick={() => handleEditClick(habit, habit.completed)}
-                              className="ml-2"
+                              className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent"
+                              title="Edit entry"
                             >
-                              Edit Entry
+                              <Pencil className="w-4 h-4" />
+                              <span className="sr-only">Edit entry</span>
                             </Button>
+                            {habit.completed !== null && habit.completed !== undefined && (
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => {
+                                  if (formattedDate) removeLog(habit.id, formattedDate);
+                                }}
+                                className="h-8 w-8 text-muted-foreground hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                title="Clear status"
+                              >
+                                <Undo2 className="w-4 h-4" />
+                                <span className="sr-only">Clear status</span>
+                              </Button>
+                            )}
                           </div>
                         </div>
                       );
@@ -495,7 +517,7 @@ function CalendarTabContent({
 
 function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
   return (
-    <div className="h-full overflow-y-auto">
+    <div>
       <div className="space-y-3 sm:space-y-4">
         {dailyLogs.map((log, index) => {
           const completedCount = log.habits.filter(h => h.completed).length;

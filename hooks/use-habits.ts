@@ -283,6 +283,16 @@ export function useHabits() {
     try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
 
+  /**
+   * Remove a log for a habit on a given date (revert to untracked)
+   */
+  const removeLog = (habitId: string, date: string) => {
+    HabitStorage.removeLog(habitId, date);
+    const updatedHabits = HabitStorage.getHabits();
+    setHabits(updatedHabits);
+    try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
+  };
+
   // After initial load, if autoSync enabled and user is logged in, pull remote data once
   const importDataRef = useRef(importData);
   importDataRef.current = importData;
@@ -332,5 +342,6 @@ export function useHabits() {
     exportData,
     importData,
     addOrUpdateLog,
+    removeLog,
   };
 }

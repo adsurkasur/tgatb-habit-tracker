@@ -50,6 +50,7 @@ export default function Home() {
     navigateToHabitIndex,
     updateSettings,
     addOrUpdateLog,
+    removeLog,
   } = useHabits();
 
   // Theme context for instant dark mode update
@@ -451,6 +452,7 @@ export default function Home() {
           onOpenChange={setShowHistory}
           habits={allHabits}
           addOrUpdateLog={addOrUpdateLog}
+          removeLog={removeLog}
         />
 
         <AboutDialog 
