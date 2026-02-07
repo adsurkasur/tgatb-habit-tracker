@@ -1,6 +1,6 @@
 ﻿// scripts/bump-ver.cjs
 // Bumps the version in package.json based on the provided argument.
-// Usage: node scripts/bump-ver.cjs <major|minor|patch|revision>
+// Usage: node scripts/bump-ver.cjs <major|minor|patch|revision|help>
 //
 // Version format: major.minor.patch.revision (e.g., 0.4.0.1)
 //
@@ -18,13 +18,33 @@ const ALIASES = { rev: 'revision', r: 'revision', p: 'patch', m: 'minor', M: 'ma
 
 const pkgPath = path.resolve(__dirname, '../package.json');
 
+const HELP_TEXT = `
+bump-ver.cjs — Bumps the version in package.json.
+
+Usage: node scripts/bump-ver.cjs <major|minor|patch|revision|help>
+
+Version format: major.minor.patch.revision (e.g., 0.4.0.1)
+
+Aliases: M=major, m=minor, p=patch, r/rev=revision
+
+Examples:
+  node scripts/bump-ver.cjs revision  =>  0.4.0.1 -> 0.4.0.2
+  node scripts/bump-ver.cjs patch     =>  0.4.0.2 -> 0.4.1.0
+  node scripts/bump-ver.cjs minor     =>  0.4.1.0 -> 0.5.0.0
+  node scripts/bump-ver.cjs major     =>  0.5.0.0 -> 1.0.0.0
+`.trim();
+
 // Parse argument
 let bumpType = process.argv[2];
 
 if (!bumpType) {
-  console.error('Usage: node scripts/bump-ver.cjs <major|minor|patch|revision>');
-  console.error('  Aliases: M=major, m=minor, p=patch, r/rev=revision');
+  console.error(HELP_TEXT);
   process.exit(1);
+}
+
+if (bumpType === '--help' || bumpType === '-h' || bumpType === 'help') {
+  console.log(HELP_TEXT);
+  process.exit(0);
 }
 
 // Resolve aliases
