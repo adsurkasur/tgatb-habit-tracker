@@ -135,6 +135,70 @@ export default function PrivacyPolicyPage() {
             </ul>
           </section>
 
+          <section id="delete-data">
+            <h2 className="text-xl font-semibold mb-3">Delete Your Data</h2>
+            <p className="mb-3">
+              TGATB Habit Tracker stores your habit data locally on your device. You can delete
+              all your data at any time without needing to delete your account:
+            </p>
+            <ol className="list-decimal pl-6 space-y-2 mb-4">
+              <li>Open the app</li>
+              <li>Tap the <strong>menu icon</strong> (hamburger menu) in the top-left corner</li>
+              <li>Scroll down to <strong>Habit Management</strong></li>
+              <li>Tap <strong>&quot;Delete All Habits&quot;</strong></li>
+              <li>Confirm the deletion when prompted</li>
+            </ol>
+            <p className="mb-3">This will permanently delete:</p>
+            <ul className="list-disc pl-6 space-y-1 mb-4">
+              <li>All your habits and their names</li>
+              <li>All completion logs and streak data</li>
+              <li>All history records</li>
+            </ul>
+            <p className="mb-3">This will <strong>not</strong> delete:</p>
+            <ul className="list-disc pl-6 space-y-1 mb-4">
+              <li>Your app settings (dark mode, language, etc.) — these reset when you clear app data or uninstall</li>
+              <li>Any backup files previously saved to your Google Drive — you can delete those directly from your Google Drive</li>
+            </ul>
+            <p>
+              Alternatively, you can <strong>uninstall the app</strong> or <strong>clear app data</strong> from
+              your device settings to remove all locally stored information.
+            </p>
+          </section>
+
+          <section id="delete-account">
+            <h2 className="text-xl font-semibold mb-3">Delete Your Account</h2>
+            <p className="mb-3">
+              If you signed in with Google and want to completely remove your account and all
+              associated data, follow these steps:
+            </p>
+            <ol className="list-decimal pl-6 space-y-2 mb-4">
+              <li>Open the app</li>
+              <li>Tap the <strong>menu icon</strong> (hamburger menu) in the top-left corner</li>
+              <li>Scroll down to <strong>Habit Management</strong> and tap <strong>&quot;Delete All Habits&quot;</strong> to remove your data</li>
+              <li>Scroll to <strong>Account &amp; Data</strong> and tap <strong>&quot;Logout&quot;</strong> to sign out</li>
+              <li>Uninstall the app to remove all remaining local data</li>
+            </ol>
+            <p className="mb-3">To remove your Google Drive backup files:</p>
+            <ol className="list-decimal pl-6 space-y-2 mb-4">
+              <li>Go to <a href="https://drive.google.com" className="text-primary underline">Google Drive</a></li>
+              <li>Search for &quot;tgatb&quot; or &quot;habit&quot; to find backup files</li>
+              <li>Delete the backup files</li>
+            </ol>
+            <p className="mb-3">To revoke the app&apos;s access to your Google account:</p>
+            <ol className="list-decimal pl-6 space-y-2 mb-4">
+              <li>Go to <a href="https://myaccount.google.com/permissions" className="text-primary underline">Google Account Permissions</a></li>
+              <li>Find &quot;TGATB Habit Tracker&quot; in the list</li>
+              <li>Click <strong>&quot;Remove Access&quot;</strong></li>
+            </ol>
+            <p>
+              After completing these steps, all your data and account access will be fully removed.
+              If you need assistance, contact us at{" "}
+              <a href="mailto:adsurkasur.dev@gmail.com" className="text-primary underline">
+                adsurkasur.dev@gmail.com
+              </a>.
+            </p>
+          </section>
+
           <section>
             <h2 className="text-xl font-semibold mb-3">Data Security</h2>
             <p>
