@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from 'react';
-import { Dialog, DialogContent, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from './ui/dialog';
 import { Button } from './ui/button';
+import { X } from 'lucide-react';
 import { HabitStorage } from '@/lib/habit-storage';
 
 import type { Habit, HabitLog } from '@shared/schema';
@@ -134,8 +135,20 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
 
   return (
     <Dialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
-      <DialogContent>
-        <DialogTitle>Sync Conflicts Detected</DialogTitle>
+      <DialogContent className="[&>button]:hidden">
+        <DialogHeader className="shrink-0 border-b border-border pb-4">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold">Sync Conflicts Detected</DialogTitle>
+            <button
+              type="button"
+              onClick={() => onClose()}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
+        </DialogHeader>
         <DialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</DialogDescription>
         <div className="space-y-4">
         <div className="max-h-72 overflow-auto">

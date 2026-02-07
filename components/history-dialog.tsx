@@ -135,16 +135,16 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
 
 function HistoryHeader({ onClose }: { onClose: () => void }) {
   return (
-    <DialogHeader className="px-6 py-4 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative">
-      <div className="flex items-center w-full justify-between">
-        <DialogTitle className="flex items-center gap-2">
+    <DialogHeader className="shrink-0 border-b border-border pb-4">
+      <div className="flex items-center justify-between">
+        <DialogTitle className="text-xl font-semibold flex items-center gap-2">
           <BarChart3 className="w-5 h-5" />
           Habit History & Analytics
         </DialogTitle>
         <button
           type="button"
           onClick={onClose}
-          className="flex items-center justify-center w-6 h-6 rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none hover:bg-accent"
+          className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
         >
           <X className="h-4 w-4" />
           <span className="sr-only">Close</span>

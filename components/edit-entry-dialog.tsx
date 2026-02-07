@@ -66,22 +66,18 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`w-full max-w-lg mx-auto material-radius-lg surface-elevation-3 ${isMobile ? "p-0 flex flex-col gap-0 h-fit max-h-[400px]" : ""}`}>
-        <DialogHeader className={`${isMobile ? "px-6 pt-2 pb-1 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left!" : ""}`}>
-          <div className={`flex items-center w-full ${isMobile ? "justify-between" : ""}`}>
-            <DialogTitle className="text-xl font-semibold">
-              {isMobile ? "Edit Entry" : `Edit Entry for ${habit.name}`}
-            </DialogTitle>
-            {isMobile && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0"
-              >
-                <X className="w-5 h-5" />
-              </Button>
-            )}
+      <MobileDialogContent className={`w-full max-w-lg mx-auto material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "p-0 flex flex-col gap-0 h-fit max-h-[400px]" : ""}`}>
+        <DialogHeader className="shrink-0 border-b border-border pb-4">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold">Edit Entry</DialogTitle>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </button>
           </div>
         </DialogHeader>
         <div className={`${isMobile ? "overflow-y-auto" : ""}`}>

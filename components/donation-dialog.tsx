@@ -170,9 +170,9 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
   <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-full max-w-2xl max-h-[85vh] flex flex-col items-stretch justify-start"}`}>
-        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
-          <div className="flex items-center w-full justify-between">
-            <DialogTitle className="flex items-center gap-2">
+        <DialogHeader className="shrink-0 border-b border-border pb-4">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold flex items-center gap-2">
               <Heart className="w-5 h-5 text-red-500" />
               Support Me
             </DialogTitle>
@@ -243,12 +243,11 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               </div>
             </Card>
             {/* QRIS Modal */}
-            {showQrisModal && (
               <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
                 <MobileDialogContent className={`w-full max-w-lg material-radius-lg surface-elevation-3 [&>button]:hidden p-0 flex flex-col gap-0`}>
-                  <DialogHeader className={`px-6 py-2 border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
-                    <div className="flex items-center w-full justify-between">
-                      <DialogTitle className="flex items-center gap-2">
+                  <DialogHeader className="shrink-0 border-b border-border pb-4">
+                    <div className="flex items-center justify-between">
+                      <DialogTitle className="text-xl font-semibold flex items-center gap-2">
                         {/* QR code icon - theme adaptive */}
                         <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
                         QRIS
@@ -258,7 +257,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                         onClick={() => setShowQrisModal(false)}
                         className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
                       >
-                        <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                        <X className="h-4 w-4" />
                         <span className="sr-only">Close</span>
                       </button>
                     </div>
@@ -318,7 +317,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                   </div>
                 </MobileDialogContent>
               </Dialog>
-            )}
           </div>
 
           {/* Cryptocurrency */}

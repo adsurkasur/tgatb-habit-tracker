@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { useState, useEffect, useRef } from "react";
 import { Habit } from "@shared/schema";
-import { CheckCircle, XCircle } from "lucide-react";
+import { CheckCircle, XCircle, X } from "lucide-react";
 import {
   Select,
   SelectTrigger,
@@ -86,9 +86,19 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className="w-full max-w-lg mx-auto material-radius-lg surface-elevation-3">
-        <DialogHeader>
-          <DialogTitle>Add Entry for {date}</DialogTitle>
+      <MobileDialogContent className="w-full max-w-lg mx-auto material-radius-lg surface-elevation-3 [&>button]:hidden">
+        <DialogHeader className="shrink-0 border-b border-border pb-4">
+          <div className="flex items-center justify-between">
+            <DialogTitle className="text-xl font-semibold">Add Entry for {date}</DialogTitle>
+            <button
+              type="button"
+              onClick={() => onOpenChange(false)}
+              className="rounded-sm opacity-70 ring-offset-background transition-opacity hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center"
+            >
+              <X className="h-4 w-4" />
+              <span className="sr-only">Close</span>
+            </button>
+          </div>
         </DialogHeader>
         <Tabs value={tab} onValueChange={setTab} className="mt-4">
           <TabsList className="grid grid-cols-2 mb-4">
