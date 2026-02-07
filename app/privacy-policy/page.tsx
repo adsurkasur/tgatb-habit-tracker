@@ -20,7 +20,7 @@ export default function PrivacyPolicyPage() {
               TGATB Habit Tracker (&quot;The Good and The Bad&quot;) is a minimalist habit tracking
               application developed by adsurkasur. This Privacy Policy explains how we handle
               your information when you use our web application at{" "}
-              <a href="https://tgatb.vercel.app" className="text-primary underline">tgatb.vercel.app</a>{" "}
+              <a href="https://www.tgatb.click" className="text-primary underline">www.tgatb.click</a>{" "}
               and our Android mobile application.
             </p>
           </section>
