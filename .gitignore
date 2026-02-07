@@ -157,5 +157,6 @@ storybook-static/
 # Miscellaneous
 *.log
 *.cache
-.cache/ 
+.cache/
 ai-context.md
+build-output/
