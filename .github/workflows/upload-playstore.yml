@@ -15,6 +15,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Remove BOM from gradle.properties
+        run: |
+          # Remove UTF-8 BOM if present (first 3 bytes EF BB BF)
+          FILE="android/gradle.properties"
+          if [ -f "$FILE" ]; then
+            sed -i '1s/^\xEF\xBB\xBF//' "$FILE"
+            echo "gradle.properties first bytes:"
+            head -c 30 "$FILE" | xxd
+          fi
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
