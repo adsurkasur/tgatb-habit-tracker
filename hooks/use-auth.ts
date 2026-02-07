@@ -5,6 +5,20 @@ import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
 import { TokenStorage } from '@/lib/utils';
 
+/** Detect if an auth error is a user-initiated cancellation (popup closed, back pressed, etc.) */
+function isAuthCancellation(err: unknown): boolean {
+  if (!(err instanceof Error)) return false;
+  const msg = (err.message || '').toLowerCase();
+  const code = (err as { code?: string }).code || '';
+  // Web Firebase popup closed / duplicate popup
+  if (code === 'auth/popup-closed-by-user' || code === 'auth/cancelled-popup-request') return true;
+  // Android Credential Manager cancellation
+  if (msg.includes('cancel')) return true;
+  // Android legacy Google Sign-In cancellation (status code 12501)
+  if (msg.includes('12501')) return true;
+  return false;
+}
+
 export interface AuthProfile {
   name?: string;
   photoUrl?: string;
@@ -197,6 +211,11 @@ export function useAuth() {
         }
       }
     } catch (err) {
+      // User cancelled sign-in (closed popup, pressed back, etc.) — not an error
+      if (isAuthCancellation(err)) {
+        console.debug('[useAuth] Sign-in cancelled by user');
+        return;
+      }
       if (err instanceof Error && err.message.includes('No credentials available')) {
         toast({
           title: "Sign-in Error",

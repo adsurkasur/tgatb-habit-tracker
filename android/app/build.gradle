@@ -7,8 +7,8 @@ android {
     applicationId "com.tgatb.habittracker"
     minSdkVersion rootProject.ext.minSdkVersion
     targetSdkVersion rootProject.ext.targetSdkVersion
-    versionCode 400901
-    versionName "0.4.0.1"
+    versionCode 400902
+    versionName "0.4.0.2"
         ndk {
             debugSymbolLevel 'FULL'
         }
