@@ -2,9 +2,10 @@ import React, { useState, useRef } from 'react';
 import Image from 'next/image';
 import { Dialog, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { MobileDialogContent } from '@/components/ui/mobile-dialog';
+import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, X } from 'lucide-react';
+import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, Download, QrCode, X } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { useIsMobile } from '@/hooks/use-mobile';
@@ -231,8 +232,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               <div className="flex items-center justify-between w-full">
                 <div className="flex items-center space-x-3">
                   <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
-                    {/* QR code icon (Lucide) - theme adaptive */}
-                    <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                    <QrCode className="w-5 h-5" />
                   </div>
                   <div>
                     <h4 className="font-medium">QRIS</h4>
@@ -244,12 +244,11 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             </Card>
             {/* QRIS Modal */}
               <Dialog open={showQrisModal} onOpenChange={setShowQrisModal}>
-                <MobileDialogContent className={`w-full max-w-lg material-radius-lg surface-elevation-3 [&>button]:hidden p-0 flex flex-col gap-0`}>
+                <MobileDialogContent className="w-full max-w-lg material-radius-lg surface-elevation-3 [&>button]:hidden">
                   <DialogHeader className="shrink-0 border-b border-border pb-4">
                     <div className="flex items-center justify-between">
                       <DialogTitle className="text-xl font-semibold flex items-center gap-2">
-                        {/* QR code icon - theme adaptive */}
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h4v4H3V3zm0 8h4v4H3v-4zm8-8h4v4h-4V3zm0 8h4v4h-4v-4zm5 5h3v3h-3v-3z" /></svg>
+                        <QrCode className="w-5 h-5 text-primary" />
                         QRIS
                       </DialogTitle>
                       <button
@@ -262,21 +261,20 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                       </button>
                     </div>
                   </DialogHeader>
-                  <div className="overflow-y-auto px-6 pt-4 pb-4 flex flex-col items-center">
-                    <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg shadow-lg w-full max-w-xs" />
-                    <button
-                      type="button"
-                      className="mt-6 px-4 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary/80 transition-colors"
+                  <div className="flex flex-col items-center gap-4">
+                    <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
+                    <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
+                    <Button
+                      variant="outline"
+                      className="w-full max-w-xs"
                       onClick={async () => {
                         const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
                         const filename = 'qris-ade.jpg';
                         const imageUrl = '/payment/qris-ade.jpg';
                         if (isNative) {
                           try {
-                            // Fetch image as blob
                             const res = await fetch(imageUrl);
                             const blob = await res.blob();
-                            // Convert to base64
                             const reader = new FileReader();
                             reader.onloadend = async () => {
                               const base64 = reader.result?.toString().split(',')[1];
@@ -298,7 +296,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                             toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
                           }
                         } else {
-                          // Web: anchor download
                           const link = document.createElement('a');
                           link.href = imageUrl;
                           link.download = filename;
@@ -308,12 +305,9 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                         }
                       }}
                     >
-                      <span className="flex items-center gap-2">
-                        {/* Download icon (Lucide) */}
-                        <svg xmlns="http://www.w3.org/2000/svg" className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v2a2 2 0 002 2h12a2 2 0 002-2v-2M7 10l5 5 5-5M12 15V3" /></svg>
-                        Download QRIS
-                      </span>
-                    </button>
+                      <Download className="w-4 h-4" />
+                      Download QRIS
+                    </Button>
                   </div>
                 </MobileDialogContent>
               </Dialog>
