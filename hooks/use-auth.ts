@@ -77,6 +77,34 @@ export function useAuth() {
       let name: string | undefined = undefined;
       let photoUrl: string | undefined = undefined;
 
+      // Check for pending Google redirect sign-in result (mobile web flow)
+      if (typeof window !== 'undefined' && !isCapacitorApp) {
+        try {
+          const { getGoogleRedirectResult } = await import("../web/google-auth");
+          const redirectResult = await getGoogleRedirectResult();
+          if (redirectResult.accessToken) {
+            console.debug('[useAuth] Redirect sign-in successful');
+            await TokenStorage.setAccessToken(redirectResult.accessToken);
+            const user = redirectResult.user;
+            if (user) {
+              localStorage.setItem('googleProfileName', user.displayName || '');
+              localStorage.setItem('googleProfilePhoto', user.photoURL || '');
+              setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
+            }
+            setIsLoggedIn(true);
+            setClientReady(true);
+            toast({
+              title: "Sign-in Successful",
+              description: "You are now signed in with Google.",
+              duration: 3000,
+            });
+            return;
+          }
+        } catch (err) {
+          console.warn('[useAuth] Redirect result check failed:', err);
+        }
+      }
+
       if (typeof window !== 'undefined' && !isCapacitorApp) {
         accessToken = await TokenStorage.getAccessToken();
         name = localStorage.getItem('googleProfileName') || undefined;
@@ -224,11 +252,12 @@ export function useAuth() {
           duration: 3000,
         });
       } else {
+        const errorMsg = err instanceof Error ? err.message : String(err);
         toast({
           title: isLoggedIn ? "Logout Error" : "Sign-in Error",
-          description: `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
+          description: errorMsg || `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
           variant: "destructive",
-          duration: 3000,
+          duration: 5000,
         });
       }
       console.error(`[useAuth] ${isLoggedIn ? 'logout' : 'sign-in'} threw error:`, err);

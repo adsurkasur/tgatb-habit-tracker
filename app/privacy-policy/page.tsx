@@ -18,7 +18,7 @@ export default function PrivacyPolicyPage() {
             <h2 className="text-xl font-semibold mb-3">Overview</h2>
             <p>
               TGATB Habit Tracker (&quot;The Good and The Bad&quot;) is a minimalist habit tracking
-              application developed by adsurkasur. This Privacy Policy explains how we handle
+              application developed by <a href="https://github.com/adsurkasur" className="text-primary underline">adsurkasur</a>. This Privacy Policy explains how we handle
               your information when you use our web application at{" "}
               <a href="https://www.tgatb.click" className="text-primary underline">www.tgatb.click</a>{" "}
               and our Android mobile application.
@@ -251,7 +251,16 @@ export default function PrivacyPolicyPage() {
         </div>
 
         <div className="mt-12 pt-6 border-t border-border text-sm text-muted-foreground">
-          <p>&copy; 2025-2026 adsurkasur. All rights reserved.</p>
+          <p>&copy; 2025-2026 <a href="https://github.com/adsurkasur" className="text-primary underline">adsurkasur</a>. All rights reserved.</p>
+        </div>
+
+        <div className="mt-8 text-center">
+          <a
+            href="/"
+            className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-colors"
+          >
+            Open TGATB Habit Tracker
+          </a>
         </div>
       </div>
     </div>

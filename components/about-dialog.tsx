@@ -5,7 +5,7 @@ import { MobileDialogContent } from "@/components/ui/mobile-dialog";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ExternalLink, Github, Heart, Zap } from "lucide-react";
+import { ExternalLink, Github, Heart, Shield, Zap } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
 
 interface AboutDialogProps {
@@ -19,8 +19,8 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-  <MobileDialogContent className={`w-full max-w-md material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}> 
-        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 flex-shrink-0 space-y-0 !flex-row !text-left relative`}>
+  <MobileDialogContent className={`w-full max-w-2xl material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "p-0 flex flex-col gap-0 h-auto" : ""}`}> 
+        <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
           <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-primary" />
@@ -70,12 +70,12 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
           <div className="space-y-3">
             <h4 className="font-medium text-sm">Built with</h4>
             <div className="flex flex-wrap gap-1">
-              <Badge variant="outline" className="text-xs">Next.js 15</Badge>
-              <Badge variant="outline" className="text-xs">React 18</Badge>
+              <Badge variant="outline" className="text-xs">Next.js 16</Badge>
+              <Badge variant="outline" className="text-xs">React 19</Badge>
               <Badge variant="outline" className="text-xs">TypeScript</Badge>
-              <Badge variant="outline" className="text-xs">Tailwind CSS</Badge>
+              <Badge variant="outline" className="text-xs">Tailwind CSS v4</Badge>
               <Badge variant="outline" className="text-xs">PWA</Badge>
-              <Badge variant="outline" className="text-xs">Workbox</Badge>
+              <Badge variant="outline" className="text-xs">Capacitor</Badge>
             </div>
           </div>
           
@@ -106,6 +106,17 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                 Powered by Vercel
                 <ExternalLink className="w-3 h-3 ml-auto" />
               </Button>
+
+              <Button
+                variant="outline"
+                size="sm"
+                className="justify-start h-8"
+                onClick={() => window.open('/privacy-policy', '_blank')}
+              >
+                <Shield className="w-4 h-4 mr-2" />
+                Privacy Policy
+                <ExternalLink className="w-3 h-3 ml-auto" />
+              </Button>
             </div>
           </div>
           
@@ -114,7 +125,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
           {/* Footer */}
           <div className="text-center text-xs text-muted-foreground">
             <p>Made with ❤️ for better habits</p>
-            <p className="mt-1">© 2025 TGATB Habit Tracker</p>
+            <p className="mt-1">&copy; 2025-2026 TGATB Habit Tracker</p>
           </div>
         </div>
         </div>

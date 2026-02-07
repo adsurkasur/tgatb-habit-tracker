@@ -21,6 +21,9 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
 
+  // Suppress on standalone pages like /privacy-policy
+  const isStandalonePage = typeof window !== 'undefined' && /^\/privacy-policy/.test(window.location.pathname);
+
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
     typeof window !== 'undefined' && localStorage.getItem('analytics-notice-acknowledged') === 'true'
@@ -32,6 +35,13 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   const { toast } = useToast();
 
   // Note: do not early-return before hooks (rules-of-hooks)
+
+  // Suppress on standalone pages (e.g., /privacy-policy)
+  useEffect(() => {
+    if (isStandalonePage && showInstallPrompt) {
+      setShowInstallPrompt(false);
+    }
+  }, [isStandalonePage, showInstallPrompt]);
 
   // Hide install prompt immediately if user has already dismissed it
   useEffect(() => {
