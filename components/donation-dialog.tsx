@@ -169,7 +169,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-full max-w-2xl h-[90vh] max-h-[90vh] flex flex-col items-stretch justify-start"}`}>
+  <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? "w-full max-w-full p-0 flex flex-col h-[90vh] max-h-[90vh] gap-0" : "w-full max-w-2xl max-h-[85vh] flex flex-col items-stretch justify-start"}`}>
         <DialogHeader className={`px-6 ${isMobile ? 'py-2' : 'pb-4'} border-b bg-background z-10 shrink-0 space-y-0 flex-row! text-left! relative`}>
           <div className="flex items-center w-full justify-between">
             <DialogTitle className="flex items-center gap-2">
@@ -202,7 +202,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {supportContacts.map((contact) => (
               <Card
                 key={contact.name}
-                className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
+                className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
               >
                 <a
                   href={contact.href}
@@ -225,7 +225,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             ))}
             {/* QRIS Card */}
             <Card
-              className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
+              className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
               onClick={() => setShowQrisModal(true)}
             >
               <div className="flex items-center justify-between w-full">
@@ -333,7 +333,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {cryptoList.map((crypto) => (
               <Card
                 key={crypto.name}
-                className="p-4 hover:bg-accent hover:text-accent-foreground hover:scale-[1.02] transition-all duration-200 cursor-pointer group state-layer-hover"
+                className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
                 onClick={() => handleCopy(crypto.address)}
               >
                 <div className="flex items-center space-x-3">

@@ -95,7 +95,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog }: Hi
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? 'w-full max-w-full p-0 flex flex-col h-auto gap-0' : 'w-[900px] h-[700px] max-w-[900px] max-h-[700px] flex flex-col items-stretch justify-start'}`}>
+      <MobileDialogContent className={`material-radius-lg surface-elevation-3 [&>button]:hidden ${isMobile ? 'w-full max-w-full p-0 flex flex-col h-auto gap-0' : 'w-full max-w-2xl max-h-[85vh] flex flex-col items-stretch justify-start'}`}>
         <HistoryHeader onClose={() => onOpenChange(false)} />
         <div className="flex-1 overflow-y-auto">
           <Tabs value={selectedTab} onValueChange={setSelectedTab} className="flex-1 min-h-0 flex flex-col px-6 pt-4 pb-6">
@@ -522,7 +522,7 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
                     {completedCount}/{totalHabitsForDay} habits completed ({Math.round(completionRate)}%)
                   </p>
                 </div>
-                <div className="flex gap-1 flex-wrap max-w-[100px] sm:max-w-none">
+                <div className="flex gap-1 flex-wrap max-w-25 sm:max-w-none">
                   {log.habits.map(habit => {
                     if (habit.completed === null || habit.completed === undefined) {
                       // Untracked: grey dot, question mark tooltip

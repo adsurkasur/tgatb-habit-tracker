@@ -267,7 +267,30 @@
       rgba(103, 80, 164, 0.45) 0px 6px 24px,
       rgba(103, 80, 164, 0.25) 0px 0px 48px;
   }
-  
+
+  /* Reusable interactive card hover effect (same motion as habit card) */
+  .interactive-card {
+    transition-property: scale, translate, box-shadow, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    scale: 1;
+    translate: 0 0;
+  }
+
+  .interactive-card:hover {
+    scale: 1.015;
+    translate: 0 -2px;
+    box-shadow:
+      rgba(103, 80, 164, 0.15) 0px 4px 16px,
+      rgba(103, 80, 164, 0.08) 0px 0px 32px;
+  }
+
+  .dark .interactive-card:hover {
+    box-shadow:
+      rgba(103, 80, 164, 0.35) 0px 4px 16px,
+      rgba(103, 80, 164, 0.18) 0px 0px 32px;
+  }
+
   /* Offline Toast Animation - uses individual translate property for Tailwind v4 */
   .animate-slide-up {
     animation: slide-up 0.3s cubic-bezier(0.4, 0, 0.2, 1);
