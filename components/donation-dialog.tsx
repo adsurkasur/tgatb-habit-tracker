@@ -171,6 +171,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   };
 
   return (
+    <>
     <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
       <ResponsiveDialogContent dialogClassName="w-full max-w-2xl max-h-[85vh] flex flex-col">
         <ResponsiveDialogHeader>
@@ -234,67 +235,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
                 </div>
               </Card>
-              {/* QRIS Modal */}
-              <ResponsiveDialog open={showQrisModal} onOpenChange={setShowQrisModal}>
-                <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
-                  <ResponsiveDialogHeader>
-                    <ResponsiveDialogTitle className="flex items-center gap-2">
-                      <QrCode className="w-5 h-5 text-primary" />
-                      QRIS
-                    </ResponsiveDialogTitle>
-                  </ResponsiveDialogHeader>
-                  <ResponsiveDialogBody>
-                    <div className="flex flex-col items-center gap-4">
-                      <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
-                      <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
-                      <Button
-                        variant="outline"
-                        className="w-full max-w-xs"
-                        onClick={async () => {
-                          const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
-                          const filename = 'qris-ade.jpg';
-                          const imageUrl = '/payment/qris-ade.jpg';
-                          if (isNative) {
-                            try {
-                              const res = await fetch(imageUrl);
-                              const blob = await res.blob();
-                              const reader = new FileReader();
-                              reader.onloadend = async () => {
-                                const base64 = reader.result?.toString().split(',')[1];
-                                if (!base64) throw new Error('Failed to convert image');
-                                try {
-                                  const { SaveAs } = await import('capacitor-save-as');
-                                  await SaveAs.showSaveAsPicker({
-                                    filename,
-                                    mimeType: 'image/jpeg',
-                                    data: base64,
-                                  });
-                                  toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
-                                } catch {
-                                  toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
-                                }
-                              };
-                              reader.readAsDataURL(blob);
-                            } catch {
-                              toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
-                            }
-                          } else {
-                            const link = document.createElement('a');
-                            link.href = imageUrl;
-                            link.download = filename;
-                            document.body.appendChild(link);
-                            link.click();
-                            document.body.removeChild(link);
-                          }
-                        }}
-                      >
-                        <Download className="w-4 h-4" />
-                        Download QRIS
-                      </Button>
-                    </div>
-                  </ResponsiveDialogBody>
-                </ResponsiveDialogContent>
-              </ResponsiveDialog>
             </div>
 
             {/* Cryptocurrency */}
@@ -353,5 +293,68 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
         </ResponsiveDialogBody>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
+
+    {/* QRIS Modal — rendered as sibling to prevent nested drawer back-gesture issues */}
+    <ResponsiveDialog open={showQrisModal} onOpenChange={setShowQrisModal}>
+      <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle className="flex items-center gap-2">
+            <QrCode className="w-5 h-5 text-primary" />
+            QRIS
+          </ResponsiveDialogTitle>
+        </ResponsiveDialogHeader>
+        <ResponsiveDialogBody>
+          <div className="flex flex-col items-center gap-4">
+            <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
+            <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
+            <Button
+              variant="outline"
+              className="w-full max-w-xs"
+              onClick={async () => {
+                const isNative = typeof window !== 'undefined' && (await import('@/lib/capacitor')).isNativePlatform();
+                const filename = 'qris-ade.jpg';
+                const imageUrl = '/payment/qris-ade.jpg';
+                if (isNative) {
+                  try {
+                    const res = await fetch(imageUrl);
+                    const blob = await res.blob();
+                    const reader = new FileReader();
+                    reader.onloadend = async () => {
+                      const base64 = reader.result?.toString().split(',')[1];
+                      if (!base64) throw new Error('Failed to convert image');
+                      try {
+                        const { SaveAs } = await import('capacitor-save-as');
+                        await SaveAs.showSaveAsPicker({
+                          filename,
+                          mimeType: 'image/jpeg',
+                          data: base64,
+                        });
+                        toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
+                      } catch {
+                        toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
+                      }
+                    };
+                    reader.readAsDataURL(blob);
+                  } catch {
+                    toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
+                  }
+                } else {
+                  const link = document.createElement('a');
+                  link.href = imageUrl;
+                  link.download = filename;
+                  document.body.appendChild(link);
+                  link.click();
+                  document.body.removeChild(link);
+                }
+              }}
+            >
+              <Download className="w-4 h-4" />
+              Download QRIS
+            </Button>
+          </div>
+        </ResponsiveDialogBody>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
+    </>
   );
 }

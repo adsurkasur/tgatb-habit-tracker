@@ -137,7 +137,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
               <OverviewTabContent habits={habits} statistics={statistics} />
             </TabsContent>
 
-            <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto mt-0">
+            <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
               <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} removeLog={removeLog} habits={habits} addHabit={useHabits().addHabit} />
             </TabsContent>
 
@@ -367,7 +367,7 @@ function CalendarTabContent({
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
-            className="rounded-lg border w-full max-w-[350px] sm:max-w-none [--cell-size:2.5rem] sm:[--cell-size:2.75rem]"
+            className="rounded-lg border w-full sm:max-w-none [--cell-size:2rem] sm:[--cell-size:2.75rem]"
             disabled={{ after: new Date() }}
             modifiers={{
               completed: date => completedDates.has(formatLocalDate(date)),
