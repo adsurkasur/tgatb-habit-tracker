@@ -110,10 +110,10 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody className="flex-1 min-h-0">
-          <Tabs value={tab} onValueChange={setTab} className="h-full flex flex-col">
-            <TabsList className="grid grid-cols-2 mb-4 shrink-0">
-              <TabsTrigger value="entry">Add New Entry</TabsTrigger>
-              <TabsTrigger value="habit">Add New Habit</TabsTrigger>
+          <Tabs value={tab} onValueChange={setTab} className="flex-1 min-h-0 flex flex-col">
+            <TabsList className="grid grid-cols-2 mb-4 shrink-0 h-auto p-1">
+              <TabsTrigger value="entry" className="flex-1">Add New Entry</TabsTrigger>
+              <TabsTrigger value="habit" className="flex-1">Add New Habit</TabsTrigger>
             </TabsList>
             <TabsContent value="entry" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <div className="space-y-2">
@@ -174,14 +174,6 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     <XCircle className="w-4 h-4 mr-1" />{selectedHabit ? getStatusLabels(selectedHabit.type === "bad" ? "bad" : "good")["false"] : "Missed"}
                   </Button>
                 </div>
-                <Button
-                  type="button"
-                  className="mt-4 w-full cta-color-hover"
-                  disabled={!selectedHabit || status === null}
-                  onClick={handleAddEntry}
-                >
-                  Add Entry
-                </Button>
               </div>
             </TabsContent>
             <TabsContent value="habit" className="flex-1 min-h-0 overflow-y-auto mt-0">
@@ -230,17 +222,31 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     <XCircle className="w-4 h-4 mr-1" />{getStatusLabels(newHabitType)["false"]}
                   </Button>
                 </div>
-                <Button
-                  type="button"
-                  className="mt-4 w-full cta-color-hover"
-                  disabled={!newHabitName.trim() || newHabitStatus === null}
-                  onClick={handleAddNewHabit}
-                >
-                  Add Habit & Log Entry
-                </Button>
               </div>
             </TabsContent>
           </Tabs>
+          {/* Footer CTA — fixed (shrink-0) so it never scrolls with tab content */}
+          <div className="mt-4 shrink-0">
+            {tab === "entry" ? (
+              <Button
+                type="button"
+                className="w-full cta-color-hover"
+                disabled={!selectedHabit || status === null}
+                onClick={handleAddEntry}
+              >
+                Add Entry
+              </Button>
+            ) : (
+              <Button
+                type="button"
+                className="w-full cta-color-hover"
+                disabled={!newHabitName.trim() || newHabitStatus === null}
+                onClick={handleAddNewHabit}
+              >
+                Add Habit & Log Entry
+              </Button>
+            )}
+          </div>
         </ResponsiveDialogBody>
       </ResponsiveDialogContent>
     </ResponsiveDialog>
