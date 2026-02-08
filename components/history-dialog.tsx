@@ -28,7 +28,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Calendar } from '@/components/ui/calendar';
-import { ScrollArea } from '@/components/ui/scroll-area';
+
 import {
   Calendar as CalendarIcon,
   TrendingUp,
@@ -219,7 +219,7 @@ function TopHabits({ habits }: { habits: Habit[] }) {
   return (
     <Card className="p-3 sm:hidden">
       <h3 className="text-sm font-semibold mb-3">Top Habits</h3>
-      <ScrollArea className="h-40">
+      <div className="h-40 overflow-y-auto">
         <div className="space-y-2">
           {habits.slice(0, 3).map(habit => {
             const stats = getHabitStats(habit.id);
@@ -240,7 +240,7 @@ function TopHabits({ habits }: { habits: Habit[] }) {
             );
           })}
         </div>
-      </ScrollArea>
+      </div>
     </Card>
   );
 }
@@ -249,7 +249,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
   return (
     <Card className="p-3 sm:p-4 hidden sm:block">
       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Habit Breakdown</h3>
-      <ScrollArea className="h-40 sm:h-48">
+      <div className="h-40 sm:h-48 overflow-y-auto">
         <div className="space-y-2 sm:space-y-3">
           {habits.map(habit => {
             const stats = getHabitStats(habit.id);
@@ -282,7 +282,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
             );
           })}
         </div>
-      </ScrollArea>
+      </div>
     </Card>
   );
 }
@@ -386,7 +386,7 @@ function CalendarTabContent({
 
             {/* Habit list or no data message */}
               {selectedDayLog && selectedDayLog.habits.length > 0 ? (
-                <ScrollArea className="max-h-64 sm:max-h-72 overflow-y-auto">
+                <div className="max-h-64 sm:max-h-72 overflow-y-auto">
                   <div className="space-y-2">
                     {selectedDayLog.habits.map(habit => {
                       // Determine status and colors
@@ -466,7 +466,7 @@ function CalendarTabContent({
                       );
                     })}
                   </div>
-                </ScrollArea>
+                </div>
               ) : (
                 selectedDate && (
                   <div className="text-center text-muted-foreground text-sm flex flex-col items-center">

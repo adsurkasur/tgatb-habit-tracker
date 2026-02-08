@@ -130,6 +130,28 @@
     transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
                 background-color 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
+
+}
+
+/* ===== Global Scrollbar Styling =====
+ * Unified thin purple scrollbar with transparent track across the entire app.
+ * Every scrollable container uses native overflow-y-auto styled by this CSS.
+ * Works on all Chromium browsers (Chrome, Edge, Capacitor WebView) and Firefox.
+ */
+::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+::-webkit-scrollbar-thumb {
+  background: hsl(256, 33%, 52%);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+html {
+  scrollbar-width: thin;
+  scrollbar-color: hsl(256, 33%, 52%) transparent;
 }
 
 /* Utilities are defined using @utility or top-level classes for Tailwind v4 compatibility */
@@ -842,37 +864,3 @@
     overflow: hidden;
   }
 }
-
-  /* Global Scrollbar Styling */
-  /* Chrome, Edge, Safari */
-  ::-webkit-scrollbar {
-    width: 3px;
-    height: 3px;
-  }
-  ::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border-radius: 8px;
-    border: 2px solid var(--surface);
-  }
-  ::-webkit-scrollbar-track {
-    background: var(--surface-variant);
-    border-radius: 8px;
-  }
-
-  /* Firefox */
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: var(--primary) var(--surface-variant);
-  }
-
-  /* Dark mode overrides */
-  .dark ::-webkit-scrollbar-thumb {
-    background: var(--primary);
-    border: 2px solid var(--surface);
-  }
-  .dark ::-webkit-scrollbar-track {
-    background: var(--surface-variant);
-  }
-  .dark html {
-    scrollbar-color: var(--primary) var(--surface-variant);
-  }
