@@ -109,13 +109,13 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
           <ResponsiveDialogTitle>Add Entry for {date}</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
-        <ResponsiveDialogBody>
-          <Tabs value={tab} onValueChange={setTab}>
-            <TabsList className="grid grid-cols-2 mb-4">
+        <ResponsiveDialogBody className="flex-1 min-h-0">
+          <Tabs value={tab} onValueChange={setTab} className="h-full flex flex-col">
+            <TabsList className="grid grid-cols-2 mb-4 shrink-0">
               <TabsTrigger value="entry">Add New Entry</TabsTrigger>
               <TabsTrigger value="habit">Add New Habit</TabsTrigger>
             </TabsList>
-            <TabsContent value="entry">
+            <TabsContent value="entry" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <div className="space-y-2">
                 <div
                   // Make the disabled select area act as a CTA to switch to the Add Habit tab
@@ -184,7 +184,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                 </Button>
               </div>
             </TabsContent>
-            <TabsContent value="habit">
+            <TabsContent value="habit" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <div className="space-y-2">
                 <Input
                   type="text"
