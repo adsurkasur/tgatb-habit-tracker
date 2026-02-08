@@ -156,7 +156,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     variant={status === true ? "default" : "outline"}
                     onClick={() => setStatus(true)}
                     disabled={!selectedHabit}
-                    className={selectedHabit && selectedHabit.type === "good" && status === true ? "bg-green-500 text-white hover:bg-green-600" : selectedHabit && selectedHabit.type === "bad" && status === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}
+                    className={`flex-1 ${selectedHabit && selectedHabit.type === "good" && status === true ? "bg-green-500 text-white hover:bg-green-600" : selectedHabit && selectedHabit.type === "bad" && status === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}`}
                   >
                     <CheckCircle className="w-4 h-4 mr-1" />{selectedHabit ? getStatusLabels(selectedHabit.type === "bad" ? "bad" : "good")["true"] : "Completed"}
                   </Button>
@@ -165,6 +165,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     variant={status === false ? "destructive" : "outline"}
                     onClick={() => setStatus(false)}
                     disabled={!selectedHabit}
+                    className="flex-1"
                   >
                     <XCircle className="w-4 h-4 mr-1" />{selectedHabit ? getStatusLabels(selectedHabit.type === "bad" ? "bad" : "good")["false"] : "Missed"}
                   </Button>
@@ -194,7 +195,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     type="button"
                     variant={newHabitType === "good" ? "default" : "outline"}
                     onClick={() => setNewHabitType("good")}
-                    className={newHabitType === "good" ? "bg-green-500 text-white hover:bg-green-600" : ""}
+                    className={`flex-1 ${newHabitType === "good" ? "bg-green-500 text-white hover:bg-green-600" : ""}`}
                   >
                     Good
                   </Button>
@@ -202,6 +203,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     type="button"
                     variant={newHabitType === "bad" ? "destructive" : "outline"}
                     onClick={() => setNewHabitType("bad")}
+                    className="flex-1"
                   >
                     Bad
                   </Button>
@@ -211,7 +213,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     type="button"
                     variant={newHabitStatus === true ? "default" : "outline"}
                     onClick={() => setNewHabitStatus(true)}
-                    className={newHabitType === "good" && newHabitStatus === true ? "bg-green-500 text-white hover:bg-green-600" : newHabitType === "bad" && newHabitStatus === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}
+                    className={`flex-1 ${newHabitType === "good" && newHabitStatus === true ? "bg-green-500 text-white hover:bg-green-600" : newHabitType === "bad" && newHabitStatus === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}`}
                   >
                     <CheckCircle className="w-4 h-4 mr-1" />{getStatusLabels(newHabitType)["true"]}
                   </Button>
@@ -219,6 +221,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     type="button"
                     variant={newHabitStatus === false ? "destructive" : "outline"}
                     onClick={() => setNewHabitStatus(false)}
+                    className="flex-1"
                   >
                     <XCircle className="w-4 h-4 mr-1" />{getStatusLabels(newHabitType)["false"]}
                   </Button>

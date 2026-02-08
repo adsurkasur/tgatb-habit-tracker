@@ -2,15 +2,16 @@
 function AddEntryButton({ show, onClick }: { show: boolean; onClick: () => void }) {
   if (!show) return null;
   return (
-      <div className="w-full flex justify-center mt-4">
+    <div className="w-full flex justify-center mt-4">
       <Button
         type="button"
         size="sm"
-        variant="default"
-        className="cta-color-hover"
+        variant="outline"
+        className="border-dashed border-primary/40 text-primary hover:bg-primary/5 hover:border-primary/60"
         onClick={onClick}
       >
-        + Add Entry
+        <Plus className="w-4 h-4 mr-1" />
+        Add Entry
       </Button>
     </div>
   );
@@ -41,6 +42,7 @@ import {
   Clock,
   Award,
   Pencil,
+  Plus,
   Undo2,
 } from 'lucide-react';
 import {
@@ -131,7 +133,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="flex-1 min-h-0 overflow-y-auto mt-0">
+            <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col">
               <OverviewTabContent habits={habits} statistics={statistics} />
             </TabsContent>
 
@@ -217,9 +219,9 @@ function StatGrid({ statistics }: { statistics: ReturnType<typeof computeStatSum
 
 function TopHabits({ habits }: { habits: Habit[] }) {
   return (
-    <Card className="p-3 sm:hidden">
-      <h3 className="text-sm font-semibold mb-3">Top Habits</h3>
-      <div className="h-40 overflow-y-auto">
+    <Card className="p-3 flex flex-col flex-1 min-h-0 sm:hidden">
+      <h3 className="text-sm font-semibold mb-3 shrink-0">Top Habits</h3>
+      <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="space-y-2">
           {habits.slice(0, 3).map(habit => {
             const stats = getHabitStats(habit.id);
@@ -247,9 +249,9 @@ function TopHabits({ habits }: { habits: Habit[] }) {
 
 function HabitBreakdown({ habits }: { habits: Habit[] }) {
   return (
-    <Card className="p-3 sm:p-4 hidden sm:block">
-      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4">Habit Breakdown</h3>
-      <div className="h-40 sm:h-48 overflow-y-auto">
+    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-0">
+      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">Habit Breakdown</h3>
+      <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="space-y-2 sm:space-y-3">
           {habits.map(habit => {
             const stats = getHabitStats(habit.id);
@@ -289,7 +291,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
 
 function OverviewTabContent({ habits, statistics }: { habits: Habit[]; statistics: ReturnType<typeof computeStatSummary> }) {
   return (
-    <div>
+    <div className="flex flex-col flex-1 min-h-0">
       <StatGrid statistics={statistics} />
       <TopHabits habits={habits} />
       <HabitBreakdown habits={habits} />
@@ -359,10 +361,9 @@ function CalendarTabContent({
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center gap-4 sm:gap-6">
-        <div className="flex justify-center w-full">
-          <Calendar
+    <div className="flex flex-col items-center gap-4 sm:gap-6">
+      <div className="flex justify-center w-full">
+        <Calendar
             mode="single"
             selected={selectedDate}
             onSelect={setSelectedDate}
@@ -386,7 +387,6 @@ function CalendarTabContent({
 
             {/* Habit list or no data message */}
               {selectedDayLog && selectedDayLog.habits.length > 0 ? (
-                <div className="max-h-64 sm:max-h-72 overflow-y-auto">
                   <div className="space-y-2">
                     {selectedDayLog.habits.map(habit => {
                       // Determine status and colors
@@ -466,7 +466,6 @@ function CalendarTabContent({
                       );
                     })}
                   </div>
-                </div>
               ) : (
                 selectedDate && (
                   <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
@@ -474,14 +473,9 @@ function CalendarTabContent({
                   </div>
                 )
               )}
-              {/* Only show AddEntryButton for today/past dates with no logs */}
+              {/* Show AddEntryButton for any past or today date (not future) */}
               <AddEntryButton
-                show={
-                  !!selectedDate && (
-                    isToday(selectedDate) ||
-                    (isPastOrToday(selectedDate) && !isToday(selectedDate) && (!selectedDayLog || selectedDayLog.habits.length === 0))
-                  )
-                }
+                show={!!selectedDate && isPastOrToday(selectedDate)}
                 onClick={() => setAddEntryDialogOpen(true)}
               />
             {/* AddEntryDialog modal */}
@@ -510,15 +504,13 @@ function CalendarTabContent({
             )}
           </div>
         )}
-      </div>
     </div>
   );
 }
 
 function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
   return (
-    <div>
-      <div className="space-y-3 sm:space-y-4">
+    <div className="space-y-3 sm:space-y-4">
         {dailyLogs.map((log, index) => {
           const completedCount = log.habits.filter(h => h.completed).length;
           const totalHabitsForDay = log.habits.length;
@@ -565,7 +557,6 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
             </Card>
           );
         })}
-      </div>
     </div>
   );
 }
