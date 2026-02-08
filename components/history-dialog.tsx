@@ -379,7 +379,7 @@ function CalendarTabContent({
         </div>
 
         {selectedDate && (
-          <div className="w-full max-w-md mx-auto">
+          <div className="w-full mx-auto">
             <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 text-center">
               {format(selectedDate, 'MMMM d, yyyy')}
               {isToday(selectedDate) && <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>}
