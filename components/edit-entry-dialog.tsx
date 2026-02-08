@@ -68,7 +68,7 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
   const labels = getStatusLabels(habit.type);
 
   return (
-    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Edit Entry</ResponsiveDialogTitle>

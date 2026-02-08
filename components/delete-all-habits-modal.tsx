@@ -17,7 +17,7 @@ interface DeleteAllHabitsModalProps {
 
 export function DeleteAllHabitsModal({ open, onCancel, onDelete, loading }: DeleteAllHabitsModalProps) {
   return (
-    <ResponsiveDialog open={open} onOpenChange={(v) => { if (!v) onCancel(); }}>
+    <ResponsiveDialog open={open} onOpenChange={(v) => { if (!v) onCancel(); }} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-sm">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="text-destructive">

@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { HabitType } from "@shared/schema";
-import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -23,14 +22,6 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
   const [name, setName] = useState("");
   const [type, setType] = useState<HabitType>("good");
 
-  // Handle mobile back navigation
-  useMobileBackNavigation({
-    onBackPressed: () => {
-      onOpenChange(false);
-    },
-    isActive: open,
-  });
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (name.trim()) {
@@ -48,7 +39,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
   };
 
   return (
-    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Add New Habit</ResponsiveDialogTitle>

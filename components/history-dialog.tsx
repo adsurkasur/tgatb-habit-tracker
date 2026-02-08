@@ -57,7 +57,6 @@ import { getHabitStats } from '@/lib/habit-storage';
 import { formatLocalDate } from '@/lib/utils';
 import { buildDailyLogs, buildDayLog, getCompletedDatesSet, computeStatSummary, DayLog } from '@/lib/history';
 import { format, isToday } from 'date-fns';
-import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import { useHabits } from '@/hooks/use-habits';
 
 interface HistoryDialogProps {
@@ -82,14 +81,6 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
 
-  // Handle mobile back navigation
-  useMobileBackNavigation({
-    onBackPressed: () => {
-      onOpenChange(false);
-    },
-    isActive: open
-  });
-
   // Calculate comprehensive statistics
   const statistics = useMemo(() => computeStatSummary(habits), [habits]);
 
@@ -107,7 +98,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
 
   return (
     <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
-      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl h-[85vh] flex flex-col" drawerClassName="h-[85vh] flex flex-col">
+      <ResponsiveDialogContent dialogClassName="w-full max-w-2xl h-[85vh] flex flex-col" drawerClassName="flex flex-col">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
@@ -478,17 +469,15 @@ function CalendarTabContent({
                 show={!!selectedDate && isPastOrToday(selectedDate)}
                 onClick={() => setAddEntryDialogOpen(true)}
               />
-            {/* AddEntryDialog modal */}
-            {addEntryDialogOpen && (
-              <AddEntryDialog
-                open={addEntryDialogOpen}
-                onOpenChange={setAddEntryDialogOpen}
-                habits={habits}
-                date={formattedDate}
-                addOrUpdateLog={addOrUpdateLog}
-                addHabit={addHabit}
-              />
-            )}
+            {/* AddEntryDialog — always mounted so vaul close animation runs */}
+            <AddEntryDialog
+              open={addEntryDialogOpen}
+              onOpenChange={setAddEntryDialogOpen}
+              habits={habits}
+              date={formattedDate}
+              addOrUpdateLog={addOrUpdateLog}
+              addHabit={addHabit}
+            />
             {/* Edit Entry Dialog */}
             {editHabit && (
               <React.Suspense fallback={null}>

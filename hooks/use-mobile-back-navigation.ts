@@ -1,107 +1,112 @@
 import { useEffect, useRef } from 'react';
 import { useIsMobile } from './use-mobile';
 
-interface UseNavigationManagerOptions {
+// ─── Global back-navigation stack (singleton) ────────────
+// Implements LIFO ordering: the most recently registered active handler
+// fires on back press. This ensures stacked modals close one at a time.
+
+interface StackEntry {
+  id: string;
+  callback: () => void;
+}
+
+const backStack: StackEntry[] = [];
+let listenerAttached = false;
+let handlingBack = false;
+
+function attachListener() {
+  if (listenerAttached || typeof window === 'undefined') return;
+  listenerAttached = true;
+
+  window.addEventListener('popstate', () => {
+    if (handlingBack || backStack.length === 0) return;
+    handlingBack = true;
+
+    // Fire only the topmost handler (last in array = most recently registered)
+    const top = backStack[backStack.length - 1];
+    if (top) top.callback();
+
+    // Re-push state to stay on the current URL
+    window.history.pushState(null, '', window.location.href);
+
+    setTimeout(() => {
+      handlingBack = false;
+    }, 100);
+  });
+}
+
+function pushBack(id: string, callback: () => void) {
+  // Deduplicate: remove any existing entry with the same id
+  const idx = backStack.findIndex(e => e.id === id);
+  if (idx !== -1) backStack.splice(idx, 1);
+
+  backStack.push({ id, callback });
+  window.history.pushState(null, '', window.location.href);
+  attachListener();
+}
+
+function popBack(id: string) {
+  const idx = backStack.findIndex(e => e.id === id);
+  if (idx !== -1) backStack.splice(idx, 1);
+}
+
+// ─── Public hook ─────────────────────────────────────────
+
+interface UseMobileBackNavigationOptions {
+  /** Callback invoked when the back button/gesture is pressed. */
   onBackPressed?: () => void;
-  isActive?: boolean; // Only handle back when this is true
+  /** Whether this handler is active and on the stack. Default: true */
+  isActive?: boolean;
 }
 
 /**
- * Hook to manage mobile back navigation behavior.
- * On mobile devices, this prevents the browser back button from closing the app
- * and instead calls the provided callback to close modals/dialogs.
+ * Register a back-navigation handler on the global modal stack.
+ *
+ * When multiple handlers are active (stacked modals), only the topmost
+ * (most recently activated) handler fires on back press.
+ * This enables proper stacked-modal dismissal — one layer at a time.
  */
-export function useMobileBackNavigation({ onBackPressed, isActive = true }: UseNavigationManagerOptions = {}) {
+export function useMobileBackNavigation({
+  onBackPressed,
+  isActive = true,
+}: UseMobileBackNavigationOptions = {}) {
   const isMobile = useIsMobile();
-  const isHandlingBack = useRef(false);
+
+  // Stable unique ID per hook instance
+  const stableId = useRef('');
+  if (!stableId.current) {
+    stableId.current = `mbk-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
+  }
+
+  // Always ref the latest callback so the stack closure calls the current one
+  const callbackRef = useRef(onBackPressed);
+  callbackRef.current = onBackPressed;
 
   useEffect(() => {
     if (!isMobile || !isActive) return;
 
-    const handlePopState = (event: PopStateEvent) => {
-      // Prevent the default back navigation
-      if (onBackPressed && !isHandlingBack.current) {
-        isHandlingBack.current = true;
-        event.preventDefault();
-        
-        // Call the callback to handle the back action (e.g., close modal)
-        onBackPressed();
-        
-        // Push a new state to maintain the current URL
-        // This prevents the browser from actually navigating back
-        window.history.pushState(null, '', window.location.href);
-        
-        setTimeout(() => {
-          isHandlingBack.current = false;
-        }, 100);
-      }
-    };
-
-    // Add an initial state to the history stack
-    // This ensures we have something to "go back" to
-    window.history.pushState(null, '', window.location.href);
-    
-    window.addEventListener('popstate', handlePopState);
+    const id = stableId.current;
+    pushBack(id, () => callbackRef.current?.());
 
     return () => {
-      window.removeEventListener('popstate', handlePopState);
+      popBack(id);
     };
-  }, [isMobile, onBackPressed, isActive]);
+  }, [isMobile, isActive]);
 }
 
-interface ModalState {
-  isOpen: boolean;
-  onClose: () => void;
-  priority?: number; // Higher priority modals are closed first
+// ─── Imperative helpers for native back button (Capacitor) ───
+// These allow page.tsx to query/close the topmost modal from
+// the Capacitor `backButton` event (which does NOT trigger popstate).
+
+/** Returns true if any modal is registered on the back stack. */
+export function hasOpenModals(): boolean {
+  return backStack.length > 0;
 }
 
-/**
- * Enhanced hook that manages multiple modals/dialogs and their back navigation behavior.
- * This allows you to register multiple modals and automatically handles closing them
- * in the correct order when the back button is pressed.
- */
-export function useMobileModalManager() {
-  const isMobile = useIsMobile();
-  const modalsRef = useRef<Map<string, ModalState>>(new Map());
-
-  // Register a modal with the manager
-  const registerModal = (id: string, modalState: ModalState) => {
-    if (modalState.isOpen) {
-      modalsRef.current.set(id, modalState);
-    } else {
-      modalsRef.current.delete(id);
-    }
-  };
-
-  // Get the modal that should be closed (highest priority, then most recently opened)
-  const getModalToClose = (): ModalState | null => {
-    const modals = Array.from(modalsRef.current.values()).filter(modal => modal.isOpen);
-    if (modals.length === 0) return null;
-
-    // Sort by priority (descending) then by insertion order (most recent first)
-    return modals.sort((a, b) => (b.priority || 0) - (a.priority || 0))[0];
-  };
-
-  const handleBackPressed = () => {
-    const modalToClose = getModalToClose();
-    if (modalToClose) {
-      modalToClose.onClose();
-      return true; // Handled
-    }
-    return false; // Not handled
-  };
-
-  // Set up the back navigation handling
-  useMobileBackNavigation({ 
-    onBackPressed: () => {
-      handleBackPressed();
-    }
-  });
-
-  return {
-    registerModal,
-    hasOpenModals: () => Array.from(modalsRef.current.values()).some(modal => modal.isOpen),
-  isMobile,
-  closeTopModal: handleBackPressed
-  };
+/** Close the topmost modal on the stack. Returns true if one was closed. */
+export function closeTopModal(): boolean {
+  if (backStack.length === 0) return false;
+  const top = backStack[backStack.length - 1];
+  if (top) top.callback();
+  return true;
 }

@@ -11,7 +11,6 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -39,13 +38,18 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const [tab, setTab] = useState("entry");
   const habitNameRef = useRef<HTMLInputElement | null>(null);
 
-  // Handle mobile back navigation
-  useMobileBackNavigation({
-    onBackPressed: () => {
-      onOpenChange(false);
-    },
-    isActive: open,
-  });
+  // Reset form state when dialog opens (component stays mounted for close animation)
+  useEffect(() => {
+    if (open) {
+      setSelectedHabit(null);
+      setStatus(null);
+      setNewHabitName("");
+      setNewHabitType("good");
+      setNewHabitStatus(null);
+      setLastAddedHabitId(null);
+      setTab("entry");
+    }
+  }, [open]);
 
   // When habits prop updates, select the last added habit if present
   // Adjust state during render (React-approved pattern)
@@ -99,7 +103,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
       : { "true": "Avoided", "false": "Done" };
 
   return (
-    <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
+    <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>Add Entry for {date}</ResponsiveDialogTitle>

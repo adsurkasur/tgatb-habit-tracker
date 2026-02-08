@@ -16,7 +16,7 @@ import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
-import { useMobileModalManager } from "@/hooks/use-mobile-back-navigation";
+import { hasOpenModals, closeTopModal } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
 import { useSystemBarsUnified } from "@/hooks/use-system-bars-unified";
@@ -69,22 +69,9 @@ export default function Home() {
   const [welcomeStep, setWelcomeStep] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
   
-  const { registerModal, hasOpenModals, closeTopModal } = useMobileModalManager();
   const { toast } = useToast();
   
   const { isWelcomeVisible, closeWelcome, completeWelcome, resetWelcome } = useWelcomeOverlay();
-
-  // Register all modals/overlays with modal manager after all states are defined
-  useEffect(() => {
-    registerModal('drawer', { isOpen: drawerOpen, onClose: () => setDrawerOpen(false), priority: 10 });
-    registerModal('settings', { isOpen: showSettings, onClose: () => setShowSettings(false), priority: 9 });
-    registerModal('donate', { isOpen: showDonate, onClose: () => setShowDonate(false), priority: 8 });
-    registerModal('history', { isOpen: showHistory, onClose: () => setShowHistory(false), priority: 7 });
-    registerModal('about', { isOpen: showAbout, onClose: () => setShowAbout(false), priority: 8 });
-    registerModal('addHabit', { isOpen: showAddHabit, onClose: () => setShowAddHabit(false), priority: 6 });
-    registerModal('editHabit', { isOpen: showEditHabit, onClose: () => { setShowEditHabit(false); setEditingHabit(null); }, priority: 5 });
-    registerModal('welcome', { isOpen: isWelcomeVisible, onClose: closeWelcome, priority: 11 });
-  }, [drawerOpen, showSettings, showDonate, showHistory, showAbout, showAddHabit, showEditHabit, isWelcomeVisible, closeWelcome, registerModal]);
 
   // Navigation bar handling centralized in Capacitor layer
   
@@ -129,7 +116,7 @@ export default function Home() {
       }
     });
     return () => { handler.then(h => h.remove()); };
-  }, [toast, hasOpenModals, closeTopModal, settings.fullscreenMode]);
+  }, [toast, settings.fullscreenMode]);
 
   const handleTrackHabit = useCallback((completed: boolean) => {
     if (currentHabit) {

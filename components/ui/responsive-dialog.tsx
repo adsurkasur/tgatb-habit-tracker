@@ -3,6 +3,7 @@
 import * as React from "react";
 import { X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import {
   Dialog,
   DialogContent,
@@ -26,14 +27,20 @@ import { cn } from "@/lib/utils";
 /**
  * ResponsiveDialog — renders a Dialog on desktop and a bottom-sheet Drawer on mobile.
  *
+ * Features:
+ * - Automatic back-navigation handling (global stack, one-at-a-time dismissal)
+ * - Drawer snap points for standard modals (drag to resize / expand to fullscreen)
+ * - Compact mode for small-content modals (content-based height)
+ *
  * Usage:
  *   <ResponsiveDialog open={open} onOpenChange={setOpen}>
- *     <ResponsiveDialogHeader>
- *       <ResponsiveDialogTitle>Title</ResponsiveDialogTitle>
- *       <ResponsiveDialogDescription>Description</ResponsiveDialogDescription>
- *     </ResponsiveDialogHeader>
- *     <ResponsiveDialogBody>...content...</ResponsiveDialogBody>
- *     <ResponsiveDialogFooter>...buttons...</ResponsiveDialogFooter>
+ *     <ResponsiveDialogContent>
+ *       <ResponsiveDialogHeader>
+ *         <ResponsiveDialogTitle>Title</ResponsiveDialogTitle>
+ *       </ResponsiveDialogHeader>
+ *       <ResponsiveDialogBody>...content...</ResponsiveDialogBody>
+ *       <ResponsiveDialogFooter>...buttons...</ResponsiveDialogFooter>
+ *     </ResponsiveDialogContent>
  *   </ResponsiveDialog>
  */
 
@@ -41,11 +48,15 @@ import { cn } from "@/lib/utils";
 interface ResponsiveDialogContextValue {
   isMobile: boolean;
   onOpenChange: (open: boolean) => void;
+  drawerSize: "standard" | "compact";
+  activeSnapPoint: number | string | null;
 }
 
 const ResponsiveDialogContext = React.createContext<ResponsiveDialogContextValue>({
   isMobile: false,
   onOpenChange: () => {},
+  drawerSize: "standard",
+  activeSnapPoint: null,
 });
 
 function useResponsiveDialog() {
@@ -57,17 +68,62 @@ interface ResponsiveDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   children: React.ReactNode;
+  /**
+   * Controls the mobile drawer sizing behavior.
+   * - "standard" (default): Opens at 85vh with snap points, expandable to fullscreen.
+   *   Dragging below the initial snap dismisses the modal.
+   * - "compact": Content-based auto height. For small-content modals
+   *   (Add Entry, Add Habit, Edit Entry, etc.)
+   */
+  drawerSize?: "standard" | "compact";
 }
 
-function ResponsiveDialog({ open, onOpenChange, children }: ResponsiveDialogProps) {
+function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard" }: ResponsiveDialogProps) {
   const isMobile = useIsMobile();
 
+  // ── Automatic back-navigation (global stack) ──
+  // Each ResponsiveDialog registers itself; the topmost one closes first.
+  useMobileBackNavigation({
+    onBackPressed: () => onOpenChange(false),
+    isActive: open,
+  });
+
+  // Standard drawers: 3-snap-point resizable bottom sheet.
+  //   [0.45, 0.85, 1] → safe-minimum, initial, fullscreen
+  //   fadeFromIndex=1 → overlay fades below the 0.85 snap point
+  //   snapToSequentialPoint → prevents fast-swipe from skipping snap points (no accidental dismiss)
+  //   activeSnapPoint controlled → opens at 0.85, not 0.45
+  // Compact drawers: content-based height (no snap points).
+  const isStandard = drawerSize === "standard";
+  const [activeSnap, setActiveSnap] = React.useState<number | string | null>(0.85);
+
+  // Reset to initial snap point (0.85) each time the drawer opens
+  React.useEffect(() => {
+    if (open && isStandard) {
+      setActiveSnap(0.85);
+    }
+  }, [open, isStandard]);
+
   return (
-    <ResponsiveDialogContext.Provider value={{ isMobile, onOpenChange }}>
+    <ResponsiveDialogContext.Provider value={{ isMobile, onOpenChange, drawerSize, activeSnapPoint: isStandard ? activeSnap : null }}>
       {isMobile ? (
-        <Drawer open={open} onOpenChange={onOpenChange}>
-          {children}
-        </Drawer>
+        isStandard ? (
+          <Drawer
+            open={open}
+            onOpenChange={onOpenChange}
+            snapPoints={[0.45, 0.85, 1]}
+            activeSnapPoint={activeSnap}
+            setActiveSnapPoint={setActiveSnap}
+            fadeFromIndex={1}
+            snapToSequentialPoint
+          >
+            {children}
+          </Drawer>
+        ) : (
+          <Drawer open={open} onOpenChange={onOpenChange}>
+            {children}
+          </Drawer>
+        )
       ) : (
         <Dialog open={open} onOpenChange={onOpenChange}>
           {children}
@@ -93,16 +149,24 @@ function ResponsiveDialogContent({
   dialogClassName,
   drawerClassName,
 }: ResponsiveDialogContentProps) {
-  const { isMobile } = useResponsiveDialog();
+  const { isMobile, drawerSize, activeSnapPoint } = useResponsiveDialog();
 
   if (isMobile) {
+    // At the minimum snap point (0.45), prevent outside-click dismissal.
+    // The overlay is invisible at this snap (fadeFromIndex=1), but Radix still
+    // fires onPointerDownOutside. Preventing it avoids deceptive dismiss.
+    const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
+
     return (
       <DrawerContent
         className={cn(
-          "max-h-[90vh]",
+          // Standard drawers: full viewport height so snap-point offsets map correctly.
+          // Compact drawers: cap at 90vh for content-based sizing.
+          drawerSize === "compact" ? "max-h-[90vh]" : "h-[100dvh] flex flex-col",
           className,
           drawerClassName,
         )}
+        onPointerDownOutside={isAtMinSnap ? (e) => e.preventDefault() : undefined}
       >
         {children}
       </DrawerContent>
@@ -195,8 +259,18 @@ interface ResponsiveDialogBodyProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 function ResponsiveDialogBody({ className, children, ...props }: ResponsiveDialogBodyProps) {
+  const { isMobile, drawerSize, activeSnapPoint } = useResponsiveDialog();
+
+  // On mobile standard drawers, constrain the scroll area to the visible snap height
+  // minus overhead for pill handle + header (~5rem). This prevents content from
+  // extending below the viewport at lower snap points.
+  const adaptiveStyle = React.useMemo(() => {
+    if (!isMobile || drawerSize !== "standard" || typeof activeSnapPoint !== "number") return undefined;
+    return { maxHeight: `calc(${activeSnapPoint * 100}dvh - 5rem)` };
+  }, [isMobile, drawerSize, activeSnapPoint]);
+
   return (
-    <div className={cn("flex-1 overflow-y-auto px-6 py-4", className)} {...props}>
+    <div className={cn("flex-1 overflow-y-auto px-6 py-4", className)} style={adaptiveStyle} {...props}>
       {children}
     </div>
   );

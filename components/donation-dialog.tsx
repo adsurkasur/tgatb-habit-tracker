@@ -6,7 +6,6 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, Download, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
-import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -134,18 +133,6 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
   const [showQrisModal, setShowQrisModal] = useState(false);
-
-  // Handle mobile back navigation
-  useMobileBackNavigation({
-    onBackPressed: () => {
-      if (showQrisModal) {
-        setShowQrisModal(false);
-        return;
-      }
-      onOpenChange(false);
-    },
-    isActive: open || showQrisModal
-  });
 
   const handleCopy = async (address: string) => {
     try {
@@ -295,7 +282,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
     </ResponsiveDialog>
 
     {/* QRIS Modal — rendered as sibling to prevent nested drawer back-gesture issues */}
-    <ResponsiveDialog open={showQrisModal} onOpenChange={setShowQrisModal}>
+    <ResponsiveDialog open={showQrisModal} onOpenChange={setShowQrisModal} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
