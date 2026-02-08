@@ -39,11 +39,16 @@ export function useWelcomeOverlay() {
   };
 
   const resetWelcome = async () => {
-    // Temporarily clear the "shown" flag so the overlay can be displayed
+    // Clear the "shown" flag from all storage backends so the overlay can be displayed.
+    // PlatformStorage uses Capacitor Preferences on native and localStorage on web.
+    // Also clear localStorage directly in case of stale values from older code paths.
     try {
       const { PlatformStorage } = await import('../lib/platform-storage');
       await PlatformStorage.removeItem(WELCOME_SHOWN_KEY);
     } catch { /* ignore */ }
+    if (typeof window !== 'undefined') {
+      try { localStorage.removeItem(WELCOME_SHOWN_KEY); } catch { /* ignore */ }
+    }
     // Always show the welcome tour from the beginning when requested
     setIsWelcomeVisible(true);
   };

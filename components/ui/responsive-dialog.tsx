@@ -152,9 +152,6 @@ function ResponsiveDialogContent({
   const { isMobile, drawerSize, activeSnapPoint } = useResponsiveDialog();
 
   if (isMobile) {
-    // At the minimum snap point (0.45), prevent outside-click dismissal.
-    // The overlay is invisible at this snap (fadeFromIndex=1), but Radix still
-    // fires onPointerDownOutside. Preventing it keeps the peek state honest.
     const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
 
     return (
@@ -166,7 +163,6 @@ function ResponsiveDialogContent({
           className,
           drawerClassName,
         )}
-        onPointerDownOutside={isAtMinSnap ? (e) => e.preventDefault() : undefined}
       >
         {/* Peek indicator — shown only at the minimum snap point */}
         {isAtMinSnap && (
