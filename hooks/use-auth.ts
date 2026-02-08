@@ -215,6 +215,9 @@ export function useAuth() {
         // Logout flow
         if (typeof window !== 'undefined' && !isCapacitorApp) {
           await TokenStorage.removeAccessToken();
+          // Clear cached Drive folder ID
+          const { resetAppFolderCache } = await import('@/lib/drive-folder');
+          resetAppFolderCache();
           localStorage.removeItem('googleProfileName');
           localStorage.removeItem('googleProfilePhoto');
           setIsLoggedIn(false);
@@ -226,6 +229,9 @@ export function useAuth() {
           });
         } else {
           await TokenStorage.removeAccessToken();
+          // Clear cached Drive folder ID
+          const { resetAppFolderCache } = await import('@/lib/drive-folder');
+          resetAppFolderCache();
           const { Preferences } = await import('@capacitor/preferences');
           await Preferences.remove({ key: 'googleProfileName' });
           await Preferences.remove({ key: 'googleProfilePhoto' });

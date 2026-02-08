@@ -210,11 +210,8 @@ export function useCloudSync() {
           return false;
         }
         // List and download the most recent file named habits-backup.json
-        const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
-          headers: { Authorization: `Bearer ${accessToken}` }
-        });
-        const listJson = await listRes.json();
-        const files = listJson.files || [];
+        const { listAppFiles } = await import('@/lib/drive-folder');
+        const files = await listAppFiles('habits-backup.json', accessToken, { withRootFallback: true });
         if (!files.length) {
           toast({ title: 'No backup', description: 'No cloud backup found.', duration: 2500 });
           return false;

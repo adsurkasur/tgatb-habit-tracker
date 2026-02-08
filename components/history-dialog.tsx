@@ -23,8 +23,6 @@ function isPastOrToday(date: Date) {
   return formatLocalDate(date) <= formatLocalDate(today);
 }
 import { Button } from '@/components/ui/button';
-import { EditEntryDialog } from './edit-entry-dialog';
-import { AddEntryDialog } from './add-entry-dialog';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -57,7 +55,6 @@ import { getHabitStats } from '@/lib/habit-storage';
 import { formatLocalDate } from '@/lib/utils';
 import { buildDailyLogs, buildDayLog, getCompletedDatesSet, computeStatSummary, DayLog } from '@/lib/history';
 import { format, isToday } from 'date-fns';
-import { useHabits } from '@/hooks/use-habits';
 
 interface HistoryDialogProps {
   open: boolean;
@@ -65,6 +62,10 @@ interface HistoryDialogProps {
   habits: Habit[];
   addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
   removeLog: (habitId: string, date: string) => void;
+  /** Callback to open the AddEntryDialog for a given date (hoisted to page level) */
+  onRequestAddEntry: (date: string) => void;
+  /** Callback to open the EditEntryDialog for a given habit/date/status (hoisted to page level) */
+  onRequestEditEntry: (habit: Habit, date: string, completed: boolean | null) => void;
 }
 
 // DayLog moved to lib/history.ts
@@ -77,7 +78,7 @@ interface StatCard {
   color: string;
 }
 
-export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, removeLog }: HistoryDialogProps) {
+export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, removeLog, onRequestAddEntry, onRequestEditEntry }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
 
@@ -129,7 +130,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
             </TabsContent>
 
             <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} addOrUpdateLog={addOrUpdateLog} removeLog={removeLog} habits={habits} addHabit={useHabits().addHabit} />
+              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} habits={habits} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
             </TabsContent>
 
             <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
@@ -295,31 +296,22 @@ function CalendarTabContent({
   setSelectedDate,
   completedDates,
   selectedDayLog,
-  addOrUpdateLog,
   removeLog,
   habits,
-  addHabit,
+  onRequestAddEntry,
+  onRequestEditEntry,
 }: {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
   completedDates: Set<string>;
   selectedDayLog: DayLog | null | undefined;
-  addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
   removeLog: (habitId: string, date: string) => void;
   habits: Habit[];
-  addHabit: (habit: { name: string; type: "good" | "bad" }) => Habit;
+  onRequestAddEntry: (date: string) => void;
+  onRequestEditEntry: (habit: Habit, date: string, completed: boolean | null) => void;
 }) {
-  // Edit Entry dialog state
-  const [editDialogOpen, setEditDialogOpen] = useState(false);
-  const [editHabit, setEditHabit] = useState<Habit | null>(null);
-  const [editCompleted, setEditCompleted] = useState<boolean | null>(null);
-
-  // Add Entry dialog state
-  const [addEntryDialogOpen, setAddEntryDialogOpen] = useState(false);
-
   // Get formatted date string
   const formattedDate = selectedDate ? formatLocalDate(selectedDate) : "";
-
 
   // Accept the DayLog habit type for editing
   type DayLogHabit = {
@@ -330,25 +322,15 @@ function CalendarTabContent({
   };
 
   const handleEditClick = (habit: DayLogHabit, completed: boolean | null) => {
-    // Convert to Habit type with minimal fields for dialog
-    setEditHabit({
+    // Convert to Habit type with minimal fields for the edit dialog
+    const habitForEdit: Habit = {
       id: habit.id,
       name: habit.name,
       type: habit.type,
       streak: 0,
       createdAt: new Date(),
-    } as Habit);
-    setEditCompleted(completed);
-    setEditDialogOpen(true);
-  };
-
-  const handleSaveEdit = (completed: boolean) => {
-    if (editHabit && formattedDate) {
-      addOrUpdateLog(editHabit.id, formattedDate, completed);
-    }
-    setEditDialogOpen(false);
-    setEditHabit(null);
-    setEditCompleted(null);
+    } as Habit;
+    onRequestEditEntry(habitForEdit, formattedDate, completed);
   };
 
   return (
@@ -467,30 +449,8 @@ function CalendarTabContent({
               {/* Show AddEntryButton for any past or today date (not future) */}
               <AddEntryButton
                 show={!!selectedDate && isPastOrToday(selectedDate)}
-                onClick={() => setAddEntryDialogOpen(true)}
+                onClick={() => onRequestAddEntry(formattedDate)}
               />
-            {/* AddEntryDialog — always mounted so vaul close animation runs */}
-            <AddEntryDialog
-              open={addEntryDialogOpen}
-              onOpenChange={setAddEntryDialogOpen}
-              habits={habits}
-              date={formattedDate}
-              addOrUpdateLog={addOrUpdateLog}
-              addHabit={addHabit}
-            />
-            {/* Edit Entry Dialog */}
-            {editHabit && (
-              <React.Suspense fallback={null}>
-                <EditEntryDialog
-                  open={editDialogOpen}
-                  onOpenChange={setEditDialogOpen}
-                  habit={editHabit}
-                  date={formattedDate}
-                  completed={editCompleted}
-                  onSave={handleSaveEdit}
-                />
-              </React.Suspense>
-            )}
           </div>
         )}
     </div>

@@ -2,6 +2,7 @@
 // Use googleapis and shared/data-sync helpers
 
 import { exportBundleToJson, importBundleFromJson } from '../shared/data-sync';
+import { getOrCreateAppFolder } from '../lib/drive-folder';
 
 // Example: Export habits to Drive
 // const bundle = {...};
@@ -12,13 +13,15 @@ import { exportBundleToJson, importBundleFromJson } from '../shared/data-sync';
 // const json = await downloadFromDrive(accessToken);
 // const bundle = importBundleFromJson(json);
 
-// Upload JSON data to Google Drive
+// Upload JSON data to Google Drive (into the "TGATB Habit Tracker" folder)
 export async function uploadToDrive(jsonData: string, accessToken: string): Promise<{ id?: string } | null> {
 	try {
 		console.debug('[DriveSync] uploadToDrive called', { jsonData, accessToken });
+		const folderId = await getOrCreateAppFolder(accessToken);
 		const metadata = {
 			name: 'habits-backup.json',
 			mimeType: 'application/json',
+			parents: [folderId],
 		};
 		const form = new FormData();
 		form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));

@@ -9,6 +9,8 @@ import { AddHabitDialog } from "@/components/add-habit-dialog";
 import { EditHabitDialog } from "@/components/edit-habit-dialog";
 import { DonationDialog } from "@/components/donation-dialog";
 import { HistoryDialog } from "@/components/history-dialog";
+import { AddEntryDialog } from "@/components/add-entry-dialog";
+import { EditEntryDialog } from "@/components/edit-entry-dialog";
 import { AboutDialog } from "@/components/about-dialog";
 import { AddHabitCTA } from "@/components/add-habit-cta";
 import { ResponsiveSettings } from "@/components/responsive-settings";
@@ -68,6 +70,15 @@ export default function Home() {
   const [showAbout, setShowAbout] = useState(false);
   const [welcomeStep, setWelcomeStep] = useState(0);
   const [drawerOpen, setDrawerOpen] = useState(false);
+
+  // Hoisted AddEntry / EditEntry dialog state (siblings of HistoryDialog, not children)
+  // This prevents vaul keyboard handlers from cross-contaminating the parent drawer.
+  const [historyAddEntryOpen, setHistoryAddEntryOpen] = useState(false);
+  const [historyAddEntryDate, setHistoryAddEntryDate] = useState("");
+  const [historyEditEntryOpen, setHistoryEditEntryOpen] = useState(false);
+  const [historyEditHabit, setHistoryEditHabit] = useState<Habit | null>(null);
+  const [historyEditDate, setHistoryEditDate] = useState("");
+  const [historyEditCompleted, setHistoryEditCompleted] = useState<boolean | null>(null);
   
   const { toast } = useToast();
   
@@ -440,7 +451,44 @@ export default function Home() {
           habits={allHabits}
           addOrUpdateLog={addOrUpdateLog}
           removeLog={removeLog}
+          onRequestAddEntry={(date) => {
+            setHistoryAddEntryDate(date);
+            setHistoryAddEntryOpen(true);
+          }}
+          onRequestEditEntry={(habit, date, completed) => {
+            setHistoryEditHabit(habit);
+            setHistoryEditDate(date);
+            setHistoryEditCompleted(completed);
+            setHistoryEditEntryOpen(true);
+          }}
         />
+
+        {/* AddEntryDialog — sibling of HistoryDialog so keyboard events don't affect parent drawer */}
+        <AddEntryDialog
+          open={historyAddEntryOpen}
+          onOpenChange={setHistoryAddEntryOpen}
+          habits={allHabits}
+          date={historyAddEntryDate}
+          addOrUpdateLog={addOrUpdateLog}
+          addHabit={addHabit}
+        />
+
+        {/* EditEntryDialog — sibling of HistoryDialog for same reason */}
+        {historyEditHabit && (
+          <EditEntryDialog
+            open={historyEditEntryOpen}
+            onOpenChange={setHistoryEditEntryOpen}
+            habit={historyEditHabit}
+            date={historyEditDate}
+            completed={historyEditCompleted}
+            onSave={(completed) => {
+              addOrUpdateLog(historyEditHabit.id, historyEditDate, completed);
+              setHistoryEditEntryOpen(false);
+              setHistoryEditHabit(null);
+              setHistoryEditCompleted(null);
+            }}
+          />
+        )}
 
         <AboutDialog 
           open={showAbout}

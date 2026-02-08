@@ -151,12 +151,9 @@ export function useCloudBackup() {
         }
 
         try {
-          // List files named 'habits-backup.json' in Drive
-          const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
-            headers: { Authorization: `Bearer ${accessToken}` }
-          });
-          const listJson = await listRes.json();
-          const files = listJson.files || [];
+          // List files in app folder (with root fallback for legacy uploads)
+          const { listAppFiles } = await import('@/lib/drive-folder');
+          const files = await listAppFiles('habits-backup.json', accessToken, { withRootFallback: true });
           console.debug('[useCloudBackup] Web Drive file list:', files);
 
           if (!files.length) throw new Error("No backup file found in Drive");

@@ -1,8 +1,12 @@
-// Upload full export bundle (string) to Drive
+import { getOrCreateAppFolder, listAppFiles } from '../lib/drive-folder';
+
+// Upload full export bundle (string) to Drive (into "TGATB Habit Tracker" folder)
 export async function uploadDataToDrive(jsonData: string, accessToken: string): Promise<string | null> {
+	const folderId = await getOrCreateAppFolder(accessToken);
 	const metadata = {
 		name: 'habits-backup.json',
 		mimeType: 'application/json',
+		parents: [folderId],
 	};
 	const form = new FormData();
 	form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
@@ -39,27 +43,11 @@ export async function uploadDataToDrive(jsonData: string, accessToken: string): 
 import type { ExportBundle } from '../shared/schema';
 import { TokenStorage } from '../lib/utils';
 
-// Download the latest habits backup from Drive
+// Download the latest habits backup from Drive (checks app folder first, then root)
 export async function downloadLatestHabitsFromDrive(accessToken: string): Promise<ExportBundle | null> {
 	 try {
-		 // List files named 'habits-backup.json' (to match web)
-		 const listRes = await fetch('https://www.googleapis.com/drive/v3/files?q=name%3D%27habits-backup.json%27&spaces=drive&fields=files(id%2Cname%2CmodifiedTime)&orderBy=modifiedTime desc', {
-			 headers: { Authorization: `Bearer ${accessToken}` }
-		 });
-		 const listJson = await listRes.json();
-		 if (!listRes.ok) {
-			 if (listRes.status === 401) {
-				 console.error('[DriveSync] list files 401', { status: listRes.status, result: listJson });
-				 try {
-							await TokenStorage.removeAccessToken();
-				 } catch (e) {
-					 console.warn('[DriveSync] failed to clear googleAccessToken in Preferences', e);
-				 }
-				 throw new Error('Drive Unauthorized (401)');
-			 }
-			 throw new Error(listJson?.error?.message || 'Drive file list failed');
-		 }
-		 const files = listJson.files || [];
+		 // List files in app folder with root fallback for legacy uploads
+		 const files = await listAppFiles('habits-backup.json', accessToken, { withRootFallback: true });
 		 if (!files.length) throw new Error("No backup file found in Drive");
 		 const fileId = files[0].id;
 		 // Download full bundle from Drive
@@ -91,9 +79,11 @@ export async function downloadLatestHabitsFromDrive(accessToken: string): Promis
 import { exportBundleToJson, importBundleFromJson } from '../shared/data-sync';
 
 export async function uploadHabitsToDrive(habitsOrBundle: ExportBundle | ExportBundle['habits'], accessToken: string): Promise<string | null> {
+	 const folderId = await getOrCreateAppFolder(accessToken);
 	 const metadata = {
 		 name: 'habits-export.json',
 		 mimeType: 'application/json',
+		 parents: [folderId],
 	 };
 	 const form = new FormData();
 	 form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
