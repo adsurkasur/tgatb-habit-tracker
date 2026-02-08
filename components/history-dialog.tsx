@@ -60,7 +60,7 @@ interface HistoryDialogProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   habits: Habit[];
-  addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
+
   removeLog: (habitId: string, date: string) => void;
   /** Callback to open the AddEntryDialog for a given date (hoisted to page level) */
   onRequestAddEntry: (date: string) => void;
@@ -78,7 +78,7 @@ interface StatCard {
   color: string;
 }
 
-export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, removeLog, onRequestAddEntry, onRequestEditEntry }: HistoryDialogProps) {
+export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequestAddEntry, onRequestEditEntry }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
 
@@ -130,7 +130,7 @@ export function HistoryDialog({ open, onOpenChange, habits, addOrUpdateLog, remo
             </TabsContent>
 
             <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} habits={habits} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
+              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
             </TabsContent>
 
             <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
@@ -297,7 +297,6 @@ function CalendarTabContent({
   completedDates,
   selectedDayLog,
   removeLog,
-  habits,
   onRequestAddEntry,
   onRequestEditEntry,
 }: {
@@ -306,7 +305,6 @@ function CalendarTabContent({
   completedDates: Set<string>;
   selectedDayLog: DayLog | null | undefined;
   removeLog: (habitId: string, date: string) => void;
-  habits: Habit[];
   onRequestAddEntry: (date: string) => void;
   onRequestEditEntry: (habit: Habit, date: string, completed: boolean | null) => void;
 }) {

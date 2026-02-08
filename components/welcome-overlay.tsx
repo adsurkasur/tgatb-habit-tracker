@@ -401,7 +401,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   return (
     <div
       ref={overlayRef}
-      className="fixed inset-0 z-[100] bg-black/20"
+      className="fixed inset-0 z-100 bg-black/20"
       style={{ 
         pointerEvents: 'auto'
       }}
@@ -435,7 +435,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           {/* Header */}
           <div className="flex items-start justify-between mb-6 max-sm:mb-4 min-w-0">
             <div className="flex-1 min-w-0">
-              <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-3 max-sm:mb-2 leading-tight break-words">
+              <h3 className="text-lg max-sm:text-base font-semibold text-card-foreground mb-3 max-sm:mb-2 leading-tight wrap-break-word">
                 {currentStepData.title}
               </h3>
               <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20 px-3 py-1">
@@ -451,7 +451,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           </div>
 
           {/* Description */}
-          <p className="text-sm max-sm:text-xs text-muted-foreground mb-6 max-sm:mb-4 leading-relaxed max-sm:leading-snug break-words">
+          <p className="text-sm max-sm:text-xs text-muted-foreground mb-6 max-sm:mb-4 leading-relaxed max-sm:leading-snug wrap-break-word">
             {currentStepData.description}
           </p>
 

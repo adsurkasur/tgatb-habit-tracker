@@ -328,7 +328,7 @@ export default function Home() {
                   {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
                     <button
                       onClick={moveToPreviousHabit}
-                      className="max-sm:hidden absolute left-[-60px] top-1/2 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                      className="max-sm:hidden absolute left-0 top-1/2 -translate-x-15 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                       aria-label="Previous habit"
                     >
                       <svg className="w-6 h-6 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -351,7 +351,7 @@ export default function Home() {
                   {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
                     <button
                       onClick={moveToNextHabit}
-                      className="max-sm:hidden absolute right-[-60px] top-1/2 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
+                      className="max-sm:hidden absolute right-0 top-1/2 translate-x-15 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                       aria-label="Next habit"
                     >
                       <svg className="w-6 h-6 text-primary group-hover:text-primary/80 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -449,7 +449,6 @@ export default function Home() {
           open={showHistory}
           onOpenChange={setShowHistory}
           habits={allHabits}
-          addOrUpdateLog={addOrUpdateLog}
           removeLog={removeLog}
           onRequestAddEntry={(date) => {
             setHistoryAddEntryDate(date);

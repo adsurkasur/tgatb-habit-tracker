@@ -41,13 +41,16 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   // Reset form state when dialog opens (component stays mounted for close animation)
   useEffect(() => {
     if (open) {
-      setSelectedHabit(null);
-      setStatus(null);
-      setNewHabitName("");
-      setNewHabitType("good");
-      setNewHabitStatus(null);
-      setLastAddedHabitId(null);
-      setTab("entry");
+      // Defer resets to avoid synchronous cascading renders when dialog opens
+      setTimeout(() => {
+        setSelectedHabit(null);
+        setStatus(null);
+        setNewHabitName("");
+        setNewHabitType("good");
+        setNewHabitStatus(null);
+        setLastAddedHabitId(null);
+        setTab("entry");
+      }, 0);
     }
   }, [open]);
 

@@ -159,10 +159,10 @@ function ResponsiveDialogContent({
         className={cn(
           // Standard drawers: full viewport height so snap-point offsets map correctly.
           // Compact drawers: cap at 90vh for content-based sizing.
-          drawerSize === "compact" ? "max-h-[90vh]" : "h-[100dvh] flex flex-col",
+          drawerSize === "compact" ? "max-h-[90vh]" : "h-dvh flex flex-col",
           className,
           drawerClassName,
-        )}
+        )} 
       >
         {/* Peek indicator — shown only at the minimum snap point */}
         {isAtMinSnap && (
