@@ -43,7 +43,8 @@
     "release:tag": "node scripts/release.cjs",
     "sync-git": "node scripts/sync-pull-push.cjs",
     "release": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git",
-    "release:full": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git"
+    "release:full": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git",
+    "rerelease": "node scripts/rerelease.cjs"
   },
   "dependencies": {
     "@capacitor-firebase/authentication": "^7.3.0",
