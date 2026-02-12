@@ -3,6 +3,7 @@
 import * as React from "react";
 import { X } from "lucide-react";
 import { useIsMobile } from "@/hooks/use-mobile";
+import { useIsAndroid } from "@/hooks/use-platform";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import {
   Dialog,
@@ -80,6 +81,7 @@ interface ResponsiveDialogProps {
 
 function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard" }: ResponsiveDialogProps) {
   const isMobile = useIsMobile();
+  const isAndroid = useIsAndroid();
 
   // ── Automatic back-navigation (global stack) ──
   // Each ResponsiveDialog registers itself; the topmost one closes first.
@@ -116,6 +118,12 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
             setActiveSnapPoint={setActiveSnap}
             fadeFromIndex={1}
             snapToSequentialPoint
+            // On Android WebView, Vaul's keyboard repositioning causes a transient
+            // downward shift because it mutates style.bottom via visualViewport while
+            // snap transforms are still anchored to window.innerHeight. Disabling
+            // repositionInputs prevents Vaul from touching bottom/height on keyboard
+            // events, letting the native Android scroll/pan handle input visibility.
+            repositionInputs={!isAndroid}
           >
             {children}
           </Drawer>
