@@ -70,40 +70,12 @@ export function useAuth() {
     });
   }, [isCapacitorApp, toast]);
 
-  // Load profile info on mount (web)
+  // Load profile info on mount — check for stored token
   useEffect(() => {
     (async () => {
       let accessToken: string | null = null;
       let name: string | undefined = undefined;
       let photoUrl: string | undefined = undefined;
-
-      // Check for pending Google redirect sign-in result (mobile web flow)
-      if (typeof window !== 'undefined' && !isCapacitorApp) {
-        try {
-          const { getGoogleRedirectResult } = await import("../web/google-auth");
-          const redirectResult = await getGoogleRedirectResult();
-          if (redirectResult.accessToken) {
-            console.debug('[useAuth] Redirect sign-in successful');
-            await TokenStorage.setAccessToken(redirectResult.accessToken);
-            const user = redirectResult.user;
-            if (user) {
-              localStorage.setItem('googleProfileName', user.displayName || '');
-              localStorage.setItem('googleProfilePhoto', user.photoURL || '');
-              setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
-            }
-            setIsLoggedIn(true);
-            setClientReady(true);
-            toast({
-              title: "Sign-in Successful",
-              description: "You are now signed in with Google.",
-              duration: 3000,
-            });
-            return;
-          }
-        } catch (err) {
-          console.warn('[useAuth] Redirect result check failed:', err);
-        }
-      }
 
       if (typeof window !== 'undefined' && !isCapacitorApp) {
         accessToken = await TokenStorage.getAccessToken();

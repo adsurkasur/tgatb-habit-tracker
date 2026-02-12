@@ -46,7 +46,7 @@
     "release:full": "npm run sync-ver && npm run validate-ver && npm run commit:release && npm run release:tag && npm run sync-git"
   },
   "dependencies": {
-    "@capacitor-firebase/authentication": "^7.3.0",
+    "@capacitor-firebase/authentication": "7.5.0",
     "@capacitor/android": "^7.4.2",
     "@capacitor/app": "^7.0.2",
     "@capacitor/cli": "^7.4.2",
