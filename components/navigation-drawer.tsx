@@ -205,7 +205,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               </div>
               <button
                 onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-opacity flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
+                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-all duration-200 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -225,7 +225,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               {searchQuery && (
                 <button
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-foreground transition-colors cursor-pointer"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer"
                   aria-label="Clear search"
                 >
                   <X className="w-4 h-4" />
@@ -253,7 +253,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     </div>
                     {!searchQuery && (
                       <ChevronDown className={cn(
-                        "w-5 h-5 transition-transform duration-200 ease-out",
+                        "w-5 h-5 transition-all duration-200 ease-out",
                         goodHabitsOpen && "rotate-180"
                       )} />
                     )}
@@ -304,7 +304,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     </div>
                     {!searchQuery && (
                       <ChevronDown className={cn(
-                        "w-5 h-5 transition-transform duration-200 ease-out",
+                        "w-5 h-5 transition-all duration-200 ease-out",
                         badHabitsOpen && "rotate-180"
                       )} />
                     )}

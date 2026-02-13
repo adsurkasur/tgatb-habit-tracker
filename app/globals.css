@@ -64,9 +64,9 @@
   
   /* Design System Custom Properties */
   --cta-bg: var(--header);
-  --cta-border: hsl(var(--primary) / 0.3);
-  --cta-hover-border: hsl(var(--primary) / 0.5);
-  --cta-icon-bg: hsl(var(--primary) / 0.1);
+  --cta-border: oklch(from var(--primary) l c h / 0.3);
+  --cta-hover-border: oklch(from var(--primary) l c h / 0.5);
+  --cta-icon-bg: oklch(from var(--primary) l c h / 0.1);
   --cta-button-bg: hsl(256, 33%, 52%);
   --cta-button-hover: hsl(256, 33%, 45%);
 }
@@ -127,8 +127,9 @@
     color: var(--foreground);
     font-family: 'Inter', sans-serif;
     /* Keep smooth transitions on the body only */
-    transition: color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                background-color 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: color, background-color;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
 
 }
@@ -190,7 +191,9 @@ html {
   }
   
   @utility card-transition {
-    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: box-shadow;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   /* Habit Card Animations */
@@ -362,9 +365,8 @@ html {
     background: var(--cta-bg);
     /* Minimal shadow when not hovered */
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                scale 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                translate 0.2s cubic-bezier(0.2, 0, 0, 1);
+    /* NOTE: No transition longhands here — the component's Tailwind transition-all utility
+       handles all property transitions. CSS longhands here would conflict with the utility layer. */
   }
   
   .cta-card:hover {
@@ -414,12 +416,13 @@ html {
   
   /* CTA Icon Animations - uses explicit properties for Tailwind v4 compatibility */
   .cta-icon-container {
-    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                scale 0.2s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: background-color, scale;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover .cta-icon-container {
-    background-color: hsl(var(--primary) / 0.15);
+    background-color: oklch(from var(--primary) l c h / 0.15);
     scale: 1.05;
   }
   
@@ -443,8 +446,9 @@ html {
   @utility cta-button {
     background: var(--cta-button-bg);
     color: white;
-    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1), 
-                scale 0.2s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: background-color, scale;
+    transition-duration: 0.2s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-button:hover {
@@ -466,7 +470,8 @@ html {
     width: 100%;
     height: 100%;
     background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-    transition: left 0.5s;
+    transition-property: left;
+    transition-duration: 0.5s;
   }
   
   .cta-button-animated:hover::before {
@@ -474,7 +479,7 @@ html {
   }
   
   .dark .cta-button {
-    color: hsl(var(--primary-foreground));
+    color: var(--primary-foreground);
   }
   
   /* Floating Action Button - uses individual CSS properties */
@@ -490,6 +495,11 @@ html {
     background: var(--cta-button-hover) !important;
     box-shadow: 0 6px 20px rgba(103, 80, 164, 0.4);
     scale: 1.05;
+  }
+
+  .fab:active {
+    translate: 0 1px;
+    box-shadow: 0 2px 8px rgba(103, 80, 164, 0.2);
   }
   
   /* Enhanced FAB Animations - transform in keyframes is isolated */
@@ -508,7 +518,9 @@ html {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     translate: -50% -50%;
-    transition: width 0.2s ease-out, height 0.2s ease-out;
+    transition-property: width, height;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
   }
   
   .fab-animated:active::after {
@@ -562,12 +574,16 @@ html {
   
   /* Theme transition enhancement */
   .theme-transition {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   /* Page transition animations */
   .page-content {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   /* Loading state for content changes */
@@ -578,7 +594,9 @@ html {
   
   /* Smooth page transitions */
   .main-content-container {
-    transition: opacity 0.2s ease-in-out;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-in-out;
   }
   
   /* Cycling indicator animation (subtle) */
@@ -600,7 +618,9 @@ html {
   .cta-color-hover {
     background: var(--cta-button-bg);
     color: white;
-    transition: background-color 0.18s ease;
+    transition-property: background-color;
+    transition-duration: 0.2s;
+    transition-timing-function: ease-out;
   }
 
   .cta-color-hover:hover {
@@ -609,14 +629,15 @@ html {
   
   /* Navigation button transitions for smooth hover/active effects */
   .nav-button {
-    transition-property: scale, box-shadow, background-color, border-color;
+    transition-property: scale, translate, box-shadow, background-color, border-color;
     transition-duration: 200ms;
     transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   .nav-button:active {
-    /* Use individual scale property to compose with Tailwind v4's translate */
-    scale: 0.95;
+    /* Smooth press depth — no scale snap, just translate + shadow */
+    translate: 0 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
   }
   
   /* Dark mode navigation button effects */
@@ -662,8 +683,9 @@ html {
 
   /* Enhanced collapsible animations - uses individual CSS properties */
   .collapsible-item {
-    transition: translate 0.15s cubic-bezier(0.2, 0, 0, 1), 
-                background-color 0.15s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: translate, background-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
 
   .collapsible-item:hover {
@@ -702,7 +724,9 @@ html {
 
   /* Sidebar accordion trigger enhanced animations */
   .accordion-trigger {
-    transition: background-color 0.1s ease-out;
+    transition-property: background-color;
+    transition-duration: 200ms;
+    transition-timing-function: ease-out;
   }
 
   .accordion-trigger:hover {
@@ -711,7 +735,9 @@ html {
 
   /* Badge count animations - uses individual scale property */
   .badge-count {
-    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1);
+    transition-property: scale;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
 
   .badge-count.updated {
@@ -757,7 +783,9 @@ html {
   
   /* Smooth theme transitions */
   html {
-    transition: color-scheme 0.3s ease;
+    transition-property: color-scheme;
+    transition-duration: 0.3s;
+    transition-timing-function: ease;
   }
   
   /* Prevent flash of unstyled content */
@@ -767,7 +795,9 @@ html {
   
   body.app-loaded {
     opacity: 1;
-    transition: opacity 0.4s ease-out;
+    transition-property: opacity;
+    transition-duration: 0.4s;
+    transition-timing-function: ease-out;
   }
   
   /* Loading screen animations */
@@ -793,20 +823,24 @@ html {
     }
   }
   
-  /* Enhanced theme transition: apply to all elements for smooth dark/light mode toggle */
-  /* Uses specific properties to avoid interfering with layout animations */
-  *, *::before, *::after {
-    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1),
-                border-color 0.2s cubic-bezier(0.2, 0, 0, 1),
-                color 0.2s cubic-bezier(0.2, 0, 0, 1),
-                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
-                fill 0.2s cubic-bezier(0.2, 0, 0, 1),
-                stroke 0.2s cubic-bezier(0.2, 0, 0, 1);
+  /* Enhanced theme transition: apply to all elements for smooth dark/light mode toggle.
+   * CRITICAL: Must be in @layer base so Tailwind utility-layer classes (transition-all,
+   * duration-*, etc.) can override these longhands. Unlayered CSS always beats layered CSS
+   * regardless of specificity, which would prevent scale/translate/opacity from transitioning.
+   */
+  @layer base {
+    *, *::before, *::after {
+      transition-property: background-color, border-color, color, box-shadow, fill, stroke;
+      transition-duration: 0.2s;
+      transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
+    }
   }
 
   /* Override transition for specific elements that need faster/different transitions */
   .theme-transition {
-    transition: all 0.3s cubic-bezier(0.2, 0, 0, 1) !important;
+    transition-property: all;
+    transition-duration: 0.3s;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   /* Loading screen specific styles */

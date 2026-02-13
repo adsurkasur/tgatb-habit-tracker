@@ -18,7 +18,7 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
     <div className="space-y-4">
       <h2 className="text-lg font-semibold">Habit Management</h2>
       <div
-        className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+        className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
         onClick={() => setShowDeleteModal(true)}
       >
         <div className="flex items-center space-x-3">

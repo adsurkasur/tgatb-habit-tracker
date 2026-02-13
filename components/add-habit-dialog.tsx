@@ -70,7 +70,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
                 <Button
                   type="button"
                   onClick={() => setType("good")}
-                  className={`flex-1 material-radius-none font-medium transition-colors ${
+                  className={`flex-1 material-radius-none font-medium transition-all duration-200 ${
                     type === "good"
                       ? "bg-green-500 hover:bg-green-600 text-white"
                       : "bg-background hover:bg-muted text-foreground"
@@ -82,7 +82,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
                 <Button
                   type="button"
                   onClick={() => setType("bad")}
-                  className={`flex-1 material-radius-none font-medium transition-colors ${
+                  className={`flex-1 material-radius-none font-medium transition-all duration-200 ${
                     type === "bad"
                       ? "bg-red-500 hover:bg-red-600 text-white"
                       : "bg-background hover:bg-muted text-foreground"

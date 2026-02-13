@@ -23,7 +23,7 @@ export default function OfflinePage() {
           </div>
           <button
             onClick={() => window.location.reload()}
-            className="flex-shrink-0 bg-[#6750a4] hover:bg-[#5a47a0] text-white text-xs px-3 py-1.5 rounded-md font-medium transition-colors duration-200 cursor-pointer"
+            className="flex-shrink-0 bg-[#6750a4] hover:bg-[#5a47a0] text-white text-xs px-3 py-1.5 rounded-md font-medium transition-all duration-200 cursor-pointer"
           >
             Retry
           </button>

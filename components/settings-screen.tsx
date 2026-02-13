@@ -40,7 +40,7 @@ export function SettingsScreen({
 
   return (
     <div
-      className={`fixed inset-0 bg-background z-50 transform transition-transform duration-300 theme-transition flex flex-col ${
+      className={`fixed inset-0 bg-background z-50 transform transition-all duration-300 theme-transition flex flex-col ${
         open ? 'translate-x-0' : 'translate-x-full'
       }`}
     >

@@ -47,7 +47,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
           className="h-14 w-14 rounded-full fab fab-animated"
           data-tour="add-habit-fab"
         >
-          <Plus className="h-6 w-6 transition-transform duration-200 group-hover:rotate-90" />
+          <Plus className="h-6 w-6 transition-all duration-200 group-hover:rotate-90" />
         </Button>
       </div>
     );
@@ -84,7 +84,7 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
           onClick={onAddHabit}
           className="w-full h-12 cta-color-hover cta-button-animated font-medium group"
         >
-          <Plus className="w-5 h-5 mr-2 transition-transform duration-200 group-hover:rotate-90" />
+          <Plus className="w-5 h-5 mr-2 transition-all duration-200 group-hover:rotate-90" />
           Add Your First Habit
         </Button>
         

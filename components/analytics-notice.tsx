@@ -59,7 +59,7 @@ export function AnalyticsNotice() {
           : "translate-y-0 opacity-100 max-sm:translate-y-0 max-sm:opacity-100"
       )}
     >
-      <div className="bg-background border border-border rounded-lg shadow-lg p-4 hover:bg-primary/90 transition-colors duration-200">
+      <div className="bg-background border border-border rounded-lg shadow-lg p-4 hover:bg-primary/90 transition-all duration-200">
         <div className="flex items-center gap-2 mb-2">
           <BarChart3 className="h-4 w-4 text-muted-foreground" />
           <h3 className="text-sm font-medium text-foreground">Notice</h3>

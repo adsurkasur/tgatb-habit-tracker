@@ -13,7 +13,7 @@ export function HelpSupportSettings({ onShowHelp }: HelpSupportSettingsProps) {
       <div className="space-y-2">
         {onShowHelp && (
           <div
-            className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+            className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
             onClick={onShowHelp}
           >
             <div className="flex items-center space-x-3">
@@ -25,7 +25,7 @@ export function HelpSupportSettings({ onShowHelp }: HelpSupportSettingsProps) {
         )}
 
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => window.open(`mailto:${SUPPORT_EMAIL}?subject=Habit%20Tracker%20Support&body=Hi%2C%20I%20need%20support.`, '_blank')}
         >
           <div className="flex items-center space-x-3">

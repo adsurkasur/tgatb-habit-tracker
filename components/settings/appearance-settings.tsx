@@ -46,7 +46,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
 
       <div className="space-y-2">
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => onUpdateSettings({ darkMode: !settings.darkMode })}
         >
           <div className="flex items-center space-x-3">
@@ -64,7 +64,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
         </div>
 
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => {
             toast({
               title: "Upcoming Feature!",
@@ -86,7 +86,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
         </div>
 
         <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             !isNative ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
           {...(isNative ? { onClick: () => handleFullscreenToggle(!settings.fullscreenMode) } : {})}

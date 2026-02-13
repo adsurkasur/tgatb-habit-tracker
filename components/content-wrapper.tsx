@@ -11,7 +11,7 @@ export function ContentWrapper({ children }: ContentWrapperProps) {
   const { isLoading } = useTheme();
 
   return (
-    <div className={`min-h-screen transition-opacity duration-500 ease-out ${
+    <div className={`min-h-screen transition-all duration-200 ease-out ${
       isLoading 
         ? 'opacity-0 pointer-events-none' 
         : 'opacity-100'

@@ -34,12 +34,12 @@ export function LoadingScreen() {
         <div className={`text-center transition-all duration-500 delay-100 ${
           isLoading ? 'translate-y-0 opacity-100' : 'translate-y-2 opacity-0'
         }`}>
-          <h1 className={`text-2xl font-bold mb-2 transition-colors duration-300 ${
+          <h1 className={`text-2xl font-bold mb-2 transition-all duration-200 ${
             isDark ? 'text-white' : 'text-gray-900'
           }`}>
             TGATB
           </h1>
-          <p className={`text-sm transition-colors duration-300 ${
+          <p className={`text-sm transition-all duration-200 ${
             isDark ? 'text-gray-400' : 'text-gray-600'
           }`}>
             Habit Tracker
@@ -50,7 +50,7 @@ export function LoadingScreen() {
         <div className={`relative transition-all duration-500 delay-200 ${
           isLoading ? 'scale-100 opacity-100' : 'scale-75 opacity-0'
         }`}>
-          <div className={`w-8 h-8 rounded-full border-2 transition-colors duration-300 ${
+          <div className={`w-8 h-8 rounded-full border-2 transition-all duration-200 ${
             isDark 
               ? 'border-purple-900 border-t-purple-500' 
               : 'border-purple-200 border-t-purple-600'
@@ -73,7 +73,7 @@ export function LoadingScreen() {
       }`} />
       
       {/* Subtle pattern overlay */}
-      <div className={`absolute inset-0 opacity-10 transition-opacity duration-500 ${
+      <div className={`absolute inset-0 opacity-10 transition-all duration-200 ${
         isDark ? 'bg-purple-500' : 'bg-purple-100'
       }`}>
         <div className="absolute inset-0 bg-gradient-to-br from-transparent via-current to-transparent" />

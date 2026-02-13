@@ -46,7 +46,7 @@ export function AccountDataSettings({
       <div className="space-y-2">
         {!clientReady ? null : (
           <div
-            className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+            className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
             onClick={handleAuth}
           >
             <div className="flex items-center space-x-3">
@@ -75,7 +75,7 @@ export function AccountDataSettings({
 
         {/* Export to Cloud Button */}
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={handleBackup}
         >
           <div className="flex items-center space-x-3">
@@ -87,7 +87,7 @@ export function AccountDataSettings({
 
         {/* Import from Cloud Button */}
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => handleRestore(onImportData)}
         >
           <div className="flex items-center space-x-3">
@@ -99,7 +99,7 @@ export function AccountDataSettings({
 
         {/* Auto Sync Toggle (Switch) */}
         <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             !clientReady || !isLoggedIn ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
           onClick={clientReady && isLoggedIn ? toggleAutoSync : undefined}
@@ -123,7 +123,7 @@ export function AccountDataSettings({
 
         {/* Analytics Consent Toggle */}
         <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             !clientReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
           onClick={clientReady ? () => onUpdateSettings({ analyticsConsent: !settings.analyticsConsent }) : undefined}
@@ -146,7 +146,7 @@ export function AccountDataSettings({
         </div>
 
         <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             isExporting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
           onClick={isExporting ? undefined : handleExportClick}
@@ -161,7 +161,7 @@ export function AccountDataSettings({
         </div>
 
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition"
+          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={handleImportClick}
         >
           <div className="flex items-center space-x-3">
@@ -180,7 +180,7 @@ export function AccountDataSettings({
         />
         {hasConflict ? (
           <div className="mt-3">
-            <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-colors theme-transition" onClick={() => setConflictOpen(true)}>
+            <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition" onClick={() => setConflictOpen(true)}>
               <div className="flex items-center space-x-3">
                 <CloudDownload className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Resolve Sync Conflicts</span>

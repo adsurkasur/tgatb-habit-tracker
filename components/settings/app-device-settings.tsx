@@ -10,7 +10,7 @@ export function AppDeviceSettings() {
 
       <div className="space-y-2">
         <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-colors theme-transition ${
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             isCapacitorApp || isAppInstalled
               ? 'opacity-50 cursor-not-allowed'
               : 'cursor-pointer state-layer-hover'
