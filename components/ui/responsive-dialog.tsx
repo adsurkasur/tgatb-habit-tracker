@@ -157,7 +157,7 @@ function ResponsiveDialogContent({
   dialogClassName,
   drawerClassName,
 }: ResponsiveDialogContentProps) {
-  const { isMobile, drawerSize, activeSnapPoint } = useResponsiveDialog();
+  const { isMobile, onOpenChange, drawerSize, activeSnapPoint } = useResponsiveDialog();
 
   if (isMobile) {
     const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
@@ -172,6 +172,16 @@ function ResponsiveDialogContent({
           drawerClassName,
         )} 
       >
+        {/* Tap-to-dismiss scrim — at the peeking snap the vaul overlay is faded out,
+            so we render our own invisible touch target above the drawer to let users
+            tap-outside-to-close. */}
+        {isAtMinSnap && (
+          <div
+            className="fixed inset-0 z-[-1]"
+            onClick={() => onOpenChange(false)}
+            aria-hidden="true"
+          />
+        )}
         {/* Peek indicator — shown only at the minimum snap point */}
         {isAtMinSnap && (
           <div
