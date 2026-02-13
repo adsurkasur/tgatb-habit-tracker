@@ -4,10 +4,17 @@
  * - Android (Capacitor): Uses @capacitor/local-notifications for reliable OS-level alarms.
  * - Web: Uses the Notification API as best-effort (only fires when browser/PWA is active).
  *
+ * Notification messages are sourced from the "reminder" context in the
+ * motivator personality system so tone matches the user's chosen personality.
+ *
  * No server, no FCM, no Service Worker timers.
  */
 
+import type { MotivatorPersonality } from "@shared/schema";
+import { motivatorMessages } from "./motivator-messages";
+
 const REMINDER_NOTIFICATION_ID = 42001;
+const DEFAULT_PERSONALITY: MotivatorPersonality = "positive";
 
 // ---------------------------------------------------------------------------
 // Platform detection
@@ -43,7 +50,10 @@ async function checkAndroidPermission(): Promise<boolean> {
   return perm.display === "granted";
 }
 
-async function scheduleAndroidReminder(timeStr: string): Promise<void> {
+async function scheduleAndroidReminder(
+  timeStr: string,
+  personality: MotivatorPersonality = DEFAULT_PERSONALITY,
+): Promise<void> {
   const { LocalNotifications } = await import(
     "@capacitor/local-notifications"
   );
@@ -65,7 +75,7 @@ async function scheduleAndroidReminder(timeStr: string): Promise<void> {
       {
         id: REMINDER_NOTIFICATION_ID,
         title: "TGATB Habit Tracker",
-        body: "Time to check in! How are your habits today?",
+        body: pickReminderMessage(personality),
         schedule: {
           at: next,
           repeats: true,
@@ -98,6 +108,18 @@ async function cancelAndroidReminder(): Promise<void> {
 // Web  Notification API (best-effort)
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Shared helper — pick a random reminder message for a personality
+// ---------------------------------------------------------------------------
+
+function pickReminderMessage(personality: MotivatorPersonality): string {
+  const pool = motivatorMessages[personality]?.reminder;
+  if (pool && pool.length > 0) {
+    return pool[Math.floor(Math.random() * pool.length)];
+  }
+  return "Time to check in! How are your habits today?";
+}
+
 let webReminderTimer: ReturnType<typeof setTimeout> | null = null;
 
 function requestWebPermission(): Promise<boolean> {
@@ -115,8 +137,15 @@ function checkWebPermission(): boolean {
   return Notification.permission === "granted";
 }
 
-function scheduleWebReminder(timeStr: string): void {
+/** Currently active personality — stored so re-tick uses the right voice. */
+let activePersonality: MotivatorPersonality = DEFAULT_PERSONALITY;
+
+function scheduleWebReminder(
+  timeStr: string,
+  personality: MotivatorPersonality = DEFAULT_PERSONALITY,
+): void {
   cancelWebReminder();
+  activePersonality = personality;
 
   const [hours, minutes] = timeStr.split(":").map(Number);
 
@@ -161,7 +190,7 @@ function fireWebNotification(): void {
 
   try {
     new Notification("TGATB Habit Tracker", {
-      body: "Time to check in! How are your habits today?",
+      body: pickReminderMessage(activePersonality),
       icon: "/icons/icon-192x192.svg",
       tag: "tgatb-daily-reminder",
     });
@@ -198,12 +227,17 @@ export async function checkReminderPermission(): Promise<boolean> {
 /**
  * Schedule a daily reminder at the given time (HH:mm).
  * On Android this uses OS-level alarms. On web it uses setTimeout (best-effort).
+ * The notification message is sourced from the motivator "reminder" context
+ * matching the user's chosen personality.
  */
-export async function scheduleReminder(timeStr: string): Promise<void> {
+export async function scheduleReminder(
+  timeStr: string,
+  personality: MotivatorPersonality = DEFAULT_PERSONALITY,
+): Promise<void> {
   if (await isNativePlatform()) {
-    return scheduleAndroidReminder(timeStr);
+    return scheduleAndroidReminder(timeStr, personality);
   }
-  scheduleWebReminder(timeStr);
+  scheduleWebReminder(timeStr, personality);
 }
 
 /**

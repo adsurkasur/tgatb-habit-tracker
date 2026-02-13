@@ -18,7 +18,8 @@ export type MotivatorContext =
   | "missed"
   | "relapse"
   | "firstDay"
-  | "comeback";
+  | "comeback"
+  | "reminder";
 
 export type MotivatorMessages = Record<
   MotivatorPersonality,
@@ -76,6 +77,13 @@ export const motivatorMessages: MotivatorMessages = {
       "\uD83C\uDF08 Glad to see you back! Let's keep going!",
       "\u2764\uFE0F Coming back is harder than starting. Well done!",
     ],
+    reminder: [
+      "🌟 Hey! Time to check in on your habits!",
+      "💪 Your habits are waiting for you! Let's go!",
+      "✨ A quick check-in keeps the momentum alive!",
+      "🌈 Don't forget — every day counts! Open up!",
+      "🎯 You've got this! Time for your daily check-in!",
+    ],
   },
   adaptive: {
     completed: [
@@ -127,6 +135,13 @@ export const motivatorMessages: MotivatorMessages = {
       "\uD83C\uDFAF The gap happened. Focus on what's ahead.",
       "\u26A1 Resuming is a decision. Good one.",
     ],
+    reminder: [
+      "📋 Time for your daily habit check-in.",
+      "⏰ Reminder: log your habits while it's fresh.",
+      "📊 Your habits won't track themselves. Check in now.",
+      "✅ Daily review time. How did today go?",
+      "🎯 Stay on track — open up and log your progress.",
+    ],
   },
   harsh: {
     completed: [
@@ -177,6 +192,13 @@ export const motivatorMessages: MotivatorMessages = {
       "\uD83C\uDFAF Returning is easy. Staying is the hard part.",
       "\uD83D\uDCAA Glad you're back. Now prove you mean it.",
       "\uD83D\uDD25 The gap on your record doesn't lie. Fix it.",
+    ],
+    reminder: [
+      "⏰ Your habits aren't going to log themselves.",
+      "🔥 No excuses. Open the app and check in.",
+      "💀 Skipping your check-in? That's how streaks die.",
+      "⚡ You committed to this. Time to show up.",
+      "🎯 Don't be lazy. Open the app. Now.",
     ],
   },
 };

@@ -58,13 +58,15 @@ export function AppDeviceSettings({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isCapacitorApp]);
 
-  // Re-schedule whenever time changes and reminder is enabled
+  const personality = settings.motivatorPersonality ?? "positive";
+
+  // Re-schedule whenever time or personality changes and reminder is enabled
   useEffect(() => {
     if (reminderEnabled && permissionGranted && reminderTime) {
-      scheduleReminder(reminderTime);
+      scheduleReminder(reminderTime, personality);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [reminderTime, reminderEnabled, permissionGranted]);
+  }, [reminderTime, reminderEnabled, permissionGranted, personality]);
 
   const handleToggle = useCallback(
     async (enabled: boolean) => {
@@ -79,7 +81,7 @@ export function AppDeviceSettings({
           reminderEnabled: true,
           reminderTime: reminderTime,
         });
-        await scheduleReminder(reminderTime);
+        await scheduleReminder(reminderTime, personality);
       } else {
         onUpdateSettings({ reminderEnabled: false });
         await cancelReminder();
