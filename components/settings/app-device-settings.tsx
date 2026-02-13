@@ -143,56 +143,61 @@ export function AppDeviceSettings({
           )}
         </div>
 
-        {/* Daily Reminder toggle */}
-        <div
-          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
-            !notificationsSupported
-              ? "opacity-50 cursor-not-allowed"
-              : "cursor-pointer state-layer-hover"
-          }`}
-          onClick={notificationsSupported ? () => handleToggle(!reminderEnabled) : undefined}
-        >
-          <div className="flex items-center space-x-3">
-            <Bell className="w-5 h-5 shrink-0 text-muted-foreground" />
-            <div>
-              <span className="font-medium">Daily Reminder</span>
-              <p className="text-sm text-muted-foreground">
-                {getStatusText()}
-              </p>
-            </div>
-          </div>
-          <Switch
-            id="reminder-toggle"
-            checked={reminderEnabled}
-            onCheckedChange={handleToggle}
-            disabled={!notificationsSupported}
-            onClick={(e) => e.stopPropagation()}
-          />
-        </div>
-
-        {/* Reminder time picker — animated expand/collapse */}
-        <div
-          className={`grid transition-all duration-200 ease-in-out ${
-            reminderEnabled && permissionGranted
-              ? "grid-rows-[1fr] opacity-100"
-              : "grid-rows-[0fr] opacity-0"
-          }`}
-        >
-          <div className="overflow-hidden">
-            <div className="flex items-center justify-between p-4 mt-2 bg-muted material-radius transition-all duration-200 theme-transition">
-              <div className="flex items-center space-x-3">
-                <div className="w-5" />
-                <span className="text-sm text-muted-foreground">Reminder time</span>
+        {/* Daily Reminder — toggle + collapsible time picker in one card */}
+        <div className={`bg-muted material-radius transition-all duration-200 theme-transition ${
+          !notificationsSupported ? "opacity-50" : ""
+        }`}>
+          {/* Toggle row */}
+          <div
+            className={`flex items-center justify-between p-4 ${
+              !notificationsSupported
+                ? "cursor-not-allowed"
+                : "cursor-pointer state-layer-hover"
+            } material-radius`}
+            onClick={notificationsSupported ? () => handleToggle(!reminderEnabled) : undefined}
+          >
+            <div className="flex items-center space-x-3">
+              <Bell className="w-5 h-5 shrink-0 text-muted-foreground" />
+              <div>
+                <span className="font-medium">Daily Reminder</span>
+                <p className="text-sm text-muted-foreground">
+                  {getStatusText()}
+                </p>
               </div>
-              <div className="relative">
-                <input
-                  id="reminder-time"
-                  type="time"
-                  value={reminderTime}
-                  onChange={(e) => handleTimeChange(e.target.value)}
-                  className="bg-background border border-border rounded-md pl-3 pr-9 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
-                />
-                <Clock className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+            </div>
+            <Switch
+              id="reminder-toggle"
+              checked={reminderEnabled}
+              onCheckedChange={handleToggle}
+              disabled={!notificationsSupported}
+              onClick={(e) => e.stopPropagation()}
+            />
+          </div>
+
+          {/* Time picker — animated expand/collapse within same card */}
+          <div
+            className={`grid transition-all duration-200 ease-in-out ${
+              reminderEnabled && permissionGranted
+                ? "grid-rows-[1fr] opacity-100"
+                : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="flex items-center justify-between px-4 pb-4 pt-0">
+                <div className="flex items-center space-x-3">
+                  <div className="w-5" />
+                  <span className="text-sm text-muted-foreground">Reminder time</span>
+                </div>
+                <div className="relative">
+                  <input
+                    id="reminder-time"
+                    type="time"
+                    value={reminderTime}
+                    onChange={(e) => handleTimeChange(e.target.value)}
+                    className="bg-background border border-border rounded-md pl-3 pr-9 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring [&::-webkit-calendar-picker-indicator]:opacity-0 [&::-webkit-calendar-picker-indicator]:absolute [&::-webkit-calendar-picker-indicator]:inset-0 [&::-webkit-calendar-picker-indicator]:w-full [&::-webkit-calendar-picker-indicator]:h-full [&::-webkit-calendar-picker-indicator]:cursor-pointer"
+                  />
+                  <Clock className="pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2 w-4 h-4 text-primary" />
+                </div>
               </div>
             </div>
           </div>
