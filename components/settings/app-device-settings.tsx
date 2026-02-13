@@ -222,16 +222,17 @@ export function AppDeviceSettings({
         <ResponsiveDialogContent dialogClassName="w-full max-w-sm">
           <ResponsiveDialogHeader>
             <ResponsiveDialogTitle className="flex items-center gap-2">
-              <BellOff className="w-5 h-5 text-muted-foreground" />
+              <BellOff className="w-5 h-5 shrink-0 text-muted-foreground" />
               Notifications Needed
             </ResponsiveDialogTitle>
-            <ResponsiveDialogDescription>
+            <ResponsiveDialogDescription className="mt-1.5 text-sm text-muted-foreground">
               To send you daily reminders, the app needs permission to show
               notifications. You can enable this in your browser or device settings.
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
+
           <ResponsiveDialogFooter>
-            <div className="flex justify-end w-full">
+            <div className="flex justify-end space-x-2 w-full">
               <Button onClick={() => setShowPermissionDialog(false)}>Got it</Button>
             </div>
           </ResponsiveDialogFooter>
