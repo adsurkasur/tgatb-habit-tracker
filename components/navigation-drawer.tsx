@@ -253,11 +253,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     </div>
                     {!searchQuery && (
                       <ChevronDown className={cn(
-                        "w-5 h-5",
-                        // Faster closing, slower opening for better UX
-                        goodHabitsOpen 
-                          ? "transition-transform duration-250 ease-out rotate-180"
-                          : "transition-transform duration-150 ease-in"
+                        "w-5 h-5 transition-transform duration-200 ease-out",
+                        goodHabitsOpen && "rotate-180"
                       )} />
                     )}
                   </Button>
@@ -307,11 +304,8 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     </div>
                     {!searchQuery && (
                       <ChevronDown className={cn(
-                        "w-5 h-5",
-                        // Faster closing, slower opening for better UX
-                        badHabitsOpen 
-                          ? "transition-transform duration-250 ease-out rotate-180"
-                          : "transition-transform duration-150 ease-in"
+                        "w-5 h-5 transition-transform duration-200 ease-out",
+                        badHabitsOpen && "rotate-180"
                       )} />
                     )}
                   </Button>

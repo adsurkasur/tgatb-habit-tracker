@@ -190,7 +190,7 @@ html {
   }
   
   @utility card-transition {
-    transition: box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1);
+    transition: box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   /* Habit Card Animations */
@@ -414,8 +414,8 @@ html {
   
   /* CTA Icon Animations - uses explicit properties for Tailwind v4 compatibility */
   .cta-icon-container {
-    transition: background-color 0.25s cubic-bezier(0.2, 0, 0, 1), 
-                scale 0.25s cubic-bezier(0.2, 0, 0, 1);
+    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1), 
+                scale 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .cta-card:hover .cta-icon-container {
@@ -443,7 +443,7 @@ html {
   @utility cta-button {
     background: var(--cta-button-bg);
     color: white;
-    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
+    transition: background-color 0.2s cubic-bezier(0.2, 0, 0, 1), 
                 scale 0.2s cubic-bezier(0.2, 0, 0, 1);
   }
   
@@ -478,13 +478,12 @@ html {
   }
   
   /* Floating Action Button - uses individual CSS properties */
+  /* NOTE: No transition shorthand here — the Button component's transition-all utility
+     handles all property transitions. A CSS shorthand would override the Tailwind longhands. */
   @utility fab {
     background: var(--cta-button-bg) !important;
     color: white !important;
     box-shadow: 0 4px 12px rgba(103, 80, 164, 0.3);
-    transition: background-color 0.3s cubic-bezier(0.2, 0, 0, 1), 
-                box-shadow 0.3s cubic-bezier(0.2, 0, 0, 1),
-                scale 0.3s cubic-bezier(0.2, 0, 0, 1);
   }
   
   .fab:hover {
@@ -509,7 +508,7 @@ html {
     background: rgba(255, 255, 255, 0.1);
     border-radius: 50%;
     translate: -50% -50%;
-    transition: width 0.3s ease, height 0.3s ease;
+    transition: width 0.2s ease-out, height 0.2s ease-out;
   }
   
   .fab-animated:active::after {
@@ -610,9 +609,9 @@ html {
   
   /* Navigation button transitions for smooth hover/active effects */
   .nav-button {
-    transition: scale 0.15s cubic-bezier(0.2, 0, 0, 1), 
-                box-shadow 0.2s cubic-bezier(0.2, 0, 0, 1),
-                background-color 0.15s ease;
+    transition-property: scale, box-shadow, background-color, border-color;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
   }
   
   .nav-button:active {

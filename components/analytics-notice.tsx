@@ -53,7 +53,7 @@ export function AnalyticsNotice() {
         "sm:right-4 sm:bottom-4 sm:left-auto sm:mx-0",
         "left-1/2 -translate-x-1/2 w-[90vw] max-w-sm mx-auto",
         "sm:w-auto sm:left-auto sm:translate-x-0",
-        "transform transition-all duration-400 ease-in-out",
+        "transform transition-all duration-300 ease-out",
         (!isVisible || isExiting)
           ? "translate-y-full opacity-0 max-sm:translate-y-full max-sm:opacity-0"
           : "translate-y-0 opacity-100 max-sm:translate-y-0 max-sm:opacity-100"

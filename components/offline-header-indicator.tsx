@@ -40,7 +40,7 @@ export function OfflineHeaderIndicator() {
   return (
     <div className="flex items-center justify-center w-10">
       <div 
-        className={`p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 transition-opacity duration-300 ease-in-out ${
+        className={`p-2 rounded-full bg-orange-100 dark:bg-orange-900/30 transition-opacity duration-300 ease-out ${
           phase === 'visible' ? 'opacity-100' : 'opacity-0'
         }`}
         title="You are offline"

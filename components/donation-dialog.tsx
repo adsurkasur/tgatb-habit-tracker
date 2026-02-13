@@ -192,15 +192,15 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                     className="flex items-center justify-between w-full"
                   >
                     <div className="flex items-center space-x-3">
-                      <div className={`p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors ${contact.color}`}>
+                      <div className={`p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-200 ${contact.color}`}>
                         {contact.icon}
                       </div>
                       <div>
                         <h4 className="font-medium">{contact.name}</h4>
-                        <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">{contact.label}</p>
+                        <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors duration-200">{contact.label}</p>
                       </div>
                     </div>
-                    <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
+                    <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors duration-200" />
                   </a>
                 </Card>
               ))}
@@ -211,15 +211,15 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               >
                 <div className="flex items-center justify-between w-full">
                   <div className="flex items-center space-x-3">
-                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors">
+                    <div className="p-2 rounded-full bg-primary/10 group-hover:bg-primary/20 transition-colors duration-200">
                       <QrCode className="w-5 h-5" />
                     </div>
                     <div>
                       <h4 className="font-medium">QRIS</h4>
-                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors">Support me with QRIS!</p>
+                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-colors duration-200">Support me with QRIS!</p>
                     </div>
                   </div>
-                  <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors" />
+                  <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors duration-200" />
                 </div>
               </Card>
             </div>
@@ -252,16 +252,16 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                           </Badge>
                         )}
                       </div>
-                      <p className="text-xs text-muted-foreground font-mono break-all group-hover:text-accent-foreground/70 transition-colors">
+                      <p className="text-xs text-muted-foreground font-mono break-all group-hover:text-accent-foreground/70 transition-colors duration-200">
                         {crypto.address}
                       </p>
                     </div>
                     <div className="shrink-0">
                       <div className="relative w-4 h-4">
                         {copiedAddress === crypto.address ? (
-                          <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-300" />
+                          <Check className="w-4 h-4 text-green-600 animate-in fade-in-0 zoom-in-50 duration-200" />
                         ) : (
-                          <Copy className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors animate-in fade-in-0 zoom-in-95 duration-200" />
+                          <Copy className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-colors duration-200 animate-in fade-in-0 zoom-in-95" />
                         )}
                       </div>
                     </div>
