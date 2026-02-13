@@ -1,83 +1,100 @@
 import { MotivatorPersonality, HabitType } from "@shared/schema";
+import { motivatorMessages, type MotivatorContext } from "./motivator-messages";
 
-interface MotivatorMessage {
-  success: string[];
-  failure: string[];
+/** State of a habit used to determine the motivator context. */
+export interface HabitState {
+  /** Whether the habit was just completed (true) or missed (false). */
+  completed: boolean;
+  /** The habit type — affects success/failure inversion for "bad" habits. */
+  habitType: HabitType;
+  /** Current streak length (after the action). */
+  streak: number;
+  /** Previous streak length before today's action (0 if none). */
+  previousStreak?: number;
+  /** How many consecutive days were missed before today (0 if none). */
+  daysMissed?: number;
+  /** Whether this is the very first completion ever recorded for this habit. */
+  isFirstCompletion?: boolean;
 }
 
-const motivatorMessages: Record<MotivatorPersonality, MotivatorMessage> = {
-  positive: {
-    success: [
-      "🌟 Amazing work! You're building great habits!",
-      "💪 Keep it up! Every step counts!",
-      "✨ You're on fire! Great job staying consistent!",
-      "🎉 Fantastic! You're making real progress!",
-      "🌈 Wonderful! Your dedication is inspiring!",
-    ],
-    failure: [
-      "🌱 No worries! Tomorrow is a fresh start!",
-      "💫 It's okay! Progress takes time. You've got this!",
-      "🌟 Don't give up! Every day is a new opportunity!",
-      "💖 Be kind to yourself. Tomorrow you'll do better!",
-      "🌸 Small setbacks lead to bigger comebacks!",
-    ],
-  },
-  adaptive: {
-    success: [
-      "📈 Good progress! Consistency is key.",
-      "✅ Well done! You're building momentum.",
-      "🎯 Nice work! Stay focused on your goals.",
-      "📊 Solid effort! Keep tracking your progress.",
-      "⚡ Good job! Small wins add up over time.",
-    ],
-    failure: [
-      "📝 Noted. What can you adjust for tomorrow?",
-      "🔄 Reset and try again. Learning from setbacks.",
-      "⚖️ Balance is important. Reflect and move forward.",
-      "🎯 Refocus on your why. What matters most?",
-      "📚 Every miss is data. Use it to improve.",
-    ],
-  },
-  harsh: {
-    success: [
-      "💯 Finally! Don't let this be a one-time thing.",
-      "🔥 About time! Keep this energy going.",
-      "⚡ Good. Now prove you can do it again.",
-      "💪 Decent work. Don't get comfortable.",
-      "🎯 One day down. Many more to go.",
-    ],
-    failure: [
-      "❌ Really? You had one job today.",
-      "🚫 Excuses won't build habits. Action will.",
-      "⏰ Time wasted. No shortcuts to success.",
-      "💔 Another missed opportunity. When will you learn?",
-      "🔄 Here we go again. Prove me wrong tomorrow.",
-    ],
-  },
-};
+const MILESTONE_DAYS = [7, 14, 30, 60, 100];
+
+/**
+ * Determine the motivational context from habit state.
+ * For "bad" habits, the success/failure semantics are inverted:
+ * marking a bad habit as completed means you did the bad thing (failure),
+ * NOT completing it means you resisted (success).
+ */
+function detectContext(state: HabitState): MotivatorContext {
+  const actualSuccess =
+    state.habitType === "bad" ? !state.completed : state.completed;
+
+  if (actualSuccess) {
+    // Positive path
+    if (state.isFirstCompletion) return "firstDay";
+    if (MILESTONE_DAYS.includes(state.streak)) return "milestone";
+    if ((state.daysMissed ?? 0) >= 2) return "comeback";
+    if (state.streak >= 3) return "streak";
+    return "completed";
+  }
+
+  // Negative path
+  if ((state.previousStreak ?? 0) >= 3) return "relapse";
+  return "missed";
+}
+
+function pickRandom(messages: string[]): string {
+  return messages[Math.floor(Math.random() * messages.length)];
+}
 
 export class Motivator {
+  /**
+   * Get a context-aware motivational message.
+   * This is the preferred API — it uses full habit state to choose the right context.
+   */
+  static getContextMessage(
+    personality: MotivatorPersonality,
+    state: HabitState
+  ): string {
+    const context = detectContext(state);
+    const pool = motivatorMessages[personality]?.[context];
+
+    // Fallback: if pool somehow empty, use completed/missed
+    const actualSuccess =
+      state.habitType === "bad" ? !state.completed : state.completed;
+    const fallbackContext: MotivatorContext = actualSuccess
+      ? "completed"
+      : "missed";
+    const messages =
+      pool && pool.length > 0
+        ? pool
+        : motivatorMessages[personality][fallbackContext];
+
+    let message = pickRandom(messages);
+
+    // Append streak info on positive outcomes with a streak
+    if (actualSuccess && state.streak > 1) {
+      message += ` (${state.streak} day streak!)`;
+    }
+
+    return message;
+  }
+
+  /**
+   * Legacy API — preserved for backward compatibility.
+   * Delegates to getContextMessage with minimal state.
+   */
   static getMessage(
     personality: MotivatorPersonality,
     success: boolean,
     habitType: HabitType,
     streak: number
   ): string {
-  const messages = motivatorMessages[personality];
-    
-    // For bad habits, flip the success/failure logic
-    const actualSuccess = habitType === "bad" ? !success : success;
-    const actualMessages = actualSuccess ? messages.success : messages.failure;
-    
-    const randomIndex = Math.floor(Math.random() * actualMessages.length);
-    let message = actualMessages[randomIndex];
-    
-    // Add streak information for good performance
-    if (actualSuccess && streak > 1) {
-      message += ` (${streak} day streak!)`;
-    }
-    
-    return message;
+    return Motivator.getContextMessage(personality, {
+      completed: success,
+      habitType,
+      streak,
+    });
   }
 
   static getPersonalityDescription(personality: MotivatorPersonality): string {

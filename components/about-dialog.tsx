@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ExternalLink, Github, Heart, Shield, Zap } from "lucide-react";
+import { ExternalLink, FileText, Github, Heart, Shield, Zap } from "lucide-react";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -108,6 +108,17 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                 >
                   <Shield className="w-4 h-4 mr-2" />
                   Privacy Policy
+                  <ExternalLink className="w-3 h-3 ml-auto" />
+                </Button>
+
+                <Button
+                  variant="outline"
+                  size="sm"
+                  className="justify-start h-8"
+                  onClick={() => window.open('/terms-of-service', '_blank')}
+                >
+                  <FileText className="w-4 h-4 mr-2" />
+                  Terms of Service
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>
               </div>

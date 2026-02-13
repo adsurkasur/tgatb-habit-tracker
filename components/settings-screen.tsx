@@ -79,7 +79,10 @@ export function SettingsScreen({
           onImportData={onImportData}
         />
 
-        <AppDeviceSettings />
+        <AppDeviceSettings
+          settings={settings}
+          onUpdateSettings={onUpdateSettings}
+        />
 
         <HelpSupportSettings
           onShowHelp={onShowHelp}

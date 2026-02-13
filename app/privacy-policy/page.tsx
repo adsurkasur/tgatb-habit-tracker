@@ -251,7 +251,12 @@ export default function PrivacyPolicyPage() {
           </section>
         </div>
 
-        <div className="mt-12 pt-6 border-t border-border text-sm text-muted-foreground">
+        <div className="mt-12 pt-6 border-t border-border text-sm text-muted-foreground space-y-2">
+          <p>
+            <Link href="/terms-of-service" className="text-primary underline">
+              Terms of Service
+            </Link>
+          </p>
           <p>&copy; 2025-2026 <a href="https://github.com/adsurkasur" className="text-primary underline">adsurkasur</a>. All rights reserved.</p>
         </div>
 

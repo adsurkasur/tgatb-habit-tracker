@@ -61,7 +61,10 @@ export function SettingsDialog({
               onImportData={onImportData}
             />
 
-            <AppDeviceSettings />
+            <AppDeviceSettings
+              settings={settings}
+              onUpdateSettings={onUpdateSettings}
+            />
 
             <HelpSupportSettings
               onShowHelp={onShowHelp}

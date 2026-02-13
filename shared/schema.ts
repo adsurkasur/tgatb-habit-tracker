@@ -36,6 +36,10 @@ export interface UserSettings {
   fullscreenMode: boolean;
   autoSync?: boolean;
   analyticsConsent?: boolean;
+  /** Whether daily reminder notifications are enabled. */
+  reminderEnabled?: boolean;
+  /** Reminder time in "HH:mm" format (local time), null when disabled. */
+  reminderTime?: string | null;
 }
 
 export const habitSchema = z.object({
@@ -76,6 +80,8 @@ export const userSettingsSchema = z.object({
   fullscreenMode: z.boolean(),
   autoSync: z.boolean().optional(),
   analyticsConsent: z.boolean().optional(),
+  reminderEnabled: z.boolean().optional(),
+  reminderTime: z.string().nullable().optional(),
 });
 
 // Export bundle schema and types

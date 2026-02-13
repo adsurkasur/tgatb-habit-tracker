@@ -21,7 +21,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   const isCapacitorApp = Capacitor.isNativePlatform();
 
   // Suppress on standalone pages like /privacy-policy
-  const isStandalonePage = typeof window !== 'undefined' && /^\/privacy-policy/.test(window.location.pathname);
+  const isStandalonePage = typeof window !== 'undefined' && /^\/(?:privacy-policy|terms-of-service)/.test(window.location.pathname);
 
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
