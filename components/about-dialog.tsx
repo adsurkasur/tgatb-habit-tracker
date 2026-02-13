@@ -5,6 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLink, FileText, Github, Heart, Shield, Zap } from "lucide-react";
 import { Capacitor } from "@capacitor/core";
+import { useRouter } from "next/navigation";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -20,6 +21,16 @@ interface AboutDialogProps {
 
 export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
   const version = process.env.APP_VERSION || "1.0.0";
+  const router = useRouter();
+
+  const navigateToPage = (path: string) => {
+    if (Capacitor.isNativePlatform()) {
+      onOpenChange(false);
+      router.push(path);
+    } else {
+      window.open(path, '_blank');
+    }
+  };
   
   return (
     <ResponsiveDialog open={open} onOpenChange={onOpenChange}>
@@ -105,7 +116,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   variant="outline"
                   size="sm"
                   className="justify-start h-8"
-                  onClick={() => Capacitor.isNativePlatform() ? (window.location.href = '/privacy-policy/') : window.open('/privacy-policy', '_blank')}
+                  onClick={() => navigateToPage('/privacy-policy')}
                 >
                   <Shield className="w-4 h-4 mr-2" />
                   Privacy Policy
@@ -116,7 +127,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   variant="outline"
                   size="sm"
                   className="justify-start h-8"
-                  onClick={() => Capacitor.isNativePlatform() ? (window.location.href = '/terms-of-service/') : window.open('/terms-of-service', '_blank')}
+                  onClick={() => navigateToPage('/terms-of-service')}
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Terms of Service

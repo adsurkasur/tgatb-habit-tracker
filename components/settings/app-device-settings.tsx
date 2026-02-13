@@ -198,7 +198,7 @@ export function AppDeviceSettings({
             <div className="overflow-hidden">
               <div className="flex items-center justify-between px-4 pb-4 pt-0">
                 <div className="flex items-center space-x-3">
-                  <Clock className="w-5 h-5 shrink-0 text-primary" />
+                  <Clock className="w-5 h-5 shrink-0 text-muted-foreground" />
                   <span className="text-sm text-muted-foreground">Reminder time</span>
                 </div>
                 <input
@@ -206,7 +206,7 @@ export function AppDeviceSettings({
                   type="time"
                   value={reminderTime}
                   onChange={(e) => handleTimeChange(e.target.value)}
-                  className="bg-background border border-border rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring"
+                  className="bg-background border border-border rounded-md px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-ring [color-scheme:light_dark]"
                 />
               </div>
             </div>
