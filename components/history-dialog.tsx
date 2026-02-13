@@ -26,6 +26,7 @@ import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { useSwipeableTabs } from '@/hooks/use-swipeable-tabs';
 import { Calendar } from '@/components/ui/calendar';
 
 import {
@@ -81,6 +82,11 @@ interface StatCard {
 export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequestAddEntry, onRequestEditEntry }: HistoryDialogProps) {
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
+  const { containerRef: swipeRef } = useSwipeableTabs({
+    tabs: ['overview', 'calendar', 'timeline'],
+    activeTab: selectedTab,
+    onTabChange: setSelectedTab,
+  });
 
   // Calculate comprehensive statistics
   const statistics = useMemo(() => computeStatSummary(habits), [habits]);
@@ -125,17 +131,19 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
               </TabsTrigger>
             </TabsList>
 
-            <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col">
-              <OverviewTabContent habits={habits} statistics={statistics} />
-            </TabsContent>
+            <div ref={swipeRef} className="flex-1 min-h-0">
+              <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col">
+                <OverviewTabContent habits={habits} statistics={statistics} />
+              </TabsContent>
 
-            <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
-              <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
-            </TabsContent>
+              <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
+                <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
+              </TabsContent>
 
-            <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
-              <TimelineTabContent dailyLogs={dailyLogs} />
-            </TabsContent>
+              <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
+                <TimelineTabContent dailyLogs={dailyLogs} />
+              </TabsContent>
+            </div>
           </Tabs>
         </ResponsiveDialogBody>
       </ResponsiveDialogContent>

@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
+import { useSwipeableTabs } from "@/hooks/use-swipeable-tabs";
 import { useState, useEffect, useRef } from "react";
 import { Habit } from "@shared/schema";
 import { CheckCircle, XCircle } from "lucide-react";
@@ -36,6 +37,11 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const [newHabitStatus, setNewHabitStatus] = useState<boolean | null>(null);
   const [lastAddedHabitId, setLastAddedHabitId] = useState<string | null>(null);
   const [tab, setTab] = useState("entry");
+  const { containerRef: swipeRef } = useSwipeableTabs({
+    tabs: ["entry", "habit"],
+    activeTab: tab,
+    onTabChange: setTab,
+  });
   const habitNameRef = useRef<HTMLInputElement | null>(null);
 
   // Reset form state when dialog opens (component stays mounted for close animation)
@@ -118,6 +124,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
               <TabsTrigger value="entry" className="flex-1">Add New Entry</TabsTrigger>
               <TabsTrigger value="habit" className="flex-1">Add New Habit</TabsTrigger>
             </TabsList>
+            <div ref={swipeRef} className="flex-1 min-h-0">
             <TabsContent value="entry" className="flex-1 min-h-0 overflow-y-auto mt-0">
               <div className="space-y-2">
                 <div
@@ -227,6 +234,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                 </div>
               </div>
             </TabsContent>
+            </div>
           </Tabs>
           {/* Footer CTA — fixed (shrink-0) so it never scrolls with tab content */}
           <div className="mt-4 shrink-0">
