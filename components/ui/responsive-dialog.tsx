@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { X } from "lucide-react";
+import { CloseButton } from "@/components/ui/close-button";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { useIsAndroid } from "@/hooks/use-platform";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
@@ -219,14 +219,10 @@ function ResponsiveDialogHeader({ className, children, ...props }: ResponsiveDia
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">{children}</div>
         {!isMobile && (
-          <button
-            type="button"
+          <CloseButton
+            className="shrink-0 mt-0.5"
             onClick={() => onOpenChange(false)}
-            className="shrink-0 mt-0.5 rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 p-1 flex items-center justify-center cursor-pointer"
-          >
-            <X className="h-4 w-4" />
-            <span className="sr-only">Close</span>
-          </button>
+          />
         )}
       </div>
     </Comp>

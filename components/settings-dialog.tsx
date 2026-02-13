@@ -1,5 +1,5 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
-import { X } from 'lucide-react';
+import { CloseButton } from '@/components/ui/close-button';
 import { UserSettings } from '@shared/schema';
 import { AppearanceSettings } from '@/components/settings/appearance-settings';
 import { MotivatorSettings } from '@/components/settings/motivator-settings';
@@ -35,14 +35,7 @@ export function SettingsDialog({
         <DialogHeader className="shrink-0 border-b border-border pb-4">
           <div className="flex items-center justify-between">
             <DialogTitle className="text-xl font-semibold">Settings</DialogTitle>
-            <button
-              type="button"
-              onClick={() => onOpenChange(false)}
-              className="rounded-sm opacity-70 ring-offset-background transition-all duration-200 hover:opacity-100 focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 disabled:pointer-events-none data-[state=open]:bg-accent data-[state=open]:text-muted-foreground p-1 flex items-center justify-center cursor-pointer"
-            >
-              <X className="h-4 w-4" />
-              <span className="sr-only">Close</span>
-            </button>
+            <CloseButton onClick={() => onOpenChange(false)} />
           </div>
         </DialogHeader>
 

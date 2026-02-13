@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
-import { Download, X } from "lucide-react";
+import { Download } from "lucide-react";
+import { CloseButton } from "@/components/ui/close-button";
 import { useToast } from "@/hooks/use-toast";
 import { Capacitor } from '@capacitor/core';
 
@@ -267,14 +268,11 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               </>
             )}
           </div>
-          <Button
-            size="sm"
-            variant="ghost"
+          <CloseButton
+            className="shrink-0 ml-2"
             onClick={handleDismiss}
-            className="p-1 h-6 w-6 shrink-0 ml-2"
-          >
-            <X className="h-3 w-3" />
-          </Button>
+            label="Dismiss"
+          />
         </div>
         <div className="flex gap-1.5">
           {/* Only show install button if beforeinstallprompt is available */}

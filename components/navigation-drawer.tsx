@@ -17,12 +17,12 @@ import {
   Flame,
   Edit,
   Trash2,
-  X,
   HelpCircle,
   Info,
   Search
 } from "lucide-react";
 import React, { useState, useCallback, useMemo } from "react";
+import { CloseButton } from "@/components/ui/close-button";
 import { Habit } from "@shared/schema";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 
@@ -203,12 +203,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
                 <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
               </div>
-              <button
-                onClick={() => onOpenChange(false)}
-                className="h-8 w-8 p-0 shrink-0 opacity-70 hover:opacity-100 transition-all duration-200 flex items-center justify-center text-muted-foreground hover:text-foreground cursor-pointer"
-              >
-                <X className="w-5 h-5" />
-              </button>
+              <CloseButton onClick={() => onOpenChange(false)} />
             </div>
           </div>
           {/* Search Bar */}
@@ -223,13 +218,11 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 className="pl-10 pr-10 material-radius"
               />
               {searchQuery && (
-                <button
+                <CloseButton
+                  className="absolute right-3 top-1/2 -translate-y-1/2"
                   onClick={() => setSearchQuery("")}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground hover:text-foreground transition-all duration-200 cursor-pointer"
-                  aria-label="Clear search"
-                >
-                  <X className="w-4 h-4" />
-                </button>
+                  label="Clear search"
+                />
               )}
             </div>
           </div>

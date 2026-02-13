@@ -4,7 +4,8 @@ import React, { useState, useEffect, useRef, useCallback, useMemo } from 'react'
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { X, ArrowRight, ArrowLeft, Play } from 'lucide-react';
+import { ArrowRight, ArrowLeft, Play } from 'lucide-react';
+import { CloseButton } from '@/components/ui/close-button';
 import { cn } from '@/lib/utils';
 
 interface WelcomeStep {
@@ -442,12 +443,11 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 Step {currentStep + 1} of {welcomeSteps.length}
               </Badge>
             </div>
-            <button
+            <CloseButton
+              className="ml-3"
               onClick={handleSkip}
-              className="h-8 w-8 max-sm:h-7 max-sm:w-7 p-0 shrink-0 opacity-70 hover:opacity-100 transition-all duration-200 flex items-center justify-center text-muted-foreground hover:text-foreground rounded-md hover:bg-muted/50 ml-3 cursor-pointer"
-            >
-              <X className="w-4 h-4 max-sm:w-3.5 max-sm:h-3.5" />
-            </button>
+              label="Skip"
+            />
           </div>
 
           {/* Description */}
