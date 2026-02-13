@@ -1,8 +1,17 @@
 "use client";
 
 import { useEffect, useState, useCallback } from "react";
-import { Bell, ChevronRight, Clock, Smartphone } from "lucide-react";
+import { Bell, BellOff, ChevronRight, Clock, Smartphone } from "lucide-react";
 import { Switch } from "@/components/ui/switch";
+import { Button } from "@/components/ui/button";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogContent,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogDescription,
+  ResponsiveDialogFooter,
+} from "@/components/ui/responsive-dialog";
 import { usePWAInstall } from "@/hooks/use-pwa-install";
 import type { UserSettings } from "@shared/schema";
 import {
@@ -29,6 +38,7 @@ export function AppDeviceSettings({
   // Track whether the platform actually supports notifications
   const [notificationsSupported, setNotificationsSupported] = useState(true);
   const [permissionGranted, setPermissionGranted] = useState(false);
+  const [showPermissionDialog, setShowPermissionDialog] = useState(false);
 
   // Check notification support and permission on mount
   useEffect(() => {
@@ -74,7 +84,8 @@ export function AppDeviceSettings({
         const granted = await requestReminderPermission();
         setPermissionGranted(granted);
         if (!granted) {
-          // Permission denied — don't enable
+          // Permission denied — show guidance dialog, don't enable
+          setShowPermissionDialog(true);
           return;
         }
         onUpdateSettings({
@@ -205,6 +216,27 @@ export function AppDeviceSettings({
           </div>
         </div>
       </div>
+
+      {/* Permission-denied guidance dialog */}
+      <ResponsiveDialog open={showPermissionDialog} onOpenChange={setShowPermissionDialog} drawerSize="compact">
+        <ResponsiveDialogContent dialogClassName="w-full max-w-sm">
+          <ResponsiveDialogHeader>
+            <ResponsiveDialogTitle className="flex items-center gap-2">
+              <BellOff className="w-5 h-5 text-muted-foreground" />
+              Notifications Needed
+            </ResponsiveDialogTitle>
+            <ResponsiveDialogDescription>
+              To send you daily reminders, the app needs permission to show
+              notifications. You can enable this in your browser or device settings.
+            </ResponsiveDialogDescription>
+          </ResponsiveDialogHeader>
+          <ResponsiveDialogFooter>
+            <div className="flex justify-end w-full">
+              <Button onClick={() => setShowPermissionDialog(false)}>Got it</Button>
+            </div>
+          </ResponsiveDialogFooter>
+        </ResponsiveDialogContent>
+      </ResponsiveDialog>
     </div>
   );
 }
