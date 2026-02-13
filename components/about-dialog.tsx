@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLink, FileText, Github, Heart, Shield, Zap } from "lucide-react";
+import { Capacitor } from "@capacitor/core";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -104,7 +105,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   variant="outline"
                   size="sm"
                   className="justify-start h-8"
-                  onClick={() => window.open('/privacy-policy', '_blank')}
+                  onClick={() => Capacitor.isNativePlatform() ? (window.location.href = '/privacy-policy/') : window.open('/privacy-policy', '_blank')}
                 >
                   <Shield className="w-4 h-4 mr-2" />
                   Privacy Policy
@@ -115,7 +116,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   variant="outline"
                   size="sm"
                   className="justify-start h-8"
-                  onClick={() => window.open('/terms-of-service', '_blank')}
+                  onClick={() => Capacitor.isNativePlatform() ? (window.location.href = '/terms-of-service/') : window.open('/terms-of-service', '_blank')}
                 >
                   <FileText className="w-4 h-4 mr-2" />
                   Terms of Service
