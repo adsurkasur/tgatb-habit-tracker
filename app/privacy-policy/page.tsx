@@ -157,8 +157,8 @@ export default function PrivacyPolicyPage() {
             </ul>
             <p className="mb-3">This will <strong>not</strong> delete:</p>
             <ul className="list-disc pl-6 space-y-1 mb-4">
-              <li>Your app settings (dark mode, language, etc.) — these reset when you clear app data or uninstall</li>
-              <li>Any backup files previously saved to your Google Drive — you can delete those directly from your Google Drive</li>
+              <li>Your app settings (dark mode, language, etc.) â€” these reset when you clear app data or uninstall</li>
+              <li>Any backup files previously saved to your Google Drive â€” you can delete those directly from your Google Drive</li>
             </ul>
             <p>
               Alternatively, you can <strong>uninstall the app</strong> or <strong>clear app data</strong> from

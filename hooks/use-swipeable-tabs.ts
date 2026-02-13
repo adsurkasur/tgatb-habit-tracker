@@ -86,7 +86,8 @@ export function useSwipeableTabs({
       isSwiping.current = true;
     };
 
-    const onTouchMove = (e: TouchEvent) => {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const onTouchMove = (_e: TouchEvent) => {
       if (!isSwiping.current) return;
       // We do NOT preventDefault here — vertical scrolling must work
     };

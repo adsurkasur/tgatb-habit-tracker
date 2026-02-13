@@ -72,9 +72,10 @@ export function useMobileBackNavigation({
 }: UseMobileBackNavigationOptions = {}) {
   const isMobile = useIsMobile();
 
-  // Stable unique ID per hook instance
+  // Stable unique ID per hook instance — generated lazily on first render
   const stableId = useRef('');
   if (!stableId.current) {
+    // eslint-disable-next-line react-hooks/purity -- one-time lazy init; value is stable after first render
     stableId.current = `mbk-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
   }
 
