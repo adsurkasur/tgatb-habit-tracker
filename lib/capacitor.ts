@@ -1,8 +1,6 @@
 import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 import { SplashScreen } from '@capacitor/splash-screen';
-// import { App } from '@capacitor/app';
-import { Haptics, ImpactStyle, NotificationType } from '@capacitor/haptics';
 
 export const isNativePlatform = () => Capacitor.isNativePlatform();
 export const getPlatform = () => Capacitor.getPlatform();
@@ -42,25 +40,6 @@ export async function setFullscreenMode(enabled: boolean) {
     console.log(`[CapacitorLib] Fullscreen preference change requested: ${enabled} (handled by unified hook)`);
   }
 }
-
-// Haptic feedback helpers
-export const haptics = {
-  impact: (style: ImpactStyle = ImpactStyle.Medium) => {
-    if (isNativePlatform()) {
-      Haptics.impact({ style });
-    }
-  },
-  notification: (type: NotificationType = NotificationType.Success) => {
-    if (isNativePlatform()) {
-      Haptics.notification({ type });
-    }
-  },
-  vibrate: (duration = 300) => {
-    if (isNativePlatform()) {
-      Haptics.vibrate({ duration });
-    }
-  }
-};
 
 // Status bar helpers
 export const statusBar = {

@@ -3,22 +3,28 @@
  *
  * Sound and haptic feedback helpers.
  *
- * Wraps Capacitor Haptics for mobile and Web Audio API for web.
+ * Wraps Web Audio API for sound and delegates haptics to `lib/haptics.ts`.
  * All feedback is fire-and-forget: never blocks UI, never throws.
  *
  * Invariants:
- *   - No external sound files  tones generated via Web Audio API.
+ *   - No external sound files — tones generated via Web Audio API.
  *   - All functions degrade silently if unavailable.
  *   - Feedback respects `soundEnabled` and `hapticEnabled` settings
  *     passed by the caller.
+ *   - Haptics calls MUST go through `lib/haptics.ts` — never import
+ *     `@capacitor/haptics` directly in this file.
  *
  * Allowed callers:
  *   - `use-habits.ts` (after tracking / undo actions)
  *   - Unit tests
  */
 
-import { Capacitor } from "@capacitor/core";
-import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
+import {
+  hapticSuccess,
+  hapticStreak,
+  hapticError as hapticErrorFn,
+  hapticUndo as hapticUndoFn,
+} from "@/lib/haptics";
 
 // ---------------------------------------------------------------------------
 // Audio context singleton (lazy)
@@ -100,30 +106,6 @@ function playErrorSound(): void {
 }
 
 // ---------------------------------------------------------------------------
-// Haptic presets
-// ---------------------------------------------------------------------------
-
-function hapticLight(): void {
-  if (!Capacitor.isNativePlatform()) return;
-  try { Haptics.impact({ style: ImpactStyle.Light }); } catch {}
-}
-
-function hapticMedium(): void {
-  if (!Capacitor.isNativePlatform()) return;
-  try { Haptics.impact({ style: ImpactStyle.Medium }); } catch {}
-}
-
-function hapticError(): void {
-  if (!Capacitor.isNativePlatform()) return;
-  try { Haptics.notification({ type: NotificationType.Error }); } catch {}
-}
-
-function hapticSuccess(): void {
-  if (!Capacitor.isNativePlatform()) return;
-  try { Haptics.notification({ type: NotificationType.Success }); } catch {}
-}
-
-// ---------------------------------------------------------------------------
 // Public API
 // ---------------------------------------------------------------------------
 
@@ -136,9 +118,9 @@ export interface FeedbackOptions {
 export function feedbackTrackSuccess(opts: FeedbackOptions, streakIncremented: boolean): void {
   if (opts.hapticEnabled) {
     if (streakIncremented) {
-      hapticMedium();
+      hapticStreak();
     } else {
-      hapticLight();
+      hapticSuccess();
     }
   }
   if (opts.soundEnabled) {
@@ -152,18 +134,18 @@ export function feedbackTrackSuccess(opts: FeedbackOptions, streakIncremented: b
 
 /** Feedback for marking a habit as not done / failed. */
 export function feedbackTrackFailure(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticLight();
+  if (opts.hapticEnabled) hapticSuccess();
   if (opts.soundEnabled) playFailureSound();
 }
 
 /** Feedback for invalid / error action. */
 export function feedbackError(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticError();
+  if (opts.hapticEnabled) hapticErrorFn();
   if (opts.soundEnabled) playErrorSound();
 }
 
 /** Feedback for undo action. */
 export function feedbackUndo(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticLight();
+  if (opts.hapticEnabled) hapticUndoFn();
   if (opts.soundEnabled) playTone(440, 100, "sine", 0.08);
 }
