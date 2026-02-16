@@ -3,6 +3,7 @@
 import { UserSettings } from "@shared/schema";
 import { Switch } from "@/components/ui/switch";
 import { Volume2, Vibrate } from "lucide-react";
+import { isHapticsSupported } from "@/lib/haptics";
 
 interface FeedbackSettingsProps {
   settings: UserSettings;
@@ -10,6 +11,8 @@ interface FeedbackSettingsProps {
 }
 
 export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSettingsProps) {
+  const hapticsAvailable = isHapticsSupported();
+
   return (
     <div className="space-y-4">
       <h2 className="text-lg font-semibold">Feedback</h2>
@@ -36,19 +39,24 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
 
         {/* Haptic toggle */}
         <div
-          className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={() => onUpdateSettings({ hapticEnabled: !(settings.hapticEnabled !== false) })}
+          className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
+            hapticsAvailable ? "cursor-pointer state-layer-hover" : "opacity-50 cursor-not-allowed"
+          }`}
+          onClick={hapticsAvailable ? () => onUpdateSettings({ hapticEnabled: !(settings.hapticEnabled !== false) }) : undefined}
         >
           <div className="flex items-center space-x-3">
             <Vibrate className="w-5 h-5 text-muted-foreground" />
             <div>
               <span className="font-medium">Haptic Feedback</span>
-              <p className="text-sm text-muted-foreground">Vibration on habit actions (mobile)</p>
+              <p className="text-sm text-muted-foreground">
+                {hapticsAvailable ? "Vibration on habit actions" : "Not supported on this device"}
+              </p>
             </div>
           </div>
           <Switch
-            checked={settings.hapticEnabled !== false}
+            checked={hapticsAvailable && settings.hapticEnabled !== false}
             onCheckedChange={(checked) => onUpdateSettings({ hapticEnabled: checked })}
+            disabled={!hapticsAvailable}
             onClick={(e) => e.stopPropagation()}
           />
         </div>

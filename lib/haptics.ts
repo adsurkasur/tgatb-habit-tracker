@@ -21,6 +21,22 @@ import { Capacitor } from "@capacitor/core";
 import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
 
 // ---------------------------------------------------------------------------
+// Capability detection
+// ---------------------------------------------------------------------------
+
+/**
+ * Returns `true` only when running on a native platform where the
+ * Capacitor Haptics plugin is available.  Pure, synchronous, never throws.
+ */
+export function isHapticsSupported(): boolean {
+  try {
+    return Capacitor.isNativePlatform() && typeof Haptics !== "undefined";
+  } catch {
+    return false;
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Semantic haptic functions
 // ---------------------------------------------------------------------------
 
