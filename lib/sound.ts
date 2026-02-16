@@ -7,11 +7,16 @@
  * Every function is fire-and-forget: never blocks UI, never throws.
  * On platforms without AudioContext the calls silently no-op.
  *
+ * Timing:
+ *   - All multi-tone sequencing uses `AudioContext.currentTime` offsets,
+ *     NOT `setTimeout` / `setInterval`.  This guarantees sample-accurate,
+ *     deterministic playback regardless of JS event-loop pressure.
+ *
  * Invariants:
- *   - NO external audio files  every sound is synthesised at runtime.
+ *   - NO external audio files — every sound is synthesised at runtime.
  *   - AudioContext is created lazily on first use.
  *   - All public functions are wrapped in try/catch (never throw).
- *   - No haptic logic here  this module is sound only.
+ *   - No haptic logic here — this module is sound only.
  *
  * Allowed callers:
  *   - `lib/feedback.ts` (composite feedback orchestrator)
@@ -31,6 +36,10 @@ function getAudioContext(): AudioContext | null {
         (window as unknown as { webkitAudioContext: typeof AudioContext })
           .webkitAudioContext)();
     }
+    // Resume if suspended (autoplay policy)
+    if (_audioCtx.state === "suspended") {
+      _audioCtx.resume().catch(() => {});
+    }
     return _audioCtx;
   } catch {
     return null;
@@ -38,42 +47,45 @@ function getAudioContext(): AudioContext | null {
 }
 
 // ---------------------------------------------------------------------------
-// Internal tone helper (short, subtle, <300 ms)
+// Internal tone helper — audio-clock scheduled, never uses JS timers
 // ---------------------------------------------------------------------------
 
-function playTone(
+/**
+ * Schedule a single tone at a precise audio-clock time.
+ *
+ * @param ctx        - Active AudioContext
+ * @param startTime  - Absolute `ctx.currentTime`-based start (seconds)
+ * @param frequency  - Tone frequency in Hz
+ * @param durationMs - Tone duration in milliseconds
+ * @param type       - OscillatorType waveform
+ * @param volume     - Peak gain (0–1)
+ */
+function playToneAt(
+  ctx: AudioContext,
+  startTime: number,
   frequency: number,
   durationMs: number,
   type: OscillatorType = "sine",
   volume = 0.15,
 ): void {
   try {
-    const ctx = getAudioContext();
-    if (!ctx) return;
-
-    // Resume if suspended (autoplay policy)
-    if (ctx.state === "suspended") {
-      ctx.resume().catch(() => {});
-    }
+    const dur = durationMs / 1000;
 
     const osc = ctx.createOscillator();
     const gain = ctx.createGain();
 
     osc.type = type;
-    osc.frequency.setValueAtTime(frequency, ctx.currentTime);
+    osc.frequency.setValueAtTime(frequency, startTime);
 
-    gain.gain.setValueAtTime(volume, ctx.currentTime);
-    // Fade out to avoid click
-    gain.gain.exponentialRampToValueAtTime(
-      0.001,
-      ctx.currentTime + durationMs / 1000,
-    );
+    gain.gain.setValueAtTime(volume, startTime);
+    // Exponential ramp to near-zero avoids audible clicks on stop
+    gain.gain.exponentialRampToValueAtTime(0.001, startTime + dur);
 
     osc.connect(gain);
     gain.connect(ctx.destination);
 
-    osc.start(ctx.currentTime);
-    osc.stop(ctx.currentTime + durationMs / 1000);
+    osc.start(startTime);
+    osc.stop(startTime + dur);
   } catch {
     // Silent failure
   }
@@ -83,35 +95,63 @@ function playTone(
 // Public semantic sound functions
 // ---------------------------------------------------------------------------
 
-/** Two-tone ascending chime  regular successful habit tracking. */
+/** Two-tone ascending chime — regular successful habit tracking. */
 export function playSuccessSound(): void {
-  playTone(523.25, 120, "sine", 0.12); // C5
-  setTimeout(() => playTone(659.25, 180, "sine", 0.12), 100); // E5
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+
+    playToneAt(ctx, t + 0.000, 523.25, 120, "sine", 0.12); // C5
+    playToneAt(ctx, t + 0.100, 659.25, 180, "sine", 0.12); // E5
+  } catch { /* silent */ }
 }
 
-/** Three-tone ascending sparkle  streak increment. */
+/** Three-tone ascending sparkle — streak increment. */
 export function playStreakSound(): void {
-  playTone(523.25, 100, "sine", 0.1); // C5
-  setTimeout(() => playTone(659.25, 100, "sine", 0.1), 80); // E5
-  setTimeout(() => playTone(783.99, 150, "sine", 0.12), 160); // G5
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+
+    playToneAt(ctx, t + 0.000, 523.25, 100, "sine", 0.10); // C5
+    playToneAt(ctx, t + 0.080, 659.25, 100, "sine", 0.10); // E5
+    playToneAt(ctx, t + 0.160, 783.99, 150, "sine", 0.12); // G5
+  } catch { /* silent */ }
 }
 
-/** Single descending tone  habit marked as failed / not done. */
+/** Single descending tone — habit marked as failed / not done. */
 export function playFailureSound(): void {
-  playTone(330, 200, "triangle", 0.1); // E4
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    playToneAt(ctx, ctx.currentTime, 330, 200, "triangle", 0.1); // E4
+  } catch { /* silent */ }
 }
 
-/** Low buzz  invalid action or already-completed. */
+/** Low buzz — invalid action or already-completed. */
 export function playErrorSound(): void {
-  playTone(220, 150, "square", 0.08); // A3
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    playToneAt(ctx, ctx.currentTime, 220, 150, "square", 0.08); // A3
+  } catch { /* silent */ }
 }
 
-/** Brief neutral pip  undo action. */
+/** Brief neutral pip — undo action. */
 export function playUndoSound(): void {
-  playTone(440, 100, "sine", 0.08); // A4
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    playToneAt(ctx, ctx.currentTime, 440, 100, "sine", 0.08); // A4
+  } catch { /* silent */ }
 }
 
 /** Ultra-subtle tick — generic button press acknowledgement. */
 export function playButtonPressSound(): void {
-  playTone(800, 50, "sine", 0.04);
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    playToneAt(ctx, ctx.currentTime, 800, 50, "sine", 0.04);
+  } catch { /* silent */ }
 }
