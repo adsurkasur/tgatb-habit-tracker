@@ -162,7 +162,7 @@ function StatGrid({ statistics }: { statistics: ReturnType<typeof computeStatSum
       color: 'text-blue-500',
     },
     {
-      title: "Current Streaks",
+      title: "Combined Streak",
       value: statistics.totalStreak,
       icon: <Flame className="w-5 h-5" />,
       description: `Longest: ${statistics.longestStreak} days`,
