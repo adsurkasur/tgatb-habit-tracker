@@ -10,6 +10,11 @@
         android:theme="@style/AppTheme"
         android:windowOptOutEdgeToEdgeEnforcement="true">
 
+        <!-- FCM push notification icon (white pixels on transparent background) -->
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@mipmap/ic_notification" />
+
         <activity
             android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode|navigation"
             android:name=".MainActivity"
