@@ -43,6 +43,7 @@ import {
   Pencil,
   Plus,
   Undo2,
+  ListChecks,
 } from 'lucide-react';
 import {
   ResponsiveDialog,
@@ -252,6 +253,17 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
     <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-0">
       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">Habit Breakdown</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
+        {habits.length === 0 ? (
+          <div className="flex flex-col items-center justify-center h-full text-center py-8 px-4">
+            <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mb-3">
+              <ListChecks className="w-5 h-5 text-muted-foreground" />
+            </div>
+            <p className="text-sm font-medium text-muted-foreground">No habits yet</p>
+            <p className="text-xs text-muted-foreground/70 mt-1">
+              Add a habit to see your breakdown here
+            </p>
+          </div>
+        ) : (
         <div className="space-y-2 sm:space-y-3">
           {habits.map(habit => {
             const stats = getHabitStats(habit.id);
@@ -284,6 +296,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
             );
           })}
         </div>
+        )}
       </div>
     </Card>
   );
