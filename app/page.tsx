@@ -19,7 +19,6 @@ import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
 import { useAuth } from "@/hooks/use-auth";
-import { AccountSelectorModal } from "@/components/account-selector-modal";
 import { hasOpenModals, closeTopModal } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
@@ -57,8 +56,7 @@ export default function Home() {
     removeLog,
   } = useHabits();
 
-  const { switchAccount, handleAuth: triggerGoogleLogin } = useAuth();
-  const [showAccountSelector, setShowAccountSelector] = useState(false);
+  const { handleAuth: triggerGoogleLogin } = useAuth();
 
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
@@ -497,13 +495,6 @@ export default function Home() {
         <AboutDialog 
           open={showAbout}
           onOpenChange={setShowAbout}
-        />
-
-        <AccountSelectorModal
-          open={showAccountSelector}
-          onOpenChange={setShowAccountSelector}
-          onSelectAccount={switchAccount}
-          onNewLogin={triggerGoogleLogin}
         />
 
         <ResponsiveSettings

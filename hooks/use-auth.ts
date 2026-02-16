@@ -5,7 +5,6 @@ import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
 import { TokenStorage } from '@/lib/utils';
 import { getActiveAccountId, setActiveAccountId } from "@/lib/account-scope";
-import { addKnownAccount, getKnownAccounts } from "@/lib/account-registry";
 
 /** Detect if an auth error is a user-initiated cancellation (popup closed, back pressed, etc.) */
 function isAuthCancellation(err: unknown): boolean {
@@ -76,7 +75,9 @@ export function useAuth() {
     });
   }, [isCapacitorApp, toast]);
 
-  // Load profile info on mount — check for stored token
+  // Determine initial auth state on mount.
+  // If a valid access token exists the user resumes their session;
+  // otherwise they start as anonymous (no silent re-login).
   useEffect(() => {
     (async () => {
       let accessToken: string | null = null;
@@ -95,20 +96,19 @@ export function useAuth() {
       }
 
       if (accessToken) {
-        // Validate the stored token
+        // Validate the stored token against the Drive API
         const isValid = await validateAccessToken(accessToken);
         if (isValid) {
-          // Ensure accountId is loaded from persisted value
           const currentId = getActiveAccountId();
           setAccountId(currentId);
           setIsLoggedIn(true);
           if (name || photoUrl) setProfile({ name, photoUrl });
         } else {
-          // Token is expired, clear login state and show toast
+          // Token expired — full cleanup (no silent re-login)
           await handleExpiredToken();
         }
       } else {
-        // Not logged in — use anonymous namespace
+        // No token — user is logged out
         setActiveAccountId("anonymous");
         setAccountId("anonymous");
         setIsLoggedIn(false);
@@ -141,12 +141,6 @@ export function useAuth() {
               localStorage.setItem('googleProfileName', user.displayName || '');
               localStorage.setItem('googleProfilePhoto', user.photoURL || '');
               setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
-              // Register in local account registry
-              addKnownAccount({
-                accountId: uid,
-                displayName: user.displayName || 'Google Account',
-                avatarUrl: user.photoURL || undefined,
-              });
             }
             setIsLoggedIn(true);
             toast({
@@ -194,14 +188,6 @@ export function useAuth() {
               await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
             }
             setProfile({ name, photoUrl });
-            // Register in local account registry
-            if (uid) {
-              addKnownAccount({
-                accountId: uid,
-                displayName: name || 'Google Account',
-                avatarUrl: photoUrl || undefined,
-              });
-            }
             setIsLoggedIn(true);
             toast({
               title: "Sign-in Successful",
@@ -218,8 +204,13 @@ export function useAuth() {
           }
         }
       } else {
-        // Logout flow
+        // Logout flow — terminate Firebase session FIRST, then clean up local state
         if (typeof window !== 'undefined' && !isCapacitorApp) {
+          // Sign out of Firebase so auth.currentUser becomes null
+          const { getAuth } = await import('firebase/auth');
+          const auth = getAuth(app);
+          await auth.signOut();
+
           await TokenStorage.removeAccessToken();
           // Clear cached Drive folder ID
           const { resetAppFolderCache } = await import('@/lib/drive-folder');
@@ -237,6 +228,10 @@ export function useAuth() {
             duration: 3000,
           });
         } else {
+          // Mobile: sign out via Capacitor Firebase plugin
+          const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
+          await FirebaseAuthentication.signOut();
+
           await TokenStorage.removeAccessToken();
           // Clear cached Drive folder ID
           const { resetAppFolderCache } = await import('@/lib/drive-folder');
@@ -284,34 +279,11 @@ export function useAuth() {
     }
   };
 
-  /**
-   * Switch to a known account by ID (from account selector).
-   * Loads the stored profile for that account if available.
-   */
-  const switchAccount = useCallback((targetAccountId: string) => {
-    setActiveAccountId(targetAccountId);
-    setAccountId(targetAccountId);
-
-    if (targetAccountId === "anonymous") {
-      setIsLoggedIn(false);
-      setProfile(null);
-    } else {
-      // Try to load profile from registry
-      const accounts = getKnownAccounts();
-      const found = accounts.find(a => a.accountId === targetAccountId);
-      if (found) {
-        setProfile({ name: found.displayName, photoUrl: found.avatarUrl });
-        setIsLoggedIn(true);
-      }
-    }
-  }, []);
-
   return {
     isLoggedIn,
     accountId,
     profile,
     clientReady,
     handleAuth,
-    switchAccount,
   };
 }

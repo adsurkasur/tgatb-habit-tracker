@@ -17,6 +17,8 @@ export async function signInWithGoogleWeb(): Promise<string | null> {
 	provider.addScope("https://www.googleapis.com/auth/drive.file");
 	provider.addScope("email");
 	provider.addScope("profile");
+	// ALWAYS show the Google account picker — never silently reuse a cached account
+	provider.setCustomParameters({ prompt: "select_account" });
 
 	const result = await signInWithPopup(auth, provider);
 	const credential = GoogleAuthProvider.credentialFromResult(result);
