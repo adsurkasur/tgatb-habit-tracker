@@ -43,7 +43,6 @@ export const TokenStorage = {
       try {
         const { SecureStorage } = await import('./secure-storage');
         const v = await SecureStorage.getItem('googleAccessToken');
-        console.debug('[TokenStorage] getAccessToken via SecureStorage ->', v);
         return v;
       } catch {
         try {
@@ -52,16 +51,15 @@ export const TokenStorage = {
           // @ts-ignore
           const { SecureStorage } = await import(/* webpackIgnore: true */ alt);
           const v = await SecureStorage.getItem('googleAccessToken');
-          console.debug('[TokenStorage] getAccessToken via SecureStorage (ts) ->', v);
           return v;
         } catch {
           // final fallback
         }
       }
     } catch (e) {
-      console.debug('[TokenStorage] getAccessToken secure error', e);
+      console.debug('[TokenStorage] getAccessToken secure error');
       // fallback
-      try { const { PlatformStorage } = await import('./platform-storage'); const v = await PlatformStorage.getItem('googleAccessToken'); console.debug('[TokenStorage] getAccessToken via PlatformStorage ->', v); return v; } catch { return null; }
+      try { const { PlatformStorage } = await import('./platform-storage'); const v = await PlatformStorage.getItem('googleAccessToken'); return v; } catch { return null; }
     }
 
     // Ensure the function returns null if all attempts fail

@@ -4,6 +4,7 @@ import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
 import { TokenStorage } from '@/lib/utils';
+import { getActiveAccountId, setActiveAccountId } from "@/lib/account-scope";
 
 /** Detect if an auth error is a user-initiated cancellation (popup closed, back pressed, etc.) */
 function isAuthCancellation(err: unknown): boolean {
@@ -27,6 +28,7 @@ export interface AuthProfile {
 export function useAuth() {
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
+  const [accountId, setAccountId] = useState<string>(getActiveAccountId());
   const [profile, setProfile] = useState<AuthProfile | null>(null);
   const [clientReady, setClientReady] = useState(false);
   const isCapacitorApp = Capacitor.isNativePlatform();
@@ -60,6 +62,9 @@ export function useAuth() {
       await Preferences.remove({ key: 'googleProfileName' });
       await Preferences.remove({ key: 'googleProfilePhoto' });
     }
+    // Switch to anonymous namespace
+    setActiveAccountId("anonymous");
+    setAccountId("anonymous");
     setIsLoggedIn(false);
     setProfile(null);
     toast({
@@ -92,6 +97,9 @@ export function useAuth() {
         // Validate the stored token
         const isValid = await validateAccessToken(accessToken);
         if (isValid) {
+          // Ensure accountId is loaded from persisted value
+          const currentId = getActiveAccountId();
+          setAccountId(currentId);
           setIsLoggedIn(true);
           if (name || photoUrl) setProfile({ name, photoUrl });
         } else {
@@ -99,6 +107,9 @@ export function useAuth() {
           await handleExpiredToken();
         }
       } else {
+        // Not logged in — use anonymous namespace
+        setActiveAccountId("anonymous");
+        setAccountId("anonymous");
         setIsLoggedIn(false);
       }
 
@@ -110,7 +121,6 @@ export function useAuth() {
     try {
       if (!isLoggedIn) {
         // Login flow
-        console.debug('[useAuth] Attempting sign-in...');
         let accessToken: string | null = null;
         if (typeof window !== 'undefined' && !isCapacitorApp) {
           // Web platform
@@ -123,6 +133,10 @@ export function useAuth() {
             const auth = getAuth(app);
             const user = auth.currentUser;
             if (user) {
+              // Switch to this account's namespace
+              const uid = user.uid;
+              setActiveAccountId(uid);
+              setAccountId(uid);
               localStorage.setItem('googleProfileName', user.displayName || '');
               localStorage.setItem('googleProfilePhoto', user.photoURL || '');
               setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
@@ -140,24 +154,30 @@ export function useAuth() {
               variant: "destructive",
               duration: 3000,
             });
-            console.error('[useAuth] No access token returned from sign-in');
           }
         } else {
           // Mobile (Capacitor)
           const result = await signInWithGoogle();
           // result can be string (legacy) or object (new)
           let accessToken: string | null = null;
+          let uid: string | undefined = undefined;
           let name: string | undefined = undefined;
           let photoUrl: string | undefined = undefined;
           if (typeof result === 'string') {
             accessToken = result;
           } else if (result && typeof result === 'object') {
             accessToken = result.accessToken || null;
+            uid = result.uid || undefined;
             name = result.name || undefined;
             photoUrl = result.photoUrl || undefined;
           }
           if (accessToken) {
             await TokenStorage.setAccessToken(accessToken);
+            // Switch to this account's namespace
+            if (uid) {
+              setActiveAccountId(uid);
+              setAccountId(uid);
+            }
             if (name) {
               const { Preferences } = await import('@capacitor/preferences');
               await Preferences.set({ key: 'googleProfileName', value: name });
@@ -180,7 +200,6 @@ export function useAuth() {
               variant: "destructive",
               duration: 3000,
             });
-            console.error('[useAuth] No access token returned from sign-in');
           }
         }
       } else {
@@ -192,6 +211,9 @@ export function useAuth() {
           resetAppFolderCache();
           localStorage.removeItem('googleProfileName');
           localStorage.removeItem('googleProfilePhoto');
+          // Switch to anonymous namespace
+          setActiveAccountId("anonymous");
+          setAccountId("anonymous");
           setIsLoggedIn(false);
           setProfile(null);
           toast({
@@ -207,6 +229,9 @@ export function useAuth() {
           const { Preferences } = await import('@capacitor/preferences');
           await Preferences.remove({ key: 'googleProfileName' });
           await Preferences.remove({ key: 'googleProfilePhoto' });
+          // Switch to anonymous namespace
+          setActiveAccountId("anonymous");
+          setAccountId("anonymous");
           setIsLoggedIn(false);
           setProfile(null);
           toast({
@@ -238,12 +263,13 @@ export function useAuth() {
           duration: 5000,
         });
       }
-      console.error(`[useAuth] ${isLoggedIn ? 'logout' : 'sign-in'} threw error:`, err);
+      console.error(`[useAuth] ${isLoggedIn ? 'logout' : 'sign-in'} error`);
     }
   };
 
   return {
     isLoggedIn,
+    accountId,
     profile,
     clientReady,
     handleAuth,

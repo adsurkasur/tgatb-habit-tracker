@@ -12,7 +12,6 @@ import { app } from "../components/firebase-initializer";
  * signInWithPopup works reliably on all platforms including mobile browsers.
  */
 export async function signInWithGoogleWeb(): Promise<string | null> {
-	console.debug('[GoogleAuthWeb] signInWithGoogleWeb called (popup flow)');
 	const auth = getAuth(app);
 	const provider = new GoogleAuthProvider();
 	provider.addScope("https://www.googleapis.com/auth/drive.file");
@@ -20,7 +19,6 @@ export async function signInWithGoogleWeb(): Promise<string | null> {
 	provider.addScope("profile");
 
 	const result = await signInWithPopup(auth, provider);
-	console.debug('[GoogleAuthWeb] signInWithPopup result:', result);
 	const credential = GoogleAuthProvider.credentialFromResult(result);
 	const accessToken = credential?.accessToken || null;
 	console.debug('[GoogleAuthWeb] Access token:', accessToken ? 'received' : 'null');

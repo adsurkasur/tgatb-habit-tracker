@@ -50,6 +50,9 @@ async function checkAndroidPermission(): Promise<boolean> {
   return perm.display === "granted";
 }
 
+/** Currently stored Android reminder config for re-scheduling with rotated messages. */
+let androidReminderConfig: { timeStr: string; personality: MotivatorPersonality } | null = null;
+
 async function scheduleAndroidReminder(
   timeStr: string,
   personality: MotivatorPersonality = DEFAULT_PERSONALITY,
@@ -59,6 +62,9 @@ async function scheduleAndroidReminder(
   );
   // Cancel any existing reminder first
   await cancelAndroidReminder();
+
+  // Store config so we can re-schedule with a fresh message
+  androidReminderConfig = { timeStr, personality };
 
   const [hours, minutes] = timeStr.split(":").map(Number);
 
@@ -89,6 +95,18 @@ async function scheduleAndroidReminder(
       },
     ],
   });
+}
+
+/**
+ * Re-schedule the Android reminder with a fresh rotated message.
+ * Call this on app resume / visibility change so the notification body
+ * isn't frozen from the original schedule time.
+ */
+export async function refreshAndroidReminder(): Promise<void> {
+  if (!androidReminderConfig) return;
+  if (!(await isNativePlatform())) return;
+  const { timeStr, personality } = androidReminderConfig;
+  await scheduleAndroidReminder(timeStr, personality);
 }
 
 async function cancelAndroidReminder(): Promise<void> {
@@ -191,7 +209,7 @@ function fireWebNotification(): void {
   try {
     new Notification("TGATB Habit Tracker", {
       body: pickReminderMessage(activePersonality),
-      icon: "/icons/icon-192x192.svg",
+      icon: "/icons/icon-192x192-notification.png",
       tag: "tgatb-daily-reminder",
     });
   } catch {
@@ -248,4 +266,26 @@ export async function cancelReminder(): Promise<void> {
     return cancelAndroidReminder();
   }
   cancelWebReminder();
+}
+
+/**
+ * Re-establish the reminder timer from persisted settings.
+ * Should be called on app mount and visibility-change → visible
+ * so that web reminders survive page reloads and Android reminders
+ * get a rotated message body.
+ */
+export async function reestablishReminder(
+  enabled: boolean,
+  timeStr: string | null | undefined,
+  personality: MotivatorPersonality = DEFAULT_PERSONALITY,
+): Promise<void> {
+  if (!enabled || !timeStr) return;
+
+  if (await isNativePlatform()) {
+    // Re-schedule with fresh rotated message
+    await refreshAndroidReminder();
+  } else {
+    // On web, scheduleWebReminder is idempotent (cancels old timer first)
+    scheduleWebReminder(timeStr, personality);
+  }
 }

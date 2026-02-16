@@ -1,18 +1,20 @@
 import { Habit, HabitLog, UserSettings, HabitType, ExportBundle, exportBundleSchema } from "@shared/schema";
 import { generateId, formatLocalDate } from "./utils";
+import { scopedKey } from "./account-scope";
 
-const HABITS_KEY = "habits";
-const LOGS_KEY = "habit_logs";
-const SETTINGS_KEY = "user_settings";
+// Storage keys are now dynamic — scoped to the active account.
+function habitsKey(): string { return scopedKey("habits"); }
+function logsKey(): string { return scopedKey("habit_logs"); }
+function settingsKey(): string { return scopedKey("user_settings"); }
 
 export class HabitStorage {
   static clearAllHabits(): void {
-    localStorage.removeItem(HABITS_KEY);
-    localStorage.removeItem(LOGS_KEY);
+    localStorage.removeItem(habitsKey());
+    localStorage.removeItem(logsKey());
   }
   static getHabits(): Habit[] {
     try {
-      const data = localStorage.getItem(HABITS_KEY);
+      const data = localStorage.getItem(habitsKey());
       if (!data) return [];
       
       const raw = JSON.parse(data) as unknown[];
@@ -34,7 +36,7 @@ export class HabitStorage {
   }
 
   static saveHabits(habits: Habit[]): void {
-    localStorage.setItem(HABITS_KEY, JSON.stringify(habits));
+    localStorage.setItem(habitsKey(), JSON.stringify(habits));
   }
 
   static addHabit(name: string, type: HabitType): Habit {
@@ -68,7 +70,7 @@ export class HabitStorage {
 
   static getLogs(): HabitLog[] {
     try {
-      const data = localStorage.getItem(LOGS_KEY);
+      const data = localStorage.getItem(logsKey());
       if (!data) return [];
       
       const raw = JSON.parse(data) as unknown[];
@@ -81,6 +83,10 @@ export class HabitStorage {
           completed: Boolean(logObj.completed),
           timestamp: new Date(String(logObj.timestamp)),
         };
+        // Preserve optional source field
+        if (logObj.source === "manual" || logObj.source === "auto") {
+          result.source = logObj.source;
+        }
         return result;
       });
     } catch {
@@ -89,7 +95,7 @@ export class HabitStorage {
   }
 
   static saveLogs(logs: HabitLog[]): void {
-    localStorage.setItem(LOGS_KEY, JSON.stringify(logs));
+    localStorage.setItem(logsKey(), JSON.stringify(logs));
   }
 
   static addLog(habitId: string, completed: boolean): HabitLog {
@@ -162,6 +168,14 @@ export class HabitStorage {
     this.saveHabits(habits);
   }
 
+  /**
+   * Public entry-point for recalculating and persisting a habit's streak.
+   * Called after auto-finalization inserts backfill logs.
+   */
+  static recalculateStreak(habitId: string): void {
+    this.updateStreak(habitId);
+  }
+
   private static calculateStreak(habitId: string, habitType: HabitType): number {
     const allLogs = this.getLogs()
       .filter(log => log.habitId === habitId)
@@ -227,6 +241,7 @@ export class HabitStorage {
       ...l,
       timestamp: l.timestamp.toISOString(),
       updatedAt: l.updatedAt ? l.updatedAt.toISOString() : undefined,
+      source: l.source,
     }));
 
     const bundle: ExportBundle = {
@@ -257,15 +272,15 @@ export class HabitStorage {
         const data = validated.data;
 
         // Persist habits/logs (as-is JSON with strings for dates)
-        localStorage.setItem(HABITS_KEY, JSON.stringify(data.habits));
-        localStorage.setItem(LOGS_KEY, JSON.stringify(data.logs));
+        localStorage.setItem(habitsKey(), JSON.stringify(data.habits));
+        localStorage.setItem(logsKey(), JSON.stringify(data.logs));
 
         // Persist settings via platform storage when available
         try {
           const { saveSettings } = await import('./platform-storage');
           await saveSettings(data.settings as UserSettings);
         } catch {
-          localStorage.setItem(SETTINGS_KEY, JSON.stringify(data.settings));
+          localStorage.setItem(settingsKey(), JSON.stringify(data.settings));
         }
       } catch (migErr) {
         throw migErr;
@@ -330,6 +345,7 @@ export class HabitStorage {
     const currentStreak = habit.streak || 0;
     
     // Calculate longest streak with correct logic for habit type
+    // Must check calendar day continuity — non-consecutive dates break the streak
     let longestStreak = 0;
     let tempStreak = 0;
     
@@ -338,7 +354,21 @@ export class HabitStorage {
     for (let i = 0; i < sortedLogs.length; i++) {
       const isSuccessful = habit.type === "bad" ? !sortedLogs[i].completed : sortedLogs[i].completed;
       if (isSuccessful) {
-        tempStreak++;
+        // Check if this day is consecutive to the previous successful day
+        if (tempStreak > 0 && i > 0) {
+          const prevDate = new Date(sortedLogs[i - 1].date + "T00:00:00");
+          const currDate = new Date(sortedLogs[i].date + "T00:00:00");
+          const diffMs = currDate.getTime() - prevDate.getTime();
+          const diffDays = Math.round(diffMs / (24 * 60 * 60 * 1000));
+          if (diffDays !== 1) {
+            // Gap in calendar — reset streak
+            tempStreak = 1;
+          } else {
+            tempStreak++;
+          }
+        } else {
+          tempStreak = tempStreak === 0 ? 1 : tempStreak + 1;
+        }
         longestStreak = Math.max(longestStreak, tempStreak);
       } else {
         tempStreak = 0;

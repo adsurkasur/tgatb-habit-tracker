@@ -19,6 +19,7 @@ import {
   checkReminderPermission,
   scheduleReminder,
   cancelReminder,
+  reestablishReminder,
 } from "@/lib/notifications";
 
 interface AppDeviceSettingsProps {
@@ -56,6 +57,11 @@ export function AppDeviceSettings({
       // If settings say enabled but permission was revoked, auto-disable
       if (reminderEnabled && !granted) {
         onUpdateSettings({ reminderEnabled: false });
+      }
+
+      // Re-establish reminder timer (survives page reload + rotates Android message)
+      if (reminderEnabled && granted && reminderTime) {
+        reestablishReminder(true, reminderTime, settings.motivatorPersonality ?? "positive");
       }
     };
     check();

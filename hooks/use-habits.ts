@@ -1,25 +1,27 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { Habit, HabitType, UserSettings } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { HabitStorage } from "@/lib/habit-storage";
+import { computeAutoLogs } from "@/lib/auto-finalize";
+import { migrateLegacyPlatformStorage, scopedKey } from "@/lib/account-scope";
 import { useAuth } from "@/hooks/use-auth";
 import { useCloudSync } from "@/hooks/use-cloud-sync";
 import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/components/theme-provider";
+import { formatLocalDate } from "@/lib/utils";
 
 export function useHabits() {
   // Clear all habits and logs from storage and state
   const clearAllHabits = async () => {
     if (Capacitor.isNativePlatform()) {
-      // Mobile: clear Capacitor Preferences
+      // Mobile: clear Capacitor Preferences (scoped keys)
       const { Preferences } = await import('@capacitor/preferences');
-      await Preferences.remove({ key: 'habits' });
-      await Preferences.remove({ key: 'habit_logs' });
-    } else {
-      // Web: clear localStorage
-      HabitStorage.clearAllHabits();
+      await Preferences.remove({ key: scopedKey('habits') });
+      await Preferences.remove({ key: scopedKey('habit_logs') });
     }
+    // Always clear localStorage (HabitStorage uses scoped keys)
+    HabitStorage.clearAllHabits();
     setHabits([]);
   };
   // ...existing code...
@@ -32,7 +34,7 @@ export function useHabits() {
    */
   const [navigationEvent, setNavigationEvent] = useState<{ dir: 'left' | 'right'; seq: number } | null>(null);
   const navSeqRef = useRef(0);
-  const { isLoggedIn } = useAuth();
+  const { isLoggedIn, accountId } = useAuth();
   const { schedulePush, pushNow, pullOnce } = useCloudSync();
 
   const [settings, setSettings] = useState<UserSettings>({
@@ -47,16 +49,79 @@ export function useHabits() {
 
     useEffect(() => {
       (async () => {
+        // Run legacy data migration (once per account, idempotent)
+        await migrateLegacyPlatformStorage();
+
         const loadedHabits = HabitStorage.getHabits();
         const loadedSettings = await HabitStorage.getSettings();
-        setHabits(loadedHabits);
+
+        // --- Auto-finalization: fill in missed days ---
+        const allLogs = HabitStorage.getLogs();
+        const newAutoLogs = computeAutoLogs(loadedHabits, allLogs);
+        if (newAutoLogs.length > 0) {
+          const merged = [...allLogs, ...newAutoLogs];
+          HabitStorage.saveLogs(merged);
+          // Recalculate streaks after auto-finalization
+          for (const habit of loadedHabits) {
+            HabitStorage.recalculateStreak(habit.id);
+          }
+        }
+
+        // Re-read habits (streaks may have been updated)
+        const freshHabits = HabitStorage.getHabits();
+        setHabits(freshHabits);
+        setCurrentHabitIndex(0);
         setSettings(loadedSettings);
         // Apply dark mode
         if (loadedSettings.darkMode) {
           document.documentElement.classList.add("dark");
+        } else {
+          document.documentElement.classList.remove("dark");
         }
       })();
+    // Re-run whenever the active account changes (login/logout)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [accountId]);
+
+    // --- Day-boundary & visibility change listener ---
+    // Re-runs auto-finalization when the user returns to the app or a new day begins.
+    const lastFinalizedDateRef = useRef<string>(formatLocalDate(new Date()));
+
+    const runAutoFinalize = useCallback(() => {
+      const todayStr = formatLocalDate(new Date());
+      if (todayStr === lastFinalizedDateRef.current) return; // already up-to-date
+      lastFinalizedDateRef.current = todayStr;
+
+      const currentHabits = HabitStorage.getHabits();
+      const allLogs = HabitStorage.getLogs();
+      const newAutoLogs = computeAutoLogs(currentHabits, allLogs);
+      if (newAutoLogs.length > 0) {
+        const merged = [...allLogs, ...newAutoLogs];
+        HabitStorage.saveLogs(merged);
+        for (const habit of currentHabits) {
+          HabitStorage.recalculateStreak(habit.id);
+        }
+      }
+      const freshHabits = HabitStorage.getHabits();
+      setHabits(freshHabits);
     }, []);
+
+    useEffect(() => {
+      const onVisibility = () => {
+        if (document.visibilityState === "visible") {
+          runAutoFinalize();
+        }
+      };
+      document.addEventListener("visibilitychange", onVisibility);
+
+      // Also check every 60 s for day rollover while app is open
+      const interval = setInterval(() => runAutoFinalize(), 60_000);
+
+      return () => {
+        document.removeEventListener("visibilitychange", onVisibility);
+        clearInterval(interval);
+      };
+    }, [runAutoFinalize]);
 
   const addHabit = ({ name, type }: { name: string; type: HabitType }) => {
     const newHabit = HabitStorage.addHabit(name, type);

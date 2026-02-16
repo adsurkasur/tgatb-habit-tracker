@@ -144,8 +144,8 @@ self.addEventListener('push', event => {
     const data = event.data.json();
     const options = {
       body: data.body || 'Time to check your habits!',
-      icon: '/icons/icon-192x192.svg',
-      badge: '/icons/icon-72x72.svg',
+      icon: '/icons/icon-192x192-notification.png',
+      badge: '/icons/icon-72x72-notification.png',
       vibrate: [100, 50, 100],
       data: {
         url: data.url || '/',
@@ -155,7 +155,7 @@ self.addEventListener('push', event => {
         {
           action: 'open',
           title: 'Open App',
-          icon: '/icons/icon-96x96.svg'
+          icon: '/icons/icon-96x96-notification.png'
         },
         {
           action: 'dismiss',

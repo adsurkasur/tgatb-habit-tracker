@@ -1,6 +1,9 @@
 import type { UserSettings } from "@shared/schema";
+import { scopedKey } from "./account-scope";
 
-export const SETTINGS_KEY = 'user_settings';
+function settingsKey(): string {
+  return scopedKey('user_settings');
+}
 
 const defaultSettings = (): UserSettings => ({
   darkMode: false,
@@ -54,7 +57,7 @@ export const PlatformStorage = {
 };
 
 export async function getSettings(): Promise<UserSettings> {
-  const raw = await PlatformStorage.getItem(SETTINGS_KEY);
+  const raw = await PlatformStorage.getItem(settingsKey());
   if (!raw) return defaultSettings();
   try {
     return JSON.parse(raw) as UserSettings;
@@ -64,5 +67,5 @@ export async function getSettings(): Promise<UserSettings> {
 }
 
 export async function saveSettings(settings: UserSettings): Promise<void> {
-  await PlatformStorage.setItem(SETTINGS_KEY, JSON.stringify(settings));
+  await PlatformStorage.setItem(settingsKey(), JSON.stringify(settings));
 }

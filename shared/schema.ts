@@ -23,6 +23,8 @@ export interface HabitLog {
   date: string; // YYYY-MM-DD format
   completed: boolean;
   timestamp: Date;
+  /** How this log was created: "manual" (user action) or "auto" (auto-finalization). */
+  source?: "manual" | "auto";
   // optional metadata for sync/migrations
   updatedAt?: Date;
   deviceId?: string;
@@ -60,6 +62,7 @@ export const habitLogSchema = z.object({
   date: z.string(),
   completed: z.boolean(),
   timestamp: z.date(),
+  source: z.enum(["manual", "auto"]).optional(),
   updatedAt: z.date().optional(),
   deviceId: z.string().optional(),
   version: z.number().int().optional(),
@@ -114,6 +117,7 @@ export const exportBundleSchema = z.object({
       date: z.string(),
       completed: z.boolean(),
       timestamp: z.string(),
+      source: z.enum(["manual", "auto"]).optional(),
       updatedAt: z.string().optional(),
       deviceId: z.string().optional(),
       version: z.number().int().optional(),
