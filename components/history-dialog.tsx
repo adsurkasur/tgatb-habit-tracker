@@ -132,16 +132,17 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
               </TabsTrigger>
             </TabsList>
 
-            <div ref={swipeRef} className="flex-1 min-h-0">
-              <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col">
+            {/* Swipe container — must be flex-col so child TabsContent can use flex-1 for height */}
+            <div ref={swipeRef} className="flex-1 min-h-0 flex flex-col overflow-hidden">
+              <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col overflow-y-auto">
                 <OverviewTabContent habits={habits} statistics={statistics} />
               </TabsContent>
 
-              <TabsContent value="calendar" className="flex-1 min-h-0 overflow-y-auto overflow-x-hidden mt-0">
+              <TabsContent value="calendar" className="flex-1 min-h-0 mt-0 overflow-y-auto overflow-x-hidden">
                 <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
               </TabsContent>
 
-              <TabsContent value="timeline" className="flex-1 min-h-0 overflow-y-auto mt-0">
+              <TabsContent value="timeline" className="flex-1 min-h-0 mt-0 overflow-y-auto">
                 <TimelineTabContent dailyLogs={dailyLogs} />
               </TabsContent>
             </div>
