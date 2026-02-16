@@ -11,10 +11,12 @@
  *   - Sound calls go through `lib/sound.ts` only.
  *   - This file MUST NOT import `@capacitor/haptics` or create AudioContext.
  *   - Feedback respects `soundEnabled` and `hapticEnabled` settings
- *     passed by the caller.
+ *     passed by the caller (habit actions) or the module-level cache
+ *     (global button press).
  *
  * Allowed callers:
  *   - `use-habits.ts` (after tracking / undo actions)
+ *   - `components/ui/button.tsx` (global button press feedback)
  *   - Unit tests
  */
 
@@ -23,6 +25,7 @@ import {
   hapticStreak,
   hapticError as hapticErrorFn,
   hapticUndo as hapticUndoFn,
+  hapticButtonPress as hapticButtonPressFn,
 } from "@/lib/haptics";
 
 import {
@@ -31,7 +34,27 @@ import {
   playFailureSound,
   playErrorSound,
   playUndoSound,
+  playButtonPressSound,
 } from "@/lib/sound";
+
+// ---------------------------------------------------------------------------
+// Global settings cache (written by use-habits.ts via setGlobalFeedbackSettings)
+// ---------------------------------------------------------------------------
+
+let _globalSoundEnabled = true;
+let _globalHapticEnabled = true;
+
+/**
+ * One-way setter called from `use-habits.ts` whenever user settings change.
+ * This is the ONLY way to update the cache — no other caller is allowed.
+ */
+export function setGlobalFeedbackSettings(opts: {
+  soundEnabled: boolean;
+  hapticEnabled: boolean;
+}): void {
+  _globalSoundEnabled = opts.soundEnabled;
+  _globalHapticEnabled = opts.hapticEnabled;
+}
 
 // ---------------------------------------------------------------------------
 // Public API
@@ -76,4 +99,18 @@ export function feedbackError(opts: FeedbackOptions): void {
 export function feedbackUndo(opts: FeedbackOptions): void {
   if (opts.hapticEnabled) hapticUndoFn();
   if (opts.soundEnabled) playUndoSound();
+}
+
+// ---------------------------------------------------------------------------
+// Global button press feedback (reads from module-level cache)
+// ---------------------------------------------------------------------------
+
+/** Ultra-subtle acknowledgement for any button press. Fire-and-forget. */
+export function feedbackButtonPress(): void {
+  try {
+    if (_globalHapticEnabled) hapticButtonPressFn();
+    if (_globalSoundEnabled) playButtonPressSound();
+  } catch {
+    // Silent — feedback must never break UI
+  }
 }

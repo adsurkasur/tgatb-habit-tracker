@@ -3,6 +3,7 @@
 import * as React from "react";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 /**
  * CloseButton — THE canonical close ("X") icon for the entire app.
@@ -28,11 +29,21 @@ interface CloseButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 }
 
 const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>(
-  ({ className, label = "Close", onClick, ...props }, ref) => (
+  ({ className, label = "Close", onClick, disabled, ...props }, ref) => {
+    const handleClick = React.useCallback(
+      (e: React.MouseEvent<HTMLButtonElement>) => {
+        if (!disabled) feedbackButtonPress();
+        onClick?.(e);
+      },
+      [disabled, onClick],
+    );
+
+    return (
     <button
       ref={ref}
       type="button"
-      onClick={onClick}
+      onClick={handleClick}
+      disabled={disabled}
       className={cn(
         // Layout
         "inline-flex items-center justify-center shrink-0",
@@ -59,7 +70,8 @@ const CloseButton = React.forwardRef<HTMLButtonElement, CloseButtonProps>(
       <X className="h-4 w-4" />
       <span className="sr-only">{label}</span>
     </button>
-  ),
+    );
+  },
 );
 
 CloseButton.displayName = "CloseButton";

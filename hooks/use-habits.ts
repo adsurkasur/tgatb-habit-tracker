@@ -10,7 +10,7 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
-import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo } from "@/lib/feedback";
+import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
 
 export function useHabits() {
   // Clear all habits and logs from storage and state
@@ -49,6 +49,14 @@ export function useHabits() {
   });
   const { toast } = useToast();
   const { setIsDark } = useTheme();
+
+    // --- Sync feedback settings into module-level cache (single source of truth) ---
+    useEffect(() => {
+      setGlobalFeedbackSettings({
+        soundEnabled: settings.soundEnabled !== false,
+        hapticEnabled: settings.hapticEnabled !== false,
+      });
+    }, [settings.soundEnabled, settings.hapticEnabled]);
 
     useEffect(() => {
       (async () => {

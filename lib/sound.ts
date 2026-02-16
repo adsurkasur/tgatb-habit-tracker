@@ -110,3 +110,8 @@ export function playErrorSound(): void {
 export function playUndoSound(): void {
   playTone(440, 100, "sine", 0.08); // A4
 }
+
+/** Ultra-subtle tick — generic button press acknowledgement. */
+export function playButtonPressSound(): void {
+  playTone(800, 50, "sine", 0.04);
+}

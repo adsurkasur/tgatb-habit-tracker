@@ -63,3 +63,9 @@ export function hapticUndo(): void {
   if (!Capacitor.isNativePlatform()) return;
   try { Haptics.impact({ style: ImpactStyle.Light }); } catch { /* silent */ }
 }
+
+/** Very light tap — generic button press acknowledgement. */
+export function hapticButtonPress(): void {
+  if (!Capacitor.isNativePlatform()) return;
+  try { Haptics.impact({ style: ImpactStyle.Light }); } catch { /* silent */ }
+}
