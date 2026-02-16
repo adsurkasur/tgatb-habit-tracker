@@ -113,6 +113,7 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
           <Drawer
             open={open}
             onOpenChange={onOpenChange}
+            handleOnly
             snapPoints={[0.45, 0.85, 1]}
             activeSnapPoint={activeSnap}
             setActiveSnapPoint={setActiveSnap}
@@ -128,7 +129,7 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
             {children}
           </Drawer>
         ) : (
-          <Drawer open={open} onOpenChange={onOpenChange}>
+          <Drawer open={open} onOpenChange={onOpenChange} handleOnly>
             {children}
           </Drawer>
         )
