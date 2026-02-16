@@ -18,13 +18,15 @@ import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
 import { useHabits } from "@/hooks/use-habits";
+import { useAuth } from "@/hooks/use-auth";
+import { AccountSelectorModal } from "@/components/account-selector-modal";
 import { hasOpenModals, closeTopModal } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
 import { useToast } from "@/hooks/use-toast";
 import { useSystemBarsUnified } from "@/hooks/use-system-bars-unified";
 import { ToastAction } from "@/components/ui/toast";
 import { Badge } from "@/components/ui/badge";
-import { HabitType, Habit } from "@shared/schema";
+import { HabitType, HabitSchedule, Habit } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 
@@ -54,6 +56,9 @@ export default function Home() {
     addOrUpdateLog,
     removeLog,
   } = useHabits();
+
+  const { switchAccount, handleAuth: triggerGoogleLogin } = useAuth();
+  const [showAccountSelector, setShowAccountSelector] = useState(false);
 
   // Theme context for instant dark mode update
   const { setIsDark } = useTheme();
@@ -145,9 +150,9 @@ export default function Home() {
   // Ref to track last added habit
   const lastAddedHabitRef = useRef<{ name: string; type: HabitType } | null>(null);
 
-  const handleAddHabit = (name: string, type: HabitType) => {
+  const handleAddHabit = (name: string, type: HabitType, schedule?: HabitSchedule) => {
     lastAddedHabitRef.current = { name, type };
-    addHabit({ name, type });
+    addHabit({ name, type, schedule });
     setShowAddHabit(false);
   };
 
@@ -167,8 +172,8 @@ export default function Home() {
     setShowEditHabit(true);
   };
 
-  const handleUpdateHabit = (id: string, name: string, type: HabitType) => {
-  updateHabit({ id, name, type });
+  const handleUpdateHabit = (id: string, name: string, type: HabitType, schedule?: HabitSchedule) => {
+  updateHabit({ id, name, type, schedule });
     setShowEditHabit(false);
     setEditingHabit(null);
   };
@@ -492,6 +497,13 @@ export default function Home() {
         <AboutDialog 
           open={showAbout}
           onOpenChange={setShowAbout}
+        />
+
+        <AccountSelectorModal
+          open={showAccountSelector}
+          onOpenChange={setShowAccountSelector}
+          onSelectAccount={switchAccount}
+          onNewLogin={triggerGoogleLogin}
         />
 
         <ResponsiveSettings

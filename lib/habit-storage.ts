@@ -1,6 +1,32 @@
-import { Habit, HabitLog, UserSettings, HabitType, ExportBundle, exportBundleSchema } from "@shared/schema";
+/**
+ * @module habit-storage
+ *
+ * Canonical read/write layer for habits, logs, and settings in localStorage.
+ *
+ * Responsibilities:
+ *   - CRUD operations on habits and logs.
+ *   - Streak calculation (current & longest) based on log history.
+ *   - Export/import of full data bundles (with migration support).
+ *   - Delegating settings persistence to `platform-storage`.
+ *
+ * Invariants:
+ *   - All storage keys are account-scoped via `scopedKey()` from
+ *     `account-scope.ts`. This module MUST NOT hard-code key strings.
+ *   - Streak recalculation MUST be triggered after any log mutation
+ *     (including auto-finalization backfills).
+ *   - This module MUST NOT access network, authentication state, or
+ *     notification APIs.
+ *
+ * Allowed callers:
+ *   - React hooks (`use-habits.ts`, `use-data-export.ts`).
+ *   - `auto-finalize.ts` (via `recalculateStreak` only).
+ *   - `use-cloud-sync.ts` / `use-cloud-backup.ts` for import/export.
+ */
+
+import { Habit, HabitLog, HabitSchedule, UserSettings, HabitType, ExportBundle, exportBundleSchema } from "@shared/schema";
 import { generateId, formatLocalDate } from "./utils";
 import { scopedKey } from "./account-scope";
+import { isExpectedDate, getExpectedDates } from "./schedule";
 
 // Storage keys are now dynamic — scoped to the active account.
 function habitsKey(): string { return scopedKey("habits"); }
@@ -27,6 +53,8 @@ export class HabitStorage {
           streak: Number(habitObj.streak ?? 0),
           createdAt: new Date(String(habitObj.createdAt)),
           lastCompletedDate: habitObj.lastCompletedDate ? new Date(String(habitObj.lastCompletedDate)) : undefined,
+          // Apply default schedule at read-time (never rewrite storage)
+          schedule: (habitObj.schedule as HabitSchedule | undefined) ?? { type: "daily" },
         };
         return result;
       });
@@ -39,7 +67,7 @@ export class HabitStorage {
     localStorage.setItem(habitsKey(), JSON.stringify(habits));
   }
 
-  static addHabit(name: string, type: HabitType): Habit {
+  static addHabit(name: string, type: HabitType, schedule?: HabitSchedule): Habit {
     const habits = this.getHabits();
     const newHabit: Habit = {
       id: generateId(),
@@ -47,6 +75,7 @@ export class HabitStorage {
       type,
       streak: 0,
       createdAt: new Date(),
+      schedule: schedule ?? { type: "daily" },
     };
     
     habits.push(newHabit);
@@ -171,12 +200,20 @@ export class HabitStorage {
   /**
    * Public entry-point for recalculating and persisting a habit's streak.
    * Called after auto-finalization inserts backfill logs.
+   *
+   * @throws {Error} (dev-only) If habitId is empty.
    */
   static recalculateStreak(habitId: string): void {
+    if (process.env.NODE_ENV !== "production" && (!habitId || habitId.trim().length === 0)) {
+      throw new Error("[habit-storage] recalculateStreak called with empty habitId");
+    }
     this.updateStreak(habitId);
   }
 
   private static calculateStreak(habitId: string, habitType: HabitType): number {
+    const habit = this.getHabits().find(h => h.id === habitId);
+    if (!habit) return 0;
+
     const allLogs = this.getLogs()
       .filter(log => log.habitId === habitId)
       .sort((a, b) => b.date.localeCompare(a.date));
@@ -184,27 +221,49 @@ export class HabitStorage {
     if (allLogs.length === 0) return 0;
     
     const today = new Date();
-    const todayStr = formatLocalDate(today); // Use local timezone
+    today.setHours(0, 0, 0, 0);
     
-    // Find starting point for streak calculation
-    const hasLogToday = allLogs.some(log => log.date === todayStr);
-    const startDaysBack = hasLogToday ? 0 : 1;
-    
-    return this.countConsecutiveDays(allLogs, today, startDaysBack, habitType);
+    return this.countExpectedStreak(habit, allLogs, today, habitType);
   }
 
-  private static countConsecutiveDays(logs: HabitLog[], fromDate: Date, startDaysBack: number, habitType: HabitType): number {
+  /**
+   * Schedule-aware streak calculation.
+   * Walks backward through expected dates only. Gaps between expected dates
+   * do NOT break the streak — only missing an expected date does.
+   */
+  private static countExpectedStreak(habit: Habit, logs: HabitLog[], today: Date, habitType: HabitType): number {
     let streak = 0;
-    
-    for (let i = startDaysBack; i <= 365; i++) {
-      const checkDate = new Date(fromDate);
+    const todayStr = formatLocalDate(today);
+    const logMap = new Map<string, HabitLog>();
+    for (const log of logs) {
+      logMap.set(log.date, log);
+    }
+
+    // Walk backward up to 365 calendar days, but only count expected dates
+    for (let i = 0; i <= 365; i++) {
+      const checkDate = new Date(today);
       checkDate.setDate(checkDate.getDate() - i);
-      const checkDateStr = formatLocalDate(checkDate); // Use local timezone
-      
-      const logForDay = logs.find(log => log.date === checkDateStr);
+      checkDate.setHours(0, 0, 0, 0);
+      const checkDateStr = formatLocalDate(checkDate);
+
+      // Skip non-expected dates (they don't affect streak)
+      if (!isExpectedDate(habit, checkDate)) continue;
+
+      // Today: if no log yet, skip (grace period) — don't break streak
+      if (checkDateStr === todayStr) {
+        const logForDay = logMap.get(checkDateStr);
+        if (!logForDay) continue; // grace period
+        const isSuccessfulDay = habitType === "bad" ? !logForDay.completed : logForDay.completed;
+        if (isSuccessfulDay) {
+          streak++;
+        } else {
+          break;
+        }
+        continue;
+      }
+
+      const logForDay = logMap.get(checkDateStr);
       if (logForDay) {
-        // For bad habits, streak continues when completed = false (didn't do bad thing)
-        // For good habits, streak continues when completed = true (did good thing)
         const isSuccessfulDay = habitType === "bad" ? !logForDay.completed : logForDay.completed;
         if (isSuccessfulDay) {
           streak++;
@@ -212,7 +271,7 @@ export class HabitStorage {
           break; // Streak broken
         }
       } else {
-        break; // No log for this day, streak broken
+        break; // Missing expected date — streak broken
       }
     }
     
@@ -236,6 +295,7 @@ export class HabitStorage {
       createdAt: h.createdAt.toISOString(),
       lastCompletedDate: h.lastCompletedDate ? h.lastCompletedDate.toISOString() : undefined,
       updatedAt: h.updatedAt ? h.updatedAt.toISOString() : undefined,
+      schedule: h.schedule,
     }));
     const logs = this.getLogs().map(l => ({
       ...l,
@@ -344,24 +404,36 @@ export class HabitStorage {
     
     const currentStreak = habit.streak || 0;
     
-    // Calculate longest streak with correct logic for habit type
-    // Must check calendar day continuity — non-consecutive dates break the streak
+    // Calculate longest streak — schedule-aware
+    // For interval/weekly habits, gaps between non-expected dates don't break streaks
     let longestStreak = 0;
     let tempStreak = 0;
     
-    const sortedLogs = logs.sort((a, b) => a.date.localeCompare(b.date));
+    // Filter to only expected-date logs for schedule-aware counting
+    const sortedLogs = logs
+      .filter(log => {
+        const d = new Date(log.date + "T00:00:00");
+        return isExpectedDate(habit, d);
+      })
+      .sort((a, b) => a.date.localeCompare(b.date));
     
     for (let i = 0; i < sortedLogs.length; i++) {
       const isSuccessful = habit.type === "bad" ? !sortedLogs[i].completed : sortedLogs[i].completed;
       if (isSuccessful) {
-        // Check if this day is consecutive to the previous successful day
+        // For longest streak, check if no expected date was missed between this and previous
         if (tempStreak > 0 && i > 0) {
           const prevDate = new Date(sortedLogs[i - 1].date + "T00:00:00");
           const currDate = new Date(sortedLogs[i].date + "T00:00:00");
-          const diffMs = currDate.getTime() - prevDate.getTime();
-          const diffDays = Math.round(diffMs / (24 * 60 * 60 * 1000));
-          if (diffDays !== 1) {
-            // Gap in calendar — reset streak
+          // Count expected dates between prevDate and currDate (exclusive)
+          const dayAfterPrev = new Date(prevDate);
+          dayAfterPrev.setDate(dayAfterPrev.getDate() + 1);
+          const dayBeforeCurr = new Date(currDate);
+          dayBeforeCurr.setDate(dayBeforeCurr.getDate() - 1);
+          const expectedBetween = dayAfterPrev <= dayBeforeCurr
+            ? getExpectedDates(habit, dayAfterPrev, dayBeforeCurr)
+            : [];
+          if (expectedBetween.length > 0) {
+            // Missed expected dates between — reset streak
             tempStreak = 1;
           } else {
             tempStreak++;

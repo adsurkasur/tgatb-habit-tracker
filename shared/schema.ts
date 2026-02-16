@@ -4,6 +4,16 @@ export type HabitType = "good" | "bad";
 
 export type MotivatorPersonality = "positive" | "adaptive" | "harsh";
 
+export type HabitScheduleType = "daily" | "interval" | "weekly";
+
+export interface HabitSchedule {
+  type: HabitScheduleType;
+  /** Number of days between expected dates (only for type "interval"). */
+  intervalDays?: number;
+  /** Days of week when habit is expected (0=Sun … 6=Sat, only for type "weekly"). */
+  daysOfWeek?: number[];
+}
+
 export interface Habit {
   id: string;
   name: string;
@@ -11,6 +21,8 @@ export interface Habit {
   streak: number;
   createdAt: Date;
   lastCompletedDate?: Date;
+  /** Schedule configuration. Defaults to { type: "daily" } at read-time. */
+  schedule?: HabitSchedule;
   // optional metadata for sync/migrations
   updatedAt?: Date;
   deviceId?: string;
@@ -42,7 +54,17 @@ export interface UserSettings {
   reminderEnabled?: boolean;
   /** Reminder time in "HH:mm" format (local time), null when disabled. */
   reminderTime?: string | null;
+  /** Whether sound feedback is enabled. Default ON. */
+  soundEnabled?: boolean;
+  /** Whether haptic feedback is enabled. Default ON. */
+  hapticEnabled?: boolean;
 }
+
+export const habitScheduleSchema = z.object({
+  type: z.enum(["daily", "interval", "weekly"]),
+  intervalDays: z.number().int().min(2).optional(),
+  daysOfWeek: z.array(z.number().int().min(0).max(6)).optional(),
+});
 
 export const habitSchema = z.object({
   id: z.string(),
@@ -51,6 +73,7 @@ export const habitSchema = z.object({
   streak: z.number(),
   createdAt: z.date(),
   lastCompletedDate: z.date().optional(),
+  schedule: habitScheduleSchema.optional(),
   updatedAt: z.date().optional(),
   deviceId: z.string().optional(),
   version: z.number().int().optional(),
@@ -85,6 +108,8 @@ export const userSettingsSchema = z.object({
   analyticsConsent: z.boolean().optional(),
   reminderEnabled: z.boolean().optional(),
   reminderTime: z.string().nullable().optional(),
+  soundEnabled: z.boolean().optional(),
+  hapticEnabled: z.boolean().optional(),
 });
 
 // Export bundle schema and types
@@ -105,6 +130,7 @@ export const exportBundleSchema = z.object({
       streak: z.number(),
       createdAt: z.string(),
       lastCompletedDate: z.string().optional(),
+      schedule: habitScheduleSchema.optional(),
       updatedAt: z.string().optional(),
       deviceId: z.string().optional(),
       version: z.number().int().optional(),

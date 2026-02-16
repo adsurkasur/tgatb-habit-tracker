@@ -26,7 +26,7 @@ interface AddEntryDialogProps {
   habits: Habit[];
   date: string;
   addOrUpdateLog: (habitId: string, date: string, completed: boolean) => void;
-  addHabit: (habit: { name: string; type: "good" | "bad" }) => Habit;
+  addHabit: (habit: { name: string; type: "good" | "bad"; schedule?: import("@shared/schema").HabitSchedule }) => Habit;
 }
 
 export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLog, addHabit }: AddEntryDialogProps) {

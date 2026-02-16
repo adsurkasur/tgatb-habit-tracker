@@ -16,7 +16,9 @@ import { getOrCreateAppFolder } from '../lib/drive-folder';
 // Upload JSON data to Google Drive (into the "TGATB Habit Tracker" folder)
 export async function uploadToDrive(jsonData: string, accessToken: string): Promise<{ id?: string } | null> {
 	try {
-		console.debug('[DriveSync] uploadToDrive called', { jsonData, accessToken });
+		if (process.env.NODE_ENV !== "production") {
+			console.debug('[DriveSync] uploadToDrive called', { jsonData, accessToken });
+		}
 		const folderId = await getOrCreateAppFolder(accessToken);
 		const metadata = {
 			name: 'habits-backup.json',
@@ -34,7 +36,9 @@ export async function uploadToDrive(jsonData: string, accessToken: string): Prom
 			body: form,
 		});
 			const result = await response.json();
-			console.debug('[DriveSync] uploadToDrive response', result);
+			if (process.env.NODE_ENV !== "production") {
+				console.debug('[DriveSync] uploadToDrive response', result);
+			}
 			if (!response.ok) {
 				console.error('[DriveSync] uploadToDrive error', {
 					status: response.status,

@@ -57,7 +57,9 @@ export const TokenStorage = {
         }
       }
     } catch (e) {
-      console.debug('[TokenStorage] getAccessToken secure error');
+      if (process.env.NODE_ENV !== "production") {
+        console.debug('[TokenStorage] getAccessToken secure error');
+      }
       // fallback
       try { const { PlatformStorage } = await import('./platform-storage'); const v = await PlatformStorage.getItem('googleAccessToken'); return v; } catch { return null; }
     }

@@ -21,6 +21,8 @@ export async function signInWithGoogleWeb(): Promise<string | null> {
 	const result = await signInWithPopup(auth, provider);
 	const credential = GoogleAuthProvider.credentialFromResult(result);
 	const accessToken = credential?.accessToken || null;
-	console.debug('[GoogleAuthWeb] Access token:', accessToken ? 'received' : 'null');
+	if (process.env.NODE_ENV !== "production") {
+		console.debug('[GoogleAuthWeb] Access token:', accessToken ? 'received' : 'null');
+	}
 	return accessToken;
 }

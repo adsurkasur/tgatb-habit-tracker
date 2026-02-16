@@ -53,8 +53,10 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     };
     const resolveTargetFullscreen = (force?: boolean) => force ?? fullscreenMode ?? globalState.isFullscreen;
     const logStart = (target: boolean) => {
-      console.log(`🔧 [SystemBars] Starting application: fullscreen=${target}, platform=${Capacitor.getPlatform()}`);
-      console.log(`🔧 [SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`[SystemBars] Starting application: fullscreen=${target}, platform=${Capacitor.getPlatform()}`);
+        console.log(`[SystemBars] Global state: isInitialized=${globalState.isInitialized}, isFullscreen=${globalState.isFullscreen}`);
+      }
     };
     const setNavColor = async (color: string) => {
       try {
@@ -78,8 +80,10 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
       type CapacitorPlugins = Record<string, unknown>;
       const cap = (window as unknown as { Capacitor?: { Plugins?: CapacitorPlugins } }).Capacitor;
       const plugins = Object.keys(cap?.Plugins || {});
-      console.log(`🔧 [SystemBars] Available plugins: ${plugins.join(', ')}`);
-      console.log(`🔧 [SystemBars] Using StatusBar API as primary method`);
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`[SystemBars] Available plugins: ${plugins.join(', ')}`);
+        console.log(`[SystemBars] Using StatusBar API as primary method`);
+      }
       if (target) {
         await StatusBar.setBackgroundColor({ color: '#00000000' });
         await StatusBar.hide();
@@ -97,7 +101,9 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     };
     const finalizeState = (target: boolean) => {
       globalState.isFullscreen = target;
-      console.log(`🔧 [SystemBars] System bars configuration completed: fullscreen=${target}`);
+      if (process.env.NODE_ENV !== "production") {
+        console.log(`[SystemBars] System bars configuration completed: fullscreen=${target}`);
+      }
     };
     const smallSettleDelay = () => new Promise(r => setTimeout(r, 100));
     const attemptRecovery = async (err: unknown, target: boolean) => {

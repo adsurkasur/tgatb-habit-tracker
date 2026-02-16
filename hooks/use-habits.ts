@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
-import { Habit, HabitType, UserSettings } from "@shared/schema";
+import { Habit, HabitType, HabitSchedule, UserSettings } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { HabitStorage } from "@/lib/habit-storage";
 import { computeAutoLogs } from "@/lib/auto-finalize";
@@ -10,6 +10,7 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
+import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo } from "@/lib/feedback";
 
 export function useHabits() {
   // Clear all habits and logs from storage and state
@@ -43,6 +44,8 @@ export function useHabits() {
     motivatorPersonality: "positive",
     fullscreenMode: false,
     autoSync: false,
+    soundEnabled: true,
+    hapticEnabled: true,
   });
   const { toast } = useToast();
   const { setIsDark } = useTheme();
@@ -123,17 +126,17 @@ export function useHabits() {
       };
     }, [runAutoFinalize]);
 
-  const addHabit = ({ name, type }: { name: string; type: HabitType }) => {
-    const newHabit = HabitStorage.addHabit(name, type);
+  const addHabit = ({ name, type, schedule }: { name: string; type: HabitType; schedule?: HabitSchedule }) => {
+    const newHabit = HabitStorage.addHabit(name, type, schedule);
     setHabits(prev => [...prev, newHabit]);
     // schedule cloud push if enabled
     try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     return newHabit;
   };
 
-  const updateHabit = ({ id, name, type }: { id: string; name: string; type: HabitType }) => {
-    HabitStorage.updateHabit(id, { name, type });
-    setHabits(prev => prev.map(h => h.id === id ? { ...h, name, type } : h));
+  const updateHabit = ({ id, name, type, schedule }: { id: string; name: string; type: HabitType; schedule?: HabitSchedule }) => {
+    HabitStorage.updateHabit(id, { name, type, schedule });
+    setHabits(prev => prev.map(h => h.id === id ? { ...h, name, type, schedule: schedule ?? h.schedule } : h));
     toast({
       title: "Habit updated!",
       description: "Your habit has been successfully updated.",
@@ -153,7 +156,7 @@ export function useHabits() {
 
   const restoreHabit = (deletedHabit: Habit) => {
     // Restore the habit
-    const restoredHabit = HabitStorage.addHabit(deletedHabit.name, deletedHabit.type);
+    const restoredHabit = HabitStorage.addHabit(deletedHabit.name, deletedHabit.type, deletedHabit.schedule);
     // Update the restored habit with original data (preserve streak, creation date, etc.)
     HabitStorage.updateHabit(restoredHabit.id, {
       streak: deletedHabit.streak,
@@ -176,6 +179,7 @@ export function useHabits() {
     const habit = habits.find(h => h.id === habitId);
     if (!habit) return;
     if (isAlreadyCompleted) {
+      feedbackError({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
       toast({
         title: "Already completed!",
         description: "You've already tracked this habit today.",
@@ -183,12 +187,22 @@ export function useHabits() {
       });
       return;
     }
+    const oldStreak = habit.streak;
     HabitStorage.addLog(habitId, completed);
     // Refresh habits to get updated streaks
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
     const updatedHabit = updatedHabits.find(h => h.id === habitId);
     if (updatedHabit) {
+      // Determine if this was a "successful" track
+      const isSuccess = updatedHabit.type === "bad" ? !completed : completed;
+      const streakIncremented = updatedHabit.streak > oldStreak;
+      const feedbackOpts = { soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false };
+      if (isSuccess) {
+        feedbackTrackSuccess(feedbackOpts, streakIncremented);
+      } else {
+        feedbackTrackFailure(feedbackOpts);
+      }
       const message = Motivator.getMessage(
         settings.motivatorPersonality,
         completed,
@@ -206,6 +220,7 @@ export function useHabits() {
   const undoHabitTracking = (habitId: string) => {
     const success = HabitStorage.undoTodayLog(habitId);
     if (success) {
+      feedbackUndo({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
       const updatedHabits = HabitStorage.getHabits();
       setHabits(updatedHabits);
       toast({
@@ -215,6 +230,7 @@ export function useHabits() {
       });
       try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     } else {
+      feedbackError({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
       toast({
         title: "Nothing to undo",
         description: "No tracking recorded for today.",

@@ -5,6 +5,7 @@ import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
 import { TokenStorage } from '@/lib/utils';
 import { getActiveAccountId, setActiveAccountId } from "@/lib/account-scope";
+import { addKnownAccount, getKnownAccounts } from "@/lib/account-registry";
 
 /** Detect if an auth error is a user-initiated cancellation (popup closed, back pressed, etc.) */
 function isAuthCancellation(err: unknown): boolean {
@@ -140,6 +141,12 @@ export function useAuth() {
               localStorage.setItem('googleProfileName', user.displayName || '');
               localStorage.setItem('googleProfilePhoto', user.photoURL || '');
               setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
+              // Register in local account registry
+              addKnownAccount({
+                accountId: uid,
+                displayName: user.displayName || 'Google Account',
+                avatarUrl: user.photoURL || undefined,
+              });
             }
             setIsLoggedIn(true);
             toast({
@@ -187,6 +194,14 @@ export function useAuth() {
               await Preferences.set({ key: 'googleProfilePhoto', value: photoUrl });
             }
             setProfile({ name, photoUrl });
+            // Register in local account registry
+            if (uid) {
+              addKnownAccount({
+                accountId: uid,
+                displayName: name || 'Google Account',
+                avatarUrl: photoUrl || undefined,
+              });
+            }
             setIsLoggedIn(true);
             toast({
               title: "Sign-in Successful",
@@ -244,7 +259,9 @@ export function useAuth() {
     } catch (err) {
       // User cancelled sign-in (closed popup, pressed back, etc.) — not an error
       if (isAuthCancellation(err)) {
-        console.debug('[useAuth] Sign-in cancelled by user');
+        if (process.env.NODE_ENV !== "production") {
+          console.debug('[useAuth] Sign-in cancelled by user');
+        }
         return;
       }
       if (err instanceof Error && err.message.includes('No credentials available')) {
@@ -267,11 +284,34 @@ export function useAuth() {
     }
   };
 
+  /**
+   * Switch to a known account by ID (from account selector).
+   * Loads the stored profile for that account if available.
+   */
+  const switchAccount = useCallback((targetAccountId: string) => {
+    setActiveAccountId(targetAccountId);
+    setAccountId(targetAccountId);
+
+    if (targetAccountId === "anonymous") {
+      setIsLoggedIn(false);
+      setProfile(null);
+    } else {
+      // Try to load profile from registry
+      const accounts = getKnownAccounts();
+      const found = accounts.find(a => a.accountId === targetAccountId);
+      if (found) {
+        setProfile({ name: found.displayName, photoUrl: found.avatarUrl });
+        setIsLoggedIn(true);
+      }
+    }
+  }, []);
+
   return {
     isLoggedIn,
     accountId,
     profile,
     clientReady,
     handleAuth,
+    switchAccount,
   };
 }

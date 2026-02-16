@@ -1,3 +1,27 @@
+/**
+ * @module platform-storage
+ *
+ * Thin abstraction over Capacitor Preferences (native) and
+ * localStorage (web) for key-value persistence.
+ *
+ * Responsibilities:
+ *   - Provide a unified async `getItem` / `setItem` / `removeItem` API.
+ *   - Read/write user settings with account-scoped keys.
+ *
+ * Invariants:
+ *   - All settings keys MUST go through `scopedKey()` from
+ *     `account-scope.ts` — hard-coded key strings are prohibited.
+ *   - The `PlatformStorage` object MUST remain stateless (no caching)
+ *     to avoid stale reads after account switches.
+ *   - This module MUST NOT import from `habit-storage` to avoid
+ *     circular dependencies.
+ *
+ * Allowed callers:
+ *   - `habit-storage.ts` (settings delegation).
+ *   - `offline-storage.ts` (localStorage fallback for IndexedDB).
+ *   - `use-habits.ts`, `use-auth.ts`, settings UI components.
+ */
+
 import type { UserSettings } from "@shared/schema";
 import { scopedKey } from "./account-scope";
 

@@ -1,5 +1,50 @@
 /**
- * Offline storage for habit data with IndexedDB fallback
+ * @module offline-storage
+ *
+ * Offline queue for habit mutations while the device is disconnected.
+ *
+ * Uses IndexedDB as the primary store with a localStorage/PlatformStorage
+ * fallback when IndexedDB is unavailable.
+ *
+ * ### Why this module is NOT account-scoped (yet)
+ *
+ * Currently the offline queue uses global (un-scoped) keys:
+ *   - IndexedDB database: `"tgatb-habits-offline"` (shared across accounts)
+ *   - localStorage fallback keys: `"offline-habits"`, `"pending-habit-actions"`
+ *
+ * This is safe **today** because:
+ *   1. The queue is transient — actions are replayed and cleared on sync.
+ *   2. Account switches trigger a full data reload from scoped storage;
+ *      the queue is only consumed by the session that created it.
+ *   3. Multi-account usage on the same device is rare and always
+ *      sequential (never concurrent).
+ *
+ * ### When scoping becomes necessary
+ *
+ * If the app ever supports:
+ *   - Background sync (actions replayed without user session context),
+ *   - Concurrent multi-account sessions,
+ *   - Shared-device flows where queue items could leak,
+ *
+ * then the queue MUST be scoped by accountId. Insertion points:
+ *
+ *   TODO(account-scope): Scope IndexedDB database name with accountId
+ *       e.g. `tgatb-habits-offline::${getActiveAccountId()}`
+ *
+ *   TODO(account-scope): Scope localStorage fallback keys with `scopedKey()`
+ *       e.g. `scopedKey("pending-habit-actions")`
+ *
+ *   TODO(account-scope): Clear/rotate the queue on account switch to
+ *       prevent cross-account replay.
+ *
+ * Invariants:
+ *   - The queue is append-only until sync clears it.
+ *   - `init()` is called once on module import (singleton pattern).
+ *   - Fallback to PlatformStorage must be silent (no user-visible error).
+ *
+ * Allowed callers:
+ *   - `use-cloud-sync.ts` (enqueue actions while offline, replay on reconnect).
+ *   - `use-habits.ts` (read cached habits when offline).
  */
 
 interface OfflineHabitAction {

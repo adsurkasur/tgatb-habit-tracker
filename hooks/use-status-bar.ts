@@ -37,7 +37,9 @@ export const useStatusBar = () => {
         // Since we're not overlaying, we don't need safe area padding
         root.style.setProperty('--safe-area-top', '0px');
         
-        console.log('Status bar info:', { ...info, height: statusBarHeight, overlays: false });
+        if (process.env.NODE_ENV !== "production") {
+          console.log('Status bar info:', { ...info, height: statusBarHeight, overlays: false });
+        }
       } catch (error) {
         console.warn('Failed to get status bar info:', error);
         // Fallback values
@@ -115,7 +117,9 @@ export const useStatusBar = () => {
 
     try {
       await StatusBar.setStyle({ style });
-      console.log('Status bar style set to:', style);
+      if (process.env.NODE_ENV !== "production") {
+        console.log('Status bar style set to:', style);
+      }
     } catch (error) {
       console.warn('Failed to set status bar style:', error);
     }
@@ -128,7 +132,9 @@ export const useStatusBar = () => {
 
     try {
       await StatusBar.setBackgroundColor({ color });
-      console.log('Status bar background color set to:', color);
+      if (process.env.NODE_ENV !== "production") {
+        console.log('Status bar background color set to:', color);
+      }
     } catch (error) {
       console.warn('Failed to set status bar background color:', error);
     }

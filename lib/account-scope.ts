@@ -1,4 +1,6 @@
 /**
+ * @module account-scope
+ *
  * Account scope management for data isolation.
  *
  * Every storage key is namespaced with the active account's ID so
@@ -7,6 +9,26 @@
  *
  *   scopedKey("habits") → "habits::abc123"   (logged-in)
  *   scopedKey("habits") → "habits::anonymous" (anonymous)
+ *
+ * Responsibilities:
+ *   - Maintain the active accountId in memory and localStorage.
+ *   - Provide `scopedKey()` for deterministic key namespacing.
+ *   - Migrate legacy un-scoped keys to the current account's namespace.
+ *
+ * Invariants:
+ *   - `getActiveAccountId()` MUST NEVER return an empty string, null,
+ *     or undefined. The sentinel value `"anonymous"` is used when no
+ *     account is set.
+ *   - `scopedKey()` MUST produce a non-empty string containing the
+ *     delimiter `"::"` — callers rely on this format.
+ *   - Legacy migration is idempotent — safe to call multiple times.
+ *   - This module MUST NOT import from `habit-storage`, `platform-storage`,
+ *     or any React hook to avoid circular dependencies.
+ *
+ * Allowed callers:
+ *   - `habit-storage.ts`, `platform-storage.ts` (via `scopedKey`).
+ *   - `use-auth.ts` (via `setActiveAccountId`).
+ *   - `use-habits.ts` (via `migrateLegacyStorage` / `migrateLegacyPlatformStorage`).
  */
 
 const ACCOUNT_KEY = "tgatb_active_account";
@@ -21,13 +43,15 @@ let _activeAccountId: string | null = null;
  * Get the current active account ID.
  * Lazy-loads from localStorage on first call.
  * Returns `"anonymous"` when no account is set.
+ *
+ * @throws {Error} If the resolved ID is somehow empty (should never happen).
  */
 export function getActiveAccountId(): string {
   if (_activeAccountId) return _activeAccountId;
 
   if (typeof window !== "undefined") {
     const stored = localStorage.getItem(ACCOUNT_KEY);
-    if (stored) {
+    if (stored && stored.trim().length > 0) {
       _activeAccountId = stored;
       return stored;
     }
@@ -39,8 +63,16 @@ export function getActiveAccountId(): string {
 /**
  * Set the active account ID and persist it.
  * Pass `"anonymous"` to switch back to the anonymous namespace.
+ *
+ * @throws {Error} If `id` is empty or null/undefined.
  */
 export function setActiveAccountId(id: string): void {
+  if (!id || id.trim().length === 0) {
+    throw new Error(
+      "[account-scope] setActiveAccountId called with empty id. " +
+      "Use 'anonymous' for the anonymous namespace.",
+    );
+  }
   _activeAccountId = id;
   if (typeof window !== "undefined") {
     localStorage.setItem(ACCOUNT_KEY, id);
@@ -53,9 +85,21 @@ export function setActiveAccountId(id: string): void {
  * @example
  *   scopedKey("habits")       → "habits::uid123"
  *   scopedKey("user_settings") → "user_settings::anonymous"
+ *
+ * @throws {Error} If `baseKey` is empty.
  */
 export function scopedKey(baseKey: string): string {
-  return `${baseKey}::${getActiveAccountId()}`;
+  if (!baseKey || baseKey.trim().length === 0) {
+    throw new Error("[account-scope] scopedKey called with empty baseKey.");
+  }
+  const key = `${baseKey}::${getActiveAccountId()}`;
+  if (process.env.NODE_ENV !== "production") {
+    // Sanity-check: the key must contain the delimiter
+    if (!key.includes("::")) {
+      throw new Error(`[account-scope] scopedKey produced invalid key: ${key}`);
+    }
+  }
+  return key;
 }
 
 // ---------------------------------------------------------------------------

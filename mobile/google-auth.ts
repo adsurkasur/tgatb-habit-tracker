@@ -23,7 +23,9 @@ export async function signInWithGoogle(): Promise<GoogleAuthResult | null> {
 			const uid = result.user?.uid || undefined;
 			const name = result.user?.displayName || undefined;
 			const photoUrl = result.user?.photoUrl || undefined;
-			console.debug('[GoogleAuth] Access token received');
+			if (process.env.NODE_ENV !== "production") {
+				console.debug('[GoogleAuth] Access token received');
+			}
 			return {
 				accessToken: result.credential.accessToken,
 				uid,

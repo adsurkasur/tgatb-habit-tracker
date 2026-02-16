@@ -34,7 +34,9 @@ export function useCloudBackup() {
       // Get full export bundle
       const { HabitStorage } = await import("@/lib/habit-storage");
       const exportJson = await HabitStorage.exportData();
-      console.debug('[useCloudBackup] Exporting full bundle:', exportJson);
+      if (process.env.NODE_ENV !== "production") {
+        console.debug('[useCloudBackup] Exporting full bundle:', exportJson);
+      }
 
       const accessToken = await TokenStorage.getAccessToken();
         if (!accessToken) {
@@ -51,7 +53,9 @@ export function useCloudBackup() {
           const { uploadToDrive } = await import("../web/drive-sync");
           try {
             result = await uploadToDrive(exportJson, accessToken);
-            console.debug('[useCloudBackup] Web Drive backup result:', result);
+            if (process.env.NODE_ENV !== "production") {
+              console.debug('[useCloudBackup] Web Drive backup result:', result);
+            }
             toast({
               title: "Backup Successful",
               description: "Your data has been backed up to Google Drive (web).",
@@ -74,7 +78,9 @@ export function useCloudBackup() {
           const { uploadDataToDrive } = await import("@/mobile/drive-sync");
           try {
             result = await uploadDataToDrive(exportJson, accessToken);
-            console.debug('[useCloudBackup] Mobile Drive backup result:', result);
+            if (process.env.NODE_ENV !== "production") {
+              console.debug('[useCloudBackup] Mobile Drive backup result:', result);
+            }
             if (result) {
               toast({
                 title: "Backup Successful",
@@ -154,7 +160,9 @@ export function useCloudBackup() {
           // List files in app folder (with root fallback for legacy uploads)
           const { listAppFiles } = await import('@/lib/drive-folder');
           const files = await listAppFiles('habits-backup.json', accessToken, { withRootFallback: true });
-          console.debug('[useCloudBackup] Web Drive file list:', files);
+          if (process.env.NODE_ENV !== "production") {
+            console.debug('[useCloudBackup] Web Drive file list:', files);
+          }
 
           if (!files.length) throw new Error("No backup file found in Drive");
 
@@ -170,7 +178,9 @@ export function useCloudBackup() {
             toast({ title: 'Import Failed', description: 'Downloaded backup is invalid and cannot be imported.', variant: 'destructive', duration: 4000 });
             return;
           }
-          console.debug('[useCloudBackup] Web Drive raw backup bundle:', cloudBundle);
+          if (process.env.NODE_ENV !== "production") {
+            console.debug('[useCloudBackup] Web Drive raw backup bundle:', cloudBundle);
+          }
         } catch (err: unknown) {
           // If error is due to invalid/expired token, show error toast and instruct user to log in via login/logout button
           let message = "Drive import failed.";
@@ -217,7 +227,9 @@ export function useCloudBackup() {
             throw err;
           }
           cloudJson = JSON.stringify(cloudBundle);
-          console.debug('[useCloudBackup] Mobile Drive raw backup bundle:', cloudBundle);
+          if (process.env.NODE_ENV !== "production") {
+            console.debug('[useCloudBackup] Mobile Drive raw backup bundle:', cloudBundle);
+          }
         } catch (err: unknown) {
           let message = "Drive import failed.";
           if (err && typeof err === "object" && "message" in err && typeof (err as { message?: string }).message === "string") {

@@ -29,7 +29,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
         await initSentryClient(!!settings?.analyticsConsent);
       } catch (err) {
         // initialization failures should not block app
-        console.debug('Sentry client init skipped', err);
+        if (process.env.NODE_ENV !== "production") {
+          console.debug('Sentry client init skipped', err);
+        }
       }
     })();
   }, []);

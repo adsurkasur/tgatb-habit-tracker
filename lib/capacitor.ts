@@ -38,7 +38,9 @@ export const initializeCapacitor = async () => {
 export async function setFullscreenMode(enabled: boolean) {
   if (!isNativePlatform()) return;
   // NOTE: Actual system bar changes & preference are handled by useSystemBarsUnified hook
-  console.log(`🔧 [CapacitorLib] Fullscreen preference change requested: ${enabled} (handled by unified hook)`);
+  if (process.env.NODE_ENV !== "production") {
+    console.log(`[CapacitorLib] Fullscreen preference change requested: ${enabled} (handled by unified hook)`);
+  }
 }
 
 // Haptic feedback helpers

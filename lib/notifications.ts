@@ -1,4 +1,6 @@
 /**
+ * @module notifications
+ *
  * Platform-abstracted daily reminder notification scheduling.
  *
  * - Android (Capacitor): Uses @capacitor/local-notifications for reliable OS-level alarms.
@@ -8,6 +10,22 @@
  * motivator personality system so tone matches the user's chosen personality.
  *
  * No server, no FCM, no Service Worker timers.
+ *
+ * Responsibilities:
+ *   - Schedule / cancel / re-establish daily reminders.
+ *   - Manage notification permissions on both platforms.
+ *   - Rotate motivator messages on each (re-)schedule.
+ *
+ * Invariants:
+ *   - Notification scheduling MUST NOT access or modify habit data.
+ *   - Android notification ID (`REMINDER_NOTIFICATION_ID`) is constant
+ *     to ensure only one reminder exists at a time.
+ *   - `scheduleReminder` is idempotent — always cancels before scheduling.
+ *   - Icon references MUST use PNG assets (not SVG) for Android compatibility.
+ *
+ * Allowed callers:
+ *   - `settings-dialog.tsx` / `settings-screen.tsx` (user toggles).
+ *   - `use-habits.ts` (via `reestablishReminder` on mount / visibility).
  */
 
 import type { MotivatorPersonality } from "@shared/schema";

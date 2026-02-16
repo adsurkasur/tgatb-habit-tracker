@@ -1,5 +1,7 @@
 /**
- * Auto-finalization module.
+ * @module auto-finalize
+ *
+ * Backfill engine for unlogged calendar days.
  *
  * On every app open / day boundary, this scans all habits and creates
  * auto-generated failure logs for any calendar day between a habit's
@@ -12,16 +14,35 @@
  *
  * All auto-generated logs carry `source: "auto"` so they can be
  * distinguished from manual entries.
+ *
+ * Invariants:
+ *   - `computeAutoLogs()` is a **pure function** — no side effects,
+ *     no storage access, no network calls.
+ *   - The caller (`use-habits.ts`) is responsible for persisting the
+ *     returned logs and triggering streak recalculation.
+ *   - Today's date MUST NEVER appear in the output (grace period).
+ *   - Duplicate logs MUST NOT be generated for dates that already
+ *     have an entry — the `existingLogs` set is authoritative.
+ *
+ * Allowed callers:
+ *   - `use-habits.ts` (the only orchestrator of auto-finalization).
+ *   - Unit tests.
  */
 
 import type { Habit, HabitLog } from "@shared/schema";
 import { generateId, formatLocalDate } from "./utils";
+import { isExpectedDate } from "./schedule";
 
 /**
  * Given all habits and all existing logs, return an array of new auto-generated
  * logs that should be persisted. The caller is responsible for actually saving.
  *
  * This function is pure — no side effects, no storage access.
+ *
+ * Runtime guards:
+ *   - Never emits a log for today (grace period).
+ *   - Never emits a log for a date that already has an entry.
+ *   - Deduplicates output by (habitId, date) pair.
  */
 export function computeAutoLogs(
   habits: Habit[],
@@ -42,6 +63,8 @@ export function computeAutoLogs(
   }
 
   const newLogs: HabitLog[] = [];
+  // Guard against duplicate (habitId, date) pairs in output
+  const emitted = new Set<string>();
 
   for (const habit of habits) {
     const existing = loggedDates.get(habit.id) ?? new Set<string>();
@@ -57,7 +80,8 @@ export function computeAutoLogs(
       // Stop when we reach today (grace period)
       if (dateStr >= todayStr) break;
 
-      if (!existing.has(dateStr)) {
+      const emitKey = `${habit.id}::${dateStr}`;
+      if (!existing.has(dateStr) && !emitted.has(emitKey) && isExpectedDate(habit, cursor)) {
         // Good habit missed → completed: false
         // Bad habit missed  → completed: true (indulged / not resisted)
         const completed = habit.type === "bad";
@@ -70,11 +94,13 @@ export function computeAutoLogs(
           timestamp: new Date(`${dateStr}T23:59:59`),
           source: "auto",
         });
+        emitted.add(emitKey);
       }
 
       cursor.setDate(cursor.getDate() + 1);
     }
   }
 
-  return newLogs;
+  // Final safety: strip any log that somehow targets today
+  return newLogs.filter((log) => log.date !== todayStr);
 }
