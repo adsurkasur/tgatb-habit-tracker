@@ -6,6 +6,7 @@ import { MotivatorSettings } from '@/components/settings/motivator-settings';
 import { HabitManagementSettings } from '@/components/settings/habit-management-settings';
 import { AccountDataSettings } from '@/components/settings/account-data-settings';
 import { AppDeviceSettings } from '@/components/settings/app-device-settings';
+import { FeedbackSettings } from '@/components/settings/feedback-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
 
 type SettingsDialogProps = {
@@ -62,6 +63,11 @@ export function SettingsDialog({
             />
 
             <AppDeviceSettings
+              settings={settings}
+              onUpdateSettings={onUpdateSettings}
+            />
+
+            <FeedbackSettings
               settings={settings}
               onUpdateSettings={onUpdateSettings}
             />

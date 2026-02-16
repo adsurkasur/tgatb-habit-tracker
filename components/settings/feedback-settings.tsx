@@ -28,7 +28,7 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
             <Volume2 className="w-5 h-5 text-muted-foreground" />
             <div>
               <span className="font-medium">Sound Effects</span>
-              <p className="text-sm text-muted-foreground">Play sounds on habit actions</p>
+              <p className="text-sm text-muted-foreground">Play sounds on interactions</p>
             </div>
           </div>
           <Switch
@@ -50,7 +50,7 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
             <div>
               <span className="font-medium">Haptic Feedback</span>
               <p className="text-sm text-muted-foreground">
-                {hapticsAvailable ? "Vibration on habit actions" : "Not supported on this device"}
+                {hapticsAvailable ? "Vibrate on interactions" : "Not supported on this device"}
               </p>
             </div>
           </div>

@@ -21,6 +21,8 @@ export function useCloudBackup() {
       });
     }
 
+    showLoading();
+
     // Show 'Exporting to Cloud...' toast
     toast({
       title: "Exporting to Cloud...",
@@ -116,6 +118,8 @@ export function useCloudBackup() {
         duration: 3000,
       });
       console.error('[useCloudBackup] Drive backup error:', err instanceof Error ? err.stack : err);
+    } finally {
+      hideLoading();
     }
   };
 
