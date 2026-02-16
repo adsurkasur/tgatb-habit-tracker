@@ -221,7 +221,7 @@ function StatGrid({ statistics }: { statistics: ReturnType<typeof computeStatSum
 
 function TopHabits({ habits }: { habits: Habit[] }) {
   return (
-    <Card className="p-3 flex flex-col flex-1 min-h-0 sm:hidden">
+    <Card className="p-3 flex flex-col flex-1 min-h-[12rem] sm:hidden">
       <h3 className="text-sm font-semibold mb-3 shrink-0">Top Habits</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="space-y-2">
@@ -251,7 +251,7 @@ function TopHabits({ habits }: { habits: Habit[] }) {
 
 function HabitBreakdown({ habits }: { habits: Habit[] }) {
   return (
-    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-0">
+    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-[12rem]">
       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">Habit Breakdown</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         {habits.length === 0 ? (
