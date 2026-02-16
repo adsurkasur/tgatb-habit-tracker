@@ -179,14 +179,14 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
 
               {/* Weekday multi-select */}
               {scheduleType === "weekly" && (
-                <div className="flex flex-wrap gap-1.5 mt-2">
+                <div className="grid grid-cols-7 gap-1.5 mt-2">
                   {WEEKDAY_LABELS.map((label, idx) => (
                     <Button
                       key={idx}
                       type="button"
                       size="sm"
                       onClick={() => toggleDay(idx)}
-                      className={`h-8 w-10 text-xs font-medium transition-all duration-200 ${
+                      className={`h-8 w-full text-xs font-medium transition-all duration-200 ${
                         daysOfWeek.includes(idx)
                           ? "bg-primary hover:bg-primary/90 text-white"
                           : "bg-muted hover:bg-muted/80 text-foreground"
