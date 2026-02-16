@@ -103,7 +103,7 @@ async function scheduleAndroidReminder(
         schedule: {
           at: next,
           repeats: true,
-          every: "day",
+          // removed `every` — using `at` + `repeats: true` per Capacitor docs to avoid duplicate scheduling
           allowWhileIdle: true,
         },
         sound: undefined, // default system sound
