@@ -3,6 +3,7 @@ import { ChevronRight, Trash2 } from "lucide-react";
 import { DeleteAllHabitsModal } from "@/components/delete-all-habits-modal";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface HabitManagementSettingsProps {
   onDeleteAllHabits?: () => Promise<void>;
@@ -19,7 +20,7 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
       <h2 className="text-lg font-semibold">Habit Management</h2>
       <div
         className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-        onClick={() => setShowDeleteModal(true)}
+        onClick={() => { feedbackButtonPress(); setShowDeleteModal(true); }}
       >
         <div className="flex items-center space-x-3">
           <Trash2 className="w-5 h-5 text-destructive" />

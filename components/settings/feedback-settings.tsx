@@ -4,6 +4,7 @@ import { UserSettings } from "@shared/schema";
 import { Switch } from "@/components/ui/switch";
 import { Volume2, Vibrate } from "lucide-react";
 import { isHapticsSupported } from "@/lib/haptics";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface FeedbackSettingsProps {
   settings: UserSettings;
@@ -21,7 +22,7 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
         {/* Sound toggle */}
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={() => onUpdateSettings({ soundEnabled: !(settings.soundEnabled !== false) })}
+          onClick={() => { feedbackButtonPress(); onUpdateSettings({ soundEnabled: !(settings.soundEnabled !== false) }); }}
         >
           <div className="flex items-center space-x-3">
             <Volume2 className="w-5 h-5 text-muted-foreground" />
@@ -42,7 +43,7 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
           className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             hapticsAvailable ? "cursor-pointer state-layer-hover" : "opacity-50 cursor-not-allowed"
           }`}
-          onClick={hapticsAvailable ? () => onUpdateSettings({ hapticEnabled: !(settings.hapticEnabled !== false) }) : undefined}
+          onClick={hapticsAvailable ? () => { feedbackButtonPress(); onUpdateSettings({ hapticEnabled: !(settings.hapticEnabled !== false) }); } : undefined}
         >
           <div className="flex items-center space-x-3">
             <Vibrate className="w-5 h-5 text-muted-foreground" />

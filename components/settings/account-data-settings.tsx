@@ -7,6 +7,7 @@ import { UserSettings } from "@shared/schema";
 import { useAuth } from "@/hooks/use-auth";
 import { useCloudBackup } from "@/hooks/use-cloud-backup";
 import { useDataExport } from "@/hooks/use-data-export";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface AccountDataSettingsProps {
   settings: UserSettings;
@@ -27,6 +28,7 @@ export function AccountDataSettings({
   const { fileInputRef, isExporting, handleExportClick, handleImportClick, handleFileChange } = useDataExport(onExportData, onImportData);
   
   const toggleAutoSync = () => {
+    feedbackButtonPress();
     onUpdateSettings({ autoSync: !settings.autoSync });
   };
 
@@ -47,7 +49,7 @@ export function AccountDataSettings({
         {!clientReady ? null : (
           <div
             className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-            onClick={handleAuth}
+            onClick={() => { feedbackButtonPress(); handleAuth(); }}
           >
             <div className="flex items-center space-x-3">
               {isLoggedIn && profile?.photoUrl ? (
@@ -76,7 +78,7 @@ export function AccountDataSettings({
         {/* Export to Cloud Button */}
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={handleBackup}
+          onClick={() => { feedbackButtonPress(); handleBackup(); }}
         >
           <div className="flex items-center space-x-3">
             <CloudUpload className="w-5 h-5 text-muted-foreground" />
@@ -88,7 +90,7 @@ export function AccountDataSettings({
         {/* Import from Cloud Button */}
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={() => handleRestore(onImportData)}
+          onClick={() => { feedbackButtonPress(); handleRestore(onImportData); }}
         >
           <div className="flex items-center space-x-3">
             <CloudDownload className="w-5 h-5 text-muted-foreground" />
@@ -126,7 +128,7 @@ export function AccountDataSettings({
           className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             !clientReady ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
-          onClick={clientReady ? () => onUpdateSettings({ analyticsConsent: !settings.analyticsConsent }) : undefined}
+          onClick={clientReady ? () => { feedbackButtonPress(); onUpdateSettings({ analyticsConsent: !settings.analyticsConsent }); } : undefined}
         >
           <div className="flex items-center space-x-3">
             <User className="w-5 h-5 text-muted-foreground" />
@@ -149,7 +151,7 @@ export function AccountDataSettings({
           className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             isExporting ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
-          onClick={isExporting ? undefined : handleExportClick}
+          onClick={isExporting ? undefined : () => { feedbackButtonPress(); handleExportClick(); }}
         >
           <div className="flex items-center space-x-3">
             <Upload className="w-5 h-5 text-muted-foreground" />
@@ -162,7 +164,7 @@ export function AccountDataSettings({
 
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={handleImportClick}
+          onClick={() => { feedbackButtonPress(); handleImportClick(); }}
         >
           <div className="flex items-center space-x-3">
             <Download className="w-5 h-5 text-muted-foreground" />
@@ -180,7 +182,7 @@ export function AccountDataSettings({
         />
         {hasConflict ? (
           <div className="mt-3">
-            <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition" onClick={() => setConflictOpen(true)}>
+            <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition" onClick={() => { feedbackButtonPress(); setConflictOpen(true); }}>
               <div className="flex items-center space-x-3">
                 <CloudDownload className="w-5 h-5 text-muted-foreground" />
                 <span className="font-medium">Resolve Sync Conflicts</span>

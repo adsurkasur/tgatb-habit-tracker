@@ -1,6 +1,7 @@
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { UserSettings, MotivatorPersonality } from "@shared/schema";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface MotivatorSettingsProps {
   settings: UserSettings;
@@ -16,7 +17,7 @@ export function MotivatorSettings({ settings, onUpdateSettings }: MotivatorSetti
         <Label className="font-medium block mb-3">Personality Type</Label>
         <RadioGroup
           value={settings.motivatorPersonality}
-          onValueChange={(value) => onUpdateSettings({ motivatorPersonality: value as MotivatorPersonality })}
+          onValueChange={(value) => { feedbackButtonPress(); onUpdateSettings({ motivatorPersonality: value as MotivatorPersonality }); }}
           className="space-y-3"
         >
           <div className="flex items-center space-x-3">

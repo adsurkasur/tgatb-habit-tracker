@@ -5,6 +5,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
 // MAJOR FIX: Use unified system bars instead of conflicting implementations
 import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface AppearanceSettingsProps {
   settings: UserSettings;
@@ -47,7 +48,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
       <div className="space-y-2">
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
-          onClick={() => onUpdateSettings({ darkMode: !settings.darkMode })}
+          onClick={() => { feedbackButtonPress(); onUpdateSettings({ darkMode: !settings.darkMode }); }}
         >
           <div className="flex items-center space-x-3">
             <Moon className="w-5 h-5 text-muted-foreground" />
@@ -66,6 +67,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
         <div
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => {
+            feedbackButtonPress();
             toast({
               title: "Upcoming Feature!",
               description: "Language selection coming soon. Stay tuned! 🌐",
@@ -89,7 +91,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
           className={`flex items-center justify-between p-4 bg-muted material-radius transition-all duration-200 theme-transition ${
             !isNative ? 'opacity-50 cursor-not-allowed' : 'cursor-pointer state-layer-hover'
           }`}
-          {...(isNative ? { onClick: () => handleFullscreenToggle(!settings.fullscreenMode) } : {})}
+          {...(isNative ? { onClick: () => { feedbackButtonPress(); handleFullscreenToggle(!settings.fullscreenMode); } } : {})}
         >
           <div className="flex items-center space-x-3">
             <Maximize className="w-5 h-5 text-muted-foreground" />

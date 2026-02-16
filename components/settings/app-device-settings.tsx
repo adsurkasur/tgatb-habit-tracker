@@ -21,6 +21,7 @@ import {
   cancelReminder,
   reestablishReminder,
 } from "@/lib/notifications";
+import { feedbackButtonPress } from "@/lib/feedback";
 
 interface AppDeviceSettingsProps {
   settings: UserSettings;
@@ -136,7 +137,7 @@ export function AppDeviceSettings({
               ? "opacity-50 cursor-not-allowed"
               : "cursor-pointer state-layer-hover"
           }`}
-          onClick={isCapacitorApp ? undefined : handleInstallPWA}
+          onClick={isCapacitorApp ? undefined : () => { feedbackButtonPress(); handleInstallPWA(); }}
         >
           <div className="flex items-center space-x-3">
             <Smartphone className="w-5 h-5 text-muted-foreground" />
@@ -173,7 +174,7 @@ export function AppDeviceSettings({
                 ? "cursor-not-allowed"
                 : "cursor-pointer state-layer-hover"
             } material-radius`}
-            onClick={notificationsSupported ? () => handleToggle(!reminderEnabled) : undefined}
+            onClick={notificationsSupported ? () => { feedbackButtonPress(); handleToggle(!reminderEnabled); } : undefined}
           >
             <div className="flex items-center space-x-3">
               <Bell className="w-5 h-5 shrink-0 text-muted-foreground" />
