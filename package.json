@@ -103,7 +103,7 @@
     "embla-carousel-react": "^8.6.0",
     "firebase": "^11.10.0",
     "framer-motion": "^12.29.2",
-    "googleapis": "^155.0.1",
+    "googleapis": "^171.4.0",
     "input-otp": "^1.4.2",
     "lucide-react": "^0.563.0",
     "memoizee": "^0.4.17",
