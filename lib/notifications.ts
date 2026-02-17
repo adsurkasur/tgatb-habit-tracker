@@ -71,22 +71,24 @@ async function checkAndroidPermission(): Promise<boolean> {
 /** Currently stored Android reminder config for re-scheduling with rotated messages. */
 let androidReminderConfig: { timeStr: string; personality: MotivatorPersonality } | null = null;
 
+
+
+/**
+ * Schedule a single notification for the next reminder time.
+ * No repeats: notification will only fire once at the scheduled time.
+ */
 async function scheduleAndroidReminder(
   timeStr: string,
   personality: MotivatorPersonality = DEFAULT_PERSONALITY,
 ): Promise<void> {
-  const { LocalNotifications } = await import(
-    "@capacitor/local-notifications"
-  );
-  // Cancel any existing reminder first
+  const { LocalNotifications } = await import("@capacitor/local-notifications");
+  // Cancel any existing reminder first (by ID)
   await cancelAndroidReminder();
 
   // Store config so we can re-schedule with a fresh message
   androidReminderConfig = { timeStr, personality };
 
   const [hours, minutes] = timeStr.split(":").map(Number);
-
-  // Calculate next occurrence
   const now = new Date();
   const next = new Date();
   next.setHours(hours, minutes, 0, 0);
@@ -102,8 +104,7 @@ async function scheduleAndroidReminder(
         body: pickReminderMessage(personality),
         schedule: {
           at: next,
-          repeats: true,
-          // removed `every` — using `at` + `repeats: true` per Capacitor docs to avoid duplicate scheduling
+          // CRITICAL: no repeats, only one fire
           allowWhileIdle: true,
         },
         sound: undefined, // default system sound
