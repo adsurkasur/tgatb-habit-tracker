@@ -62,9 +62,8 @@ export function useAuth() {
       await Preferences.remove({ key: 'googleProfileName' });
       await Preferences.remove({ key: 'googleProfilePhoto' });
     }
-    // Switch to anonymous namespace
-    setActiveAccountId("anonymous");
-    setAccountId("anonymous");
+    // Keep active local data scope; only cloud auth is revoked.
+    setAccountId(getActiveAccountId());
     setIsLoggedIn(false);
     setProfile(null);
     toast({
@@ -108,9 +107,8 @@ export function useAuth() {
           await handleExpiredToken();
         }
       } else {
-        // No token — user is logged out
-        setActiveAccountId("anonymous");
-        setAccountId("anonymous");
+        // No token — user is logged out, but keep current local data scope.
+        setAccountId(getActiveAccountId());
         setIsLoggedIn(false);
       }
 
@@ -217,9 +215,8 @@ export function useAuth() {
           resetAppFolderCache();
           localStorage.removeItem('googleProfileName');
           localStorage.removeItem('googleProfilePhoto');
-          // Switch to anonymous namespace
-          setActiveAccountId("anonymous");
-          setAccountId("anonymous");
+          // Keep active local data scope; only cloud session is cleared.
+          setAccountId(getActiveAccountId());
           setIsLoggedIn(false);
           setProfile(null);
           toast({
@@ -239,9 +236,8 @@ export function useAuth() {
           const { Preferences } = await import('@capacitor/preferences');
           await Preferences.remove({ key: 'googleProfileName' });
           await Preferences.remove({ key: 'googleProfilePhoto' });
-          // Switch to anonymous namespace
-          setActiveAccountId("anonymous");
-          setAccountId("anonymous");
+          // Keep active local data scope; only cloud session is cleared.
+          setAccountId(getActiveAccountId());
           setIsLoggedIn(false);
           setProfile(null);
           toast({
