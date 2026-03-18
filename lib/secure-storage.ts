@@ -26,7 +26,7 @@ export const SecureStorage = {
           // plugin not available, fall through to PlatformStorage
         }
       }
-    } catch (e) { /* plugin path error - silent */ }
+    } catch { /* plugin path error - silent */ }
 
     // Fallback to platform storage
     try {
@@ -68,7 +68,7 @@ export const SecureStorage = {
           // plugin not available, fall through
         }
       }
-    } catch (e) { /* plugin path/set error - silent */ }
+    } catch { /* plugin path/set error - silent */ }
 
     try {
       try {
@@ -105,7 +105,7 @@ export const SecureStorage = {
           // plugin not available, fall through
         }
       }
-    } catch (e) { /* plugin path/remove error - silent */ }
+    } catch { /* plugin path/remove error - silent */ }
 
     try {
       try {

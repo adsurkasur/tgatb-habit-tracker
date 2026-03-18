@@ -91,7 +91,6 @@ export function useHabits() {
         }
       })();
     // Re-run whenever the active account changes (login/logout)
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [accountId]);
 
     // --- Day-boundary & visibility change listener ---

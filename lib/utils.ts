@@ -56,7 +56,7 @@ export const TokenStorage = {
           // final fallback
         }
       }
-    } catch (e) {
+    } catch {
       if (process.env.NODE_ENV !== "production") {
         console.debug('[TokenStorage] getAccessToken secure error');
       }

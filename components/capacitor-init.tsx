@@ -2,6 +2,7 @@
 'use client';
 
 import { useEffect } from 'react';
+import { Capacitor } from '@capacitor/core';
 import { initializeCapacitor } from '@/lib/capacitor';
 import { HabitStorage } from '@/lib/habit-storage';
 
@@ -12,7 +13,6 @@ export function CapacitorInit() {
     // Disable pinch-to-zoom on native Capacitor for a native app feel
     if (typeof window !== 'undefined') {
       try {
-        const { Capacitor } = require('@capacitor/core');
         if (Capacitor.isNativePlatform()) {
           const meta = document.querySelector('meta[name="viewport"]');
           if (meta) {

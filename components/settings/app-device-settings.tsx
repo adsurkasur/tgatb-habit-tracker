@@ -72,8 +72,7 @@ export function AppDeviceSettings({
     };
     document.addEventListener("visibilitychange", onVisibility);
     return () => document.removeEventListener("visibilitychange", onVisibility);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isCapacitorApp]);
+  }, [isCapacitorApp, onUpdateSettings, reminderEnabled, reminderTime, settings.motivatorPersonality]);
 
   const personality = settings.motivatorPersonality ?? "positive";
 
@@ -82,7 +81,6 @@ export function AppDeviceSettings({
     if (reminderEnabled && permissionGranted && reminderTime) {
       scheduleReminder(reminderTime, personality);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [reminderTime, reminderEnabled, permissionGranted, personality]);
 
   const handleToggle = useCallback(
@@ -105,7 +103,7 @@ export function AppDeviceSettings({
         await cancelReminder();
       }
     },
-    [onUpdateSettings, reminderTime]
+    [onUpdateSettings, reminderTime, personality]
   );
 
   const handleTimeChange = useCallback(
