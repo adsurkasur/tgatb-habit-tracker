@@ -127,7 +127,7 @@
   "overrides": {
     "esbuild": "^0.25.10",
     "path-to-regexp": "^8.2.0",
-    "undici": "^6.21.0"
+    "undici": "^7.21.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
