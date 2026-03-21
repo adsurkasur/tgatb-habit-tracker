@@ -124,13 +124,29 @@ export function buildDayLog(habits: Habit[], date: Date): DayLog {
   };
 }
 
-/** Get a Set of date strings (YYYY-MM-DD) that have at least one completed habit. */
+/**
+ * Get dates that should be highlighted as positive progress days.
+ *
+ * A date is included when at least one habit has a positive outcome on that day:
+ * - good habit: completed === true
+ * - bad habit: completed === false (successfully avoided)
+ *
+ * Logs before a habit's creation date are ignored so calendar markers stay aligned
+ * with day-detail visibility.
+ */
 export function getCompletedDatesSet(habits: Habit[]): Set<string> {
   const dates = new Set<string>();
   for (const habit of habits) {
     const logs = getAllHabitLogs(habit.id);
+    const createdAt = startOfDay(habit.createdAt);
     for (const log of logs) {
-      if (log.completed === true) {
+      const logDate = startOfDay(new Date(`${log.date}T00:00:00`));
+      if (logDate < createdAt) {
+        continue;
+      }
+
+      const isPositiveOutcome = habit.type === 'good' ? log.completed === true : log.completed === false;
+      if (isPositiveOutcome) {
         dates.add(log.date);
       }
     }
