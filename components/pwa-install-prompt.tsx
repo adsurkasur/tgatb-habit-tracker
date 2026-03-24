@@ -20,8 +20,8 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
 
-  // Suppress on standalone pages like /privacy-policy
-  const isStandalonePage = typeof window !== 'undefined' && /^\/(?:privacy-policy|terms-of-service)/.test(window.location.pathname);
+  // Suppress on standalone pages like /privacy-policy or /en/privacy-policy
+  const isStandalonePage = typeof window !== 'undefined' && /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?(?:privacy-policy|terms-of-service)(?:\/|$)/.test(window.location.pathname);
 
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(

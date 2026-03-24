@@ -120,7 +120,7 @@ export default function TermsOfServicePage() {
 
         <div className="mt-12 pt-6 border-t border-border text-sm text-muted-foreground space-y-2">
           <p>
-            <Link href="/privacy-policy" className="text-primary underline">
+            <Link href="../privacy-policy" className="text-primary underline">
               Privacy Policy
             </Link>
           </p>
@@ -135,7 +135,7 @@ export default function TermsOfServicePage() {
 
         <div className="mt-8 text-center">
           <Link
-            href="/"
+            href=".."
             className="inline-flex items-center gap-2 rounded-md bg-primary px-6 py-3 text-sm font-medium text-primary-foreground shadow hover:bg-primary/90 transition-all duration-200"
           >
             Open TGATB Habit Tracker

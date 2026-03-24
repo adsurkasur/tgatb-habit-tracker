@@ -1,5 +1,5 @@
 // Modular AddEntryButton component
-function AddEntryButton({ show, onClick }: { show: boolean; onClick: () => void }) {
+function AddEntryButton({ show, onClick, label }: { show: boolean; onClick: () => void; label: string }) {
   if (!show) return null;
   return (
     <div className="w-full flex justify-center mt-4">
@@ -11,12 +11,13 @@ function AddEntryButton({ show, onClick }: { show: boolean; onClick: () => void 
         onClick={onClick}
       >
         <Plus className="w-4 h-4 mr-1" />
-        Add Entry
+        {label}
       </Button>
     </div>
   );
 }
 import React, { useState, useMemo } from 'react';
+import { useTranslations } from 'next-intl';
 // Helper to check if a date is today or in the past (date-only, local)
 function isPastOrToday(date: Date) {
   const today = new Date();
@@ -81,6 +82,7 @@ interface StatCard {
 }
 
 export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequestAddEntry, onRequestEditEntry }: HistoryDialogProps) {
+  const t = useTranslations('HistoryDialog');
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(new Date());
   const [selectedTab, setSelectedTab] = useState('overview');
   const { containerRef: swipeRef } = useSwipeableTabs({
@@ -110,7 +112,7 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <BarChart3 className="w-5 h-5" />
-            Habit History & Analytics
+            {t('title')}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
@@ -119,31 +121,31 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
             <TabsList className="grid w-full grid-cols-3 h-auto mb-3 sm:mb-6 shrink-0">
               <TabsTrigger value="overview" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <TrendingUp className="w-3 h-3 sm:w-4 sm:h-4" />
-                <span className="hidden sm:inline">Overview</span>
-                <span className="sm:hidden">Stats</span>
+                <span className="hidden sm:inline">{t('tabs.overview')}</span>
+                <span className="sm:hidden">{t('tabs.stats')}</span>
               </TabsTrigger>
               <TabsTrigger value="calendar" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <CalendarIcon className="w-3 h-3 sm:w-4 sm:h-4" />
-                Calendar
+                {t('tabs.calendar')}
               </TabsTrigger>
               <TabsTrigger value="timeline" className="flex items-center gap-1 sm:gap-2 text-xs sm:text-sm px-2 sm:px-4">
                 <Clock className="w-3 h-3 sm:w-4 sm:h-4" />
-                Timeline
+                {t('tabs.timeline')}
               </TabsTrigger>
             </TabsList>
 
             {/* Swipe container — must be flex-col so child TabsContent can use flex-1 for height */}
             <div ref={swipeRef} className="flex-1 min-h-0 flex flex-col overflow-hidden">
               <TabsContent value="overview" className="flex-1 min-h-0 mt-0 flex flex-col overflow-y-auto">
-                <OverviewTabContent habits={habits} statistics={statistics} />
+                <OverviewTabContent habits={habits} statistics={statistics} t={t} />
               </TabsContent>
 
               <TabsContent value="calendar" className="flex-1 min-h-0 mt-0 overflow-y-auto overflow-x-hidden">
-                <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} />
+                <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} t={t} />
               </TabsContent>
 
               <TabsContent value="timeline" className="flex-1 min-h-0 mt-0 overflow-y-auto">
-                <TimelineTabContent dailyLogs={dailyLogs} />
+                <TimelineTabContent dailyLogs={dailyLogs} t={t} />
               </TabsContent>
             </div>
           </Tabs>
@@ -153,34 +155,34 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
   );
 }
 
-function StatGrid({ statistics }: { statistics: ReturnType<typeof computeStatSummary> }) {
+function StatGrid({ statistics, t }: { statistics: ReturnType<typeof computeStatSummary>; t: (key: string, values?: Record<string, string | number>) => string }) {
   const cards: StatCard[] = [
     {
-      title: 'Total Habits',
+      title: t('stats.totalHabits.title'),
       value: statistics.totalHabits,
       icon: <Target className="w-5 h-5" />,
-      description: `${statistics.goodHabits} good, ${statistics.badHabits} bad`,
+      description: t('stats.totalHabits.description', { good: statistics.goodHabits, bad: statistics.badHabits }),
       color: 'text-blue-500',
     },
     {
-      title: "Combined Streak",
+      title: t('stats.combinedStreak.title'),
       value: statistics.totalStreak,
       icon: <Flame className="w-5 h-5" />,
-      description: `Longest: ${statistics.longestStreak} days`,
+      description: t('stats.combinedStreak.description', { longest: statistics.longestStreak }),
       color: 'text-orange-500',
     },
     {
-      title: "Today's Progress",
+      title: t('stats.todaysProgress.title'),
       value: `${statistics.todayCompletion}/${statistics.habitsActiveToday}`,
       icon: <CheckCircle className="w-5 h-5" />,
-      description: `${Math.round((statistics.todayCompletion / Math.max(statistics.habitsActiveToday, 1)) * 100)}% completed`,
+      description: t('stats.todaysProgress.description', { percent: Math.round((statistics.todayCompletion / Math.max(statistics.habitsActiveToday, 1)) * 100) }),
       color: 'text-green-500',
     },
     {
-      title: 'Total Actions',
+      title: t('stats.totalActions.title'),
       value: statistics.totalActions,
       icon: <Award className="w-5 h-5" />,
-      description: 'All time completions',
+      description: t('stats.totalActions.description'),
       color: 'text-purple-500',
     },
   ];
@@ -219,10 +221,10 @@ function StatGrid({ statistics }: { statistics: ReturnType<typeof computeStatSum
   );
 }
 
-function TopHabits({ habits }: { habits: Habit[] }) {
+function TopHabits({ habits, t }: { habits: Habit[]; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
-    <Card className="p-3 flex flex-col flex-1 min-h-[12rem] sm:hidden">
-      <h3 className="text-sm font-semibold mb-3 shrink-0">Top Habits</h3>
+    <Card className="p-3 flex flex-col flex-1 min-h-48 sm:hidden">
+      <h3 className="text-sm font-semibold mb-3 shrink-0">{t('topHabits.title')}</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="space-y-2">
           {habits.slice(0, 3).map(habit => {
@@ -249,19 +251,19 @@ function TopHabits({ habits }: { habits: Habit[] }) {
   );
 }
 
-function HabitBreakdown({ habits }: { habits: Habit[] }) {
+function HabitBreakdown({ habits, t }: { habits: Habit[]; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
-    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-[12rem]">
-      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">Habit Breakdown</h3>
+    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-48">
+      <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">{t('breakdown.title')}</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         {habits.length === 0 ? (
           <div className="flex flex-col items-center justify-center h-full text-center py-8 px-4">
             <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center mb-3">
               <ListChecks className="w-5 h-5 text-muted-foreground" />
             </div>
-            <p className="text-sm font-medium text-muted-foreground">No habits yet</p>
+            <p className="text-sm font-medium text-muted-foreground">{t('breakdown.emptyTitle')}</p>
             <p className="text-xs text-muted-foreground/70 mt-1">
-              Add a habit to see your breakdown here
+              {t('breakdown.emptyDescription')}
             </p>
           </div>
         ) : (
@@ -284,7 +286,7 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
                   )}
                   <div className="min-w-0 flex-1">
                     <p className="text-xs sm:text-sm font-medium truncate">{habit.name}</p>
-                    <p className="text-xs sm:text-sm text-muted-foreground">{stats.totalCompletions} completions</p>
+                    <p className="text-xs sm:text-sm text-muted-foreground">{t('breakdown.completions', { count: stats.totalCompletions })}</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-2 shrink-0">
@@ -303,12 +305,12 @@ function HabitBreakdown({ habits }: { habits: Habit[] }) {
   );
 }
 
-function OverviewTabContent({ habits, statistics }: { habits: Habit[]; statistics: ReturnType<typeof computeStatSummary> }) {
+function OverviewTabContent({ habits, statistics, t }: { habits: Habit[]; statistics: ReturnType<typeof computeStatSummary>; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
     <div className="flex flex-col flex-1 min-h-0">
-      <StatGrid statistics={statistics} />
-      <TopHabits habits={habits} />
-      <HabitBreakdown habits={habits} />
+      <StatGrid statistics={statistics} t={t} />
+      <TopHabits habits={habits} t={t} />
+      <HabitBreakdown habits={habits} t={t} />
     </div>
   );
 }
@@ -321,6 +323,7 @@ function CalendarTabContent({
   removeLog,
   onRequestAddEntry,
   onRequestEditEntry,
+  t,
 }: {
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
@@ -329,6 +332,7 @@ function CalendarTabContent({
   removeLog: (habitId: string, date: string) => void;
   onRequestAddEntry: (date: string) => void;
   onRequestEditEntry: (habit: Habit, date: string, completed: boolean | null) => void;
+  t: (key: string, values?: Record<string, string | number>) => string;
 }) {
   // Get formatted date string
   const formattedDate = selectedDate ? formatLocalDate(selectedDate) : "";
@@ -375,7 +379,7 @@ function CalendarTabContent({
           <div className="w-full mx-auto">
             <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 text-center">
               {format(selectedDate, 'MMMM d, yyyy')}
-              {isToday(selectedDate) && <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>}
+              {isToday(selectedDate) && <Badge variant="secondary" className="ml-2 text-xs">{t('calendar.today')}</Badge>}
             </h3>
 
             {/* Habit list or no data message */}
@@ -391,7 +395,7 @@ function CalendarTabContent({
                           // Untracked state: grey background, question mark icon, tooltip
                           bgClass = "bg-gray-100 dark:bg-gray-800";
                           icon = (
-                            <span title="Not Tracked" aria-label="Not Tracked">
+                            <span title={t('calendar.notTracked')} aria-label={t('calendar.notTracked')}>
                               <HelpCircle className={iconClass + " text-gray-400"} />
                             </span>
                           );
@@ -434,10 +438,10 @@ function CalendarTabContent({
                               variant="ghost"
                               onClick={() => handleEditClick(habit, habit.completed)}
                               className="h-8 w-8 text-muted-foreground hover:text-foreground hover:bg-accent"
-                              title="Edit entry"
+                              title={t('calendar.editEntry')}
                             >
                               <Pencil className="w-4 h-4" />
-                              <span className="sr-only">Edit entry</span>
+                              <span className="sr-only">{t('calendar.editEntry')}</span>
                             </Button>
                             {habit.completed !== null && habit.completed !== undefined && (
                               <Button
@@ -448,10 +452,10 @@ function CalendarTabContent({
                                   if (formattedDate) removeLog(habit.id, formattedDate);
                                 }}
                                 className="h-8 w-8 text-muted-foreground hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
-                                title="Clear status"
+                                title={t('calendar.clearStatus')}
                               >
                                 <Undo2 className="w-4 h-4" />
-                                <span className="sr-only">Clear status</span>
+                                <span className="sr-only">{t('calendar.clearStatus')}</span>
                               </Button>
                             )}
                           </div>
@@ -462,7 +466,7 @@ function CalendarTabContent({
               ) : (
                 selectedDate && (
                   <div className="text-center text-muted-foreground text-sm flex flex-col items-center">
-                    <span>No data available for this date</span>
+                    <span>{t('calendar.noDataForDate')}</span>
                   </div>
                 )
               )}
@@ -470,6 +474,7 @@ function CalendarTabContent({
               <AddEntryButton
                 show={!!selectedDate && isPastOrToday(selectedDate)}
                 onClick={() => onRequestAddEntry(formattedDate)}
+                label={t('calendar.addEntry')}
               />
           </div>
         )}
@@ -477,7 +482,7 @@ function CalendarTabContent({
   );
 }
 
-function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
+function TimelineTabContent({ dailyLogs, t }: { dailyLogs: DayLog[]; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
     <div className="space-y-3 sm:space-y-4">
         {dailyLogs.map((log, index) => {
@@ -492,10 +497,14 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
                   <h4 className="text-sm sm:text-base font-medium">
                     <span className="hidden sm:inline">{format(log.date, 'EEEE, MMMM d')}</span>
                     <span className="sm:hidden">{format(log.date, 'MMM d')}</span>
-                    {isToday(log.date) && <Badge variant="secondary" className="ml-2 text-xs">Today</Badge>}
+                    {isToday(log.date) && <Badge variant="secondary" className="ml-2 text-xs">{t('timeline.today')}</Badge>}
                   </h4>
                   <p className="text-xs sm:text-sm text-muted-foreground">
-                    {completedCount}/{totalHabitsForDay} habits completed ({Math.round(completionRate)}%)
+                    {t('timeline.completionSummary', {
+                      completed: completedCount,
+                      total: totalHabitsForDay,
+                      percent: Math.round(completionRate),
+                    })}
                   </p>
                 </div>
                 <div className="flex gap-1 flex-wrap max-w-25 sm:max-w-none">
@@ -506,8 +515,8 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
                         <div
                           key={habit.id}
                           className="w-2 h-2 sm:w-3 sm:h-3 rounded-full bg-gray-400"
-                          title={`${habit.name}: Not Tracked`}
-                          aria-label="Not Tracked"
+                          title={t('timeline.notTrackedTitle', { name: habit.name })}
+                          aria-label={t('timeline.notTracked')}
                         >
                           {/* Optionally, could use a small ? icon inside dot, but keep simple for now */}
                         </div>
@@ -517,7 +526,7 @@ function TimelineTabContent({ dailyLogs }: { dailyLogs: DayLog[] }) {
                       <div
                         key={habit.id}
                         className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${habit.completed ? (habit.type === 'good' ? 'bg-green-500' : 'bg-red-500') : 'bg-muted-foreground/20'}`}
-                        title={`${habit.name}: ${habit.completed ? 'Completed' : 'Not completed'}`}
+                        title={habit.completed ? t('timeline.completedTitle', { name: habit.name }) : t('timeline.notCompletedTitle', { name: habit.name })}
                       />
                     );
                   })}

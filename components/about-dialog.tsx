@@ -5,7 +5,9 @@ import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
 import { ExternalLink, FileText, Github, Heart, Shield, Zap } from "lucide-react";
 import { Capacitor } from "@capacitor/core";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
+import { withLocalePath, normalizeLocale, extractLocaleFromPathname } from "@/i18n/pathname";
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -20,15 +22,20 @@ interface AboutDialogProps {
 }
 
 export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
+  const t = useTranslations("AboutDialog");
   const version = process.env.APP_VERSION || "1.0.0";
   const router = useRouter();
+  const pathname = usePathname();
 
   const navigateToPage = (path: string) => {
+    const activeLocale = normalizeLocale(extractLocaleFromPathname(pathname || "/"));
+    const localizedPath = withLocalePath(path, activeLocale);
+
     if (Capacitor.isNativePlatform()) {
       onOpenChange(false);
-      router.push(path);
+      router.push(localizedPath);
     } else {
-      window.open(path, '_blank');
+      window.open(localizedPath, '_blank');
     }
   };
   
@@ -38,7 +45,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <Zap className="w-5 h-5 text-primary" />
-            About TGATB Habit Tracker
+            {t("title")}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
@@ -46,12 +53,12 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
           <div className="space-y-4">
             {/* Project Info */}
             <div className="text-center space-y-2">
-              <h3 className="text-lg font-semibold">The Good and The Bad</h3>
+              <h3 className="text-lg font-semibold">{t("projectName")}</h3>
               <p className="text-sm text-muted-foreground">
-                A minimalist Progressive Web App for tracking your daily habits
+                {t("projectDescription")}
               </p>
               <Badge variant="secondary" className="text-xs">
-                Version {version}
+                {t("version", { version })}
               </Badge>
             </div>
             
@@ -59,13 +66,13 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             
             {/* Features */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm">Features</h4>
+              <h4 className="font-medium text-sm">{t("features.title")}</h4>
               <ul className="text-sm text-muted-foreground space-y-1">
-                <li>• Track good and bad habits</li>
-                <li>• Offline support with PWA technology</li>
-                <li>• Streak tracking and visual progress</li>
-                <li>• Minimalist, distraction-free design</li>
-                <li>• Cross-platform compatibility</li>
+                <li>{t("features.item1")}</li>
+                <li>{t("features.item2")}</li>
+                <li>{t("features.item3")}</li>
+                <li>{t("features.item4")}</li>
+                <li>{t("features.item5")}</li>
               </ul>
             </div>
             
@@ -73,7 +80,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             
             {/* Tech Stack */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm">Built with</h4>
+              <h4 className="font-medium text-sm">{t("builtWith")}</h4>
               <div className="flex flex-wrap gap-1">
                 <Badge variant="outline" className="text-xs">Next.js 16</Badge>
                 <Badge variant="outline" className="text-xs">React 19</Badge>
@@ -88,7 +95,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             
             {/* Links */}
             <div className="space-y-3">
-              <h4 className="font-medium text-sm">Links</h4>
+              <h4 className="font-medium text-sm">{t("links.title")}</h4>
               <div className="flex flex-col space-y-2">
                 <Button
                   variant="outline"
@@ -97,7 +104,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   onClick={() => window.open('https://github.com/adsurkasur/tgatb-habit-tracker', '_blank')}
                 >
                   <Github className="w-4 h-4 mr-2" />
-                  View on GitHub
+                  {t("links.github")}
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>
                 
@@ -108,7 +115,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   onClick={() => window.open('https://vercel.com/ades-projects-2025/tgatb-habit-tracker', '_blank')}
                 >
                   <Heart className="w-4 h-4 mr-2" />
-                  Powered by Vercel
+                  {t("links.vercel")}
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>
 
@@ -119,7 +126,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   onClick={() => navigateToPage('/privacy-policy')}
                 >
                   <Shield className="w-4 h-4 mr-2" />
-                  Privacy Policy
+                  {t("links.privacyPolicy")}
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>
 
@@ -130,7 +137,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   onClick={() => navigateToPage('/terms-of-service')}
                 >
                   <FileText className="w-4 h-4 mr-2" />
-                  Terms of Service
+                  {t("links.termsOfService")}
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>
               </div>
@@ -140,8 +147,8 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             
             {/* Footer */}
             <div className="text-center text-xs text-muted-foreground">
-              <p>Made with ❤️ for better habits</p>
-              <p className="mt-1">&copy; 2025-2026 TGATB Habit Tracker</p>
+              <p>{t("footer.madeWithLove")}</p>
+              <p className="mt-1">{t("footer.copyright")}</p>
             </div>
           </div>
         </ResponsiveDialogBody>

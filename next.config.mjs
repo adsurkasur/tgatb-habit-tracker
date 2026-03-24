@@ -1,4 +1,5 @@
 import withPWA from 'next-pwa';
+import createNextIntlPlugin from 'next-intl/plugin';
 import { readFileSync } from 'fs';
 import { join } from 'path';
 
@@ -59,4 +60,6 @@ const pwaConfig = withPWA({
   }
 });
 
-export default pwaConfig(nextConfig);
+const withNextIntl = createNextIntlPlugin('./i18n/request.ts');
+
+export default withNextIntl(pwaConfig(nextConfig));

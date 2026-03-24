@@ -22,6 +22,7 @@ import {
   Search
 } from "lucide-react";
 import React, { useState, useCallback, useMemo } from "react";
+import { useTranslations } from "next-intl";
 import { CloseButton } from "@/components/ui/close-button";
 import { Habit } from "@shared/schema";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
@@ -47,10 +48,11 @@ const HabitItem = React.memo<{
   index: number;
   isOpen: boolean;
   type: 'good' | 'bad';
+  t: (key: string, values?: Record<string, string | number>) => string;
   onEdit?: (habit: Habit) => void;
   onDelete?: (habitId: string) => void;
   onSelect?: (habit: Habit) => void;
-}>(({ habit, index, isOpen, type, onEdit, onDelete, onSelect }) => {
+}>(({ habit, index, isOpen, type, t, onEdit, onDelete, onSelect }) => {
   const colorClasses = type === 'good' 
     ? "bg-green-500/10 text-green-600 border-green-500/20"
     : "bg-red-500/10 text-red-600 border-red-500/20";
@@ -72,7 +74,7 @@ const HabitItem = React.memo<{
         <div className="flex items-center space-x-2">
           <Badge variant="secondary" className={colorClasses}>
             <Flame className="w-3 h-3 mr-1" />
-            {habit.streak} days
+            {t("habitItem.days", { count: habit.streak })}
           </Badge>
           {/* Action buttons */}
           <div className="flex items-center space-x-1">
@@ -125,6 +127,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   open,
   onOpenChange
 }) => {
+  const t = useTranslations("NavigationDrawer");
   const [goodHabitsOpen, setGoodHabitsOpen] = useState(false);
   const [badHabitsOpen, setBadHabitsOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
@@ -192,16 +195,16 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
       </SheetTrigger>
       <SheetContent side="left" className="w-80 p-0 bg-muted [&>button]:hidden">
         <VisuallyHidden.Root>
-          <SheetTitle>Navigation Menu</SheetTitle>
-          <SheetDescription>Access your habit tracking dashboard and settings</SheetDescription>
+          <SheetTitle>{t("hidden.navigationMenuTitle")}</SheetTitle>
+          <SheetDescription>{t("hidden.navigationMenuDescription")}</SheetDescription>
         </VisuallyHidden.Root>
         <div className="h-full flex flex-col">
           {/* Header */}
           <div className="p-6 border-b border-border bg-card">
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-2xl font-bold text-foreground">Habit Tracker</h2>
-                <p className="text-sm text-muted-foreground mt-1">Track your daily progress</p>
+                <h2 className="text-2xl font-bold text-foreground">{t("header.title")}</h2>
+                <p className="text-sm text-muted-foreground mt-1">{t("header.subtitle")}</p>
               </div>
               <CloseButton onClick={() => onOpenChange(false)} />
             </div>
@@ -212,7 +215,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
                 type="text"
-                placeholder="Search habits..."
+                placeholder={t("search.placeholder")}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="pl-10 pr-10 material-radius"
@@ -221,7 +224,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <CloseButton
                   className="absolute right-3 top-1/2 -translate-y-1/2"
                   onClick={() => setSearchQuery("")}
-                  label="Clear search"
+                  label={t("search.clear")}
                 />
               )}
             </div>
@@ -239,7 +242,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                   >
                     <div className="flex items-center space-x-3">
                       <CheckCircle className="w-5 h-5 text-green-500" />
-                      <span className="font-medium">Good Habits</span>
+                      <span className="font-medium">{t("sections.goodHabits")}</span>
                       <Badge variant="secondary" className="bg-green-500/10 text-green-600 border-green-500/20 ml-2 badge-count">
                         {filteredGoodHabits.length}
                       </Badge>
@@ -256,7 +259,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                   {filteredGoodHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
                       <span className="text-muted-foreground text-sm">
-                        {searchQuery ? "No good habits found" : "No good habits yet"}
+                        {searchQuery ? t("empty.noGoodHabitsFound") : t("empty.noGoodHabitsYet")}
                       </span>
                     </div>
                   ) : (
@@ -268,6 +271,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           index={index}
                           isOpen={effectiveGoodHabitsOpen}
                           type="good"
+                          t={t}
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
                           onSelect={onHabitSelect}
@@ -290,7 +294,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                   >
                     <div className="flex items-center space-x-3">
                       <XCircle className="w-5 h-5 text-red-500" />
-                      <span className="font-medium">Bad Habits</span>
+                      <span className="font-medium">{t("sections.badHabits")}</span>
                       <Badge variant="secondary" className="bg-red-500/10 text-red-600 border-red-500/20 ml-2 badge-count">
                         {filteredBadHabits.length}
                       </Badge>
@@ -307,7 +311,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                   {filteredBadHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
                       <span className="text-muted-foreground text-sm">
-                        {searchQuery ? "No bad habits found" : "No bad habits tracked"}
+                        {searchQuery ? t("empty.noBadHabitsFound") : t("empty.noBadHabitsTracked")}
                       </span>
                     </div>
                   ) : (
@@ -319,6 +323,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                           index={index}
                           isOpen={effectiveBadHabitsOpen}
                           type="bad"
+                          t={t}
                           onEdit={onEditHabit}
                           onDelete={onDeleteHabit}
                           onSelect={onHabitSelect}
@@ -340,7 +345,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 onClick={handleHelpClick}
               >
                 <HelpCircle className="w-5 h-5 mr-3" />
-                <span>Help</span>
+                <span>{t("actions.help")}</span>
               </Button>
               
               <Button
@@ -349,7 +354,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 onClick={handleHistoryClick}
               >
                 <History className="w-5 h-5 mr-3" />
-                <span>History</span>
+                <span>{t("actions.history")}</span>
               </Button>
               
               <Button
@@ -358,7 +363,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 onClick={handleSettingsClick}
               >
                 <Settings className="w-5 h-5 mr-3" />
-                <span>Settings</span>
+                <span>{t("actions.settings")}</span>
               </Button>
               
               <Button
@@ -367,7 +372,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 onClick={handleDonateClick}
               >
                 <Heart className="w-5 h-5 mr-3" />
-                <span>Support Me</span>
+                <span>{t("actions.supportMe")}</span>
               </Button>
               
               <Button
@@ -376,7 +381,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 onClick={handleAboutClick}
               >
                 <Info className="w-5 h-5 mr-3" />
-                <span>About</span>
+                <span>{t("actions.about")}</span>
               </Button>
             </div>
           </div>

@@ -8,6 +8,7 @@ import { useAuth } from "@/hooks/use-auth";
 import { useCloudBackup } from "@/hooks/use-cloud-backup";
 import { useDataExport } from "@/hooks/use-data-export";
 import { feedbackButtonPress } from "@/lib/feedback";
+import { useTranslations } from "next-intl";
 
 interface AccountDataSettingsProps {
   settings: UserSettings;
@@ -22,6 +23,7 @@ export function AccountDataSettings({
   onExportData,
   onImportData
 }: AccountDataSettingsProps) {
+  const t = useTranslations("AccountDataSettings");
 
   const { isLoggedIn, profile, clientReady, handleAuth } = useAuth();
   const { handleBackup, handleRestore } = useCloudBackup();
@@ -43,7 +45,7 @@ export function AccountDataSettings({
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Account & Data</h2>
+      <h2 className="text-lg font-semibold">{t("title")}</h2>
 
       <div className="space-y-2">
         {!clientReady ? null : (
@@ -55,7 +57,7 @@ export function AccountDataSettings({
               {isLoggedIn && profile?.photoUrl ? (
                 <Image
                   src={profile.photoUrl}
-                  alt={profile.name || "Profile"}
+                  alt={profile.name || t("profileAlt")}
                   width={24}
                   height={24}
                   className="w-6 h-6 rounded-full object-cover"
@@ -67,8 +69,8 @@ export function AccountDataSettings({
               )}
               <span className="font-medium">
                 {isLoggedIn
-                  ? `Logout from${profile?.name ? ` ${profile.name}` : ''}`
-                  : 'Login'}
+                  ? t("auth.logoutFrom", { name: profile?.name ?? "" }).trim()
+                  : t("auth.login")}
               </span>
             </div>
             <ChevronRight className="w-5 h-5 text-muted-foreground" />
@@ -82,7 +84,7 @@ export function AccountDataSettings({
         >
           <div className="flex items-center space-x-3">
             <CloudUpload className="w-5 h-5 text-muted-foreground" />
-            <span className="font-medium">Export to Cloud</span>
+            <span className="font-medium">{t("actions.exportToCloud")}</span>
           </div>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </div>
@@ -94,7 +96,7 @@ export function AccountDataSettings({
         >
           <div className="flex items-center space-x-3">
             <CloudDownload className="w-5 h-5 text-muted-foreground" />
-            <span className="font-medium">Import from Cloud</span>
+            <span className="font-medium">{t("actions.importFromCloud")}</span>
           </div>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </div>
@@ -109,8 +111,8 @@ export function AccountDataSettings({
           <div className="flex items-center space-x-3">
             <RefreshCw className="w-5 h-5 text-muted-foreground" />
             <div>
-              <div className="font-medium">Auto sync</div>
-              <div className="text-sm text-muted-foreground">Automatically sync changes to Google Drive when signed in.</div>
+              <div className="font-medium">{t("autoSync.title")}</div>
+              <div className="text-sm text-muted-foreground">{t("autoSync.description")}</div>
             </div>
           </div>
           <div className="flex items-center space-x-3">
@@ -133,8 +135,8 @@ export function AccountDataSettings({
           <div className="flex items-center space-x-3">
             <User className="w-5 h-5 text-muted-foreground" />
             <div>
-              <div className="font-medium">Analytics</div>
-              <div className="text-sm text-muted-foreground">Allow anonymous analytics to help improve the app.</div>
+              <div className="font-medium">{t("analytics.title")}</div>
+              <div className="text-sm text-muted-foreground">{t("analytics.description")}</div>
             </div>
           </div>
           <div className="flex items-center space-x-3">
@@ -156,7 +158,7 @@ export function AccountDataSettings({
           <div className="flex items-center space-x-3">
             <Upload className="w-5 h-5 text-muted-foreground" />
             <span className="font-medium">
-              {isExporting ? "Exporting..." : "Export Data"}
+              {isExporting ? t("actions.exporting") : t("actions.exportData")}
             </span>
           </div>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
@@ -168,7 +170,7 @@ export function AccountDataSettings({
         >
           <div className="flex items-center space-x-3">
             <Download className="w-5 h-5 text-muted-foreground" />
-            <span className="font-medium">Import Data</span>
+            <span className="font-medium">{t("actions.importData")}</span>
           </div>
           <ChevronRight className="w-5 h-5 text-muted-foreground" />
         </div>
@@ -185,7 +187,7 @@ export function AccountDataSettings({
             <div className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition" onClick={() => { feedbackButtonPress(); setConflictOpen(true); }}>
               <div className="flex items-center space-x-3">
                 <CloudDownload className="w-5 h-5 text-muted-foreground" />
-                <span className="font-medium">Resolve Sync Conflicts</span>
+                <span className="font-medium">{t("actions.resolveSyncConflicts")}</span>
               </div>
               <ChevronRight className="w-5 h-5 text-muted-foreground" />
             </div>
