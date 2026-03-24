@@ -419,3 +419,22 @@ or intensive watchers. The following controls are planned:
 ## Phase 4 Status
 
 - Complete: canonical/hreflang metadata, locale sitemap, notification localization, and manifest locale strategy are implemented and validated.
+
+## Phase 5 Execution Log (2026-03-24 Operationalization and Hardening)
+
+- Added operational runbook at `docs/I18N_OPERATIONS.md` including:
+  - Ownership model (engineering/content/legal/QA)
+  - Localization PR checklist
+  - Release checklist
+  - Rollback strategy levels (catalog, metadata, routing)
+  - EMFILE-safe execution notes
+- Updated `CONTRIBUTING.md`:
+  - Added mandatory `npm run i18n:check` in local PR checks
+  - Added localization workflow guardrails and link to operations guide
+- Updated `README.md`:
+  - Added `i18n:check` in available scripts
+  - Added localization operations guide under resources
+
+## Phase 5 Status
+
+- Complete: translation lifecycle ownership, release checklist, rollback strategy, and contributor guidance are documented and integrated.

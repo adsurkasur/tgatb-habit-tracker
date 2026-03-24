@@ -174,6 +174,7 @@ npm run android:open    # Open in Android Studio
 
 - `npm run dev` — Start Next.js development server
 - `npm run build` — Build for production
+- `npm run i18n:check` — Validate locale message key parity (`en`/`id`)
 - `npm run start` — Start production server
 - `npm run lint` — Run ESLint for code quality
 - `npm run check` — Run TypeScript type checking
@@ -329,6 +330,8 @@ For issues and questions:
 ---
 
 ## Resources
+
+- [docs/I18N_OPERATIONS.md](docs/I18N_OPERATIONS.md) — Localization ownership, release checklist, and rollback strategy
 
 - [Next.js Documentation](https://nextjs.org/docs)
 - [Shadcn/ui](https://ui.shadcn.com/)
