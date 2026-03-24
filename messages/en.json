@@ -35,7 +35,12 @@
       "english": "English",
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Select language",
-      "modalDescription": "Choose the language used across the app interface."
+      "modalDescription": "Choose the language used across the app interface.",
+      "restartWarningWeb": "Applying a new language refreshes this page to fully update text.",
+      "restartWarningApp": "Applying a new language restarts this app screen to fully update text.",
+      "cancel": "Cancel",
+      "apply": "Apply",
+      "applying": "Applying..."
     },
     "fullscreen": {
       "title": "Fullscreen Mode",

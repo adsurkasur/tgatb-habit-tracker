@@ -418,6 +418,23 @@ or intensive watchers. The following controls are planned:
 
 ## Phase 4 Status
 
+### 2026-03-24 23:53 - 23:58 (Language UX Finalization Wave)
+
+- Added centralized reusable language modal component in `components/language-selection-modal.tsx`.
+- Standardized modal experience on unified responsive modal stack (`ResponsiveDialog`) for desktop/mobile parity.
+- Refactored `components/settings/appearance-settings.tsx` to use staged language selection with explicit Apply action.
+- Added apply-before-switch persistence behavior (save settings first, then reload localized route).
+- Added platform-aware restart warning copy in locale catalogs:
+  - `messages/en.json`
+  - `messages/id.json`
+- Added modal action keys (`apply`, `applying`, `cancel`) and warning keys (`restartWarningWeb`, `restartWarningApp`).
+- Validation sequence executed and passed:
+  - `npm run i18n:check`
+  - `npm run i18n:literals` (total=201, baseline=202)
+  - `npm run check`
+  - `npm run lint`
+  - `npm run build`
+
 - Complete: canonical/hreflang metadata, locale sitemap, notification localization, and manifest locale strategy are implemented and validated.
 
 ## Phase 5 Execution Log (2026-03-24 Operationalization and Hardening)

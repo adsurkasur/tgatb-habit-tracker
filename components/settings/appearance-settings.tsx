@@ -5,20 +5,13 @@ import { UserSettings } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
 import { useTranslations } from "next-intl";
-import { useMemo, useState } from "react";
+import { useState } from "react";
 // MAJOR FIX: Use unified system bars instead of conflicting implementations
 import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { feedbackButtonPress } from "@/lib/feedback";
 import { withLocalePath } from "@/i18n/pathname";
 import { routing, type AppLocale } from "@/i18n/routing";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { LanguageSelectionModal } from "@/components/language-selection-modal";
 
 interface AppearanceSettingsProps {
   settings: UserSettings;
@@ -32,15 +25,6 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
   const router = useRouter();
   const pathname = usePathname();
   const [languageModalOpen, setLanguageModalOpen] = useState(false);
-
-  const localeOptions = useMemo(
-    () =>
-      routing.locales.map((locale) => ({
-        locale,
-        label: locale === "en" ? t("language.english") : t("language.indonesian"),
-      })),
-    [t],
-  );
 
   // Always force fullscreenMode to false if not native
   const effectiveFullscreenMode = isNative ? settings.fullscreenMode : false;
@@ -67,12 +51,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
     }
   };
 
-  const handleLanguageSelect = async (nextLanguage: AppLocale) => {
-    if (nextLanguage === settings.language) {
-      setLanguageModalOpen(false);
-      return;
-    }
-
+  const handleLanguageApply = async (nextLanguage: AppLocale) => {
     const updatedSettings = { ...settings, language: nextLanguage };
     onUpdateSettings({ language: nextLanguage });
 
@@ -84,17 +63,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
     }
 
     const nextPath = withLocalePath(pathname || "/", nextLanguage);
-    router.push(nextPath);
-    setLanguageModalOpen(false);
-
-    toast({
-      title: t("toasts.languageUpdated"),
-      description:
-        nextLanguage === "en"
-          ? t("toasts.switchedToEnglish")
-          : t("toasts.switchedToIndonesian"),
-      duration: 2500,
-    });
+    window.location.assign(nextPath);
   };
 
   const handleOpenLanguageModal = () => {
@@ -173,34 +142,13 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
         </div>
       </div>
 
-      <Dialog open={languageModalOpen} onOpenChange={setLanguageModalOpen}>
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle>{t("language.modalTitle")}</DialogTitle>
-            <DialogDescription>{t("language.modalDescription")}</DialogDescription>
-          </DialogHeader>
-
-          <div className="space-y-2">
-            {localeOptions.map((option) => {
-              const isActive = option.locale === settings.language;
-              return (
-                <Button
-                  key={option.locale}
-                  type="button"
-                  variant={isActive ? "default" : "outline"}
-                  className="w-full justify-between"
-                  onClick={() => {
-                    void handleLanguageSelect(option.locale);
-                  }}
-                >
-                  <span>{option.label}</span>
-                  <span className="text-xs uppercase opacity-80">{option.locale}</span>
-                </Button>
-              );
-            })}
-          </div>
-        </DialogContent>
-      </Dialog>
+      <LanguageSelectionModal
+        open={languageModalOpen}
+        onOpenChange={setLanguageModalOpen}
+        currentLanguage={settings.language as AppLocale}
+        isNative={isNative}
+        onApply={handleLanguageApply}
+      />
     </div>
   );
 }

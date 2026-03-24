@@ -1,0 +1,135 @@
+"use client";
+
+import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import {
+  ResponsiveDialog,
+  ResponsiveDialogBody,
+  ResponsiveDialogContent,
+  ResponsiveDialogFooter,
+  ResponsiveDialogHeader,
+  ResponsiveDialogTitle,
+  ResponsiveDialogDescription,
+} from "@/components/ui/responsive-dialog";
+import { routing, type AppLocale } from "@/i18n/routing";
+import { useTranslations } from "next-intl";
+
+type LanguageSelectionModalProps = {
+  open: boolean;
+  currentLanguage: AppLocale;
+  isNative: boolean;
+  onOpenChange(open: boolean): void;
+  onApply(nextLanguage: AppLocale): Promise<void>;
+};
+
+function getLocaleDisplayName(localeCode: string, displayLocale: string): string {
+  try {
+    const displayNames = new Intl.DisplayNames([displayLocale], { type: "language" });
+    return displayNames.of(localeCode) ?? localeCode.toUpperCase();
+  } catch {
+    return localeCode.toUpperCase();
+  }
+}
+
+export function LanguageSelectionModal({
+  open,
+  currentLanguage,
+  isNative,
+  onOpenChange,
+  onApply,
+}: LanguageSelectionModalProps) {
+  const t = useTranslations("AppearanceSettings.language");
+  const [selectedLanguage, setSelectedLanguage] = useState<AppLocale>(currentLanguage);
+  const [applying, setApplying] = useState(false);
+
+  const localeOptions = useMemo(
+    () =>
+      routing.locales.map((locale) => ({
+        locale,
+        label: getLocaleDisplayName(locale, currentLanguage),
+      })),
+    [currentLanguage],
+  );
+
+  const hasChanges = selectedLanguage !== currentLanguage;
+
+  const handleApply = async () => {
+    if (!hasChanges || applying) {
+      onOpenChange(false);
+      return;
+    }
+
+    setApplying(true);
+    try {
+      await onApply(selectedLanguage);
+    } finally {
+      setApplying(false);
+    }
+  };
+
+  return (
+    <ResponsiveDialog
+      open={open}
+      onOpenChange={(nextOpen) => {
+        if (!nextOpen) {
+          setSelectedLanguage(currentLanguage);
+        }
+        onOpenChange(nextOpen);
+      }}
+      drawerSize="compact"
+    >
+      <ResponsiveDialogContent dialogClassName="w-full max-w-md">
+        <ResponsiveDialogHeader>
+          <ResponsiveDialogTitle>{t("modalTitle")}</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>{t("modalDescription")}</ResponsiveDialogDescription>
+        </ResponsiveDialogHeader>
+
+        <ResponsiveDialogBody>
+          <div className="space-y-2">
+            {localeOptions.map((option) => {
+              const isSelected = option.locale === selectedLanguage;
+              return (
+                <Button
+                  key={option.locale}
+                  type="button"
+                  variant={isSelected ? "default" : "outline"}
+                  className="w-full justify-between"
+                  onClick={() => setSelectedLanguage(option.locale)}
+                >
+                  <span>{option.label}</span>
+                  <span className="text-xs uppercase opacity-80">{option.locale}</span>
+                </Button>
+              );
+            })}
+          </div>
+
+          <p className="mt-4 text-xs text-muted-foreground">
+            {isNative ? t("restartWarningApp") : t("restartWarningWeb")}
+          </p>
+        </ResponsiveDialogBody>
+
+        <ResponsiveDialogFooter>
+          <div className="flex w-full justify-end gap-2">
+            <Button
+              type="button"
+              variant="ghost"
+              onClick={() => onOpenChange(false)}
+              disabled={applying}
+            >
+              {t("cancel")}
+            </Button>
+            <Button
+              type="button"
+              onClick={() => {
+                void handleApply();
+              }}
+              disabled={!hasChanges || applying}
+            >
+              {applying ? t("applying") : t("apply")}
+            </Button>
+          </div>
+        </ResponsiveDialogFooter>
+      </ResponsiveDialogContent>
+    </ResponsiveDialog>
+  );
+}

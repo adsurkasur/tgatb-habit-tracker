@@ -35,7 +35,12 @@
       "english": "Inggris",
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Pilih bahasa",
-      "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi."
+      "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi.",
+      "restartWarningWeb": "Menerapkan bahasa baru akan memuat ulang halaman ini agar semua teks diperbarui.",
+      "restartWarningApp": "Menerapkan bahasa baru akan memulai ulang layar aplikasi ini agar semua teks diperbarui.",
+      "cancel": "Batal",
+      "apply": "Terapkan",
+      "applying": "Menerapkan..."
     },
     "fullscreen": {
       "title": "Mode Layar Penuh",
