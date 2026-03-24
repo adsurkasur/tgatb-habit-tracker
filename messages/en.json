@@ -72,6 +72,14 @@
       "item5": "\u2022 Cross-platform compatibility"
     },
     "builtWith": "Built with",
+    "stack": {
+      "nextjs": "Next.js 16",
+      "react": "React 19",
+      "typescript": "TypeScript",
+      "tailwind": "Tailwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "Capacitor"
+    },
     "links": {
       "title": "Links",
       "github": "View on GitHub",
@@ -192,6 +200,446 @@
       "notTrackedTitle": "{name}: Not Tracked",
       "completedTitle": "{name}: Completed",
       "notCompletedTitle": "{name}: Not completed"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Add New Habit",
+    "fields": {
+      "name": "Habit Name",
+      "type": "Habit Type",
+      "schedule": "Schedule"
+    },
+    "placeholders": {
+      "name": "Enter habit name..."
+    },
+    "type": {
+      "good": "Good",
+      "bad": "Bad"
+    },
+    "schedule": {
+      "daily": "Daily",
+      "interval": "Every N Days",
+      "weekly": "Weekdays"
+    },
+    "interval": {
+      "every": "Every",
+      "days": "days"
+    },
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "Edit Habit",
+    "fields": {
+      "name": "Habit Name",
+      "type": "Habit Type",
+      "schedule": "Schedule"
+    },
+    "placeholders": {
+      "name": "Enter habit name..."
+    },
+    "type": {
+      "good": "Good",
+      "bad": "Bad"
+    },
+    "schedule": {
+      "daily": "Daily",
+      "interval": "Every N Days",
+      "weekly": "Weekdays"
+    },
+    "interval": {
+      "every": "Every",
+      "days": "days"
+    },
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "saveChanges": "Save Changes"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Sync Conflicts Detected",
+    "description": "We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.",
+    "itemLabel": "Item: {id}",
+    "differences": "Local vs Remote differences",
+    "choices": {
+      "local": "Local",
+      "remote": "Remote"
+    },
+    "actions": {
+      "keepLocal": "Keep Local",
+      "applySelected": "Apply Selected",
+      "acceptRemote": "Accept Remote"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "Install TGATB App",
+    "subtitle": "Better experience with offline support and quick access",
+    "toasts": {
+      "notAvailable": {
+        "title": "App install not available",
+        "description": "App installation is not supported on this device or browser. Try Chrome or Edge on desktop/mobile."
+      },
+      "started": {
+        "title": "App install started",
+        "description": "Follow your browser's instructions to complete installation."
+      },
+      "dismissed": {
+        "title": "App install dismissed",
+        "description": "You can install the app anytime from Settings -> Install App."
+      },
+      "failed": {
+        "title": "App install failed",
+        "description": "Something went wrong while trying to install the app."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "On iOS/Safari, tap the Share button and select \"Add to Home Screen\" to install.",
+        "android": {
+          "line1": "On Android, use Chrome, Edge, or Samsung Internet. If you see a + icon in your browser's address bar, tap it to install.",
+          "line2": "If you don't see the icon, open browser menu and look for \"Add to Home screen\" or \"Install app\"."
+        },
+        "windowsLinux": {
+          "line1": "On Windows/Linux, use Chrome or Edge. If you see an install icon in your browser's address bar, use it.",
+          "line2": "If not, open browser menu and look for \"Install app\" or \"Add to desktop\"."
+        },
+        "mac": {
+          "line1": "On macOS, use Chrome or Edge. If you see an install icon in your browser's address bar, use it.",
+          "line2": "If not, open browser menu and look for \"Install app\" or \"Add to dock\"."
+        },
+        "generic": {
+          "line1": "If you see an install icon in your browser's address bar, use it.",
+          "line2": "Otherwise, open browser menu and look for \"Install app\" or \"Add to Home screen\"."
+        }
+      },
+      "default": {
+        "iosSafari": "On iOS/Safari, tap the Share button and select \"Add to Home Screen\" to install.",
+        "android": "On Android, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.",
+        "windowsLinux": "On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.",
+        "mac": "On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it."
+      }
+    },
+    "actions": {
+      "dismiss": "Dismiss",
+      "install": "Install",
+      "ok": "OK",
+      "notNow": "Not now"
+    }
+  },
+  "DonationDialog": {
+    "title": "Support Me",
+    "description": "If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!",
+    "sections": {
+      "paymentPlatforms": "Payment Platforms",
+      "cryptocurrency": "Cryptocurrency"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Support me with QRIS!",
+      "description": "Scan this QR code with your banking app to donate via QRIS.",
+      "imageAlt": "QRIS Donation Method",
+      "download": "Download QRIS"
+    },
+    "copiedBadge": "Copied!",
+    "thankYou": "Thank you for considering supporting this project!",
+    "toasts": {
+      "copied": {
+        "title": "Copied!",
+        "description": "Address copied to clipboard"
+      },
+      "copyFailed": {
+        "title": "Failed to copy",
+        "description": "Please copy the address manually"
+      },
+      "saved": {
+        "title": "Saved!",
+        "description": "QRIS image saved to device."
+      },
+      "saveFailed": {
+        "title": "Save failed",
+        "description": "Could not save image."
+      },
+      "downloadFailed": {
+        "title": "Download failed",
+        "description": "Could not fetch image."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Add Entry for {date}",
+    "tabs": {
+      "addEntry": "Add New Entry",
+      "addHabit": "Add New Habit"
+    },
+    "placeholders": {
+      "noHabit": "No habit available, add now!",
+      "selectHabit": "Select habit...",
+      "habitName": "Habit name..."
+    },
+    "type": {
+      "good": "Good",
+      "bad": "Bad"
+    },
+    "status": {
+      "good": {
+        "true": "Completed",
+        "false": "Missed"
+      },
+      "bad": {
+        "true": "Avoided",
+        "false": "Done"
+      }
+    },
+    "actions": {
+      "addEntry": "Add Entry",
+      "addHabitAndLog": "Add Habit & Log Entry"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "Edit Entry",
+    "fields": {
+      "date": "Date",
+      "status": "Status"
+    },
+    "status": {
+      "good": {
+        "true": "Completed",
+        "false": "Missed"
+      },
+      "bad": {
+        "true": "Avoided",
+        "false": "Done"
+      }
+    },
+    "actions": {
+      "cancel": "Cancel",
+      "save": "Save"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Character Motivator",
+    "personalityType": "Personality Type",
+    "personality": {
+      "positive": {
+        "title": "Positive",
+        "description": "Encouraging and supportive"
+      },
+      "adaptive": {
+        "title": "Adaptive",
+        "description": "Balanced and realistic"
+      },
+      "harsh": {
+        "title": "Harsh",
+        "description": "Direct and challenging"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Start Your Journey",
+    "description": "Create your first habit to begin tracking your daily progress and building consistency.",
+    "addFirstHabit": "Add Your First Habit",
+    "footer": "Every expert was once a beginner"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Delete All Habits?",
+    "description": "This action cannot be undone. Are you sure you want to delete all habits?",
+    "actions": {
+      "cancel": "Cancel",
+      "deleting": "Deleting...",
+      "delete": "Delete"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Feedback",
+    "sound": {
+      "title": "Sound Effects",
+      "description": "Play sounds on interactions"
+    },
+    "haptic": {
+      "title": "Haptic Feedback",
+      "supported": "Vibrate on interactions",
+      "notSupported": "Not supported on this device"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Help & Support",
+    "actions": {
+      "showWelcomeGuide": "Show Welcome Guide",
+      "contactEmail": "Contact {name} via email"
+    }
+  },
+  "SettingsScreen": {
+    "title": "Settings"
+  },
+  "AppDeviceSettings": {
+    "title": "App & Device",
+    "install": {
+      "nativeApp": "Native App",
+      "installed": "App Installed",
+      "installApp": "Install App",
+      "nativeDescription": "You're using the native Android app",
+      "installedDescription": "TGATB is already on your device",
+      "addToHome": "Add to home screen"
+    },
+    "reminder": {
+      "title": "Daily Reminder",
+      "timeLabel": "Reminder time",
+      "status": {
+        "notSupported": "Notifications not supported in this browser",
+        "off": "Off",
+        "denied": "Permission denied - check browser/device settings",
+        "set": "Reminder set for {time}",
+        "setWeb": "Reminder set for {time} - works best when app is open or installed as PWA"
+      }
+    },
+    "permission": {
+      "title": "Notifications Needed",
+      "description": "To send you daily reminders, the app needs permission to show notifications. You can enable this in your browser or device settings.",
+      "gotIt": "Got it"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "No habits yet",
+    "emptyDescription": "Add your first habit to get started!",
+    "question": {
+      "pending": "Did you do it?",
+      "goodPositive": "Already done today!",
+      "badPositive": "You didn't do it today!",
+      "goodNegative": "You didn't do it today!",
+      "badNegative": "You did it today!"
+    },
+    "status": {
+      "goodCompleted": "Completed",
+      "goodMissed": "Missed",
+      "badAvoided": "Avoided",
+      "badDone": "Done"
+    },
+    "type": {
+      "good": "Good",
+      "bad": "Bad"
+    },
+    "streakDays": "{count} days",
+    "atTime": "at {time}",
+    "actions": {
+      "undo": "Undo"
+    }
+  },
+  "OfflineToast": {
+    "message": "You're offline. Some features may be limited."
+  },
+  "OfflineIndicator": {
+    "message": "You're offline. Some features may be limited."
+  },
+  "AnalyticsNotice": {
+    "title": "Notice",
+    "description": "We use Vercel Analytics to improve your experience. Anonymous usage data helps us make the app better.",
+    "gotIt": "Got it"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Habit Tracker",
+    "loading": "Loading your habits..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Step {current} of {total}",
+    "steps": {
+      "welcome": {
+        "title": "Welcome to Habit Tracker!",
+        "description": "Let's take a quick tour to help you get started with tracking your habits effectively."
+      },
+      "navigation": {
+        "title": "Navigation Menu",
+        "description": "Access all your habits, view history, and adjust settings from this menu."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Add More Habits",
+        "emptyTitle": "Add Your First Habit",
+        "hasHabitsDescription": "Use this floating button to add more habits anytime.",
+        "emptyDescription": "Tap this button to create your first habit. You can add both good habits to build and bad habits to break."
+      },
+      "habitCard": {
+        "title": "Track Your Progress",
+        "hasHabitsDescription": "Here are your habits! Tap them to mark as complete for the day.",
+        "emptyDescription": "Once you add habits, they'll appear here. Tap to mark them as complete for the day."
+      },
+      "complete": {
+        "title": "You're All Set!",
+        "description": "Start building better habits today. Remember, consistency is key to success!"
+      }
+    },
+    "actions": {
+      "skip": "Skip",
+      "previous": "Previous",
+      "skipTour": "Skip Tour",
+      "next": "Next",
+      "getStarted": "Get Started",
+      "start": "Start"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Habit Management",
+    "deleteAll": "Delete All Habits",
+    "toasts": {
+      "deleted": {
+        "title": "All habits deleted",
+        "description": "Your habit list has been cleared."
+      },
+      "failed": {
+        "title": "Delete Failed",
+        "description": "An error occurred while deleting habits."
+      },
+      "noHandler": {
+        "description": "No delete handler provided."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Status Bar Controls",
+    "label": "Status Bar",
+    "visible": "Visible",
+    "hidden": "Hidden",
+    "status": "Status Bar: {visibility} | Height: {height}px",
+    "actions": {
+      "show": "Show",
+      "hide": "Hide",
+      "lightStyle": "Light Style",
+      "darkStyle": "Dark Style",
+      "defaultStyle": "Default Style",
+      "redBackground": "Red Background",
+      "greenBackground": "Green Background",
+      "blueBackground": "Blue Background",
+      "resetToWhite": "Reset to White"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "You're offline",
+      "description": "App works offline. Data syncs when reconnected.",
+      "retry": "Retry"
+    },
+    "fallback": {
+      "title": "TGATB Habit Tracker",
+      "description": "Loading your habits..."
     }
   },
   "TermsOfServicePage": {

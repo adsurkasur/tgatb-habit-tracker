@@ -72,6 +72,14 @@
       "item5": "\u2022 Kompatibel lintas platform"
     },
     "builtWith": "Dibangun dengan",
+    "stack": {
+      "nextjs": "Next.js 16",
+      "react": "React 19",
+      "typescript": "TypeScript",
+      "tailwind": "Tailwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "Capacitor"
+    },
     "links": {
       "title": "Tautan",
       "github": "Lihat di GitHub",
@@ -192,6 +200,446 @@
       "notTrackedTitle": "{name}: Belum Dilacak",
       "completedTitle": "{name}: Selesai",
       "notCompletedTitle": "{name}: Belum selesai"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Tambah Kebiasaan Baru",
+    "fields": {
+      "name": "Nama Kebiasaan",
+      "type": "Jenis Kebiasaan",
+      "schedule": "Jadwal"
+    },
+    "placeholders": {
+      "name": "Masukkan nama kebiasaan..."
+    },
+    "type": {
+      "good": "Baik",
+      "bad": "Buruk"
+    },
+    "schedule": {
+      "daily": "Harian",
+      "interval": "Setiap N Hari",
+      "weekly": "Hari dalam Minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Min",
+      "mon": "Sen",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kam",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Batal",
+      "save": "Simpan"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "Ubah Kebiasaan",
+    "fields": {
+      "name": "Nama Kebiasaan",
+      "type": "Jenis Kebiasaan",
+      "schedule": "Jadwal"
+    },
+    "placeholders": {
+      "name": "Masukkan nama kebiasaan..."
+    },
+    "type": {
+      "good": "Baik",
+      "bad": "Buruk"
+    },
+    "schedule": {
+      "daily": "Harian",
+      "interval": "Setiap N Hari",
+      "weekly": "Hari dalam Minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Min",
+      "mon": "Sen",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kam",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Batal",
+      "saveChanges": "Simpan Perubahan"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Konflik Sinkronisasi Terdeteksi",
+    "description": "Kami menemukan konflik antara data lokal Anda dan cadangan cloud. Pilih resolusi per kolom di bawah, atau gunakan aksi global untuk menerima versi cloud atau mempertahankan data lokal.",
+    "itemLabel": "Item: {id}",
+    "differences": "Perbedaan Lokal vs Cloud",
+    "choices": {
+      "local": "Lokal",
+      "remote": "Cloud"
+    },
+    "actions": {
+      "keepLocal": "Pertahankan Lokal",
+      "applySelected": "Terapkan Pilihan",
+      "acceptRemote": "Terima Cloud"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "Instal Aplikasi TGATB",
+    "subtitle": "Pengalaman lebih baik dengan dukungan offline dan akses cepat",
+    "toasts": {
+      "notAvailable": {
+        "title": "Instalasi aplikasi tidak tersedia",
+        "description": "Instalasi aplikasi tidak didukung di perangkat atau browser ini. Coba Chrome atau Edge di desktop/mobile."
+      },
+      "started": {
+        "title": "Instalasi aplikasi dimulai",
+        "description": "Ikuti instruksi browser Anda untuk menyelesaikan instalasi."
+      },
+      "dismissed": {
+        "title": "Instalasi aplikasi ditutup",
+        "description": "Anda bisa memasang aplikasi kapan saja dari Pengaturan -> Instal Aplikasi."
+      },
+      "failed": {
+        "title": "Instalasi aplikasi gagal",
+        "description": "Terjadi masalah saat mencoba menginstal aplikasi."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "Di iOS/Safari, ketuk tombol Share lalu pilih \"Add to Home Screen\" untuk menginstal.",
+        "android": {
+          "line1": "Di Android, gunakan Chrome, Edge, atau Samsung Internet. Jika Anda melihat ikon + di address bar browser, ketuk untuk menginstal.",
+          "line2": "Jika ikon tidak terlihat, buka menu browser dan cari \"Add to Home screen\" atau \"Install app\"."
+        },
+        "windowsLinux": {
+          "line1": "Di Windows/Linux, gunakan Chrome atau Edge. Jika Anda melihat ikon instal di address bar browser, gunakan itu.",
+          "line2": "Jika tidak, buka menu browser dan cari \"Install app\" atau \"Add to desktop\"."
+        },
+        "mac": {
+          "line1": "Di macOS, gunakan Chrome atau Edge. Jika Anda melihat ikon instal di address bar browser, gunakan itu.",
+          "line2": "Jika tidak, buka menu browser dan cari \"Install app\" atau \"Add to dock\"."
+        },
+        "generic": {
+          "line1": "Jika Anda melihat ikon instal di address bar browser, gunakan itu.",
+          "line2": "Jika tidak, buka menu browser dan cari \"Install app\" atau \"Add to Home screen\"."
+        }
+      },
+      "default": {
+        "iosSafari": "Di iOS/Safari, ketuk tombol Share lalu pilih \"Add to Home Screen\" untuk menginstal.",
+        "android": "Di Android, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika Anda melihat ikon instal di address bar browser, gunakan itu.",
+        "windowsLinux": "Di Windows/Linux, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika Anda melihat ikon instal di address bar browser, gunakan itu.",
+        "mac": "Di macOS, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika Anda melihat ikon instal di address bar browser, gunakan itu."
+      }
+    },
+    "actions": {
+      "dismiss": "Tutup",
+      "install": "Instal",
+      "ok": "OK",
+      "notNow": "Nanti"
+    }
+  },
+  "DonationDialog": {
+    "title": "Dukung Saya",
+    "description": "Jika Anda menyukai aplikasi ini, pertimbangkan untuk mendukung pengembangannya. Setiap kontribusi membantu agar aplikasi tetap gratis dan terus berkembang!",
+    "sections": {
+      "paymentPlatforms": "Platform Pembayaran",
+      "cryptocurrency": "Kripto"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Dukung saya dengan QRIS!",
+      "description": "Pindai kode QR ini dengan aplikasi perbankan Anda untuk berdonasi via QRIS.",
+      "imageAlt": "Metode Donasi QRIS",
+      "download": "Unduh QRIS"
+    },
+    "copiedBadge": "Tersalin!",
+    "thankYou": "Terima kasih telah mempertimbangkan untuk mendukung proyek ini!",
+    "toasts": {
+      "copied": {
+        "title": "Tersalin!",
+        "description": "Alamat tersalin ke clipboard"
+      },
+      "copyFailed": {
+        "title": "Gagal menyalin",
+        "description": "Silakan salin alamat secara manual"
+      },
+      "saved": {
+        "title": "Tersimpan!",
+        "description": "Gambar QRIS tersimpan ke perangkat."
+      },
+      "saveFailed": {
+        "title": "Gagal menyimpan",
+        "description": "Tidak dapat menyimpan gambar."
+      },
+      "downloadFailed": {
+        "title": "Unduhan gagal",
+        "description": "Tidak dapat mengambil gambar."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Tambah Entri untuk {date}",
+    "tabs": {
+      "addEntry": "Tambah Entri Baru",
+      "addHabit": "Tambah Kebiasaan Baru"
+    },
+    "placeholders": {
+      "noHabit": "Belum ada kebiasaan, tambah sekarang!",
+      "selectHabit": "Pilih kebiasaan...",
+      "habitName": "Nama kebiasaan..."
+    },
+    "type": {
+      "good": "Baik",
+      "bad": "Buruk"
+    },
+    "status": {
+      "good": {
+        "true": "Selesai",
+        "false": "Terlewat"
+      },
+      "bad": {
+        "true": "Berhasil dihindari",
+        "false": "Dilakukan"
+      }
+    },
+    "actions": {
+      "addEntry": "Tambah Entri",
+      "addHabitAndLog": "Tambah Kebiasaan & Catat Entri"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "Ubah Entri",
+    "fields": {
+      "date": "Tanggal",
+      "status": "Status"
+    },
+    "status": {
+      "good": {
+        "true": "Selesai",
+        "false": "Terlewat"
+      },
+      "bad": {
+        "true": "Berhasil dihindari",
+        "false": "Dilakukan"
+      }
+    },
+    "actions": {
+      "cancel": "Batal",
+      "save": "Simpan"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Motivator Karakter",
+    "personalityType": "Tipe Kepribadian",
+    "personality": {
+      "positive": {
+        "title": "Positif",
+        "description": "Mendukung dan menyemangati"
+      },
+      "adaptive": {
+        "title": "Adaptif",
+        "description": "Seimbang dan realistis"
+      },
+      "harsh": {
+        "title": "Tegas",
+        "description": "Langsung dan menantang"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Mulai Perjalananmu",
+    "description": "Buat kebiasaan pertamamu untuk mulai melacak progres harian dan membangun konsistensi.",
+    "addFirstHabit": "Tambah Kebiasaan Pertama",
+    "footer": "Setiap ahli pernah menjadi pemula"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Hapus Semua Kebiasaan?",
+    "description": "Tindakan ini tidak dapat dibatalkan. Yakin ingin menghapus semua kebiasaan?",
+    "actions": {
+      "cancel": "Batal",
+      "deleting": "Menghapus...",
+      "delete": "Hapus"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Umpan Balik",
+    "sound": {
+      "title": "Efek Suara",
+      "description": "Putar suara saat berinteraksi"
+    },
+    "haptic": {
+      "title": "Getaran",
+      "supported": "Bergetar saat berinteraksi",
+      "notSupported": "Tidak didukung di perangkat ini"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Bantuan & Dukungan",
+    "actions": {
+      "showWelcomeGuide": "Tampilkan Panduan Awal",
+      "contactEmail": "Hubungi {name} via email"
+    }
+  },
+  "SettingsScreen": {
+    "title": "Pengaturan"
+  },
+  "AppDeviceSettings": {
+    "title": "Aplikasi & Perangkat",
+    "install": {
+      "nativeApp": "Aplikasi Native",
+      "installed": "Aplikasi Terpasang",
+      "installApp": "Pasang Aplikasi",
+      "nativeDescription": "Anda menggunakan aplikasi Android native",
+      "installedDescription": "TGATB sudah ada di perangkat Anda",
+      "addToHome": "Tambahkan ke layar utama"
+    },
+    "reminder": {
+      "title": "Pengingat Harian",
+      "timeLabel": "Waktu pengingat",
+      "status": {
+        "notSupported": "Notifikasi tidak didukung di browser ini",
+        "off": "Mati",
+        "denied": "Izin ditolak - periksa pengaturan browser/perangkat",
+        "set": "Pengingat diatur untuk {time}",
+        "setWeb": "Pengingat diatur untuk {time} - paling optimal saat aplikasi dibuka atau dipasang sebagai PWA"
+      }
+    },
+    "permission": {
+      "title": "Notifikasi Diperlukan",
+      "description": "Untuk mengirim pengingat harian, aplikasi memerlukan izin menampilkan notifikasi. Anda bisa mengaktifkannya di pengaturan browser atau perangkat.",
+      "gotIt": "Mengerti"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "Belum ada kebiasaan",
+    "emptyDescription": "Tambahkan kebiasaan pertamamu untuk mulai!",
+    "question": {
+      "pending": "Apakah kamu melakukannya?",
+      "goodPositive": "Sudah selesai hari ini!",
+      "badPositive": "Kamu tidak melakukannya hari ini!",
+      "goodNegative": "Kamu tidak melakukannya hari ini!",
+      "badNegative": "Kamu melakukannya hari ini!"
+    },
+    "status": {
+      "goodCompleted": "Selesai",
+      "goodMissed": "Terlewat",
+      "badAvoided": "Berhasil dihindari",
+      "badDone": "Dilakukan"
+    },
+    "type": {
+      "good": "Baik",
+      "bad": "Buruk"
+    },
+    "streakDays": "{count} hari",
+    "atTime": "pukul {time}",
+    "actions": {
+      "undo": "Urungkan"
+    }
+  },
+  "OfflineToast": {
+    "message": "Anda sedang offline. Beberapa fitur mungkin terbatas."
+  },
+  "OfflineIndicator": {
+    "message": "Anda sedang offline. Beberapa fitur mungkin terbatas."
+  },
+  "AnalyticsNotice": {
+    "title": "Pemberitahuan",
+    "description": "Kami menggunakan Vercel Analytics untuk meningkatkan pengalaman Anda. Data penggunaan anonim membantu kami membuat aplikasi lebih baik.",
+    "gotIt": "Mengerti"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Pelacak Kebiasaan",
+    "loading": "Memuat kebiasaan Anda..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Langkah {current} dari {total}",
+    "steps": {
+      "welcome": {
+        "title": "Selamat datang di Habit Tracker!",
+        "description": "Ayo ikuti tur singkat agar Anda cepat memahami cara melacak kebiasaan dengan efektif."
+      },
+      "navigation": {
+        "title": "Menu Navigasi",
+        "description": "Akses semua kebiasaan, lihat riwayat, dan atur pengaturan dari menu ini."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Tambah Kebiasaan Lagi",
+        "emptyTitle": "Tambah Kebiasaan Pertama",
+        "hasHabitsDescription": "Gunakan tombol mengambang ini untuk menambah kebiasaan kapan saja.",
+        "emptyDescription": "Ketuk tombol ini untuk membuat kebiasaan pertama Anda. Anda bisa menambah kebiasaan baik untuk dibangun dan kebiasaan buruk untuk dihentikan."
+      },
+      "habitCard": {
+        "title": "Lacak Progresmu",
+        "hasHabitsDescription": "Ini kebiasaanmu! Ketuk untuk menandai selesai hari ini.",
+        "emptyDescription": "Setelah menambah kebiasaan, semuanya akan muncul di sini. Ketuk untuk menandai selesai hari ini."
+      },
+      "complete": {
+        "title": "Kamu Sudah Siap!",
+        "description": "Mulai bangun kebiasaan yang lebih baik hari ini. Ingat, konsistensi adalah kunci sukses!"
+      }
+    },
+    "actions": {
+      "skip": "Lewati",
+      "previous": "Sebelumnya",
+      "skipTour": "Lewati Tur",
+      "next": "Berikutnya",
+      "getStarted": "Mulai Sekarang",
+      "start": "Mulai"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Manajemen Kebiasaan",
+    "deleteAll": "Hapus Semua Kebiasaan",
+    "toasts": {
+      "deleted": {
+        "title": "Semua kebiasaan dihapus",
+        "description": "Daftar kebiasaan Anda telah dikosongkan."
+      },
+      "failed": {
+        "title": "Penghapusan Gagal",
+        "description": "Terjadi kesalahan saat menghapus kebiasaan."
+      },
+      "noHandler": {
+        "description": "Handler penghapusan tidak tersedia."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Kontrol Status Bar",
+    "label": "Status Bar",
+    "visible": "Terlihat",
+    "hidden": "Tersembunyi",
+    "status": "Status Bar: {visibility} | Tinggi: {height}px",
+    "actions": {
+      "show": "Tampilkan",
+      "hide": "Sembunyikan",
+      "lightStyle": "Gaya Terang",
+      "darkStyle": "Gaya Gelap",
+      "defaultStyle": "Gaya Default",
+      "redBackground": "Latar Merah",
+      "greenBackground": "Latar Hijau",
+      "blueBackground": "Latar Biru",
+      "resetToWhite": "Reset ke Putih"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "Anda sedang offline",
+      "description": "Aplikasi tetap berjalan offline. Data akan tersinkron saat tersambung kembali.",
+      "retry": "Coba lagi"
+    },
+    "fallback": {
+      "title": "TGATB Habit Tracker",
+      "description": "Memuat kebiasaan Anda..."
     }
   },
   "TermsOfServicePage": {

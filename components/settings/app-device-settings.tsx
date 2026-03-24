@@ -22,6 +22,7 @@ import {
   reestablishReminder,
 } from "@/lib/notifications";
 import { feedbackButtonPress } from "@/lib/feedback";
+import { useTranslations } from "next-intl";
 
 interface AppDeviceSettingsProps {
   settings: UserSettings;
@@ -32,6 +33,7 @@ export function AppDeviceSettings({
   settings,
   onUpdateSettings,
 }: AppDeviceSettingsProps) {
+  const t = useTranslations("AppDeviceSettings");
   const { isAppInstalled, isCapacitorApp, handleInstallPWA } = usePWAInstall();
 
   const reminderEnabled = settings.reminderEnabled ?? false;
@@ -116,16 +118,16 @@ export function AppDeviceSettings({
 
   // Status text
   const getStatusText = (): string => {
-    if (!notificationsSupported) return "Notifications not supported in this browser";
-    if (!reminderEnabled) return "Off";
-    if (!permissionGranted) return "Permission denied — check browser/device settings";
-    if (isCapacitorApp) return `Reminder set for ${reminderTime}`;
-    return `Reminder set for ${reminderTime} — works best when app is open or installed as PWA`;
+    if (!notificationsSupported) return t("reminder.status.notSupported");
+    if (!reminderEnabled) return t("reminder.status.off");
+    if (!permissionGranted) return t("reminder.status.denied");
+    if (isCapacitorApp) return t("reminder.status.set", { time: reminderTime });
+    return t("reminder.status.setWeb", { time: reminderTime });
   };
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">App & Device</h2>
+      <h2 className="text-lg font-semibold">{t("title")}</h2>
 
       <div className="space-y-2">
         {/* Install App row */}
@@ -142,17 +144,17 @@ export function AppDeviceSettings({
             <div className="flex flex-col">
               <span className="font-medium">
                 {isCapacitorApp
-                  ? "Native App"
+                  ? t("install.nativeApp")
                   : isAppInstalled
-                    ? "App Installed"
-                    : "Install App"}
+                    ? t("install.installed")
+                    : t("install.installApp")}
               </span>
               <span className="text-xs text-muted-foreground">
                 {isCapacitorApp
-                  ? "You're using the native Android app"
+                  ? t("install.nativeDescription")
                   : isAppInstalled
-                    ? "TGATB is already on your device"
-                    : "Add to home screen"}
+                    ? t("install.installedDescription")
+                    : t("install.addToHome")}
               </span>
             </div>
           </div>
@@ -177,7 +179,7 @@ export function AppDeviceSettings({
             <div className="flex items-center space-x-3">
               <Bell className="w-5 h-5 shrink-0 text-muted-foreground" />
               <div>
-                <span className="font-medium">Daily Reminder</span>
+                <span className="font-medium">{t("reminder.title")}</span>
                 <p className="text-sm text-muted-foreground">
                   {getStatusText()}
                 </p>
@@ -204,7 +206,7 @@ export function AppDeviceSettings({
               <div className="flex items-center justify-between px-4 pb-4 pt-0">
                 <div className="flex items-center space-x-3">
                   <Clock className="w-5 h-5 shrink-0 text-muted-foreground" />
-                  <span className="text-sm text-muted-foreground">Reminder time</span>
+                  <span className="text-sm text-muted-foreground">{t("reminder.timeLabel")}</span>
                 </div>
                 <input
                   id="reminder-time"
@@ -225,17 +227,16 @@ export function AppDeviceSettings({
           <ResponsiveDialogHeader>
             <ResponsiveDialogTitle className="flex items-center gap-2">
               <BellOff className="w-5 h-5 shrink-0 text-muted-foreground" />
-              Notifications Needed
+              {t("permission.title")}
             </ResponsiveDialogTitle>
             <ResponsiveDialogDescription className="mt-1.5 text-sm text-muted-foreground">
-              To send you daily reminders, the app needs permission to show
-              notifications. You can enable this in your browser or device settings.
+              {t("permission.description")}
             </ResponsiveDialogDescription>
           </ResponsiveDialogHeader>
 
           <ResponsiveDialogFooter>
             <div className="flex justify-end space-x-2 w-full">
-              <Button onClick={() => setShowPermissionDialog(false)}>Got it</Button>
+              <Button onClick={() => setShowPermissionDialog(false)}>{t("permission.gotIt")}</Button>
             </div>
           </ResponsiveDialogFooter>
         </ResponsiveDialogContent>

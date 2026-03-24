@@ -108,6 +108,11 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
   const { locale } = await params;
   const resolvedLocale: AppLocale = isValidLocale(locale) ? locale : routing.defaultLocale;
   const copy = await getTermsCopy(resolvedLocale);
+  const supportEmail = "adsurkasur.dev@gmail.com";
+  const repoUrl = "https://github.com/adsurkasur/tgatb-habit-tracker";
+  const repoLabel = "github.com/adsurkasur/tgatb-habit-tracker";
+  const authorUrl = "https://github.com/adsurkasur";
+  const authorName = "adsurkasur";
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -170,10 +175,10 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
             <p>
               {copy.sections.openSource.body}{" "}
               <a
-                href="https://github.com/adsurkasur/tgatb-habit-tracker"
+                href={repoUrl}
                 className="text-primary underline"
               >
-                github.com/adsurkasur/tgatb-habit-tracker
+                {repoLabel}
               </a>
             </p>
           </section>
@@ -183,10 +188,10 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
             <p>
               {copy.sections.contact.body}{" "}
               <a
-                href="mailto:adsurkasur.dev@gmail.com"
+                href={`mailto:${supportEmail}`}
                 className="text-primary underline"
               >
-                adsurkasur.dev@gmail.com
+                {supportEmail}
               </a>
             </p>
           </section>
@@ -200,8 +205,8 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
           </p>
           <p>
             &copy; 2025-2026{" "}
-            <a href="https://github.com/adsurkasur" className="text-primary underline">
-              adsurkasur
+            <a href={authorUrl} className="text-primary underline">
+              {authorName}
             </a>
             . {copy.footer.rightsReserved}
           </p>

@@ -82,12 +82,12 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
             <div className="space-y-3">
               <h4 className="font-medium text-sm">{t("builtWith")}</h4>
               <div className="flex flex-wrap gap-1">
-                <Badge variant="outline" className="text-xs">Next.js 16</Badge>
-                <Badge variant="outline" className="text-xs">React 19</Badge>
-                <Badge variant="outline" className="text-xs">TypeScript</Badge>
-                <Badge variant="outline" className="text-xs">Tailwind CSS v4</Badge>
-                <Badge variant="outline" className="text-xs">PWA</Badge>
-                <Badge variant="outline" className="text-xs">Capacitor</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.nextjs")}</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.react")}</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.typescript")}</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.tailwind")}</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.pwa")}</Badge>
+                <Badge variant="outline" className="text-xs">{t("stack.capacitor")}</Badge>
               </div>
             </div>
             

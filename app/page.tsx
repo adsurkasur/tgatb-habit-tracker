@@ -33,5 +33,5 @@ export default function RootRedirectPage() {
     };
   }, [router]);
 
-  return <div className="sr-only">Redirecting...</div>;
+  return <div className="sr-only" aria-hidden="true" />;
 }

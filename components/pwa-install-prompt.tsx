@@ -162,7 +162,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
         // Use the same message as handleDismiss for consistency
         toast({
           title: "App install dismissed",
-          description: "You can install the app anytime from Settings → Install App.",
+          description: "You can install the app anytime from Settings -> Install App.",
           duration: 3000,
         });
       }
@@ -181,7 +181,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     sessionStorage.setItem('pwa-install-dismissed', 'true');
     toast({
       title: "App install dismissed",
-      description: "You can install the app anytime from Settings → Install App.",
+      description: "You can install the app anytime from Settings -> Install App.",
       duration: 3000,
     });
   };
@@ -217,27 +217,27 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               <>
                 {isIOS || (isMac && isSafari) ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                    On iOS/Safari, tap the Share button and select "Add to Home Screen" to install.
                   </p>
                 ) : isAndroid ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Android, use Chrome, Edge, or Samsung Internet. If you see a <b>+</b> icon in your browser&apos;s address bar, tap it to install.<br />
-                    If you don&apos;t see the icon, open browser menu and look for &quot;Add to Home screen&quot; or &quot;Install app&quot;.
+                    On Android, use Chrome, Edge, or Samsung Internet. If you see a + icon in your browser's address bar, tap it to install.<br />
+                    If you don't see the icon, open browser menu and look for "Add to Home screen" or "Install app".
                   </p>
                 ) : (isWindows || isLinux) ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Windows/Linux, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to desktop&quot;.
+                    On Windows/Linux, use Chrome or Edge. If you see an install icon in your browser's address bar, use it.<br />
+                    If not, open browser menu and look for "Install app" or "Add to desktop".
                   </p>
                 ) : isMac ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On macOS, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to dock&quot;.
+                    On macOS, use Chrome or Edge. If you see an install icon in your browser's address bar, use it.<br />
+                    If not, open browser menu and look for "Install app" or "Add to dock".
                   </p>
                 ) : (
                   <p className="text-xs text-muted-foreground mt-2">
-                    If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    Otherwise, open browser menu and look for &quot;Install app&quot; or &quot;Add to Home screen&quot;.
+                    If you see an install icon in your browser's address bar, use it.<br />
+                    Otherwise, open browser menu and look for "Install app" or "Add to Home screen".
                   </p>
                 )}
               </>
@@ -247,22 +247,22 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               <>
                 {(isIOS || (isMac && isSafari)) && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                    On iOS/Safari, tap the Share button and select "Add to Home Screen" to install.
                   </p>
                 )}
                 {isAndroid && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Android, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    On Android, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
                   </p>
                 )}
                 {(isWindows || isLinux) && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
                   </p>
                 )}
                 {isMac && !isSafari && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser's address bar, use it.
                   </p>
                 )}
               </>

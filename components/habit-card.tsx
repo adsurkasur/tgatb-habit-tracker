@@ -4,6 +4,7 @@ import { Badge } from "@/components/ui/badge";
 import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
 import { useEffect, useState, memo } from "react";
+import { useTranslations } from "next-intl";
 
 interface HabitCardProps {
   habit: Habit;
@@ -25,6 +26,7 @@ function HabitCardComponent({
   navigationEvent = null,
   todayLog
 }: HabitCardProps) {
+  const t = useTranslations("HabitCard");
   const animationClass = useSlideAnimation(habit?.id, navigationEvent);
   const [initialApplied, setInitialApplied] = useState(true);
   useEffect(() => {
@@ -42,8 +44,8 @@ function HabitCardComponent({
       <div className="w-full max-w-md mx-auto">
         <div className="rounded-lg border p-6 bg-muted/50">
           <div className="text-center space-y-4">
-            <h2 className="text-2xl font-bold text-muted-foreground">No habits yet</h2>
-            <p className="text-muted-foreground">Add your first habit to get started!</p>
+            <h2 className="text-2xl font-bold text-muted-foreground">{t("emptyTitle")}</h2>
+            <p className="text-muted-foreground">{t("emptyDescription")}</p>
           </div>
         </div>
       </div>
@@ -58,6 +60,7 @@ function HabitCardComponent({
       isPositiveAction={isPositiveAction}
       onTrack={onTrack}
       onUndo={onUndo}
+      t={t}
     />
   );
 }
@@ -79,7 +82,7 @@ function areEqual(prevProps: HabitCardProps, nextProps: HabitCardProps) {
 
 export const HabitCard = memo(HabitCardComponent, areEqual);
 
-function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo }: {
+function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo, t }: {
   habit: Habit;
   animationClass: string;
   isCompletedToday: boolean;
@@ -87,6 +90,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   isPositiveAction: boolean;
   onTrack: (completed: boolean) => void;
   onUndo?: () => void;
+  t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
   const cardToneClass = () => {
     if (!isCompletedToday) {
@@ -100,22 +104,22 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
     return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
   };
   const questionText = () => {
-    if (!isCompletedToday) return 'Did you do it?';
-    if (isPositiveAction) return habit.type === 'bad' ? "You didn't do it today!" : 'Already done today!';
-    return habit.type === 'good' ? "You didn't do it today!" : 'You did it today!';
+    if (!isCompletedToday) return t('question.pending');
+    if (isPositiveAction) return habit.type === 'bad' ? t('question.badPositive') : t('question.goodPositive');
+    return habit.type === 'good' ? t('question.goodNegative') : t('question.badNegative');
   };
   return (
     <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
       {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
       <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
         <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
-        <StreakBadge type={habit.type} streak={habit.streak} />
+        <StreakBadge type={habit.type} streak={habit.streak} t={t} />
         <div className="space-y-6 mt-8">
-          <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} />
+          <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} t={t} />
           <div className="text-center">
             <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
           </div>
-          <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} />
+          <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} t={t} />
         </div>
       </div>
     </div>
@@ -152,9 +156,10 @@ function useSlideAnimation(
 }
 
 function StatusBadge({ visible, isPositiveAction, type }: { visible: boolean; isPositiveAction: boolean; type: Habit['type'] }) {
+  const t = useTranslations("HabitCard");
   if (!visible) return null;
   const tone = isPositiveAction ? (type === 'good' ? 'bg-green-500 border-green-600' : 'bg-blue-500 border-blue-600') : 'bg-red-500 border-red-600';
-  const label = isPositiveAction ? (type === 'good' ? 'Completed' : 'Avoided') : (type === 'good' ? 'Missed' : 'Done');
+  const label = isPositiveAction ? (type === 'good' ? t('status.goodCompleted') : t('status.badAvoided')) : (type === 'good' ? t('status.goodMissed') : t('status.badDone'));
   return (
     <div className="absolute top-4 left-4">
       <Badge className={`text-white border-opacity-60 ${tone}`}>
@@ -165,30 +170,30 @@ function StatusBadge({ visible, isPositiveAction, type }: { visible: boolean; is
   );
 }
 
-function StreakBadge({ type, streak }: { type: Habit['type']; streak: number }) {
+function StreakBadge({ type, streak, t }: { type: Habit['type']; streak: number; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
   const tone = type === 'good' ? 'bg-green-500/10 text-green-600 border-green-500/20' : 'bg-orange-500/10 text-orange-600 border-orange-500/20';
   return (
     <div className="absolute top-4 right-4">
       <Badge variant="secondary" className={`font-medium ${tone}`}>
         <Flame className="w-3 h-3 mr-1" />
-        {streak} days
+        {t('streakDays', { count: streak })}
       </Badge>
     </div>
   );
 }
 
-function HabitHeader({ name, type, completedAt }: { name: string; type: Habit['type']; completedAt?: Date }) {
+function HabitHeader({ name, type, completedAt, t }: { name: string; type: Habit['type']; completedAt?: Date; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
   const badgeClass = type === 'good' ? 'bg-green-500 hover:bg-green-600 text-white' : 'bg-red-500 hover:bg-red-600 text-white';
   return (
     <div className="space-y-2">
       <h2 className="text-2xl font-bold text-foreground leading-tight">{name}</h2>
       <div className="flex items-center gap-2">
         <Badge variant={type === 'good' ? 'default' : 'destructive'} className={`font-medium ${badgeClass}`}>
-          {type === 'good' ? 'Good' : 'Bad'}
+          {type === 'good' ? t('type.good') : t('type.bad')}
         </Badge>
         {completedAt && (
           <span className="text-sm text-muted-foreground">
-            at {new Date(completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+            {t('atTime', { time: new Date(completedAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) })}
           </span>
         )}
       </div>
@@ -196,7 +201,7 @@ function HabitHeader({ name, type, completedAt }: { name: string; type: Habit['t
   );
 }
 
-function ActionButtons({ isCompletedToday, onUndo, onTrack }: { isCompletedToday: boolean; onUndo?: () => void; onTrack: (completed: boolean) => void }) {
+function ActionButtons({ isCompletedToday, onUndo, onTrack, t }: { isCompletedToday: boolean; onUndo?: () => void; onTrack: (completed: boolean) => void; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
   if (isCompletedToday) {
     return (
       <div className="flex space-x-4">
@@ -207,7 +212,7 @@ function ActionButtons({ isCompletedToday, onUndo, onTrack }: { isCompletedToday
           size="lg"
         >
           <RotateCcw className="w-6 h-6 mr-2" />
-          Undo
+          {t('actions.undo')}
         </Button>
       </div>
     );

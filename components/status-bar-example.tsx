@@ -4,12 +4,14 @@ import { useStatusBar } from '@/hooks/use-status-bar';
 import { Button } from '@/components/ui/button';
 import { useTheme } from 'next-themes';
 import { useEffect } from 'react';
+import { useTranslations } from 'next-intl';
 
 /**
  * Example component demonstrating how to use the enhanced status bar functionality
  * This shows how to dynamically control status bar appearance
  */
 export const StatusBarExample = () => {
+  const t = useTranslations('StatusBarExample');
   const { 
     visible, 
     height, 
@@ -42,11 +44,11 @@ export const StatusBarExample = () => {
 
   return (
     <div className="p-4 space-y-4 border rounded-lg">
-      <h3 className="text-lg font-semibold">Status Bar Controls</h3>
+      <h3 className="text-lg font-semibold">{t('title')}</h3>
       
       <div className="space-y-2">
         <p className="text-sm text-muted-foreground">
-          Status Bar: {visible ? 'Visible' : 'Hidden'} | Height: {height}px
+          {t('status', { visibility: visible ? t('visible') : t('hidden'), height })}
         </p>
         
         <div className="flex flex-wrap gap-2">
@@ -55,7 +57,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={() => setVisible(!visible)}
           >
-            {visible ? 'Hide' : 'Show'} Status Bar
+            {visible ? t('actions.hide') : t('actions.show')} {t('label')}
           </Button>
           
           <Button 
@@ -63,7 +65,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={setLightStyle}
           >
-            Light Style
+            {t('actions.lightStyle')}
           </Button>
           
           <Button 
@@ -71,7 +73,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={setDarkStyle}
           >
-            Dark Style
+            {t('actions.darkStyle')}
           </Button>
           
           <Button 
@@ -79,7 +81,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={setDefaultStyle}
           >
-            Default Style
+            {t('actions.defaultStyle')}
           </Button>
         </div>
         
@@ -89,7 +91,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={() => setBackgroundColor('#FF0000')}
           >
-            Red Background
+            {t('actions.redBackground')}
           </Button>
           
           <Button 
@@ -97,7 +99,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={() => setBackgroundColor('#00FF00')}
           >
-            Green Background
+            {t('actions.greenBackground')}
           </Button>
           
           <Button 
@@ -105,7 +107,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={() => setBackgroundColor('#0000FF')}
           >
-            Blue Background
+            {t('actions.blueBackground')}
           </Button>
           
           <Button 
@@ -113,7 +115,7 @@ export const StatusBarExample = () => {
             size="sm"
             onClick={() => setBackgroundColor('#FFFFFF')}
           >
-            Reset to White
+            {t('actions.resetToWhite')}
           </Button>
         </div>
       </div>

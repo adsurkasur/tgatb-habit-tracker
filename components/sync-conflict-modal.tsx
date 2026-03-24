@@ -12,6 +12,7 @@ import {
   ResponsiveDialogBody,
   ResponsiveDialogFooter,
 } from './ui/responsive-dialog';
+import { useTranslations } from 'next-intl';
 
 import type { Habit, HabitLog } from '@shared/schema';
 
@@ -32,6 +33,7 @@ type ConflictPayload = {
 };
 
 export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: () => void }) {
+  const t = useTranslations('SyncConflictModal');
   const [payload, setPayload] = useState<ConflictPayload | null>(null);
   const [choices, setChoices] = useState<Record<string, Record<string, FieldChoice>>>({});
   const [prevOpen, setPrevOpen] = useState(false);
@@ -144,24 +146,24 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
     <ResponsiveDialog open={open} onOpenChange={(v) => { if (!v) onClose(); }}>
       <ResponsiveDialogContent dialogClassName="w-full max-w-2xl">
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Sync Conflicts Detected</ResponsiveDialogTitle>
-          <ResponsiveDialogDescription>We found conflicts between your local data and the cloud backup. Choose per-field resolutions below, or use the global actions to accept the remote version or keep your local data.</ResponsiveDialogDescription>
+          <ResponsiveDialogTitle>{t('title')}</ResponsiveDialogTitle>
+          <ResponsiveDialogDescription>{t('description')}</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
           <div className="max-h-72 overflow-auto">
             {(payload.conflicts ?? []).map((c: ConflictItem) => (
               <div key={c.id} className="p-3 border rounded mb-2 bg-muted">
-                <div className="font-medium">Item: {c.id}</div>
-                <div className="text-xs text-muted-foreground">Local vs Remote differences</div>
+                <div className="font-medium">{t('itemLabel', {id: c.id})}</div>
+                <div className="text-xs text-muted-foreground">{t('differences')}</div>
                 <pre className="text-xs my-2 p-2 bg-surface overflow-auto">{JSON.stringify({ local: c.local, remote: c.remote }, null, 2)}</pre>
                 <div className="space-y-1">
                   {Object.keys(c.conflicts || {}).map((f: string) => (
                     <div key={f} className="flex items-center justify-between">
                       <div className="text-sm">{f}</div>
                       <div className="space-x-2">
-                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'local'} onChange={() => setChoice(c.id, f, 'local')} /> <span className="ml-1">Local</span></label>
-                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'remote'} onChange={() => setChoice(c.id, f, 'remote')} /> <span className="ml-1">Remote</span></label>
+                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'local'} onChange={() => setChoice(c.id, f, 'local')} /> <span className="ml-1">{t('choices.local')}</span></label>
+                        <label className="inline-flex items-center"><input type="radio" name={`${c.id}-${f}`} checked={choices[c.id]?.[f] === 'remote'} onChange={() => setChoice(c.id, f, 'remote')} /> <span className="ml-1">{t('choices.remote')}</span></label>
                       </div>
                     </div>
                   ))}
@@ -173,9 +175,9 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
 
         <ResponsiveDialogFooter>
           <div className="flex justify-end space-x-2 w-full">
-            <Button variant="ghost" onClick={keepLocal}>Keep Local</Button>
-            <Button variant="secondary" onClick={applyResolutions}>Apply Selected</Button>
-            <Button onClick={acceptRemote}>Accept Remote</Button>
+            <Button variant="ghost" onClick={keepLocal}>{t('actions.keepLocal')}</Button>
+            <Button variant="secondary" onClick={applyResolutions}>{t('actions.applySelected')}</Button>
+            <Button onClick={acceptRemote}>{t('actions.acceptRemote')}</Button>
           </div>
         </ResponsiveDialogFooter>
       </ResponsiveDialogContent>

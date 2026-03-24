@@ -168,6 +168,11 @@ export default async function LocalizedPrivacyPolicyPage({ params }: LocaleParam
 	const deleteAccountAppSteps = parseNumberedList(copy.sections.deleteAccount.appSteps);
 	const googleDriveSteps = parseHeadingAndSteps(copy.sections.deleteAccount.googleDriveSteps);
 	const revokeSteps = parseHeadingAndSteps(copy.sections.deleteAccount.revokeSteps);
+	const authorUrl = "https://github.com/adsurkasur";
+	const authorName = "adsurkasur";
+	const supportEmail = "adsurkasur.dev@gmail.com";
+	const repoUrl = "https://github.com/adsurkasur/tgatb-habit-tracker";
+	const repoLabel = "github.com/adsurkasur/tgatb-habit-tracker";
 
 	return (
 		<div className="min-h-screen bg-background text-foreground">
@@ -180,8 +185,8 @@ export default async function LocalizedPrivacyPolicyPage({ params }: LocaleParam
 						<h2 className="mb-3 text-xl font-semibold">{copy.sections.overview.title}</h2>
 						<p>
 							{copy.sections.overview.body}{" "}
-							<a href="https://github.com/adsurkasur" className="text-primary underline">
-								adsurkasur
+							<a href={authorUrl} className="text-primary underline">
+								{authorName}
 							</a>
 							.
 						</p>
@@ -286,8 +291,8 @@ export default async function LocalizedPrivacyPolicyPage({ params }: LocaleParam
 						</ol>
 						<p>
 							{copy.sections.deleteAccount.completion}{" "}
-							<a href="mailto:adsurkasur.dev@gmail.com" className="text-primary underline">
-								adsurkasur.dev@gmail.com
+							<a href={`mailto:${supportEmail}`} className="text-primary underline">
+								{supportEmail}
 							</a>
 							.
 						</p>
@@ -312,8 +317,8 @@ export default async function LocalizedPrivacyPolicyPage({ params }: LocaleParam
 						<h2 className="mb-3 text-xl font-semibold">{copy.sections.contactUs.title}</h2>
 						<p>
 							{copy.sections.contactUs.body}{" "}
-							<a href="mailto:adsurkasur.dev@gmail.com" className="text-primary underline">
-								adsurkasur.dev@gmail.com
+							<a href={`mailto:${supportEmail}`} className="text-primary underline">
+								{supportEmail}
 							</a>
 							.
 						</p>
@@ -324,10 +329,10 @@ export default async function LocalizedPrivacyPolicyPage({ params }: LocaleParam
 						<p>
 							{copy.sections.openSource.body}{" "}
 							<a
-								href="https://github.com/adsurkasur/tgatb-habit-tracker"
+									href={repoUrl}
 								className="text-primary underline"
 							>
-								github.com/adsurkasur/tgatb-habit-tracker
+									{repoLabel}
 							</a>
 						</p>
 					</section>

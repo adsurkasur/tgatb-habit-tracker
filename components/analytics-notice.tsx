@@ -5,8 +5,10 @@ import { useLocalStorage } from '@/hooks/use-local-storage';
 import { BarChart3 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 export function AnalyticsNotice() {
+  const t = useTranslations('AnalyticsNotice');
   const [acknowledged, setAcknowledged] = useLocalStorage('analytics-notice-acknowledged', false);
   const [isVisible, setIsVisible] = useState(false);
   const [isExiting, setIsExiting] = useState(false);
@@ -62,10 +64,10 @@ export function AnalyticsNotice() {
       <div className="bg-background border border-border rounded-lg shadow-lg p-4 hover:bg-primary/90 transition-all duration-200">
         <div className="flex items-center gap-2 mb-2">
           <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          <h3 className="text-sm font-medium text-foreground">Notice</h3>
+          <h3 className="text-sm font-medium text-foreground">{t('title')}</h3>
         </div>
         <p className="text-xs text-muted-foreground mb-3 leading-relaxed">
-          We use Vercel Analytics to improve your experience. Anonymous usage data helps us make the app better.
+          {t('description')}
         </p>
         <div className="flex gap-2">
           <Button
@@ -73,7 +75,7 @@ export function AnalyticsNotice() {
             onClick={handleAcknowledge}
             className="text-xs px-3 py-1 h-7"
           >
-            Got it
+            {t('gotIt')}
           </Button>
         </div>
       </div>

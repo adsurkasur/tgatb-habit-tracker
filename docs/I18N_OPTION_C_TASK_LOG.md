@@ -435,6 +435,26 @@ or intensive watchers. The following controls are planned:
   - `npm run lint`
   - `npm run build`
 
+### 2026-03-25 00:00 - 00:41 (Repository-Wide Literal Sweep)
+
+- Executed multi-wave i18n migration for remaining high-impact component copy:
+  - Settings surfaces (`feedback`, `help/support`, `habit management`, `settings screen`)
+  - Dialogs/modals (`add/edit habit`, `add/edit entry`, `delete all`, `sync conflict`, `donation`)
+  - User guidance/notifications (`welcome overlay`, `analytics notice`, `offline indicator`, `offline toast`)
+  - Card/CTA surfaces (`habit card`, `add habit CTA`)
+  - Informational labels (`about dialog tech badges`, `status bar example`)
+- Added corresponding EN/ID catalog keys in `messages/en.json` and `messages/id.json`.
+- Replaced remaining visible policy-page hardcoded literals (contact/repo labels) with variable-driven rendering.
+- Build stability incident encountered:
+  - `PWAInstallPrompt` localized with `useTranslations` triggered missing provider context on non-locale root route.
+  - Resolved by reverting `PWAInstallPrompt` to context-free copy while preserving localization gains elsewhere.
+- Final validation sequence passed:
+  - `npm run i18n:check`
+  - `npm run check`
+  - `npm run lint`
+  - `npm run build`
+  - `npm run i18n:literals` -> `total=85` (baseline `202`)
+
 - Complete: canonical/hreflang metadata, locale sitemap, notification localization, and manifest locale strategy are implemented and validated.
 
 ## Phase 5 Execution Log (2026-03-24 Operationalization and Hardening)

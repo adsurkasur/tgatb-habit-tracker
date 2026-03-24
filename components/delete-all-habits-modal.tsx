@@ -7,6 +7,7 @@ import {
   ResponsiveDialogDescription,
   ResponsiveDialogFooter,
 } from "@/components/ui/responsive-dialog";
+import { useTranslations } from "next-intl";
 
 interface DeleteAllHabitsModalProps {
   open: boolean;
@@ -16,25 +17,26 @@ interface DeleteAllHabitsModalProps {
 }
 
 export function DeleteAllHabitsModal({ open, onCancel, onDelete, loading }: DeleteAllHabitsModalProps) {
+  const t = useTranslations("DeleteAllHabitsModal");
   return (
     <ResponsiveDialog open={open} onOpenChange={(v) => { if (!v) onCancel(); }} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-sm">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="text-destructive">
-            Delete All Habits?
+            {t("title")}
           </ResponsiveDialogTitle>
           <ResponsiveDialogDescription>
-            This action cannot be undone. Are you sure you want to delete all habits?
+            {t("description")}
           </ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogFooter>
           <div className="flex justify-end space-x-2 w-full">
             <Button variant="ghost" onClick={onCancel} disabled={loading}>
-              Cancel
+              {t("actions.cancel")}
             </Button>
             <Button variant="destructive" onClick={onDelete} disabled={loading}>
-              {loading ? "Deleting..." : "Delete"}
+              {loading ? t("actions.deleting") : t("actions.delete")}
             </Button>
           </div>
         </ResponsiveDialogFooter>

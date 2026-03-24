@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, ArrowLeft, Play } from 'lucide-react';
 import { CloseButton } from '@/components/ui/close-button';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface WelcomeStep {
   id: string;
@@ -26,6 +27,7 @@ interface WelcomeOverlayProps {
 }
 
 export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = false, onStepChange }: WelcomeOverlayProps) {
+  const t = useTranslations('WelcomeOverlay');
   const [currentStep, setCurrentStep] = useState(0);
   // targetPosition was unused; removed to reduce warnings
   const [isPositionReady, setIsPositionReady] = useState(false);
@@ -114,53 +116,50 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
   }, [currentStep, onStepChange]);
 
-  // Dynamic steps based on whether user has habits
-  const getWelcomeSteps = useCallback((): WelcomeStep[] => [
+  const welcomeSteps = useMemo((): WelcomeStep[] => [
     {
       id: 'welcome',
-      title: '🎉 Welcome to Habit Tracker!',
-      description: 'Let\'s take a quick tour to help you get started with tracking your habits effectively.',
+      title: t('steps.welcome.title'),
+      description: t('steps.welcome.description'),
       targetSelector: '',
       position: 'bottom'
     },
     {
       id: 'navigation',
-      title: 'Navigation Menu',
-      description: 'Access all your habits, view history, and adjust settings from this menu.',
+      title: t('steps.navigation.title'),
+      description: t('steps.navigation.description'),
       targetSelector: '[data-tour="navigation"]',
       position: 'bottom',
       offset: { x: 135, y: 10 }
     },
     {
       id: 'add-button',
-      title: hasHabits ? 'Add More Habits' : 'Add Your First Habit',
-      description: hasHabits 
-        ? 'Use this floating button to add more habits anytime.'
-        : 'Tap this button to create your first habit. You can add both good habits to build and bad habits to break.',
+      title: hasHabits ? t('steps.addButton.hasHabitsTitle') : t('steps.addButton.emptyTitle'),
+      description: hasHabits
+        ? t('steps.addButton.hasHabitsDescription')
+        : t('steps.addButton.emptyDescription'),
       targetSelector: hasHabits ? '[data-tour="add-habit-fab"]' : '[data-tour="add-habit-empty"]',
       position: hasHabits ? 'left' : 'right',
       offset: hasHabits ? { x: -10, y: -125 } : { x: 10, y: 0 }
     },
     {
       id: 'habit-card',
-      title: 'Track Your Progress',
-      description: hasHabits 
-        ? 'Here are your habits! Tap them to mark as complete for the day.'
-        : 'Once you add habits, they\'ll appear here. Tap to mark them as complete for the day.',
+      title: t('steps.habitCard.title'),
+      description: hasHabits
+        ? t('steps.habitCard.hasHabitsDescription')
+        : t('steps.habitCard.emptyDescription'),
       targetSelector: '[data-tour="habit-card"]',
       position: 'right',
-      offset: { x: 0, y: 0 } // Centered for better alignment
+      offset: { x: 0, y: 0 }
     },
     {
       id: 'complete',
-      title: '🚀 You\'re All Set!',
-      description: 'Start building better habits today. Remember, consistency is key to success!',
+      title: t('steps.complete.title'),
+      description: t('steps.complete.description'),
       targetSelector: '',
       position: 'bottom'
     }
-  ], [hasHabits]);
-
-  const welcomeSteps = useMemo(() => getWelcomeSteps(), [getWelcomeSteps]);
+  ], [hasHabits, t]);
   const currentStepData = welcomeSteps[currentStep];
   const isLastStep = currentStep === welcomeSteps.length - 1;
 
@@ -440,13 +439,13 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 {currentStepData.title}
               </h3>
               <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20 px-3 py-1">
-                Step {currentStep + 1} of {welcomeSteps.length}
+                {t('stepCounter', { current: currentStep + 1, total: welcomeSteps.length })}
               </Badge>
             </div>
             <CloseButton
               className="ml-3"
               onClick={handleSkip}
-              label="Skip"
+              label={t('actions.skip')}
             />
           </div>
 
@@ -478,7 +477,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 )}
               >
                 <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
-                <span className="truncate">Previous</span>
+                <span className="truncate">{t('actions.previous')}</span>
               </Button>
             </div>
 
@@ -494,7 +493,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                   currentStep >= welcomeSteps.length - 1 && "invisible"
                 )}
               >
-                Skip Tour
+                {t('actions.skipTour')}
               </Button>
             </div>
 
@@ -510,12 +509,12 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 {currentStep === welcomeSteps.length - 1 ? (
                   <>
                     <Play className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
-                    <span className="max-sm:hidden truncate">Get Started</span>
-                    <span className="sm:hidden truncate">Start</span>
+                    <span className="max-sm:hidden truncate">{t('actions.getStarted')}</span>
+                    <span className="sm:hidden truncate">{t('actions.start')}</span>
                   </>
                 ) : (
                   <>
-                    <span className="truncate">Next</span>
+                    <span className="truncate">{t('actions.next')}</span>
                     <ArrowRight className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
                   </>
                 )}
