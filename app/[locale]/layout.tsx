@@ -21,9 +21,31 @@ export async function generateMetadata({ params }: Omit<LocaleLayoutProps, "chil
   const resolvedLocale = isValidLocale(locale) ? locale : routing.defaultLocale;
   const messages = (await import(`../../messages/${resolvedLocale}.json`)).default;
 
+  // Generate hreflang alternate links for all supported locales
+  const alternates: Record<string, string> = {};
+  const currentUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click";
+  
+  for (const loc of routing.locales) {
+    const urlPath = loc === routing.defaultLocale ? "" : `/${loc}`;
+    alternates[loc] = `${currentUrl}${urlPath}`;
+  }
+
   return {
     title: messages.App.name,
     description: messages.App.description,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click"),
+    alternates: {
+      languages: alternates,
+      canonical: alternates[resolvedLocale],
+    },
+    openGraph: {
+      title: messages.App.name,
+      description: messages.App.description,
+      url: alternates[resolvedLocale],
+      siteName: messages.App.name,
+      locale: resolvedLocale === "en" ? "en_US" : "id_ID",
+      type: "website",
+    },
   };
 }
 

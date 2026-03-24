@@ -125,9 +125,30 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
   const resolvedLocale: AppLocale = isValidLocale(locale) ? locale : routing.defaultLocale;
   const copy = termsByLocale[resolvedLocale];
 
+  // Generate hreflang alternate links for all supported locales
+  const alternates: Record<string, string> = {};
+  const currentUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click";
+  
+  for (const loc of routing.locales) {
+    const urlPath = loc === routing.defaultLocale ? "" : `/${loc}`;
+    alternates[loc] = `${currentUrl}${urlPath}/terms-of-service`;
+  }
+
   return {
     title: copy.metadataTitle,
     description: copy.metadataDescription,
+    metadataBase: new URL(process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click"),
+    alternates: {
+      languages: alternates,
+      canonical: alternates[resolvedLocale],
+    },
+    openGraph: {
+      title: copy.metadataTitle,
+      description: copy.metadataDescription,
+      url: alternates[resolvedLocale],
+      locale: resolvedLocale === "en" ? "en_US" : "id_ID",
+      type: "website",
+    },
   };
 }
 
