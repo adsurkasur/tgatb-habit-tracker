@@ -33,7 +33,9 @@
       "title": "Bahasa",
       "label": "Ubah bahasa aplikasi",
       "english": "Inggris",
-      "indonesian": "Bahasa Indonesia"
+      "indonesian": "Bahasa Indonesia",
+      "modalTitle": "Pilih bahasa",
+      "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi."
     },
     "fullscreen": {
       "title": "Mode Layar Penuh",

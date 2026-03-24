@@ -473,3 +473,17 @@ or intensive watchers. The following controls are planned:
   - `npm run check` pass.
   - `npm run lint` pass.
   - `npm run build` pass.
+
+## Finalization Pass - Language UX Sustainability (2026-03-24)
+
+- Replaced direct language toggle with a modal-based selector in `components/settings/appearance-settings.tsx`.
+- Added locale prefetch on modal open for smoother route transitions.
+- Added explicit save of selected language before route switch to harden persistence.
+- Added `AppearanceSettings.language.modalTitle` and `modalDescription` in `messages/en.json` and `messages/id.json`.
+- Verified old "coming soon/upcoming feature" language copy is absent from source scan.
+- Validation:
+  - `npm run i18n:check` pass.
+  - `npm run i18n:literals` pass (`total=201`, baseline=202).
+  - `npm run check` pass.
+  - `npm run lint` pass.
+  - `npm run build` pass.

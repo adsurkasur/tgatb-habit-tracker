@@ -33,7 +33,9 @@
       "title": "Language",
       "label": "Toggle app language",
       "english": "English",
-      "indonesian": "Bahasa Indonesia"
+      "indonesian": "Bahasa Indonesia",
+      "modalTitle": "Select language",
+      "modalDescription": "Choose the language used across the app interface."
     },
     "fullscreen": {
       "title": "Fullscreen Mode",
