@@ -30,9 +30,41 @@
 
 import type { MotivatorPersonality } from "@shared/schema";
 import { motivatorMessages } from "./motivator-messages";
+import { getSettings } from "./platform-storage";
 
 const REMINDER_NOTIFICATION_ID = 42001;
 const DEFAULT_PERSONALITY: MotivatorPersonality = "positive";
+type SupportedLanguage = "en" | "id";
+
+const notificationCopyByLanguage: Record<
+  SupportedLanguage,
+  { title: string; fallbackBody: string }
+> = {
+  en: {
+    title: "TGATB Habit Tracker",
+    fallbackBody: "Time to check in! How are your habits today?",
+  },
+  id: {
+    title: "TGATB Pelacak Kebiasaan",
+    fallbackBody: "Saatnya mencatat kebiasaanmu. Bagaimana progresmu hari ini?",
+  },
+};
+
+function resolveLanguage(input: string | null | undefined): SupportedLanguage {
+  return input === "id" ? "id" : "en";
+}
+
+async function getNotificationCopy(): Promise<{
+  title: string;
+  fallbackBody: string;
+}> {
+  try {
+    const settings = await getSettings();
+    return notificationCopyByLanguage[resolveLanguage(settings.language)];
+  } catch {
+    return notificationCopyByLanguage.en;
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Platform detection
@@ -96,12 +128,14 @@ async function scheduleAndroidReminder(
     next.setDate(next.getDate() + 1);
   }
 
+  const copy = await getNotificationCopy();
+
   await LocalNotifications.schedule({
     notifications: [
       {
         id: REMINDER_NOTIFICATION_ID,
-        title: "TGATB Habit Tracker",
-        body: pickReminderMessage(personality),
+        title: copy.title,
+        body: pickReminderMessage(personality, copy.fallbackBody),
         schedule: {
           at: next,
           // CRITICAL: no repeats, only one fire
@@ -149,12 +183,15 @@ async function cancelAndroidReminder(): Promise<void> {
 // Shared helper — pick a random reminder message for a personality
 // ---------------------------------------------------------------------------
 
-function pickReminderMessage(personality: MotivatorPersonality): string {
+function pickReminderMessage(
+  personality: MotivatorPersonality,
+  fallbackBody: string,
+): string {
   const pool = motivatorMessages[personality]?.reminder;
   if (pool && pool.length > 0) {
     return pool[Math.floor(Math.random() * pool.length)];
   }
-  return "Time to check in! How are your habits today?";
+  return fallbackBody;
 }
 
 let webReminderTimer: ReturnType<typeof setTimeout> | null = null;
@@ -196,7 +233,7 @@ function scheduleWebReminder(
       // If time already passed today, show it now if within 60s window,
       // otherwise schedule for tomorrow
       if (delay > -60_000) {
-        fireWebNotification();
+        void fireWebNotification();
         // Schedule again for tomorrow
         delay += 24 * 60 * 60 * 1000;
       } else {
@@ -205,7 +242,7 @@ function scheduleWebReminder(
     }
 
     webReminderTimer = setTimeout(() => {
-      fireWebNotification();
+      void fireWebNotification();
       // Re-schedule for next day
       tick();
     }, delay);
@@ -221,13 +258,15 @@ function cancelWebReminder(): void {
   }
 }
 
-function fireWebNotification(): void {
+async function fireWebNotification(): Promise<void> {
   if (typeof window === "undefined" || !("Notification" in window)) return;
   if (Notification.permission !== "granted") return;
 
+  const copy = await getNotificationCopy();
+
   try {
-    new Notification("TGATB Habit Tracker", {
-      body: pickReminderMessage(activePersonality),
+    new Notification(copy.title, {
+      body: pickReminderMessage(activePersonality, copy.fallbackBody),
       icon: "/icons/icon-192x192-notification.png",
       tag: "tgatb-daily-reminder",
     });

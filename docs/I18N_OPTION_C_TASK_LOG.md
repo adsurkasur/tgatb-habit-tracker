@@ -407,3 +407,15 @@ or intensive watchers. The following controls are planned:
 - Replaced app/[locale]/privacy-policy/page.tsx re-export with full locale-specific implementation
 - Added canonical URLs, hreflang alternates, and OpenGraph metadata for locale privacy routes
 - Validation completed: npm run check, npm run lint, npm run build (14/14 routes generated)
+- Added new locale-aware sitemap route at app/sitemap.ts for canonical locale URLs
+- Resolved static-export constraint for sitemap by setting export const dynamic = "force-static"
+- Validation completed: npm run check, npm run lint, npm run build (15/15 routes generated including /sitemap.xml)
+- Localized app reminder notification title/body defaults in lib/notifications.ts using persisted language setting (en/id)
+- Localized service-worker push fallback title/body/action labels in worker/index.js using payload locale/lang with en fallback
+- Validation completed: npm run check, npm run lint, npm run build (15/15 routes generated, no regressions)
+- Updated public/manifest.json for locale-path strategy: start_url now /en/ and shortcuts now include EN and ID localized variants
+- Validation completed: npm run check, npm run lint, npm run build (15/15 routes generated, no regressions)
+
+## Phase 4 Status
+
+- Complete: canonical/hreflang metadata, locale sitemap, notification localization, and manifest locale strategy are implemented and validated.
