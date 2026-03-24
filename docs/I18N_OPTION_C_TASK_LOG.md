@@ -438,3 +438,13 @@ or intensive watchers. The following controls are planned:
 ## Phase 5 Status
 
 - Complete: translation lifecycle ownership, release checklist, rollback strategy, and contributor guidance are documented and integrated.
+
+## Post-Phase Documentation Update (2026-03-24)
+
+- Added full implementation reference at `docs/I18N_IMPLEMENTATION.md` covering:
+  - i18n architecture and routing model
+  - next-intl runtime wiring
+  - static export compatibility rules
+  - SEO/sitemap/PWA localization behavior
+  - reminder/push notification localization
+  - CI automation (`i18n:check`) and validation workflow

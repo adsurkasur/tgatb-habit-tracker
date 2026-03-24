@@ -331,6 +331,7 @@ For issues and questions:
 
 ## Resources
 
+- [docs/I18N_IMPLEMENTATION.md](docs/I18N_IMPLEMENTATION.md) — Full i18n architecture and automation implementation details
 - [docs/I18N_OPERATIONS.md](docs/I18N_OPERATIONS.md) — Localization ownership, release checklist, and rollback strategy
 
 - [Next.js Documentation](https://nextjs.org/docs)
