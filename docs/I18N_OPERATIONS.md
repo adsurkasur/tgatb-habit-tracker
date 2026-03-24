@@ -26,6 +26,7 @@ This guide defines ownership, release quality gates, and rollback procedures for
 4. Avoid hard-coded user-facing strings in components and pages.
 5. Run the full validation sequence before opening a PR:
    - `npm run i18n:check`
+   - `npm run i18n:literals`
    - `npm run check`
    - `npm run lint`
    - `npm run build`
@@ -45,19 +46,21 @@ Run before every release that includes copy, route, SEO, or PWA changes:
 
 1. Validate message parity:
    - `npm run i18n:check`
-2. Validate code quality and static build:
+2. Validate hard-coded literal guard:
+   - `npm run i18n:literals`
+3. Validate code quality and static build:
    - `npm run check`
    - `npm run lint`
    - `npm run build`
-3. Verify generated locale routes include:
+4. Verify generated locale routes include:
    - `/en`, `/id`
    - `/en/privacy-policy`, `/id/privacy-policy`
    - `/en/terms-of-service`, `/id/terms-of-service`
    - `/sitemap.xml`
-4. Verify metadata behavior:
+5. Verify metadata behavior:
    - Canonical URLs resolve to locale-specific route URLs
    - Hreflang alternates include all supported locales
-5. Verify PWA manifest strategy:
+6. Verify PWA manifest strategy:
    - `start_url` remains locale-safe
    - Locale shortcuts are valid and open localized paths
 

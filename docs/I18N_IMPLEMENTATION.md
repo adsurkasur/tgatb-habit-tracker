@@ -164,6 +164,25 @@ NPM script:
 
 - `npm run i18n:check` in [package.json](package.json)
 
+### Hard-Coded Literal Guard
+
+Scripts:
+
+- [scripts/i18n-literal-guard.mjs](scripts/i18n-literal-guard.mjs)
+- Baseline data: [scripts/i18n-literal-baseline.json](scripts/i18n-literal-baseline.json)
+
+NPM scripts:
+
+- `npm run i18n:literals` checks current literal counts against baseline.
+- `npm run i18n:literals:baseline` updates the baseline intentionally.
+
+Behavior:
+
+- Scans `.tsx` files in `app/` and `components/` (with focused exclusions).
+- Detects plain JSX text candidates.
+- Fails when total literals increase or file-level literal counts increase versus baseline.
+- Encourages incremental reduction of hard-coded strings while preventing regressions.
+
 ### CI Integration
 
 Workflow: [.github/workflows/ci.yml](.github/workflows/ci.yml)
@@ -191,6 +210,14 @@ Run this sequence for localization-related changes:
 2. `npm run check`
 3. `npm run lint`
 4. `npm run build`
+
+Recommended sustainability validation sequence:
+
+1. `npm run i18n:check`
+2. `npm run i18n:literals`
+3. `npm run check`
+4. `npm run lint`
+5. `npm run build`
 
 ## Known Improvement Opportunities
 

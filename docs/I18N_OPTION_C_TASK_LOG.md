@@ -448,3 +448,13 @@ or intensive watchers. The following controls are planned:
   - SEO/sitemap/PWA localization behavior
   - reminder/push notification localization
   - CI automation (`i18n:check`) and validation workflow
+
+## Sustainability Package Update (2026-03-24)
+
+- Refactored `app/[locale]/terms-of-service/page.tsx` to use `messages/<locale>.json` (`TermsOfServicePage`) for consistency with catalog-driven localization.
+- Added hard-coded string regression guard:
+  - Script: `scripts/i18n-literal-guard.mjs`
+  - Baseline: `scripts/i18n-literal-baseline.json`
+  - NPM scripts: `i18n:literals`, `i18n:literals:baseline`
+  - CI gate added in `.github/workflows/ci.yml`
+- Updated localization docs (`I18N_IMPLEMENTATION.md`, `I18N_OPERATIONS.md`) to include literal guard workflow.

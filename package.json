@@ -26,6 +26,8 @@
     "dev": "next dev",
     "build": "next build",
     "i18n:check": "node scripts/i18n-check.mjs",
+    "i18n:literals": "node scripts/i18n-literal-guard.mjs",
+    "i18n:literals:baseline": "node scripts/i18n-literal-guard.mjs --update-baseline",
     "start": "npx serve@latest out",
     "test": "npm run build && npm run start",
     "lint": "eslint app components hooks lib shared mobile",
