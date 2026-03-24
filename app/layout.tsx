@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { GlobalLoadingOverlay } from "@/components/global-loading-overlay";
 import { FirebaseInitializer } from "@/components/firebase-initializer";
 import { CapacitorInit } from "@/components/capacitor-init";
+import { MasterLoadingScreen } from "@/components/master-loading-screen";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -55,14 +56,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* <script dangerouslySetInnerHTML={{__html:`window.onerror = ...`}} /> */}
       </head>
       <body>
-        <CapacitorInit />
-        {/* <ServiceWorkerRegistration /> */}
-        <FirebaseInitializer>
-          <Providers>
-            <GlobalLoadingOverlay />
-            {children}
-          </Providers>
-        </FirebaseInitializer>
+        <MasterLoadingScreen />
+        <div id="app-shell" className="app-shell">
+          <CapacitorInit />
+          {/* <ServiceWorkerRegistration /> */}
+          <FirebaseInitializer>
+            <Providers>
+              <GlobalLoadingOverlay />
+              {children}
+            </Providers>
+          </FirebaseInitializer>
+        </div>
         {/* <OfflineToast /> */}
         {/* <AnalyticsNotice /> */}
         {/* {process.env.NODE_ENV === 'production' && <Analytics />} */}

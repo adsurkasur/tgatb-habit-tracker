@@ -1,5 +1,6 @@
 import { readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
+import ts from "typescript";
 
 const ROOT = process.cwd();
 const BASELINE_PATH = join(ROOT, "scripts", "i18n-literal-baseline.json");
@@ -13,8 +14,6 @@ const IGNORED_PATH_PATTERNS = [
   /^app\/layout\.tsx$/,
   /^app\/globals\.css\.d\.ts$/,
 ];
-
-const JSX_TEXT_REGEX = />([^<>{]+)</g;
 
 function shouldIgnorePath(path) {
   return IGNORED_PATH_PATTERNS.some((pattern) => pattern.test(path));
@@ -49,12 +48,29 @@ function isCandidateLiteral(text) {
 
 function countLiteralsInFile(filePath) {
   const source = readFileSync(filePath, "utf8");
+  const sourceFile = ts.createSourceFile(
+    filePath,
+    source,
+    ts.ScriptTarget.Latest,
+    true,
+    ts.ScriptKind.TSX,
+  );
+
   let count = 0;
-  for (const match of source.matchAll(JSX_TEXT_REGEX)) {
-    const text = normalizeText(match[1] ?? "");
-    if (!isCandidateLiteral(text)) continue;
-    count += 1;
+
+  function visit(node) {
+    if (ts.isJsxText(node)) {
+      const text = normalizeText(node.text ?? "");
+      if (isCandidateLiteral(text)) {
+        count += 1;
+      }
+    }
+
+    ts.forEachChild(node, visit);
   }
+
+  visit(sourceFile);
+
   return count;
 }
 

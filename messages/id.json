@@ -560,6 +560,9 @@
     "subtitle": "Pelacak Kebiasaan",
     "loading": "Memuat kebiasaan Anda..."
   },
+  "LoadingOverlay": {
+    "loading": "Memuat..."
+  },
   "WelcomeOverlay": {
     "stepCounter": "Langkah {current} dari {total}",
     "steps": {

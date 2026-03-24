@@ -560,6 +560,9 @@
     "subtitle": "Habit Tracker",
     "loading": "Loading your habits..."
   },
+  "LoadingOverlay": {
+    "loading": "Loading..."
+  },
   "WelcomeOverlay": {
     "stepCounter": "Step {current} of {total}",
     "steps": {

@@ -1,20 +1,20 @@
 import React from "react";
+import { Loader2 } from "lucide-react";
+import { useTranslations } from "next-intl";
 
 export function LoadingOverlay({ show = false }: { show?: boolean }) {
+  const t = useTranslations("LoadingOverlay");
   if (!show) return null;
   return (
     <div
-      className="fixed inset-0 z-[9999] flex items-center justify-center bg-black/60 backdrop-blur-sm"
+      className="fixed inset-0 z-9998 flex items-center justify-center bg-background/80 backdrop-blur-md"
       aria-live="polite"
       aria-busy="true"
       role="alert"
     >
-      <div className="flex flex-col items-center gap-4">
-        <svg className="animate-spin h-12 w-12 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-          <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-          <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
-        </svg>
-        <span className="text-white text-lg font-medium">Loading...</span>
+      <div className="flex min-w-55 flex-col items-center gap-3 rounded-2xl border border-border/60 bg-card/95 px-6 py-5 shadow-2xl">
+        <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        <span className="text-sm font-medium text-foreground">{t("loading")}</span>
       </div>
     </div>
   );

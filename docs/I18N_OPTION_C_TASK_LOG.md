@@ -455,6 +455,33 @@ or intensive watchers. The following controls are planned:
   - `npm run build`
   - `npm run i18n:literals` -> `total=85` (baseline `202`)
 
+### 2026-03-25 00:44 - 01:02 (Finalization and Master Loading Integration)
+
+- Added safe app-wide i18n context in `app/providers.tsx` using pathname-derived locale (`en`/`id`) and static message catalogs.
+- Re-enabled localized `PWAInstallPrompt` copy now that non-locale surfaces have provider context.
+- Implemented master-first boot loading screen:
+  - Added `components/master-loading-screen.tsx`
+  - Mounted in `app/layout.tsx` before app shell content
+  - Updated `app/globals.css` boot visibility rules to keep app shell hidden until initialization (`body.app-loaded`) and fade out master loader.
+- Upgraded runtime loading UX:
+  - Enhanced `components/ui/loading-overlay.tsx` visual treatment
+  - Added localized loading copy in `messages/en.json` and `messages/id.json`.
+- Hardened i18n sustainability metric:
+  - Reworked `scripts/i18n-literal-guard.mjs` to TypeScript AST-based JSX text-node scanning (reduced regex false positives).
+- Validation results:
+  - `npm run i18n:check` pass
+  - `npm run check` pass
+  - `npm run lint` pass
+  - `npm run build` pass (non-fatal `ENVIRONMENT_FALLBACK` log observed)
+  - `npm run i18n:literals` pass (`total=9`, baseline `202`)
+
+### Finalization Outcome
+
+- Global i18n context is now available to app-wide client components rendered outside locale-route layout.
+- Master-first loading UX is implemented (boot splash blocks app shell until initialization completes).
+- Runtime loading overlay is modernized and localized.
+- Literal guard now uses AST-based JSX text detection, reducing false positives and providing a more accurate residual metric.
+
 - Complete: canonical/hreflang metadata, locale sitemap, notification localization, and manifest locale strategy are implemented and validated.
 
 ## Phase 5 Execution Log (2026-03-24 Operationalization and Hardening)
