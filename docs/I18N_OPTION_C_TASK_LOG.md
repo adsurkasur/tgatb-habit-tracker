@@ -458,3 +458,18 @@ or intensive watchers. The following controls are planned:
   - NPM scripts: `i18n:literals`, `i18n:literals:baseline`
   - CI gate added in `.github/workflows/ci.yml`
 - Updated localization docs (`I18N_IMPLEMENTATION.md`, `I18N_OPERATIONS.md`) to include literal guard workflow.
+
+## Frontend Hardening Finalization (2026-03-24)
+
+- Root redirect hardening:
+  - `app/page.tsx` now resolves locale from persisted user settings before redirecting.
+- Runtime locale consistency hardening:
+  - Added `components/locale-runtime-sync.tsx`.
+  - Mounted in `app/[locale]/layout.tsx` to sync `html lang` and persisted `settings.language` with active locale route.
+- Language-selection UX hardening:
+  - Localized settings dialog title via `SettingsDialog` namespace in `messages/en.json` and `messages/id.json`.
+- Validation:
+  - `npm run i18n:check` pass.
+  - `npm run check` pass.
+  - `npm run lint` pass.
+  - `npm run build` pass.

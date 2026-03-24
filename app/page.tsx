@@ -2,13 +2,35 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { routing } from "@/i18n/routing";
+import { isValidLocale, routing } from "@/i18n/routing";
+import { getSettings } from "@/lib/platform-storage";
 
 export default function RootRedirectPage() {
   const router = useRouter();
 
   useEffect(() => {
-    router.replace(`/${routing.defaultLocale}`);
+    let isMounted = true;
+
+    void (async () => {
+      try {
+        const settings = await getSettings();
+        const locale = isValidLocale(settings.language)
+          ? settings.language
+          : routing.defaultLocale;
+
+        if (isMounted) {
+          router.replace(`/${locale}`);
+        }
+      } catch {
+        if (isMounted) {
+          router.replace(`/${routing.defaultLocale}`);
+        }
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [router]);
 
   return <div className="sr-only">Redirecting...</div>;

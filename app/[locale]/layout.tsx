@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing, isValidLocale } from "@/i18n/routing";
+import { LocaleRuntimeSync } from "@/components/locale-runtime-sync";
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -61,6 +62,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
+      <LocaleRuntimeSync locale={locale} />
       {children}
     </NextIntlClientProvider>
   );

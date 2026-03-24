@@ -48,6 +48,9 @@
       "switchedToIndonesian": "Beralih ke Bahasa Indonesia"
     }
   },
+  "SettingsDialog": {
+    "title": "Pengaturan"
+  },
   "AboutDialog": {
     "title": "Tentang TGATB Habit Tracker",
     "projectName": "The Good and The Bad",
