@@ -404,4 +404,6 @@ or intensive watchers. The following controls are planned:
 - Added hreflang alternate links to app/[locale]/layout.tsx
 - Enhanced Terms of Service with canonical URLs and OpenGraph metadata
 - All locale routes prerender successfully with proper metadata
-- Privacy Policy to receive similar SEO treatment next
+- Replaced app/[locale]/privacy-policy/page.tsx re-export with full locale-specific implementation
+- Added canonical URLs, hreflang alternates, and OpenGraph metadata for locale privacy routes
+- Validation completed: npm run check, npm run lint, npm run build (14/14 routes generated)
