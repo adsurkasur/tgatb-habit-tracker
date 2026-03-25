@@ -132,7 +132,7 @@ export const exportBundleSchema = z.object({
       lastCompletedDate: z.string().optional(),
       schedule: habitScheduleSchema.optional(),
       updatedAt: z.string().optional(),
-      deviceId: z.string().optional(),
+      deviceId: z.string().nullable().optional(),
       version: z.number().int().optional(),
     })
   ),
@@ -145,7 +145,7 @@ export const exportBundleSchema = z.object({
       timestamp: z.string(),
       source: z.enum(["manual", "auto"]).optional(),
       updatedAt: z.string().optional(),
-      deviceId: z.string().optional(),
+      deviceId: z.string().nullable().optional(),
       version: z.number().int().optional(),
     })
   ),

@@ -328,7 +328,12 @@ export class HabitStorage {
         const runMigrations = (migrationsModule.runMigrations as ((b: unknown) => Promise<ExportBundle>) | undefined);
         const migrated = runMigrations ? await runMigrations(parsedRaw).catch(() => parsedRaw as ExportBundle) : (parsedRaw as ExportBundle);
         const validated = exportBundleSchema.safeParse(migrated);
-        if (!validated.success) throw new Error('Invalid export file format');
+        if (!validated.success) {
+          const firstIssue = validated.error.issues[0];
+          const issuePath = firstIssue?.path?.join('.') || 'root';
+          const issueMessage = firstIssue?.message || 'schema validation failed';
+          throw new Error(`Invalid export file format (${issuePath}: ${issueMessage})`);
+        }
         const data = validated.data;
 
         // Persist habits/logs (as-is JSON with strings for dates)

@@ -3,7 +3,8 @@
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ExternalLink, FileText, Github, Heart, Shield, Zap } from "lucide-react";
+import { ExternalLink, FileText, Heart, Shield, Zap } from "lucide-react";
+import { FaGithub } from "react-icons/fa";
 import { Capacitor } from "@capacitor/core";
 import { usePathname, useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
@@ -103,7 +104,7 @@ export function AboutDialog({ open, onOpenChange }: AboutDialogProps) {
                   className="justify-start h-8"
                   onClick={() => window.open('https://github.com/adsurkasur/tgatb-habit-tracker', '_blank')}
                 >
-                  <Github className="w-4 h-4 mr-2" />
+                  <FaGithub className="w-4 h-4 mr-2" />
                   {t("links.github")}
                   <ExternalLink className="w-3 h-3 ml-auto" />
                 </Button>

@@ -28,17 +28,21 @@ export async function importBundleFromJson(json: string): Promise<ExportBundle |
   }
 }
 
-// Convenience helpers for working with just habits arrays (legacy compatibility)
-export function exportHabitsToJson(habits: ExportBundle['habits']): string {
+// Convenience helpers for working with habits arrays while preserving settings/logs.
+export function exportHabitsToJson(
+  habits: ExportBundle['habits'],
+  settings: ExportBundle['settings'],
+  logs: ExportBundle['logs'] = []
+): string {
   const bundle: ExportBundle = {
     version: '1',
     meta: {
       exportedAt: new Date().toISOString(),
-      counts: { habits: habits.length, logs: 0 },
+      counts: { habits: habits.length, logs: logs.length },
     },
     habits,
-    logs: [],
-    settings: { darkMode: false, language: 'en', motivatorPersonality: 'positive', fullscreenMode: false },
+    logs,
+    settings,
   };
   return exportBundleToJson(bundle);
 }

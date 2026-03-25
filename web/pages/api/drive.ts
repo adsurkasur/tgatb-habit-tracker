@@ -3,7 +3,8 @@
 import { google } from "googleapis";
 import { getSession } from "next-auth/react";
 import type { NextApiRequest, NextApiResponse } from "next";
-import { exportHabitsToJson, importHabitsFromJson } from "../../../shared/data-sync";
+import { exportBundleToJson, importBundleFromJson } from "../../../shared/data-sync";
+import type { ExportBundle } from "../../../shared/schema";
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   const session = await getSession({ req });
@@ -16,13 +17,18 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
   try {
     if (req.method === "POST") {
-      // Export: Upload habit data to Drive
-      const { habits } = req.body;
-      if (!Array.isArray(habits)) return res.status(400).json({ error: 'Invalid habits payload' });
+      // Export: Upload full bundle data to Drive (habits + logs + settings)
+      const { bundle } = req.body as { bundle?: ExportBundle };
+      if (!bundle || typeof bundle !== "object") {
+        return res.status(400).json({ error: "Invalid bundle payload" });
+      }
+      if (!Array.isArray(bundle.habits) || !Array.isArray(bundle.logs) || !bundle.settings) {
+        return res.status(400).json({ error: "Bundle must contain habits, logs, and settings" });
+      }
       const fileMetadata = { name: "habits-export.json" };
       const media = {
         mimeType: "application/json",
-        body: exportHabitsToJson(habits),
+        body: exportBundleToJson(bundle),
       };
       const fileResponse = await drive.files.create({
         requestBody: fileMetadata,
@@ -31,15 +37,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       });
       return res.status(200).json({ fileId: fileResponse.data.id });
     } else if (req.method === "GET") {
-      // Import: Download habit data from Drive (by fileId)
+      // Import: Download full export bundle from Drive (by fileId)
       const { fileId } = req.query;
       const fileResponse = await drive.files.get({
         fileId: fileId as string,
         alt: "media",
       }, { responseType: "text" });
-      const habits = importHabitsFromJson(fileResponse.data as string);
-      if (!habits) return res.status(422).json({ error: 'Invalid export bundle' });
-      return res.status(200).json({ habits });
+      const bundle = await importBundleFromJson(fileResponse.data as string);
+      if (!bundle) return res.status(422).json({ error: "Invalid export bundle" });
+      return res.status(200).json({ bundle });
     } else {
       res.setHeader("Allow", ["GET", "POST"]);
       res.status(405).end(`Method ${req.method} Not Allowed`);

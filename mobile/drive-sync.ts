@@ -87,16 +87,11 @@ export async function uploadHabitsToDrive(habitsOrBundle: ExportBundle | ExportB
 	 };
 	 const form = new FormData();
 	 form.append('metadata', new Blob([JSON.stringify(metadata)], { type: 'application/json' }));
-	 // Normalize to ExportBundle
-	 const bundle: ExportBundle = Array.isArray(habitsOrBundle)
-		 ? {
-			 version: '1',
-			 meta: { exportedAt: new Date().toISOString(), counts: { habits: habitsOrBundle.length, logs: 0 } },
-			 habits: habitsOrBundle,
-			 logs: [],
-			 settings: { darkMode: false, language: 'en', motivatorPersonality: 'positive', fullscreenMode: false },
-		 }
-		 : habitsOrBundle;
+	 // Require full ExportBundle so settings are always preserved.
+	 if (Array.isArray(habitsOrBundle)) {
+		 throw new Error('uploadHabitsToDrive now requires a full ExportBundle (including settings).');
+	 }
+	 const bundle: ExportBundle = habitsOrBundle;
 	 form.append('file', new Blob([exportBundleToJson(bundle)], { type: 'application/json' }));
 	try {
 		const res = await fetch('https://www.googleapis.com/upload/drive/v3/files?uploadType=multipart', {
