@@ -14,7 +14,7 @@ interface AccountDataSettingsProps {
   settings: UserSettings;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
   onExportData: () => Promise<string>;
-  onImportData: (jsonData: string) => void;
+  onImportData: (jsonData: string) => Promise<void> | void;
 }
 
 export function AccountDataSettings({

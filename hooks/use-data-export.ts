@@ -5,7 +5,10 @@ import { exportDataPlatform } from "@/lib/platform-export";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
 
-export function useDataExport(onExportData: () => Promise<string>, onImportData: (jsonData: string) => void) {
+export function useDataExport(
+  onExportData: () => Promise<string>,
+  onImportData: (jsonData: string) => Promise<void> | void
+) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { show: showLoading, hide: hideLoading } = useLoading();
@@ -75,7 +78,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
       });
 
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         try {
           const jsonData = event.target?.result as string;
           if (jsonData) {
@@ -103,7 +106,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
               return;
             }
 
-            onImportData(jsonData);
+            await onImportData(jsonData);
           }
         } finally {
           hideLoading();

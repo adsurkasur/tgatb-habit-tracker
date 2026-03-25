@@ -10,6 +10,8 @@ import { Motivator } from "@/lib/motivator";
 import { useToast } from "@/hooks/use-toast";
 import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
+import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
+import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
 import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
 
 export function useHabits() {
@@ -341,6 +343,22 @@ export function useHabits() {
       setSettings(loadedSettings);
       // Immediately update theme if darkMode changed
       setIsDark(loadedSettings.darkMode);
+
+      // Keep displayed locale and persisted language in sync after import.
+      if (typeof window !== "undefined") {
+        const importedLanguage: AppLocale = isValidLocale(loadedSettings.language)
+          ? loadedSettings.language
+          : routing.defaultLocale;
+        const currentLocale = extractLocaleFromPathname(window.location.pathname) ?? routing.defaultLocale;
+
+        if (currentLocale !== importedLanguage) {
+          const nextPath = withLocalePath(window.location.pathname || "/", importedLanguage);
+          const nextUrl = `${nextPath}${window.location.search}${window.location.hash}`;
+          window.location.assign(nextUrl);
+          return;
+        }
+      }
+
       toast({
         title: 'Import successful',
         description: 'Your habit data has been imported.',
