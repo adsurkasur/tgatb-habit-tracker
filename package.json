@@ -25,6 +25,7 @@
     "test:integration": "vitest run tests/integration",
     "dev": "next dev",
     "dev:reset": "powershell -ExecutionPolicy Bypass -File scripts/dev-reset.ps1",
+    "dev:cleanstart": "npm run dev:reset && npm run dev",
     "build": "next build",
     "i18n:check": "node scripts/i18n-check.mjs",
     "i18n:literals": "node scripts/i18n-literal-guard.mjs",
