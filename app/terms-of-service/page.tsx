@@ -1,6 +1,7 @@
 import React from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
+import { AppReadyMarker } from "@/components/app-ready-marker";
 
 export const metadata: Metadata = {
   title: "Terms of Service - TGATB Habit Tracker",
@@ -10,6 +11,7 @@ export const metadata: Metadata = {
 export default function TermsOfServicePage() {
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <AppReadyMarker />
       <div className="max-w-3xl mx-auto px-6 py-12">
         <h1 className="text-3xl font-bold mb-2">Terms of Service</h1>
         <p className="text-sm text-muted-foreground mb-8">Last updated: February 13, 2026</p>

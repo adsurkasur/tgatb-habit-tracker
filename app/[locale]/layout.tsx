@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing, isValidLocale } from "@/i18n/routing";
+import { AppReadyMarker } from "@/components/app-ready-marker";
 import { LocaleRuntimeSync } from "@/components/locale-runtime-sync";
 
 type LocaleLayoutProps = {
@@ -63,6 +64,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   return (
     <NextIntlClientProvider locale={locale} messages={messages} timeZone={routing.timeZone}>
       <LocaleRuntimeSync locale={locale} />
+      <AppReadyMarker />
       {children}
     </NextIntlClientProvider>
   );

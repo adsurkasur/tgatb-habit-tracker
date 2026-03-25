@@ -1,12 +1,14 @@
 "use client";
 
 import { useTranslations } from "next-intl";
+import { AppReadyMarker } from "@/components/app-ready-marker";
 
 export default function OfflinePage() {
   const t = useTranslations("OfflinePage");
 
   return (
     <div className="min-h-screen bg-gray-50 relative">
+      <AppReadyMarker />
       {/* Toast-style notification at bottom */}
       <div className="fixed bottom-4 left-4 right-4 z-50 mx-auto max-w-sm">
         <div className="bg-white rounded-xl shadow-lg border border-gray-200 p-4 flex items-center space-x-3 animate-in slide-in-from-bottom-2 duration-300">
