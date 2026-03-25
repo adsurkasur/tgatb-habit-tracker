@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { HabitStorage } from "@/lib/habit-storage";
 import { initSentryClient } from "@/lib/sentry";
+import { routing } from "@/i18n/routing";
 import enMessages from "@/messages/en.json";
 import idMessages from "@/messages/id.json";
 
@@ -53,7 +54,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
+    <NextIntlClientProvider locale={locale} messages={messages} timeZone={routing.timeZone}>
       <ThemeProvider>
         <QueryClientProvider client={queryClient}>
           <TooltipProvider>

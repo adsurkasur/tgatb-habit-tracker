@@ -108,6 +108,7 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
   const { locale } = await params;
   const resolvedLocale: AppLocale = isValidLocale(locale) ? locale : routing.defaultLocale;
   const copy = await getTermsCopy(resolvedLocale);
+  const copyrightPrefix = "\u00A9 2025-2026 ";
   const supportEmail = "adsurkasur.dev@gmail.com";
   const repoUrl = "https://github.com/adsurkasur/tgatb-habit-tracker";
   const repoLabel = "github.com/adsurkasur/tgatb-habit-tracker";
@@ -204,7 +205,7 @@ export default async function LocalizedTermsOfServicePage({ params }: LocalePara
             </Link>
           </p>
           <p>
-            &copy; 2025-2026{" "}
+            {copyrightPrefix}
             <a href={authorUrl} className="text-primary underline">
               {authorName}
             </a>

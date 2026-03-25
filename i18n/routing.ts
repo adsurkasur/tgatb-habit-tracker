@@ -1,6 +1,7 @@
 export const routing = {
   locales: ["en", "id"] as const,
   defaultLocale: "en" as const,
+  timeZone: "Asia/Jakarta" as const,
 };
 
 export type AppLocale = (typeof routing.locales)[number];
