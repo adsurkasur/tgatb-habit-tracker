@@ -127,7 +127,6 @@
     "recharts": "^3.7.0",
     "uuid": "^13.0.0",
     "vaul": "^1.1.2",
-    "workbox-webpack-plugin": "^7.4.0",
     "zod": "^4.3.6",
     "zod-validation-error": "^5.0.0"
   },
@@ -143,6 +142,7 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.58.2",
+    "@rollup/plugin-terser": "^0.4.4",
     "@tailwindcss/postcss": "^4.1.18",
     "@tailwindcss/typography": "^0.5.19",
     "@testing-library/dom": "^10.4.1",
@@ -153,7 +153,6 @@
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
     "baseline-browser-mapping": "^2.9.19",
-    "@rollup/plugin-terser": "^0.4.4",
     "eslint": "9.39.4",
     "eslint-config-next": "^16.1.6",
     "jsdom": "^28.1.0",

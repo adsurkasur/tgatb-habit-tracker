@@ -43,11 +43,25 @@ export function LanguageSelectionModal({
   const [applying, setApplying] = useState(false);
 
   const localeOptions = useMemo(
-    () =>
-      routing.locales.map((locale) => ({
-        locale,
-        label: getLocaleDisplayName(locale, currentLanguage),
-      })),
+    () => {
+      const collator = new Intl.Collator(currentLanguage, {
+        usage: "sort",
+        sensitivity: "base",
+      });
+
+      return routing.locales
+        .map((locale) => ({
+          locale,
+          label: getLocaleDisplayName(locale, currentLanguage),
+        }))
+        .sort((a, b) => {
+          const labelCompare = collator.compare(a.label, b.label);
+          if (labelCompare !== 0) {
+            return labelCompare;
+          }
+          return a.locale.localeCompare(b.locale);
+        });
+    },
     [currentLanguage],
   );
 
