@@ -96,11 +96,11 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
             {/* Habit Type Segmented Button */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("fields.type")}</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-2">
                 <Button
                   type="button"
                   onClick={() => setType("good")}
-                  className={`flex-1 material-radius-none font-medium transition-all duration-200 ${
+                  className={`w-full material-radius-none font-medium transition-all duration-200 ${
                     type === "good"
                       ? "bg-green-500 hover:bg-green-600 text-white"
                       : "bg-background hover:bg-muted text-foreground"
@@ -112,7 +112,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
                 <Button
                   type="button"
                   onClick={() => setType("bad")}
-                  className={`flex-1 material-radius-none font-medium transition-all duration-200 ${
+                  className={`w-full material-radius-none font-medium transition-all duration-200 ${
                     type === "bad"
                       ? "bg-red-500 hover:bg-red-600 text-white"
                       : "bg-background hover:bg-muted text-foreground"
@@ -127,13 +127,13 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
             {/* Schedule Selector */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("fields.schedule")}</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-3">
                 {(["daily", "interval", "weekly"] as const).map((st) => (
                   <Button
                     key={st}
                     type="button"
                     onClick={() => setScheduleType(st)}
-                    className={`flex-1 material-radius-none text-xs font-medium transition-all duration-200 ${
+                    className={`w-full material-radius-none text-xs font-medium transition-all duration-200 ${
                       scheduleType === st
                         ? "bg-primary hover:bg-primary/90 text-white"
                         : "bg-background hover:bg-muted text-foreground"
@@ -194,7 +194,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>
-          <div className="flex space-x-3 justify-end w-full">
+          <div className="flex flex-wrap justify-end gap-2 w-full">
             <Button
               type="button"
               variant="ghost"

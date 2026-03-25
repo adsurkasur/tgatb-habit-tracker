@@ -31,7 +31,7 @@ export function DeleteAllHabitsModal({ open, onCancel, onDelete, loading }: Dele
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogFooter>
-          <div className="flex justify-end space-x-2 w-full">
+          <div className="flex flex-wrap justify-end gap-2 w-full">
             <Button variant="ghost" onClick={onCancel} disabled={loading}>
               {t("actions.cancel")}
             </Button>

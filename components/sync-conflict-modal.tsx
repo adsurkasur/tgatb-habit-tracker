@@ -174,7 +174,7 @@ export function SyncConflictModal({ open, onClose }: { open: boolean; onClose: (
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>
-          <div className="flex justify-end space-x-2 w-full">
+          <div className="flex flex-wrap justify-end gap-2 w-full">
             <Button variant="ghost" onClick={keepLocal}>{t('actions.keepLocal')}</Button>
             <Button variant="secondary" onClick={applyResolutions}>{t('actions.applySelected')}</Button>
             <Button onClick={acceptRemote}>{t('actions.acceptRemote')}</Button>

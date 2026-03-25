@@ -199,7 +199,7 @@ function ResponsiveDialogContent({
   return (
     <DialogContent
       className={cn(
-        "material-radius-lg surface-elevation-3 [&>button]:hidden",
+        "material-radius-lg surface-elevation-3 min-w-0 [&>button]:hidden [&_button]:max-w-full",
         className,
         dialogClassName,
       )}
@@ -301,7 +301,14 @@ function ResponsiveDialogFooter({ className, children, ...props }: React.HTMLAtt
   const Comp = isMobile ? DrawerFooter : DialogFooter;
 
   return (
-    <Comp className={cn(isMobile ? "px-4 pb-6" : "", className)} {...props}>
+    <Comp
+      className={cn(
+        isMobile ? "px-4 pb-6" : "",
+        "*:min-w-0 [&>div]:w-full [&>div]:flex-wrap [&>div]:gap-2 [&>div]:*:min-w-0",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </Comp>
   );

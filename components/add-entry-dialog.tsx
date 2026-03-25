@@ -166,7 +166,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     </SelectContent>
                   </Select>
                 </div>
-                <div className="flex gap-2 mt-2">
+                <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
                   <Button
                     type="button"
                     variant={status === true ? "default" : "outline"}
@@ -198,7 +198,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                   value={newHabitName}
                   onChange={(e) => setNewHabitName(e.target.value)}
                 />
-                <div className="flex gap-2">
+                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                   <Button
                     type="button"
                     variant={newHabitType === "good" ? "default" : "outline"}
@@ -216,7 +216,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     {t("type.bad")}
                   </Button>
                 </div>
-                <div className="flex gap-2 mt-2">
+                <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
                   <Button
                     type="button"
                     variant={newHabitStatus === true ? "default" : "outline"}

@@ -69,8 +69,8 @@ const HabitItem = React.memo<{
       }}
       onClick={() => onSelect?.(habit)}
     >
-      <div className="flex items-center justify-between flex-1">
-        <span className="text-foreground text-sm">{habit.name}</span>
+      <div className="flex items-center justify-between flex-1 min-w-0 gap-2">
+        <span className="text-foreground text-sm leading-snug wrap-break-word">{habit.name}</span>
         <div className="flex items-center space-x-2">
           <Badge variant="secondary" className={colorClasses}>
             <Flame className="w-3 h-3 mr-1" />

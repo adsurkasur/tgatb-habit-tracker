@@ -111,11 +111,11 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
             {/* Habit Type Segmented Button */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("fields.type")}</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-2">
                 <Button
                   type="button"
                   variant={type === "good" ? "default" : "ghost"}
-                  className={`flex-1 material-radius-none ${
+                  className={`w-full material-radius-none ${
                     type === "good"
                       ? "bg-green-500 hover:bg-green-600 text-white"
                       : "hover:bg-green-50 hover:text-green-700"
@@ -127,7 +127,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
                 <Button
                   type="button"
                   variant={type === "bad" ? "default" : "ghost"}
-                  className={`flex-1 material-radius-none ${
+                  className={`w-full material-radius-none ${
                     type === "bad"
                       ? "bg-red-500 hover:bg-red-600 text-white"
                       : "hover:bg-red-50 hover:text-red-700"
@@ -142,13 +142,13 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
             {/* Schedule Selector */}
             <div className="space-y-2">
               <Label className="text-sm font-medium">{t("fields.schedule")}</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-3">
                 {(["daily", "interval", "weekly"] as const).map((st) => (
                   <Button
                     key={st}
                     type="button"
                     onClick={() => setScheduleType(st)}
-                    className={`flex-1 material-radius-none text-xs font-medium transition-all duration-200 ${
+                    className={`w-full material-radius-none text-xs font-medium transition-all duration-200 ${
                       scheduleType === st
                         ? "bg-primary hover:bg-primary/90 text-white"
                         : "bg-background hover:bg-muted text-foreground"
@@ -209,19 +209,19 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>
-          <div className="flex space-x-3 w-full">
+          <div className="grid grid-cols-1 gap-2 w-full sm:grid-cols-2">
             <Button
               type="button"
               variant="outline"
               onClick={handleCancel}
-              className="flex-1 material-radius"
+              className="w-full material-radius"
             >
               {t("actions.cancel")}
             </Button>
             <Button
               type="submit"
               form="edit-habit-form"
-              className="flex-1 material-radius cta-color-hover text-white"
+              className="w-full material-radius cta-color-hover text-white"
               disabled={!name.trim()}
             >
               {t("actions.saveChanges")}
