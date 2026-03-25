@@ -5,7 +5,7 @@ $targets = Get-CimInstance Win32_Process | Where-Object {
   $_.Name -eq "node.exe" -and
   $_.CommandLine -match "tgatb-habit-tracker" -and
   (
-    $_.CommandLine -match "next\\dist\\bin\\next\" dev" -or
+    $_.CommandLine -match "next\\dist\\bin\\next.* dev" -or
     $_.CommandLine -match "next\\dist\\server\\lib\\start-server\.js" -or
     $_.CommandLine -match "\\.next\\dev\\build"
   )

@@ -172,7 +172,8 @@ npm run android:open    # Open in Android Studio
 
 ## Available Scripts
 
-- `npm run dev` — Start Next.js development server
+- `npm run dev` — Start Next.js development server (webpack mode for stability)
+- `npm run dev:turbopack` — Start Next.js development server with Turbopack
 - `npm run build` — Build for production
 - `npm run i18n:check` — Validate locale message key parity (`en`/`id`)
 - `npm run start` — Start production server

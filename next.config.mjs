@@ -2,9 +2,37 @@ import withPWA from 'next-pwa';
 import createNextIntlPlugin from 'next-intl/plugin';
 import { readFileSync } from 'fs';
 import { join } from 'path';
+import { networkInterfaces } from 'os';
 
 // Read package.json to get version
 const packageJson = JSON.parse(readFileSync(join(process.cwd(), 'package.json'), 'utf8'));
+
+function getAllowedDevOrigins() {
+  const fromEnv = (process.env.NEXT_ALLOWED_DEV_ORIGINS ?? '')
+    .split(',')
+    .map((origin) => origin.trim())
+    .filter(Boolean);
+
+  const interfaces = networkInterfaces();
+  const lanAddresses = Object.values(interfaces)
+    .flat()
+    .filter((entry) => entry && entry.family === 'IPv4' && !entry.internal)
+    .map((entry) => entry.address);
+
+  const ports = ['3000', '3001'];
+  const lanOrigins = lanAddresses.flatMap((ip) =>
+    ports.map((port) => `http://${ip}:${port}`)
+  );
+
+  return [...new Set([
+    'http://localhost:3000',
+    'http://127.0.0.1:3000',
+    'http://localhost:3001',
+    'http://127.0.0.1:3001',
+    ...lanOrigins,
+    ...fromEnv,
+  ])];
+}
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -25,6 +53,7 @@ const nextConfig = {
     CUSTOM_KEY: process.env.CUSTOM_KEY,
     APP_VERSION: packageJson.version,
   },
+  allowedDevOrigins: getAllowedDevOrigins(),
   serverExternalPackages: [],
   // Exclude API routes from static export
   generateBuildId: async () => {
