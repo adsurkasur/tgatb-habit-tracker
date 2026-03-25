@@ -78,14 +78,14 @@ export function LanguageSelectionModal({
       }}
       drawerSize="compact"
     >
-      <ResponsiveDialogContent dialogClassName="w-full max-w-md">
+      <ResponsiveDialogContent dialogClassName="w-[min(36rem,92vw)] max-h-[85vh] overflow-hidden">
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle>{t("modalTitle")}</ResponsiveDialogTitle>
           <ResponsiveDialogDescription>{t("modalDescription")}</ResponsiveDialogDescription>
         </ResponsiveDialogHeader>
 
-        <ResponsiveDialogBody>
-          <div className="space-y-2">
+        <ResponsiveDialogBody className="max-h-[65vh] overflow-y-auto">
+          <div className="space-y-2 pr-1">
             {localeOptions.map((option) => {
               const isSelected = option.locale === selectedLanguage;
               return (
@@ -93,11 +93,11 @@ export function LanguageSelectionModal({
                   key={option.locale}
                   type="button"
                   variant={isSelected ? "default" : "outline"}
-                  className="w-full justify-between"
+                  className="w-full grid grid-cols-[1fr_auto] items-center gap-2 text-left"
                   onClick={() => setSelectedLanguage(option.locale)}
                 >
-                  <span>{option.label}</span>
-                  <span className="text-xs uppercase opacity-80">{option.locale}</span>
+                  <span className="min-w-0 wrap-anywhere">{option.label}</span>
+                  <span className="text-xs uppercase opacity-80 shrink-0">{option.locale}</span>
                 </Button>
               );
             })}
