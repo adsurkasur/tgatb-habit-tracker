@@ -12,15 +12,46 @@ import { usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { HabitStorage } from "@/lib/habit-storage";
 import { initSentryClient } from "@/lib/sentry";
-import { routing } from "@/i18n/routing";
+import { routing, isValidLocale, type AppLocale } from "@/i18n/routing";
 import enMessages from "@/messages/en.json";
 import idMessages from "@/messages/id.json";
+import msMessages from "@/messages/ms.json";
+import thMessages from "@/messages/th.json";
+import viMessages from "@/messages/vi.json";
+import filMessages from "@/messages/fil.json";
+import zhMessages from "@/messages/zh.json";
+import jaMessages from "@/messages/ja.json";
+import koMessages from "@/messages/ko.json";
+import esMessages from "@/messages/es.json";
+import frMessages from "@/messages/fr.json";
+import deMessages from "@/messages/de.json";
+import ptMessages from "@/messages/pt.json";
+import arMessages from "@/messages/ar.json";
+import hiMessages from "@/messages/hi.json";
+import ruMessages from "@/messages/ru.json";
 
-type ProviderLocale = "en" | "id";
+const messagesByLocale: Record<AppLocale, typeof enMessages> = {
+  en: enMessages,
+  id: idMessages,
+  ms: msMessages,
+  th: thMessages,
+  vi: viMessages,
+  fil: filMessages,
+  zh: zhMessages,
+  ja: jaMessages,
+  ko: koMessages,
+  es: esMessages,
+  fr: frMessages,
+  de: deMessages,
+  pt: ptMessages,
+  ar: arMessages,
+  hi: hiMessages,
+  ru: ruMessages,
+};
 
-function getLocaleFromPathname(pathname: string): ProviderLocale {
+function getLocaleFromPathname(pathname: string): AppLocale {
   const segment = pathname.split("/").filter(Boolean)[0];
-  return segment === "id" ? "id" : "en";
+  return segment && isValidLocale(segment) ? segment : routing.defaultLocale;
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -50,7 +81,7 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   const pathname = usePathname() ?? "/";
   const locale = getLocaleFromPathname(pathname);
-  const messages = locale === "id" ? idMessages : enMessages;
+  const messages = messagesByLocale[locale] ?? enMessages;
 
 
   return (

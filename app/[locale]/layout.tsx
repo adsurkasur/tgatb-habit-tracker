@@ -4,8 +4,28 @@ import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing, isValidLocale } from "@/i18n/routing";
+import { getMessagesForLocale } from "@/i18n/messages";
 import { AppReadyMarker } from "@/components/app-ready-marker";
 import { LocaleRuntimeSync } from "@/components/locale-runtime-sync";
+
+const openGraphLocaleByAppLocale: Record<string, string> = {
+  en: "en_US",
+  id: "id_ID",
+  ms: "ms_MY",
+  th: "th_TH",
+  vi: "vi_VN",
+  fil: "fil_PH",
+  zh: "zh_CN",
+  ja: "ja_JP",
+  ko: "ko_KR",
+  es: "es_ES",
+  fr: "fr_FR",
+  de: "de_DE",
+  pt: "pt_BR",
+  ar: "ar_SA",
+  hi: "hi_IN",
+  ru: "ru_RU",
+};
 
 type LocaleLayoutProps = {
   children: ReactNode;
@@ -21,7 +41,7 @@ export function generateStaticParams() {
 export async function generateMetadata({ params }: Omit<LocaleLayoutProps, "children">): Promise<Metadata> {
   const { locale } = await params;
   const resolvedLocale = isValidLocale(locale) ? locale : routing.defaultLocale;
-  const messages = (await import(`../../messages/${resolvedLocale}.json`)).default;
+  const messages = getMessagesForLocale(resolvedLocale);
 
   // Generate hreflang alternate links for all supported locales
   const alternates: Record<string, string> = {};
@@ -45,7 +65,7 @@ export async function generateMetadata({ params }: Omit<LocaleLayoutProps, "chil
       description: messages.App.description,
       url: alternates[resolvedLocale],
       siteName: messages.App.name,
-      locale: resolvedLocale === "en" ? "en_US" : "id_ID",
+      locale: openGraphLocaleByAppLocale[resolvedLocale] ?? "en_US",
       type: "website",
     },
   };

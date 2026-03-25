@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
+import { getMessagesForLocale } from "@/i18n/messages";
 
 type TermsCopy = {
   meta: {
@@ -64,12 +65,31 @@ type TermsCopy = {
 };
 
 async function getTermsCopy(locale: AppLocale): Promise<TermsCopy> {
-  const messages = (await import(`../../../messages/${locale}.json`)).default;
+  const messages = getMessagesForLocale(locale);
   return messages.TermsOfServicePage as TermsCopy;
 }
 
 type LocaleParams = {
   params: Promise<{ locale: string }>;
+};
+
+const openGraphLocaleByAppLocale: Record<string, string> = {
+  en: "en_US",
+  id: "id_ID",
+  ms: "ms_MY",
+  th: "th_TH",
+  vi: "vi_VN",
+  fil: "fil_PH",
+  zh: "zh_CN",
+  ja: "ja_JP",
+  ko: "ko_KR",
+  es: "es_ES",
+  fr: "fr_FR",
+  de: "de_DE",
+  pt: "pt_BR",
+  ar: "ar_SA",
+  hi: "hi_IN",
+  ru: "ru_RU",
 };
 
 export async function generateMetadata({ params }: LocaleParams): Promise<Metadata> {
@@ -98,7 +118,7 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
       title: copy.meta.title,
       description: copy.meta.description,
       url: alternates[resolvedLocale],
-      locale: resolvedLocale === "en" ? "en_US" : "id_ID",
+      locale: openGraphLocaleByAppLocale[resolvedLocale] ?? "en_US",
       type: "website",
     },
   };

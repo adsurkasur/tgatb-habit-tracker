@@ -1,0 +1,810 @@
+{
+  "App": {
+    "name": "TGATB Habit Tracker",
+    "description": "The Good and The Bad: Isang minimalist na application ng pagsubaybay sa ugali"
+  },
+  "Routing": {
+    "redirecting": "Nire-redirect..."
+  },
+  "Home": {
+    "title": "Ang Mabuti at Ang Masama",
+    "demoLabel": "Demo ugali",
+    "counter": "{current} ng {total} gawi",
+    "counterHint": "Gamitin ang ← → key, navigation button, o mag-swipe para mag-navigate",
+    "aria": {
+      "previousHabit": "Nakaraang ugali",
+      "nextHabit": "Susunod na ugali"
+    },
+    "toasts": {
+      "pressBackAgainExit": "Pindutin muli upang lumabas",
+      "habitDeletedTitle": "Natanggal ang ugali!",
+      "habitDeletedDescription": "Natanggal na ang ugali mo.",
+      "undoDeleteAltText": "I-undo ang pagtanggal",
+      "undo": "I-undo"
+    }
+  },
+  "AppearanceSettings": {
+    "title": "Hitsura",
+    "darkMode": {
+      "label": "Dark Mode",
+      "description": "Lumipat sa pagitan ng maliwanag at madilim na tema"
+    },
+    "language": {
+      "title": "Wika",
+      "label": "I-toggle ang wika ng app",
+      "english": "Ingles",
+      "indonesian": "Bahasa Indonesia",
+      "modalTitle": "Pumili ng wika",
+      "modalDescription": "Piliin ang wikang ginagamit sa buong interface ng app.",
+      "restartWarningWeb": "Ang paglalapat ng bagong wika ay nagre-refresh sa pahinang ito upang ganap na ma-update ang teksto.",
+      "restartWarningApp": "Ang paglalapat ng bagong wika ay magre-restart sa screen ng app na ito upang ganap na ma-update ang text.",
+      "cancel": "Kanselahin",
+      "apply": "Mag-apply",
+      "applying": "Nag-aaplay..."
+    },
+    "fullscreen": {
+      "title": "Fullscreen Mode",
+      "nativeDescription": "Itago ang status bar para sa nakaka-engganyong karanasan",
+      "nonNativeDescription": "Setting ng mobile app"
+    },
+    "toasts": {
+      "fullscreenEnabledTitle": "Pinagana ang fullscreen mode",
+      "fullscreenEnabledDescription": "Maaaring hindi maipakita nang perpekto ang fullscreen mode sa lahat ng device. Kung may napansin kang mga isyu, maaari mo itong i-off sa mga setting.",
+      "languageUpdated": "Na-update ang wika",
+      "switchedToEnglish": "Lumipat sa English",
+      "switchedToIndonesian": "Lumipat sa Bahasa Indonesia"
+    }
+  },
+  "SettingsDialog": {
+    "title": "Mga setting"
+  },
+  "AboutDialog": {
+    "title": "Tungkol sa TGATB Habit Tracker",
+    "projectName": "Ang Mabuti at Ang Masama",
+    "projectDescription": "Isang minimalist na Progressive Web App para sa pagsubaybay sa iyong pang-araw-araw na gawi",
+    "version": "Bersyon {version}",
+    "features": {
+      "title": "Mga tampok",
+      "item1": "• Subaybayan ang mabuti at masamang gawi",
+      "item2": "• Offline na suporta sa teknolohiya ng PWA",
+      "item3": "• Pagsubaybay sa streak at visual na pag-unlad",
+      "item4": "• Minimalist, walang distraction na disenyo",
+      "item5": "• Cross-platform compatibility"
+    },
+    "builtWith": "Itinayo gamit ang",
+    "stack": {
+      "nextjs": "Susunod.js 16",
+      "react": "Reaksyon 19",
+      "typescript": "TypeScript",
+      "tailwind": "Tailwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "Kapasitor"
+    },
+    "links": {
+      "title": "Mga link",
+      "github": "Tingnan sa GitHub",
+      "vercel": "Pinapatakbo ng Vercel",
+      "privacyPolicy": "Patakaran sa Privacy",
+      "termsOfService": "Mga Tuntunin ng Serbisyo"
+    },
+    "footer": {
+      "madeWithLove": "Ginawa gamit ang ❤️ para sa mas magandang gawi",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
+    }
+  },
+  "NavigationDrawer": {
+    "hidden": {
+      "navigationMenuTitle": "Menu ng Nabigasyon",
+      "navigationMenuDescription": "I-access ang iyong dashboard at mga setting ng pagsubaybay sa ugali"
+    },
+    "header": {
+      "title": "Tagasubaybay ng ugali",
+      "subtitle": "Subaybayan ang iyong pang-araw-araw na pag-unlad"
+    },
+    "search": {
+      "placeholder": "Mga gawi sa paghahanap...",
+      "clear": "I-clear ang paghahanap"
+    },
+    "sections": {
+      "goodHabits": "Magandang gawi",
+      "badHabits": "Masamang Ugali"
+    },
+    "empty": {
+      "noGoodHabitsFound": "Walang nakitang magandang gawi",
+      "noGoodHabitsYet": "Wala pang magandang ugali",
+      "noBadHabitsFound": "Walang nakitang masamang gawi",
+      "noBadHabitsTracked": "Walang sinusubaybayang masamang gawi"
+    },
+    "actions": {
+      "help": "Tulong",
+      "history": "Kasaysayan",
+      "settings": "Mga setting",
+      "supportMe": "Suportahan Ako",
+      "about": "Tungkol sa"
+    },
+    "habitItem": {
+      "days": "{count} araw"
+    }
+  },
+  "AccountDataSettings": {
+    "title": "Account at Data",
+    "profileAlt": "Profile",
+    "auth": {
+      "login": "Mag-login",
+      "logoutFrom": "Mag-logout mula sa {name}"
+    },
+    "autoSync": {
+      "title": "Awtomatikong pag-sync",
+      "description": "Awtomatikong i-sync ang mga pagbabago sa Google Drive kapag naka-sign in."
+    },
+    "analytics": {
+      "title": "Analytics",
+      "description": "Payagan ang anonymous na analytics na tumulong na pahusayin ang app."
+    },
+    "actions": {
+      "exportToCloud": "I-export sa Cloud",
+      "importFromCloud": "Mag-import mula sa Cloud",
+      "exporting": "Ini-export...",
+      "exportData": "I-export ang Data",
+      "importData": "Mag-import ng Data",
+      "resolveSyncConflicts": "Lutasin ang Mga Salungatan sa Pag-sync"
+    }
+  },
+  "HistoryDialog": {
+    "title": "Kasaysayan ng ugali at Analytics",
+    "tabs": {
+      "overview": "Pangkalahatang-ideya",
+      "stats": "Stats",
+      "calendar": "Kalendaryo",
+      "timeline": "Timeline"
+    },
+    "stats": {
+      "totalHabits": {
+        "title": "Kabuuang gawi",
+        "description": "{good} mabuti, {bad} masama"
+      },
+      "combinedStreak": {
+        "title": "Pinagsamang Streak",
+        "description": "Pinakamatagal: {longest} araw"
+      },
+      "todaysProgress": {
+        "title": "Ang Pag-unlad Ngayon",
+        "description": "{percent}% ang natapos"
+      },
+      "totalActions": {
+        "title": "Kabuuang Mga Pagkilos",
+        "description": "Lahat ng oras na nakumpleto"
+      }
+    },
+    "topHabits": {
+      "title": "Mga Nangungunang Gawi"
+    },
+    "breakdown": {
+      "title": "Pagkasira ng ugali",
+      "emptyTitle": "Wala pang ugali",
+      "emptyDescription": "Magdagdag ng ugali upang makita ang iyong pagkasira dito",
+      "completions": "{count} pagkumpleto"
+    },
+    "calendar": {
+      "today": "Ngayong araw",
+      "notTracked": "Hindi Sinusubaybayan",
+      "editEntry": "I-edit ang entry",
+      "clearStatus": "I-clear ang status",
+      "noDataForDate": "Walang available na data para sa petsang ito",
+      "addEntry": "Magdagdag ng Entry"
+    },
+    "timeline": {
+      "today": "Ngayong araw",
+      "completionSummary": "{completed}/{total} mga gawi ang natapos ({percent}%)",
+      "notTracked": "Hindi Sinusubaybayan",
+      "notTrackedTitle": "{name}: Hindi Sinusubaybayan",
+      "completedTitle": "{name}: Nakumpleto",
+      "notCompletedTitle": "{name}: Hindi nakumpleto"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Magdagdag ng Bagong Ugali",
+    "fields": {
+      "name": "Pangalan ng ugali",
+      "type": "Uri ng ugali",
+      "schedule": "Iskedyul"
+    },
+    "placeholders": {
+      "name": "Ilagay ang pangalan ng ugali..."
+    },
+    "type": {
+      "good": "Mabuti",
+      "bad": "Masama"
+    },
+    "schedule": {
+      "daily": "Araw-araw",
+      "interval": "Tuwing N Araw",
+      "weekly": "Weekdays"
+    },
+    "interval": {
+      "every": "Bawat",
+      "days": "araw"
+    },
+    "weekdays": {
+      "sun": "Araw",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Huwebes",
+      "fri": "Biyernes",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Kanselahin",
+      "save": "I-save"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "I-edit ang ugali",
+    "fields": {
+      "name": "Pangalan ng ugali",
+      "type": "Uri ng ugali",
+      "schedule": "Iskedyul"
+    },
+    "placeholders": {
+      "name": "Ilagay ang pangalan ng ugali..."
+    },
+    "type": {
+      "good": "Mabuti",
+      "bad": "Masama"
+    },
+    "schedule": {
+      "daily": "Araw-araw",
+      "interval": "Tuwing N Araw",
+      "weekly": "Weekdays"
+    },
+    "interval": {
+      "every": "Bawat",
+      "days": "araw"
+    },
+    "weekdays": {
+      "sun": "Araw",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Huwebes",
+      "fri": "Biyernes",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Kanselahin",
+      "saveChanges": "I-save ang Mga Pagbabago"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Natukoy ang Mga Salungatan sa Pag-sync",
+    "description": "Nakakita kami ng mga salungatan sa pagitan ng iyong lokal na data at ang cloud backup. Pumili ng mga resolusyon sa bawat field sa ibaba, o gamitin ang mga pandaigdigang pagkilos para tanggapin ang malayuang bersyon o panatilihin ang iyong lokal na data.",
+    "itemLabel": "Item: {id}",
+    "differences": "Mga pagkakaiba sa Lokal kumpara sa Malayo",
+    "choices": {
+      "local": "Lokal",
+      "remote": "Remote"
+    },
+    "actions": {
+      "keepLocal": "Panatilihin ang Lokal",
+      "applySelected": "Ilapat ang Napili",
+      "acceptRemote": "Tanggapin ang Remote"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "I-install ang TGATB App",
+    "subtitle": "Mas mahusay na karanasan sa offline na suporta at mabilis na pag-access",
+    "toasts": {
+      "notAvailable": {
+        "title": "Hindi available ang pag-install ng app",
+        "description": "Hindi sinusuportahan ang pag-install ng app sa device o browser na ito. Subukan ang Chrome o Edge sa desktop/mobile."
+      },
+      "started": {
+        "title": "Nagsimula ang pag-install ng app",
+        "description": "Sundin ang mga tagubilin ng iyong browser upang makumpleto ang pag-install."
+      },
+      "dismissed": {
+        "title": "Na-dismiss ang pag-install ng app",
+        "description": "Maaari mong i-install ang app anumang oras mula sa Mga Setting -> I-install ang App."
+      },
+      "failed": {
+        "title": "Nabigo ang pag-install ng app",
+        "description": "Nagkaproblema habang sinusubukang i-install ang app."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "Sa iOS/Safari, i-tap ang button na Ibahagi at piliin ang \"Idagdag sa Home Screen\" para i-install.",
+        "android": {
+          "line1": "Sa Android, gamitin ang Chrome, Edge, o Samsung Internet. Kung makakita ka ng + icon sa address bar ng iyong browser, i-tap ito para i-install.",
+          "line2": "Kung hindi mo makita ang icon, buksan ang menu ng browser at hanapin ang \"Idagdag sa Home screen\" o \"I-install ang app.\""
+        },
+        "windowsLinux": {
+          "line1": "Sa Windows/Linux, gamitin ang Chrome o Edge. Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito.",
+          "line2": "Kung hindi, buksan ang menu ng browser at hanapin ang \"I-install ang app\" o \"Idagdag sa desktop\"."
+        },
+        "mac": {
+          "line1": "Sa macOS, gamitin ang Chrome o Edge. Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito.",
+          "line2": "Kung hindi, buksan ang menu ng browser at hanapin ang \"I-install ang app\" o \"Idagdag sa dock\"."
+        },
+        "generic": {
+          "line1": "Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito.",
+          "line2": "Kung hindi, buksan ang menu ng browser at hanapin ang \"I-install ang app\" o \"Idagdag sa Home screen.\""
+        }
+      },
+      "default": {
+        "iosSafari": "Sa iOS/Safari, i-tap ang button na Ibahagi at piliin ang \"Idagdag sa Home Screen\" para i-install.",
+        "android": "Sa Android, gamitin ang Chrome o Edge para sa pinakamahusay na karanasan. Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito.",
+        "windowsLinux": "Sa Windows/Linux, gamitin ang Chrome o Edge para sa pinakamahusay na karanasan. Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito.",
+        "mac": "Sa macOS, gamitin ang Chrome o Edge para sa pinakamahusay na karanasan. Kung makakita ka ng icon ng pag-install sa address bar ng iyong browser, gamitin ito."
+      }
+    },
+    "actions": {
+      "dismiss": "I-dismiss",
+      "install": "I-install",
+      "ok": "OK",
+      "notNow": "Hindi ngayon"
+    }
+  },
+  "DonationDialog": {
+    "title": "Suportahan Ako",
+    "description": "Kung nasiyahan ka sa app na ito, isaalang-alang ang pagsuporta sa pagbuo nito. Ang bawat kontribusyon ay nakakatulong na panatilihin itong libre at pagpapabuti!",
+    "sections": {
+      "paymentPlatforms": "Mga Platform ng Pagbabayad",
+      "cryptocurrency": "Cryptocurrency"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Suportahan mo ako sa QRIS!",
+      "description": "I-scan ang QR code na ito gamit ang iyong banking app para mag-donate sa pamamagitan ng QRIS.",
+      "imageAlt": "Paraan ng Donasyon ng QRIS",
+      "download": "I-download ang QRIS"
+    },
+    "copiedBadge": "Kinopya!",
+    "thankYou": "Salamat sa pagsasaalang-alang sa pagsuporta sa proyektong ito!",
+    "toasts": {
+      "copied": {
+        "title": "Kinopya!",
+        "description": "Nakopya ang address sa clipboard"
+      },
+      "copyFailed": {
+        "title": "Nabigong kopyahin",
+        "description": "Pakikopya nang manu-mano ang address"
+      },
+      "saved": {
+        "title": "Na-save!",
+        "description": "Na-save ang QRIS na larawan sa device."
+      },
+      "saveFailed": {
+        "title": "Nabigo ang pag-save",
+        "description": "Hindi ma-save ang larawan."
+      },
+      "downloadFailed": {
+        "title": "Nabigo ang pag-download",
+        "description": "Hindi makuha ang larawan."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Magdagdag ng Entry para sa {date}",
+    "tabs": {
+      "addEntry": "Magdagdag ng Bagong Entry",
+      "addHabit": "Magdagdag ng Bagong Ugali"
+    },
+    "placeholders": {
+      "noHabit": "Walang available na ugali, idagdag ngayon!",
+      "selectHabit": "Piliin ang ugali...",
+      "habitName": "Pangalan ng ugali..."
+    },
+    "type": {
+      "good": "Mabuti",
+      "bad": "Masama"
+    },
+    "status": {
+      "good": {
+        "true": "Nakumpleto",
+        "false": "Nakaligtaan"
+      },
+      "bad": {
+        "true": "Iniiwasan",
+        "false": "Tapos na"
+      }
+    },
+    "actions": {
+      "addEntry": "Magdagdag ng Entry",
+      "addHabitAndLog": "Magdagdag ng Habit at Log Entry"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "I-edit ang Entry",
+    "fields": {
+      "date": "Petsa",
+      "status": "Katayuan"
+    },
+    "status": {
+      "good": {
+        "true": "Nakumpleto",
+        "false": "Nakaligtaan"
+      },
+      "bad": {
+        "true": "Iniiwasan",
+        "false": "Tapos na"
+      }
+    },
+    "actions": {
+      "cancel": "Kanselahin",
+      "save": "I-save"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Tagapag-udyok ng Karakter",
+    "personalityType": "Uri ng Personalidad",
+    "personality": {
+      "positive": {
+        "title": "Positibo",
+        "description": "Naghihikayat at sumusuporta"
+      },
+      "adaptive": {
+        "title": "Adaptive",
+        "description": "Balanseng at makatotohanan"
+      },
+      "harsh": {
+        "title": "Malupit",
+        "description": "Direkta at mapaghamong"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Simulan ang Iyong Paglalakbay",
+    "description": "Gawin ang iyong unang ugali upang simulan ang pagsubaybay sa iyong pang-araw-araw na pag-unlad at pagbuo ng pare-pareho.",
+    "addFirstHabit": "Idagdag ang Iyong Unang Ugali",
+    "footer": "Ang bawat dalubhasa ay dating isang baguhan"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Tanggalin ang Lahat ng Gawi?",
+    "description": "Ang pagkilos na ito ay hindi maaaring i-undo. Sigurado ka bang gusto mong tanggalin ang lahat ng ugali?",
+    "actions": {
+      "cancel": "Kanselahin",
+      "deleting": "Tinatanggal...",
+      "delete": "Tanggalin"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Feedback",
+    "sound": {
+      "title": "Mga Sound Effect",
+      "description": "Magpatugtog ng mga tunog sa mga pakikipag-ugnayan"
+    },
+    "haptic": {
+      "title": "Haptic Feedback",
+      "supported": "Mag-vibrate sa mga pakikipag-ugnayan",
+      "notSupported": "Hindi suportado sa device na ito"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Tulong at Suporta",
+    "actions": {
+      "showWelcomeGuide": "Ipakita ang Gabay sa Pagbati",
+      "contactEmail": "Makipag-ugnayan kay {name} sa pamamagitan ng email"
+    }
+  },
+  "SettingsScreen": {
+    "title": "Mga setting"
+  },
+  "AppDeviceSettings": {
+    "title": "App at Device",
+    "install": {
+      "nativeApp": "Native App",
+      "installed": "Naka-install na App",
+      "installApp": "I-install ang App",
+      "nativeDescription": "Ginagamit mo ang native na Android app",
+      "installedDescription": "Nasa iyong device na ang TGATB",
+      "addToHome": "Idagdag sa home screen"
+    },
+    "reminder": {
+      "title": "Araw-araw na Paalala",
+      "timeLabel": "Oras ng paalala",
+      "status": {
+        "notSupported": "Hindi suportado ang mga notification sa browser na ito",
+        "off": "Naka-off",
+        "denied": "Tinanggihan ang pahintulot - tingnan ang mga setting ng browser/device",
+        "set": "Itinakda ang paalala para sa {time}",
+        "setWeb": "Itinakda ang paalala para sa {time} - pinakamahusay na gumagana kapag nakabukas o naka-install ang app bilang PWA"
+      }
+    },
+    "permission": {
+      "title": "Mga Notification na Kailangan",
+      "description": "Para magpadala sa iyo ng pang-araw-araw na mga paalala, kailangan ng app ng pahintulot na magpakita ng mga notification. Maaari mong paganahin ito sa iyong browser o mga setting ng device.",
+      "gotIt": "Nakuha ko"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "Wala pang ugali",
+    "emptyDescription": "Idagdag ang iyong unang ugali upang makapagsimula!",
+    "question": {
+      "pending": "Ginawa mo ba?",
+      "goodPositive": "Tapos na ngayon!",
+      "badPositive": "Hindi mo ginawa ngayon!",
+      "goodNegative": "Hindi mo ginawa ngayon!",
+      "badNegative": "Ginawa mo ngayon!"
+    },
+    "status": {
+      "goodCompleted": "Nakumpleto",
+      "goodMissed": "Nakaligtaan",
+      "badAvoided": "Iniiwasan",
+      "badDone": "Tapos na"
+    },
+    "type": {
+      "good": "Mabuti",
+      "bad": "Masama"
+    },
+    "streakDays": "{count} araw",
+    "atTime": "sa {time}",
+    "actions": {
+      "undo": "I-undo"
+    }
+  },
+  "OfflineToast": {
+    "message": "Offline ka. Maaaring limitado ang ilang feature."
+  },
+  "OfflineIndicator": {
+    "message": "Offline ka. Maaaring limitado ang ilang feature."
+  },
+  "AnalyticsNotice": {
+    "title": "Pansinin",
+    "description": "Ginagamit namin ang Vercel Analytics upang mapabuti ang iyong karanasan. Tinutulungan kami ng anonymous na data ng paggamit na gawing mas mahusay ang app.",
+    "gotIt": "Nakuha ko"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Tagasubaybay ng ugali",
+    "loading": "Nilo-load ang iyong mga gawi..."
+  },
+  "LoadingOverlay": {
+    "loading": "Naglo-load..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Hakbang {current} ng {total}",
+    "steps": {
+      "welcome": {
+        "title": "Maligayang pagdating sa Habit Tracker!",
+        "description": "Magsagawa tayo ng mabilis na paglilibot upang matulungan kang makapagsimula sa epektibong pagsubaybay sa iyong mga gawi."
+      },
+      "navigation": {
+        "title": "Menu ng Nabigasyon",
+        "description": "I-access ang lahat ng iyong mga gawi, tingnan ang kasaysayan, at ayusin ang mga setting mula sa menu na ito."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Magdagdag ng Higit pang mga gawi",
+        "emptyTitle": "Idagdag ang Iyong Unang Ugali",
+        "hasHabitsDescription": "Gamitin ang lumulutang na button na ito upang magdagdag ng higit pang mga gawi anumang oras.",
+        "emptyDescription": "I-tap ang button na ito para gawin ang iyong unang ugali. Maaari mong idagdag ang parehong mabubuting gawi upang mabuo at masasamang gawi upang masira."
+      },
+      "habitCard": {
+        "title": "Subaybayan ang Iyong Pag-unlad",
+        "hasHabitsDescription": "Narito ang iyong mga gawi! I-tap ang mga ito para markahan bilang kumpleto para sa araw.",
+        "emptyDescription": "Kapag nagdagdag ka ng mga gawi, lalabas ang mga ito dito. I-tap upang markahan ang mga ito bilang kumpleto para sa araw."
+      },
+      "complete": {
+        "title": "Handa ka na!",
+        "description": "Simulan ang pagbuo ng mas mahusay na mga gawi ngayon. Tandaan, ang pagiging pare-pareho ay susi sa tagumpay!"
+      }
+    },
+    "actions": {
+      "skip": "Laktawan",
+      "previous": "Nakaraang",
+      "skipTour": "Laktawan ang Paglilibot",
+      "next": "Susunod",
+      "getStarted": "Magsimula",
+      "start": "Magsimula"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Pamamahala ng ugali",
+    "deleteAll": "Tanggalin ang Lahat ng Gawi",
+    "toasts": {
+      "deleted": {
+        "title": "Nabura lahat ng ugali",
+        "description": "Na-clear na ang iyong listahan ng ugali."
+      },
+      "failed": {
+        "title": "Nabigo ang pagtanggal",
+        "description": "Nagkaroon ng error habang tinatanggal ang mga gawi."
+      },
+      "noHandler": {
+        "description": "Walang ibinigay na delete handler."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Mga Kontrol sa Status Bar",
+    "label": "Status Bar",
+    "visible": "Nakikita",
+    "hidden": "Nakatago",
+    "status": "Status Bar: {visibility} | Taas: {height}px",
+    "actions": {
+      "show": "Ipakita",
+      "hide": "Magtago",
+      "lightStyle": "Banayad na Estilo",
+      "darkStyle": "Madilim na Estilo",
+      "defaultStyle": "Default na Estilo",
+      "redBackground": "Pulang Background",
+      "greenBackground": "Berdeng Background",
+      "blueBackground": "Asul na Background",
+      "resetToWhite": "I-reset sa White"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "Offline ka",
+      "description": "Gumagana offline ang app. Nagsi-sync ang data kapag muling nakakonekta.",
+      "retry": "Subukan muli"
+    },
+    "fallback": {
+      "title": "TGATB Habit Tracker",
+      "description": "Nilo-load ang iyong mga gawi..."
+    }
+  },
+  "TermsOfServicePage": {
+    "meta": {
+      "title": "Mga Tuntunin ng Serbisyo - TGATB Habit Tracker",
+      "description": "Mga Tuntunin ng Serbisyo para sa The Good and The Bad: Habit Tracker"
+    },
+    "title": "Mga Tuntunin ng Serbisyo",
+    "lastUpdated": "Huling na-update: Pebrero 13, 2026",
+    "sections": {
+      "welcome": {
+        "title": "Maligayang pagdating",
+        "body": "Maligayang pagdating sa TGATB Habit Tracker (\"The Good and The Bad\", \"we\", \"us\", \"our\"). Sa pamamagitan ng paggamit ng aming mga web at mobile application, sumasang-ayon ka sa Mga Tuntunin ng Serbisyong ito."
+      },
+      "use": {
+        "title": "Paggamit ng App",
+        "item1": "Dapat ay hindi bababa sa 13 taong gulang ka upang magamit ang app.",
+        "item2": "Sumasang-ayon ka na huwag gamitin sa maling paraan ang app o subukang i-access ito sa mga hindi awtorisadong paraan."
+      },
+      "userContent": {
+        "title": "Nilalaman ng User",
+        "item1": "Ikaw ang may pananagutan para sa nilalaman na iyong idinagdag (mga gawi, mga tala, atbp.).",
+        "item2": "Inilalaan namin ang karapatang mag-alis ng content na lumalabag sa mga tuntuning ito o mga naaangkop na batas."
+      },
+      "intellectualProperty": {
+        "title": "Intelektwal na Ari-arian",
+        "item1": "Ang lahat ng nilalaman ng app, mga trademark, at code ay pagmamay-ari namin o ng aming mga tagapaglisensya.",
+        "item2": "Hindi mo maaaring kopyahin, baguhin, o ipamahagi ang aming nilalaman nang walang pahintulot."
+      },
+      "thirdParty": {
+        "title": "Mga Serbisyo ng Third-Party",
+        "body": "Gumagamit ang app ng mga serbisyo ng third-party (Google Cloud, Firebase, atbp.). Ang iyong paggamit ng mga serbisyong ito ay napapailalim sa kani-kanilang mga tuntunin."
+      },
+      "limitation": {
+        "title": "Limitasyon ng Pananagutan",
+        "body": "Ang app ay ibinigay \"as is\" nang walang mga warranty ng anumang uri. Hindi kami mananagot para sa anumang pinsalang dulot ng iyong paggamit ng app."
+      },
+      "termination": {
+        "title": "Pagwawakas",
+        "body": "Maaari naming suspindihin o wakasan ang iyong access sa app dahil sa paglabag sa mga tuntuning ito."
+      },
+      "changes": {
+        "title": "Mga Pagbabago sa Mga Tuntuning Ito",
+        "body": "Maaari naming i-update ang Mga Tuntunin ng Serbisyo na ito paminsan-minsan. Ang mga pagbabago ay ipo-post sa app at sa aming website."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "body": "Ang TGATB Habit Tracker ay open source sa ilalim ng Apache 2.0 License. Maaari mong suriin ang kumpletong source code sa:"
+      },
+      "contact": {
+        "title": "Makipag-ugnayan sa Amin",
+        "body": "Kung mayroon kang anumang mga katanungan tungkol sa Mga Tuntunin ng Serbisyong ito, mangyaring makipag-ugnayan sa amin sa:"
+      }
+    },
+    "links": {
+      "privacyPolicy": "Patakaran sa Privacy",
+      "openApp": "Buksan ang TGATB Habit Tracker"
+    },
+    "footer": {
+      "rightsReserved": "Lahat ng karapatan ay nakalaan."
+    }
+  },
+  "PrivacyPolicyPage": {
+    "meta": {
+      "title": "Patakaran sa Privacy - TGATB Habit Tracker",
+      "description": "Patakaran sa Privacy para sa The Good and The Bad: Habit Tracker"
+    },
+    "title": "Patakaran sa Privacy",
+    "lastUpdated": "Huling na-update: Pebrero 7, 2026",
+    "sections": {
+      "overview": {
+        "title": "Pangkalahatang-ideya",
+        "body": "Ang TGATB Habit Tracker (\"The Good and The Bad\") ay isang minimalist na habit tracking application na binuo ng adsurkasur. Ipinapaliwanag ng Patakaran sa Privacy na ito kung paano namin pinangangasiwaan ang iyong impormasyon kapag ginamit mo ang aming web application sa www.tgatb.click at ang aming Android mobile application."
+      },
+      "informationCollected": {
+        "title": "Impormasyon na Kinokolekta Namin",
+        "dataYouProvide": {
+          "title": "Data na Ibinibigay Mo",
+          "habitData": "Data ng ugali: Mga pangalan, uri (mabuti/masama), mga log ng pagkumpleto, at mga guhit na ginawa mo sa loob ng app. Ang data na ito ay lokal na nakaimbak sa iyong device bilang default.",
+          "settings": "Mga kagustuhan sa mga setting: Dark mode, wika, personalidad ng motivator, at iba pang mga kagustuhan sa app na lokal na nakaimbak sa iyong device.",
+          "googleAccount": "Impormasyon ng Google account (opsyonal): Kung pipiliin mong mag-sign in gamit ang Google para sa cloud backup, ina-access namin ang iyong pangalan, email address, at larawan sa profile para lang sa pagpapatunay at pag-andar ng backup ng Google Drive."
+        },
+        "dataCollectedAutomatically": {
+          "title": "Awtomatikong Nakolekta ang Data",
+          "analytics": "Data ng Analytics (na may pahintulot): Ginagamit namin ang Vercel Analytics at Firebase Analytics upang mangolekta ng mga anonymous na istatistika ng paggamit gaya ng mga page view, uri ng device, at mga pattern ng pangkalahatang pakikipag-ugnayan. Sinisimulan lang ang Analytics pagkatapos mong magbigay ng pahintulot.",
+          "errorTracking": "Pagsubaybay sa error (opsyonal): Kung naka-enable, kinokolekta ng Sentry ang mga ulat ng pag-crash at mga log ng error upang matulungan kaming mapabuti ang katatagan ng app. Aktibo lang ito kapag ibinigay ang pahintulot ng analytics at na-configure ang isang Sentry DSN."
+        },
+        "dataNotCollected": {
+          "title": "Data na HINDI Namin Kinokolekta",
+          "noPayments": "Hindi kami nangongolekta ng impormasyon sa pagbabayad",
+          "noLocation": "Hindi kami nangongolekta ng data ng lokasyon",
+          "noContacts": "Hindi kami nangongolekta ng mga contact o data ng telepono",
+          "noAds": "Hindi kami naghahatid ng mga ad o nangongolekta ng data na nauugnay sa ad",
+          "noSelling": "Hindi namin ibinebenta ang iyong data sa mga third party"
+        }
+      },
+      "dataStorage": {
+        "title": "Paano Iniimbak ang Iyong Data",
+        "local": "Lokal na imbakan (default): Ang lahat ng data ng ugali at mga setting ay lokal na iniimbak sa iyong device gamit ang browser localStorage (web) o Capacitor Preferences (Android). Walang data na umalis sa iyong device maliban kung tahasan mong i-enable ang cloud backup.",
+        "cloudBackup": "Cloud backup (opsyonal): Kung magsa-sign in ka sa Google, maaari mong piliing i-back up ang iyong data sa sarili mong Google Drive. Ang iyong data ay nakaimbak bilang isang file sa iyong personal na Google Drive – wala kaming access sa iyong mga file sa Google Drive."
+      },
+      "thirdPartyServices": {
+        "title": "Mga Serbisyo ng Third-Party",
+        "intro": "Ginagamit namin ang mga sumusunod na serbisyo ng third-party:",
+        "firebase": "Firebase Authentication: Para sa pag-sign in sa Google. Pinamamahalaan ng Patakaran sa Privacy ng Google.",
+        "firebaseAnalytics": "Firebase Analytics: Para sa mga anonymous na istatistika ng paggamit (kinakailangan ang pahintulot).",
+        "vercelAnalytics": "Vercel Analytics: Para sa hindi kilalang web analytics (kinakailangan ang pahintulot).",
+        "googleDrive": "Google Drive API: Para sa opsyonal na cloud backup, ina-access lang ang sarili mong mga file na ginawa ng app.",
+        "sentry": "Sentry (opsyonal): Para sa pag-uulat ng error at pag-crash kapag pinagana."
+      },
+      "rightsControls": {
+        "title": "Iyong Mga Karapatan at Kontrol",
+        "analyticsConsent": "Pahintulot sa Analytics: Maaari mong i-enable o i-disable ang analytics anumang oras sa mga setting ng app.",
+        "dataDeletion": "Pagtanggal ng data: Maaari mong tanggalin ang lahat ng iyong data ng ugali mula sa mga setting ng app (\"Delete All Habits\"). Dahil lokal na nakaimbak ang data, ang pag-clear sa data ng iyong browser o pag-uninstall sa app ay mag-aalis din ng lahat ng data.",
+        "cloudBackupControl": "Cloud backup control: Maaari kang mag-sign out anumang oras upang ihinto ang cloud backup. Ang iyong mga backup na file sa Google Drive ay maaaring direktang pamahalaan mula sa iyong Google Drive.",
+        "dataExport": "Pag-export ng data: Maaari mong i-export ang iyong data bilang JSON file mula sa mga setting ng app anumang oras."
+      },
+      "deleteData": {
+        "title": "Tanggalin ang Iyong Data",
+        "intro": "Iniimbak ng TGATB Habit Tracker ang iyong data ng ugali nang lokal sa iyong device. Maaari mong tanggalin ang lahat ng iyong data anumang oras nang hindi kinakailangang tanggalin ang iyong account:",
+        "steps": "1. Buksan ang app\n2. I-tap ang icon ng menu (menu ng hamburger) sa kaliwang sulok sa itaas\n3. Mag-scroll pababa sa Habit Management\n4. I-tap ang \"Delete All Habits\"\n5. Kumpirmahin ang pagtanggal kapag sinenyasan",
+        "willDelete": "Ito ay permanenteng magde-delete:",
+        "willDeleteItems": "Ang lahat ng iyong mga gawi at ang kanilang mga pangalan, Lahat ng pagkumpleto ng mga log at streak data, Lahat ng mga tala ng kasaysayan",
+        "willNotDelete": "HINDI nito tatanggalin:",
+        "willNotDeleteItems": "Mga setting ng iyong app (dark mode, wika, atbp.) — ang mga ito ay nagre-reset kapag na-clear mo ang data ng app o nag-uninstall, Anumang backup na file na dati nang na-save sa iyong Google Drive — maaari mong i-delete ang mga iyon nang direkta sa iyong Google Drive",
+        "alternative": "Bilang kahalili, maaari mong i-uninstall ang app o i-clear ang data ng app mula sa mga setting ng iyong device upang alisin ang lahat ng lokal na nakaimbak na impormasyon."
+      },
+      "deleteAccount": {
+        "title": "Tanggalin ang Iyong Account",
+        "intro": "Kung nag-sign in ka sa Google at gustong ganap na alisin ang iyong account at lahat ng nauugnay na data, sundin ang mga hakbang na ito:",
+        "appSteps": "1. Buksan ang app\n2. I-tap ang icon ng menu (menu ng hamburger) sa kaliwang sulok sa itaas\n3. Mag-scroll pababa sa Habit Management at i-tap ang \"Delete All Habits\" para alisin ang iyong data\n4. Mag-scroll sa Account at Data at i-tap ang \"Logout\" para mag-sign out\n5. I-uninstall ang app para alisin ang lahat ng natitirang lokal na data",
+        "googleDriveSteps": "Upang alisin ang iyong mga backup na file sa Google Drive:\n1. Pumunta sa Google Drive\n2. Maghanap para sa \"tgatb\" o \"ugalian\" upang makahanap ng mga backup na file\n3. Tanggalin ang mga backup na file",
+        "revokeSteps": "Upang bawiin ang access ng app sa iyong Google account:\n1. Pumunta sa Google Account Permissions\n2. Hanapin ang \"TGATB Habit Tracker\" sa listahan\n3. I-click ang \"Alisin ang Access\"",
+        "completion": "Pagkatapos makumpleto ang mga hakbang na ito, ganap na maaalis ang lahat ng iyong data at access sa account. Kung kailangan mo ng tulong, makipag-ugnayan sa amin sa adsurkasur.dev@gmail.com."
+      },
+      "dataSecurity": {
+        "title": "Seguridad ng Data",
+        "body": "Nagpapatupad kami ng mga makatwirang hakbang sa seguridad upang protektahan ang iyong data. Ang iyong data ng ugali ay lokal na nakaimbak sa iyong device at hindi ipinapadala sa aming mga server. Ang cloud backup data ay iniimbak sa iyong personal na Google Drive gamit ang imprastraktura ng seguridad ng Google. Gayunpaman, walang paraan ng electronic storage ang 100% secure."
+      },
+      "childrenPrivacy": {
+        "title": "Privacy ng mga Bata",
+        "body": "Ang aming app ay hindi nakadirekta sa mga batang wala pang 13 taong gulang. Hindi namin sinasadyang nangongolekta ng personal na impormasyon mula sa mga batang wala pang 13 taong gulang. Kung ikaw ay isang magulang o tagapag-alaga at naniniwala na ang iyong anak ay nagbigay sa amin ng personal na impormasyon, mangyaring makipag-ugnayan sa amin."
+      },
+      "policyChanges": {
+        "title": "Mga Pagbabago sa Patakarang Ito",
+        "body": "Maaari naming i-update ang Patakaran sa Privacy na ito paminsan-minsan. Ang anumang mga pagbabago ay makikita sa pamamagitan ng pag-update sa petsa ng \"Huling na-update\" sa tuktok ng pahinang ito. Hinihikayat ka naming suriin ang patakarang ito sa pana-panahon."
+      },
+      "contactUs": {
+        "title": "Makipag-ugnayan sa Amin",
+        "body": "Kung mayroon kang anumang mga katanungan tungkol sa Patakaran sa Privacy na ito o sa aming mga kasanayan sa data, mangyaring makipag-ugnay sa amin sa: adsurkasur.dev@gmail.com"
+      },
+      "openSource": {
+        "title": "Open Source",
+        "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
+      }
+    },
+    "links": {
+      "termsOfService": "Mga Tuntunin ng Serbisyo",
+      "openApp": "Buksan ang TGATB Habit Tracker"
+    },
+    "footer": {
+      "copyright": "© 2025-2026 adsurkasur. Lahat ng karapatan ay nakalaan."
+    }
+  }
+}

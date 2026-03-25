@@ -1,5 +1,22 @@
 export const routing = {
-  locales: ["en", "id"] as const,
+  locales: [
+    "en",
+    "id",
+    "ms",
+    "th",
+    "vi",
+    "fil",
+    "zh",
+    "ja",
+    "ko",
+    "es",
+    "fr",
+    "de",
+    "pt",
+    "ar",
+    "hi",
+    "ru",
+  ] as const,
   defaultLocale: "en" as const,
   timeZone: "Asia/Jakarta" as const,
 };

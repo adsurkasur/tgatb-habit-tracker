@@ -1,0 +1,810 @@
+{
+  "App": {
+    "name": "TGATB Habit Tracker",
+    "description": "Das Gute und das Schlechte: Eine minimalistische Anwendung zur Gewohnheitsverfolgung"
+  },
+  "Routing": {
+    "redirecting": "Weiterleitung..."
+  },
+  "Home": {
+    "title": "Das Gute und das Schlechte",
+    "demoLabel": "Demo-Gewohnheit",
+    "counter": "{current} von {total} Gewohnheiten",
+    "counterHint": "Verwenden Sie die Tasten ← →, die Navigationstasten oder wischen Sie, um zu navigieren",
+    "aria": {
+      "previousHabit": "Bisherige Gewohnheit",
+      "nextHabit": "Nächste Gewohnheit"
+    },
+    "toasts": {
+      "pressBackAgainExit": "Drücken Sie erneut die Zurück-Taste, um den Vorgang zu beenden",
+      "habitDeletedTitle": "Gewohnheit gelöscht!",
+      "habitDeletedDescription": "Ihre Gewohnheit wurde entfernt.",
+      "undoDeleteAltText": "Löschen rückgängig machen",
+      "undo": "Rückgängig machen"
+    }
+  },
+  "AppearanceSettings": {
+    "title": "Aussehen",
+    "darkMode": {
+      "label": "Dunkler Modus",
+      "description": "Wechseln Sie zwischen hellen und dunklen Themen"
+    },
+    "language": {
+      "title": "Sprache",
+      "label": "App-Sprache umschalten",
+      "english": "Englisch",
+      "indonesian": "Bahasa Indonesien",
+      "modalTitle": "Sprache auswählen",
+      "modalDescription": "Wählen Sie die Sprache aus, die auf der App-Oberfläche verwendet wird.",
+      "restartWarningWeb": "Durch Anwenden einer neuen Sprache wird diese Seite aktualisiert, um den Text vollständig zu aktualisieren.",
+      "restartWarningApp": "Durch Anwenden einer neuen Sprache wird dieser App-Bildschirm neu gestartet, um den Text vollständig zu aktualisieren.",
+      "cancel": "Abbrechen",
+      "apply": "Bewerben",
+      "applying": "Bewerben..."
+    },
+    "fullscreen": {
+      "title": "Vollbildmodus",
+      "nativeDescription": "Verstecken Sie die Statusleiste für ein immersives Erlebnis",
+      "nonNativeDescription": "Einstellung für mobile Apps"
+    },
+    "toasts": {
+      "fullscreenEnabledTitle": "Vollbildmodus aktiviert",
+      "fullscreenEnabledDescription": "Der Vollbildmodus wird möglicherweise nicht auf allen Geräten perfekt angezeigt. Wenn Sie Probleme bemerken, können Sie es in den Einstellungen deaktivieren.",
+      "languageUpdated": "Sprache aktualisiert",
+      "switchedToEnglish": "Auf Englisch umgestellt",
+      "switchedToIndonesian": "Auf Bahasa Indonesia umgestellt"
+    }
+  },
+  "SettingsDialog": {
+    "title": "Einstellungen"
+  },
+  "AboutDialog": {
+    "title": "Über TGATB Habit Tracker",
+    "projectName": "Das Gute und das Schlechte",
+    "projectDescription": "Eine minimalistische progressive Web-App zum Verfolgen Ihrer täglichen Gewohnheiten",
+    "version": "Version {version}",
+    "features": {
+      "title": "Funktionen",
+      "item1": "• Verfolgen Sie gute und schlechte Gewohnheiten",
+      "item2": "• Offline-Unterstützung mit PWA-Technologie",
+      "item3": "• Streifenverfolgung und visueller Fortschritt",
+      "item4": "• Minimalistisches, ablenkungsfreies Design",
+      "item5": "• Plattformübergreifende Kompatibilität"
+    },
+    "builtWith": "Gebaut mit",
+    "stack": {
+      "nextjs": "Next.js 16",
+      "react": "Reaktion 19",
+      "typescript": "TypeScript",
+      "tailwind": "Rückenwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "Kondensator"
+    },
+    "links": {
+      "title": "Links",
+      "github": "Auf GitHub ansehen",
+      "vercel": "Unterstützt von Vercel",
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "termsOfService": "Nutzungsbedingungen"
+    },
+    "footer": {
+      "madeWithLove": "Hergestellt mit ❤️ für bessere Gewohnheiten",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
+    }
+  },
+  "NavigationDrawer": {
+    "hidden": {
+      "navigationMenuTitle": "Navigationsmenü",
+      "navigationMenuDescription": "Greifen Sie auf Ihr Dashboard und Ihre Einstellungen zur Gewohnheitsverfolgung zu"
+    },
+    "header": {
+      "title": "Gewohnheits-Tracker",
+      "subtitle": "Verfolgen Sie Ihren täglichen Fortschritt"
+    },
+    "search": {
+      "placeholder": "Suchgewohnheiten...",
+      "clear": "Suche löschen"
+    },
+    "sections": {
+      "goodHabits": "Gute Gewohnheiten",
+      "badHabits": "Schlechte Gewohnheiten"
+    },
+    "empty": {
+      "noGoodHabitsFound": "Keine guten Gewohnheiten gefunden",
+      "noGoodHabitsYet": "Noch keine guten Gewohnheiten",
+      "noBadHabitsFound": "Keine schlechten Angewohnheiten gefunden",
+      "noBadHabitsTracked": "Keine schlechten Gewohnheiten erfasst"
+    },
+    "actions": {
+      "help": "Hilfe",
+      "history": "Geschichte",
+      "settings": "Einstellungen",
+      "supportMe": "Unterstützen Sie mich",
+      "about": "Über"
+    },
+    "habitItem": {
+      "days": "{count} Tage"
+    }
+  },
+  "AccountDataSettings": {
+    "title": "Konto & Daten",
+    "profileAlt": "Profil",
+    "auth": {
+      "login": "Anmelden",
+      "logoutFrom": "Abmelden von {name}"
+    },
+    "autoSync": {
+      "title": "Automatische Synchronisierung",
+      "description": "Synchronisieren Sie Änderungen automatisch mit Google Drive, wenn Sie angemeldet sind."
+    },
+    "analytics": {
+      "title": "Analytik",
+      "description": "Erlauben Sie anonyme Analysen, um die App zu verbessern."
+    },
+    "actions": {
+      "exportToCloud": "In die Cloud exportieren",
+      "importFromCloud": "Aus der Cloud importieren",
+      "exporting": "Exportieren...",
+      "exportData": "Daten exportieren",
+      "importData": "Daten importieren",
+      "resolveSyncConflicts": "Synchronisierungskonflikte lösen"
+    }
+  },
+  "HistoryDialog": {
+    "title": "Gewohnheitsgeschichte und Analyse",
+    "tabs": {
+      "overview": "Übersicht",
+      "stats": "Statistiken",
+      "calendar": "Kalender",
+      "timeline": "Zeitleiste"
+    },
+    "stats": {
+      "totalHabits": {
+        "title": "Gesamtgewohnheiten",
+        "description": "{good} gut, {bad} schlecht"
+      },
+      "combinedStreak": {
+        "title": "Kombinierter Streak",
+        "description": "Längste: {longest} Tage"
+      },
+      "todaysProgress": {
+        "title": "Der heutige Fortschritt",
+        "description": "{percent}% abgeschlossen"
+      },
+      "totalActions": {
+        "title": "Gesamtaktionen",
+        "description": "Alle Zeitabschlüsse"
+      }
+    },
+    "topHabits": {
+      "title": "Top-Gewohnheiten"
+    },
+    "breakdown": {
+      "title": "Gewohnheitsabbau",
+      "emptyTitle": "Noch keine Gewohnheiten",
+      "emptyDescription": "Fügen Sie eine Gewohnheit hinzu, um Ihre Aufschlüsselung hier anzuzeigen",
+      "completions": "{count} Abschlüsse"
+    },
+    "calendar": {
+      "today": "Heute",
+      "notTracked": "Nicht verfolgt",
+      "editEntry": "Eintrag bearbeiten",
+      "clearStatus": "Klarer Status",
+      "noDataForDate": "Für dieses Datum sind keine Daten verfügbar",
+      "addEntry": "Eintrag hinzufügen"
+    },
+    "timeline": {
+      "today": "Heute",
+      "completionSummary": "{completed}/{total} Gewohnheiten abgeschlossen ({percent}%)",
+      "notTracked": "Nicht verfolgt",
+      "notTrackedTitle": "{name}: Nicht verfolgt",
+      "completedTitle": "{name}: Abgeschlossen",
+      "notCompletedTitle": "{name}: Nicht abgeschlossen"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Neue Gewohnheit hinzufügen",
+    "fields": {
+      "name": "Gewohnheitsname",
+      "type": "Gewohnheitstyp",
+      "schedule": "Zeitplan"
+    },
+    "placeholders": {
+      "name": "Geben Sie den Namen der Gewohnheit ein..."
+    },
+    "type": {
+      "good": "Gut",
+      "bad": "Schlecht"
+    },
+    "schedule": {
+      "daily": "Täglich",
+      "interval": "Alle N Tage",
+      "weekly": "Wochentags"
+    },
+    "interval": {
+      "every": "Jeder",
+      "days": "Tage"
+    },
+    "weekdays": {
+      "sun": "Sonne",
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa"
+    },
+    "actions": {
+      "cancel": "Abbrechen",
+      "save": "Speichern"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "Gewohnheit bearbeiten",
+    "fields": {
+      "name": "Gewohnheitsname",
+      "type": "Gewohnheitstyp",
+      "schedule": "Zeitplan"
+    },
+    "placeholders": {
+      "name": "Geben Sie den Namen der Gewohnheit ein..."
+    },
+    "type": {
+      "good": "Gut",
+      "bad": "Schlecht"
+    },
+    "schedule": {
+      "daily": "Täglich",
+      "interval": "Alle N Tage",
+      "weekly": "Wochentags"
+    },
+    "interval": {
+      "every": "Jeder",
+      "days": "Tage"
+    },
+    "weekdays": {
+      "sun": "Sonne",
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa"
+    },
+    "actions": {
+      "cancel": "Abbrechen",
+      "saveChanges": "Änderungen speichern"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Synchronisierungskonflikte erkannt",
+    "description": "Wir haben Konflikte zwischen Ihren lokalen Daten und dem Cloud-Backup festgestellt. Wählen Sie unten Auflösungen pro Feld aus oder verwenden Sie die globalen Aktionen, um die Remote-Version zu akzeptieren oder Ihre lokalen Daten beizubehalten.",
+    "itemLabel": "Artikel: {id}",
+    "differences": "Unterschiede zwischen Lokal und Remote",
+    "choices": {
+      "local": "Lokal",
+      "remote": "Fernbedienung"
+    },
+    "actions": {
+      "keepLocal": "Bleiben Sie lokal",
+      "applySelected": "Ausgewählte anwenden",
+      "acceptRemote": "Akzeptieren Sie Remote"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "Installieren Sie die TGATB-App",
+    "subtitle": "Bessere Erfahrung mit Offline-Support und schnellem Zugriff",
+    "toasts": {
+      "notAvailable": {
+        "title": "App-Installation nicht verfügbar",
+        "description": "Die App-Installation wird auf diesem Gerät oder Browser nicht unterstützt. Probieren Sie Chrome oder Edge auf dem Desktop/Mobilgerät aus."
+      },
+      "started": {
+        "title": "App-Installation gestartet",
+        "description": "Befolgen Sie die Anweisungen Ihres Browsers, um die Installation abzuschließen."
+      },
+      "dismissed": {
+        "title": "App-Installation abgelehnt",
+        "description": "Sie können die App jederzeit über Einstellungen -> App installieren installieren."
+      },
+      "failed": {
+        "title": "Die App-Installation ist fehlgeschlagen",
+        "description": "Beim Versuch, die App zu installieren, ist ein Fehler aufgetreten."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "Tippen Sie unter iOS/Safari auf die Schaltfläche „Teilen“ und wählen Sie zur Installation „Zum Startbildschirm hinzufügen“ aus.",
+        "android": {
+          "line1": "Verwenden Sie unter Android Chrome, Edge oder Samsung Internet. Wenn in der Adressleiste Ihres Browsers ein +-Symbol angezeigt wird, tippen Sie zum Installieren darauf.",
+          "line2": "Wenn Sie das Symbol nicht sehen, öffnen Sie das Browsermenü und suchen Sie nach „Zum Startbildschirm hinzufügen“ oder „App installieren“."
+        },
+        "windowsLinux": {
+          "line1": "Verwenden Sie unter Windows/Linux Chrome oder Edge. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+          "line2": "Wenn nicht, öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Desktop hinzufügen“."
+        },
+        "mac": {
+          "line1": "Verwenden Sie unter macOS Chrome oder Edge. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+          "line2": "Wenn nicht, öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Dock hinzufügen“."
+        },
+        "generic": {
+          "line1": "Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+          "line2": "Andernfalls öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Startbildschirm hinzufügen“."
+        }
+      },
+      "default": {
+        "iosSafari": "Tippen Sie unter iOS/Safari auf die Schaltfläche „Teilen“ und wählen Sie zur Installation „Zum Startbildschirm hinzufügen“ aus.",
+        "android": "Verwenden Sie auf Android Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+        "windowsLinux": "Verwenden Sie unter Windows/Linux Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+        "mac": "Verwenden Sie unter macOS Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es."
+      }
+    },
+    "actions": {
+      "dismiss": "Entlassen",
+      "install": "Installieren",
+      "ok": "Okay",
+      "notNow": "Nicht jetzt"
+    }
+  },
+  "DonationDialog": {
+    "title": "Unterstützen Sie mich",
+    "description": "Wenn Ihnen diese App gefällt, sollten Sie darüber nachdenken, ihre Entwicklung zu unterstützen. Jeder Beitrag trägt dazu bei, dass es kostenlos bleibt und sich verbessert!",
+    "sections": {
+      "paymentPlatforms": "Zahlungsplattformen",
+      "cryptocurrency": "Kryptowährung"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Unterstützen Sie mich mit QRIS!",
+      "description": "Scannen Sie diesen QR-Code mit Ihrer Banking-App, um über QRIS zu spenden.",
+      "imageAlt": "QRIS-Spendenmethode",
+      "download": "Laden Sie QRIS herunter"
+    },
+    "copiedBadge": "Kopiert!",
+    "thankYou": "Vielen Dank, dass Sie darüber nachdenken, dieses Projekt zu unterstützen!",
+    "toasts": {
+      "copied": {
+        "title": "Kopiert!",
+        "description": "Adresse in die Zwischenablage kopiert"
+      },
+      "copyFailed": {
+        "title": "Kopieren fehlgeschlagen",
+        "description": "Bitte kopieren Sie die Adresse manuell"
+      },
+      "saved": {
+        "title": "Gespeichert!",
+        "description": "QRIS-Bild auf dem Gerät gespeichert."
+      },
+      "saveFailed": {
+        "title": "Speichern fehlgeschlagen",
+        "description": "Bild konnte nicht gespeichert werden."
+      },
+      "downloadFailed": {
+        "title": "Der Download ist fehlgeschlagen",
+        "description": "Bild konnte nicht abgerufen werden."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Eintrag hinzufügen für {date}",
+    "tabs": {
+      "addEntry": "Neuen Eintrag hinzufügen",
+      "addHabit": "Neue Gewohnheit hinzufügen"
+    },
+    "placeholders": {
+      "noHabit": "Keine Gewohnheit verfügbar, jetzt hinzufügen!",
+      "selectHabit": "Gewohnheit auswählen...",
+      "habitName": "Gewohnheitsname..."
+    },
+    "type": {
+      "good": "Gut",
+      "bad": "Schlecht"
+    },
+    "status": {
+      "good": {
+        "true": "Abgeschlossen",
+        "false": "Verpasst"
+      },
+      "bad": {
+        "true": "Vermieden",
+        "false": "Fertig"
+      }
+    },
+    "actions": {
+      "addEntry": "Eintrag hinzufügen",
+      "addHabitAndLog": "Gewohnheit und Protokolleintrag hinzufügen"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "Eintrag bearbeiten",
+    "fields": {
+      "date": "Datum",
+      "status": "Status"
+    },
+    "status": {
+      "good": {
+        "true": "Abgeschlossen",
+        "false": "Verpasst"
+      },
+      "bad": {
+        "true": "Vermieden",
+        "false": "Fertig"
+      }
+    },
+    "actions": {
+      "cancel": "Abbrechen",
+      "save": "Speichern"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Charaktermotivator",
+    "personalityType": "Persönlichkeitstyp",
+    "personality": {
+      "positive": {
+        "title": "Positiv",
+        "description": "Ermutigend und unterstützend"
+      },
+      "adaptive": {
+        "title": "Adaptiv",
+        "description": "Ausgewogen und realistisch"
+      },
+      "harsh": {
+        "title": "Hart",
+        "description": "Direkt und herausfordernd"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Beginnen Sie Ihre Reise",
+    "description": "Erstellen Sie Ihre erste Gewohnheit, um Ihren täglichen Fortschritt zu verfolgen und Konsistenz aufzubauen.",
+    "addFirstHabit": "Fügen Sie Ihre erste Gewohnheit hinzu",
+    "footer": "Jeder Experte war einmal ein Anfänger"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Alle Gewohnheiten löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie alle Gewohnheiten löschen möchten?",
+    "actions": {
+      "cancel": "Abbrechen",
+      "deleting": "Löschen...",
+      "delete": "Löschen"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Rückmeldung",
+    "sound": {
+      "title": "Soundeffekte",
+      "description": "Spielen Sie Sounds bei Interaktionen ab"
+    },
+    "haptic": {
+      "title": "Haptisches Feedback",
+      "supported": "Vibrieren Sie bei Interaktionen",
+      "notSupported": "Wird auf diesem Gerät nicht unterstützt"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Hilfe und Support",
+    "actions": {
+      "showWelcomeGuide": "Willkommensführer anzeigen",
+      "contactEmail": "Kontaktieren Sie {name} per E-Mail"
+    }
+  },
+  "SettingsScreen": {
+    "title": "Einstellungen"
+  },
+  "AppDeviceSettings": {
+    "title": "App und Gerät",
+    "install": {
+      "nativeApp": "Native App",
+      "installed": "App installiert",
+      "installApp": "App installieren",
+      "nativeDescription": "Sie verwenden die native Android-App",
+      "installedDescription": "TGATB ist bereits auf Ihrem Gerät",
+      "addToHome": "Zum Startbildschirm hinzufügen"
+    },
+    "reminder": {
+      "title": "Tägliche Erinnerung",
+      "timeLabel": "Erinnerungszeit",
+      "status": {
+        "notSupported": "Benachrichtigungen werden in diesem Browser nicht unterstützt",
+        "off": "Aus",
+        "denied": "Berechtigung verweigert – Browser-/Geräteeinstellungen überprüfen",
+        "set": "Erinnerung für {time} festgelegt",
+        "setWeb": "Erinnerung für {time} festgelegt – funktioniert am besten, wenn die App geöffnet oder als PWA installiert ist"
+      }
+    },
+    "permission": {
+      "title": "Benachrichtigungen erforderlich",
+      "description": "Um Ihnen tägliche Erinnerungen zu senden, benötigt die App die Erlaubnis, Benachrichtigungen anzuzeigen. Sie können dies in Ihren Browser- oder Geräteeinstellungen aktivieren.",
+      "gotIt": "Verstanden"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "Noch keine Gewohnheiten",
+    "emptyDescription": "Fügen Sie Ihre erste Gewohnheit hinzu, um loszulegen!",
+    "question": {
+      "pending": "Hast du es getan?",
+      "goodPositive": "Heute schon erledigt!",
+      "badPositive": "Du hast es heute nicht getan!",
+      "goodNegative": "Du hast es heute nicht getan!",
+      "badNegative": "Du hast es heute geschafft!"
+    },
+    "status": {
+      "goodCompleted": "Abgeschlossen",
+      "goodMissed": "Verpasst",
+      "badAvoided": "Vermieden",
+      "badDone": "Fertig"
+    },
+    "type": {
+      "good": "Gut",
+      "bad": "Schlecht"
+    },
+    "streakDays": "{count} Tage",
+    "atTime": "um {time}",
+    "actions": {
+      "undo": "Rückgängig machen"
+    }
+  },
+  "OfflineToast": {
+    "message": "Du bist offline. Einige Funktionen können eingeschränkt sein."
+  },
+  "OfflineIndicator": {
+    "message": "Du bist offline. Einige Funktionen können eingeschränkt sein."
+  },
+  "AnalyticsNotice": {
+    "title": "Hinweis",
+    "description": "Wir nutzen Vercel Analytics, um Ihr Erlebnis zu verbessern. Anonyme Nutzungsdaten helfen uns, die App besser zu machen.",
+    "gotIt": "Verstanden"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Gewohnheits-Tracker",
+    "loading": "Deine Gewohnheiten werden geladen..."
+  },
+  "LoadingOverlay": {
+    "loading": "Laden..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Schritt {current} von {total}",
+    "steps": {
+      "welcome": {
+        "title": "Willkommen bei Habit Tracker!",
+        "description": "Machen wir einen kurzen Rundgang, um Ihnen den Einstieg in die effektive Verfolgung Ihrer Gewohnheiten zu erleichtern."
+      },
+      "navigation": {
+        "title": "Navigationsmenü",
+        "description": "Greifen Sie über dieses Menü auf alle Ihre Gewohnheiten zu, sehen Sie sich den Verlauf an und passen Sie Einstellungen an."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Fügen Sie weitere Gewohnheiten hinzu",
+        "emptyTitle": "Fügen Sie Ihre erste Gewohnheit hinzu",
+        "hasHabitsDescription": "Mit dieser schwebenden Schaltfläche können Sie jederzeit weitere Gewohnheiten hinzufügen.",
+        "emptyDescription": "Tippen Sie auf diese Schaltfläche, um Ihre erste Gewohnheit zu erstellen. Sie können sowohl gute Gewohnheiten zum Aufbau als auch schlechte Gewohnheiten zum Abbrechen hinzufügen."
+      },
+      "habitCard": {
+        "title": "Verfolgen Sie Ihren Fortschritt",
+        "hasHabitsDescription": "Hier sind deine Gewohnheiten! Tippen Sie darauf, um sie für den Tag als abgeschlossen zu markieren.",
+        "emptyDescription": "Sobald Sie Gewohnheiten hinzufügen, werden diese hier angezeigt. Tippen Sie, um sie für den Tag als abgeschlossen zu markieren."
+      },
+      "complete": {
+        "title": "Sie sind bereit!",
+        "description": "Beginnen Sie noch heute damit, bessere Gewohnheiten aufzubauen. Denken Sie daran: Beständigkeit ist der Schlüssel zum Erfolg!"
+      }
+    },
+    "actions": {
+      "skip": "Überspringen",
+      "previous": "Zurück",
+      "skipTour": "Tour überspringen",
+      "next": "Als nächstes",
+      "getStarted": "Legen Sie los",
+      "start": "Starten"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Gewohnheitsmanagement",
+    "deleteAll": "Alle Gewohnheiten löschen",
+    "toasts": {
+      "deleted": {
+        "title": "Alle Gewohnheiten gelöscht",
+        "description": "Ihre Gewohnheitsliste wurde gelöscht."
+      },
+      "failed": {
+        "title": "Löschen fehlgeschlagen",
+        "description": "Beim Löschen von Gewohnheiten ist ein Fehler aufgetreten."
+      },
+      "noHandler": {
+        "description": "Kein Löschhandler bereitgestellt."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Steuerelemente in der Statusleiste",
+    "label": "Statusleiste",
+    "visible": "Sichtbar",
+    "hidden": "Versteckt",
+    "status": "Statusleiste: {visibility} | Höhe: {height}px",
+    "actions": {
+      "show": "Zeigen",
+      "hide": "Verstecken",
+      "lightStyle": "Leichter Stil",
+      "darkStyle": "Dunkler Stil",
+      "defaultStyle": "Standardstil",
+      "redBackground": "Roter Hintergrund",
+      "greenBackground": "Grüner Hintergrund",
+      "blueBackground": "Blauer Hintergrund",
+      "resetToWhite": "Zurücksetzen auf Weiß"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "Du bist offline",
+      "description": "App funktioniert offline. Die Daten werden synchronisiert, wenn die Verbindung wiederhergestellt wird.",
+      "retry": "Versuchen Sie es noch einmal"
+    },
+    "fallback": {
+      "title": "TGATB Habit Tracker",
+      "description": "Deine Gewohnheiten werden geladen..."
+    }
+  },
+  "TermsOfServicePage": {
+    "meta": {
+      "title": "Nutzungsbedingungen – TGATB Habit Tracker",
+      "description": "Nutzungsbedingungen für The Good and The Bad: Habit Tracker"
+    },
+    "title": "Nutzungsbedingungen",
+    "lastUpdated": "Letzte Aktualisierung: 13. Februar 2026",
+    "sections": {
+      "welcome": {
+        "title": "Willkommen",
+        "body": "Willkommen beim TGATB Habit Tracker („Das Gute und das Schlechte“, „wir“, „uns“, „unser“). Durch die Nutzung unserer Web- und Mobilanwendungen stimmen Sie diesen Nutzungsbedingungen zu."
+      },
+      "use": {
+        "title": "Nutzung der App",
+        "item1": "Um die App nutzen zu können, müssen Sie mindestens 13 Jahre alt sein.",
+        "item2": "Sie erklären sich damit einverstanden, die App nicht zu missbrauchen oder zu versuchen, auf unbefugte Weise darauf zuzugreifen."
+      },
+      "userContent": {
+        "title": "Benutzerinhalte",
+        "item1": "Sie sind für die von Ihnen hinzugefügten Inhalte (Gewohnheiten, Notizen usw.) verantwortlich.",
+        "item2": "Wir behalten uns das Recht vor, Inhalte zu entfernen, die gegen diese Bedingungen oder geltende Gesetze verstoßen."
+      },
+      "intellectualProperty": {
+        "title": "Geistiges Eigentum",
+        "item1": "Alle App-Inhalte, Marken und Codes sind Eigentum von uns oder unseren Lizenzgebern.",
+        "item2": "Sie dürfen unsere Inhalte nicht ohne Genehmigung kopieren, ändern oder verbreiten."
+      },
+      "thirdParty": {
+        "title": "Dienste Dritter",
+        "body": "Die App nutzt Dienste von Drittanbietern (Google Cloud, Firebase usw.). Ihre Nutzung dieser Dienste unterliegt den jeweiligen Bedingungen."
+      },
+      "limitation": {
+        "title": "Haftungsbeschränkung",
+        "body": "Die App wird „wie besehen“ ohne Gewährleistungen jeglicher Art bereitgestellt. Wir haften nicht für Schäden, die durch Ihre Nutzung der App entstehen."
+      },
+      "termination": {
+        "title": "Kündigung",
+        "body": "Bei einem Verstoß gegen diese Bedingungen können wir Ihren Zugriff auf die App sperren oder beenden."
+      },
+      "changes": {
+        "title": "Änderungen dieser Bedingungen",
+        "body": "Wir können diese Nutzungsbedingungen von Zeit zu Zeit aktualisieren. Änderungen werden in der App und auf unserer Website veröffentlicht."
+      },
+      "openSource": {
+        "title": "Open Source",
+        "body": "TGATB Habit Tracker ist Open Source unter der Apache 2.0-Lizenz. Den vollständigen Quellcode können Sie hier einsehen:"
+      },
+      "contact": {
+        "title": "Kontaktieren Sie uns",
+        "body": "Wenn Sie Fragen zu diesen Nutzungsbedingungen haben, kontaktieren Sie uns bitte unter:"
+      }
+    },
+    "links": {
+      "privacyPolicy": "Datenschutzrichtlinie",
+      "openApp": "Öffnen Sie den TGATB Habit Tracker"
+    },
+    "footer": {
+      "rightsReserved": "Alle Rechte vorbehalten."
+    }
+  },
+  "PrivacyPolicyPage": {
+    "meta": {
+      "title": "Datenschutzrichtlinie – TGATB Habit Tracker",
+      "description": "Datenschutzrichtlinie für das Gute und das Schlechte: Habit Tracker"
+    },
+    "title": "Datenschutzrichtlinie",
+    "lastUpdated": "Letzte Aktualisierung: 7. Februar 2026",
+    "sections": {
+      "overview": {
+        "title": "Übersicht",
+        "body": "TGATB Habit Tracker („The Good and The Bad“) ist eine minimalistische Anwendung zur Gewohnheitsverfolgung, die von adsurkasur entwickelt wurde. In dieser Datenschutzrichtlinie wird erläutert, wie wir mit Ihren Daten umgehen, wenn Sie unsere Webanwendung unter www.tgatb.click und unsere mobile Android-Anwendung nutzen."
+      },
+      "informationCollected": {
+        "title": "Informationen, die wir sammeln",
+        "dataYouProvide": {
+          "title": "Von Ihnen bereitgestellte Daten",
+          "habitData": "Gewohnheitsdaten: Namen, Typen (gut/schlecht), Abschlussprotokolle und Streaks, die Sie in der App erstellen. Diese Daten werden standardmäßig lokal auf Ihrem Gerät gespeichert.",
+          "settings": "Einstellungen: Dunkelmodus, Sprache, Motivator-Persönlichkeit und andere App-Einstellungen, die lokal auf Ihrem Gerät gespeichert sind.",
+          "googleAccount": "Google-Kontoinformationen (optional): Wenn Sie sich für die Cloud-Sicherung bei Google anmelden, greifen wir ausschließlich zur Authentifizierung und zur Google Drive-Sicherungsfunktion auf Ihren Namen, Ihre E-Mail-Adresse und Ihr Profilbild zu."
+        },
+        "dataCollectedAutomatically": {
+          "title": "Automatisch erfasste Daten",
+          "analytics": "Analysedaten (mit Einwilligung): Wir verwenden Vercel Analytics und Firebase Analytics, um anonyme Nutzungsstatistiken wie Seitenaufrufe, Gerätetyp und allgemeine Interaktionsmuster zu sammeln. Die Analyse wird erst initialisiert, nachdem Sie Ihre Einwilligung erteilt haben.",
+          "errorTracking": "Fehlerverfolgung (optional): Wenn aktiviert, sammelt Sentry Absturzberichte und Fehlerprotokolle, um uns bei der Verbesserung der App-Stabilität zu helfen. Dies ist nur aktiv, wenn eine Einwilligung zur Analyse vorliegt und ein Sentry-DSN konfiguriert ist."
+        },
+        "dataNotCollected": {
+          "title": "Daten, die wir NICHT sammeln",
+          "noPayments": "Wir erfassen keine Zahlungsinformationen",
+          "noLocation": "Wir erfassen keine Standortdaten",
+          "noContacts": "Wir erfassen keine Kontakt- oder Telefondaten",
+          "noAds": "Wir schalten keine Werbung und sammeln keine werbebezogenen Daten",
+          "noSelling": "Wir verkaufen Ihre Daten nicht an Dritte"
+        }
+      },
+      "dataStorage": {
+        "title": "Wie Ihre Daten gespeichert werden",
+        "local": "Lokale Speicherung (Standard): Alle Gewohnheitsdaten und -einstellungen werden lokal auf Ihrem Gerät über den Browser „localStorage“ (Web) oder „Capacitor Preferences“ (Android) gespeichert. Keine Daten verlassen Ihr Gerät, es sei denn, Sie aktivieren explizit die Cloud-Sicherung.",
+        "cloudBackup": "Cloud-Backup (optional): Wenn Sie sich bei Google anmelden, können Sie Ihre Daten auf Ihrem eigenen Google Drive sichern. Ihre Daten werden als Datei in Ihrem persönlichen Google Drive gespeichert – wir haben keinen Zugriff auf Ihre Google Drive-Dateien."
+      },
+      "thirdPartyServices": {
+        "title": "Dienste Dritter",
+        "intro": "Wir nutzen die folgenden Dienste von Drittanbietern:",
+        "firebase": "Firebase-Authentifizierung: Für die Google-Anmeldung. Es gelten die Datenschutzbestimmungen von Google.",
+        "firebaseAnalytics": "Firebase Analytics: Für anonyme Nutzungsstatistiken (Einwilligung erforderlich).",
+        "vercelAnalytics": "Vercel Analytics: Für anonyme Webanalysen (Einwilligung erforderlich).",
+        "googleDrive": "Google Drive API: Für optionale Cloud-Sicherung, Zugriff nur auf Ihre eigenen, von der App erstellten Dateien.",
+        "sentry": "Sentry (optional): Für Fehler- und Absturzberichte, wenn aktiviert."
+      },
+      "rightsControls": {
+        "title": "Ihre Rechte und Kontrollen",
+        "analyticsConsent": "Analytics-Einwilligung: Sie können Analytics jederzeit in den App-Einstellungen aktivieren oder deaktivieren.",
+        "dataDeletion": "Datenlöschung: Sie können alle Ihre Gewohnheitsdaten in den App-Einstellungen löschen („Alle Gewohnheiten löschen“). Da die Daten lokal gespeichert werden, werden durch das Löschen Ihrer Browserdaten oder die Deinstallation der App auch alle Daten gelöscht.",
+        "cloudBackupControl": "Cloud-Backup-Kontrolle: Sie können sich jederzeit abmelden, um das Cloud-Backup zu stoppen. Ihre Google Drive-Sicherungsdateien können direkt von Ihrem Google Drive aus verwaltet werden.",
+        "dataExport": "Datenexport: Sie können Ihre Daten jederzeit aus den App-Einstellungen als JSON-Datei exportieren."
+      },
+      "deleteData": {
+        "title": "Löschen Sie Ihre Daten",
+        "intro": "TGATB Habit Tracker speichert Ihre Gewohnheitsdaten lokal auf Ihrem Gerät. Sie können jederzeit alle Ihre Daten löschen, ohne dass Sie Ihr Konto löschen müssen:",
+        "steps": "1. Öffnen Sie die App\n2. Tippen Sie oben links auf das Menüsymbol (Hamburger-Menü).\n3. Scrollen Sie nach unten zu „Gewohnheitsverwaltung“.\n4. Tippen Sie auf „Alle Gewohnheiten löschen“\n5. Bestätigen Sie den Löschvorgang, wenn Sie dazu aufgefordert werden",
+        "willDelete": "Dadurch wird Folgendes dauerhaft gelöscht:",
+        "willDeleteItems": "Alle Ihre Gewohnheiten und ihre Namen, alle Abschlussprotokolle und Streak-Daten, alle Verlaufsaufzeichnungen",
+        "willNotDelete": "Dadurch wird Folgendes NICHT gelöscht:",
+        "willNotDeleteItems": "Ihre App-Einstellungen (Dunkelmodus, Sprache usw.) – diese werden zurückgesetzt, wenn Sie App-Daten löschen oder deinstallieren. Alle zuvor auf Ihrem Google Drive gespeicherten Sicherungsdateien – Sie können diese direkt von Ihrem Google Drive löschen",
+        "alternative": "Alternativ können Sie die App deinstallieren oder App-Daten aus Ihren Geräteeinstellungen löschen, um alle lokal gespeicherten Informationen zu entfernen."
+      },
+      "deleteAccount": {
+        "title": "Löschen Sie Ihr Konto",
+        "intro": "Wenn Sie sich bei Google angemeldet haben und Ihr Konto und alle damit verbundenen Daten vollständig entfernen möchten, gehen Sie folgendermaßen vor:",
+        "appSteps": "1. Öffnen Sie die App\n2. Tippen Sie oben links auf das Menüsymbol (Hamburger-Menü).\n3. Scrollen Sie nach unten zu Gewohnheitsverwaltung und tippen Sie auf „Alle Gewohnheiten löschen“, um Ihre Daten zu entfernen\n4. Scrollen Sie zu Konto & Daten und tippen Sie auf „Abmelden“, um sich abzumelden\n5. Deinstallieren Sie die App, um alle verbleibenden lokalen Daten zu entfernen",
+        "googleDriveSteps": "So entfernen Sie Ihre Google Drive-Sicherungsdateien:\n1. Gehen Sie zu Google Drive\n2. Suchen Sie nach „tgatb“ oder „habit“, um Sicherungsdateien zu finden\n3. Löschen Sie die Sicherungsdateien",
+        "revokeSteps": "So widerrufen Sie den Zugriff der App auf Ihr Google-Konto:\n1. Gehen Sie zu Google-Kontoberechtigungen\n2. Suchen Sie in der Liste nach „TGATB Habit Tracker“.\n3. Klicken Sie auf „Zugriff entfernen“",
+        "completion": "Nach Abschluss dieser Schritte werden alle Ihre Daten und Ihr Kontozugriff vollständig entfernt. Wenn Sie Hilfe benötigen, kontaktieren Sie uns unter adsurkasur.dev@gmail.com."
+      },
+      "dataSecurity": {
+        "title": "Datensicherheit",
+        "body": "Wir ergreifen angemessene Sicherheitsmaßnahmen, um Ihre Daten zu schützen. Ihre Gewohnheitsdaten werden lokal auf Ihrem Gerät gespeichert und nicht an unsere Server übertragen. Cloud-Backup-Daten werden mithilfe der Sicherheitsinfrastruktur von Google in Ihrem persönlichen Google Drive gespeichert. Allerdings ist keine Methode der elektronischen Speicherung zu 100 % sicher."
+      },
+      "childrenPrivacy": {
+        "title": "Privatsphäre von Kindern",
+        "body": "Unsere App richtet sich nicht an Kinder unter 13 Jahren. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren. Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und glauben, dass Ihr Kind uns personenbezogene Daten zur Verfügung gestellt hat, kontaktieren Sie uns bitte."
+      },
+      "policyChanges": {
+        "title": "Änderungen an dieser Richtlinie",
+        "body": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Alle Änderungen werden durch die Aktualisierung des Datums „Letzte Aktualisierung“ oben auf dieser Seite berücksichtigt. Wir empfehlen Ihnen, diese Richtlinie regelmäßig zu überprüfen."
+      },
+      "contactUs": {
+        "title": "Kontaktieren Sie uns",
+        "body": "Wenn Sie Fragen zu dieser Datenschutzrichtlinie oder unseren Datenpraktiken haben, kontaktieren Sie uns bitte unter: adsurkasur.dev@gmail.com"
+      },
+      "openSource": {
+        "title": "Open Source",
+        "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
+      }
+    },
+    "links": {
+      "termsOfService": "Nutzungsbedingungen",
+      "openApp": "Öffnen Sie den TGATB Habit Tracker"
+    },
+    "footer": {
+      "copyright": "© 2025-2026 adsurkasur. Alle Rechte vorbehalten."
+    }
+  }
+}

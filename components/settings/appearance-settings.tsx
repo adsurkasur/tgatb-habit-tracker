@@ -13,6 +13,15 @@ import { withLocalePath } from "@/i18n/pathname";
 import { routing, type AppLocale } from "@/i18n/routing";
 import { LanguageSelectionModal } from "@/components/language-selection-modal";
 
+function getLocaleDisplayName(localeCode: string, displayLocale: string): string {
+  try {
+    const displayNames = new Intl.DisplayNames([displayLocale], { type: "language" });
+    return displayNames.of(localeCode) ?? localeCode.toUpperCase();
+  } catch {
+    return localeCode.toUpperCase();
+  }
+}
+
 interface AppearanceSettingsProps {
   settings: UserSettings;
   onUpdateSettings: (settings: Partial<UserSettings>) => void;
@@ -111,7 +120,7 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
             <div>
               <span className="font-medium">{t("language.title")}</span>
               <p className="text-sm text-muted-foreground">
-                {settings.language === "en" ? t("language.english") : t("language.indonesian")}
+                {getLocaleDisplayName(settings.language, settings.language)}
               </p>
             </div>
           </div>

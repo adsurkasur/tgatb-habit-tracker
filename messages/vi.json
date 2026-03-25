@@ -1,0 +1,810 @@
+{
+  "App": {
+    "name": "Trình theo dõi thói quen TGATB",
+    "description": "The Good and The Bad: Ứng dụng theo dõi thói quen tối giản"
+  },
+  "Routing": {
+    "redirecting": "Đang chuyển hướng..."
+  },
+  "Home": {
+    "title": "Cái tốt và cái xấu",
+    "demoLabel": "Thói quen demo",
+    "counter": "{current} trong số {total} thói quen",
+    "counterHint": "Sử dụng phím ← →, nút điều hướng hoặc vuốt để điều hướng",
+    "aria": {
+      "previousHabit": "Thói quen trước đây",
+      "nextHabit": "Thói quen tiếp theo"
+    },
+    "toasts": {
+      "pressBackAgainExit": "Nhấn lại lần nữa để thoát",
+      "habitDeletedTitle": "Đã xóa thói quen!",
+      "habitDeletedDescription": "Thói quen của bạn đã bị loại bỏ.",
+      "undoDeleteAltText": "Hoàn tác xóa",
+      "undo": "Hoàn tác"
+    }
+  },
+  "AppearanceSettings": {
+    "title": "Vẻ bề ngoài",
+    "darkMode": {
+      "label": "Chế độ tối",
+      "description": "Chuyển đổi giữa chủ đề sáng và tối"
+    },
+    "language": {
+      "title": "Ngôn ngữ",
+      "label": "Chuyển đổi ngôn ngữ ứng dụng",
+      "english": "Tiếng Anh",
+      "indonesian": "Tiếng Bahasa Indonesia",
+      "modalTitle": "Chọn ngôn ngữ",
+      "modalDescription": "Chọn ngôn ngữ được sử dụng trên giao diện ứng dụng.",
+      "restartWarningWeb": "Việc áp dụng ngôn ngữ mới sẽ làm mới trang này để cập nhật đầy đủ văn bản.",
+      "restartWarningApp": "Việc áp dụng ngôn ngữ mới sẽ khởi động lại màn hình ứng dụng này để cập nhật đầy đủ văn bản.",
+      "cancel": "Hủy bỏ",
+      "apply": "Áp dụng",
+      "applying": "Đang áp dụng..."
+    },
+    "fullscreen": {
+      "title": "Chế độ toàn màn hình",
+      "nativeDescription": "Ẩn thanh trạng thái để có trải nghiệm tuyệt vời",
+      "nonNativeDescription": "Cài đặt ứng dụng di động"
+    },
+    "toasts": {
+      "fullscreenEnabledTitle": "Đã bật chế độ toàn màn hình",
+      "fullscreenEnabledDescription": "Chế độ toàn màn hình có thể không hiển thị hoàn hảo trên tất cả các thiết bị. Nếu nhận thấy vấn đề, bạn có thể tắt tính năng này trong cài đặt.",
+      "languageUpdated": "Đã cập nhật ngôn ngữ",
+      "switchedToEnglish": "Đã chuyển sang tiếng Anh",
+      "switchedToIndonesian": "Chuyển sang tiếng Bahasa Indonesia"
+    }
+  },
+  "SettingsDialog": {
+    "title": "Cài đặt"
+  },
+  "AboutDialog": {
+    "title": "Giới thiệu về Trình theo dõi thói quen TGATB",
+    "projectName": "Cái tốt và cái xấu",
+    "projectDescription": "Ứng dụng web tiến bộ tối giản để theo dõi thói quen hàng ngày của bạn",
+    "version": "Phiên bản {version}",
+    "features": {
+      "title": "Đặc trưng",
+      "item1": "• Theo dõi thói quen tốt và xấu",
+      "item2": "• Hỗ trợ ngoại tuyến với công nghệ PWA",
+      "item3": "• Theo dõi vệt và tiến trình trực quan",
+      "item4": "• Thiết kế tối giản, không gây xao lãng",
+      "item5": "• Khả năng tương thích đa nền tảng"
+    },
+    "builtWith": "Được xây dựng với",
+    "stack": {
+      "nextjs": "Next.js 16",
+      "react": "Phản ứng 19",
+      "typescript": "Bản đánh máy",
+      "tailwind": "Tailwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "tụ điện"
+    },
+    "links": {
+      "title": "Liên kết",
+      "github": "Xem trên GitHub",
+      "vercel": "Được cung cấp bởi Vercel",
+      "privacyPolicy": "Chính sách bảo mật",
+      "termsOfService": "Điều khoản dịch vụ"
+    },
+    "footer": {
+      "madeWithLove": "Được làm bằng ❤️ để có thói quen tốt hơn",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
+    }
+  },
+  "NavigationDrawer": {
+    "hidden": {
+      "navigationMenuTitle": "Menu điều hướng",
+      "navigationMenuDescription": "Truy cập bảng điều khiển và cài đặt theo dõi thói quen của bạn"
+    },
+    "header": {
+      "title": "Theo dõi thói quen",
+      "subtitle": "Theo dõi tiến trình hàng ngày của bạn"
+    },
+    "search": {
+      "placeholder": "Thói quen tìm kiếm...",
+      "clear": "Xóa tìm kiếm"
+    },
+    "sections": {
+      "goodHabits": "Thói quen tốt",
+      "badHabits": "Thói quen xấu"
+    },
+    "empty": {
+      "noGoodHabitsFound": "Không tìm thấy thói quen tốt",
+      "noGoodHabitsYet": "Chưa có thói quen tốt",
+      "noBadHabitsFound": "Không tìm thấy thói quen xấu",
+      "noBadHabitsTracked": "Không có thói quen xấu nào được theo dõi"
+    },
+    "actions": {
+      "help": "Giúp đỡ",
+      "history": "Lịch sử",
+      "settings": "Cài đặt",
+      "supportMe": "Hỗ trợ tôi",
+      "about": "Về"
+    },
+    "habitItem": {
+      "days": "{count} ngày"
+    }
+  },
+  "AccountDataSettings": {
+    "title": "Tài khoản & Dữ liệu",
+    "profileAlt": "Hồ sơ",
+    "auth": {
+      "login": "Đăng nhập",
+      "logoutFrom": "Đăng xuất khỏi {name}"
+    },
+    "autoSync": {
+      "title": "Tự động đồng bộ hóa",
+      "description": "Tự động đồng bộ hóa các thay đổi với Google Drive khi đăng nhập."
+    },
+    "analytics": {
+      "title": "Phân tích",
+      "description": "Cho phép phân tích ẩn danh để giúp cải thiện ứng dụng."
+    },
+    "actions": {
+      "exportToCloud": "Xuất sang đám mây",
+      "importFromCloud": "Nhập từ đám mây",
+      "exporting": "Đang xuất...",
+      "exportData": "Xuất dữ liệu",
+      "importData": "Nhập dữ liệu",
+      "resolveSyncConflicts": "Giải quyết xung đột đồng bộ hóa"
+    }
+  },
+  "HistoryDialog": {
+    "title": "Lịch sử và phân tích thói quen",
+    "tabs": {
+      "overview": "Tổng quan",
+      "stats": "Thống kê",
+      "calendar": "Lịch",
+      "timeline": "Dòng thời gian"
+    },
+    "stats": {
+      "totalHabits": {
+        "title": "Tổng số thói quen",
+        "description": "{good} tốt, {bad} tệ"
+      },
+      "combinedStreak": {
+        "title": "Vệt kết hợp",
+        "description": "Dài nhất: {longest} ngày"
+      },
+      "todaysProgress": {
+        "title": "Sự tiến bộ ngày nay",
+        "description": "{percent}% đã hoàn thành"
+      },
+      "totalActions": {
+        "title": "Tổng số hành động",
+        "description": "Tất cả thời gian hoàn thành"
+      }
+    },
+    "topHabits": {
+      "title": "Thói quen hàng đầu"
+    },
+    "breakdown": {
+      "title": "Phân tích thói quen",
+      "emptyTitle": "Chưa có thói quen",
+      "emptyDescription": "Thêm thói quen để xem bảng phân tích của bạn tại đây",
+      "completions": "{count} hoàn thành"
+    },
+    "calendar": {
+      "today": "Hôm nay",
+      "notTracked": "Không được theo dõi",
+      "editEntry": "Chỉnh sửa mục nhập",
+      "clearStatus": "Xóa trạng thái",
+      "noDataForDate": "Không có dữ liệu cho ngày này",
+      "addEntry": "Thêm mục nhập"
+    },
+    "timeline": {
+      "today": "Hôm nay",
+      "completionSummary": "{completed}/{total} thói quen đã hoàn thành ({percent}%)",
+      "notTracked": "Không được theo dõi",
+      "notTrackedTitle": "{name}: Không được theo dõi",
+      "completedTitle": "{name}: Đã hoàn thành",
+      "notCompletedTitle": "{name}: Chưa hoàn thành"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Thêm thói quen mới",
+    "fields": {
+      "name": "Tên thói quen",
+      "type": "Loại thói quen",
+      "schedule": "Lịch trình"
+    },
+    "placeholders": {
+      "name": "Nhập tên thói quen..."
+    },
+    "type": {
+      "good": "Tốt",
+      "bad": "Xấu"
+    },
+    "schedule": {
+      "daily": "Hằng ngày",
+      "interval": "Mỗi N ngày",
+      "weekly": "Các ngày trong tuần"
+    },
+    "interval": {
+      "every": "Mọi",
+      "days": "ngày"
+    },
+    "weekdays": {
+      "sun": "Mặt trời",
+      "mon": "Thứ hai",
+      "tue": "thứ ba",
+      "wed": "Thứ tư",
+      "thu": "Thứ năm",
+      "fri": "Thứ Sáu",
+      "sat": "Đã ngồi"
+    },
+    "actions": {
+      "cancel": "Hủy bỏ",
+      "save": "Cứu"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "Chỉnh sửa thói quen",
+    "fields": {
+      "name": "Tên thói quen",
+      "type": "Loại thói quen",
+      "schedule": "Lịch trình"
+    },
+    "placeholders": {
+      "name": "Nhập tên thói quen..."
+    },
+    "type": {
+      "good": "Tốt",
+      "bad": "Xấu"
+    },
+    "schedule": {
+      "daily": "Hằng ngày",
+      "interval": "Mỗi N ngày",
+      "weekly": "Các ngày trong tuần"
+    },
+    "interval": {
+      "every": "Mọi",
+      "days": "ngày"
+    },
+    "weekdays": {
+      "sun": "Mặt trời",
+      "mon": "Thứ hai",
+      "tue": "thứ ba",
+      "wed": "Thứ tư",
+      "thu": "Thứ năm",
+      "fri": "Thứ Sáu",
+      "sat": "Đã ngồi"
+    },
+    "actions": {
+      "cancel": "Hủy bỏ",
+      "saveChanges": "Lưu thay đổi"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Đã phát hiện xung đột đồng bộ hóa",
+    "description": "Chúng tôi đã tìm thấy xung đột giữa dữ liệu cục bộ của bạn và bản sao lưu đám mây. Chọn độ phân giải theo từng trường bên dưới hoặc sử dụng các hành động chung để chấp nhận phiên bản từ xa hoặc giữ lại dữ liệu cục bộ của bạn.",
+    "itemLabel": "Mục: {id}",
+    "differences": "Sự khác biệt cục bộ và từ xa",
+    "choices": {
+      "local": "Địa phương",
+      "remote": "Xa"
+    },
+    "actions": {
+      "keepLocal": "Giữ cục bộ",
+      "applySelected": "Áp dụng đã chọn",
+      "acceptRemote": "Chấp nhận từ xa"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "Cài đặt ứng dụng TGATB",
+    "subtitle": "Trải nghiệm tốt hơn với hỗ trợ ngoại tuyến và truy cập nhanh",
+    "toasts": {
+      "notAvailable": {
+        "title": "Cài đặt ứng dụng không có sẵn",
+        "description": "Cài đặt ứng dụng không được hỗ trợ trên thiết bị hoặc trình duyệt này. Dùng thử Chrome hoặc Edge trên máy tính để bàn/thiết bị di động."
+      },
+      "started": {
+        "title": "Đã bắt đầu cài đặt ứng dụng",
+        "description": "Làm theo hướng dẫn của trình duyệt để hoàn tất cài đặt."
+      },
+      "dismissed": {
+        "title": "Đã loại bỏ lượt cài đặt ứng dụng",
+        "description": "Bạn có thể cài đặt ứng dụng bất cứ lúc nào từ Cài đặt -> Cài đặt ứng dụng."
+      },
+      "failed": {
+        "title": "Cài đặt ứng dụng không thành công",
+        "description": "Đã xảy ra lỗi khi cố gắng cài đặt ứng dụng."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "Trên iOS/Safari, chạm vào nút Chia sẻ và chọn \"Thêm vào Màn hình chính\" để cài đặt.",
+        "android": {
+          "line1": "Trên Android, hãy sử dụng Chrome, Edge hoặc Samsung Internet. Nếu bạn thấy biểu tượng + trên thanh địa chỉ của trình duyệt, hãy nhấn vào biểu tượng đó để cài đặt.",
+          "line2": "Nếu bạn không thấy biểu tượng, hãy mở menu trình duyệt và tìm \"Thêm vào màn hình chính\" hoặc \"Cài đặt ứng dụng\"."
+        },
+        "windowsLinux": {
+          "line1": "Trên Windows/Linux, hãy sử dụng Chrome hoặc Edge. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào màn hình\"."
+        },
+        "mac": {
+          "line1": "Trên macOS, sử dụng Chrome hoặc Edge. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào dock\"."
+        },
+        "generic": {
+          "line1": "Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào màn hình chính\"."
+        }
+      },
+      "default": {
+        "iosSafari": "Trên iOS/Safari, chạm vào nút Chia sẻ và chọn \"Thêm vào Màn hình chính\" để cài đặt.",
+        "android": "Trên Android, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+        "windowsLinux": "Trên Windows/Linux, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+        "mac": "Trên macOS, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó."
+      }
+    },
+    "actions": {
+      "dismiss": "Miễn nhiệm",
+      "install": "Cài đặt",
+      "ok": "ĐƯỢC RỒI",
+      "notNow": "Không phải bây giờ"
+    }
+  },
+  "DonationDialog": {
+    "title": "Hỗ trợ tôi",
+    "description": "Nếu bạn thích ứng dụng này, hãy cân nhắc việc hỗ trợ sự phát triển của nó. Mọi đóng góp đều giúp giữ cho nó miễn phí và cải thiện!",
+    "sections": {
+      "paymentPlatforms": "Nền tảng thanh toán",
+      "cryptocurrency": "tiền điện tử"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Hãy hỗ trợ tôi với QRIS!",
+      "description": "Quét mã QR này bằng ứng dụng ngân hàng của bạn để quyên góp qua QRIS.",
+      "imageAlt": "Phương thức quyên góp QRIS",
+      "download": "Tải xuống QRIS"
+    },
+    "copiedBadge": "Đã sao chép!",
+    "thankYou": "Cảm ơn bạn đã xem xét hỗ trợ dự án này!",
+    "toasts": {
+      "copied": {
+        "title": "Đã sao chép!",
+        "description": "Đã sao chép địa chỉ vào bảng nhớ tạm"
+      },
+      "copyFailed": {
+        "title": "Không sao chép được",
+        "description": "Vui lòng sao chép địa chỉ theo cách thủ công"
+      },
+      "saved": {
+        "title": "Đã lưu!",
+        "description": "Đã lưu hình ảnh QRIS vào thiết bị."
+      },
+      "saveFailed": {
+        "title": "Lưu không thành công",
+        "description": "Không thể lưu hình ảnh."
+      },
+      "downloadFailed": {
+        "title": "Tải xuống không thành công",
+        "description": "Không thể tìm nạp hình ảnh."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Thêm mục nhập cho {date}",
+    "tabs": {
+      "addEntry": "Thêm mục mới",
+      "addHabit": "Thêm thói quen mới"
+    },
+    "placeholders": {
+      "noHabit": "Không có thói quen có sẵn, thêm ngay bây giờ!",
+      "selectHabit": "Chọn thói quen...",
+      "habitName": "Tên thói quen..."
+    },
+    "type": {
+      "good": "Tốt",
+      "bad": "Xấu"
+    },
+    "status": {
+      "good": {
+        "true": "Hoàn thành",
+        "false": "Bỏ lỡ"
+      },
+      "bad": {
+        "true": "tránh được",
+        "false": "Xong"
+      }
+    },
+    "actions": {
+      "addEntry": "Thêm mục nhập",
+      "addHabitAndLog": "Thêm thói quen và nhật ký"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "Chỉnh sửa mục nhập",
+    "fields": {
+      "date": "Ngày",
+      "status": "Trạng thái"
+    },
+    "status": {
+      "good": {
+        "true": "Hoàn thành",
+        "false": "Bỏ lỡ"
+      },
+      "bad": {
+        "true": "tránh được",
+        "false": "Xong"
+      }
+    },
+    "actions": {
+      "cancel": "Hủy bỏ",
+      "save": "Cứu"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Động lực thúc đẩy nhân vật",
+    "personalityType": "Loại tính cách",
+    "personality": {
+      "positive": {
+        "title": "Tích cực",
+        "description": "Khuyến khích và hỗ trợ"
+      },
+      "adaptive": {
+        "title": "Thích ứng",
+        "description": "Cân bằng và thực tế"
+      },
+      "harsh": {
+        "title": "Thô ráp",
+        "description": "Trực tiếp và đầy thách thức"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Bắt đầu hành trình của bạn",
+    "description": "Tạo thói quen đầu tiên của bạn để bắt đầu theo dõi tiến độ hàng ngày và xây dựng tính nhất quán.",
+    "addFirstHabit": "Thêm thói quen đầu tiên của bạn",
+    "footer": "Mọi chuyên gia đều từng là người mới bắt đầu"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Xóa tất cả thói quen?",
+    "description": "Không thể hoàn tác hành động này. Bạn có chắc chắn muốn xóa tất cả thói quen?",
+    "actions": {
+      "cancel": "Hủy bỏ",
+      "deleting": "Đang xóa...",
+      "delete": "Xóa bỏ"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Nhận xét",
+    "sound": {
+      "title": "Hiệu ứng âm thanh",
+      "description": "Phát âm thanh khi tương tác"
+    },
+    "haptic": {
+      "title": "Phản hồi xúc giác",
+      "supported": "Rung khi tương tác",
+      "notSupported": "Không được hỗ trợ trên thiết bị này"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Trợ giúp & Hỗ trợ",
+    "actions": {
+      "showWelcomeGuide": "Hiển thị hướng dẫn chào mừng",
+      "contactEmail": "Liên hệ {name} qua email"
+    }
+  },
+  "SettingsScreen": {
+    "title": "Cài đặt"
+  },
+  "AppDeviceSettings": {
+    "title": "Ứng dụng & Thiết bị",
+    "install": {
+      "nativeApp": "Ứng dụng gốc",
+      "installed": "Đã cài đặt ứng dụng",
+      "installApp": "Cài đặt ứng dụng",
+      "nativeDescription": "Bạn đang sử dụng ứng dụng Android gốc",
+      "installedDescription": "TGATB đã có trên thiết bị của bạn",
+      "addToHome": "Thêm vào màn hình chính"
+    },
+    "reminder": {
+      "title": "Nhắc nhở hàng ngày",
+      "timeLabel": "Thời gian nhắc nhở",
+      "status": {
+        "notSupported": "Thông báo không được hỗ trợ trong trình duyệt này",
+        "off": "Tắt",
+        "denied": "Quyền bị từ chối - kiểm tra cài đặt trình duyệt/thiết bị",
+        "set": "Đã đặt lời nhắc cho {time}",
+        "setWeb": "Đã đặt lời nhắc cho {time} - hoạt động tốt nhất khi ứng dụng được mở hoặc được cài đặt dưới dạng PWA"
+      }
+    },
+    "permission": {
+      "title": "Thông báo cần thiết",
+      "description": "Để gửi cho bạn lời nhắc hàng ngày, ứng dụng cần có quyền hiển thị thông báo. Bạn có thể kích hoạt tính năng này trong cài đặt trình duyệt hoặc thiết bị của mình.",
+      "gotIt": "Hiểu rồi"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "Chưa có thói quen",
+    "emptyDescription": "Thêm thói quen đầu tiên của bạn để bắt đầu!",
+    "question": {
+      "pending": "Bạn đã làm điều đó phải không?",
+      "goodPositive": "Hôm nay đã xong rồi!",
+      "badPositive": "Bạn đã không làm điều đó ngày hôm nay!",
+      "goodNegative": "Bạn đã không làm điều đó ngày hôm nay!",
+      "badNegative": "Bạn đã làm được điều đó ngày hôm nay!"
+    },
+    "status": {
+      "goodCompleted": "Hoàn thành",
+      "goodMissed": "Bỏ lỡ",
+      "badAvoided": "tránh được",
+      "badDone": "Xong"
+    },
+    "type": {
+      "good": "Tốt",
+      "bad": "Xấu"
+    },
+    "streakDays": "{count} ngày",
+    "atTime": "tại {time}",
+    "actions": {
+      "undo": "Hoàn tác"
+    }
+  },
+  "OfflineToast": {
+    "message": "Bạn đang ngoại tuyến. Một số tính năng có thể bị hạn chế."
+  },
+  "OfflineIndicator": {
+    "message": "Bạn đang ngoại tuyến. Một số tính năng có thể bị hạn chế."
+  },
+  "AnalyticsNotice": {
+    "title": "Để ý",
+    "description": "Chúng tôi sử dụng Vercel Analytics để cải thiện trải nghiệm của bạn. Dữ liệu sử dụng ẩn danh giúp chúng tôi cải thiện ứng dụng.",
+    "gotIt": "Hiểu rồi"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Theo dõi thói quen",
+    "loading": "Đang tải thói quen của bạn..."
+  },
+  "LoadingOverlay": {
+    "loading": "Đang tải..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Bước {current} trong số {total}",
+    "steps": {
+      "welcome": {
+        "title": "Chào mừng bạn đến với Trình theo dõi thói quen!",
+        "description": "Hãy cùng tham quan nhanh để giúp bạn bắt đầu theo dõi thói quen của mình một cách hiệu quả."
+      },
+      "navigation": {
+        "title": "Menu điều hướng",
+        "description": "Truy cập tất cả thói quen của bạn, xem lịch sử và điều chỉnh cài đặt từ menu này."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Thêm nhiều thói quen",
+        "emptyTitle": "Thêm thói quen đầu tiên của bạn",
+        "hasHabitsDescription": "Sử dụng nút nổi này để thêm nhiều thói quen hơn bất cứ lúc nào.",
+        "emptyDescription": "Nhấn vào nút này để tạo thói quen đầu tiên của bạn. Bạn có thể thêm cả những thói quen tốt cần xây dựng và những thói quen xấu cần bỏ."
+      },
+      "habitCard": {
+        "title": "Theo dõi tiến trình của bạn",
+        "hasHabitsDescription": "Đây là thói quen của bạn! Nhấn vào chúng để đánh dấu là hoàn thành trong ngày.",
+        "emptyDescription": "Khi bạn thêm thói quen, chúng sẽ xuất hiện ở đây. Nhấn để đánh dấu chúng là hoàn thành trong ngày."
+      },
+      "complete": {
+        "title": "Bạn đã hoàn tất!",
+        "description": "Hãy bắt đầu xây dựng những thói quen tốt hơn ngay hôm nay. Hãy nhớ rằng, sự nhất quán là chìa khóa thành công!"
+      }
+    },
+    "actions": {
+      "skip": "Nhảy",
+      "previous": "Trước",
+      "skipTour": "Bỏ qua chuyến tham quan",
+      "next": "Kế tiếp",
+      "getStarted": "Bắt đầu",
+      "start": "Bắt đầu"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Quản lý thói quen",
+    "deleteAll": "Xóa tất cả thói quen",
+    "toasts": {
+      "deleted": {
+        "title": "Đã xóa tất cả thói quen",
+        "description": "Danh sách thói quen của bạn đã bị xóa."
+      },
+      "failed": {
+        "title": "Xóa không thành công",
+        "description": "Đã xảy ra lỗi khi xóa thói quen."
+      },
+      "noHandler": {
+        "description": "Không có trình xử lý xóa nào được cung cấp."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Điều khiển thanh trạng thái",
+    "label": "Thanh trạng thái",
+    "visible": "Dễ thấy",
+    "hidden": "Ẩn giấu",
+    "status": "Thanh trạng thái: {visibility} | Chiều cao: {height}px",
+    "actions": {
+      "show": "Trình diễn",
+      "hide": "Trốn",
+      "lightStyle": "Phong cách nhẹ nhàng",
+      "darkStyle": "Phong cách tối",
+      "defaultStyle": "Kiểu mặc định",
+      "redBackground": "Nền đỏ",
+      "greenBackground": "Nền xanh",
+      "blueBackground": "Nền màu xanh",
+      "resetToWhite": "Đặt lại về màu trắng"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "Bạn đang ngoại tuyến",
+      "description": "Ứng dụng hoạt động ngoại tuyến. Đồng bộ hóa dữ liệu khi được kết nối lại.",
+      "retry": "Thử lại"
+    },
+    "fallback": {
+      "title": "Trình theo dõi thói quen TGATB",
+      "description": "Đang tải thói quen của bạn..."
+    }
+  },
+  "TermsOfServicePage": {
+    "meta": {
+      "title": "Điều khoản dịch vụ - TGATB Habit Tracker",
+      "description": "Điều khoản dịch vụ cho điều tốt và điều xấu: Trình theo dõi thói quen"
+    },
+    "title": "Điều khoản dịch vụ",
+    "lastUpdated": "Cập nhật lần cuối: ngày 13 tháng 2 năm 2026",
+    "sections": {
+      "welcome": {
+        "title": "Chào mừng",
+        "body": "Chào mừng bạn đến với TGATB Habit Tracker (\"Tốt và Xấu\", \"chúng tôi\", \"của chúng tôi\"). Bằng cách sử dụng trang web và ứng dụng di động của chúng tôi, bạn đồng ý với các Điều khoản dịch vụ này."
+      },
+      "use": {
+        "title": "Sử dụng ứng dụng",
+        "item1": "Bạn phải ít nhất 13 tuổi để sử dụng ứng dụng.",
+        "item2": "Bạn đồng ý không lạm dụng ứng dụng hoặc cố gắng truy cập ứng dụng theo cách trái phép."
+      },
+      "userContent": {
+        "title": "Nội dung người dùng",
+        "item1": "Bạn chịu trách nhiệm về nội dung bạn thêm vào (thói quen, ghi chú, v.v.).",
+        "item2": "Chúng tôi có quyền xóa nội dung vi phạm các điều khoản này hoặc luật hiện hành."
+      },
+      "intellectualProperty": {
+        "title": "Sở hữu trí tuệ",
+        "item1": "Tất cả nội dung ứng dụng, nhãn hiệu và mã đều thuộc sở hữu của chúng tôi hoặc người cấp phép của chúng tôi.",
+        "item2": "Bạn không được sao chép, sửa đổi hoặc phân phối nội dung của chúng tôi mà không được phép."
+      },
+      "thirdParty": {
+        "title": "Dịch vụ của bên thứ ba",
+        "body": "Ứng dụng sử dụng các dịch vụ của bên thứ ba (Google Cloud, Firebase, v.v.). Việc bạn sử dụng các dịch vụ này phải tuân theo các điều khoản tương ứng."
+      },
+      "limitation": {
+        "title": "Giới hạn trách nhiệm pháp lý",
+        "body": "Ứng dụng được cung cấp \"nguyên trạng\" mà không có bất kỳ hình thức bảo đảm nào. Chúng tôi không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc bạn sử dụng ứng dụng."
+      },
+      "termination": {
+        "title": "Chấm dứt",
+        "body": "Chúng tôi có thể đình chỉ hoặc chấm dứt quyền truy cập của bạn vào ứng dụng nếu vi phạm các điều khoản này."
+      },
+      "changes": {
+        "title": "Thay đổi đối với các điều khoản này",
+        "body": "Thỉnh thoảng chúng tôi có thể cập nhật các Điều khoản dịch vụ này. Những thay đổi sẽ được đăng trong ứng dụng và trên trang web của chúng tôi."
+      },
+      "openSource": {
+        "title": "Nguồn mở",
+        "body": "TGATB Habit Tracker là nguồn mở theo Giấy phép Apache 2.0. Bạn có thể xem lại mã nguồn hoàn chỉnh tại:"
+      },
+      "contact": {
+        "title": "Liên hệ với chúng tôi",
+        "body": "Nếu bạn có bất kỳ câu hỏi nào về các Điều khoản dịch vụ này, vui lòng liên hệ với chúng tôi tại:"
+      }
+    },
+    "links": {
+      "privacyPolicy": "Chính sách bảo mật",
+      "openApp": "Mở Trình theo dõi thói quen TGATB"
+    },
+    "footer": {
+      "rightsReserved": "Mọi quyền được bảo lưu."
+    }
+  },
+  "PrivacyPolicyPage": {
+    "meta": {
+      "title": "Chính sách quyền riêng tư - TGATB Habit Tracker",
+      "description": "Chính sách quyền riêng tư cho điều tốt và điều xấu: Theo dõi thói quen"
+    },
+    "title": "Chính sách bảo mật",
+    "lastUpdated": "Cập nhật lần cuối: ngày 7 tháng 2 năm 2026",
+    "sections": {
+      "overview": {
+        "title": "Tổng quan",
+        "body": "TGATB Habit Tracker (\"The Good and The Bad\") là một ứng dụng theo dõi thói quen tối giản được phát triển bởi adsurkasur. Chính sách quyền riêng tư này giải thích cách chúng tôi xử lý thông tin của bạn khi bạn sử dụng ứng dụng web của chúng tôi tại www.tgatb.click và ứng dụng di động Android của chúng tôi."
+      },
+      "informationCollected": {
+        "title": "Thông tin chúng tôi thu thập",
+        "dataYouProvide": {
+          "title": "Dữ liệu bạn cung cấp",
+          "habitData": "Dữ liệu thói quen: Tên, loại (tốt/xấu), nhật ký hoàn thành và các chuỗi bạn tạo trong ứng dụng. Dữ liệu này được lưu trữ cục bộ trên thiết bị của bạn theo mặc định.",
+          "settings": "Tùy chọn cài đặt: Chế độ tối, ngôn ngữ, tính cách động lực và các tùy chọn ứng dụng khác được lưu trữ cục bộ trên thiết bị của bạn.",
+          "googleAccount": "Thông tin tài khoản Google (tùy chọn): Nếu bạn chọn đăng nhập bằng Google để sao lưu đám mây, chúng tôi chỉ truy cập vào tên, địa chỉ email và ảnh hồ sơ của bạn để xác thực và chức năng sao lưu Google Drive."
+        },
+        "dataCollectedAutomatically": {
+          "title": "Dữ liệu được thu thập tự động",
+          "analytics": "Dữ liệu phân tích (có sự đồng ý): Chúng tôi sử dụng Vercel Analytics và Firebase Analytics để thu thập số liệu thống kê sử dụng ẩn danh như lượt xem trang, loại thiết bị và kiểu tương tác chung. Phân tích chỉ được khởi tạo sau khi bạn đồng ý.",
+          "errorTracking": "Theo dõi lỗi (tùy chọn): Nếu được bật, Sentry sẽ thu thập các báo cáo sự cố và nhật ký lỗi để giúp chúng tôi cải thiện độ ổn định của ứng dụng. Điều này chỉ hoạt động khi có sự đồng ý phân tích và Sentry DSN được định cấu hình."
+        },
+        "dataNotCollected": {
+          "title": "Dữ liệu chúng tôi KHÔNG thu thập",
+          "noPayments": "Chúng tôi không thu thập thông tin thanh toán",
+          "noLocation": "Chúng tôi không thu thập dữ liệu vị trí",
+          "noContacts": "Chúng tôi không thu thập danh bạ hoặc dữ liệu điện thoại",
+          "noAds": "Chúng tôi không phục vụ quảng cáo hoặc thu thập dữ liệu liên quan đến quảng cáo",
+          "noSelling": "Chúng tôi không bán dữ liệu của bạn cho bên thứ ba"
+        }
+      },
+      "dataStorage": {
+        "title": "Dữ liệu của bạn được lưu trữ như thế nào",
+        "local": "Bộ nhớ cục bộ (mặc định): Tất cả dữ liệu và cài đặt thói quen được lưu trữ cục bộ trên thiết bị của bạn bằng trình duyệt localStorage (web) hoặc Tùy chọn tụ điện (Android). Không có dữ liệu nào rời khỏi thiết bị của bạn trừ khi bạn bật sao lưu đám mây một cách rõ ràng.",
+        "cloudBackup": "Sao lưu đám mây (tùy chọn): Nếu đăng nhập bằng Google, bạn có thể chọn sao lưu dữ liệu của mình vào Google Drive của riêng bạn. Dữ liệu của bạn được lưu trữ dưới dạng tệp trong Google Drive cá nhân của bạn – chúng tôi không có quyền truy cập vào các tệp Google Drive của bạn."
+      },
+      "thirdPartyServices": {
+        "title": "Dịch vụ của bên thứ ba",
+        "intro": "Chúng tôi sử dụng các dịch vụ của bên thứ ba sau:",
+        "firebase": "Xác thực Firebase: Để đăng nhập bằng Google. Được điều chỉnh bởi Chính sách quyền riêng tư của Google.",
+        "firebaseAnalytics": "Phân tích Firebase: Để thống kê việc sử dụng ẩn danh (cần có sự đồng ý).",
+        "vercelAnalytics": "Vercel Analytics: Dành cho phân tích trang web ẩn danh (cần có sự đồng ý).",
+        "googleDrive": "API Google Drive: Để sao lưu đám mây tùy chọn, chỉ truy cập các tệp do ứng dụng của riêng bạn tạo.",
+        "sentry": "Sentry (tùy chọn): Để báo cáo lỗi và sự cố khi được bật."
+      },
+      "rightsControls": {
+        "title": "Quyền và quyền kiểm soát của bạn",
+        "analyticsConsent": "Sự đồng ý của phân tích: Bạn có thể bật hoặc tắt phân tích bất kỳ lúc nào trong cài đặt ứng dụng.",
+        "dataDeletion": "Xóa dữ liệu: Bạn có thể xóa tất cả dữ liệu thói quen của mình khỏi cài đặt ứng dụng (\"Xóa tất cả thói quen\"). Vì dữ liệu được lưu trữ cục bộ nên việc xóa dữ liệu trình duyệt của bạn hoặc gỡ cài đặt ứng dụng cũng sẽ xóa tất cả dữ liệu.",
+        "cloudBackupControl": "Kiểm soát sao lưu đám mây: Bạn có thể đăng xuất bất cứ lúc nào để dừng sao lưu đám mây. Các tệp sao lưu Google Drive của bạn có thể được quản lý trực tiếp từ Google Drive.",
+        "dataExport": "Xuất dữ liệu: Bạn có thể xuất dữ liệu của mình dưới dạng tệp JSON từ cài đặt ứng dụng bất cứ lúc nào."
+      },
+      "deleteData": {
+        "title": "Xóa dữ liệu của bạn",
+        "intro": "TGATB Habit Tracker lưu trữ dữ liệu thói quen của bạn cục bộ trên thiết bị của bạn. Bạn có thể xóa tất cả dữ liệu của mình bất kỳ lúc nào mà không cần xóa tài khoản của mình:",
+        "steps": "1. Mở ứng dụng\n2. Nhấn vào biểu tượng menu (menu hamburger) ở góc trên bên trái\n3. Cuộn xuống Quản lý thói quen\n4. Nhấn vào \"Xóa tất cả thói quen\"\n5. Xác nhận xóa khi được nhắc",
+        "willDelete": "Điều này sẽ xóa vĩnh viễn:",
+        "willDeleteItems": "Tất cả thói quen của bạn và tên của chúng, Tất cả nhật ký hoàn thành và dữ liệu chuỗi, Tất cả hồ sơ lịch sử",
+        "willNotDelete": "Điều này sẽ KHÔNG xóa:",
+        "willNotDeleteItems": "Cài đặt ứng dụng của bạn (chế độ tối, ngôn ngữ, v.v.) — những cài đặt này sẽ được đặt lại khi bạn xóa dữ liệu ứng dụng hoặc gỡ cài đặt. Mọi tệp sao lưu trước đó đã lưu vào Google Drive của bạn — bạn có thể xóa những cài đặt đó trực tiếp khỏi Google Drive của mình",
+        "alternative": "Ngoài ra, bạn có thể gỡ cài đặt ứng dụng hoặc xóa dữ liệu ứng dụng khỏi cài đặt thiết bị của mình để xóa tất cả thông tin được lưu trữ cục bộ."
+      },
+      "deleteAccount": {
+        "title": "Xóa tài khoản của bạn",
+        "intro": "Nếu bạn đã đăng nhập bằng Google và muốn xóa hoàn toàn tài khoản của mình cũng như tất cả dữ liệu liên quan, hãy làm theo các bước sau:",
+        "appSteps": "1. Mở ứng dụng\n2. Nhấn vào biểu tượng menu (menu hamburger) ở góc trên bên trái\n3. Cuộn xuống Quản lý thói quen và nhấn \"Xóa tất cả thói quen\" để xóa dữ liệu của bạn\n4. Di chuyển đến Tài khoản & Dữ liệu và nhấn \"Đăng xuất\" để đăng xuất\n5. Gỡ cài đặt ứng dụng để xóa tất cả dữ liệu cục bộ còn lại",
+        "googleDriveSteps": "Để xóa tệp sao lưu Google Drive của bạn:\n1. Truy cập Google Drive\n2. Tìm kiếm \"tgatb\" hoặc \"habit\" để tìm file sao lưu\n3. Xóa các tập tin sao lưu",
+        "revokeSteps": "Để thu hồi quyền truy cập của ứng dụng vào tài khoản Google của bạn:\n1. Đi tới Quyền của Tài khoản Google\n2. Tìm \"TGATB Habit Tracker\" trong danh sách\n3. Nhấp vào \"Xóa quyền truy cập\"",
+        "completion": "Sau khi hoàn thành các bước này, tất cả quyền truy cập dữ liệu và tài khoản của bạn sẽ bị xóa hoàn toàn. Nếu bạn cần hỗ trợ, hãy liên hệ với chúng tôi tại adsurkasur.dev@gmail.com."
+      },
+      "dataSecurity": {
+        "title": "Bảo mật dữ liệu",
+        "body": "Chúng tôi thực hiện các biện pháp bảo mật hợp lý để bảo vệ dữ liệu của bạn. Dữ liệu thói quen của bạn được lưu trữ cục bộ trên thiết bị của bạn và không được truyền đến máy chủ của chúng tôi. Dữ liệu sao lưu đám mây được lưu trữ trong Google Drive cá nhân của bạn bằng cơ sở hạ tầng bảo mật của Google. Tuy nhiên, không có phương pháp lưu trữ điện tử nào an toàn 100%."
+      },
+      "childrenPrivacy": {
+        "title": "Quyền riêng tư của trẻ em",
+        "body": "Ứng dụng của chúng tôi không hướng tới trẻ em dưới 13 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em dưới 13 tuổi. Nếu bạn là cha mẹ hoặc người giám hộ và tin rằng con bạn đã cung cấp thông tin cá nhân cho chúng tôi, vui lòng liên hệ với chúng tôi."
+      },
+      "policyChanges": {
+        "title": "Những thay đổi đối với Chính sách này",
+        "body": "Thỉnh thoảng chúng tôi có thể cập nhật Chính sách quyền riêng tư này. Mọi thay đổi sẽ được phản ánh bằng cách cập nhật ngày \"Cập nhật lần cuối\" ở đầu trang này. Chúng tôi khuyến khích bạn xem lại chính sách này định kỳ."
+      },
+      "contactUs": {
+        "title": "Liên hệ với chúng tôi",
+        "body": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách quyền riêng tư này hoặc cách xử lý dữ liệu của chúng tôi, vui lòng liên hệ với chúng tôi tại: adsurkasur.dev@gmail.com"
+      },
+      "openSource": {
+        "title": "Nguồn mở",
+        "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
+      }
+    },
+    "links": {
+      "termsOfService": "Điều khoản dịch vụ",
+      "openApp": "Mở Trình theo dõi thói quen TGATB"
+    },
+    "footer": {
+      "copyright": "© 2025-2026 adsurkasur. Mọi quyền được bảo lưu."
+    }
+  }
+}

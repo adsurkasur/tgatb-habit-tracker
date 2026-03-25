@@ -1,5 +1,6 @@
 import { getRequestConfig } from "next-intl/server";
 import { routing, isValidLocale } from "@/i18n/routing";
+import { getMessagesForLocale } from "@/i18n/messages";
 
 export default getRequestConfig(async ({ requestLocale }) => {
   const requested = await requestLocale;
@@ -10,6 +11,6 @@ export default getRequestConfig(async ({ requestLocale }) => {
   return {
     locale,
     timeZone: routing.timeZone,
-    messages: (await import(`../messages/${locale}.json`)).default,
+    messages: getMessagesForLocale(locale),
   };
 });

@@ -1,0 +1,810 @@
+{
+  "App": {
+    "name": "Penjejak Tabiat TGATB",
+    "description": "Kebaikan dan Keburukan: Aplikasi penjejakan tabiat minimalis"
+  },
+  "Routing": {
+    "redirecting": "Mengubah hala..."
+  },
+  "Home": {
+    "title": "Yang Baik dan Yang Buruk",
+    "demoLabel": "Tabiat Demo",
+    "counter": "{current} daripada {total} tabiat",
+    "counterHint": "Gunakan kekunci ← →, butang navigasi atau leret untuk menavigasi",
+    "aria": {
+      "previousHabit": "Tabiat sebelumnya",
+      "nextHabit": "Tabiat seterusnya"
+    },
+    "toasts": {
+      "pressBackAgainExit": "Tekan kembali sekali lagi untuk keluar",
+      "habitDeletedTitle": "Tabiat dipadam!",
+      "habitDeletedDescription": "Tabiat anda telah dibuang.",
+      "undoDeleteAltText": "Buat asal pemadaman",
+      "undo": "Buat asal"
+    }
+  },
+  "AppearanceSettings": {
+    "title": "Penampilan",
+    "darkMode": {
+      "label": "Mod Gelap",
+      "description": "Beralih antara tema terang dan gelap"
+    },
+    "language": {
+      "title": "Bahasa",
+      "label": "Togol bahasa apl",
+      "english": "Inggeris",
+      "indonesian": "Bahasa Indonesia",
+      "modalTitle": "Pilih bahasa",
+      "modalDescription": "Pilih bahasa yang digunakan merentas antara muka apl.",
+      "restartWarningWeb": "Menggunakan bahasa baharu menyegarkan halaman ini untuk mengemas kini teks sepenuhnya.",
+      "restartWarningApp": "Menggunakan bahasa baharu memulakan semula skrin apl ini untuk mengemas kini teks sepenuhnya.",
+      "cancel": "Batal",
+      "apply": "Mohon",
+      "applying": "Memohon..."
+    },
+    "fullscreen": {
+      "title": "Mod Skrin Penuh",
+      "nativeDescription": "Sembunyikan bar status untuk pengalaman yang mengasyikkan",
+      "nonNativeDescription": "Tetapan aplikasi mudah alih"
+    },
+    "toasts": {
+      "fullscreenEnabledTitle": "Mod skrin penuh didayakan",
+      "fullscreenEnabledDescription": "Mod skrin penuh mungkin tidak dipaparkan dengan sempurna pada semua peranti. Jika anda melihat masalah, anda boleh mematikannya dalam tetapan.",
+      "languageUpdated": "Bahasa dikemas kini",
+      "switchedToEnglish": "Bertukar kepada bahasa Inggeris",
+      "switchedToIndonesian": "Bertukar ke Bahasa Indonesia"
+    }
+  },
+  "SettingsDialog": {
+    "title": "tetapan"
+  },
+  "AboutDialog": {
+    "title": "Mengenai TGATB Habit Tracker",
+    "projectName": "Yang Baik dan Yang Buruk",
+    "projectDescription": "Apl Web Progresif minimalis untuk menjejaki tabiat harian anda",
+    "version": "Versi {version}",
+    "features": {
+      "title": "Ciri-ciri",
+      "item1": "• Jejaki tabiat baik dan buruk",
+      "item2": "• Sokongan luar talian dengan teknologi PWA",
+      "item3": "• Penjejakan coretan dan kemajuan visual",
+      "item4": "• Reka bentuk minimalis dan bebas gangguan",
+      "item5": "• Keserasian merentas platform"
+    },
+    "builtWith": "Dibina dengan",
+    "stack": {
+      "nextjs": "Seterusnya.js 16",
+      "react": "Bertindak balas 19",
+      "typescript": "TypeScript",
+      "tailwind": "Tailwind CSS v4",
+      "pwa": "PWA",
+      "capacitor": "Kapasitor"
+    },
+    "links": {
+      "title": "Pautan",
+      "github": "Lihat di GitHub",
+      "vercel": "Dikuasakan oleh Vercel",
+      "privacyPolicy": "Dasar Privasi",
+      "termsOfService": "Syarat Perkhidmatan"
+    },
+    "footer": {
+      "madeWithLove": "Dibuat dengan ❤️ untuk tabiat yang lebih baik",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
+    }
+  },
+  "NavigationDrawer": {
+    "hidden": {
+      "navigationMenuTitle": "Menu Navigasi",
+      "navigationMenuDescription": "Akses papan pemuka dan tetapan penjejakan tabiat anda"
+    },
+    "header": {
+      "title": "Penjejak Tabiat",
+      "subtitle": "Jejaki kemajuan harian anda"
+    },
+    "search": {
+      "placeholder": "Tabiat mencari...",
+      "clear": "Kosongkan carian"
+    },
+    "sections": {
+      "goodHabits": "Tabiat Baik",
+      "badHabits": "Tabiat Buruk"
+    },
+    "empty": {
+      "noGoodHabitsFound": "Tiada tabiat baik ditemui",
+      "noGoodHabitsYet": "Belum ada tabiat yang baik",
+      "noBadHabitsFound": "Tiada tabiat buruk ditemui",
+      "noBadHabitsTracked": "Tiada tabiat buruk dikesan"
+    },
+    "actions": {
+      "help": "Tolong",
+      "history": "Sejarah",
+      "settings": "tetapan",
+      "supportMe": "Sokong Saya",
+      "about": "Tentang"
+    },
+    "habitItem": {
+      "days": "{count} hari"
+    }
+  },
+  "AccountDataSettings": {
+    "title": "Akaun & Data",
+    "profileAlt": "Profil",
+    "auth": {
+      "login": "Log masuk",
+      "logoutFrom": "Log keluar dari {name}"
+    },
+    "autoSync": {
+      "title": "Penyegerakan automatik",
+      "description": "Segerakkan perubahan pada Google Drive secara automatik apabila dilog masuk."
+    },
+    "analytics": {
+      "title": "Analitis",
+      "description": "Benarkan analitis tanpa nama untuk membantu memperbaik apl."
+    },
+    "actions": {
+      "exportToCloud": "Eksport ke Cloud",
+      "importFromCloud": "Import daripada Cloud",
+      "exporting": "Mengeksport...",
+      "exportData": "Eksport Data",
+      "importData": "Import Data",
+      "resolveSyncConflicts": "Selesaikan Konflik Penyegerakan"
+    }
+  },
+  "HistoryDialog": {
+    "title": "Sejarah Tabiat & Analitis",
+    "tabs": {
+      "overview": "Gambaran keseluruhan",
+      "stats": "Statistik",
+      "calendar": "Kalendar",
+      "timeline": "Garis masa"
+    },
+    "stats": {
+      "totalHabits": {
+        "title": "Jumlah Tabiat",
+        "description": "{good} baik, {bad} buruk"
+      },
+      "combinedStreak": {
+        "title": "Contengan Gabungan",
+        "description": "Paling lama: {longest} hari"
+      },
+      "todaysProgress": {
+        "title": "Kemajuan Hari Ini",
+        "description": "{percent}% selesai"
+      },
+      "totalActions": {
+        "title": "Jumlah Tindakan",
+        "description": "Selesai sepanjang masa"
+      }
+    },
+    "topHabits": {
+      "title": "Tabiat Teratas"
+    },
+    "breakdown": {
+      "title": "Kerosakan Tabiat",
+      "emptyTitle": "Belum ada tabiat",
+      "emptyDescription": "Tambah tabiat untuk melihat pecahan anda di sini",
+      "completions": "{count} siap"
+    },
+    "calendar": {
+      "today": "Hari ini",
+      "notTracked": "Tidak Dijejaki",
+      "editEntry": "Edit entri",
+      "clearStatus": "Kosongkan status",
+      "noDataForDate": "Tiada data tersedia untuk tarikh ini",
+      "addEntry": "Tambah Entri"
+    },
+    "timeline": {
+      "today": "Hari ini",
+      "completionSummary": "{completed}/{total} tabiat selesai ({percent}%)",
+      "notTracked": "Tidak Dijejaki",
+      "notTrackedTitle": "{name}: Tidak Dijejaki",
+      "completedTitle": "{name}: Selesai",
+      "notCompletedTitle": "{name}: Tidak selesai"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "Tambah Tabiat Baru",
+    "fields": {
+      "name": "Nama Tabiat",
+      "type": "Jenis Tabiat",
+      "schedule": "Jadual"
+    },
+    "placeholders": {
+      "name": "Masukkan nama tabiat..."
+    },
+    "type": {
+      "good": "bagus",
+      "bad": "teruk"
+    },
+    "schedule": {
+      "daily": "Setiap hari",
+      "interval": "Setiap N Hari",
+      "weekly": "hari minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Matahari",
+      "mon": "isn",
+      "tue": "Tue",
+      "wed": "Rabu",
+      "thu": "Kha",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Batal",
+      "save": "Jimat"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "Edit Tabiat",
+    "fields": {
+      "name": "Nama Tabiat",
+      "type": "Jenis Tabiat",
+      "schedule": "Jadual"
+    },
+    "placeholders": {
+      "name": "Masukkan nama tabiat..."
+    },
+    "type": {
+      "good": "bagus",
+      "bad": "teruk"
+    },
+    "schedule": {
+      "daily": "Setiap hari",
+      "interval": "Setiap N Hari",
+      "weekly": "hari minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Matahari",
+      "mon": "isn",
+      "tue": "Tue",
+      "wed": "Rabu",
+      "thu": "Kha",
+      "fri": "Jum",
+      "sat": "Sab"
+    },
+    "actions": {
+      "cancel": "Batal",
+      "saveChanges": "Simpan Perubahan"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "Konflik Penyegerakan Dikesan",
+    "description": "Kami menemui konflik antara data setempat anda dan sandaran awan. Pilih resolusi setiap medan di bawah atau gunakan tindakan global untuk menerima versi jauh atau menyimpan data setempat anda.",
+    "itemLabel": "Item: {id}",
+    "differences": "Perbezaan tempatan vs Jauh",
+    "choices": {
+      "local": "Tempatan",
+      "remote": "Jauh"
+    },
+    "actions": {
+      "keepLocal": "Kekalkan Tempatan",
+      "applySelected": "Mohon Dipilih",
+      "acceptRemote": "Terima Jauh"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "Pasang Apl TGATB",
+    "subtitle": "Pengalaman yang lebih baik dengan sokongan luar talian dan akses pantas",
+    "toasts": {
+      "notAvailable": {
+        "title": "Pemasangan apl tidak tersedia",
+        "description": "Pemasangan apl tidak disokong pada peranti atau penyemak imbas ini. Cuba Chrome atau Edge pada desktop/mudah alih."
+      },
+      "started": {
+        "title": "Pemasangan apl bermula",
+        "description": "Ikut arahan penyemak imbas anda untuk menyelesaikan pemasangan."
+      },
+      "dismissed": {
+        "title": "Pemasangan apl ditolak",
+        "description": "Anda boleh memasang apl pada bila-bila masa daripada Tetapan -> Pasang Apl."
+      },
+      "failed": {
+        "title": "Pemasangan apl gagal",
+        "description": "Kesilapan telah berlaku semasa cuba memasang apl."
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "Pada iOS/Safari, ketik butang Kongsi dan pilih \"Tambah pada Skrin Utama\" untuk memasang.",
+        "android": {
+          "line1": "Pada Android, gunakan Internet Chrome, Edge atau Samsung. Jika anda melihat ikon + dalam bar alamat penyemak imbas anda, ketik ikon itu untuk memasang.",
+          "line2": "Jika anda tidak melihat ikon tersebut, buka menu penyemak imbas dan cari \"Tambah pada skrin Utama\" atau \"Pasang apl\"."
+        },
+        "windowsLinux": {
+          "line1": "Pada Windows/Linux, gunakan Chrome atau Edge. Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya.",
+          "line2": "Jika tidak, buka menu penyemak imbas dan cari \"Pasang apl\" atau \"Tambah pada desktop\"."
+        },
+        "mac": {
+          "line1": "Pada macOS, gunakan Chrome atau Edge. Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya.",
+          "line2": "Jika tidak, buka menu penyemak imbas dan cari \"Pasang apl\" atau \"Tambah ke dok\"."
+        },
+        "generic": {
+          "line1": "Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya.",
+          "line2": "Jika tidak, buka menu penyemak imbas dan cari \"Pasang apl\" atau \"Tambah pada skrin Utama\"."
+        }
+      },
+      "default": {
+        "iosSafari": "Pada iOS/Safari, ketik butang Kongsi dan pilih \"Tambah pada Skrin Utama\" untuk memasang.",
+        "android": "Pada Android, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya.",
+        "windowsLinux": "Pada Windows/Linux, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya.",
+        "mac": "Pada macOS, gunakan Chrome atau Edge untuk pengalaman terbaik. Jika anda melihat ikon pasang dalam bar alamat penyemak imbas anda, gunakannya."
+      }
+    },
+    "actions": {
+      "dismiss": "Tolak",
+      "install": "Pasang",
+      "ok": "OK",
+      "notNow": "bukan sekarang"
+    }
+  },
+  "DonationDialog": {
+    "title": "Sokong Saya",
+    "description": "Jika anda menikmati apl ini, pertimbangkan untuk menyokong pembangunannya. Setiap sumbangan membantu memastikan ia percuma dan bertambah baik!",
+    "sections": {
+      "paymentPlatforms": "Platform Pembayaran",
+      "cryptocurrency": "Cryptocurrency"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "Sokong saya dengan QRIS!",
+      "description": "Imbas kod QR ini dengan aplikasi perbankan anda untuk menderma melalui QRIS.",
+      "imageAlt": "Kaedah Sumbangan QRIS",
+      "download": "Muat turun QRIS"
+    },
+    "copiedBadge": "disalin!",
+    "thankYou": "Terima kasih kerana mempertimbangkan untuk menyokong projek ini!",
+    "toasts": {
+      "copied": {
+        "title": "disalin!",
+        "description": "Alamat disalin ke papan keratan"
+      },
+      "copyFailed": {
+        "title": "Gagal menyalin",
+        "description": "Sila salin alamat secara manual"
+      },
+      "saved": {
+        "title": "Disimpan!",
+        "description": "Imej QRIS disimpan pada peranti."
+      },
+      "saveFailed": {
+        "title": "Simpan gagal",
+        "description": "Tidak dapat menyimpan imej."
+      },
+      "downloadFailed": {
+        "title": "Muat turun gagal",
+        "description": "Tidak dapat mengambil imej."
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "Tambah Entri untuk {date}",
+    "tabs": {
+      "addEntry": "Tambah Entri Baharu",
+      "addHabit": "Tambah Tabiat Baru"
+    },
+    "placeholders": {
+      "noHabit": "Tiada tabiat tersedia, tambah sekarang!",
+      "selectHabit": "Pilih tabiat...",
+      "habitName": "Nama tabiat..."
+    },
+    "type": {
+      "good": "bagus",
+      "bad": "teruk"
+    },
+    "status": {
+      "good": {
+        "true": "Selesai",
+        "false": "terlepas"
+      },
+      "bad": {
+        "true": "dielakkan",
+        "false": "Selesai"
+      }
+    },
+    "actions": {
+      "addEntry": "Tambah Entri",
+      "addHabitAndLog": "Tambah Tabiat & Kemasukan Log"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "Edit Entri",
+    "fields": {
+      "date": "tarikh",
+      "status": "Status"
+    },
+    "status": {
+      "good": {
+        "true": "Selesai",
+        "false": "terlepas"
+      },
+      "bad": {
+        "true": "dielakkan",
+        "false": "Selesai"
+      }
+    },
+    "actions": {
+      "cancel": "Batal",
+      "save": "Jimat"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "Penggerak Perwatakan",
+    "personalityType": "Jenis Personaliti",
+    "personality": {
+      "positive": {
+        "title": "Positif",
+        "description": "Menggalakkan dan menyokong"
+      },
+      "adaptive": {
+        "title": "Adaptif",
+        "description": "Seimbang dan realistik"
+      },
+      "harsh": {
+        "title": "Kejam",
+        "description": "Langsung dan mencabar"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "Mulakan Perjalanan Anda",
+    "description": "Cipta tabiat pertama anda untuk mula menjejaki kemajuan harian anda dan membina konsistensi.",
+    "addFirstHabit": "Tambah Tabiat Pertama Anda",
+    "footer": "Setiap pakar pernah menjadi pemula"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "Padamkan Semua Tabiat?",
+    "description": "Tindakan ini tidak boleh dibuat asal. Adakah anda pasti mahu memadamkan semua tabiat?",
+    "actions": {
+      "cancel": "Batal",
+      "deleting": "Memadamkan...",
+      "delete": "Padam"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "Maklum balas",
+    "sound": {
+      "title": "Kesan Bunyi",
+      "description": "Mainkan bunyi pada interaksi"
+    },
+    "haptic": {
+      "title": "Maklum Balas Haptic",
+      "supported": "Bergetar pada interaksi",
+      "notSupported": "Tidak disokong pada peranti ini"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "Bantuan & Sokongan",
+    "actions": {
+      "showWelcomeGuide": "Tunjukkan Panduan Selamat Datang",
+      "contactEmail": "Hubungi {name} melalui e-mel"
+    }
+  },
+  "SettingsScreen": {
+    "title": "tetapan"
+  },
+  "AppDeviceSettings": {
+    "title": "Apl & Peranti",
+    "install": {
+      "nativeApp": "Apl Asli",
+      "installed": "Apl Dipasang",
+      "installApp": "Pasang Apl",
+      "nativeDescription": "Anda menggunakan apl Android asli",
+      "installedDescription": "TGATB sudah ada pada peranti anda",
+      "addToHome": "Tambahkan pada skrin utama"
+    },
+    "reminder": {
+      "title": "Peringatan Harian",
+      "timeLabel": "Masa peringatan",
+      "status": {
+        "notSupported": "Pemberitahuan tidak disokong dalam penyemak imbas ini",
+        "off": "Mati",
+        "denied": "Kebenaran ditolak - semak tetapan penyemak imbas/peranti",
+        "set": "Peringatan ditetapkan untuk {time}",
+        "setWeb": "Peringatan ditetapkan untuk {time} - berfungsi paling baik apabila apl dibuka atau dipasang sebagai PWA"
+      }
+    },
+    "permission": {
+      "title": "Pemberitahuan Diperlukan",
+      "description": "Untuk menghantar peringatan harian kepada anda, apl memerlukan kebenaran untuk menunjukkan pemberitahuan. Anda boleh mendayakan ini dalam tetapan penyemak imbas atau peranti anda.",
+      "gotIt": "faham"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "Belum ada tabiat",
+    "emptyDescription": "Tambah tabiat pertama anda untuk bermula!",
+    "question": {
+      "pending": "Adakah anda melakukannya?",
+      "goodPositive": "Sudah selesai hari ini!",
+      "badPositive": "Anda tidak melakukannya hari ini!",
+      "goodNegative": "Anda tidak melakukannya hari ini!",
+      "badNegative": "Anda melakukannya hari ini!"
+    },
+    "status": {
+      "goodCompleted": "Selesai",
+      "goodMissed": "terlepas",
+      "badAvoided": "dielakkan",
+      "badDone": "Selesai"
+    },
+    "type": {
+      "good": "bagus",
+      "bad": "teruk"
+    },
+    "streakDays": "{count} hari",
+    "atTime": "di {time}",
+    "actions": {
+      "undo": "Buat asal"
+    }
+  },
+  "OfflineToast": {
+    "message": "Anda di luar talian. Sesetengah ciri mungkin terhad."
+  },
+  "OfflineIndicator": {
+    "message": "Anda di luar talian. Sesetengah ciri mungkin terhad."
+  },
+  "AnalyticsNotice": {
+    "title": "Notis",
+    "description": "Kami menggunakan Vercel Analytics untuk meningkatkan pengalaman anda. Data penggunaan tanpa nama membantu kami menjadikan apl lebih baik.",
+    "gotIt": "faham"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "Penjejak Tabiat",
+    "loading": "Memuatkan tabiat anda..."
+  },
+  "LoadingOverlay": {
+    "loading": "Memuatkan..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "Langkah {current} daripada {total}",
+    "steps": {
+      "welcome": {
+        "title": "Selamat datang ke Habit Tracker!",
+        "description": "Mari lakukan lawatan pantas untuk membantu anda bermula dengan menjejaki tabiat anda dengan berkesan."
+      },
+      "navigation": {
+        "title": "Menu Navigasi",
+        "description": "Akses semua tabiat anda, lihat sejarah dan laraskan tetapan daripada menu ini."
+      },
+      "addButton": {
+        "hasHabitsTitle": "Tambah Lebih Banyak Tabiat",
+        "emptyTitle": "Tambah Tabiat Pertama Anda",
+        "hasHabitsDescription": "Gunakan butang terapung ini untuk menambah lebih banyak tabiat pada bila-bila masa.",
+        "emptyDescription": "Ketik butang ini untuk mencipta tabiat pertama anda. Anda boleh menambah kedua-dua tabiat baik untuk membina dan tabiat buruk untuk dihentikan."
+      },
+      "habitCard": {
+        "title": "Jejaki Kemajuan Anda",
+        "hasHabitsDescription": "Berikut adalah tabiat anda! Ketik mereka untuk menandakan sebagai lengkap untuk hari itu.",
+        "emptyDescription": "Sebaik sahaja anda menambah tabiat, ia akan dipaparkan di sini. Ketik untuk menandakannya sebagai lengkap untuk hari itu."
+      },
+      "complete": {
+        "title": "Anda Sudah Bersedia!",
+        "description": "Mula membina tabiat yang lebih baik hari ini. Ingat, konsisten adalah kunci kejayaan!"
+      }
+    },
+    "actions": {
+      "skip": "Langkau",
+      "previous": "Sebelumnya",
+      "skipTour": "Langkau Lawatan",
+      "next": "Seterusnya",
+      "getStarted": "Mulakan",
+      "start": "Mulakan"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "Pengurusan Tabiat",
+    "deleteAll": "Padamkan Semua Tabiat",
+    "toasts": {
+      "deleted": {
+        "title": "Semua tabiat dipadamkan",
+        "description": "Senarai tabiat anda telah dikosongkan."
+      },
+      "failed": {
+        "title": "Padam Gagal",
+        "description": "Ralat berlaku semasa memadamkan tabiat."
+      },
+      "noHandler": {
+        "description": "Tiada pengendali padam disediakan."
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "Kawalan Bar Status",
+    "label": "Bar Status",
+    "visible": "Kelihatan",
+    "hidden": "Tersembunyi",
+    "status": "Bar Status: {visibility} | Ketinggian: {height}px",
+    "actions": {
+      "show": "Tunjukkan",
+      "hide": "Sembunyi",
+      "lightStyle": "Gaya Cahaya",
+      "darkStyle": "Gaya Gelap",
+      "defaultStyle": "Gaya Lalai",
+      "redBackground": "Latar Belakang Merah",
+      "greenBackground": "Latar Belakang Hijau",
+      "blueBackground": "Latar Belakang Biru",
+      "resetToWhite": "Tetapkan semula kepada Putih"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "Anda di luar talian",
+      "description": "Apl berfungsi di luar talian. Data disegerakkan apabila disambungkan semula.",
+      "retry": "Cuba semula"
+    },
+    "fallback": {
+      "title": "Penjejak Tabiat TGATB",
+      "description": "Memuatkan tabiat anda..."
+    }
+  },
+  "TermsOfServicePage": {
+    "meta": {
+      "title": "Syarat Perkhidmatan - TGATB Habit Tracker",
+      "description": "Syarat Perkhidmatan untuk Kebaikan dan Keburukan: Penjejak Tabiat"
+    },
+    "title": "Syarat Perkhidmatan",
+    "lastUpdated": "Kemas kini terakhir: 13 Februari 2026",
+    "sections": {
+      "welcome": {
+        "title": "Selamat datang",
+        "body": "Selamat datang ke TGATB Habit Tracker (\"The Good and The Bad\", \"we\", \"us\", \"our\"). Dengan menggunakan aplikasi web dan mudah alih kami, anda bersetuju menerima Syarat Perkhidmatan ini."
+      },
+      "use": {
+        "title": "Penggunaan Apl",
+        "item1": "Anda mesti berumur sekurang-kurangnya 13 tahun untuk menggunakan apl tersebut.",
+        "item2": "Anda bersetuju untuk tidak menyalahgunakan apl atau cuba mengaksesnya dengan cara yang tidak dibenarkan."
+      },
+      "userContent": {
+        "title": "Kandungan Pengguna",
+        "item1": "Anda bertanggungjawab ke atas kandungan yang anda tambahkan (tabiat, nota, dsb.).",
+        "item2": "Kami berhak untuk mengalih keluar kandungan yang melanggar syarat ini atau undang-undang yang berkenaan."
+      },
+      "intellectualProperty": {
+        "title": "Harta Intelek",
+        "item1": "Semua kandungan apl, tanda dagangan dan kod dimiliki oleh kami atau pemberi lesen kami.",
+        "item2": "Anda tidak boleh menyalin, mengubah suai atau mengedarkan kandungan kami tanpa kebenaran."
+      },
+      "thirdParty": {
+        "title": "Perkhidmatan Pihak Ketiga",
+        "body": "Apl menggunakan perkhidmatan pihak ketiga (Google Cloud, Firebase, dsb.). Penggunaan perkhidmatan ini oleh anda adalah tertakluk kepada syarat masing-masing."
+      },
+      "limitation": {
+        "title": "Had Liabiliti",
+        "body": "Aplikasi ini disediakan \"seadanya\" tanpa sebarang jenis jaminan. Kami tidak bertanggungjawab ke atas sebarang kerosakan yang timbul daripada penggunaan aplikasi anda."
+      },
+      "termination": {
+        "title": "Penamatan",
+        "body": "Kami mungkin menggantung atau menamatkan akses anda kepada apl kerana melanggar syarat ini."
+      },
+      "changes": {
+        "title": "Perubahan kepada Syarat Ini",
+        "body": "Kami mungkin mengemas kini Syarat Perkhidmatan ini dari semasa ke semasa. Perubahan akan disiarkan dalam apl dan di tapak web kami."
+      },
+      "openSource": {
+        "title": "Sumber Terbuka",
+        "body": "TGATB Habit Tracker ialah sumber terbuka di bawah Lesen Apache 2.0. Anda boleh menyemak kod sumber lengkap di:"
+      },
+      "contact": {
+        "title": "Hubungi Kami",
+        "body": "Jika anda mempunyai sebarang pertanyaan tentang Syarat Perkhidmatan ini, sila hubungi kami di:"
+      }
+    },
+    "links": {
+      "privacyPolicy": "Dasar Privasi",
+      "openApp": "Buka Penjejak Tabiat TGATB"
+    },
+    "footer": {
+      "rightsReserved": "Semua hak terpelihara."
+    }
+  },
+  "PrivacyPolicyPage": {
+    "meta": {
+      "title": "Dasar Privasi - Penjejak Tabiat TGATB",
+      "description": "Dasar Privasi untuk Kebaikan dan Keburukan: Penjejak Tabiat"
+    },
+    "title": "Dasar Privasi",
+    "lastUpdated": "Kemas kini terakhir: 7 Februari 2026",
+    "sections": {
+      "overview": {
+        "title": "Gambaran keseluruhan",
+        "body": "TGATB Habit Tracker (\"The Good and The Bad\") ialah aplikasi penjejakan tabiat minimalis yang dibangunkan oleh adsurkasur. Dasar Privasi ini menerangkan cara kami mengendalikan maklumat anda apabila anda menggunakan aplikasi web kami di www.tgatb.click dan aplikasi mudah alih Android kami."
+      },
+      "informationCollected": {
+        "title": "Maklumat yang Kami Kumpul",
+        "dataYouProvide": {
+          "title": "Data yang Anda Sediakan",
+          "habitData": "Data tabiat: Nama, jenis (baik/buruk), log penyiapan dan coretan yang anda buat dalam apl. Data ini disimpan secara setempat pada peranti anda secara lalai.",
+          "settings": "Keutamaan tetapan: Mod gelap, bahasa, personaliti motivator dan pilihan apl lain yang disimpan secara setempat pada peranti anda.",
+          "googleAccount": "Maklumat akaun Google (pilihan): Jika anda memilih untuk log masuk dengan Google untuk sandaran awan, kami mengakses nama, alamat e-mel dan gambar profil anda semata-mata untuk pengesahan dan kefungsian sandaran Google Drive."
+        },
+        "dataCollectedAutomatically": {
+          "title": "Data Dikumpul Secara Automatik",
+          "analytics": "Data analitis (dengan persetujuan): Kami menggunakan Analitis Vercel dan Analitis Firebase untuk mengumpulkan statistik penggunaan tanpa nama seperti paparan halaman, jenis peranti dan corak interaksi umum. Analitis hanya dimulakan selepas anda memberikan persetujuan.",
+          "errorTracking": "Penjejakan ralat (pilihan): Jika didayakan, Sentry mengumpul laporan ranap dan log ralat untuk membantu kami meningkatkan kestabilan apl. Ini hanya aktif apabila persetujuan analitis diberikan dan Sentry DSN dikonfigurasikan."
+        },
+        "dataNotCollected": {
+          "title": "Data yang TIDAK Kami Kumpul",
+          "noPayments": "Kami tidak mengumpul maklumat pembayaran",
+          "noLocation": "Kami tidak mengumpul data lokasi",
+          "noContacts": "Kami tidak mengumpul kenalan atau data telefon",
+          "noAds": "Kami tidak menyiarkan iklan atau mengumpul data berkaitan iklan",
+          "noSelling": "Kami tidak menjual data anda kepada pihak ketiga"
+        }
+      },
+      "dataStorage": {
+        "title": "Cara Data Anda Disimpan",
+        "local": "Storan setempat (lalai): Semua data tabiat dan tetapan disimpan secara setempat pada peranti anda menggunakan penyemak imbas localStorage (web) atau Keutamaan Kapasitor (Android). Tiada data meninggalkan peranti anda melainkan anda mendayakan sandaran awan secara eksplisit.",
+        "cloudBackup": "Sandaran awan (pilihan): Jika anda log masuk dengan Google, anda boleh memilih untuk menyandarkan data anda ke Google Drive anda sendiri. Data anda disimpan sebagai fail dalam Google Drive peribadi anda – kami tidak mempunyai akses kepada fail Google Drive anda."
+      },
+      "thirdPartyServices": {
+        "title": "Perkhidmatan Pihak Ketiga",
+        "intro": "Kami menggunakan perkhidmatan pihak ketiga berikut:",
+        "firebase": "Pengesahan Firebase: Untuk log masuk Google. Ditadbir oleh Dasar Privasi Google.",
+        "firebaseAnalytics": "Analitis Firebase: Untuk statistik penggunaan tanpa nama (persetujuan diperlukan).",
+        "vercelAnalytics": "Analitis Vercel: Untuk analitis web tanpa nama (persetujuan diperlukan).",
+        "googleDrive": "API Google Drive: Untuk sandaran awan pilihan, hanya mengakses fail ciptaan apl anda sendiri.",
+        "sentry": "Sentry (pilihan): Untuk pelaporan ralat dan ranap apabila didayakan."
+      },
+      "rightsControls": {
+        "title": "Hak dan Kawalan Anda",
+        "analyticsConsent": "Persetujuan analitis: Anda boleh mendayakan atau melumpuhkan analitis pada bila-bila masa dalam tetapan apl.",
+        "dataDeletion": "Pemadaman data: Anda boleh memadamkan semua data tabiat anda daripada tetapan apl (\"Padam Semua Tabiat\"). Memandangkan data disimpan secara setempat, mengosongkan data penyemak imbas anda atau menyahpasang apl juga akan mengalih keluar semua data.",
+        "cloudBackupControl": "Kawalan sandaran awan: Anda boleh log keluar pada bila-bila masa untuk menghentikan sandaran awan. Fail sandaran Google Drive anda boleh diurus terus daripada Google Drive anda.",
+        "dataExport": "Eksport data: Anda boleh mengeksport data anda sebagai fail JSON daripada tetapan apl pada bila-bila masa."
+      },
+      "deleteData": {
+        "title": "Padamkan Data Anda",
+        "intro": "TGATB Habit Tracker menyimpan data tabiat anda secara setempat pada peranti anda. Anda boleh memadamkan semua data anda pada bila-bila masa tanpa perlu memadamkan akaun anda:",
+        "steps": "1. Buka apl\n2. Ketik ikon menu (menu hamburger) di penjuru kiri sebelah atas\n3. Tatal ke bawah ke Pengurusan Tabiat\n4. Ketik \"Padam Semua Tabiat\"\n5. Sahkan pemadaman apabila digesa",
+        "willDelete": "Ini akan memadamkan secara kekal:",
+        "willDeleteItems": "Semua tabiat anda dan nama mereka, Semua log penyiapan dan data coretan, Semua rekod sejarah",
+        "willNotDelete": "Ini TIDAK akan memadam:",
+        "willNotDeleteItems": "Tetapan apl anda (mod gelap, bahasa, dll.) — ini ditetapkan semula apabila anda mengosongkan data apl atau menyahpasang, Sebarang fail sandaran yang sebelum ini disimpan ke Google Drive anda — anda boleh memadamkannya terus daripada Google Drive anda",
+        "alternative": "Sebagai alternatif, anda boleh menyahpasang apl atau mengosongkan data apl daripada tetapan peranti anda untuk mengalih keluar semua maklumat yang disimpan secara setempat."
+      },
+      "deleteAccount": {
+        "title": "Padamkan Akaun Anda",
+        "intro": "Jika anda log masuk dengan Google dan ingin mengalih keluar akaun anda dan semua data yang berkaitan sepenuhnya, ikut langkah ini:",
+        "appSteps": "1. Buka apl\n2. Ketik ikon menu (menu hamburger) di penjuru kiri sebelah atas\n3. Tatal ke bawah ke Pengurusan Tabiat dan ketik \"Padam Semua Tabiat\" untuk mengalih keluar data anda\n4. Tatal ke Akaun & Data dan ketik \"Log Keluar\" untuk log keluar\n5. Nyahpasang apl untuk mengalih keluar semua data tempatan yang tinggal",
+        "googleDriveSteps": "Untuk mengalih keluar fail sandaran Google Drive anda:\n1. Pergi ke Google Drive\n2. Cari \"tgatb\" atau \"kebiasaan\" untuk mencari fail sandaran\n3. Padamkan fail sandaran",
+        "revokeSteps": "Untuk membatalkan akses apl kepada akaun Google anda:\n1. Pergi ke Kebenaran Akaun Google\n2. Cari \"TGATB Habit Tracker\" dalam senarai\n3. Klik \"Alih Keluar Akses\"",
+        "completion": "Selepas melengkapkan langkah ini, semua data dan akses akaun anda akan dialih keluar sepenuhnya. Jika anda memerlukan bantuan, hubungi kami di adsurkasur.dev@gmail.com."
+      },
+      "dataSecurity": {
+        "title": "Keselamatan Data",
+        "body": "Kami melaksanakan langkah keselamatan yang munasabah untuk melindungi data anda. Data tabiat anda disimpan secara setempat pada peranti anda dan tidak dihantar ke pelayan kami. Data sandaran awan disimpan dalam Google Drive peribadi anda menggunakan infrastruktur keselamatan Google. Walau bagaimanapun, tiada kaedah storan elektronik yang 100% selamat."
+      },
+      "childrenPrivacy": {
+        "title": "Privasi Kanak-kanak",
+        "body": "Apl kami tidak ditujukan kepada kanak-kanak di bawah umur 13 tahun. Kami tidak mengumpul maklumat peribadi daripada kanak-kanak di bawah umur 13 tahun dengan sengaja. Jika anda seorang ibu bapa atau penjaga dan percaya anak anda telah memberikan maklumat peribadi kepada kami, sila hubungi kami."
+      },
+      "policyChanges": {
+        "title": "Perubahan kepada Polisi Ini",
+        "body": "Kami mungkin mengemas kini Dasar Privasi ini dari semasa ke semasa. Sebarang perubahan akan ditunjukkan dengan mengemas kini tarikh \"Terakhir dikemas kini\" di bahagian atas halaman ini. Kami menggalakkan anda menyemak dasar ini secara berkala."
+      },
+      "contactUs": {
+        "title": "Hubungi Kami",
+        "body": "Jika anda mempunyai sebarang soalan tentang Dasar Privasi ini atau amalan data kami, sila hubungi kami di: adsurkasur.dev@gmail.com"
+      },
+      "openSource": {
+        "title": "Sumber Terbuka",
+        "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
+      }
+    },
+    "links": {
+      "termsOfService": "Syarat Perkhidmatan",
+      "openApp": "Buka Penjejak Tabiat TGATB"
+    },
+    "footer": {
+      "copyright": "© 2025-2026 adsurkasur. Semua hak terpelihara."
+    }
+  }
+}

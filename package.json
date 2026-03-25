@@ -29,6 +29,7 @@
     "dev:cleanstart": "npm run dev:reset && npm run dev",
     "build": "next build",
     "i18n:check": "node scripts/i18n-check.mjs",
+    "i18n:translate": "node scripts/translate-locales.mjs",
     "i18n:literals": "node scripts/i18n-literal-guard.mjs",
     "i18n:literals:baseline": "node scripts/i18n-literal-guard.mjs --update-baseline",
     "start": "npx serve@latest out",
