@@ -1,7 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { describe, it, beforeEach, afterEach, expect } from 'vitest';
+import { NextIntlClientProvider } from 'next-intl';
 import SyncConflictModal from '../components/sync-conflict-modal';
+import enMessages from '../messages/en.json';
 
 const samplePayload = {
   conflicts: [
@@ -25,7 +27,11 @@ describe('SyncConflictModal', () => {
 
   it('renders conflict item and allows choosing local or remote', async () => {
     const handleClose = vi.fn();
-    render(<SyncConflictModal open={true} onClose={handleClose} />);
+    render(
+      <NextIntlClientProvider locale="en" messages={enMessages} timeZone="Asia/Jakarta">
+        <SyncConflictModal open={true} onClose={handleClose} />
+      </NextIntlClientProvider>
+    );
 
     // should show item id (wait for effect to run)
     await screen.findByText(/Item: h1/);
