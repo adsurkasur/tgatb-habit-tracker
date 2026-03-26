@@ -82,12 +82,23 @@ export const PlatformStorage = {
 
 export async function getSettings(): Promise<UserSettings> {
   const raw = await PlatformStorage.getItem(settingsKey());
-  if (!raw) return defaultSettings();
-  try {
-    return JSON.parse(raw) as UserSettings;
-  } catch {
-    return defaultSettings();
+  if (raw) {
+    try {
+      return JSON.parse(raw) as UserSettings;
+    } catch {
+      return defaultSettings();
+    }
   }
+  // Fallback to legacy 'app-settings' key for backward compatibility with old boot script
+  try {
+    const legacyRaw = await PlatformStorage.getItem('app-settings');
+    if (legacyRaw) {
+      return JSON.parse(legacyRaw) as UserSettings;
+    }
+  } catch {
+    // Fallback to default if legacy key also fails
+  }
+  return defaultSettings();
 }
 
 export async function saveSettings(settings: UserSettings): Promise<void> {

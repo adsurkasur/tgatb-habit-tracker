@@ -42,14 +42,15 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load theme from localStorage immediately on mount
+  // Load theme from settings on mount, then synchronize with DOM and apply immediately
+  // This runs BEFORE children are mounted, ensuring system bars have correct theme from the start
   useEffect(() => {
     (async () => {
       try {
         const settings = await HabitStorage.getSettings();
         const darkMode = settings.darkMode;
         setIsDarkState(darkMode);
-        // Apply theme immediately to prevent flash
+        // Apply theme immediately to prevent flash (matching boot script)
         if (darkMode) {
           document.documentElement.classList.add("dark");
         } else {
@@ -63,17 +64,23 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     })();
   }, []);
 
-  // Handle loading state - wait for initialization and a brief moment for smooth transition
+  // Handle loading state - set to false when initialized
+  // This effect must be called unconditionally (before any conditional returns)
   useEffect(() => {
     if (isInitialized) {
-      // Add a small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 300);
+      }, 100);
       
       return () => clearTimeout(timer);
     }
   }, [isInitialized]);
+
+  // Only render children (including system bar hooks) after theme is initialized
+  // This prevents system bars from applying with stale/default theme
+  if (!isInitialized) {
+    return null;
+  }
 
   const setIsDark = (darkMode: boolean) => {
     setIsDarkState(darkMode);

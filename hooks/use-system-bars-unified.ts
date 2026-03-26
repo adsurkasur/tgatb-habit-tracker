@@ -31,6 +31,7 @@ interface SystemUiPlugin {
  */
 
 const DEBOUNCE_MS = 300;
+let pendingApplyPromise: Promise<void> | null = null;
 
 // Color scheme: maps theme to system bar colors
 // Light mode: white/light surface, dark icons
@@ -75,11 +76,15 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
   const isIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
 
   /**
-   * Apply system bars with current theme and fullscreen state
+   * Apply system bars with current theme and fullscreen state.
+   * Guards against concurrent applies to prevent race conditions.
    */
   const applySystemBars = useCallback(
     async (forceFullscreen?: boolean, forceTheme?: boolean) => {
       if (!Capacitor.isNativePlatform()) return;
+      
+      // Prevent concurrent applies by returning early if one is already in-flight
+      if (pendingApplyPromise) return pendingApplyPromise;
 
       // --- Helper functions ---
       const shouldRun = () => {
@@ -229,17 +234,32 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
       const targetTheme = resolveTargetTheme(forceTheme);
       logStart(targetFullscreen, targetTheme);
 
-      try {
-        if (isAndroid) {
-          await applyAndroidBars(targetFullscreen, targetTheme);
-        } else if (isIOS) {
-          await applyIOSBars(targetFullscreen, targetTheme);
+      // Wrap in promise to track pending state
+      const executeApply = async () => {
+        try {
+          if (isAndroid) {
+            await applyAndroidBars(targetFullscreen, targetTheme);
+          } else if (isIOS) {
+            await applyIOSBars(targetFullscreen, targetTheme);
+          }
+          finalizeState(targetFullscreen, targetTheme);
+          await smallSettleDelay();
+        } catch (error) {
+          await attemptRecovery(error, targetFullscreen, targetTheme);
         }
-        finalizeState(targetFullscreen, targetTheme);
-        await smallSettleDelay();
-      } catch (error) {
-        await attemptRecovery(error, targetFullscreen, targetTheme);
-      }
+      };
+      
+      const applyPromise = executeApply();
+      
+      // Track pending promise; clear when this one completes
+      pendingApplyPromise = applyPromise;
+      applyPromise.finally(() => {
+        if (pendingApplyPromise === applyPromise) {
+          pendingApplyPromise = null;
+        }
+      });
+      
+      return applyPromise;
     },
     [fullscreenMode, isAndroid, isIOS, currentTheme]
   );
@@ -257,6 +277,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
   );
 
   // Initialize system bars on first mount and handle fullscreen changes
+  // Skip debounce for initial mount (apply immediately to prevent white-on-white on first open)
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
@@ -267,22 +288,26 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     if (shouldApply) {
       if (!globalState.isInitialized) {
         globalState.isInitialized = true;
+        // Apply immediately without debounce - this is critical for first-render appearance
         applySystemBars(fullscreenMode, currentTheme);
       } else {
-        debouncedApply(fullscreenMode, currentTheme);
+        // For subsequent fullscreen changes, use debounce
+        debouncedApply(fullscreenMode, undefined);
       }
     }
   }, [applySystemBars, debouncedApply, fullscreenMode, currentTheme]);
 
   // Listen for theme changes from ThemeProvider
+  // Apply theme changes immediately (without debounce) to ensure bars update on toggle
   useEffect(() => {
     if (typeof window === 'undefined') return;
 
     const handleThemeChange = (event: Event) => {
       if (event instanceof ThemeChangeEvent) {
         setCurrentTheme(event.isDark);
-        // Debounced apply on theme change
-        debouncedApply(fullscreenMode, event.isDark);
+        // Apply theme change immediately without debounce - user expects instant visual feedback
+        // Do not debounce theme changes; only debounce fullscreen mode (non-critical)
+        applySystemBars(fullscreenMode, event.isDark);
       }
     };
 
@@ -290,7 +315,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     return () => {
       window.removeEventListener('theme-change', handleThemeChange);
     };
-  }, [debouncedApply, fullscreenMode]);
+  }, [applySystemBars, fullscreenMode]);
 
   // Cleanup
   useEffect(() => {
