@@ -1,10 +1,15 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, createContext, useContext, createElement, type ReactNode } from "react";
 import { Capacitor } from '@capacitor/core';
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
 import { TokenStorage } from '@/lib/utils';
 import { getActiveAccountId, setActiveAccountId } from "@/lib/account-scope";
+import { AUTH_TOASTS, getAuthActionErrorToast } from "@/lib/toast-config";
+
+// Dedupe concurrent expiry toasts from multiple mounted useAuth instances.
+let lastExpiredLogoutToastAt = 0;
+const EXPIRED_TOAST_DEDUPE_MS = 3000;
 
 /** Detect if an auth error is a user-initiated cancellation (popup closed, back pressed, etc.) */
 function isAuthCancellation(err: unknown): boolean {
@@ -25,7 +30,17 @@ export interface AuthProfile {
   photoUrl?: string;
 }
 
-export function useAuth() {
+export interface AuthContextValue {
+  isLoggedIn: boolean | null;
+  accountId: string;
+  profile: AuthProfile | null;
+  clientReady: boolean;
+  handleAuth: () => Promise<void>;
+}
+
+const AuthContext = createContext<AuthContextValue | null>(null);
+
+function useProvideAuth(): AuthContextValue {
   const { toast } = useToast();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [accountId, setAccountId] = useState<string>(getActiveAccountId());
@@ -66,12 +81,11 @@ export function useAuth() {
     setAccountId(getActiveAccountId());
     setIsLoggedIn(false);
     setProfile(null);
-    toast({
-      title: "Logged Out Automatically",
-      description: "Your login has expired. Please sign in again to access sync and cloud features.",
-      variant: "destructive",
-      duration: 5000,
-    });
+    const now = Date.now();
+    if (now - lastExpiredLogoutToastAt > EXPIRED_TOAST_DEDUPE_MS) {
+      lastExpiredLogoutToastAt = now;
+      toast(AUTH_TOASTS.expired);
+    }
   }, [isCapacitorApp, toast]);
 
   // Determine initial auth state on mount.
@@ -141,18 +155,9 @@ export function useAuth() {
               setProfile({ name: user.displayName || '', photoUrl: user.photoURL || '' });
             }
             setIsLoggedIn(true);
-            toast({
-              title: "Sign-in Successful",
-              description: "You are now signed in with Google.",
-              duration: 3000,
-            });
+            toast(AUTH_TOASTS.signInSuccess);
           } else {
-            toast({
-              title: "Sign-in Failed",
-              description: "Could not sign in with Google.",
-              variant: "destructive",
-              duration: 3000,
-            });
+            toast(AUTH_TOASTS.signInFailed);
           }
         } else {
           // Mobile (Capacitor)
@@ -187,18 +192,9 @@ export function useAuth() {
             }
             setProfile({ name, photoUrl });
             setIsLoggedIn(true);
-            toast({
-              title: "Sign-in Successful",
-              description: "You are now signed in with Google.",
-              duration: 3000,
-            });
+            toast(AUTH_TOASTS.signInSuccess);
           } else {
-            toast({
-              title: "Sign-in Failed",
-              description: "Could not sign in with Google.",
-              variant: "destructive",
-              duration: 3000,
-            });
+            toast(AUTH_TOASTS.signInFailed);
           }
         }
       } else {
@@ -219,11 +215,7 @@ export function useAuth() {
           setAccountId(getActiveAccountId());
           setIsLoggedIn(false);
           setProfile(null);
-          toast({
-            title: "Logged Out",
-            description: "You have been logged out of Google.",
-            duration: 3000,
-          });
+          toast(AUTH_TOASTS.loggedOut);
         } else {
           // Mobile: sign out via Capacitor Firebase plugin
           const { FirebaseAuthentication } = await import('@capacitor-firebase/authentication');
@@ -240,11 +232,7 @@ export function useAuth() {
           setAccountId(getActiveAccountId());
           setIsLoggedIn(false);
           setProfile(null);
-          toast({
-            title: "Logged Out",
-            description: "You have been logged out of Google.",
-            duration: 3000,
-          });
+          toast(AUTH_TOASTS.loggedOut);
         }
       }
     } catch (err) {
@@ -256,20 +244,10 @@ export function useAuth() {
         return;
       }
       if (err instanceof Error && err.message.includes('No credentials available')) {
-        toast({
-          title: "Sign-in Error",
-          description: "No Google account found on this device. Please add an account and try again.",
-          variant: "destructive",
-          duration: 3000,
-        });
+        toast(AUTH_TOASTS.signInNoCredentials);
       } else {
         const errorMsg = err instanceof Error ? err.message : String(err);
-        toast({
-          title: isLoggedIn ? "Logout Error" : "Sign-in Error",
-          description: errorMsg || `An error occurred during ${isLoggedIn ? 'logout' : 'sign-in'}.`,
-          variant: "destructive",
-          duration: 5000,
-        });
+        toast(getAuthActionErrorToast(!!isLoggedIn, errorMsg));
       }
       console.error(`[useAuth] ${isLoggedIn ? 'logout' : 'sign-in'} error`);
     }
@@ -282,4 +260,17 @@ export function useAuth() {
     clientReady,
     handleAuth,
   };
+}
+
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const value = useProvideAuth();
+  return createElement(AuthContext.Provider, { value }, children);
+}
+
+export function useAuth() {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within AuthProvider");
+  }
+  return context;
 }

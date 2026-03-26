@@ -12,6 +12,7 @@ import { usePathname } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { HabitStorage } from "@/lib/habit-storage";
 import { initSentryClient } from "@/lib/sentry";
+import { AuthProvider } from "@/hooks/use-auth";
 import { routing, isValidLocale, type AppLocale } from "@/i18n/routing";
 import enMessages from "@/messages/en.json";
 import idMessages from "@/messages/id.json";
@@ -91,9 +92,11 @@ export function Providers({ children }: { children: React.ReactNode }) {
           <TooltipProvider>
             <ServiceWorkerRegistration />
             <LoadingProvider>
-              {children}
-              <PWAInstallPrompt />
-              <Toaster />
+              <AuthProvider>
+                {children}
+                <PWAInstallPrompt />
+                <Toaster />
+              </AuthProvider>
             </LoadingProvider>
           </TooltipProvider>
         </QueryClientProvider>
