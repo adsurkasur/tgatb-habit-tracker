@@ -170,7 +170,7 @@ public class SystemUiPlugin extends Plugin {
         int navColor    = parseColor(currentNavBarColor);
         applyBarColors(window, statusColor, navColor);
         applyIconAppearance(controller);
-        clearLegacyLightFlags(window);
+        applyLegacyIconAppearance(window);
     }
 
     private static int parseColor(String hex) {
@@ -210,7 +210,7 @@ public class SystemUiPlugin extends Plugin {
         }
     }
 
-    private static void clearLegacyLightFlags(Window window) {
+    private static void applyLegacyIconAppearance(Window window) {
         View decor = window.getDecorView();
         int vis = decor.getSystemUiVisibility();
         if (darkMode) {
@@ -218,6 +218,12 @@ public class SystemUiPlugin extends Plugin {
             vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
+        } else {
+            // Light mode: set light flags (dark icons)
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
             }
         }
         decor.setSystemUiVisibility(vis);

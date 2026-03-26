@@ -142,7 +142,7 @@ const resolveStatusBarStyle = (isDarkMode: boolean | undefined) => {
     if (typeof document !== 'undefined') {
       return document.documentElement.classList.contains('dark') ? StatusBarStyles.Light : StatusBarStyles.Dark;
     }
-    return StatusBarStyles.Light;
+    return StatusBarStyles.Dark; // Default to dark text for white background
   }
   return isDarkMode ? StatusBarStyles.Light : StatusBarStyles.Dark;
 };

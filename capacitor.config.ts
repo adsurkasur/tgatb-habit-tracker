@@ -13,13 +13,11 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       // Runtime JS/native plugin will override with theme-aware colors
-      style: 'light',
-      backgroundColor: '#ffffff',
+      style: 'dark', // Dark text for white background
       overlaysWebView: false
     },
     SplashScreen: {
       launchShowDuration: 1000,
-      backgroundColor: '#ffffff',
       androidScaleType: 'CENTER_CROP',
       showSpinner: false
     },
@@ -29,9 +27,7 @@ const config: CapacitorConfig = {
     Keyboard: {
       resizeOnFullScreen: false
     },
-    NavigationBar: {
-      backgroundColor: '#ffffff' // Runtime JS/native plugin will override with theme-aware colors
-    }
+    NavigationBar: {}
   },
   android: {
     allowMixedContent: true,
