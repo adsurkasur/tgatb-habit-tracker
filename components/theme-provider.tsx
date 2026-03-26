@@ -11,6 +11,20 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
+/**
+ * Custom event for theme changes.
+ * This allows other components/hooks to listen for theme updates
+ * without prop-drilling or tight coupling to ThemeProvider.
+ */
+export class ThemeChangeEvent extends Event {
+  public readonly isDark: boolean;
+
+  constructor(isDark: boolean) {
+    super("theme-change");
+    this.isDark = isDark;
+  }
+}
+
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -69,6 +83,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
+    }
+
+    // Dispatch custom event so system bars and other UI can react
+    if (typeof window !== "undefined") {
+      window.dispatchEvent(new ThemeChangeEvent(darkMode));
     }
     
     // Save to localStorage

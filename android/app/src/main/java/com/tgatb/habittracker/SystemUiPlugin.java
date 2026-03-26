@@ -21,7 +21,9 @@ import com.getcapacitor.PluginMethod;
 @CapacitorPlugin(name = "SystemUi")
 public class SystemUiPlugin extends Plugin {
     private static boolean fullscreenEnabled = false;
-    private static final String PURPLE = "#6750A4"; // match web constant
+    private static String themeColor = "#FFFFFF"; // Light mode default
+    private static boolean isDarkTheme = false;
+    private static final String PURPLE = "#6750A4"; // Legacy fallback
 
     @PluginMethod
     public void setFullscreen(PluginCall call) {
@@ -37,9 +39,33 @@ public class SystemUiPlugin extends Plugin {
     }
 
     @PluginMethod
+    public void setThemeColor(PluginCall call) {
+        String color = call.getString("color", "#FFFFFF");
+        boolean isDark = call.getBoolean("isDark", false);
+        themeColor = color;
+        isDarkTheme = isDark;
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(() -> applySystemUi(activity));
+        }
+        JSObject ret = new JSObject();
+        ret.put("color", themeColor);
+        ret.put("isDark", isDarkTheme);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
     public void getFullscreen(PluginCall call) {
         JSObject ret = new JSObject();
         ret.put("enabled", fullscreenEnabled);
+        call.resolve(ret);
+    }
+
+    @PluginMethod
+    public void getThemeColor(PluginCall call) {
+        JSObject ret = new JSObject();
+        ret.put("color", themeColor);
+        ret.put("isDark", isDarkTheme);
         call.resolve(ret);
     }
 
@@ -49,6 +75,10 @@ public class SystemUiPlugin extends Plugin {
     }
 
     public static boolean isFullscreenEnabled() { return fullscreenEnabled; }
+
+    public static String getThemeColor() { return themeColor; }
+
+    public static boolean isDarkTheme() { return isDarkTheme; }
 
     private static void applySystemUi(Activity activity) {
         final Window window = activity.getWindow();
@@ -142,31 +172,34 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void applyColorsAndAppearance(Window window, WindowInsetsControllerCompat controller) {
-        int purple = parsePurple();
-        applyBarColors(window, purple);
-        enforceLightIcons(controller);
+        // Don't apply colors in fullscreen mode
+        if (fullscreenEnabled) return;
+
+        int barColor = parseThemeColor();
+        applyBarColors(window, barColor);
+        applyIconAppearance(controller, isDarkTheme);
         clearLegacyLightFlags(window);
     }
 
-    private static int parsePurple() {
-        try { return Color.parseColor(PURPLE); } catch (Exception e) { return Color.BLACK; }
+    private static int parseThemeColor() {
+        try { return Color.parseColor(themeColor); } catch (Exception e) { return Color.parseColor(PURPLE); }
     }
 
-    private static void applyBarColors(Window window, int purple) {
+    private static void applyBarColors(Window window, int barColor) {
         try {
             if (Build.VERSION.SDK_INT >= 35) { // Android 15+
-                applyColorsAndroid15Plus(window, purple);
+                applyColorsAndroid15Plus(window, barColor);
             } else {
-                applyColorsLegacy(window, purple);
+                applyColorsLegacy(window, barColor);
             }
         } catch (Throwable ignored) {}
     }
 
-    private static void applyColorsAndroid15Plus(Window window, int purple) {
+    private static void applyColorsAndroid15Plus(Window window, int barColor) {
         View decorView = window.getDecorView();
         decorView.setOnApplyWindowInsetsListener((view, insets) -> {
             // Android 15+ recommends drawing behind status/navigation bars instead of directly setting their colors.
-            view.setBackgroundColor(purple);
+            view.setBackgroundColor(barColor);
             return insets;
         });
 
@@ -174,16 +207,16 @@ public class SystemUiPlugin extends Plugin {
         // Legacy colors are handled in applyColorsLegacy below for older Android versions.
     }
 
-    private static void applyColorsLegacy(Window window, int purple) {
-        window.setStatusBarColor(purple);
-        tintNavBars(window, purple, false);
+    private static void applyColorsLegacy(Window window, int barColor) {
+        window.setStatusBarColor(barColor);
+        tintNavBars(window, barColor, false);
     }
 
-    private static void tintNavBars(Window window, int purple, boolean enforceContrast) {
+    private static void tintNavBars(Window window, int barColor, boolean enforceContrast) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setNavigationBarColor(purple);
+            window.setNavigationBarColor(barColor);
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                window.setNavigationBarDividerColor(purple);
+                window.setNavigationBarDividerColor(barColor);
             }
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 try { window.setNavigationBarContrastEnforced(enforceContrast); } catch (Throwable ignored) {}
@@ -191,11 +224,18 @@ public class SystemUiPlugin extends Plugin {
         }
     }
 
-    private static void enforceLightIcons(WindowInsetsControllerCompat controller) {
+    /**
+     * Apply icon appearance based on theme
+     * isDark = true: light icons for dark bars
+     * isDark = false: dark icons for light bars
+     */
+    private static void applyIconAppearance(WindowInsetsControllerCompat controller, boolean isDark) {
         if (controller == null) return;
-        controller.setAppearanceLightStatusBars(false);
+        // setAppearanceLightStatusBars(true) = show dark icons (for light background)
+        // setAppearanceLightStatusBars(false) = show light icons (for dark background)
+        controller.setAppearanceLightStatusBars(!isDark);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            controller.setAppearanceLightNavigationBars(false);
+            controller.setAppearanceLightNavigationBars(!isDark);
         }
     }
 
