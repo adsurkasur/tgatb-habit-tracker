@@ -102,5 +102,14 @@ export async function getSettings(): Promise<UserSettings> {
 }
 
 export async function saveSettings(settings: UserSettings): Promise<void> {
-  await PlatformStorage.setItem(settingsKey(), JSON.stringify(settings));
+  const key = settingsKey();
+  const value = JSON.stringify(settings);
+
+  // On native, save to BOTH Preferences and localStorage
+  // This way the boot script can find settings on first load even on Android
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(key, value);  // Boot script reads this
+  }
+
+  await PlatformStorage.setItem(key, value);  // Main storage backend
 }

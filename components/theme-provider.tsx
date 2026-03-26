@@ -42,14 +42,23 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load theme from settings on mount, then synchronize with DOM and apply immediately
-  // This runs BEFORE children are mounted, ensuring system bars have correct theme from the start
+  // Load theme from settings on mount and apply immediately to DOM
+  // This happens synchronously during render for boot script
   useEffect(() => {
     (async () => {
       try {
         const settings = await HabitStorage.getSettings();
         const darkMode = settings.darkMode;
         setIsDarkState(darkMode);
+        
+        // Also save to localStorage so boot script can find it on next app open
+        // (On native, settings are in Preferences, not localStorage)
+        try {
+          localStorage.setItem('user_settings::anonymous', JSON.stringify(settings));
+        } catch {
+          // Silently fail - localStorage might not be available
+        }
+        
         // Apply theme immediately to prevent flash (matching boot script)
         if (darkMode) {
           document.documentElement.classList.add("dark");
@@ -64,8 +73,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     })();
   }, []);
 
-  // Handle loading state - set to false when initialized
-  // This effect must be called unconditionally (before any conditional returns)
+  // Handle loading state - must be called before any conditional returns
   useEffect(() => {
     if (isInitialized) {
       const timer = setTimeout(() => {
@@ -75,12 +83,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       return () => clearTimeout(timer);
     }
   }, [isInitialized]);
-
-  // Only render children (including system bar hooks) after theme is initialized
-  // This prevents system bars from applying with stale/default theme
-  if (!isInitialized) {
-    return null;
-  }
 
   const setIsDark = (darkMode: boolean) => {
     setIsDarkState(darkMode);
