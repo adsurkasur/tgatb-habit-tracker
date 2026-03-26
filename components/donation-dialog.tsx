@@ -6,6 +6,7 @@ import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Copy, ExternalLink, Heart, DollarSign, Coffee, Check, Download, QrCode } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useTranslations } from 'next-intl';
 import {
   ResponsiveDialog,
   ResponsiveDialogContent,
@@ -129,6 +130,7 @@ const cryptoList: CryptoItem[] = [
 ];
 
 export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
+  const t = useTranslations('DonationDialog');
   const [copiedAddress, setCopiedAddress] = useState<string | null>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const { toast } = useToast();
@@ -139,8 +141,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
       await navigator.clipboard.writeText(address);
       setCopiedAddress(address);
       toast({
-        title: "Copied!",
-        description: "Address copied to clipboard",
+        title: t('toasts.copied.title'),
+        description: t('toasts.copied.description'),
         duration: 3000,
       });
       if (timerRef.current) clearTimeout(timerRef.current);
@@ -149,8 +151,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
       }, 3000);
     } catch {
       toast({
-        title: "Failed to copy",
-        description: "Please copy the address manually",
+        title: t('toasts.copyFailed.title'),
+        description: t('toasts.copyFailed.description'),
         variant: "destructive",
         duration: 3000,
       });
@@ -164,20 +166,20 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <Heart className="w-5 h-5 text-red-500" />
-            Support Me
+            {t('title')}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
           <DialogDescription className="text-center mb-6">
-            If you enjoy this app, consider supporting its development. Every contribution helps keep it free and improving!
+            {t('description')}
           </DialogDescription>
           <div className="space-y-6">
             {/* Payment Platforms */}
             <div className="space-y-3">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <ExternalLink className="w-4 h-4" />
-                Payment Platforms
+                {t('sections.paymentPlatforms')}
               </h3>
               {/* Render Trakteer and Ko-fi cards */}
               {supportContacts.map((contact) => (
@@ -215,8 +217,8 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                       <QrCode className="w-5 h-5" />
                     </div>
                     <div>
-                      <h4 className="font-medium">QRIS</h4>
-                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-all duration-200">Support me with QRIS!</p>
+                      <h4 className="font-medium">{t('qris.title')}</h4>
+                      <p className="text-sm text-muted-foreground group-hover:text-accent-foreground/70 transition-all duration-200">{t('qris.supportLine')}</p>
                     </div>
                   </div>
                   <ExternalLink className="w-4 h-4 text-muted-foreground group-hover:text-accent-foreground transition-all duration-200" />
@@ -230,7 +232,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <path fillRule="evenodd" d="M13.425 6.432c1.983.19 3.538.778 3.71 2.528.117 1.276-.438 2.035-1.355 2.463 1.481.359 2.382 1.202 2.196 3.072-.227 2.343-2.035 2.952-4.62 3.08l.004 2.42-1.522.002-.004-2.42c-.166-.002-.34 0-.519.003-.238.003-.484.006-.731-.001l.004 2.42-1.52.001-.004-2.42-3.044-.058.256-1.768s1.15.024 1.129.012c.423-.002.549-.293.58-.485l-.008-3.878.012-2.76c-.046-.288-.248-.634-.87-.644.033-.03-1.115.001-1.115.001L6 6.38l3.12-.005-.004-2.37 1.571-.002.004 2.37c.304-.008.603-.005.906-.003l.3.002-.005-2.37L13.422 4l.003 2.432zm-2.92 4.46l.076.002c.926.04 3.67.155 3.673-1.457-.004-1.532-2.339-1.482-3.423-1.46-.129.003-.24.006-.327.005v2.91zm.129 4.75l-.134-.005v-2.91c.097.002.218 0 .359-.002 1.282-.015 4.145-.05 4.132 1.494.014 1.597-3.218 1.468-4.357 1.423z" clipRule="evenodd" />
                 </svg>
-                Cryptocurrency
+                {t('sections.cryptocurrency')}
               </h3>
               
               {cryptoList.map((crypto) => (
@@ -248,7 +250,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                         <h4 className="font-medium">{crypto.name}</h4>
                         {copiedAddress === crypto.address && (
                           <Badge variant="secondary" className="text-xs bg-green-100 text-green-700 dark:bg-green-900 dark:text-green-300">
-                            Copied!
+                            {t('copiedBadge')}
                           </Badge>
                         )}
                       </div>
@@ -273,7 +275,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             {/* Thank You Message */}
             <div className="text-center mt-4">
               <p className="text-sm text-muted-foreground">
-                Thank you for considering supporting this project! 🙏
+                {t('thankYou')}
               </p>
             </div>
           </div>
@@ -287,13 +289,13 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
         <ResponsiveDialogHeader>
           <ResponsiveDialogTitle className="flex items-center gap-2">
             <QrCode className="w-5 h-5 text-primary" />
-            QRIS
+            {t('qris.title')}
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody>
           <div className="flex flex-col items-center gap-4">
-            <p className="text-sm text-muted-foreground text-center">Scan this QR code with your banking app to donate via QRIS.</p>
-            <Image src="/payment/qris-ade.jpg" alt="QRIS Donation Method" width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
+            <p className="text-sm text-muted-foreground text-center">{t('qris.description')}</p>
+            <Image src="/payment/qris-ade.jpg" alt={t('qris.imageAlt')} width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
             <Button
               variant="outline"
               className="w-full max-w-xs"
@@ -316,14 +318,14 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
                           mimeType: 'image/jpeg',
                           data: base64,
                         });
-                        toast({ title: 'Saved!', description: 'QRIS image saved to device.', duration: 3000 });
+                        toast({ title: t('toasts.saved.title'), description: t('toasts.saved.description'), duration: 3000 });
                       } catch {
-                        toast({ title: 'Save failed', description: 'Could not save image.', variant: 'destructive', duration: 3000 });
+                        toast({ title: t('toasts.saveFailed.title'), description: t('toasts.saveFailed.description'), variant: 'destructive', duration: 3000 });
                       }
                     };
                     reader.readAsDataURL(blob);
                   } catch {
-                    toast({ title: 'Download failed', description: 'Could not fetch image.', variant: 'destructive', duration: 3000 });
+                    toast({ title: t('toasts.downloadFailed.title'), description: t('toasts.downloadFailed.description'), variant: 'destructive', duration: 3000 });
                   }
                 } else {
                   const link = document.createElement('a');
@@ -336,7 +338,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               }}
             >
               <Download className="w-4 h-4" />
-              Download QRIS
+              {t('qris.download')}
             </Button>
           </div>
         </ResponsiveDialogBody>

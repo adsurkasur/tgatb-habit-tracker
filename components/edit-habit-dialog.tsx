@@ -11,8 +11,9 @@ import {
   ResponsiveDialogBody,
   ResponsiveDialogFooter,
 } from "@/components/ui/responsive-dialog";
+import { useTranslations } from "next-intl";
 
-const WEEKDAY_LABELS = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const WEEKDAY_KEYS = ["sun", "mon", "tue", "wed", "thu", "fri", "sat"] as const;
 
 interface EditHabitDialogProps {
   open: boolean;
@@ -22,6 +23,7 @@ interface EditHabitDialogProps {
 }
 
 export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: EditHabitDialogProps) {
+  const t = useTranslations("EditHabitDialog");
   const [name, setName] = useState("");
   const [type, setType] = useState<HabitType>("good");
   const [scheduleType, setScheduleType] = useState<HabitScheduleType>("daily");
@@ -85,7 +87,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
     <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Edit Habit</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle>{t("title")}</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
@@ -93,12 +95,12 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
             {/* Habit Name Input */}
             <div className="space-y-2">
               <Label htmlFor="edit-habit-name" className="text-sm font-medium">
-                Habit Name
+                {t("fields.name")}
               </Label>
               <Input
                 id="edit-habit-name"
                 type="text"
-                placeholder="Enter habit name..."
+                placeholder={t("placeholders.name")}
                 value={name}
                 onChange={(e) => setName(e.target.value)}
                 className="material-radius focus:border-primary"
@@ -108,52 +110,56 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
 
             {/* Habit Type Segmented Button */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Habit Type</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <Label className="text-sm font-medium">{t("fields.type")}</Label>
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-2">
                 <Button
                   type="button"
                   variant={type === "good" ? "default" : "ghost"}
-                  className={`flex-1 material-radius-none ${
+                  className={`w-full material-radius-none ${
                     type === "good"
                       ? "bg-green-500 hover:bg-green-600 text-white"
                       : "hover:bg-green-50 hover:text-green-700"
                   }`}
                   onClick={() => setType("good")}
                 >
-                  Good
+                  {t("type.good")}
                 </Button>
                 <Button
                   type="button"
                   variant={type === "bad" ? "default" : "ghost"}
-                  className={`flex-1 material-radius-none ${
+                  className={`w-full material-radius-none ${
                     type === "bad"
                       ? "bg-red-500 hover:bg-red-600 text-white"
                       : "hover:bg-red-50 hover:text-red-700"
                   }`}
                   onClick={() => setType("bad")}
                 >
-                  Bad
+                  {t("type.bad")}
                 </Button>
               </div>
             </div>
 
             {/* Schedule Selector */}
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Schedule</Label>
-              <div className="flex border border-border material-radius overflow-hidden">
+              <Label className="text-sm font-medium">{t("fields.schedule")}</Label>
+              <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-3">
                 {(["daily", "interval", "weekly"] as const).map((st) => (
                   <Button
                     key={st}
                     type="button"
                     onClick={() => setScheduleType(st)}
-                    className={`flex-1 material-radius-none text-xs font-medium transition-all duration-200 ${
+                    className={`w-full material-radius-none text-xs font-medium transition-all duration-200 ${
                       scheduleType === st
                         ? "bg-primary hover:bg-primary/90 text-white"
                         : "bg-background hover:bg-muted text-foreground"
                     }`}
                     variant="ghost"
                   >
-                    {st === "daily" ? "Daily" : st === "interval" ? "Every N Days" : "Weekdays"}
+                    {st === "daily"
+                      ? t("schedule.daily")
+                      : st === "interval"
+                        ? t("schedule.interval")
+                        : t("schedule.weekly")}
                   </Button>
                 ))}
               </div>
@@ -162,7 +168,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
               {scheduleType === "interval" && (
                 <div className="flex items-center gap-2 mt-2">
                   <Label htmlFor="edit-interval-days" className="text-sm text-muted-foreground whitespace-nowrap">
-                    Every
+                    {t("interval.every")}
                   </Label>
                   <Input
                     id="edit-interval-days"
@@ -173,14 +179,14 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
                     onChange={(e) => setIntervalDays(parseInt(e.target.value) || 2)}
                     className="w-20 material-radius"
                   />
-                  <span className="text-sm text-muted-foreground">days</span>
+                  <span className="text-sm text-muted-foreground">{t("interval.days")}</span>
                 </div>
               )}
 
               {/* Weekday multi-select */}
               {scheduleType === "weekly" && (
                 <div className="grid grid-cols-7 gap-1.5 mt-2">
-                  {WEEKDAY_LABELS.map((label, idx) => (
+                  {WEEKDAY_KEYS.map((dayKey, idx) => (
                     <Button
                       key={idx}
                       type="button"
@@ -193,7 +199,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
                       }`}
                       variant="ghost"
                     >
-                      {label}
+                      {t(`weekdays.${dayKey}`)}
                     </Button>
                   ))}
                 </div>
@@ -203,22 +209,22 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>
-          <div className="flex space-x-3 w-full">
+          <div className="grid grid-cols-1 gap-2 w-full sm:grid-cols-2">
             <Button
               type="button"
               variant="outline"
               onClick={handleCancel}
-              className="flex-1 material-radius"
+              className="w-full material-radius"
             >
-              Cancel
+              {t("actions.cancel")}
             </Button>
             <Button
               type="submit"
               form="edit-habit-form"
-              className="flex-1 material-radius cta-color-hover text-white"
+              className="w-full material-radius cta-color-hover text-white"
               disabled={!name.trim()}
             >
-              Save Changes
+              {t("actions.saveChanges")}
             </Button>
           </div>
         </ResponsiveDialogFooter>

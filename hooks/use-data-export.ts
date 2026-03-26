@@ -5,7 +5,10 @@ import { exportDataPlatform } from "@/lib/platform-export";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
 
-export function useDataExport(onExportData: () => Promise<string>, onImportData: (jsonData: string) => void) {
+export function useDataExport(
+  onExportData: () => Promise<string>,
+  onImportData: (jsonData: string) => Promise<void> | void
+) {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { toast } = useToast();
   const { show: showLoading, hide: hideLoading } = useLoading();
@@ -75,7 +78,7 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
       });
 
       const reader = new FileReader();
-      reader.onload = (event) => {
+      reader.onload = async (event) => {
         try {
           const jsonData = event.target?.result as string;
           if (jsonData) {
@@ -85,25 +88,58 @@ export function useDataExport(onExportData: () => Promise<string>, onImportData:
             } catch {
               toast({
                 title: "Import Failed",
-                description: "Imported file is not valid JSON.",
+                description: "The file is not valid JSON format.",
                 variant: "destructive",
                 duration: 3000,
               });
               return;
             }
 
-            const validation = validateExportImportJson(jsonObj);
-            if (!validation.success) {
+            // Pre-validation: check basic structure
+            if (typeof jsonObj !== "object" || !jsonObj) {
               toast({
                 title: "Import Failed",
-                description: `Imported data is invalid: ${validation.errors?.join(", ")}`,
+                description: "File appears to be empty or invalid",
+                variant: "destructive",
+                duration: 3000,
+              });
+              return;
+            }
+
+            const obj = jsonObj as Record<string, unknown>;
+            if (!obj.version) {
+              toast({
+                title: "Import Failed",
+                description: "This doesn't look like an exported habit tracker file.",
+                variant: "destructive",
+                duration: 3000,
+              });
+              return;
+            }
+
+            // Full validation
+            const validation = validateExportImportJson(jsonObj);
+            if (!validation.success) {
+              // Create user-friendly error message from Zod errors
+              let errorMsg = "The data file is corrupted or incompatible.";
+              if (validation.errors && validation.errors.length > 0) {
+                // Show first error field name only
+                const firstError = validation.errors[0];
+                const fieldMatch = firstError.match(/^([^\.\[]+)/);
+                const field = fieldMatch ? fieldMatch[1] : "data";
+                errorMsg = `Validation failed in ${field}. Please check the file and try again.`;
+              }
+              
+              toast({
+                title: "Import Failed",
+                description: errorMsg,
                 variant: "destructive",
                 duration: 4000,
               });
               return;
             }
 
-            onImportData(jsonData);
+            await onImportData(jsonData);
           }
         } finally {
           hideLoading();

@@ -45,7 +45,7 @@ export interface HabitLog {
 
 export interface UserSettings {
   darkMode: boolean;
-  language: "en" | "id";
+  language: "en" | "id" | "ms" | "th" | "vi" | "fil" | "zh" | "ja" | "ko" | "es" | "fr" | "de" | "pt" | "ar" | "hi" | "ru";
   motivatorPersonality: MotivatorPersonality;
   fullscreenMode: boolean;
   autoSync?: boolean;
@@ -101,7 +101,7 @@ export type CreateHabitInput = z.infer<typeof createHabitSchema>;
 // Settings schema for validation (used during import/export)
 export const userSettingsSchema = z.object({
   darkMode: z.boolean(),
-  language: z.enum(["en", "id"]),
+  language: z.enum(["en", "id", "ms", "th", "vi", "fil", "zh", "ja", "ko", "es", "fr", "de", "pt", "ar", "hi", "ru"]),
   motivatorPersonality: z.enum(["positive", "adaptive", "harsh"]),
   fullscreenMode: z.boolean(),
   autoSync: z.boolean().optional(),
@@ -132,7 +132,7 @@ export const exportBundleSchema = z.object({
       lastCompletedDate: z.string().optional(),
       schedule: habitScheduleSchema.optional(),
       updatedAt: z.string().optional(),
-      deviceId: z.string().optional(),
+      deviceId: z.string().nullable().optional(),
       version: z.number().int().optional(),
     })
   ),
@@ -145,7 +145,7 @@ export const exportBundleSchema = z.object({
       timestamp: z.string(),
       source: z.enum(["manual", "auto"]).optional(),
       updatedAt: z.string().optional(),
-      deviceId: z.string().optional(),
+      deviceId: z.string().nullable().optional(),
       version: z.number().int().optional(),
     })
   ),

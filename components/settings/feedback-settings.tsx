@@ -5,6 +5,7 @@ import { Switch } from "@/components/ui/switch";
 import { Volume2, Vibrate } from "lucide-react";
 import { isHapticsSupported } from "@/lib/haptics";
 import { feedbackButtonPress } from "@/lib/feedback";
+import { useTranslations } from "next-intl";
 
 interface FeedbackSettingsProps {
   settings: UserSettings;
@@ -12,11 +13,12 @@ interface FeedbackSettingsProps {
 }
 
 export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSettingsProps) {
+  const t = useTranslations("FeedbackSettings");
   const hapticsAvailable = isHapticsSupported();
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Feedback</h2>
+      <h2 className="text-lg font-semibold">{t("title")}</h2>
 
       <div className="space-y-2">
         {/* Sound toggle */}
@@ -27,8 +29,8 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
           <div className="flex items-center space-x-3">
             <Volume2 className="w-5 h-5 text-muted-foreground" />
             <div>
-              <span className="font-medium">Sound Effects</span>
-              <p className="text-sm text-muted-foreground">Play sounds on interactions</p>
+              <span className="font-medium">{t("sound.title")}</span>
+              <p className="text-sm text-muted-foreground">{t("sound.description")}</p>
             </div>
           </div>
           <Switch
@@ -48,9 +50,9 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
           <div className="flex items-center space-x-3">
             <Vibrate className="w-5 h-5 text-muted-foreground" />
             <div>
-              <span className="font-medium">Haptic Feedback</span>
+              <span className="font-medium">{t("haptic.title")}</span>
               <p className="text-sm text-muted-foreground">
-                {hapticsAvailable ? "Vibrate on interactions" : "Not supported on this device"}
+                {hapticsAvailable ? t("haptic.supported") : t("haptic.notSupported")}
               </p>
             </div>
           </div>

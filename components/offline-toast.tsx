@@ -4,8 +4,10 @@ import { useNetworkStatus } from '@/hooks/use-network-status';
 import { WifiOff } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { useSwipeToDismiss } from '@/hooks/use-swipe-to-dismiss';
+import { useTranslations } from 'next-intl';
 
 export function OfflineToast() {
+  const t = useTranslations('OfflineToast');
   const { isOnline } = useNetworkStatus();
   const [showToast, setShowToast] = useState(false);
   const [prevOnline, setPrevOnline] = useState(isOnline);
@@ -69,7 +71,7 @@ export function OfflineToast() {
   onTouchEnd={handlers.onTouchEnd}
     >
       <WifiOff className="h-4 w-4 text-orange-600" />
-  <span className="text-sm text-gray-800">You&apos;re offline. Some features may be limited.</span>
+  <span className="text-sm text-gray-800">{t('message')}</span>
     </div>
   );
 }

@@ -4,12 +4,14 @@ import { DeleteAllHabitsModal } from "@/components/delete-all-habits-modal";
 import { useToast } from "@/hooks/use-toast";
 import { useLoading } from "@/hooks/use-loading";
 import { feedbackButtonPress } from "@/lib/feedback";
+import { useTranslations } from "next-intl";
 
 interface HabitManagementSettingsProps {
   onDeleteAllHabits?: () => Promise<void>;
 }
 
 export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSettingsProps) {
+  const t = useTranslations("HabitManagementSettings");
   const { toast } = useToast();
   const { show: showLoading, hide: hideLoading } = useLoading();
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -17,14 +19,14 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
 
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Habit Management</h2>
+      <h2 className="text-lg font-semibold">{t("title")}</h2>
       <div
         className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
         onClick={() => { feedbackButtonPress(); setShowDeleteModal(true); }}
       >
         <div className="flex items-center space-x-3">
           <Trash2 className="w-5 h-5 text-destructive" />
-          <span className="font-medium text-destructive">Delete All Habits</span>
+          <span className="font-medium text-destructive">{t("deleteAll")}</span>
         </div>
         <ChevronRight className="w-5 h-5 text-destructive" />
       </div>
@@ -40,22 +42,22 @@ export function HabitManagementSettings({ onDeleteAllHabits }: HabitManagementSe
             if (onDeleteAllHabits) {
               await onDeleteAllHabits();
               toast({
-                title: 'All habits deleted',
-                description: 'Your habit list has been cleared.',
+                title: t('toasts.deleted.title'),
+                description: t('toasts.deleted.description'),
                 duration: 3000,
               });
             } else {
               toast({
-                title: 'Delete Failed',
-                description: 'No delete handler provided.',
+                title: t('toasts.failed.title'),
+                description: t('toasts.noHandler.description'),
                 variant: 'destructive',
                 duration: 3000,
               });
             }
           } catch {
             toast({
-              title: 'Delete Failed',
-              description: 'An error occurred while deleting habits.',
+              title: t('toasts.failed.title'),
+              description: t('toasts.failed.description'),
               variant: 'destructive',
               duration: 3000,
             });

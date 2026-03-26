@@ -8,10 +8,17 @@ Thanks for contributing! Please follow these guidelines to make PRs easier to re
 
 ## Local checks before opening PR
 - Run `npm ci` to install dependencies.
+- Run `npm run i18n:check` to validate locale key parity.
 - Run `npm run lint` and fix issues.
 - Run `npm run check` to type-check the code.
 - Run `npm run test:unit` to ensure unit tests pass.
 - Run `npm run build` to verify production build.
+
+## Localization workflow
+- Add new user-facing keys in `messages/en.json` and `messages/id.json` in the same PR.
+- Do not introduce hard-coded user-facing strings in new components/pages.
+- Ensure locale-aware routes and metadata remain valid for `/en` and `/id`.
+- Follow the full release and rollback guidance in [docs/I18N_OPERATIONS.md](docs/I18N_OPERATIONS.md).
 
 ## Tests
 - Add unit tests for new features and bug fixes.

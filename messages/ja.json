@@ -1,0 +1,810 @@
+{
+  "App": {
+    "name": "TGATB 習慣トラッカー",
+    "description": "良い点と悪い点: ミニマリストの習慣追跡アプリケーション"
+  },
+  "Routing": {
+    "redirecting": "リダイレクト中..."
+  },
+  "Home": {
+    "title": "良い点と悪い点",
+    "demoLabel": "デモの習慣",
+    "counter": "{current}/{total} 個の習慣",
+    "counterHint": "← → キー、ナビゲーション ボタン、またはスワイプを使用して移動します",
+    "aria": {
+      "previousHabit": "以前の習慣",
+      "nextHabit": "次の習慣"
+    },
+    "toasts": {
+      "pressBackAgainExit": "もう一度戻るボタンを押して終了します",
+      "habitDeletedTitle": "習慣を削除しました！",
+      "habitDeletedDescription": "あなたの習慣は取り除かれました。",
+      "undoDeleteAltText": "削除を元に戻す",
+      "undo": "元に戻す"
+    }
+  },
+  "AppearanceSettings": {
+    "title": "外観",
+    "darkMode": {
+      "label": "ダークモード",
+      "description": "明るいテーマと暗いテーマを切り替える"
+    },
+    "language": {
+      "title": "言語",
+      "label": "アプリの言語を切り替える",
+      "english": "英語",
+      "indonesian": "インドネシア語",
+      "modalTitle": "言語を選択してください",
+      "modalDescription": "アプリのインターフェース全体で使用される言語を選択します。",
+      "restartWarningWeb": "新しい言語を適用すると、このページが更新され、テキストが完全に更新されます。",
+      "restartWarningApp": "新しい言語を適用すると、このアプリ画面が再起動され、テキストが完全に更新されます。",
+      "cancel": "キャンセル",
+      "apply": "適用する",
+      "applying": "申請中..."
+    },
+    "fullscreen": {
+      "title": "全画面モード",
+      "nativeDescription": "ステータス バーを非表示にして没入型エクスペリエンスを実現",
+      "nonNativeDescription": "モバイルアプリの設定"
+    },
+    "toasts": {
+      "fullscreenEnabledTitle": "全画面モードが有効になりました",
+      "fullscreenEnabledDescription": "全画面モードは、すべてのデバイスで完全に表示されない場合があります。問題に気付いた場合は、設定でオフにすることができます。",
+      "languageUpdated": "言語が更新されました",
+      "switchedToEnglish": "英語に切り替えました",
+      "switchedToIndonesian": "インドネシア語に切り替えました"
+    }
+  },
+  "SettingsDialog": {
+    "title": "設定"
+  },
+  "AboutDialog": {
+    "title": "TGATB 習慣トラッカーについて",
+    "projectName": "良い点と悪い点",
+    "projectDescription": "毎日の習慣を追跡するためのシンプルなプログレッシブ Web アプリ",
+    "version": "バージョン {version}",
+    "features": {
+      "title": "特徴",
+      "item1": "• 良い習慣と悪い習慣を追跡する",
+      "item2": "• PWAテクノロジーによるオフラインサポート",
+      "item3": "• ストリーク追跡と視覚的な進行状況",
+      "item4": "• シンプルで気を散らさないデザイン",
+      "item5": "• クロスプラットフォーム互換性"
+    },
+    "builtWith": "で構築",
+    "stack": {
+      "nextjs": "次へ.js 16",
+      "react": "リアクト19",
+      "typescript": "TypeScript",
+      "tailwind": "テイルウィンド CSS v4",
+      "pwa": "PWA",
+      "capacitor": "コンデンサ"
+    },
+    "links": {
+      "title": "リンク",
+      "github": "GitHub で見る",
+      "vercel": "ヴェルセル搭載",
+      "privacyPolicy": "プライバシーポリシー",
+      "termsOfService": "利用規約"
+    },
+    "footer": {
+      "madeWithLove": "より良い習慣のために❤️で作られています",
+      "copyright": "© 2025-2026 TGATB 習慣トラッカー"
+    }
+  },
+  "NavigationDrawer": {
+    "hidden": {
+      "navigationMenuTitle": "ナビゲーションメニュー",
+      "navigationMenuDescription": "習慣追跡ダッシュボードと設定にアクセスする"
+    },
+    "header": {
+      "title": "習慣トラッカー",
+      "subtitle": "毎日の進捗状況を追跡する"
+    },
+    "search": {
+      "placeholder": "検索の習慣...",
+      "clear": "検索をクリア"
+    },
+    "sections": {
+      "goodHabits": "良い習慣",
+      "badHabits": "悪い習慣"
+    },
+    "empty": {
+      "noGoodHabitsFound": "良い習慣が見つからない",
+      "noGoodHabitsYet": "良い習慣はまだありません",
+      "noBadHabitsFound": "悪い習慣は見つかりませんでした",
+      "noBadHabitsTracked": "悪い習慣は追跡されませんでした"
+    },
+    "actions": {
+      "help": "ヘルプ",
+      "history": "歴史",
+      "settings": "設定",
+      "supportMe": "サポートしてください",
+      "about": "について"
+    },
+    "habitItem": {
+      "days": "{count}日"
+    }
+  },
+  "AccountDataSettings": {
+    "title": "アカウントとデータ",
+    "profileAlt": "プロフィール",
+    "auth": {
+      "login": "ログイン",
+      "logoutFrom": "{name} からログアウトします"
+    },
+    "autoSync": {
+      "title": "自動同期",
+      "description": "サインインすると、変更が Google ドライブに自動的に同期されます。"
+    },
+    "analytics": {
+      "title": "分析",
+      "description": "アプリの改善に役立つ匿名分析を許可します。"
+    },
+    "actions": {
+      "exportToCloud": "クラウドへのエクスポート",
+      "importFromCloud": "クラウドからインポート",
+      "exporting": "エクスポート中...",
+      "exportData": "データのエクスポート",
+      "importData": "データのインポート",
+      "resolveSyncConflicts": "同期の競合を解決する"
+    }
+  },
+  "HistoryDialog": {
+    "title": "習慣履歴と分析",
+    "tabs": {
+      "overview": "概要",
+      "stats": "統計",
+      "calendar": "カレンダー",
+      "timeline": "タイムライン"
+    },
+    "stats": {
+      "totalHabits": {
+        "title": "合計の習慣",
+        "description": "{good} は良い、{bad} は悪い"
+      },
+      "combinedStreak": {
+        "title": "複合ストリーク",
+        "description": "最長: {longest} 日"
+      },
+      "todaysProgress": {
+        "title": "今日の進捗状況",
+        "description": "{percent}% 完了"
+      },
+      "totalActions": {
+        "title": "合計アクション数",
+        "description": "すべての時間の完了"
+      }
+    },
+    "topHabits": {
+      "title": "トップの習慣"
+    },
+    "breakdown": {
+      "title": "習慣の崩壊",
+      "emptyTitle": "まだ習慣が無い",
+      "emptyDescription": "ここで内訳を確認する習慣を追加してください",
+      "completions": "{count} 件完了"
+    },
+    "calendar": {
+      "today": "今日",
+      "notTracked": "追跡されていません",
+      "editEntry": "エントリーの編集",
+      "clearStatus": "クリアステータス",
+      "noDataForDate": "この日付には利用可能なデータがありません",
+      "addEntry": "エントリの追加"
+    },
+    "timeline": {
+      "today": "今日",
+      "completionSummary": "{completed}/{total} の習慣が完了しました ({percent}%)",
+      "notTracked": "追跡されていません",
+      "notTrackedTitle": "{name}: 追跡されていません",
+      "completedTitle": "{name}: 完了しました",
+      "notCompletedTitle": "{name}: 未完了"
+    }
+  },
+  "AddHabitDialog": {
+    "title": "新しい習慣を追加する",
+    "fields": {
+      "name": "習慣名",
+      "type": "習慣のタイプ",
+      "schedule": "スケジュール"
+    },
+    "placeholders": {
+      "name": "習慣名を入力してください..."
+    },
+    "type": {
+      "good": "良い",
+      "bad": "悪い"
+    },
+    "schedule": {
+      "daily": "毎日",
+      "interval": "N日ごと",
+      "weekly": "平日"
+    },
+    "interval": {
+      "every": "毎",
+      "days": "日"
+    },
+    "weekdays": {
+      "sun": "太陽",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    },
+    "actions": {
+      "cancel": "キャンセル",
+      "save": "保存"
+    }
+  },
+  "EditHabitDialog": {
+    "title": "習慣を編集する",
+    "fields": {
+      "name": "習慣名",
+      "type": "習慣のタイプ",
+      "schedule": "スケジュール"
+    },
+    "placeholders": {
+      "name": "習慣名を入力してください..."
+    },
+    "type": {
+      "good": "良い",
+      "bad": "悪い"
+    },
+    "schedule": {
+      "daily": "毎日",
+      "interval": "N日ごと",
+      "weekly": "平日"
+    },
+    "interval": {
+      "every": "毎",
+      "days": "日"
+    },
+    "weekdays": {
+      "sun": "太陽",
+      "mon": "月",
+      "tue": "火",
+      "wed": "水",
+      "thu": "木",
+      "fri": "金",
+      "sat": "土"
+    },
+    "actions": {
+      "cancel": "キャンセル",
+      "saveChanges": "変更を保存"
+    }
+  },
+  "SyncConflictModal": {
+    "title": "同期の競合が検出されました",
+    "description": "ローカル データとクラウド バックアップの間に競合が見つかりました。以下のフィールドごとの解像度を選択するか、グローバル アクションを使用してリモート バージョンを受け入れるか、ローカル データを保持します。",
+    "itemLabel": "アイテム: {id}",
+    "differences": "ローカルとリモートの違い",
+    "choices": {
+      "local": "地元",
+      "remote": "リモート"
+    },
+    "actions": {
+      "keepLocal": "ローカルに保つ",
+      "applySelected": "選択したものを適用",
+      "acceptRemote": "リモートを受け入れる"
+    }
+  },
+  "PWAInstallPrompt": {
+    "title": "TGATBアプリをインストールする",
+    "subtitle": "オフラインサポートとクイックアクセスによる優れたエクスペリエンス",
+    "toasts": {
+      "notAvailable": {
+        "title": "アプリのインストールは利用できません",
+        "description": "このデバイスまたはブラウザではアプリのインストールはサポートされていません。デスクトップ/モバイルで Chrome または Edge をお試しください。"
+      },
+      "started": {
+        "title": "アプリのインストールが開始されました",
+        "description": "ブラウザの指示に従ってインストールを完了します。"
+      },
+      "dismissed": {
+        "title": "アプリのインストールが拒否されました",
+        "description": "アプリは、[設定] -> [アプリのインストール] からいつでもインストールできます。"
+      },
+      "failed": {
+        "title": "アプリのインストールに失敗しました",
+        "description": "アプリのインストール中に問題が発生しました。"
+      }
+    },
+    "instructions": {
+      "fallback": {
+        "iosSafari": "iOS/Safariの場合は、共有ボタンをタップし、「ホーム画面に追加」を選択してインストールしてください。",
+        "android": {
+          "line1": "Android では、Chrome、Edge、または Samsung インターネットを使用します。ブラウザのアドレスバーに + アイコンが表示されている場合は、それをタップしてインストールします。",
+          "line2": "アイコンが表示されない場合は、ブラウザのメニューを開いて「ホーム画面に追加」または「アプリのインストール」を探してください。"
+        },
+        "windowsLinux": {
+          "line1": "Windows/Linux では、Chrome または Edge を使用します。ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。",
+          "line2": "そうでない場合は、ブラウザのメニューを開き、「アプリのインストール」または「デスクトップに追加」を探します。"
+        },
+        "mac": {
+          "line1": "macOS では、Chrome または Edge を使用します。ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。",
+          "line2": "そうでない場合は、ブラウザメニューを開いて「アプリのインストール」または「ドックに追加」を探します。"
+        },
+        "generic": {
+          "line1": "ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。",
+          "line2": "それ以外の場合は、ブラウザメニューを開き、「アプリのインストール」または「ホーム画面に追加」を探します。"
+        }
+      },
+      "default": {
+        "iosSafari": "iOS/Safariの場合は、共有ボタンをタップし、「ホーム画面に追加」を選択してインストールしてください。",
+        "android": "Android では、最高のエクスペリエンスを得るために Chrome または Edge を使用してください。ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。",
+        "windowsLinux": "Windows/Linux では、最高のエクスペリエンスを得るために Chrome または Edge を使用してください。ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。",
+        "mac": "macOS では、最高のエクスペリエンスを得るために Chrome または Edge を使用してください。ブラウザのアドレス バーにインストール アイコンが表示されている場合は、それを使用してください。"
+      }
+    },
+    "actions": {
+      "dismiss": "却下する",
+      "install": "インストール",
+      "ok": "わかりました",
+      "notNow": "今じゃない"
+    }
+  },
+  "DonationDialog": {
+    "title": "サポートしてください",
+    "description": "このアプリを気に入っていただけた場合は、その開発をサポートすることを検討してください。すべての貢献は、無料の維持と改善に役立ちます。",
+    "sections": {
+      "paymentPlatforms": "決済プラットフォーム",
+      "cryptocurrency": "暗号通貨"
+    },
+    "qris": {
+      "title": "QRIS",
+      "supportLine": "QRISで私を応援してください！",
+      "description": "QRIS 経由で寄付するには、銀行アプリでこの QR コードをスキャンしてください。",
+      "imageAlt": "QRIS寄付方法",
+      "download": "QRISをダウンロード"
+    },
+    "copiedBadge": "コピーしました！",
+    "thankYou": "このプロジェクトへの支援をご検討いただきありがとうございます。",
+    "toasts": {
+      "copied": {
+        "title": "コピーしました！",
+        "description": "アドレスをクリップボードにコピーしました"
+      },
+      "copyFailed": {
+        "title": "コピーに失敗しました",
+        "description": "アドレスを手動でコピーしてください"
+      },
+      "saved": {
+        "title": "保存しました！",
+        "description": "QRIS 画像がデバイスに保存されました。"
+      },
+      "saveFailed": {
+        "title": "保存に失敗しました",
+        "description": "画像を保存できませんでした。"
+      },
+      "downloadFailed": {
+        "title": "ダウンロードに失敗しました",
+        "description": "画像を取得できませんでした。"
+      }
+    }
+  },
+  "AddEntryDialog": {
+    "title": "{date} のエントリを追加",
+    "tabs": {
+      "addEntry": "新しいエントリを追加",
+      "addHabit": "新しい習慣を追加する"
+    },
+    "placeholders": {
+      "noHabit": "使用可能な習慣がありません。今すぐ追加してください。",
+      "selectHabit": "習慣を選択してください...",
+      "habitName": "習慣名は…"
+    },
+    "type": {
+      "good": "良い",
+      "bad": "悪い"
+    },
+    "status": {
+      "good": {
+        "true": "完了しました",
+        "false": "逃した"
+      },
+      "bad": {
+        "true": "避けられた",
+        "false": "終わり"
+      }
+    },
+    "actions": {
+      "addEntry": "エントリの追加",
+      "addHabitAndLog": "習慣の追加とログエントリ"
+    }
+  },
+  "EditEntryDialog": {
+    "title": "エントリーの編集",
+    "fields": {
+      "date": "日付",
+      "status": "状態"
+    },
+    "status": {
+      "good": {
+        "true": "完了しました",
+        "false": "逃した"
+      },
+      "bad": {
+        "true": "避けられた",
+        "false": "終わり"
+      }
+    },
+    "actions": {
+      "cancel": "キャンセル",
+      "save": "保存"
+    }
+  },
+  "MotivatorSettings": {
+    "title": "キャラクターモチベーター",
+    "personalityType": "性格タイプ",
+    "personality": {
+      "positive": {
+        "title": "ポジティブ",
+        "description": "励まし、サポートしてくれる"
+      },
+      "adaptive": {
+        "title": "アダプティブ",
+        "description": "バランスが取れていて現実的"
+      },
+      "harsh": {
+        "title": "ひどい",
+        "description": "直接的かつ挑戦的"
+      }
+    }
+  },
+  "AddHabitCTA": {
+    "title": "旅を始めましょう",
+    "description": "毎日の進捗状況を追跡し、一貫性を構築するための最初の習慣を作成します。",
+    "addFirstHabit": "最初の習慣を追加する",
+    "footer": "すべての専門家はかつては初心者でした"
+  },
+  "DeleteAllHabitsModal": {
+    "title": "すべての習慣を削除しますか?",
+    "description": "この操作は元に戻すことができません。すべての習慣を削除してもよろしいですか?",
+    "actions": {
+      "cancel": "キャンセル",
+      "deleting": "削除中...",
+      "delete": "消去"
+    }
+  },
+  "FeedbackSettings": {
+    "title": "フィードバック",
+    "sound": {
+      "title": "効果音",
+      "description": "インタラクション時にサウンドを再生する"
+    },
+    "haptic": {
+      "title": "触覚フィードバック",
+      "supported": "インタラクション時に振動する",
+      "notSupported": "このデバイスではサポートされていません"
+    }
+  },
+  "HelpSupportSettings": {
+    "title": "ヘルプとサポート",
+    "actions": {
+      "showWelcomeGuide": "ウェルカムガイドを表示する",
+      "contactEmail": "{name} に電子メールで連絡する"
+    }
+  },
+  "SettingsScreen": {
+    "title": "設定"
+  },
+  "AppDeviceSettings": {
+    "title": "アプリとデバイス",
+    "install": {
+      "nativeApp": "ネイティブアプリ",
+      "installed": "アプリがインストールされました",
+      "installApp": "アプリをインストールする",
+      "nativeDescription": "ネイティブ Android アプリを使用している",
+      "installedDescription": "TGATB はすでにデバイス上にあります",
+      "addToHome": "ホーム画面に追加"
+    },
+    "reminder": {
+      "title": "毎日のリマインダー",
+      "timeLabel": "リマインダー時間",
+      "status": {
+        "notSupported": "このブラウザでは通知がサポートされていません",
+        "off": "オフ",
+        "denied": "権限が拒否されました - ブラウザ/デバイスの設定を確認してください",
+        "set": "{time} にリマインダーを設定しました",
+        "setWeb": "{time} に設定されたリマインダー - アプリが開いているか、PWA としてインストールされている場合に最適に機能します"
+      }
+    },
+    "permission": {
+      "title": "必要な通知",
+      "description": "毎日のリマインダーを送信するには、アプリに通知を表示する権限が必要です。これはブラウザまたはデバイスの設定で有効にすることができます。",
+      "gotIt": "わかった"
+    }
+  },
+  "HabitCard": {
+    "emptyTitle": "まだ習慣が無い",
+    "emptyDescription": "まずは最初の習慣を追加してください。",
+    "question": {
+      "pending": "やったっけ？",
+      "goodPositive": "今日はすでに完了しました！",
+      "badPositive": "今日はそれをしませんでした！",
+      "goodNegative": "今日はそれをしませんでした！",
+      "badNegative": "今日はやったね！"
+    },
+    "status": {
+      "goodCompleted": "完了しました",
+      "goodMissed": "逃した",
+      "badAvoided": "避けられた",
+      "badDone": "終わり"
+    },
+    "type": {
+      "good": "良い",
+      "bad": "悪い"
+    },
+    "streakDays": "{count}日",
+    "atTime": "{time}にて",
+    "actions": {
+      "undo": "元に戻す"
+    }
+  },
+  "OfflineToast": {
+    "message": "オフラインです。一部の機能が制限される場合があります。"
+  },
+  "OfflineIndicator": {
+    "message": "オフラインです。一部の機能が制限される場合があります。"
+  },
+  "AnalyticsNotice": {
+    "title": "知らせ",
+    "description": "お客様のエクスペリエンスを向上させるために Vercel Analytics を使用します。匿名の使用状況データは、アプリの改善に役立ちます。",
+    "gotIt": "わかった"
+  },
+  "LoadingScreen": {
+    "title": "TGATB",
+    "subtitle": "習慣トラッカー",
+    "loading": "習慣を読み込んでいます..."
+  },
+  "LoadingOverlay": {
+    "loading": "読み込み中..."
+  },
+  "WelcomeOverlay": {
+    "stepCounter": "ステップ {current}/{total}",
+    "steps": {
+      "welcome": {
+        "title": "習慣トラッカーへようこそ!",
+        "description": "自分の習慣を効果的に追跡するための簡単なツアーを見てみましょう。"
+      },
+      "navigation": {
+        "title": "ナビゲーションメニュー",
+        "description": "このメニューからすべての習慣にアクセスし、履歴を表示し、設定を調整します。"
+      },
+      "addButton": {
+        "hasHabitsTitle": "さらに習慣を追加する",
+        "emptyTitle": "最初の習慣を追加する",
+        "hasHabitsDescription": "このフローティング ボタンを使用すると、いつでも習慣を追加できます。",
+        "emptyDescription": "このボタンをタップして、最初の習慣を作成します。構築する良い習慣と破る悪い習慣の両方を追加できます。"
+      },
+      "habitCard": {
+        "title": "進捗状況を追跡する",
+        "hasHabitsDescription": "ここにあなたの習慣があります！それらをタップして、その日の完了としてマークを付けます。",
+        "emptyDescription": "習慣を追加すると、ここに表示されます。タップしてその日の完了としてマークを付けます。"
+      },
+      "complete": {
+        "title": "準備は完了です!",
+        "description": "今日からより良い習慣を築き始めましょう。一貫性が成功の鍵であることを忘れないでください。"
+      }
+    },
+    "actions": {
+      "skip": "スキップ",
+      "previous": "前の",
+      "skipTour": "スキップツアー",
+      "next": "次",
+      "getStarted": "始めましょう",
+      "start": "始める"
+    }
+  },
+  "HabitManagementSettings": {
+    "title": "習慣管理",
+    "deleteAll": "すべての習慣を削除する",
+    "toasts": {
+      "deleted": {
+        "title": "すべての習慣が削除されました",
+        "description": "あなたの習慣リストはクリアされました。"
+      },
+      "failed": {
+        "title": "削除に失敗しました",
+        "description": "習慣の削除中にエラーが発生しました。"
+      },
+      "noHandler": {
+        "description": "削除ハンドラーは提供されていません。"
+      }
+    }
+  },
+  "StatusBarExample": {
+    "title": "ステータスバーのコントロール",
+    "label": "ステータスバー",
+    "visible": "見える",
+    "hidden": "隠れた",
+    "status": "ステータスバー: {visibility} |高さ: {height}px",
+    "actions": {
+      "show": "見せる",
+      "hide": "隠れる",
+      "lightStyle": "ライトスタイル",
+      "darkStyle": "ダークスタイル",
+      "defaultStyle": "デフォルトのスタイル",
+      "redBackground": "赤い背景",
+      "greenBackground": "緑の背景",
+      "blueBackground": "青色の背景",
+      "resetToWhite": "白にリセット"
+    }
+  },
+  "OfflinePage": {
+    "toast": {
+      "title": "オフラインです",
+      "description": "アプリはオフラインでも動作します。再接続するとデータが同期されます。",
+      "retry": "リトライ"
+    },
+    "fallback": {
+      "title": "TGATB 習慣トラッカー",
+      "description": "習慣を読み込んでいます..."
+    }
+  },
+  "TermsOfServicePage": {
+    "meta": {
+      "title": "利用規約 - TGATB 習慣トラッカー",
+      "description": "良い人も悪い人も利用規約: 習慣トラッカー"
+    },
+    "title": "利用規約",
+    "lastUpdated": "最終更新日: 2026 年 2 月 13 日",
+    "sections": {
+      "welcome": {
+        "title": "いらっしゃいませ",
+        "body": "TGATB 習慣トラッカー (「良いことと悪いこと」、「私たち」、「私たち」、「私たちの」) へようこそ。当社の Web およびモバイル アプリケーションを使用すると、これらの利用規約に同意したものとみなされます。"
+      },
+      "use": {
+        "title": "アプリの使用",
+        "item1": "アプリを使用するには、13 歳以上である必要があります。",
+        "item2": "あなたは、アプリを悪用したり、不正な方法でアクセスを試みたりしないことに同意するものとします。"
+      },
+      "userContent": {
+        "title": "ユーザーコンテンツ",
+        "item1": "追加するコンテンツ (習慣、メモなど) については、あなたが責任を負います。",
+        "item2": "当社は、これらの規約または適用される法律に違反するコンテンツを削除する権利を留保します。"
+      },
+      "intellectualProperty": {
+        "title": "知的財産",
+        "item1": "すべてのアプリのコンテンツ、商標、およびコードは、当社または当社のライセンサーが所有します。",
+        "item2": "当社のコンテンツを許可なくコピー、変更、配布することはできません。"
+      },
+      "thirdParty": {
+        "title": "サードパーティのサービス",
+        "body": "アプリはサードパーティのサービス (Google Cloud、Firebase など) を使用します。これらのサービスの使用には、それぞれの規約が適用されます。"
+      },
+      "limitation": {
+        "title": "責任の制限",
+        "body": "アプリは「現状のまま」提供され、いかなる種類の保証もありません。アプリのご利用により生じたいかなる損害についても、当社は一切の責任を負いません。"
+      },
+      "termination": {
+        "title": "終了",
+        "body": "これらの規約に違反した場合、当社はアプリへのアクセスを一時停止または終了することがあります。"
+      },
+      "changes": {
+        "title": "本規約の変更",
+        "body": "当社は、本利用規約を随時更新することがあります。変更はアプリおよびウェブサイトに掲載されます。"
+      },
+      "openSource": {
+        "title": "オープンソース",
+        "body": "TGATB Habit Tracker は、Apache 2.0 ライセンスに基づくオープンソースです。完全なソース コードは次の場所で確認できます。"
+      },
+      "contact": {
+        "title": "お問い合わせ",
+        "body": "これらの利用規約についてご質問がある場合は、以下までお問い合わせください。"
+      }
+    },
+    "links": {
+      "privacyPolicy": "プライバシーポリシー",
+      "openApp": "TGATB 習慣トラッカーを開く"
+    },
+    "footer": {
+      "rightsReserved": "無断転載を禁じます。"
+    }
+  },
+  "PrivacyPolicyPage": {
+    "meta": {
+      "title": "プライバシー ポリシー - TGATB 習慣トラッカー",
+      "description": "「良いことも悪いことも: 習慣トラッカー」のプライバシー ポリシー"
+    },
+    "title": "プライバシーポリシー",
+    "lastUpdated": "最終更新日: 2026 年 2 月 7 日",
+    "sections": {
+      "overview": {
+        "title": "概要",
+        "body": "TGATB Habit Tracker (「良いことと悪いこと」) は、adsurkasur によって開発された最小限の習慣追跡アプリケーションです。このプライバシー ポリシーでは、www.tgatb.click の Web アプリケーションおよび Android モバイル アプリケーションを使用する際に、当社がお客様の情報をどのように取り扱うかについて説明します。"
+      },
+      "informationCollected": {
+        "title": "当社が収集する情報",
+        "dataYouProvide": {
+          "title": "あなたが提供するデータ",
+          "habitData": "習慣データ: アプリ内で作成した名前、タイプ (良い/悪い)、完了ログ、およびストリーク。このデータは、デフォルトでデバイス上にローカルに保存されます。",
+          "settings": "設定の基本設定: ダーク モード、言語、モチベーターのパーソナリティ、およびデバイスにローカルに保存されているその他のアプリの基本設定。",
+          "googleAccount": "Google アカウント情報 (オプション): クラウド バックアップのために Google でサインインすることを選択した場合、当社は認証と Google ドライブ バックアップ機能のみを目的として、お客様の名前、電子メール アドレス、プロフィール写真にアクセスします。"
+        },
+        "dataCollectedAutomatically": {
+          "title": "自動的に収集されるデータ",
+          "analytics": "分析データ (同意あり): 当社は Vercel Analytics と Firebase Analytics を使用して、ページ ビュー、デバイス タイプ、一般的なインタラクション パターンなどの匿名の使用状況統計を収集します。分析は、同意した後にのみ初期化されます。",
+          "errorTracking": "エラー追跡 (オプション): 有効にすると、Sentry はアプリの安定性の向上に役立つクラッシュ レポートとエラー ログを収集します。これは、分析の同意が得られ、Sentry DSN が構成されている場合にのみアクティブになります。"
+        },
+        "dataNotCollected": {
+          "title": "当社が収集しないデータ",
+          "noPayments": "支払い情報は収集しません",
+          "noLocation": "位置データは収集しません",
+          "noContacts": "連絡先や電話データは収集しません",
+          "noAds": "当社は広告を配信したり、広告関連データを収集したりすることはありません",
+          "noSelling": "当社はあなたのデータを第三者に販売しません"
+        }
+      },
+      "dataStorage": {
+        "title": "データの保存方法",
+        "local": "ローカル ストレージ (デフォルト): すべての習慣データと設定は、ブラウザーの localStorage (Web) または Capacitor Preferences (Android) を使用してデバイスにローカルに保存されます。明示的にクラウド バックアップを有効にしない限り、データがデバイスから流出することはありません。",
+        "cloudBackup": "クラウド バックアップ (オプション): Google でサインインしている場合は、データを自分の Google ドライブにバックアップすることを選択できます。あなたのデータは個人の Google ドライブにファイルとして保存されます。私たちはあなたの Google ドライブ ファイルにアクセスすることはできません。"
+      },
+      "thirdPartyServices": {
+        "title": "サードパーティのサービス",
+        "intro": "当社は次のサードパーティ サービスを使用します。",
+        "firebase": "Firebase Authentication: Google サインイン用。 Google のプライバシー ポリシーによって管理されます。",
+        "firebaseAnalytics": "Firebase Analytics: 匿名の使用状況統計用 (同意が必要)。",
+        "vercelAnalytics": "Vercel Analytics: 匿名の Web 分析用 (同意が必要)。",
+        "googleDrive": "Google Drive API: オプションのクラウド バックアップの場合、独自のアプリで作成したファイルのみにアクセスします。",
+        "sentry": "Sentry (オプション): 有効になっている場合、エラーとクラッシュのレポート用。"
+      },
+      "rightsControls": {
+        "title": "お客様の権利と管理",
+        "analyticsConsent": "分析の同意: アプリの設定でいつでも分析を有効または無効にできます。",
+        "dataDeletion": "データの削除：アプリの設定からすべての習慣データを削除できます（「すべての習慣を削除」）。データはローカルに保存されるため、ブラウザのデータを消去するかアプリをアンインストールすると、すべてのデータも削除されます。",
+        "cloudBackupControl": "クラウド バックアップの制御: いつでもサインアウトしてクラウド バックアップを停止できます。 Google ドライブのバックアップ ファイルは、Google ドライブから直接管理できます。",
+        "dataExport": "データのエクスポート: アプリ設定からいつでもデータを JSON ファイルとしてエクスポートできます。"
+      },
+      "deleteData": {
+        "title": "データを削除する",
+        "intro": "TGATB Habit Tracker は、習慣データをデバイス上にローカルに保存します。アカウントを削除しなくても、いつでもすべてのデータを削除できます。",
+        "steps": "1.アプリを開きます\n2. 左上のメニューアイコン（ハンバーガーメニュー）をタップします\n3. 「習慣管理」まで下にスクロールします。\n4.「すべての習慣を削除」をタップします\n5. プロンプトが表示されたら、削除を確認します",
+        "willDelete": "これにより、以下が完全に削除されます。",
+        "willDeleteItems": "あなたのすべての習慣とその名前、すべての完了ログと連続データ、すべての履歴記録",
+        "willNotDelete": "これでは削除されません:",
+        "willNotDeleteItems": "アプリの設定 (ダーク モード、言語など) — これらはアプリのデータを消去するかアンインストールするとリセットされます。 以前に Google ドライブに保存されていたバックアップ ファイル — これらは Google ドライブから直接削除できます",
+        "alternative": "あるいは、アプリをアンインストールするか、デバイスの設定からアプリのデータを消去して、ローカルに保存されているすべての情報を削除することもできます。"
+      },
+      "deleteAccount": {
+        "title": "アカウントを削除する",
+        "intro": "Google でサインインしていて、アカウントとすべての関連データを完全に削除したい場合は、次の手順に従ってください。",
+        "appSteps": "1.アプリを開きます\n2. 左上のメニューアイコン（ハンバーガーメニュー）をタップします\n3. [習慣管理] まで下にスクロールし、[すべての習慣を削除] をタップしてデータを削除します\n4. 「アカウントとデータ」までスクロールし、「ログアウト」をタップしてサインアウトします。\n5. アプリをアンインストールして、残っているローカル データをすべて削除します",
+        "googleDriveSteps": "Google ドライブのバックアップ ファイルを削除するには:\n1. Googleドライブに移動します\n2.「tgatb」または「習慣」を検索してバックアップファイルを見つけます\n3. バックアップファイルを削除します",
+        "revokeSteps": "アプリの Google アカウントへのアクセスを取り消すには:\n1. Googleアカウントの権限に移動します\n2. リストから「TGATB Habit Tracker」を見つけます。\n3.「アクセス権の削除」をクリックします。",
+        "completion": "これらの手順を完了すると、すべてのデータとアカウントへのアクセスが完全に削除されます。サポートが必要な場合は、adsurkasur.dev@gmail.com までご連絡ください。"
+      },
+      "dataSecurity": {
+        "title": "データセキュリティ",
+        "body": "当社はお客様のデータを保護するために合理的なセキュリティ対策を実施しています。あなたの習慣データはデバイス上にローカルに保存され、当社のサーバーには送信されません。クラウド バックアップ データは、Google のセキュリティ インフラストラクチャを使用して個人の Google ドライブに保存されます。ただし、100% 安全な電子保存方法はありません。"
+      },
+      "childrenPrivacy": {
+        "title": "子供のプライバシー",
+        "body": "当社のアプリは 13 歳未満の子供を対象としていません。当社が 13 歳未満の子供から故意に個人情報を収集することはありません。あなたが親または保護者で、子供が当社に個人情報を提供したと思われる場合は、当社までご連絡ください。"
+      },
+      "policyChanges": {
+        "title": "このポリシーの変更",
+        "body": "当社は、このプライバシー ポリシーを随時更新することがあります。変更は、このページの上部にある「最終更新日」を更新することで反映されます。このポリシーを定期的に確認することをお勧めします。"
+      },
+      "contactUs": {
+        "title": "お問い合わせ",
+        "body": "このプライバシー ポリシーまたは当社のデータ慣行についてご質問がある場合は、adsurkasur.dev@gmail.com までご連絡ください。"
+      },
+      "openSource": {
+        "title": "オープンソース",
+        "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
+      }
+    },
+    "links": {
+      "termsOfService": "利用規約",
+      "openApp": "TGATB 習慣トラッカーを開く"
+    },
+    "footer": {
+      "copyright": "© 2025-2026 アドスルカスール。無断転載を禁じます。"
+    }
+  }
+}

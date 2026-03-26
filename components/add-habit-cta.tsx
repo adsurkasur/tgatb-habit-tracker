@@ -2,6 +2,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Plus, Target, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
+import { useTranslations } from "next-intl";
 
 interface AddHabitCTAProps {
   onAddHabit: () => void;
@@ -9,6 +10,7 @@ interface AddHabitCTAProps {
 }
 
 export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
+  const t = useTranslations("AddHabitCTA");
   const [isVisible, setIsVisible] = useState(true);
   const [previousHasHabits, setPreviousHasHabits] = useState(hasHabits);
   const [animationKey, setAnimationKey] = useState(0);
@@ -72,10 +74,10 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
         {/* Content */}
         <div className="space-y-3">
           <h3 className="text-xl font-semibold text-foreground">
-            Start Your Journey
+            {t("title")}
           </h3>
           <p className="text-muted-foreground text-sm leading-relaxed">
-            Create your first habit to begin tracking your daily progress and building consistency.
+            {t("description")}
           </p>
         </div>
         
@@ -85,13 +87,13 @@ export function AddHabitCTA({ onAddHabit, hasHabits }: AddHabitCTAProps) {
           className="w-full h-12 cta-color-hover cta-button-animated font-medium group"
         >
           <Plus className="w-5 h-5 mr-2 transition-all duration-200 group-hover:rotate-90" />
-          Add Your First Habit
+          {t("addFirstHabit")}
         </Button>
         
         {/* Motivational Note */}
         <div className="flex items-center justify-center text-xs text-muted-foreground mt-4">
           <Sparkles className="w-3 h-3 mr-1 cta-sparkle" />
-          <span>Every expert was once a beginner</span>
+          <span>{t("footer")}</span>
         </div>
       </div>
     </Card>

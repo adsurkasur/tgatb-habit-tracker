@@ -1,11 +1,26 @@
 import { Switch } from "@/components/ui/switch";
 import { ChevronRight, Moon, Globe, Maximize } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { UserSettings } from "@shared/schema";
 import { useToast } from "@/hooks/use-toast";
 import { useStatusBar } from "@/hooks/use-status-bar";
+import { useTranslations } from "next-intl";
+import { useState } from "react";
 // MAJOR FIX: Use unified system bars instead of conflicting implementations
 import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { feedbackButtonPress } from "@/lib/feedback";
+import { withLocalePath } from "@/i18n/pathname";
+import { routing, type AppLocale } from "@/i18n/routing";
+import { LanguageSelectionModal } from "@/components/language-selection-modal";
+
+function getLocaleDisplayName(localeCode: string, displayLocale: string): string {
+  try {
+    const displayNames = new Intl.DisplayNames([displayLocale], { type: "language" });
+    return displayNames.of(localeCode) ?? localeCode.toUpperCase();
+  } catch {
+    return localeCode.toUpperCase();
+  }
+}
 
 interface AppearanceSettingsProps {
   settings: UserSettings;
@@ -13,8 +28,12 @@ interface AppearanceSettingsProps {
 }
 
 export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSettingsProps) {
+  const t = useTranslations("AppearanceSettings");
   const { toast } = useToast();
   const { isNative } = useStatusBar();
+  const router = useRouter();
+  const pathname = usePathname();
+  const [languageModalOpen, setLanguageModalOpen] = useState(false);
 
   // Always force fullscreenMode to false if not native
   const effectiveFullscreenMode = isNative ? settings.fullscreenMode : false;
@@ -23,8 +42,8 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
     if (!isNative) return;
     if (enabled) {
       toast({
-        title: "Fullscreen mode enabled",
-        description: "Fullscreen mode may not display perfectly on all devices. If you notice issues, you can turn it off in settings.",
+        title: t("toasts.fullscreenEnabledTitle"),
+        description: t("toasts.fullscreenEnabledDescription"),
         duration: 3000,
       });
     }
@@ -41,9 +60,34 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
     }
   };
 
+  const handleLanguageApply = async (nextLanguage: AppLocale) => {
+    const updatedSettings = { ...settings, language: nextLanguage };
+    onUpdateSettings({ language: nextLanguage });
+
+    try {
+      const { HabitStorage } = await import("@/lib/habit-storage");
+      await HabitStorage.saveSettings(updatedSettings);
+    } catch {
+      // If persistence fails, route locale still updates and settings save path remains in onUpdateSettings.
+    }
+
+    const nextPath = withLocalePath(pathname || "/", nextLanguage);
+    window.location.assign(nextPath);
+  };
+
+  const handleOpenLanguageModal = () => {
+    const currentPath = pathname || "/";
+    for (const locale of routing.locales) {
+      if (locale !== settings.language) {
+        void router.prefetch(withLocalePath(currentPath, locale));
+      }
+    }
+    setLanguageModalOpen(true);
+  };
+
   return (
     <div className="space-y-4">
-      <h2 className="text-lg font-semibold">Appearance</h2>
+      <h2 className="text-lg font-semibold">{t("title")}</h2>
 
       <div className="space-y-2">
         <div
@@ -53,8 +97,8 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
           <div className="flex items-center space-x-3">
             <Moon className="w-5 h-5 text-muted-foreground" />
             <div>
-              <span className="font-medium">Dark Mode</span>
-              <p className="text-sm text-muted-foreground">Switch between light and dark themes</p>
+              <span className="font-medium">{t("darkMode.label")}</span>
+              <p className="text-sm text-muted-foreground">{t("darkMode.description")}</p>
             </div>
           </div>
           <Switch
@@ -68,19 +112,15 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
           className="flex items-center justify-between p-4 bg-muted material-radius cursor-pointer state-layer-hover transition-all duration-200 theme-transition"
           onClick={() => {
             feedbackButtonPress();
-            toast({
-              title: "Upcoming Feature!",
-              description: "Language selection coming soon. Stay tuned! 🌐",
-              duration: 3000,
-            });
+            handleOpenLanguageModal();
           }}
         >
           <div className="flex items-center space-x-3">
             <Globe className="w-5 h-5 text-muted-foreground" />
             <div>
-              <span className="font-medium">Language</span>
+              <span className="font-medium">{t("language.title")}</span>
               <p className="text-sm text-muted-foreground">
-                {settings.language === "en" ? "English" : "Bahasa Indonesia"}
+                {getLocaleDisplayName(settings.language, settings.language)}
               </p>
             </div>
           </div>
@@ -96,9 +136,9 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
           <div className="flex items-center space-x-3">
             <Maximize className="w-5 h-5 text-muted-foreground" />
             <div className="flex flex-col">
-              <span className="font-medium">Fullscreen Mode</span>
+              <span className="font-medium">{t("fullscreen.title")}</span>
               <span className="text-xs text-muted-foreground">
-                {isNative ? "Hide status bar for immersive experience" : "Mobile app setting"}
+                {isNative ? t("fullscreen.nativeDescription") : t("fullscreen.nonNativeDescription")}
               </span>
             </div>
           </div>
@@ -110,6 +150,14 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
           />
         </div>
       </div>
+
+      <LanguageSelectionModal
+        open={languageModalOpen}
+        onOpenChange={setLanguageModalOpen}
+        currentLanguage={settings.language as AppLocale}
+        isNative={isNative}
+        onApply={handleLanguageApply}
+      />
     </div>
   );
 }

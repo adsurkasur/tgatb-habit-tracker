@@ -7,6 +7,7 @@ import { Badge } from '@/components/ui/badge';
 import { ArrowRight, ArrowLeft, Play } from 'lucide-react';
 import { CloseButton } from '@/components/ui/close-button';
 import { cn } from '@/lib/utils';
+import { useTranslations } from 'next-intl';
 
 interface WelcomeStep {
   id: string;
@@ -26,6 +27,7 @@ interface WelcomeOverlayProps {
 }
 
 export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = false, onStepChange }: WelcomeOverlayProps) {
+  const t = useTranslations('WelcomeOverlay');
   const [currentStep, setCurrentStep] = useState(0);
   // targetPosition was unused; removed to reduce warnings
   const [isPositionReady, setIsPositionReady] = useState(false);
@@ -33,6 +35,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
   const [allPositions, setAllPositions] = useState<{ [key: number]: { x: number; y: number; width: number; height: number } | null }>({});
   const [isTransitioning, setIsTransitioning] = useState(false);
   const [shouldMoveToFinalPosition, setShouldMoveToFinalPosition] = useState(false);
+  const [cardSize, setCardSize] = useState({ width: 0, height: 0 });
   
   // Function to calculate step-specific initial positions
   const getInitialCardPosition = useCallback((step: number) => {
@@ -74,6 +77,37 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
   // cardPosition is derived via useMemo below (not state)
   const overlayRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isVisible) return;
+
+    const updateSize = () => {
+      const node = cardRef.current;
+      if (!node) return;
+      const nextWidth = Math.round(node.offsetWidth);
+      const nextHeight = Math.round(node.offsetHeight);
+      setCardSize((prev) =>
+        prev.width === nextWidth && prev.height === nextHeight
+          ? prev
+          : { width: nextWidth, height: nextHeight },
+      );
+    };
+
+    updateSize();
+    window.addEventListener('resize', updateSize);
+
+    let observer: ResizeObserver | null = null;
+    if (typeof ResizeObserver !== 'undefined' && cardRef.current) {
+      observer = new ResizeObserver(() => updateSize());
+      observer.observe(cardRef.current);
+    }
+
+    return () => {
+      window.removeEventListener('resize', updateSize);
+      observer?.disconnect();
+    };
+  }, [isVisible, currentStep]);
 
   // Adjust state during render for visibility and step changes (React-approved pattern)
   const [prevIsVisible, setPrevIsVisible] = useState(isVisible);
@@ -114,54 +148,52 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     }
   }, [currentStep, onStepChange]);
 
-  // Dynamic steps based on whether user has habits
-  const getWelcomeSteps = useCallback((): WelcomeStep[] => [
+  const welcomeSteps = useMemo((): WelcomeStep[] => [
     {
       id: 'welcome',
-      title: '🎉 Welcome to Habit Tracker!',
-      description: 'Let\'s take a quick tour to help you get started with tracking your habits effectively.',
+      title: t('steps.welcome.title'),
+      description: t('steps.welcome.description'),
       targetSelector: '',
       position: 'bottom'
     },
     {
       id: 'navigation',
-      title: 'Navigation Menu',
-      description: 'Access all your habits, view history, and adjust settings from this menu.',
+      title: t('steps.navigation.title'),
+      description: t('steps.navigation.description'),
       targetSelector: '[data-tour="navigation"]',
       position: 'bottom',
       offset: { x: 135, y: 10 }
     },
     {
       id: 'add-button',
-      title: hasHabits ? 'Add More Habits' : 'Add Your First Habit',
-      description: hasHabits 
-        ? 'Use this floating button to add more habits anytime.'
-        : 'Tap this button to create your first habit. You can add both good habits to build and bad habits to break.',
+      title: hasHabits ? t('steps.addButton.hasHabitsTitle') : t('steps.addButton.emptyTitle'),
+      description: hasHabits
+        ? t('steps.addButton.hasHabitsDescription')
+        : t('steps.addButton.emptyDescription'),
       targetSelector: hasHabits ? '[data-tour="add-habit-fab"]' : '[data-tour="add-habit-empty"]',
       position: hasHabits ? 'left' : 'right',
       offset: hasHabits ? { x: -10, y: -125 } : { x: 10, y: 0 }
     },
     {
       id: 'habit-card',
-      title: 'Track Your Progress',
-      description: hasHabits 
-        ? 'Here are your habits! Tap them to mark as complete for the day.'
-        : 'Once you add habits, they\'ll appear here. Tap to mark them as complete for the day.',
+      title: t('steps.habitCard.title'),
+      description: hasHabits
+        ? t('steps.habitCard.hasHabitsDescription')
+        : t('steps.habitCard.emptyDescription'),
       targetSelector: '[data-tour="habit-card"]',
       position: 'right',
-      offset: { x: 0, y: 0 } // Centered for better alignment
+      offset: { x: 0, y: 0 }
     },
     {
       id: 'complete',
-      title: '🚀 You\'re All Set!',
-      description: 'Start building better habits today. Remember, consistency is key to success!',
+      title: t('steps.complete.title'),
+      description: t('steps.complete.description'),
       targetSelector: '',
       position: 'bottom'
     }
-  ], [hasHabits]);
-
-  const welcomeSteps = useMemo(() => getWelcomeSteps(), [getWelcomeSteps]);
+  ], [hasHabits, t]);
   const currentStepData = welcomeSteps[currentStep];
+  const isFirstStep = currentStep === 0;
   const isLastStep = currentStep === welcomeSteps.length - 1;
 
   // Calculate position for current step only when needed
@@ -259,30 +291,33 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
     const offset = step.offset || { x: 0, y: 0 };
     const margin = 20;
     const isMobile = window.innerWidth < 640;
+    const safeMargin = 16;
 
     // Apply viewport clipping detection
     let shouldPositionAbove = false;
-    const cardWidth = isMobile ? 288 : 320;
-    const cardHeight = 250;
+    const cardWidth = cardSize.width > 0
+      ? cardSize.width
+      : (isMobile ? Math.floor(window.innerWidth * 0.88) : Math.min(416, Math.floor(window.innerWidth * 0.9)));
+    const cardHeight = cardSize.height > 0 ? cardSize.height : (isMobile ? 300 : 340);
 
     switch (step.position) {
       case 'right':
-        if (x + width + margin + offset.x + cardWidth > window.innerWidth - 20) {
+        if (x + width + margin + offset.x + cardWidth > window.innerWidth - safeMargin) {
           shouldPositionAbove = true;
         }
         break;
       case 'left':
-        if (x - margin + offset.x - cardWidth < 20) {
+        if (x - margin + offset.x - cardWidth < safeMargin) {
           shouldPositionAbove = true;
         }
         break;
       case 'bottom':
-        if (step.id !== 'navigation' && y + height + margin + offset.y + cardHeight > window.innerHeight - 20) {
+        if (step.id !== 'navigation' && y + height + margin + offset.y + cardHeight > window.innerHeight - safeMargin) {
           shouldPositionAbove = true;
         }
         break;
       case 'top':
-        if (y - margin + offset.y - cardHeight < 20) {
+        if (y - margin + offset.y - cardHeight < safeMargin) {
           shouldPositionAbove = true;
         }
         break;
@@ -311,7 +346,6 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
       let finalX = x + width / 2;
       const halfCardWidth = cardWidth / 2;
-      const safeMargin = 20;
       const minX = halfCardWidth + safeMargin;
       const maxX = window.innerWidth - halfCardWidth - safeMargin;
       if (finalX < minX) finalX = minX;
@@ -347,12 +381,35 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       }
     }
 
-    return {
+    const nextPosition = {
       top: calculatedTop,
       left: calculatedLeft,
       transform: calculatedTransform
     };
-  }, [isVisible, isPositionReady, shouldMoveToFinalPosition, allPositions, currentStep, currentStepData, getInitialCardPosition]);
+
+    // Final horizontal safety clamp by transform mode to avoid viewport overflow.
+    if (typeof nextPosition.left === 'number') {
+      if (nextPosition.transform.startsWith('translate(0')) {
+        // Left edge anchored
+        const minLeft = safeMargin;
+        const maxLeft = window.innerWidth - cardWidth - safeMargin;
+        nextPosition.left = Math.min(Math.max(nextPosition.left, minLeft), Math.max(minLeft, maxLeft));
+      } else if (nextPosition.transform.startsWith('translate(-100%')) {
+        // Right edge anchored
+        const minLeft = cardWidth + safeMargin;
+        const maxLeft = window.innerWidth - safeMargin;
+        nextPosition.left = Math.min(Math.max(nextPosition.left, minLeft), Math.max(minLeft, maxLeft));
+      } else if (nextPosition.transform.startsWith('translate(-50%')) {
+        // Center anchored
+        const half = cardWidth / 2;
+        const minLeft = half + safeMargin;
+        const maxLeft = window.innerWidth - half - safeMargin;
+        nextPosition.left = Math.min(Math.max(nextPosition.left, minLeft), Math.max(minLeft, maxLeft));
+      }
+    }
+
+    return nextPosition;
+  }, [isVisible, isPositionReady, shouldMoveToFinalPosition, allPositions, currentStep, currentStepData, getInitialCardPosition, cardSize.width, cardSize.height]);
 
   // Simple fade control - card fades in when position is ready
   useEffect(() => {
@@ -423,7 +480,8 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
 
       {/* Welcome Tour Card - Always rendered but opacity controlled for smooth transitions */}
       <Card
-        className="absolute w-80 max-w-[85vw] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-72 max-sm:max-w-[90vw] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-[opacity] duration-200 ease-out"
+        ref={cardRef}
+        className="absolute w-[min(26rem,90vw)] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-[min(22rem,88vw)] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-200 ease-out"
         style={{
           top: cardPosition.top,
           left: cardPosition.left,
@@ -440,13 +498,13 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
                 {currentStepData.title}
               </h3>
               <Badge variant="secondary" className="text-xs max-sm:text-[10px] bg-primary/10 text-primary border-primary/20 px-3 py-1">
-                Step {currentStep + 1} of {welcomeSteps.length}
+                {t('stepCounter', { current: currentStep + 1, total: welcomeSteps.length })}
               </Badge>
             </div>
             <CloseButton
               className="ml-3"
               onClick={handleSkip}
-              label="Skip"
+              label={t('actions.skip')}
             />
           </div>
 
@@ -464,58 +522,61 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
           </div>
 
           {/* Actions */}
-          <div className="flex items-center justify-between gap-3 max-sm:gap-2 min-w-0">
+          <div
+            className={cn(
+              "grid gap-2 min-w-0 sm:items-center",
+              isFirstStep || isLastStep ? "grid-cols-2" : "grid-cols-3"
+            )}
+          >
             {/* Previous button - flexible width for perfect alignment */}
-            <div className="flex justify-start min-w-0" style={{ minWidth: '80px' }}>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handlePrev}
-                disabled={isTransitioning || currentStep === 0}
-                className={cn(
-                  "flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed",
-                  currentStep === 0 && "invisible"
-                )}
-              >
-                <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
-                <span className="truncate">Previous</span>
-              </Button>
-            </div>
+            {!isFirstStep && (
+              <div className="flex justify-start min-w-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handlePrev}
+                  disabled={isTransitioning}
+                  className="w-full flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 hover:bg-muted/50 font-medium px-3 max-sm:px-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  <ArrowLeft className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
+                  <span className="wrap-anywhere">{t('actions.previous')}</span>
+                </Button>
+              </div>
+            )}
 
             {/* Skip tour button - center section with equal spacing */}
-            <div className="flex-1 flex justify-center min-w-0">
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={handleSkip}
-                disabled={isTransitioning}
-                className={cn(
-                  "text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-4 max-sm:px-3 font-medium whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed",
-                  currentStep >= welcomeSteps.length - 1 && "invisible"
-                )}
-              >
-                Skip Tour
-              </Button>
-            </div>
+            {!isLastStep && (
+              <div className="flex-1 flex justify-center min-w-0">
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={handleSkip}
+                  disabled={isTransitioning}
+                  className="w-full text-muted-foreground hover:text-foreground hover:bg-muted/50 text-xs max-sm:text-[10px] h-9 max-sm:h-8 px-4 max-sm:px-3 font-medium disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {t('actions.skipTour')}
+                </Button>
+              </div>
+            )}
 
             {/* Next button - flexible width matching previous button */}
-            <div className="flex justify-end min-w-0" style={{ minWidth: '80px' }}>
+            <div className="flex justify-end min-w-0">
               <Button
                 onClick={handleNext}
                 size="sm"
                 variant="default"
                 disabled={isTransitioning}
-                className="flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium px-3 max-sm:px-2 whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full flex items-center justify-center gap-1.5 max-sm:gap-1 text-xs max-sm:text-[10px] h-9 max-sm:h-8 fab font-medium px-3 max-sm:px-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {currentStep === welcomeSteps.length - 1 ? (
                   <>
                     <Play className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
-                    <span className="max-sm:hidden truncate">Get Started</span>
-                    <span className="sm:hidden truncate">Start</span>
+                    <span className="max-sm:hidden wrap-anywhere">{t('actions.getStarted')}</span>
+                    <span className="sm:hidden wrap-anywhere">{t('actions.start')}</span>
                   </>
                 ) : (
                   <>
-                    <span className="truncate">Next</span>
+                    <span className="wrap-anywhere">{t('actions.next')}</span>
                     <ArrowRight className="w-3.5 h-3.5 max-sm:w-3 max-sm:h-3 shrink-0" />
                   </>
                 )}

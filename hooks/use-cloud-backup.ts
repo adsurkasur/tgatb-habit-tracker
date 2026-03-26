@@ -124,7 +124,7 @@ export function useCloudBackup() {
   };
 
 
-  const handleRestore = async (onImportData: (jsonData: string) => void) => {
+  const handleRestore = async (onImportData: (jsonData: string) => Promise<void> | void) => {
     if (!isOnline) {
       return toast({
         title: "You're offline",
@@ -263,7 +263,7 @@ export function useCloudBackup() {
           return;
         }
 
-        onImportData(JSON.stringify(cloudBundle));
+        await onImportData(JSON.stringify(cloudBundle));
         toast({
           title: "Import Successful",
           description: "Your habits have been imported from Google Drive.",

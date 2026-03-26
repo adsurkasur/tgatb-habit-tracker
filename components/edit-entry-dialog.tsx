@@ -10,6 +10,7 @@ import {
   ResponsiveDialogBody,
   ResponsiveDialogFooter,
 } from "@/components/ui/responsive-dialog";
+import { useTranslations } from "next-intl";
 
 interface EditEntryDialogProps {
   open: boolean;
@@ -21,6 +22,7 @@ interface EditEntryDialogProps {
 }
 
 export function EditEntryDialog({ open, onOpenChange, habit, date, completed, onSave }: EditEntryDialogProps) {
+  const t = useTranslations("EditEntryDialog");
   const [status, setStatus] = useState<boolean | null>(completed);
 
   // Adjust state during render when props change (React-approved pattern)
@@ -37,8 +39,8 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
   // Helper to get status labels based on habit type
   const getStatusLabels = (type: "good" | "bad") =>
     type === "good"
-      ? { "true": "Completed", "false": "Missed" }
-      : { "true": "Avoided", "false": "Done" };
+      ? { "true": t("status.good.true"), "false": t("status.good.false") }
+      : { "true": t("status.bad.true"), "false": t("status.bad.false") };
 
   // Helper to get button color classes based on habit type and status, only when selected
   const getButtonClass = (type: "good" | "bad", value: boolean, selected: boolean) => {
@@ -71,23 +73,23 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
     <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
       <ResponsiveDialogContent dialogClassName="w-full max-w-lg">
         <ResponsiveDialogHeader>
-          <ResponsiveDialogTitle>Edit Entry</ResponsiveDialogTitle>
+          <ResponsiveDialogTitle>{t("title")}</ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
           <form id="edit-entry-form" onSubmit={handleSubmit} className="space-y-5">
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Date</Label>
+              <Label className="text-sm font-medium">{t("fields.date")}</Label>
               <div className="text-base font-semibold">{date}</div>
             </div>
             <div className="space-y-2">
-              <Label className="text-sm font-medium">Status</Label>
-              <div className="flex gap-2">
+              <Label className="text-sm font-medium">{t("fields.status")}</Label>
+              <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
                 <Button
                   type="button"
                   variant={status === true ? "default" : "outline"}
                   onClick={() => setStatus(true)}
-                  className={`flex-1 ${getButtonClass(habit.type, true, status === true)}`}
+                  className={`w-full ${getButtonClass(habit.type, true, status === true)}`}
                 >
                   {labels["true"]}
                 </Button>
@@ -95,7 +97,7 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
                   type="button"
                   variant={status === false ? "destructive" : "outline"}
                   onClick={() => setStatus(false)}
-                  className={`flex-1 ${getButtonClass(habit.type, false, status === false)}`}
+                  className={`w-full ${getButtonClass(habit.type, false, status === false)}`}
                 >
                   {labels["false"]}
                 </Button>
@@ -105,14 +107,14 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>
-          <div className="flex space-x-3 justify-end w-full">
+          <div className="flex flex-wrap justify-end gap-2 w-full">
             <Button
               type="button"
               variant="ghost"
               onClick={handleCancel}
               className="px-6 material-radius state-layer-hover"
             >
-              Cancel
+              {t("actions.cancel")}
             </Button>
             <Button
               type="submit"
@@ -120,7 +122,7 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
               className="px-6 bg-primary hover:bg-primary/90 text-white material-radius surface-elevation-1"
               disabled={status === null}
             >
-              Save
+              {t("actions.save")}
             </Button>
           </div>
         </ResponsiveDialogFooter>

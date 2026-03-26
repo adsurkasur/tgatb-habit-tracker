@@ -35,7 +35,7 @@ export async function up(bundle: ExportBundle): Promise<ExportBundle> {
     createdAt: String(h.createdAt ?? now),
     lastCompletedDate: h.lastCompletedDate ?? undefined,
     updatedAt: h.updatedAt ?? h.createdAt ?? now,
-    deviceId: h.deviceId ?? null,
+    deviceId: h.deviceId ?? undefined,
     version: h.version ?? 1,
   } as unknown as ExportBundle["habits"][number]));
 
@@ -46,7 +46,7 @@ export async function up(bundle: ExportBundle): Promise<ExportBundle> {
     completed: Boolean(l.completed ?? false),
     timestamp: String(l.timestamp ?? now),
     updatedAt: l.updatedAt ?? l.timestamp ?? now,
-    deviceId: l.deviceId ?? null,
+    deviceId: l.deviceId ?? undefined,
     version: l.version ?? 1,
   } as unknown as ExportBundle["logs"][number]));
 

@@ -9,6 +9,7 @@ import { AccountDataSettings } from '@/components/settings/account-data-settings
 import { AppDeviceSettings } from '@/components/settings/app-device-settings';
 import { FeedbackSettings } from '@/components/settings/feedback-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
+import { useTranslations } from 'next-intl';
 
 type SettingsScreenProps = {
   open: boolean;
@@ -31,6 +32,7 @@ export function SettingsScreen({
   onShowHelp,
   onDeleteAllHabits
 }: SettingsScreenProps) {
+  const t = useTranslations('SettingsScreen');
   // Handle mobile back navigation
   useMobileBackNavigation({
     onBackPressed: () => {
@@ -55,7 +57,7 @@ export function SettingsScreen({
         >
           <ArrowLeft className='w-6 h-6' />
         </Button>
-        <h1 className='text-xl font-semibold'>Settings</h1>
+        <h1 className='text-xl font-semibold'>{t('title')}</h1>
       </header>
 
       <div className='flex-1 overflow-y-auto p-6 space-y-6'>

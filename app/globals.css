@@ -788,16 +788,30 @@ html {
     transition-timing-function: ease;
   }
   
-  /* Prevent flash of unstyled content */
-  body:not(.app-loaded) {
-    opacity: 0;
-  }
-  
-  body.app-loaded {
+  #master-loading-screen {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
     opacity: 1;
-    transition-property: opacity;
-    transition-duration: 0.4s;
-    transition-timing-function: ease-out;
+    transition: opacity 280ms ease-out, visibility 280ms ease-out;
+    visibility: visible;
+    pointer-events: all;
+  }
+
+  body:not(.app-loaded) .app-shell {
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  body.app-loaded .app-shell {
+    opacity: 1;
+    transition: opacity 220ms ease-out;
+  }
+
+  body.app-loaded #master-loading-screen {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
   }
   
   /* Loading screen animations */

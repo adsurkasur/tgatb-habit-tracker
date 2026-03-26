@@ -6,6 +6,7 @@ import { Download } from "lucide-react";
 import { CloseButton } from "@/components/ui/close-button";
 import { useToast } from "@/hooks/use-toast";
 import { Capacitor } from '@capacitor/core';
+import { useTranslations } from "next-intl";
 
 interface BeforeInstallPromptEvent extends Event {
   readonly platforms: string[];
@@ -17,11 +18,12 @@ interface BeforeInstallPromptEvent extends Event {
 }
 
 export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) {
+  const t = useTranslations("PWAInstallPrompt");
   // Detect platform once; never early-return before hooks
   const isCapacitorApp = Capacitor.isNativePlatform();
 
-  // Suppress on standalone pages like /privacy-policy
-  const isStandalonePage = typeof window !== 'undefined' && /^\/(?:privacy-policy|terms-of-service)/.test(window.location.pathname);
+  // Suppress on standalone pages like /privacy-policy or /en/privacy-policy
+  const isStandalonePage = typeof window !== 'undefined' && /^\/(?:[a-z]{2}(?:-[A-Z]{2})?\/)?(?:privacy-policy|terms-of-service)(?:\/|$)/.test(window.location.pathname);
 
   // Only show if analytics notice is acknowledged
   const [analyticsAcknowledged, setAnalyticsAcknowledged] = useState(
@@ -140,8 +142,8 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
   // ...existing code...
     if (!deferredPrompt) {
       toast({
-        title: "App install not available",
-        description: "App installation is not supported on this device or browser. Try Chrome or Edge on desktop/mobile.",
+        title: t("toasts.notAvailable.title"),
+        description: t("toasts.notAvailable.description"),
         duration: 3000,
       });
       return;
@@ -154,22 +156,22 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
         setDeferredPrompt(null);
         setShowInstallPrompt(false);
         toast({
-          title: "App install started",
-          description: "Follow your browser's instructions to complete installation.",
+          title: t("toasts.started.title"),
+          description: t("toasts.started.description"),
           duration: 3000,
         });
       } else {
         // Use the same message as handleDismiss for consistency
         toast({
-          title: "App install dismissed",
-          description: "You can install the app anytime from Settings → Install App.",
+          title: t("toasts.dismissed.title"),
+          description: t("toasts.dismissed.description"),
           duration: 3000,
         });
       }
     } catch {
       toast({
-        title: "App install failed",
-        description: "Something went wrong while trying to install the app.",
+        title: t("toasts.failed.title"),
+        description: t("toasts.failed.description"),
         duration: 3000,
       });
     }
@@ -180,8 +182,8 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
     setShowInstallPrompt(false);
     sessionStorage.setItem('pwa-install-dismissed', 'true');
     toast({
-      title: "App install dismissed",
-      description: "You can install the app anytime from Settings → Install App.",
+      title: t("toasts.dismissed.title"),
+      description: t("toasts.dismissed.description"),
       duration: 3000,
     });
   };
@@ -208,36 +210,36 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
         <div className="p-3">
         <div className="flex items-start justify-between mb-2">
           <div className="flex-1 min-w-0">
-            <h3 className="font-medium text-sm mb-1">Install TGATB App</h3>
+            <h3 className="font-medium text-sm mb-1">{t("title")}</h3>
             <p className="text-xs text-muted-foreground">
-              Better experience with offline support and quick access
+              {t("subtitle")}
             </p>
             {/* Fallback instructions for browsers without beforeinstallprompt */}
             {fallbackInstall && (
               <>
                 {isIOS || (isMac && isSafari) ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                    {t("instructions.fallback.iosSafari")}
                   </p>
                 ) : isAndroid ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Android, use Chrome, Edge, or Samsung Internet. If you see a <b>+</b> icon in your browser&apos;s address bar, tap it to install.<br />
-                    If you don&apos;t see the icon, open browser menu and look for &quot;Add to Home screen&quot; or &quot;Install app&quot;.
+                    {t("instructions.fallback.android.line1")}<br />
+                    {t("instructions.fallback.android.line2")}
                   </p>
                 ) : (isWindows || isLinux) ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Windows/Linux, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to desktop&quot;.
+                    {t("instructions.fallback.windowsLinux.line1")}<br />
+                    {t("instructions.fallback.windowsLinux.line2")}
                   </p>
                 ) : isMac ? (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On macOS, use Chrome or Edge. If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    If not, open browser menu and look for &quot;Install app&quot; or &quot;Add to dock&quot;.
+                    {t("instructions.fallback.mac.line1")}<br />
+                    {t("instructions.fallback.mac.line2")}
                   </p>
                 ) : (
                   <p className="text-xs text-muted-foreground mt-2">
-                    If you see an install icon in your browser&apos;s address bar, use it.<br />
-                    Otherwise, open browser menu and look for &quot;Install app&quot; or &quot;Add to Home screen&quot;.
+                    {t("instructions.fallback.generic.line1")}<br />
+                    {t("instructions.fallback.generic.line2")}
                   </p>
                 )}
               </>
@@ -247,22 +249,22 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               <>
                 {(isIOS || (isMac && isSafari)) && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On iOS/Safari, tap the Share button and select &quot;Add to Home Screen&quot; to install.
+                    {t("instructions.default.iosSafari")}
                   </p>
                 )}
                 {isAndroid && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Android, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    {t("instructions.default.android")}
                   </p>
                 )}
                 {(isWindows || isLinux) && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On Windows/Linux, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    {t("instructions.default.windowsLinux")}
                   </p>
                 )}
                 {isMac && !isSafari && (
                   <p className="text-xs text-muted-foreground mt-2">
-                    On macOS, use Chrome or Edge for best experience. If you see an install icon in your browser&apos;s address bar, use it.
+                    {t("instructions.default.mac")}
                   </p>
                 )}
               </>
@@ -271,7 +273,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
           <CloseButton
             className="shrink-0 ml-2"
             onClick={handleDismiss}
-            label="Dismiss"
+            label={t("actions.dismiss")}
           />
         </div>
         <div className="flex gap-1.5">
@@ -283,7 +285,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               className="flex items-center gap-1 h-8 px-2 text-xs"
             >
               <Download className="h-3 w-3" />
-              Install
+              {t("actions.install")}
             </Button>
           )}
             <Button
@@ -292,7 +294,7 @@ export function PWAInstallPrompt({ hidden = false }: { hidden?: boolean } = {}) 
               onClick={handleDismiss}
               className="h-8 px-2 text-xs"
             >
-              {fallbackInstall ? "OK" : "Not now"}
+              {fallbackInstall ? t("actions.ok") : t("actions.notNow")}
             </Button>
         </div>
       </div>

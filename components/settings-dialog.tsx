@@ -1,3 +1,5 @@
+"use client";
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { CloseButton } from '@/components/ui/close-button';
 import { UserSettings } from '@shared/schema';
@@ -8,6 +10,7 @@ import { AccountDataSettings } from '@/components/settings/account-data-settings
 import { AppDeviceSettings } from '@/components/settings/app-device-settings';
 import { FeedbackSettings } from '@/components/settings/feedback-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
+import { useTranslations } from 'next-intl';
 
 type SettingsDialogProps = {
   open: boolean;
@@ -30,12 +33,14 @@ export function SettingsDialog({
   onShowHelp,
   onDeleteAllHabits
 }: SettingsDialogProps) {
+  const t = useTranslations('SettingsDialog');
+
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-hidden flex flex-col [&>button]:hidden">
         <DialogHeader className="shrink-0 border-b border-border pb-4">
           <div className="flex items-center justify-between">
-            <DialogTitle className="text-xl font-semibold">Settings</DialogTitle>
+            <DialogTitle className="text-xl font-semibold">{t('title')}</DialogTitle>
             <CloseButton onClick={() => onOpenChange(false)} />
           </div>
         </DialogHeader>

@@ -139,11 +139,33 @@ registerRoute(
 // Background sync removed - app uses client-side storage only
 // All data is stored locally and doesn't require server sync
 
+const notificationCopyByLocale = {
+  en: {
+    title: 'TGATB Habit Tracker',
+    body: 'Time to check your habits!',
+    openAction: 'Open App',
+    dismissAction: 'Dismiss'
+  },
+  id: {
+    title: 'TGATB Pelacak Kebiasaan',
+    body: 'Saatnya cek kebiasaanmu!',
+    openAction: 'Buka Aplikasi',
+    dismissAction: 'Tutup'
+  }
+};
+
+function resolveNotificationLocale(data) {
+  const rawLocale = String(data?.locale || data?.lang || '').toLowerCase();
+  return rawLocale.startsWith('id') ? 'id' : 'en';
+}
+
 self.addEventListener('push', event => {
   if (event.data) {
     const data = event.data.json();
+    const locale = resolveNotificationLocale(data);
+    const copy = notificationCopyByLocale[locale];
     const options = {
-      body: data.body || 'Time to check your habits!',
+      body: data.body || copy.body,
       icon: '/icons/icon-192x192-notification.png',
       badge: '/icons/icon-72x72-notification.png',
       vibrate: [100, 50, 100],
@@ -154,18 +176,18 @@ self.addEventListener('push', event => {
       actions: [
         {
           action: 'open',
-          title: 'Open App',
+          title: copy.openAction,
           icon: '/icons/icon-96x96-notification.png'
         },
         {
           action: 'dismiss',
-          title: 'Dismiss'
+          title: copy.dismissAction
         }
       ]
     };
     
     event.waitUntil(
-      self.registration.showNotification('TGATB Habit Tracker', options)
+      self.registration.showNotification(copy.title, options)
     );
   }
 });

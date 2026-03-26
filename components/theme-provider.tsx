@@ -61,14 +61,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     }
   }, [isInitialized]);
 
-  // Additional effect to ensure rendering is complete
-  useEffect(() => {
-    if (!isLoading) {
-      // Mark rendering as complete
-      document.body.classList.add('app-loaded');
-    }
-  }, [isLoading]);
-
   const setIsDark = (darkMode: boolean) => {
     setIsDarkState(darkMode);
     
