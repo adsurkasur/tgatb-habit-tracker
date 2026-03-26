@@ -5,12 +5,13 @@
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
-        <!-- Ensure status bar doesn't overlay content -->
         <item name="android:fitsSystemWindows">true</item>
-        <!-- Remove translucent status bar and set solid dark color -->
         <item name="android:windowTranslucentStatus">false</item>
+        <!-- Seamless cold-start: native bar color matches JS FULLSCREEN_DARK_COLOR -->
         <item name="android:statusBarColor">@color/status_bar_color</item>
-        <!-- Light text on dark status bar for dark theme -->
+        <item name="android:navigationBarColor">@color/status_bar_color</item>
+        <!-- Light icons on dark background in dark mode -->
         <item name="android:windowLightStatusBar">false</item>
     </style>
 </resources>
+

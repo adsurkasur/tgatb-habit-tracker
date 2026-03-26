@@ -4,6 +4,6 @@
     <color name="colorPrimaryDark">#4f46e5</color>
     <color name="colorAccent">#ec4899</color>
     
-    <!-- Status bar color for dark theme - using dark purple color -->
-    <color name="status_bar_color">#1e1b2e</color>
+    <!-- Status bar color for dark theme - matches JS FULLSCREEN_DARK_COLOR -->
+    <color name="status_bar_color">#1b1a1e</color>
 </resources>

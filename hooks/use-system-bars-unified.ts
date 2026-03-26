@@ -179,7 +179,6 @@ const globalState: SystemBarsState = {
 
 export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: boolean) => {
   const debounceRef = useRef<number | null>(null);
-  const lastApplyRef = useRef<number>(0);
   
   const isAndroid = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
   const isIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
@@ -188,11 +187,6 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
     if (!Capacitor.isNativePlatform()) return;
 
     // --- Helper functions (inside useCallback to satisfy exhaustive-deps) ---
-    const shouldRun = () => {
-      const now = Date.now();
-      if (now - lastApplyRef.current < DEBOUNCE_MS) return false;
-      lastApplyRef.current = now; return true;
-    };
     const resolveTargetFullscreen = (force?: boolean) => force ?? fullscreenMode ?? globalState.isFullscreen;
     const logStart = (target: boolean) => {
       if (process.env.NODE_ENV !== "production") {
@@ -272,7 +266,6 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
     };
 
     // --- Main logic ---
-    if (!shouldRun()) return;
     const targetFullscreen = resolveTargetFullscreen(forceFullscreen);
     logStart(targetFullscreen);
     try {
@@ -330,7 +323,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
 
 // Export utilities for manual control
 export const systemBarsUtils = {
-  setFullscreen: async (enabled: boolean) => {
+  setFullscreen: async (enabled: boolean, isDarkMode?: boolean) => {
     if (!Capacitor.isNativePlatform()) return;
     
     const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
@@ -341,11 +334,11 @@ export const systemBarsUtils = {
     } else {
       // Fallback implementation
       if (enabled) {
-        const themeBarColor = getThemeBarColor(undefined);
+        const themeBarColor = getThemeBarColor(isDarkMode);
         await StatusBar.show();
-        await StatusBar.setStyle({ style: resolveStatusBarStyle(undefined) });
+        await StatusBar.setStyle({ style: resolveStatusBarStyle(isDarkMode) });
         await StatusBar.setBackgroundColor({ color: themeBarColor });
-        await setNavigationBarColor(themeBarColor, resolveNavBarDarkButtons(undefined));
+        await setNavigationBarColor(themeBarColor, resolveNavBarDarkButtons(isDarkMode));
       } else {
         await StatusBar.show();
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
