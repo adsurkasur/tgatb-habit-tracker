@@ -111,7 +111,7 @@
     "framer-motion": "^12.34.1",
     "googleapis": "^171.4.0",
     "input-otp": "^1.4.2",
-    "lucide-react": "^0.574.0",
+    "lucide-react": "^1.7.0",
     "memoizee": "^0.4.17",
     "next": "^16.1.6",
     "next-auth": "^4.24.13",
