@@ -60,11 +60,29 @@ const globalState: SystemBarsState = {
 };
 
 /**
- * Reads current theme from DOM and localStorage
+ * Reads current theme from DOM
  */
 const getCurrentTheme = (): boolean => {
   if (typeof document === 'undefined') return false;
   return document.documentElement.classList.contains('dark');
+};
+
+/**
+ * Reads actual saved theme from Capacitor Preferences
+ * This is async and reaches the actual source of truth for Android
+ */
+const loadActualTheme = async (): Promise<boolean | null> => {
+  try {
+    const { Preferences } = await import('@capacitor/preferences');
+    const storedSettings = await Preferences.get({ key: 'user_settings::anonymous' });
+    if (storedSettings.value) {
+      const settings = JSON.parse(storedSettings.value);
+      return settings?.theme?.isDark ?? null;
+    }
+  } catch {
+    // Fall back to DOM reading if Preferences not available
+  }
+  return null;
 };
 
 export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
@@ -228,7 +246,12 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
       };
 
       // --- Main logic ---
-      if (!shouldRun()) return;
+      if (!shouldRun()) {
+        console.log(
+          `[SystemBars] Skipped due to debounce: ${Date.now() - lastApplyRef.current}ms since last apply (threshold: ${DEBOUNCE_MS}ms)`
+        );
+        return;
+      }
 
       const targetFullscreen = resolveTargetFullscreen(forceFullscreen);
       const targetTheme = resolveTargetTheme(forceTheme);
@@ -281,20 +304,48 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
 
-    const shouldApply =
-      !globalState.isInitialized ||
-      (fullscreenMode !== undefined && fullscreenMode !== globalState.isFullscreen);
+    let isMounted = true;
 
-    if (shouldApply) {
+    (async () => {
+      // On first init, try to load actual saved theme from Capacitor Preferences
+      // This is critical for Issue #1: ensures we apply the correct theme even if DOM hasn't been updated
       if (!globalState.isInitialized) {
-        globalState.isInitialized = true;
-        // Apply immediately without debounce - this is critical for first-render appearance
-        applySystemBars(fullscreenMode, currentTheme);
+        console.log(`[SystemBars] First init: loading actual theme from Preferences...`);
+        const actualTheme = await loadActualTheme();
+        console.log(
+          `[SystemBars] Loaded theme from Preferences: ${
+            actualTheme === null ? 'null (not found)' : actualTheme ? 'dark' : 'light'
+          }`
+        );
+        if (isMounted && actualTheme !== null) {
+          // We got the actual saved theme from Preferences
+          console.log(`[SystemBars] Setting currentTheme to ${actualTheme ? 'dark' : 'light'}`);
+          setCurrentTheme(actualTheme);
+          globalState.isInitialized = true;
+          // Apply immediately with the actual saved theme
+          console.log(`[SystemBars] Applying system bars with actual saved theme...`);
+          await applySystemBars(fullscreenMode, actualTheme);
+        } else if (isMounted) {
+          // No saved theme found, use DOM or default
+          console.log(`[SystemBars] No saved theme found, using DOM-based theme (currentTheme=${currentTheme})`);
+          globalState.isInitialized = true;
+          applySystemBars(fullscreenMode, currentTheme);
+        }
       } else {
-        // For subsequent fullscreen changes, use debounce
-        debouncedApply(fullscreenMode, undefined);
+        // Already initialized, handle fullscreen changes
+        const shouldApply = fullscreenMode !== undefined && fullscreenMode !== globalState.isFullscreen;
+        if (shouldApply && isMounted) {
+          console.log(
+            `[SystemBars] Fullscreen changed: ${fullscreenMode}. Applying bars...`
+          );
+          debouncedApply(fullscreenMode, undefined);
+        }
       }
-    }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
   }, [applySystemBars, debouncedApply, fullscreenMode, currentTheme]);
 
   // Listen for theme changes from ThemeProvider
@@ -304,16 +355,26 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
 
     const handleThemeChange = (event: Event) => {
       if (event instanceof ThemeChangeEvent) {
+        console.log(
+          `[SystemBars] Theme-change event received: isDark=${event.isDark}. Calling applySystemBars...`
+        );
         setCurrentTheme(event.isDark);
         // Apply theme change immediately without debounce - user expects instant visual feedback
         // Do not debounce theme changes; only debounce fullscreen mode (non-critical)
-        applySystemBars(fullscreenMode, event.isDark);
+        const applyPromise = applySystemBars(fullscreenMode, event.isDark);
+        applyPromise.then(() => {
+          console.log(`[SystemBars] Theme apply completed for isDark=${event.isDark}`);
+        }).catch((err) => {
+          console.error(`[SystemBars] Theme apply failed for isDark=${event.isDark}:`, err);
+        });
       }
     };
 
     window.addEventListener('theme-change', handleThemeChange);
+    console.log(`[SystemBars] Theme-change listener attached`);
     return () => {
       window.removeEventListener('theme-change', handleThemeChange);
+      console.log(`[SystemBars] Theme-change listener removed`);
     };
   }, [applySystemBars, fullscreenMode]);
 
