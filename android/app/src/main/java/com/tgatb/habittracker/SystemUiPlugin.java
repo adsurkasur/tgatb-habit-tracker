@@ -21,12 +21,35 @@ import com.getcapacitor.PluginMethod;
 @CapacitorPlugin(name = "SystemUi")
 public class SystemUiPlugin extends Plugin {
     private static boolean fullscreenEnabled = false;
-    private static final String PURPLE = "#6750A4"; // match web constant
+    private static boolean darkMode = false;
+
+    // Theme-aware defaults — NO purple anywhere
+    private static final String LIGHT_COLOR = "#ffffff";
+    private static final String DARK_COLOR  = "#1b1a1e";
+
+    private static String currentStatusBarColor = LIGHT_COLOR;
+    private static String currentNavBarColor    = LIGHT_COLOR;
 
     @PluginMethod
     public void setFullscreen(PluginCall call) {
         boolean enabled = call.getBoolean("enabled", false);
         fullscreenEnabled = enabled;
+
+        // Accept optional theme parameters from JS
+        if (call.hasOption("darkMode")) {
+            darkMode = call.getBoolean("darkMode", false);
+        }
+        if (call.hasOption("statusBarColor")) {
+            currentStatusBarColor = call.getString("statusBarColor", getDefaultColor());
+        } else {
+            currentStatusBarColor = getDefaultColor();
+        }
+        if (call.hasOption("navigationBarColor")) {
+            currentNavBarColor = call.getString("navigationBarColor", getDefaultColor());
+        } else {
+            currentNavBarColor = getDefaultColor();
+        }
+
         Activity activity = getActivity();
         if (activity != null) {
             activity.runOnUiThread(() -> applySystemUi(activity));
@@ -50,6 +73,10 @@ public class SystemUiPlugin extends Plugin {
 
     public static boolean isFullscreenEnabled() { return fullscreenEnabled; }
 
+    private static String getDefaultColor() {
+        return darkMode ? DARK_COLOR : LIGHT_COLOR;
+    }
+
     private static void applySystemUi(Activity activity) {
         final Window window = activity.getWindow();
         final View decor = window.getDecorView();
@@ -57,7 +84,7 @@ public class SystemUiPlugin extends Plugin {
 
         configureEdgeToEdge(window);
         installStatusBarHeightCssVarBridge(activity, decor);
-        applyColorsAndAppearance(window, controller); // recolor first
+        applyColorsAndAppearance(window, controller);
         configureControllerBehavior(controller);
 
         if (fullscreenEnabled) {
@@ -70,9 +97,6 @@ public class SystemUiPlugin extends Plugin {
     private static void configureEdgeToEdge(Window window) {
         if (Build.VERSION.SDK_INT < 35) {
             WindowCompat.setDecorFitsSystemWindows(window, !fullscreenEnabled);
-        } else {
-            // Android 15+ defaults to edge-to-edge; avoid using deprecated setDecorFitsSystemWindows.
-            // Keep fullscreen semantics via insets and controller behavior.
         }
     }
 
@@ -142,69 +166,59 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void applyColorsAndAppearance(Window window, WindowInsetsControllerCompat controller) {
-        int purple = parsePurple();
-        applyBarColors(window, purple);
-        enforceLightIcons(controller);
+        int statusColor = parseColor(currentStatusBarColor);
+        int navColor    = parseColor(currentNavBarColor);
+        applyBarColors(window, statusColor, navColor);
+        applyIconAppearance(controller);
         clearLegacyLightFlags(window);
     }
 
-    private static int parsePurple() {
-        try { return Color.parseColor(PURPLE); } catch (Exception e) { return Color.BLACK; }
+    private static int parseColor(String hex) {
+        try { return Color.parseColor(hex); } catch (Exception e) { return Color.WHITE; }
     }
 
-    private static void applyBarColors(Window window, int purple) {
+    private static void applyBarColors(Window window, int statusColor, int navColor) {
         try {
-            if (Build.VERSION.SDK_INT >= 35) { // Android 15+
-                applyColorsAndroid15Plus(window, purple);
+            if (Build.VERSION.SDK_INT >= 35) {
+                // Android 15+: draw behind bars, set decor background to status bar color
+                View decorView = window.getDecorView();
+                decorView.setOnApplyWindowInsetsListener((view, insets) -> {
+                    view.setBackgroundColor(statusColor);
+                    return insets;
+                });
             } else {
-                applyColorsLegacy(window, purple);
+                window.setStatusBarColor(statusColor);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    window.setNavigationBarColor(navColor);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+                        window.setNavigationBarDividerColor(navColor);
+                    }
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
+                        try { window.setNavigationBarContrastEnforced(false); } catch (Throwable ignored) {}
+                    }
+                }
             }
         } catch (Throwable ignored) {}
     }
 
-    private static void applyColorsAndroid15Plus(Window window, int purple) {
-        View decorView = window.getDecorView();
-        decorView.setOnApplyWindowInsetsListener((view, insets) -> {
-            // Android 15+ recommends drawing behind status/navigation bars instead of directly setting their colors.
-            view.setBackgroundColor(purple);
-            return insets;
-        });
-
-        // Keep appearance policy but avoid deprecated direct color APIs on 35+.
-        // Legacy colors are handled in applyColorsLegacy below for older Android versions.
-    }
-
-    private static void applyColorsLegacy(Window window, int purple) {
-        window.setStatusBarColor(purple);
-        tintNavBars(window, purple, false);
-    }
-
-    private static void tintNavBars(Window window, int purple, boolean enforceContrast) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            window.setNavigationBarColor(purple);
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
-                window.setNavigationBarDividerColor(purple);
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-                try { window.setNavigationBarContrastEnforced(enforceContrast); } catch (Throwable ignored) {}
-            }
-        }
-    }
-
-    private static void enforceLightIcons(WindowInsetsControllerCompat controller) {
+    private static void applyIconAppearance(WindowInsetsControllerCompat controller) {
         if (controller == null) return;
-        controller.setAppearanceLightStatusBars(false);
+        // Dark mode = light (white) icons; Light mode = dark icons
+        controller.setAppearanceLightStatusBars(!darkMode);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            controller.setAppearanceLightNavigationBars(false);
+            controller.setAppearanceLightNavigationBars(!darkMode);
         }
     }
 
     private static void clearLegacyLightFlags(Window window) {
         View decor = window.getDecorView();
         int vis = decor.getSystemUiVisibility();
-        vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+        if (darkMode) {
+            // Dark mode: clear light flags (white icons)
+            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
         }
         decor.setSystemUiVisibility(vis);
     }

@@ -12,14 +12,14 @@ const config: CapacitorConfig = {
       providers: ["google.com"],
     },
     StatusBar: {
-      // Let runtime JS/native plugin force white icons; avoid dark style which produces dark icons on white
+      // Runtime JS/native plugin will override with theme-aware colors
       style: 'light',
-      backgroundColor: '#6750a4',
+      backgroundColor: '#ffffff',
       overlaysWebView: false
     },
     SplashScreen: {
       launchShowDuration: 1000,
-      backgroundColor: '#6750a4',
+      backgroundColor: '#ffffff',
       androidScaleType: 'CENTER_CROP',
       showSpinner: false
     },
@@ -30,7 +30,7 @@ const config: CapacitorConfig = {
       resizeOnFullScreen: false
     },
     NavigationBar: {
-      backgroundColor: '#6750a4' // Set default purple, runtime will override
+      backgroundColor: '#ffffff' // Runtime JS/native plugin will override with theme-aware colors
     }
   },
   android: {

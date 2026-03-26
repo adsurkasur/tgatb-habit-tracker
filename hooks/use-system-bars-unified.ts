@@ -25,8 +25,11 @@ interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean }) => Promi
 
 const FULLSCREEN_LIGHT_COLOR = '#ffffff';
 const FULLSCREEN_DARK_COLOR = '#1b1a1e';
-const NON_FULLSCREEN_COLOR = '#6750a4';
 const DEBOUNCE_MS = 300;
+
+const getNonFullscreenColor = (isDarkMode?: boolean): string => {
+  return isDarkMode ? FULLSCREEN_DARK_COLOR : FULLSCREEN_LIGHT_COLOR;
+};
 
 const expandShortHex = (hex: string): string => {
   if (/^#([a-fA-F0-9]{3})$/.test(hex)) {
@@ -199,7 +202,15 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
         const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
         const { SystemUi } = cap?.Plugins || {};
         const sys = SystemUi as unknown as SystemUiPlugin | undefined;
-        if (sys && typeof sys.setFullscreen === 'function') { await sys.setFullscreen({ enabled: target }); }
+        if (sys && typeof sys.setFullscreen === 'function') {
+          const themeColor = getThemeBarColor(isDarkMode);
+          await sys.setFullscreen({
+            enabled: target,
+            darkMode: isDarkMode ?? false,
+            statusBarColor: themeColor,
+            navigationBarColor: themeColor,
+          } as unknown as { enabled: boolean });
+        }
       } catch (e) { console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e); }
     };
     const applyAndroidBars = async (target: boolean) => {
@@ -231,10 +242,13 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
         await StatusBar.setBackgroundColor({ color: themeBarColor });
         await setNavigationBarColor(themeBarColor, navDarkButtons);
       } else {
+        const nonFsColor = getNonFullscreenColor(isDarkMode);
+        const nonFsStyle = resolveStatusBarStyle(isDarkMode);
+        const nonFsNavDark = resolveNavBarDarkButtons(isDarkMode);
         await StatusBar.show();
-        await StatusBar.setStyle({ style: StatusBarStyles.Light });
-        await StatusBar.setBackgroundColor({ color: NON_FULLSCREEN_COLOR });
-        await setNavigationBarColor(NON_FULLSCREEN_COLOR, false);
+        await StatusBar.setStyle({ style: nonFsStyle });
+        await StatusBar.setBackgroundColor({ color: nonFsColor });
+        await setNavigationBarColor(nonFsColor, nonFsNavDark);
       }
       await maybeApplySystemUi(target);
     };
@@ -260,7 +274,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
         try {
           await StatusBar.show();
           await StatusBar.setStyle({ style: StatusBarStyles.Light });
-          await StatusBar.setBackgroundColor({ color: NON_FULLSCREEN_COLOR });
+          await StatusBar.setBackgroundColor({ color: getNonFullscreenColor(isDarkMode) });
         } catch (recoveryError) { console.error('Recovery failed:', recoveryError); }
       }
     };
@@ -330,7 +344,13 @@ export const systemBarsUtils = {
     const { SystemUi } = cap?.Plugins || {};
     const sys = SystemUi as unknown as SystemUiPlugin | undefined;
     if (sys && typeof sys.setFullscreen === 'function') {
-      await sys.setFullscreen({ enabled });
+      const themeColor = getThemeBarColor(isDarkMode);
+      await sys.setFullscreen({
+        enabled,
+        darkMode: isDarkMode ?? false,
+        statusBarColor: themeColor,
+        navigationBarColor: themeColor,
+      } as unknown as { enabled: boolean });
     } else {
       // Fallback implementation
       if (enabled) {
@@ -340,10 +360,13 @@ export const systemBarsUtils = {
         await StatusBar.setBackgroundColor({ color: themeBarColor });
         await setNavigationBarColor(themeBarColor, resolveNavBarDarkButtons(isDarkMode));
       } else {
+        const nonFsColor = getNonFullscreenColor(isDarkMode);
+        const nonFsStyle = resolveStatusBarStyle(isDarkMode);
+        const nonFsNavDark = resolveNavBarDarkButtons(isDarkMode);
         await StatusBar.show();
-        await StatusBar.setStyle({ style: StatusBarStyles.Light });
-        await StatusBar.setBackgroundColor({ color: NON_FULLSCREEN_COLOR });
-        await setNavigationBarColor(NON_FULLSCREEN_COLOR, false);
+        await StatusBar.setStyle({ style: nonFsStyle });
+        await StatusBar.setBackgroundColor({ color: nonFsColor });
+        await setNavigationBarColor(nonFsColor, nonFsNavDark);
       }
     }
     globalState.isFullscreen = enabled;
@@ -356,9 +379,10 @@ export const systemBarsUtils = {
     globalState.isFullscreen = false;
     if (Capacitor.isNativePlatform()) {
       try {
+        const resetColor = getNonFullscreenColor(false);
         await StatusBar.show();
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
-        await StatusBar.setBackgroundColor({ color: NON_FULLSCREEN_COLOR });
+        await StatusBar.setBackgroundColor({ color: resetColor });
       } catch (e) {
         console.warn('Reset failed:', e);
       }
