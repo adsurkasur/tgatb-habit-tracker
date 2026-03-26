@@ -200,7 +200,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
         </VisuallyHidden.Root>
         <div className="h-full flex flex-col">
           {/* Header */}
-          <div className="p-8 border-b border-border bg-card">
+          <div className="p-6 border-b border-border bg-card">
             <div className="flex items-center justify-between">
               <div>
                 <h2 className="text-2xl font-bold text-foreground">{t("header.title")}</h2>
@@ -210,7 +210,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
             </div>
           </div>
           {/* Search Bar */}
-          <div className="px-6 py-4 border-b border-border bg-card">
+          <div className="px-4 py-2 border-b border-border bg-card">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-muted-foreground" />
               <Input
@@ -230,14 +230,14 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
             </div>
           </div>
           {/* Content - Scrollable Habits Area */}
-          <div className="flex-1 p-6 space-y-3 overflow-y-auto">
+          <div className="flex-1 p-4 space-y-2 overflow-y-auto">
             {/* Good Habits Accordion */}
             <Collapsible open={effectiveGoodHabitsOpen} onOpenChange={setGoodHabitsOpen}>
               <div className="bg-card material-radius-lg overflow-hidden">
                 <CollapsibleTrigger asChild>
                   <Button
                     variant="ghost"
-                    className="w-full p-6 justify-between h-auto no-hover accordion-trigger"
+                    className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
                     disabled={searchQuery ? true : false}
                   >
                     <div className="flex items-center space-x-3">
@@ -255,7 +255,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     )}
                   </Button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="px-6 pb-6 space-y-3">
+                <CollapsibleContent className="px-4 pb-4 space-y-2">
                   {filteredGoodHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
                       <span className="text-muted-foreground text-sm">
@@ -289,7 +289,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <CollapsibleTrigger asChild>
                   <Button 
                     variant="ghost" 
-                    className="w-full p-6 justify-between h-auto no-hover accordion-trigger"
+                    className="w-full p-4 justify-between h-auto no-hover accordion-trigger"
                     disabled={searchQuery ? true : false}
                   >
                     <div className="flex items-center space-x-3">
@@ -307,7 +307,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                     )}
                   </Button>
                 </CollapsibleTrigger>
-                <CollapsibleContent className="px-6 pb-6 space-y-3">
+                <CollapsibleContent className="px-4 pb-4 space-y-2">
                   {filteredBadHabits.length === 0 ? (
                     <div className="p-3 bg-muted material-radius text-center">
                       <span className="text-muted-foreground text-sm">
@@ -338,7 +338,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
 
           {/* Bottom Navigation - Fixed at bottom */}
           <div className="border-t border-border bg-card">
-            <div className="p-6 space-y-2">
+            <div className="p-4 space-y-1">
               <Button
                 variant="ghost"
                 className="w-full justify-start p-3 h-auto state-layer-hover"

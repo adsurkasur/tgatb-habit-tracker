@@ -1,4 +1,4 @@
-import { Button } from '@/components/ui/button';
+﻿import { Button } from '@/components/ui/button';
 import { ArrowLeft } from 'lucide-react';
 import { UserSettings } from '@shared/schema';
 import { useMobileBackNavigation } from '@/hooks/use-mobile-back-navigation';
@@ -48,7 +48,7 @@ export function SettingsScreen({
       }`}
     >
       {/* Header */}
-      <header className='bg-header border-b border-border px-6 py-4 flex items-center space-x-4 surface-elevation-2 shrink-0'>
+      <header className='bg-header border-b border-border px-4 py-3 flex items-center space-x-4 surface-elevation-2 shrink-0'>
         <Button
           variant='ghost'
           size='icon'
@@ -60,7 +60,7 @@ export function SettingsScreen({
         <h1 className='text-xl font-semibold'>{t('title')}</h1>
       </header>
 
-      <div className='flex-1 overflow-y-auto p-8 space-y-8'>
+      <div className='flex-1 overflow-y-auto p-6 space-y-6'>
         <AppearanceSettings
           settings={settings}
           onUpdateSettings={onUpdateSettings}

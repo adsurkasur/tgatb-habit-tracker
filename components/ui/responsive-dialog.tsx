@@ -222,7 +222,7 @@ function ResponsiveDialogHeader({ className, children, ...props }: ResponsiveDia
     <Comp
       className={cn(
         "shrink-0 border-b border-border",
-        isMobile ? "px-6 pb-4 pt-0 text-left" : "pb-6",
+        isMobile ? "px-4 pb-3 pt-0 text-left" : "pb-4",
         className,
       )}
       {...props}
@@ -303,7 +303,7 @@ function ResponsiveDialogFooter({ className, children, ...props }: React.HTMLAtt
   return (
     <Comp
       className={cn(
-        isMobile ? "px-6 pb-8" : "",
+        isMobile ? "px-4 pb-6" : "",
         "*:min-w-0 [&>div]:w-full [&>div]:flex-wrap [&>div]:gap-2 [&>div]:*:min-w-0",
         className,
       )}

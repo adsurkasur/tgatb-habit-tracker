@@ -174,9 +174,9 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           <DialogDescription className="text-center mb-6">
             {t('description')}
           </DialogDescription>
-          <div className="space-y-8">
+          <div className="space-y-6">
             {/* Payment Platforms */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <ExternalLink className="w-4 h-4" />
                 {t('sections.paymentPlatforms')}
@@ -185,7 +185,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               {supportContacts.map((contact) => (
                 <Card
                   key={contact.name}
-                  className="p-6 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
+                  className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
                 >
                   <a
                     href={contact.href}
@@ -227,7 +227,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
             </div>
 
             {/* Cryptocurrency */}
-            <div className="space-y-4">
+            <div className="space-y-3">
               <h3 className="text-lg font-semibold flex items-center gap-2">
                 <svg className="w-5 h-5" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor">
                   <path fillRule="evenodd" d="M13.425 6.432c1.983.19 3.538.778 3.71 2.528.117 1.276-.438 2.035-1.355 2.463 1.481.359 2.382 1.202 2.196 3.072-.227 2.343-2.035 2.952-4.62 3.08l.004 2.42-1.522.002-.004-2.42c-.166-.002-.34 0-.519.003-.238.003-.484.006-.731-.001l.004 2.42-1.52.001-.004-2.42-3.044-.058.256-1.768s1.15.024 1.129.012c.423-.002.549-.293.58-.485l-.008-3.878.012-2.76c-.046-.288-.248-.634-.87-.644.033-.03-1.115.001-1.115.001L6 6.38l3.12-.005-.004-2.37 1.571-.002.004 2.37c.304-.008.603-.005.906-.003l.3.002-.005-2.37L13.422 4l.003 2.432zm-2.92 4.46l.076.002c.926.04 3.67.155 3.673-1.457-.004-1.532-2.339-1.482-3.423-1.46-.129.003-.24.006-.327.005v2.91zm.129 4.75l-.134-.005v-2.91c.097.002.218 0 .359-.002 1.282-.015 4.145-.05 4.132 1.494.014 1.597-3.218 1.468-4.357 1.423z" clipRule="evenodd" />
@@ -238,7 +238,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
               {cryptoList.map((crypto) => (
                 <Card
                   key={crypto.name}
-                  className="p-6 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
+                  className="p-4 interactive-card hover:bg-accent hover:text-accent-foreground cursor-pointer group state-layer-hover"
                   onClick={() => handleCopy(crypto.address)}
                 >
                   <div className="flex items-center space-x-3">
@@ -293,7 +293,7 @@ export function DonationDialog({ open, onOpenChange }: DonationDialogProps) {
           </ResponsiveDialogTitle>
         </ResponsiveDialogHeader>
         <ResponsiveDialogBody>
-          <div className="flex flex-col items-center gap-6">
+          <div className="flex flex-col items-center gap-4">
             <p className="text-sm text-muted-foreground text-center">{t('qris.description')}</p>
             <Image src="/payment/qris-ade.jpg" alt={t('qris.imageAlt')} width={320} height={320} className="rounded-lg border border-border w-full max-w-xs" />
             <Button

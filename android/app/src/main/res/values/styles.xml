@@ -3,26 +3,29 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.DayNight.NoActionBar">
-        <!-- Seamless cold-start: native bar color matches JS FULLSCREEN_LIGHT_COLOR -->
-        <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="android:navigationBarColor">@color/status_bar_color</item>
-        <!-- Dark icons on white background in light mode -->
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="O">true</item>
+        <!-- CRITICAL FIX: Consistent purple theming with proper light icons -->
+        <!-- For Android 15+ we rely on WindowInsets background handling instead of deprecated direct status/navigation bar color setters. -->
+        <!-- <item name="android:statusBarColor">@color/status_bar_color</item> -->
+        <!-- <item name="android:navigationBarColor">@color/status_bar_color</item> -->
+        <!-- Light icons = false (white icons on purple background) -->
+        <item name="android:windowLightStatusBar">false</item>
+        <!-- Also ensure navigation bar has light icons -->
+        <item name="android:windowLightNavigationBar" tools:targetApi="O">false</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.DayNight.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
         <item name="android:background">@null</item>
+        <!-- CRITICAL FIX: Proper window insets handling for system bars -->
         <item name="android:fitsSystemWindows">true</item>
+        <!-- Remove translucent status bar and set solid color -->
         <item name="android:windowTranslucentStatus">false</item>
-        <!-- Seamless cold-start: native bar color matches JS FULLSCREEN_LIGHT_COLOR -->
-        <item name="android:statusBarColor">@color/status_bar_color</item>
-        <item name="android:navigationBarColor">@color/status_bar_color</item>
-        <!-- Dark icons on white background in light mode -->
-        <item name="android:windowLightStatusBar">true</item>
-        <item name="android:windowLightNavigationBar" tools:targetApi="O">true</item>
+        <!-- <item name="android:statusBarColor">@color/status_bar_color</item> -->
+        <!-- <item name="android:navigationBarColor">@color/status_bar_color</item> -->
+        <!-- Force white icons/text on purple background -->
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar" tools:targetApi="O">false</item>
     </style>
 
 

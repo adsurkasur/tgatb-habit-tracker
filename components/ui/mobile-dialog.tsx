@@ -108,7 +108,7 @@ const MobileDialogContent = React.forwardRef<
         ref={ref}
         className={cn(
           // Base layout
-          "fixed z-50 grid gap-6 border bg-background p-8 shadow-lg",
+          "fixed z-50 grid gap-4 border bg-background p-6 shadow-lg",
           // Animation: fade + scale only (no slide - incompatible with translate centering)
           "duration-200 data-[state=open]:animate-in data-[state=closed]:animate-out",
           "data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
@@ -129,7 +129,7 @@ const MobileDialogContent = React.forwardRef<
       >
         {children}
         <DialogPrimitive.Close asChild>
-          <CloseButton className="absolute right-6 top-6" />
+          <CloseButton className="absolute right-4 top-4" />
         </DialogPrimitive.Close>
       </DialogPrimitive.Content>
     </DialogPrimitive.Portal>
