@@ -53,7 +53,17 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-152x152.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-180x180.png" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.svg" />
-        {/* <script dangerouslySetInnerHTML={{__html:`window.onerror = ...`}} /> */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              try {
+                if (localStorage.getItem('tgatb-boot-theme') === 'dark') {
+                  document.documentElement.classList.add('dark');
+                }
+              } catch (_) {}
+            `
+          }}
+        />
       </head>
       <body>
         <MasterLoadingScreen />

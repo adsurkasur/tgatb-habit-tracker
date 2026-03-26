@@ -299,7 +299,7 @@ export default function Home() {
       <ContentWrapper>
         <div className="min-h-screen bg-background text-foreground flex flex-col">
           {/* Top App Bar - always visible, not part of scrollable main */}
-          <header className="bg-header border-b border-border px-4 py-3 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
+          <header className="bg-header border-b border-border px-6 py-4 flex items-center justify-between surface-elevation-2 sticky top-0 z-40">
             <div data-tour="navigation">
               <NavigationDrawer
                 goodHabits={goodHabits}

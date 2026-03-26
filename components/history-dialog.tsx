@@ -190,7 +190,7 @@ function StatGrid({ statistics, t }: { statistics: ReturnType<typeof computeStat
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-6 mb-3 sm:mb-6">
       <div className="space-y-3 sm:space-y-4">
         {cards.slice(0, 2).map((stat, index) => (
-          <Card key={index} className="p-3 sm:p-4">
+          <Card key={index} className="p-5 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-muted-foreground">{stat.title}</p>
@@ -205,7 +205,7 @@ function StatGrid({ statistics, t }: { statistics: ReturnType<typeof computeStat
 
       <div className="space-y-3 sm:space-y-4">
         {cards.slice(2).map((stat, index) => (
-          <Card key={index + 2} className="p-3 sm:p-4">
+          <Card key={index + 2} className="p-5 sm:p-6">
             <div className="flex items-center justify-between">
               <div>
                 <p className="text-xs sm:text-sm text-muted-foreground">{stat.title}</p>
@@ -223,7 +223,7 @@ function StatGrid({ statistics, t }: { statistics: ReturnType<typeof computeStat
 
 function TopHabits({ habits, t }: { habits: Habit[]; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
-    <Card className="p-3 flex flex-col flex-1 min-h-48 sm:hidden">
+    <Card className="p-5 flex flex-col flex-1 min-h-48 sm:hidden">
       <h3 className="text-sm font-semibold mb-3 shrink-0">{t('topHabits.title')}</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         <div className="space-y-2">
@@ -253,7 +253,7 @@ function TopHabits({ habits, t }: { habits: Habit[]; t: (key: string, values?: R
 
 function HabitBreakdown({ habits, t }: { habits: Habit[]; t: (key: string, values?: Record<string, string | number>) => string }) {
   return (
-    <Card className="p-3 sm:p-4 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-48">
+    <Card className="p-5 sm:p-6 hidden sm:flex sm:flex-col sm:flex-1 sm:min-h-48">
       <h3 className="text-sm sm:text-base font-semibold mb-3 sm:mb-4 shrink-0">{t('breakdown.title')}</h3>
       <div className="flex-1 min-h-0 overflow-y-auto">
         {habits.length === 0 ? (
@@ -358,7 +358,7 @@ function CalendarTabContent({
   };
 
   return (
-    <div className="flex flex-col items-center gap-4 sm:gap-6">
+    <div className="flex flex-col items-center gap-6 sm:gap-8">
       <div className="flex justify-center w-full">
         <Calendar
             mode="single"
@@ -425,7 +425,7 @@ function CalendarTabContent({
                       return (
                         <div
                           key={habit.id}
-                          className={`flex items-center justify-between p-2 sm:p-3 rounded-lg ${bgClass}`}
+                          className={`flex items-center justify-between p-3 sm:p-4 rounded-lg ${bgClass}`}
                         >
                           <div className="flex items-center gap-2 sm:gap-3 min-w-0 flex-1">
                             {icon}
@@ -491,7 +491,7 @@ function TimelineTabContent({ dailyLogs, t }: { dailyLogs: DayLog[]; t: (key: st
           const completionRate = totalHabitsForDay > 0 ? (completedCount / totalHabitsForDay) * 100 : 0;
 
           return (
-            <Card key={index} className="p-3 sm:p-4">
+            <Card key={index} className="p-5 sm:p-6">
               <div className="flex items-start justify-between mb-2 sm:mb-3">
                 <div className="min-w-0 flex-1">
                   <h4 className="text-sm sm:text-base font-medium">

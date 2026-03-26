@@ -13,7 +13,7 @@ const config: CapacitorConfig = {
     },
     StatusBar: {
       // Runtime JS/native plugin will override with theme-aware colors
-      style: 'dark', // Dark text for white background
+      style: 'light', // 'light' translates to Dark text on Android (perfect for our default white background)
       overlaysWebView: false
     },
     SplashScreen: {

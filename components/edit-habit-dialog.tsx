@@ -91,7 +91,7 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
-          <form id="edit-habit-form" onSubmit={handleSubmit} className="space-y-5">
+          <form id="edit-habit-form" onSubmit={handleSubmit} className="space-y-6">
             {/* Habit Name Input */}
             <div className="space-y-2">
               <Label htmlFor="edit-habit-name" className="text-sm font-medium">

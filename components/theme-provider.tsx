@@ -38,8 +38,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
         // Apply theme immediately to prevent flash
         if (darkMode) {
           document.documentElement.classList.add("dark");
+          localStorage.setItem('tgatb-boot-theme', 'dark');
         } else {
           document.documentElement.classList.remove("dark");
+          localStorage.setItem('tgatb-boot-theme', 'light');
         }
         setIsInitialized(true);
       } catch (error) {
@@ -67,8 +69,10 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     // Apply theme immediately
     if (darkMode) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem('tgatb-boot-theme', 'dark');
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem('tgatb-boot-theme', 'light');
     }
     
     // Save to localStorage

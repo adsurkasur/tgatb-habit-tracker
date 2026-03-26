@@ -481,7 +481,7 @@ export function WelcomeOverlay({ isVisible, onClose, onComplete, hasHabits = fal
       {/* Welcome Tour Card - Always rendered but opacity controlled for smooth transitions */}
       <Card
         ref={cardRef}
-        className="absolute w-[min(26rem,90vw)] max-h-[80vh] p-6 max-sm:p-4 max-sm:w-[min(22rem,88vw)] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-200 ease-out"
+        className="absolute w-[min(26rem,90vw)] max-h-[80vh] p-8 max-sm:p-6 max-sm:w-[min(22rem,88vw)] max-sm:max-h-[75vh] shadow-2xl border-2 border-primary/20 bg-card overflow-y-auto transition-opacity duration-200 ease-out"
         style={{
           top: cardPosition.top,
           left: cardPosition.left,

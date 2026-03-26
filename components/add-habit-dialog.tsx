@@ -76,7 +76,7 @@ export function AddHabitDialog({ open, onOpenChange, onAddHabit }: AddHabitDialo
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody>
-          <form id="add-habit-form" onSubmit={handleSubmit} className="space-y-5">
+          <form id="add-habit-form" onSubmit={handleSubmit} className="space-y-6">
             {/* Habit Name Input */}
             <div className="space-y-2">
               <Label htmlFor="habit-name" className="text-sm font-medium">

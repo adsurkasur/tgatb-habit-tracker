@@ -111,10 +111,10 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   return (
     <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
       {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
-      <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
+      <div className={`habit-card-surface habit-card-animated rounded-lg border p-8 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
         <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
         <StreakBadge type={habit.type} streak={habit.streak} t={t} />
-        <div className="space-y-6 mt-8">
+        <div className="space-y-8 mt-10">
           <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} t={t} />
           <div className="text-center">
             <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>

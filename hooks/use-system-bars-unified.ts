@@ -140,11 +140,11 @@ const getThemeBarColor = (isDarkMode?: boolean) => {
 const resolveStatusBarStyle = (isDarkMode: boolean | undefined) => {
   if (isDarkMode === undefined) {
     if (typeof document !== 'undefined') {
-      return document.documentElement.classList.contains('dark') ? StatusBarStyles.Light : StatusBarStyles.Dark;
+      return document.documentElement.classList.contains('dark') ? StatusBarStyles.Dark : StatusBarStyles.Light;
     }
-    return StatusBarStyles.Dark; // Default to dark text for white background
+    return StatusBarStyles.Light; // StatusBarStyles.Light actually gives Dark Icons on Android
   }
-  return isDarkMode ? StatusBarStyles.Light : StatusBarStyles.Dark;
+  return isDarkMode ? StatusBarStyles.Dark : StatusBarStyles.Light;
 };
 
 const resolveNavBarDarkButtons = (isDarkMode: boolean | undefined): boolean => {
@@ -273,7 +273,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
       if (!target) {
         try {
           await StatusBar.show();
-          await StatusBar.setStyle({ style: StatusBarStyles.Light });
+          await StatusBar.setStyle({ style: resolveStatusBarStyle(isDarkMode) });
           await StatusBar.setBackgroundColor({ color: getNonFullscreenColor(isDarkMode) });
         } catch (recoveryError) { console.error('Recovery failed:', recoveryError); }
       }
