@@ -82,34 +82,14 @@ export const PlatformStorage = {
 
 export async function getSettings(): Promise<UserSettings> {
   const raw = await PlatformStorage.getItem(settingsKey());
-  if (raw) {
-    try {
-      return JSON.parse(raw) as UserSettings;
-    } catch {
-      return defaultSettings();
-    }
-  }
-  // Fallback to legacy 'app-settings' key for backward compatibility with old boot script
+  if (!raw) return defaultSettings();
   try {
-    const legacyRaw = await PlatformStorage.getItem('app-settings');
-    if (legacyRaw) {
-      return JSON.parse(legacyRaw) as UserSettings;
-    }
+    return JSON.parse(raw) as UserSettings;
   } catch {
-    // Fallback to default if legacy key also fails
+    return defaultSettings();
   }
-  return defaultSettings();
 }
 
 export async function saveSettings(settings: UserSettings): Promise<void> {
-  const key = settingsKey();
-  const value = JSON.stringify(settings);
-
-  // On native, save to BOTH Preferences and localStorage
-  // This way the boot script can find settings on first load even on Android
-  if (typeof window !== 'undefined') {
-    localStorage.setItem(key, value);  // Boot script reads this
-  }
-
-  await PlatformStorage.setItem(key, value);  // Main storage backend
+  await PlatformStorage.setItem(settingsKey(), JSON.stringify(settings));
 }

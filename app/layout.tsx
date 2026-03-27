@@ -40,29 +40,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
-        {/* Synchronous theme boot script: prevents flash before React hydration */}
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function() {
-  try {
-    // Try to read from account-scoped key first (new format: user_settings::accountId)
-    // Fall back to legacy 'app-settings' key for backward compatibility
-    let saved = localStorage.getItem('user_settings::anonymous');
-    if (!saved) {
-      saved = localStorage.getItem('app-settings');
-    }
-    if (saved) {
-      const settings = JSON.parse(saved);
-      if (settings.darkMode) {
-        document.documentElement.classList.add('dark');
-      }
-    }
-  } catch (e) {
-    // Silent fallback: light mode is default
-  }
-})();`
-          }}
-        />
         <link rel="manifest" href="/manifest.json" />
         <meta name="mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-capable" content="yes" />

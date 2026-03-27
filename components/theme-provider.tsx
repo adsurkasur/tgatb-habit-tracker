@@ -11,20 +11,6 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
-/**
- * Custom event for theme changes.
- * This allows other components/hooks to listen for theme updates
- * without prop-drilling or tight coupling to ThemeProvider.
- */
-export class ThemeChangeEvent extends Event {
-  public readonly isDark: boolean;
-
-  constructor(isDark: boolean) {
-    super("theme-change");
-    this.isDark = isDark;
-  }
-}
-
 export function useTheme() {
   const context = useContext(ThemeContext);
   if (!context) {
@@ -42,24 +28,14 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [isInitialized, setIsInitialized] = useState(false);
 
-  // Load theme from settings on mount and apply immediately to DOM
-  // This happens synchronously during render for boot script
+  // Load theme from localStorage immediately on mount
   useEffect(() => {
     (async () => {
       try {
         const settings = await HabitStorage.getSettings();
         const darkMode = settings.darkMode;
         setIsDarkState(darkMode);
-        
-        // Also save to localStorage so boot script can find it on next app open
-        // (On native, settings are in Preferences, not localStorage)
-        try {
-          localStorage.setItem('user_settings::anonymous', JSON.stringify(settings));
-        } catch {
-          // Silently fail - localStorage might not be available
-        }
-        
-        // Apply theme immediately to prevent flash (matching boot script)
+        // Apply theme immediately to prevent flash
         if (darkMode) {
           document.documentElement.classList.add("dark");
         } else {
@@ -73,12 +49,13 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     })();
   }, []);
 
-  // Handle loading state - must be called before any conditional returns
+  // Handle loading state - wait for initialization and a brief moment for smooth transition
   useEffect(() => {
     if (isInitialized) {
+      // Add a small delay to ensure smooth transition
       const timer = setTimeout(() => {
         setIsLoading(false);
-      }, 100);
+      }, 300);
       
       return () => clearTimeout(timer);
     }
@@ -92,11 +69,6 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       document.documentElement.classList.add("dark");
     } else {
       document.documentElement.classList.remove("dark");
-    }
-
-    // Dispatch custom event so system bars and other UI can react
-    if (typeof window !== "undefined") {
-      window.dispatchEvent(new ThemeChangeEvent(darkMode));
     }
     
     // Save to localStorage
