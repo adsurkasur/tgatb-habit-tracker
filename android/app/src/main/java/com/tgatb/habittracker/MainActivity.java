@@ -3,10 +3,16 @@ package com.tgatb.habittracker;
 import android.os.Build;
 import android.os.Bundle;
 import android.graphics.Color;
+import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import androidx.core.view.WindowCompat;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
+    private static final String PREFS_NAME = "tgatb_boot_state";
+    private static final String PREF_LAST_VERSION_CODE = "last_version_code";
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         // Register custom plugin before super so bridge picks it up
@@ -15,6 +21,7 @@ public class MainActivity extends BridgeActivity {
 
         // FIXED: Revert WebView background to default transparent/white
         getBridge().getWebView().setBackgroundColor(Color.TRANSPARENT);
+        clearWebViewCacheOnAppUpgrade();
 
         // IMPROVED: Proper window insets handling based on fullscreen state
         if (Build.VERSION.SDK_INT < 35) {
@@ -27,6 +34,25 @@ public class MainActivity extends BridgeActivity {
             // Android 15+ is edge-to-edge by default; avoid deprecated API call.
         }
         SystemUiPlugin.reapply(this);
+    }
+
+    private void clearWebViewCacheOnAppUpgrade() {
+        try {
+            PackageManager packageManager = getPackageManager();
+            PackageInfo packageInfo = packageManager.getPackageInfo(getPackageName(), 0);
+            long currentVersionCode = packageInfo.getLongVersionCode();
+
+            SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+            long lastVersionCode = prefs.getLong(PREF_LAST_VERSION_CODE, -1L);
+
+            if (lastVersionCode != currentVersionCode) {
+                getBridge().getWebView().clearCache(true);
+                getBridge().getWebView().clearHistory();
+                prefs.edit().putLong(PREF_LAST_VERSION_CODE, currentVersionCode).apply();
+            }
+        } catch (Exception ignored) {
+            // Non-fatal: app startup should continue even if cache clear check fails.
+        }
     }
 
     @Override
