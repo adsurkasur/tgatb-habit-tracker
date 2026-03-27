@@ -19,7 +19,7 @@ try {
 		console.error(`❌ Tag ${tagName} already exists. Version has not changed.`);
 		process.exit(1);
 	} else {
-		console.log(`✅ Version ${version} is new. Proceeding with release.`);
+		console.log(`✅ Version ${version} is new. Can proceed with release.`);
 		process.exit(0);
 	}
 } catch (error) {
