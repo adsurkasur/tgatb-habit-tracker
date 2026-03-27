@@ -68,12 +68,7 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void configureEdgeToEdge(Window window) {
-        if (Build.VERSION.SDK_INT < 35) {
-            WindowCompat.setDecorFitsSystemWindows(window, !fullscreenEnabled);
-        } else {
-            // Android 15+ defaults to edge-to-edge; avoid using deprecated setDecorFitsSystemWindows.
-            // Keep fullscreen semantics via insets and controller behavior.
-        }
+        WindowCompat.setDecorFitsSystemWindows(window, !fullscreenEnabled);
     }
 
     private static void installStatusBarHeightCssVarBridge(Activity activity, View decor) {
@@ -165,13 +160,11 @@ public class SystemUiPlugin extends Plugin {
     private static void applyColorsAndroid15Plus(Window window, int purple) {
         View decorView = window.getDecorView();
         decorView.setOnApplyWindowInsetsListener((view, insets) -> {
-            // Android 15+ recommends drawing behind status/navigation bars instead of directly setting their colors.
             view.setBackgroundColor(purple);
             return insets;
         });
-
-        // Keep appearance policy but avoid deprecated direct color APIs on 35+.
-        // Legacy colors are handled in applyColorsLegacy below for older Android versions.
+        try { window.setStatusBarColor(purple); } catch (Throwable ignored) {}
+        tintNavBars(window, purple, true);
     }
 
     private static void applyColorsLegacy(Window window, int purple) {
