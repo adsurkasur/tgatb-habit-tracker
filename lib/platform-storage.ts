@@ -48,7 +48,11 @@ export const PlatformStorage = {
     if (Capacitor.isNativePlatform()) {
       const { Preferences } = await import('@capacitor/preferences');
       const res = await Preferences.get({ key });
-      return res.value ?? null;
+      if (res.value != null) {
+        return res.value;
+      }
+      // Bootstrap compatibility: fall back to localStorage mirror when Preferences has no value yet.
+      return localStorage.getItem(key);
     }
     return localStorage.getItem(key);
   },
@@ -61,6 +65,8 @@ export const PlatformStorage = {
     if (Capacitor.isNativePlatform()) {
       const { Preferences } = await import('@capacitor/preferences');
       await Preferences.set({ key, value });
+      // Keep a synchronous mirror for early bootstrap scripts (theme, locale).
+      localStorage.setItem(key, value);
       return;
     }
     localStorage.setItem(key, value);
@@ -74,6 +80,7 @@ export const PlatformStorage = {
     if (Capacitor.isNativePlatform()) {
       const { Preferences } = await import('@capacitor/preferences');
       await Preferences.remove({ key });
+      localStorage.removeItem(key);
       return;
     }
     localStorage.removeItem(key);

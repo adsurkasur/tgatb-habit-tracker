@@ -72,7 +72,11 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
     }
 
     const nextPath = withLocalePath(pathname || "/", nextLanguage);
-    window.location.assign(nextPath);
+    try {
+      router.replace(nextPath);
+    } catch {
+      window.location.assign(nextPath);
+    }
   };
 
   const handleOpenLanguageModal = () => {
