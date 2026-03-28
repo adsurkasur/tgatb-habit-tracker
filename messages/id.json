@@ -478,6 +478,7 @@
     "haptic": {
       "title": "Getaran",
       "supported": "Bergetar saat berinteraksi",
+      "appOnly": "Hanya tersedia di Aplikasi",
       "notSupported": "Tidak didukung di perangkat ini",
       "off": "Mati",
       "profileLabel": "Rasa",

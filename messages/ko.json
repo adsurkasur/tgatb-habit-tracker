@@ -497,7 +497,8 @@
         "punchy": {
           "label": "펀치감 있는"
         }
-      }
+      },
+      "appOnly": "Only available in the App"
     }
   },
   "HelpSupportSettings": {

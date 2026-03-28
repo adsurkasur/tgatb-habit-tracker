@@ -497,7 +497,8 @@
         "punchy": {
           "label": "Dynamique"
         }
-      }
+      },
+      "appOnly": "Only available in the App"
     }
   },
   "HelpSupportSettings": {

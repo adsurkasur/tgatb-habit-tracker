@@ -478,6 +478,7 @@
     "haptic": {
       "title": "Haptic Feedback",
       "supported": "Vibrate on interactions",
+      "appOnly": "Only available in the App",
       "notSupported": "Not supported on this device",
       "off": "Off",
       "profileLabel": "Feel",

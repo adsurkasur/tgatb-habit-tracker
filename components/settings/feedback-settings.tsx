@@ -23,7 +23,8 @@ interface FeedbackSettingsProps {
 export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSettingsProps) {
   const t = useTranslations("FeedbackSettings");
   const isNativeApp = Capacitor.isNativePlatform();
-  const hapticsAvailable = isNativeApp && isHapticsSupported();
+  const supportsHaptics = isHapticsSupported();
+  const hapticsAvailable = isNativeApp && supportsHaptics;
   const hapticEnabled = hapticsAvailable && settings.hapticEnabled !== false;
   const activeProfile = settings.hapticProfile ?? "balanced";
 
@@ -77,8 +78,10 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
               <div>
                 <span className="font-medium">{t("haptic.title")}</span>
                 <p className="text-sm text-muted-foreground">
-                  {!hapticsAvailable
-                    ? t("haptic.notSupported")
+                  {!isNativeApp
+                    ? t("haptic.appOnly")
+                    : !supportsHaptics
+                      ? t("haptic.notSupported")
                     : hapticEnabled
                       ? t(`haptic.profileDescriptions.${activeProfile}`)
                       : t("haptic.off")}

@@ -497,7 +497,8 @@
         "punchy": {
           "label": "パンチの効いた"
         }
-      }
+      },
+      "appOnly": "Only available in the App"
     }
   },
   "HelpSupportSettings": {

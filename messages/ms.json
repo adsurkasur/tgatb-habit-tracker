@@ -497,7 +497,8 @@
         "punchy": {
           "label": "Punchy"
         }
-      }
+      },
+      "appOnly": "Only available in the App"
     }
   },
   "HelpSupportSettings": {

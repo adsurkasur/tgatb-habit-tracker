@@ -497,7 +497,8 @@
         "punchy": {
           "label": "Con garra"
         }
-      }
+      },
+      "appOnly": "Only available in the App"
     }
   },
   "HelpSupportSettings": {
