@@ -1,6 +1,634 @@
-# Changelog
+﻿# Changelog
 
 All notable changes to this project will be documented in this file.
+
+## 1.0.1.55 - 2026-03-28
+
+**Overview:**
+Latest stabilization release focused on locale/native compatibility, startup reliability, and unified system UI behavior.
+
+### Changes (1.0.1.55)
+
+- **Platform stability:** Hardened Android and Capacitor startup paths, loading behavior, cache/boot reliability, and WebView lifecycle handling.
+- **System UI and fullscreen:** Unified status/navigation bar behavior with theme-aware colors, improved edge-to-edge behavior, and better dark/light consistency.
+- **Auth and cloud reliability:** Improved Google sign-in flows, cancellation handling, token/session handling, and Google Drive import/export robustness.
+- **Internationalization:** Expanded locale routing and translations, improved language selection/runtime sync, and strengthened i18n operations/documentation.
+- **UX and settings polish:** Refined dialogs, loading overlays, navigation behavior, feedback states, and settings organization for mobile and desktop.
+- **Import/export and data safety:** Strengthened bundle validation, schema checks, error handling, and backup/restore user feedback.
+- **Build, CI/CD, and release tooling:** Improved release workflows, version automation, dependency updates, and CI reliability.
+- **Code quality and maintainability:** Ongoing refactors, type-safety improvements, cleanup of legacy paths, and documentation updates.
+
+### Disclaimer
+
+- The changelog sections from `0.4.0.3` through `1.0.1.55` below were generated with AI from tag-to-tag commit analysis and may not fully represent every real-world release condition.
+
+### Detailed Releases (AI-Assisted, Standardized Format)
+
+## 1.0.1.9 - 2026-03-26
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (1.0.1.9)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 1.0.1.8 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.7 and 1.0.1.8.
+
+### Changes (1.0.1.8)
+
+- feat: Enhance settings management with backward compatibility for legacy storage keys and immediate theme application
+
+---
+
+## 1.0.1.7 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.6 and 1.0.1.7.
+
+### Changes (1.0.1.7)
+
+- feat: Enhance theme management with dynamic system UI updates and theme-aware colors
+- Revert to 25f3806f66d338120c158d19589f83cfb93a829f
+
+---
+
+## 1.0.1.6 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.5 and 1.0.1.6.
+
+### Changes (1.0.1.6)
+
+- feat: Implement core application UI, habit management features, and system UI integration, including various dialogs, cards, and system bar handling.
+
+---
+
+## 1.0.1.5 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.4 and 1.0.1.5.
+
+### Changes (1.0.1.5)
+
+- feat: Implement unified, theme-aware system bar management via a new hook and native Android plugin, removing static configurations from Capacitor.
+
+---
+
+## 1.0.1.4 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.3 and 1.0.1.4.
+
+### Changes (1.0.1.4)
+
+- feat: Implement unified system bar management with a new Capacitor plugin and React hook for dynamic theme and fullscreen control.
+
+---
+
+## 1.0.1.3 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.2 and 1.0.1.3.
+
+### Changes (1.0.1.3)
+
+- feat: introduce unified, theme-aware system bar management for Android, including dynamic status and navigation bar styling and fullscreen control.
+- fix: update system bar color handling for improved theme support and fallback logic
+
+---
+
+## 1.0.1.2 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.1.1 and 1.0.1.2.
+
+### Changes (1.0.1.2)
+
+- fix: enhance system bar theming with fullscreen and dark mode support
+
+---
+
+## 1.0.1.1 - 2026-03-26
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (1.0.1.1)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 1.0.1.0 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.0.3 and 1.0.1.0.
+
+### Changes (1.0.1.0)
+
+- fix: attempt to fix Google Play Console's compatibility and deprecation warnings and changed versioning code
+
+---
+
+## 1.0.0.3 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.0.2 and 1.0.0.3.
+
+### Changes (1.0.0.3)
+
+- feat(auth): implement AuthProvider and enhance toast notifications for authentication actions
+
+---
+
+## 1.0.0.2 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.0.1 and 1.0.0.2.
+
+### Changes (1.0.0.2)
+
+- chore: bump version to 1.0.0.2 in build.gradle, package.json, and package-lock.json
+- chore(deps): bump @capacitor-firebase/authentication from 8.0.1 to 8.1.0 (#45)
+- chore: update capacitor-save-as to latest version and mark several dependencies as peer dependencies
+
+---
+
+## 1.0.0.1 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 1.0.0.0 and 1.0.0.1.
+
+### Changes (1.0.0.1)
+
+- feat(language-selection): enhance locale sorting in language selection modal
+- fix(ci): sync lockfile with @swc/helpers required by npm ci
+- refactor(import-export): improve error messaging for better UX during data import failures
+
+---
+
+## 1.0.0.0 - 2026-03-26
+
+**Overview:**
+AI-assisted summary of changes between tags 0.8.0.5 and 1.0.0.0.
+
+### Changes (1.0.0.0)
+
+- preparing for v1.0.0.0
+- feat: improve language selection modal layout and responsiveness
+- Add localizations and translation script for habit tracker app
+
+---
+
+## 0.8.0.5 - 2026-03-21
+
+**Overview:**
+AI-assisted summary of changes between tags 0.8.0.4 and 0.8.0.5.
+
+### Changes (0.8.0.5)
+
+- feat: enhance getCompletedDatesSet to accurately reflect positive habit outcomes and ignore logs before habit creation
+- chore: upgrade GitHub Actions to use checkout@v6 and setup-node@v6 across workflows fix: remove unused useAuth import in Home component fix: update dependencies in CapacitorInit and AppDeviceSettings components refactor: clean up error handling in SecureStorage and TokenStorage
+
+---
+
+## 0.8.0.4 - 2026-03-18
+
+**Overview:**
+AI-assisted summary of changes between tags 0.8.0.3 and 0.8.0.4.
+
+### Changes (0.8.0.4)
+
+- chore: update Node.js version in CI and release workflows to 24.x; bump undici to 7.21.0 in package.json
+
+---
+
+## 0.8.0.3 - 2026-03-18
+
+**Overview:**
+AI-assisted summary of changes between tags 0.8.0.2 and 0.8.0.3.
+
+### Changes (0.8.0.3)
+
+- fix: downgrade eslint to version 9.39.4 for compatibility
+
+---
+
+## 0.8.0.2 - 2026-03-18
+
+**Overview:**
+AI-assisted summary of changes between tags 0.8.0.1 and 0.8.0.2.
+
+### Changes (0.8.0.2)
+
+- fix: retain local data scope on logout instead of switching to anonymous
+
+---
+
+## 0.8.0.1 - 2026-02-17
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (0.8.0.1)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 0.8.0.0 - 2026-02-17
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.5 and 0.8.0.0.
+
+### Changes (0.8.0.0)
+
+- chore: update dependencies to latest versions for improved performance and security
+
+---
+
+## 0.7.2.5 - 2026-02-17
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.4 and 0.7.2.5.
+
+### Changes (0.7.2.5)
+
+- fix(notifications): update scheduleAndroidReminder to fire notification only once
+
+---
+
+## 0.7.2.4 - 2026-02-17
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.3 and 0.7.2.4.
+
+### Changes (0.7.2.4)
+
+- feat(notifications): add script to apply notification icons for various densities
+
+---
+
+## 0.7.2.3 - 2026-02-17
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.2 and 0.7.2.3.
+
+### Changes (0.7.2.3)
+
+- fix(notifications): remove duplicate scheduling 'every' and rename conflicting drawable ic_notification
+- fix(notifications): remove duplicate scheduling 'every' and rename conflicting drawable ic_notification
+
+---
+
+## 0.7.2.2 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.1 and 0.7.2.2.
+
+### Changes (0.7.2.2)
+
+- feat: add FCM push notification icon and corresponding mipmap resources
+
+---
+
+## 0.7.2.1 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.2.0 and 0.7.2.1.
+
+### Changes (0.7.2.1)
+
+- feat: adjust minimum height of TopHabits and HabitBreakdown components for improved layout
+
+---
+
+## 0.7.2.0 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.1.0 and 0.7.2.0.
+
+### Changes (0.7.2.0)
+
+- feat: update Drawer component to use DrawerPrimitive.Handle for improved styling and add handleOnly prop in ResponsiveDialog
+- feat: enhance layout of HistoryDialog for better tab content display
+
+---
+
+## 0.7.1.0 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.0.1 and 0.7.1.0.
+
+### Changes (0.7.1.0)
+
+- feat: improve audio playback precision with audio-clock scheduling and enhance tone functions
+- feat: enhance haptic feedback functions with async support and detailed patterns
+- feat: update button press feedback and rename current streaks to combined streak
+
+---
+
+## 0.7.0.1 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.7.0.0 and 0.7.0.1.
+
+### Changes (0.7.0.1)
+
+- feat: add empty state message to HabitBreakdown component
+
+---
+
+## 0.7.0.0 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.2.0 and 0.7.0.0.
+
+### Changes (0.7.0.0)
+
+- feat: integrate FeedbackSettings component into SettingsDialog and update feedback descriptions
+- feat: add feedback button press functionality across various settings components
+- feat: add global button press feedback across UI components and implement feedback settings synchronization
+
+---
+
+## 0.6.2.0 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.1.3 and 0.6.2.0.
+
+### Changes (0.6.2.0)
+
+- feat: update weekday multi-select layout to use grid for improved responsiveness
+- feat: implement haptic feedback support and sound module for enhanced user experience
+- feat: refactor feedback settings and haptic feedback handling
+
+---
+
+## 0.6.1.3 - 2026-02-16
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.1.2 and 0.6.1.3.
+
+### Changes (0.6.1.3)
+
+- feat: enhance account management and feedback systems
+- feat: Implement account-scoped storage and auto-finalization for habit logs
+- feat: Add notification icon generation script and new PNG icons
+
+---
+
+## 0.6.1.2 - 2026-02-14
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.1.1 and 0.6.1.2.
+
+### Changes (0.6.1.2)
+
+- fix: Improves navigation for policy links and input accessibility
+
+---
+
+## 0.6.1.1 - 2026-02-14
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.1.0 and 0.6.1.1.
+
+### Changes (0.6.1.1)
+
+- fix: Adds native notification and alarm support; improves UX
+
+---
+
+## 0.6.1.0 - 2026-02-13
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.0.1 and 0.6.1.0.
+
+### Changes (0.6.1.0)
+
+- fix: update default button text color for better visibility
+- fix: update notification dialog styles for improved layout and readability
+
+---
+
+## 0.6.0.1 - 2026-02-13
+
+**Overview:**
+AI-assisted summary of changes between tags 0.6.0.0 and 0.6.0.1.
+
+### Changes (0.6.0.1)
+
+- feat: enhance reminder scheduling with personalized messages based on user personality
+
+---
+
+## 0.6.0.0 - 2026-02-13
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.5.4 and 0.6.0.0.
+
+### Changes (0.6.0.0)
+
+- fix: update NotFound component styles for consistency and improved readability
+- fix: downgrade @capacitor/local-notifications to version 7.0.5 for compatibility
+- feat: enhance Daily Reminder section with collapsible time picker and improved layout
+
+---
+
+## 0.5.5.4 - 2026-02-13
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (0.5.5.4)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 0.5.5.3 - 2026-02-13
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (0.5.5.3)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 0.5.5.2 - 2026-02-12
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.5.1 and 0.5.5.2.
+
+### Changes (0.5.5.2)
+
+- fix: pin firebase-auth version to 23.1.0 to prevent runtime errors during Google Sign-In; update Google Auth logic for improved error handling and remove unused redirect flow
+
+---
+
+## 0.5.5.1 - 2026-02-09
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.5.0 and 0.5.5.1.
+
+### Changes (0.5.5.1)
+
+- feat: add rerelease script for managing Git tags
+- feat: implement useIsAndroid hook for platform detection
+- feat: add useIsAndroid hook to detect Android platform
+
+---
+
+## 0.5.5.0 - 2026-02-09
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.4.0 and 0.5.5.0.
+
+### Changes (0.5.5.0)
+
+- style: refine button positioning and improve layout in various components for better responsiveness
+- feat: integrate AddEntryDialog and EditEntryDialog into Home component for enhanced entry management refactor: streamline Drive folder management with dedicated helper functions for app folder operations test: improve Drive API integration tests with folder caching and legacy file handling
+
+---
+
+## 0.5.4.0 - 2026-02-08
+
+**Overview:**
+AI-assisted release checkpoint summary with no distinct non-release commit detected in this tag delta.
+
+### Changes (0.5.4.0)
+
+- Release checkpoint: no distinct non-release commits were detected for this tag range.
+
+---
+
+## 0.5.3.0 - 2026-02-08
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.2.2 and 0.5.3.0.
+
+### Changes (0.5.3.0)
+
+- style: improve layout of AddEntryDialog by fixing footer CTA positioning and enhancing tab responsiveness
+- style: enhance AddEntryDialog and ResponsiveDialog for improved layout and responsiveness
+- refactor: streamline modal management by removing mobile back navigation hooks from individual dialogs
+
+---
+
+## 0.5.2.2 - 2026-02-08
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.2.1 and 0.5.2.2.
+
+### Changes (0.5.2.2)
+
+- style: enhance layout of TabsContent in HistoryDialog for better overflow handling
+
+---
+
+## 0.5.2.1 - 2026-02-08
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.2.0 and 0.5.2.1.
+
+### Changes (0.5.2.1)
+
+- style: adjust CalendarTabContent layout for improved responsiveness
+- style: improve button styles and layout in AddEntryDialog and HistoryDialog components
+- style: enhance scrollbar design for better aesthetics and usability
+
+---
+
+## 0.5.2.0 - 2026-02-08
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.1.0 and 0.5.2.0.
+
+### Changes (0.5.2.0)
+
+- refactor: add cursor pointer to button elements for better UX
+- test: add matchMedia mock for jsdom compatibility
+
+---
+
+## 0.5.1.0 - 2026-02-08
+
+**Overview:**
+AI-assisted summary of changes between tags 0.5.0.0 and 0.5.1.0.
+
+### Changes (0.5.1.0)
+
+- refactor: replace MobileDialog with ResponsiveDialog for improved dialog handling
+
+---
+
+## 0.5.0.0 - 2026-02-07
+
+**Overview:**
+AI-assisted summary of changes between tags 0.4.1.1 and 0.5.0.0.
+
+### Changes (0.5.0.0)
+
+- refactor: standardize QRIS modal design and replace inline SVGs with lucide icons
+
+---
+
+## 0.4.1.1 - 2026-02-07
+
+**Overview:**
+AI-assisted summary of changes between tags 0.4.1.0 and 0.4.1.1.
+
+### Changes (0.4.1.1)
+
+- fix: update help text in bump-ver script to include 'help' argument
+
+---
+
+## 0.4.1.0 - 2026-02-07
+
+**Overview:**
+AI-assisted summary of changes between tags 0.4.0.4 and 0.4.1.0.
+
+### Changes (0.4.1.0)
+
+- fix: eliminate all 75 ESLint warnings with best-practice structural fixes
+- fix: use Next.js Link component for internal navigation in privacy policy
+
+---
+
+## 0.4.0.4 - 2026-02-07
+
+**Overview:**
+AI-assisted summary of changes between tags 0.4.0.3 and 0.4.0.4.
+
+### Changes (0.4.0.4)
+
+- style: standardize History/Donation dialogs + smooth card hover effects
+- style: standardize modal widths and fix Tailwind v4 class syntax
+
+---
+
+## 0.4.0.3 - 2026-02-07
+
+**Overview:**
+AI-assisted summary of changes between tags 0.4.0.2 and 0.4.0.3.
+
+### Changes (0.4.0.3)
+
+- feat: UI/UX improvements + fix mobile web Google sign-in
+- fix: remove changesNotSentForReview and add debug symbols to Play Store upload
+- docs: update all documentation for v0.4.0.2
+
+---
 
 ## 0.4.0.2 - 2026-02-07
 
@@ -15,9 +643,9 @@ Fix mobile Google sign-in and improve cancellation UX.
 
 ### Files Modified
 
-- `mobile/google-auth.ts` — added `useCredentialManager: false`, removed try-catch
-- `web/google-auth.ts` — removed try-catch
-- `hooks/use-auth.ts` — added `isAuthCancellation()` helper, cancellation-aware catch block
+- `mobile/google-auth.ts` - added `useCredentialManager: false`, removed try-catch
+- `web/google-auth.ts` - removed try-catch
+- `hooks/use-auth.ts` - added `isAuthCancellation()` helper, cancellation-aware catch block
 
 ---
 
@@ -35,15 +663,15 @@ Play Store compliance, domain migration, CI/CD improvements, and version automat
 ### Fixes (0.4.0.1)
 
 - **Upload workflow:** Removed `continue-on-error: true` from Play Store upload step (was masking failures). Added `changesNotSentForReview: true` and `status: completed`.
-- **sync-ver.cjs:** Fixed 4-part semver parsing (e.g., `0.4.0.1` → versionCode `400901`).
+- **sync-ver.cjs:** Fixed 4-part semver parsing (e.g., `0.4.0.1` -> versionCode `400901`).
 
 ### Files Modified
 
-- `app/privacy-policy/page.tsx` — new privacy policy page
-- `scripts/bump-ver.cjs` — new version bump script
-- `scripts/sync-ver.cjs` — 4-part version fix
-- `.github/workflows/upload-playstore.yml` — workflow hardening
-- Multiple files — domain migration from `tgatb.vercel.app` to `www.tgatb.click`
+- `app/privacy-policy/page.tsx` - new privacy policy page
+- `scripts/bump-ver.cjs` - new version bump script
+- `scripts/sync-ver.cjs` - 4-part version fix
+- `.github/workflows/upload-playstore.yml` - workflow hardening
+- Multiple files - domain migration from `tgatb.vercel.app` to `www.tgatb.click`
 
 ---
 
@@ -60,9 +688,9 @@ Major upgrade: Next.js 16, Tailwind v4 migration, dependency upgrades, and UX/mo
 
 ### Files Modified (Selected)
 
-- `components/habit-card.tsx` — refactored motion architecture, surface owns visuals, and fixed empty state.
-- `app/globals.css` — updated habit card hover selectors and motion properties.
-- `package.json` — dependency upgrades.
+- `components/habit-card.tsx` - refactored motion architecture, surface owns visuals, and fixed empty state.
+- `app/globals.css` - updated habit card hover selectors and motion properties.
+- `package.json` - dependency upgrades.
 
 ---
 
@@ -77,13 +705,13 @@ Patch release improving auto-sync reliability and UX. This update hardens the au
 - **Network-aware retries:** Pending syncs are automatically retried when the device regains connectivity (silent background retry by default).
 - **Loading overlay for sync:** Global loading overlay is shown during sync operations to provide consistent feedback; this can be suppressed for silent/background retries.
 - **Toast UX:** Coalesced success toasts to avoid repetition, and suppressed duplicate import + autosync toasts. Background retries are quieter and show a single aggregated failure message.
-- **Auth handling:** Special-case handling for Drive 401 responses — retries stop and user is prompted to re-authenticate; mobile behavior clears invalid tokens on 401 as implemented previously.
+- **Auth handling:** Special-case handling for Drive 401 responses - retries stop and user is prompted to re-authenticate; mobile behavior clears invalid tokens on 401 as implemented previously.
 - **API additions:** `pushNow` now accepts options (`payload`, `showToast`, `force`) to distinguish manual vs background syncs.
 
 ### Files Modified
 
-- `hooks/use-cloud-sync.ts` — added backoff, persistence, mutex, loading integration, and toast coalescing.
-- `hooks/use-habits.ts` — suppressed autosync toast after import to avoid duplicate toasts.
+- `hooks/use-cloud-sync.ts` - added backoff, persistence, mutex, loading integration, and toast coalescing.
+- `hooks/use-habits.ts` - suppressed autosync toast after import to avoid duplicate toasts.
 
 ### Notes
 
@@ -808,7 +1436,7 @@ Android system bar theming groundwork and minor native tweaks.
 
 ### Next (0.2.1)
 
-- Revisit navigation gesture pill background & immersive edge in a focused follow-up (0.2.2) with optional fallback to solid 3‑button bar styling.
+- Revisit navigation gesture pill background & immersive edge in a focused follow-up (0.2.2) with optional fallback to solid 3â€‘button bar styling.
 
 ## 0.2.0 - 2025-08-08
 
@@ -854,3 +1482,10 @@ Initial release.
 - Initial release.
 
 - Android: edge-to-edge support and navigation bar management to enhance theme responsiveness.
+
+
+
+
+
+
+
