@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur。版权所有。"
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "连胜庆祝",
+    "effects": {
+      "title": "效果",
+      "description": "显示里程碑庆祝叠加层和五彩纸屑。"
+    },
+    "sound": {
+      "title": "庆祝声音",
+      "description": "达到里程碑时播放庆祝声音。"
+    },
+    "haptics": {
+      "title": "庆祝触觉反馈",
+      "description": "达到里程碑时播放庆祝振动。"
+    },
+    "motion": {
+      "title": "动画",
+      "description": "控制庆祝动画的行为。",
+      "placeholder": "选择动画",
+      "options": {
+        "system": "跟随系统",
+        "full": "完整动画",
+        "reduced": "减少动画"
+      }
+    },
+    "confetti": {
+      "title": "五彩纸屑强度",
+      "description": "选择五彩纸屑的密度。",
+      "placeholder": "选择强度",
+      "options": {
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      }
+    }
   }
 }

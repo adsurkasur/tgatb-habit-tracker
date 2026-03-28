@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. สงวนลิขสิทธิ์."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "การเฉลิมฉลองชุด",
+    "effects": {
+      "title": "เอฟเฟกต์",
+      "description": "แสดงการเฉลิมฉลองไมล์สโตนและเศษกระดาษ"
+    },
+    "sound": {
+      "title": "เสียงเฉลิมฉลอง",
+      "description": "เล่นเสียงเฉลิมฉลองเมื่อถึงไมล์สโตน"
+    },
+    "haptics": {
+      "title": "ระบบสั่นเสียงเฉลิมฉลอง",
+      "description": "เล่นการสั่นคชเฉลิมฉลองเมื่อถึงไมล์สโตน"
+    },
+    "motion": {
+      "title": "การเคลื่อนไหว",
+      "description": "ควบคุมพฤติกรรมการเคลื่อนไหวของการเฉลิมฉลอง",
+      "placeholder": "เลือกการเคลื่อนไหว",
+      "options": {
+        "system": "ตามระบบ",
+        "full": "การเคลื่อนไหวเต็ม",
+        "reduced": "การเคลื่อนไหวลดลง"
+      }
+    },
+    "confetti": {
+      "title": "ความเข้มของเศษกระดาษ",
+      "description": "เลือกความหนาแน่นของเศษกระดาษ",
+      "placeholder": "เลือกความเข้ม",
+      "options": {
+        "low": "ต่ำ",
+        "medium": "ปานกลาง",
+        "high": "สูง"
+      }
+    }
   }
 }

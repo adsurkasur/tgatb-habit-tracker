@@ -17,6 +17,7 @@ import { ResponsiveSettings } from "@/components/responsive-settings";
 import { ContentWrapper } from "@/components/content-wrapper";
 import { WelcomeOverlay } from "@/components/welcome-overlay";
 import { OfflineHeaderIndicator } from "@/components/offline-header-indicator";
+import { StreakCelebrationOverlay } from "@/components/streak-celebration-overlay";
 import { useHabits } from "@/hooks/use-habits";
 import { hasOpenModals, closeTopModal } from "@/hooks/use-mobile-back-navigation";
 import { useWelcomeOverlay } from "@/hooks/use-welcome-overlay";
@@ -44,6 +45,9 @@ export default function Home() {
     goodHabits,
     badHabits,
     settings,
+    streakCelebration,
+    streakCelebrationReducedMotion,
+    streakCelebrationConfettiCount,
     addHabit,
     updateHabit,
     deleteHabit,
@@ -57,6 +61,8 @@ export default function Home() {
     updateSettings,
     addOrUpdateLog,
     removeLog,
+    dismissStreakCelebration,
+    previewStreakCelebration,
   } = useHabits();
 
   // Theme context for instant dark mode update
@@ -107,6 +113,17 @@ export default function Home() {
   useEffect(() => {
     setIsDark(settings.darkMode);
   }, [settings.darkMode, setIsDark]);
+
+  // Dev preview: /?action=celebrate triggers the full celebration pipeline quickly.
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (process.env.NODE_ENV === "production") return;
+
+    const query = new URLSearchParams(window.location.search);
+    if (query.get("action") !== "celebrate") return;
+
+    previewStreakCelebration();
+  }, [previewStreakCelebration]);
 
   // Back again to exit logic (Android only) - MOVED after settings are available
   const lastBackPressRef = useRef<number>(0);
@@ -535,6 +552,17 @@ export default function Home() {
           onComplete={completeWelcome}
           hasHabits={(goodHabits.length + badHabits.length) > 0}
           onStepChange={setWelcomeStep}
+        />
+
+        <StreakCelebrationOverlay
+          open={!!streakCelebration}
+          weeks={streakCelebration?.milestoneWeeks ?? 1}
+          streak={streakCelebration?.streak ?? 7}
+          habitName={streakCelebration?.habitName ?? "Habit"}
+          quoteKey={streakCelebration?.quoteKey ?? "caesar-veni-vidi-vici"}
+          reducedMotion={streakCelebrationReducedMotion}
+          confettiCount={streakCelebrationConfettiCount}
+          onClose={dismissStreakCelebration}
         />
       </div>
       </ContentWrapper>

@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 एडसुरकासुर। सर्वाधिकार सुरक्षित।"
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "धारा समारोह",
+    "effects": {
+      "title": "प्रभाव",
+      "description": "मील का पत्थर समारोह ओवरले और कन्फेटी दिखाएं।"
+    },
+    "sound": {
+      "title": "समारोह की आवाज़",
+      "description": "किसी मील का पत्थर तक पहुंचने पर समारोह की आवाज़ बजाएं।"
+    },
+    "haptics": {
+      "title": "समारोह हैप्टिक",
+      "description": "किसी मील का पत्थर तक पहुंचने पर उत्सव हैप्टिक बजाएं।"
+    },
+    "motion": {
+      "title": "गति",
+      "description": "समारोह एनिमेशन व्यवहार को नियंत्रित करें।",
+      "placeholder": "गति चुनें",
+      "options": {
+        "system": "सिस्टम का पालन करें",
+        "full": "पूर्ण गति",
+        "reduced": "कम गति"
+      }
+    },
+    "confetti": {
+      "title": "कन्फेटी तीव्रता",
+      "description": "कन्फेटी कितनी घनी होनी चाहिए यह चुनें।",
+      "placeholder": "तीव्रता चुनें",
+      "options": {
+        "low": "कम",
+        "medium": "मध्यम",
+        "high": "अधिक"
+      }
+    }
   }
 }

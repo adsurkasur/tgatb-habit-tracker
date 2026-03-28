@@ -583,6 +583,19 @@
   "LoadingOverlay": {
     "loading": "Loading..."
   },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks, plural, one {# Week Streak!} other {# Weeks Streak!}}",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today’s Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
   "WelcomeOverlay": {
     "stepCounter": "Step {current} of {total}",
     "steps": {
@@ -825,6 +838,41 @@
     },
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. All rights reserved."
+    }
+  },
+  "CelebrationSettings": {
+    "title": "Streak Celebration",
+    "effects": {
+      "title": "Effects",
+      "description": "Show milestone celebration overlay and confetti."
+    },
+    "sound": {
+      "title": "Celebration Sound",
+      "description": "Play a celebration sound when a milestone is reached."
+    },
+    "haptics": {
+      "title": "Celebration Haptics",
+      "description": "Play celebratory haptics when a milestone is reached."
+    },
+    "motion": {
+      "title": "Motion",
+      "description": "Control celebration animation behavior.",
+      "placeholder": "Select motion",
+      "options": {
+        "system": "Follow system",
+        "full": "Full motion",
+        "reduced": "Reduced motion"
+      }
+    },
+    "confetti": {
+      "title": "Confetti Intensity",
+      "description": "Choose how dense the confetti should be.",
+      "placeholder": "Select intensity",
+      "options": {
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High"
+      }
     }
   }
 }

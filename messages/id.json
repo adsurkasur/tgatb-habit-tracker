@@ -583,6 +583,19 @@
   "LoadingOverlay": {
     "loading": "Memuat..."
   },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "Streak {weeks} Minggu!",
+    "subtitle": "{habitName} telah mencapai {streak} hari. Pertahankan momentumnya.",
+    "quoteLabel": "Kutipan Hari Ini",
+    "dismiss": "Mantap",
+    "quotes": {
+      "rise": "Janji kecil yang ditepati setiap hari membangun momentum besar.",
+      "oneMore": "Saat kamu hadir satu hari lagi, masa depanmu jadi makin jelas.",
+      "consistency": "Konsistensi mengubah usaha menjadi identitas."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
   "WelcomeOverlay": {
     "stepCounter": "Langkah {current} dari {total}",
     "steps": {
@@ -825,6 +838,41 @@
     },
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Semua hak dilindungi."
+    }
+  },
+  "CelebrationSettings": {
+    "title": "Perayaan Streak",
+    "effects": {
+      "title": "Efek",
+      "description": "Tampilkan overlay perayaan milestone dan konfeti."
+    },
+    "sound": {
+      "title": "Suara Perayaan",
+      "description": "Putar suara perayaan saat milestone tercapai."
+    },
+    "haptics": {
+      "title": "Haptics Perayaan",
+      "description": "Putar getaran perayaan saat milestone tercapai."
+    },
+    "motion": {
+      "title": "Gerakan",
+      "description": "Atur perilaku animasi perayaan.",
+      "placeholder": "Pilih gerakan",
+      "options": {
+        "system": "Ikuti sistem",
+        "full": "Gerakan penuh",
+        "reduced": "Gerakan dikurangi"
+      }
+    },
+    "confetti": {
+      "title": "Intensitas Konfeti",
+      "description": "Pilih seberapa padat konfeti ditampilkan.",
+      "placeholder": "Pilih intensitas",
+      "options": {
+        "low": "Rendah",
+        "medium": "Sedang",
+        "high": "Tinggi"
+      }
     }
   }
 }

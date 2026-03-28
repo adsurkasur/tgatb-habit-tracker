@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 Адсуркасур. Все права защищены."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Празднование серии",
+    "effects": {
+      "title": "Эффекты",
+      "description": "Показывать наложение праздничного достижения и конфетти."
+    },
+    "sound": {
+      "title": "Звук праздника",
+      "description": "Воспроизводить звук праздника при достижении верстного столба."
+    },
+    "haptics": {
+      "title": "Вибрация праздника",
+      "description": "Воспроизводить вибрацию праздника при достижении верстного столба."
+    },
+    "motion": {
+      "title": "Движение",
+      "description": "Управление поведением анимации праздника.",
+      "placeholder": "Выбрать движение",
+      "options": {
+        "system": "Следить за системой",
+        "full": "Полное движение",
+        "reduced": "Сокращённое движение"
+      }
+    },
+    "confetti": {
+      "title": "Интенсивность конфетти",
+      "description": "Выберите плотность конфетти.",
+      "placeholder": "Выбрать интенсивность",
+      "options": {
+        "low": "Низкая",
+        "medium": "Средняя",
+        "high": "Высокая"
+      }
+    }
   }
 }

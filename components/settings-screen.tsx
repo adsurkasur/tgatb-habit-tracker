@@ -8,6 +8,7 @@ import { HabitManagementSettings } from '@/components/settings/habit-management-
 import { AccountDataSettings } from '@/components/settings/account-data-settings';
 import { AppDeviceSettings } from '@/components/settings/app-device-settings';
 import { FeedbackSettings } from '@/components/settings/feedback-settings';
+import { CelebrationSettings } from '@/components/settings/celebration-settings';
 import { HelpSupportSettings } from '@/components/settings/help-support-settings';
 import { useTranslations } from 'next-intl';
 
@@ -88,6 +89,11 @@ export function SettingsScreen({
         />
 
         <FeedbackSettings
+          settings={settings}
+          onUpdateSettings={onUpdateSettings}
+        />
+
+        <CelebrationSettings
           settings={settings}
           onUpdateSettings={onUpdateSettings}
         />

@@ -44,6 +44,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           soundEnabled: true,
           hapticEnabled: true,
           hapticProfile: "balanced",
+          celebrationEffectsEnabled: true,
+          celebrationSoundEnabled: true,
+          celebrationHapticsEnabled: true,
+          celebrationMotion: "system",
+          celebrationConfettiIntensity: "medium",
         };
         const mergedSettings = { ...defaults, ...settings };
         const darkMode = mergedSettings.darkMode;
@@ -98,6 +103,11 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           soundEnabled: true,
           hapticEnabled: true,
           hapticProfile: "balanced",
+          celebrationEffectsEnabled: true,
+          celebrationSoundEnabled: true,
+          celebrationHapticsEnabled: true,
+          celebrationMotion: "system",
+          celebrationConfettiIntensity: "medium",
         };
         const mergedSettings = { ...defaults, ...currentSettings };
         await HabitStorage.saveSettings({ ...mergedSettings, darkMode });

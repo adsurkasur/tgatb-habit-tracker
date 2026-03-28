@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 أدسوركاسور. جميع الحقوق محفوظة."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "احتفال الإنجاز",
+    "effects": {
+      "title": "المؤثرات",
+      "description": "عرض طبقة احتفال الإنجاز والألعاب النارية."
+    },
+    "sound": {
+      "title": "صوت الاحتفال",
+      "description": "تشغيل صوت احتفال عند الوصول إلى إنجاز."
+    },
+    "haptics": {
+      "title": "اهتزاز الاحتفال",
+      "description": "تشغيل اهتزاز احتفالي عند الوصول إلى إنجاز."
+    },
+    "motion": {
+      "title": "الحركة",
+      "description": "التحكم في سلوك رسم الحركة في الاحتفال.",
+      "placeholder": "اختر الحركة",
+      "options": {
+        "system": "اتبع النظام",
+        "full": "حركة كاملة",
+        "reduced": "حركة مخفضة"
+      }
+    },
+    "confetti": {
+      "title": "شدة الألعاب النارية",
+      "description": "اختر كثافة الألعاب النارية.",
+      "placeholder": "اختر الشدة",
+      "options": {
+        "low": "منخفضة",
+        "medium": "متوسطة",
+        "high": "عالية"
+      }
+    }
   }
 }

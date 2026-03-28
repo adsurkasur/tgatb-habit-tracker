@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Reservados todos los derechos."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Celebración de Modas",
+    "effects": {
+      "title": "Efectos",
+      "description": "Mostrar la superposición de celebración hito y confeti."
+    },
+    "sound": {
+      "title": "Sonido de Celebración",
+      "description": "Reproducir un sonido de celebración cuando se alcanza un hito."
+    },
+    "haptics": {
+      "title": "Háptica de Celebración",
+      "description": "Reproducir vibraciones de celebración cuando se alcanza un hito."
+    },
+    "motion": {
+      "title": "Movimiento",
+      "description": "Controlar el comportamiento de la animación de celebración.",
+      "placeholder": "Seleccionar movimiento",
+      "options": {
+        "system": "Seguir sistema",
+        "full": "Movimiento completo",
+        "reduced": "Movimiento reducido"
+      }
+    },
+    "confetti": {
+      "title": "Intensidad de Confeti",
+      "description": "Elige la densidad del confeti.",
+      "placeholder": "Seleccionar intensidad",
+      "options": {
+        "low": "Baja",
+        "medium": "Media",
+        "high": "Alta"
+      }
+    }
   }
 }

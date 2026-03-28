@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Lahat ng karapatan ay nakalaan."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Pagdiriwang ng Serie",
+    "effects": {
+      "title": "Mga Epekto",
+      "description": "Ipakita ang milestone celebration overlay at confetti."
+    },
+    "sound": {
+      "title": "Tunog ng Pagdiriwang",
+      "description": "Maglarawan ng tunog ng pagdiriwang kapag naabot ang isang milestone."
+    },
+    "haptics": {
+      "title": "Haptic ng Pagdiriwang",
+      "description": "Maglarawan ng pagdiriwang haptics kapag naabot ang isang milestone."
+    },
+    "motion": {
+      "title": "Paggalaw",
+      "description": "Kontrolin ang pag-uugali ng animation ng pagdiriwang.",
+      "placeholder": "Piliin ang paggalaw",
+      "options": {
+        "system": "Sundin ang sistema",
+        "full": "Buong paggalaw",
+        "reduced": "Nabawasang paggalaw"
+      }
+    },
+    "confetti": {
+      "title": "Intensity ng Confetti",
+      "description": "Pumili kung gaano kalabis ang confetti.",
+      "placeholder": "Piliin ang intensity",
+      "options": {
+        "low": "Mababa",
+        "medium": "Katamtaman",
+        "high": "Mataas"
+      }
+    }
   }
 }

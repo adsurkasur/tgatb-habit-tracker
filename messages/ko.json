@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 광고수르카수르. 모든 권리 보유."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "연속 달성 축하",
+    "effects": {
+      "title": "효과",
+      "description": "이정표 축하 오버레이 및 색종이를 표시합니다."
+    },
+    "sound": {
+      "title": "축하 사운드",
+      "description": "이정표에 도달했을 때 축하 사운드를 재생합니다."
+    },
+    "haptics": {
+      "title": "축하 햅틱",
+      "description": "이정표에 도달했을 때 축하 진동을 재생합니다."
+    },
+    "motion": {
+      "title": "모션",
+      "description": "축하 애니메이션 동작을 제어합니다.",
+      "placeholder": "모션 선택",
+      "options": {
+        "system": "시스템 따르기",
+        "full": "전체 모션",
+        "reduced": "감소된 모션"
+      }
+    },
+    "confetti": {
+      "title": "색종이 강도",
+      "description": "색종이의 밀도를 선택합니다.",
+      "placeholder": "강도 선택",
+      "options": {
+        "low": "낮음",
+        "medium": "중간",
+        "high": "높음"
+      }
+    }
   }
 }

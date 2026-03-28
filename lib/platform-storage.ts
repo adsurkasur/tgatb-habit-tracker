@@ -36,6 +36,11 @@ const defaultSettings = (): UserSettings => ({
   language: 'en',
   motivatorPersonality: 'positive',
   fullscreenMode: false,
+  celebrationEffectsEnabled: true,
+  celebrationSoundEnabled: true,
+  celebrationHapticsEnabled: true,
+  celebrationMotion: 'system',
+  celebrationConfettiIntensity: 'medium',
 });
 
 // Generic platform storage helper (Preferences on native, localStorage on web)

@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 アドスルカスール。無断転載を禁じます。"
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "ストリークのお祝い",
+    "effects": {
+      "title": "エフェクト",
+      "description": "マイルストーンのお祝いオーバーレイと紙吹雪を表示します。"
+    },
+    "sound": {
+      "title": "お祝いの音",
+      "description": "マイルストーンに到達したときにお祝いの音を再生します。"
+    },
+    "haptics": {
+      "title": "お祝いハプティック",
+      "description": "マイルストーンに到達したときにお祝いの振動を再生します。"
+    },
+    "motion": {
+      "title": "モーション",
+      "description": "お祝いアニメーションの動作を制御します。",
+      "placeholder": "モーションを選択",
+      "options": {
+        "system": "システムに従う",
+        "full": "フルモーション",
+        "reduced": "減少モーション"
+      }
+    },
+    "confetti": {
+      "title": "紙吹雪の強度",
+      "description": "紙吹雪の密度を選択します。",
+      "placeholder": "強度を選択",
+      "options": {
+        "low": "低",
+        "medium": "中",
+        "high": "高"
+      }
+    }
   }
 }

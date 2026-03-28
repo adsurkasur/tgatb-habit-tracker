@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Mọi quyền được bảo lưu."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Kỷ niệm dãy",
+    "effects": {
+      "title": "Hiệu ứng",
+      "description": "Hiển thị lớp phủ kỷ niệm mục tiêu và giấy rơi."
+    },
+    "sound": {
+      "title": "Âm thanh kỷ niệm",
+      "description": "Phát âm thanh kỷ niệm khi đạt được một mục tiêu."
+    },
+    "haptics": {
+      "title": "Rung kỷ niệm",
+      "description": "Phát rung kỷ niệm khi đạt được một mục tiêu."
+    },
+    "motion": {
+      "title": "Chuyển động",
+      "description": "Kiểm soát hành vi hoạt ảnh kỷ niệm.",
+      "placeholder": "Chọn chuyển động",
+      "options": {
+        "system": "Theo hệ thống",
+        "full": "Chuyển động đầy đủ",
+        "reduced": "Chuyển động giảm"
+      }
+    },
+    "confetti": {
+      "title": "Cường độ giấy rơi",
+      "description": "Chọn độ dày của giấy rơi.",
+      "placeholder": "Chọn cường độ",
+      "options": {
+        "low": "Thấp",
+        "medium": "Trung bình",
+        "high": "Cao"
+      }
+    }
   }
 }

@@ -4,6 +4,8 @@ export type HabitType = "good" | "bad";
 
 export type MotivatorPersonality = "positive" | "adaptive" | "harsh";
 export type HapticProfile = "subtle" | "balanced" | "punchy";
+export type CelebrationMotion = "system" | "full" | "reduced";
+export type CelebrationConfettiIntensity = "low" | "medium" | "high";
 
 export type HabitScheduleType = "daily" | "interval" | "weekly";
 
@@ -61,6 +63,16 @@ export interface UserSettings {
   hapticEnabled?: boolean;
   /** Semantic haptic profile intensity. */
   hapticProfile?: HapticProfile;
+  /** Master toggle for streak celebration effects. */
+  celebrationEffectsEnabled?: boolean;
+  /** Celebration-specific sound channel (respects global sound setting). */
+  celebrationSoundEnabled?: boolean;
+  /** Celebration-specific haptics channel (respects global haptic setting). */
+  celebrationHapticsEnabled?: boolean;
+  /** Celebration motion mode; system follows reduced-motion preference. */
+  celebrationMotion?: CelebrationMotion;
+  /** Celebration confetti intensity profile. */
+  celebrationConfettiIntensity?: CelebrationConfettiIntensity;
 }
 
 export const habitScheduleSchema = z.object({
@@ -114,6 +126,11 @@ export const userSettingsSchema = z.object({
   soundEnabled: z.boolean().optional(),
   hapticEnabled: z.boolean().optional(),
   hapticProfile: z.enum(["subtle", "balanced", "punchy"]).optional(),
+  celebrationEffectsEnabled: z.boolean().optional(),
+  celebrationSoundEnabled: z.boolean().optional(),
+  celebrationHapticsEnabled: z.boolean().optional(),
+  celebrationMotion: z.enum(["system", "full", "reduced"]).optional(),
+  celebrationConfettiIntensity: z.enum(["low", "medium", "high"]).optional(),
 });
 
 // Export bundle schema and types

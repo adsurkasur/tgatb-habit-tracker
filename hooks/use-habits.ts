@@ -12,7 +12,16 @@ import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
 import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
-import { feedbackHabitOutcome, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
+import { feedbackHabitOutcome, feedbackCelebration, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
+import {
+  evaluateStreakMilestoneCrossing,
+  getCelebrationConfettiCount,
+  isReducedCelebrationMotion,
+  shouldPlayCelebrationHaptics,
+  shouldPlayCelebrationSound,
+  shouldShowCelebrationEffects,
+  type StreakCelebrationPayload,
+} from "@/lib/streak-celebration";
 
 const defaultUserSettings: UserSettings = {
   darkMode: false,
@@ -23,6 +32,11 @@ const defaultUserSettings: UserSettings = {
   soundEnabled: true,
   hapticEnabled: true,
   hapticProfile: "balanced",
+  celebrationEffectsEnabled: true,
+  celebrationSoundEnabled: true,
+  celebrationHapticsEnabled: true,
+  celebrationMotion: "system",
+  celebrationConfettiIntensity: "medium",
 };
 
 function getInitialSettingsFromStorage(): UserSettings {
@@ -78,6 +92,7 @@ export function useHabits() {
   const { schedulePush, pushNow, pullOnce } = useCloudSync();
 
   const [settings, setSettings] = useState<UserSettings>(() => getInitialSettingsFromStorage());
+  const [streakCelebration, setStreakCelebration] = useState<StreakCelebrationPayload | null>(null);
   const { toast } = useToast();
   const { setIsDark } = useTheme();
 
@@ -260,21 +275,43 @@ export function useHabits() {
     const updatedHabit = updatedHabits.find(h => h.id === habitId);
     if (updatedHabit) {
       const streakIncremented = updatedHabit.streak > oldStreak;
+      const isPositiveOutcome = updatedHabit.type === "bad" ? !completed : completed;
+      const celebrationPayload = evaluateStreakMilestoneCrossing({
+        previousStreak: oldStreak,
+        nextStreak: updatedHabit.streak,
+        isPositiveOutcome,
+        habitId: updatedHabit.id,
+        habitName: updatedHabit.name,
+      });
+
       const feedbackOpts = {
         soundEnabled: settings.soundEnabled !== false,
         hapticEnabled: settings.hapticEnabled !== false,
         hapticProfile: settings.hapticProfile ?? "balanced",
       };
 
+      const hasCelebrationMilestone = !!celebrationPayload;
+
       if (updatedHabit.type === "good" && completed) {
-        feedbackHabitOutcome(feedbackOpts, "goodDone", streakIncremented);
+        feedbackHabitOutcome(feedbackOpts, "goodDone", streakIncremented && !hasCelebrationMilestone);
       } else if (updatedHabit.type === "good" && !completed) {
         feedbackHabitOutcome(feedbackOpts, "goodNotDone", streakIncremented);
       } else if (updatedHabit.type === "bad" && !completed) {
-        feedbackHabitOutcome(feedbackOpts, "badAvoided", streakIncremented);
+        feedbackHabitOutcome(feedbackOpts, "badAvoided", streakIncremented && !hasCelebrationMilestone);
       } else {
         feedbackHabitOutcome(feedbackOpts, "badDone", streakIncremented);
       }
+
+      if (celebrationPayload && shouldShowCelebrationEffects(settings)) {
+        setStreakCelebration(celebrationPayload);
+
+        feedbackCelebration({
+          soundEnabled: shouldPlayCelebrationSound(settings),
+          hapticEnabled: shouldPlayCelebrationHaptics(settings),
+          hapticProfile: settings.hapticProfile ?? "balanced",
+        });
+      }
+
       const message = Motivator.getMessage(
         settings.motivatorPersonality,
         completed,
@@ -288,6 +325,29 @@ export function useHabits() {
     }
     try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
+
+  const dismissStreakCelebration = useCallback(() => {
+    setStreakCelebration(null);
+  }, []);
+
+  const previewStreakCelebration = useCallback(() => {
+    setStreakCelebration({
+      milestoneId: "week1",
+      milestoneDays: 7,
+      milestoneWeeks: 1,
+      habitId: "preview",
+      habitName: "Momentum",
+      streak: 7,
+      quoteKey: "caesar-veni-vidi-vici",
+      triggeredAt: new Date().toISOString(),
+    });
+
+    feedbackCelebration({
+      soundEnabled: shouldPlayCelebrationSound(settings),
+      hapticEnabled: shouldPlayCelebrationHaptics(settings),
+      hapticProfile: settings.hapticProfile ?? "balanced",
+    });
+  }, [settings]);
 
   const undoHabitTracking = (habitId: string) => {
     const success = HabitStorage.undoTodayLog(habitId);
@@ -507,6 +567,9 @@ export function useHabits() {
     currentHabitIndex,
     navigationEvent,
     settings,
+    streakCelebration,
+    streakCelebrationReducedMotion: isReducedCelebrationMotion(settings),
+    streakCelebrationConfettiCount: getCelebrationConfettiCount(settings),
     addHabit,
     updateHabit,
     deleteHabit,
@@ -523,5 +586,7 @@ export function useHabits() {
     importData,
     addOrUpdateLog,
     removeLog,
+    dismissStreakCelebration,
+    previewStreakCelebration,
   };
 }

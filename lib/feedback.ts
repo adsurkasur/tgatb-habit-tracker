@@ -188,6 +188,17 @@ export function feedbackNavigation(): void {
   }
 }
 
+/** Celebration feedback for milestone overlays. */
+export function feedbackCelebration(opts: FeedbackOptions): void {
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+    hapticStreak();
+  }
+  if (opts.soundEnabled) {
+    playStreakSound();
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Global button press feedback (reads from module-level cache)
 // ---------------------------------------------------------------------------

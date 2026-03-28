@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Semua hak terpelihara."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Perayaan Rentetan",
+    "effects": {
+      "title": "Kesan",
+      "description": "Tunjukkan lapisan perayaan pencapaian dan confetti."
+    },
+    "sound": {
+      "title": "Bunyi Perayaan",
+      "description": "Mainkan bunyi perayaan apabila pencapaian dicapai."
+    },
+    "haptics": {
+      "title": "Haptics Perayaan",
+      "description": "Mainkan getaran perayaan apabila pencapaian dicapai."
+    },
+    "motion": {
+      "title": "Gerakan",
+      "description": "Kawal tingkah laku animasi perayaan.",
+      "placeholder": "Pilih gerakan",
+      "options": {
+        "system": "Ikut sistem",
+        "full": "Gerakan penuh",
+        "reduced": "Gerakan berkurangan"
+      }
+    },
+    "confetti": {
+      "title": "Keamatan Confetti",
+      "description": "Pilih seberapa padat confetti sepatutnya.",
+      "placeholder": "Pilih keamatan",
+      "options": {
+        "low": "Rendah",
+        "medium": "Sederhana",
+        "high": "Tinggi"
+      }
+    }
   }
 }

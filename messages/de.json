@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Alle Rechte vorbehalten."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Streak-Jubiläum",
+    "effects": {
+      "title": "Effekte",
+      "description": "Zeige Meilenstein-Jubiläumsüberlagerung und Konfetti."
+    },
+    "sound": {
+      "title": "Jubiläumssound",
+      "description": "Spiele einen Jubiläumssound ab, wenn ein Meilenstein erreicht wird."
+    },
+    "haptics": {
+      "title": "Jubiläums-Haptik",
+      "description": "Spiele festliche Vibrationen ab, wenn ein Meilenstein erreicht wird."
+    },
+    "motion": {
+      "title": "Bewegung",
+      "description": "Steuere das Animationsverhalten des Jubiläums.",
+      "placeholder": "Bewegung auswählen",
+      "options": {
+        "system": "Systemeinstellung folgen",
+        "full": "Vollständige Bewegung",
+        "reduced": "Reduzierte Bewegung"
+      }
+    },
+    "confetti": {
+      "title": "Konfetti-Intensität",
+      "description": "Wähle die Dichte des Konfettis.",
+      "placeholder": "Intensität auswählen",
+      "options": {
+        "low": "Niedrig",
+        "medium": "Mittel",
+        "high": "Hoch"
+      }
+    }
   }
 }

@@ -826,5 +826,53 @@
     "footer": {
       "copyright": "© 2025-2026 adsurkasur. Tous droits réservés."
     }
+  },
+  "StreakCelebration": {
+    "badge": "Milestone",
+    "title": "{weeks} Week Streak!",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "quoteLabel": "Today's Quote",
+    "dismiss": "Awesome",
+    "quotes": {
+      "rise": "Small promises kept daily become unstoppable momentum.",
+      "oneMore": "When you show up one more day, your future gets louder.",
+      "consistency": "Consistency turns effort into identity."
+    },
+    "quoteAttribution": "{author} • {language}"
+  },
+  "CelebrationSettings": {
+    "title": "Célébration de Série",
+    "effects": {
+      "title": "Effets",
+      "description": "Afficher la superposition de célébration de jalon et les confettis."
+    },
+    "sound": {
+      "title": "Son de Célébration",
+      "description": "Jouer un son de célébration lorsqu'un jalon est atteint."
+    },
+    "haptics": {
+      "title": "Haptique de Célébration",
+      "description": "Jouer les vibrations de célébration lorsqu'un jalon est atteint."
+    },
+    "motion": {
+      "title": "Mouvement",
+      "description": "Contrôler le comportement de l'animation de célébration.",
+      "placeholder": "Sélectionner le mouvement",
+      "options": {
+        "system": "Suivre le système",
+        "full": "Mouvement complet",
+        "reduced": "Mouvement réduit"
+      }
+    },
+    "confetti": {
+      "title": "Intensité des Confettis",
+      "description": "Choisir la densité des confettis.",
+      "placeholder": "Sélectionner l'intensité",
+      "options": {
+        "low": "Faible",
+        "medium": "Moyen",
+        "high": "Élevé"
+      }
+    }
   }
 }
