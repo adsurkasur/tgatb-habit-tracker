@@ -81,7 +81,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                       }
                       if (settings && typeof settings.language === "string" && settings.language.length > 0) {
                         document.documentElement.lang = settings.language;
-                        window.__TGATB_BOOT_LANGUAGE = settings.language;
                       }
                     } catch (_e) {
                       // Silent fail: if JSON parsing fails, just skip theme application
@@ -92,13 +91,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                 }
 
                 // Add app-loaded class when DOM ready (for loader gate)
-                document.addEventListener("DOMContentLoaded", function () {
+                var markAppLoaded = function () {
                   try {
                     if (document.body && !document.body.classList.contains("app-loaded")) {
                       document.body.classList.add("app-loaded");
                     }
                   } catch (_) {}
-                });
+                };
+
+                if (document.readyState === "loading") {
+                  document.addEventListener("DOMContentLoaded", markAppLoaded);
+                } else {
+                  markAppLoaded();
+                }
               })();
             `,
           }}

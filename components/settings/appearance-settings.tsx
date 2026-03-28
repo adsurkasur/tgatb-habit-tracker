@@ -10,7 +10,7 @@ import { useState } from "react";
 import { systemBarsUtils } from "@/hooks/use-system-bars-unified";
 import { feedbackButtonPress } from "@/lib/feedback";
 import { withLocalePath } from "@/i18n/pathname";
-import { routing, type AppLocale } from "@/i18n/routing";
+import { type AppLocale } from "@/i18n/routing";
 import { LanguageSelectionModal } from "@/components/language-selection-modal";
 
 function getLocaleDisplayName(localeCode: string, displayLocale: string): string {
@@ -71,6 +71,11 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
       // If persistence fails, route locale still updates and settings save path remains in onUpdateSettings.
     }
 
+    if (isNative) {
+      window.dispatchEvent(new CustomEvent("tgatb:locale-change", { detail: { locale: nextLanguage } }));
+      return;
+    }
+
     const nextPath = withLocalePath(pathname || "/", nextLanguage);
     try {
       router.replace(nextPath);
@@ -80,12 +85,6 @@ export function AppearanceSettings({ settings, onUpdateSettings }: AppearanceSet
   };
 
   const handleOpenLanguageModal = () => {
-    const currentPath = pathname || "/";
-    for (const locale of routing.locales) {
-      if (locale !== settings.language) {
-        void router.prefetch(withLocalePath(currentPath, locale));
-      }
-    }
     setLanguageModalOpen(true);
   };
 

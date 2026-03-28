@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect } from "react";
+import { Capacitor } from "@capacitor/core";
 
 type WorkboxLike = {
   addEventListener: (event: string, cb: (...args: unknown[]) => void) => void;
@@ -17,6 +18,20 @@ declare global {
 export function ServiceWorkerRegistration() {
   useEffect(() => {
     if (typeof window === 'undefined') return;
+
+    // Native Capacitor should not use web service workers.
+    // Stale SW precache can reference old hashed chunks and break startup/hydration.
+    if (Capacitor.isNativePlatform()) {
+      if ('serviceWorker' in navigator) {
+        void navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (const registration of registrations) {
+            void registration.unregister();
+          }
+        });
+      }
+      return;
+    }
+
     if ('serviceWorker' in navigator) {
       // Try Workbox registration first
       if (window.workbox) {

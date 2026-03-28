@@ -9,6 +9,7 @@ import { PWAInstallPrompt } from "@/components/pwa-install-prompt";
 import { ServiceWorkerRegistration } from "@/components/service-worker-registration";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
+import { Capacitor } from "@capacitor/core";
 import { NextIntlClientProvider } from "next-intl";
 import { HabitStorage } from "@/lib/habit-storage";
 import { initSentryClient } from "@/lib/sentry";
@@ -55,32 +56,21 @@ function getLocaleFromPathname(pathname: string): AppLocale | null {
   return segment && isValidLocale(segment) ? segment : null;
 }
 
-function getBootLocale(): AppLocale {
-  if (typeof window === "undefined") {
-    return routing.defaultLocale;
-  }
+function getPersistedLocale(): AppLocale | null {
+  if (typeof window === "undefined") return null;
 
   try {
-    const bootLang = (window as Window & { __TGATB_BOOT_LANGUAGE?: string }).__TGATB_BOOT_LANGUAGE;
-    if (bootLang && isValidLocale(bootLang)) {
-      return bootLang;
-    }
-
     const activeAccount = localStorage.getItem("tgatb_active_account") || "anonymous";
-    const scopedKey = `user_settings::${activeAccount}`;
-    const raw = localStorage.getItem(scopedKey) || localStorage.getItem("user_settings");
+    const raw =
+      localStorage.getItem(`user_settings::${activeAccount}`) ||
+      localStorage.getItem("user_settings");
 
-    if (raw) {
-      const parsed = JSON.parse(raw) as { language?: string };
-      if (parsed.language && isValidLocale(parsed.language)) {
-        return parsed.language;
-      }
-    }
+    if (!raw) return null;
+    const parsed = JSON.parse(raw) as { language?: string };
+    return parsed.language && isValidLocale(parsed.language) ? parsed.language : null;
   } catch {
-    // Fallback to default locale on malformed storage payloads.
+    return null;
   }
-
-  return routing.defaultLocale;
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -108,9 +98,44 @@ export function Providers({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
-  const [bootLocale] = useState<AppLocale>(() => getBootLocale());
   const pathname = usePathname() ?? "/";
-  const locale = getLocaleFromPathname(pathname) ?? bootLocale;
+  const pathLocale = getLocaleFromPathname(pathname);
+  const routeLocale = pathLocale ?? routing.defaultLocale;
+  const [locale, setLocale] = useState<AppLocale>(routeLocale);
+
+  useEffect(() => {
+    setLocale(routeLocale);
+  }, [routeLocale]);
+
+  useEffect(() => {
+    document.documentElement.lang = locale;
+  }, [locale]);
+
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) {
+      return;
+    }
+
+    // Avoid hydration mismatch: only apply persisted locale after mount.
+    const persistedLocale = getPersistedLocale();
+    if (persistedLocale) {
+      setLocale(persistedLocale);
+    }
+
+    const onLocaleChange = (event: Event) => {
+      const customEvent = event as CustomEvent<{ locale?: string }>;
+      const nextLocale = customEvent.detail?.locale;
+      if (nextLocale && isValidLocale(nextLocale)) {
+        setLocale(nextLocale);
+      }
+    };
+
+    window.addEventListener("tgatb:locale-change", onLocaleChange as EventListener);
+    return () => {
+      window.removeEventListener("tgatb:locale-change", onLocaleChange as EventListener);
+    };
+  }, []);
+
   const messages = messagesByLocale[locale] ?? enMessages;
 
 
