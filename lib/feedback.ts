@@ -23,6 +23,10 @@
 import {
   type HapticProfile,
   setHapticProfile,
+  hapticGoodDone,
+  hapticGoodNotDone,
+  hapticBadAvoided,
+  hapticBadDone,
   hapticSuccess,
   hapticStreak,
   hapticFailure,
@@ -75,6 +79,8 @@ export interface FeedbackOptions {
   hapticProfile?: HapticProfile;
 }
 
+export type HabitOutcomeFeedback = "goodDone" | "goodNotDone" | "badAvoided" | "badDone";
+
 function applyHapticProfile(profile?: HapticProfile): void {
   setHapticProfile(profile ?? _globalHapticProfile);
 }
@@ -105,6 +111,39 @@ export function feedbackTrackFailure(opts: FeedbackOptions): void {
     hapticFailure();
   }
   if (opts.soundEnabled) playFailureSound();
+}
+
+/** Emotion-aware feedback for habit outcomes (good/bad + done/not done). */
+export function feedbackHabitOutcome(
+  opts: FeedbackOptions,
+  outcome: HabitOutcomeFeedback,
+  streakIncremented: boolean,
+): void {
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+
+    if ((outcome === "goodDone" || outcome === "badAvoided") && streakIncremented) {
+      hapticStreak();
+    } else if (outcome === "goodDone") {
+      hapticGoodDone();
+    } else if (outcome === "goodNotDone") {
+      hapticGoodNotDone();
+    } else if (outcome === "badAvoided") {
+      hapticBadAvoided();
+    } else {
+      hapticBadDone();
+    }
+  }
+
+  if (opts.soundEnabled) {
+    if ((outcome === "goodDone" || outcome === "badAvoided") && streakIncremented) {
+      playStreakSound();
+    } else if (outcome === "goodDone" || outcome === "badAvoided") {
+      playSuccessSound();
+    } else {
+      playFailureSound();
+    }
+  }
 }
 
 /** Feedback for invalid / error action. */

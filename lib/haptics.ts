@@ -32,6 +32,10 @@ export type HapticEvent =
   | "button"
   | "selection"
   | "navigation"
+  | "goodDone"
+  | "goodNotDone"
+  | "badAvoided"
+  | "badDone"
   | "success"
   | "streak"
   | "undo"
@@ -49,6 +53,10 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
     button: [{ type: "impact", style: ImpactStyle.Light }],
     selection: [{ type: "selection" }],
     navigation: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Light, waitAfterMs: 10 }],
+    goodDone: [{ type: "impact", style: ImpactStyle.Light, waitAfterMs: 14 }, { type: "impact", style: ImpactStyle.Medium }],
+    goodNotDone: [{ type: "impact", style: ImpactStyle.Light }],
+    badAvoided: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 10 }],
+    badDone: [{ type: "notification", tone: NotificationType.Warning }],
     success: [{ type: "impact", style: ImpactStyle.Light }],
     streak: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 18 },
@@ -66,6 +74,10 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
     button: [{ type: "impact", style: ImpactStyle.Light }],
     selection: [{ type: "selection" }],
     navigation: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 12 }],
+    goodDone: [{ type: "impact", style: ImpactStyle.Light, waitAfterMs: 16 }, { type: "impact", style: ImpactStyle.Medium }],
+    goodNotDone: [{ type: "impact", style: ImpactStyle.Light, waitAfterMs: 12 }, { type: "impact", style: ImpactStyle.Light }],
+    badAvoided: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 12 }],
+    badDone: [{ type: "notification", tone: NotificationType.Warning }],
     success: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 20 },
       { type: "impact", style: ImpactStyle.Medium },
@@ -87,6 +99,10 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
     button: [{ type: "impact", style: ImpactStyle.Medium }],
     selection: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Light, waitAfterMs: 8 }],
     navigation: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 10 }],
+    goodDone: [{ type: "impact", style: ImpactStyle.Medium, waitAfterMs: 14 }, { type: "impact", style: ImpactStyle.Heavy }],
+    goodNotDone: [{ type: "impact", style: ImpactStyle.Light, waitAfterMs: 10 }, { type: "impact", style: ImpactStyle.Medium }],
+    badAvoided: [{ type: "selection" }, { type: "impact", style: ImpactStyle.Heavy, waitAfterMs: 10 }],
+    badDone: [{ type: "notification", tone: NotificationType.Warning }, { type: "impact", style: ImpactStyle.Medium }],
     success: [
       { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 18 },
       { type: "impact", style: ImpactStyle.Medium },
@@ -110,6 +126,10 @@ const webVibrationPatterns: Partial<Record<HapticEvent, number[]>> = {
   button: [8],
   selection: [6],
   navigation: [8, 10, 10],
+  goodDone: [10, 14, 12],
+  goodNotDone: [8, 12, 8],
+  badAvoided: [10, 8, 12],
+  badDone: [18, 20, 14],
   success: [10, 14, 12],
   streak: [12, 16, 12, 20, 18],
   undo: [8, 10, 8],
@@ -325,4 +345,20 @@ export async function hapticSelection(): Promise<void> {
 
 export async function hapticNavigation(): Promise<void> {
   await hapticEvent("navigation");
+}
+
+export async function hapticGoodDone(): Promise<void> {
+  await hapticEvent("goodDone");
+}
+
+export async function hapticGoodNotDone(): Promise<void> {
+  await hapticEvent("goodNotDone");
+}
+
+export async function hapticBadAvoided(): Promise<void> {
+  await hapticEvent("badAvoided");
+}
+
+export async function hapticBadDone(): Promise<void> {
+  await hapticEvent("badDone");
 }

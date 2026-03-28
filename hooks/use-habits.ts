@@ -12,7 +12,7 @@ import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
 import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
-import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
+import { feedbackHabitOutcome, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
 
 const defaultUserSettings: UserSettings = {
   darkMode: false,
@@ -259,18 +259,21 @@ export function useHabits() {
     setHabits(updatedHabits);
     const updatedHabit = updatedHabits.find(h => h.id === habitId);
     if (updatedHabit) {
-      // Determine if this was a "successful" track
-      const isSuccess = updatedHabit.type === "bad" ? !completed : completed;
       const streakIncremented = updatedHabit.streak > oldStreak;
       const feedbackOpts = {
         soundEnabled: settings.soundEnabled !== false,
         hapticEnabled: settings.hapticEnabled !== false,
         hapticProfile: settings.hapticProfile ?? "balanced",
       };
-      if (isSuccess) {
-        feedbackTrackSuccess(feedbackOpts, streakIncremented);
+
+      if (updatedHabit.type === "good" && completed) {
+        feedbackHabitOutcome(feedbackOpts, "goodDone", streakIncremented);
+      } else if (updatedHabit.type === "good" && !completed) {
+        feedbackHabitOutcome(feedbackOpts, "goodNotDone", streakIncremented);
+      } else if (updatedHabit.type === "bad" && !completed) {
+        feedbackHabitOutcome(feedbackOpts, "badAvoided", streakIncremented);
       } else {
-        feedbackTrackFailure(feedbackOpts);
+        feedbackHabitOutcome(feedbackOpts, "badDone", streakIncremented);
       }
       const message = Motivator.getMessage(
         settings.motivatorPersonality,

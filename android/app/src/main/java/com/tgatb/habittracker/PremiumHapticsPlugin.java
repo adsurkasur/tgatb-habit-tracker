@@ -97,6 +97,18 @@ public class PremiumHapticsPlugin extends Plugin {
             case "navigation":
                 playNavigation(profile);
                 return;
+            case "goodDone":
+                playGoodDone(profile);
+                return;
+            case "goodNotDone":
+                playGoodNotDone(profile);
+                return;
+            case "badAvoided":
+                playBadAvoided(profile);
+                return;
+            case "badDone":
+                playBadDone(profile);
+                return;
             case "success":
                 playSuccess(profile);
                 return;
@@ -158,6 +170,46 @@ public class PremiumHapticsPlugin extends Plugin {
             vibrateWaveform(new long[] {0, 8, 12, 10}, new int[] {0, 100, 0, 120});
         } else {
             vibrateWaveform(new long[] {0, 9, 14, 12}, new int[] {0, 140, 0, 165});
+        }
+    }
+
+    private void playGoodDone(String profile) {
+        if (PROFILE_PUNCHY.equals(profile)) {
+            vibrateWaveform(new long[] {0, 10, 12, 14}, new int[] {0, 180, 0, 220});
+        } else if (PROFILE_SUBTLE.equals(profile)) {
+            vibrateWaveform(new long[] {0, 8, 12, 10}, new int[] {0, 95, 0, 120});
+        } else {
+            vibrateWaveform(new long[] {0, 9, 14, 12}, new int[] {0, 140, 0, 175});
+        }
+    }
+
+    private void playGoodNotDone(String profile) {
+        if (PROFILE_PUNCHY.equals(profile)) {
+            vibrateWaveform(new long[] {0, 8, 10, 10}, new int[] {0, 110, 0, 160});
+        } else if (PROFILE_SUBTLE.equals(profile)) {
+            vibrateOneShot(8, 85);
+        } else {
+            vibrateWaveform(new long[] {0, 7, 10, 9}, new int[] {0, 95, 0, 120});
+        }
+    }
+
+    private void playBadAvoided(String profile) {
+        if (PROFILE_PUNCHY.equals(profile)) {
+            vibrateWaveform(new long[] {0, 8, 8, 14}, new int[] {0, 145, 0, 225});
+        } else if (PROFILE_SUBTLE.equals(profile)) {
+            vibrateWaveform(new long[] {0, 7, 10, 10}, new int[] {0, 90, 0, 120});
+        } else {
+            vibrateWaveform(new long[] {0, 8, 10, 12}, new int[] {0, 125, 0, 175});
+        }
+    }
+
+    private void playBadDone(String profile) {
+        if (PROFILE_PUNCHY.equals(profile)) {
+            vibrateWaveform(new long[] {0, 16, 18, 14}, new int[] {0, 215, 0, 165});
+        } else if (PROFILE_SUBTLE.equals(profile)) {
+            vibrateOneShot(14, 120);
+        } else {
+            vibrateWaveform(new long[] {0, 14, 18, 12}, new int[] {0, 160, 0, 130});
         }
     }
 
