@@ -22,6 +22,7 @@ const defaultUserSettings: UserSettings = {
   autoSync: false,
   soundEnabled: true,
   hapticEnabled: true,
+  hapticProfile: "balanced",
 };
 
 function getInitialSettingsFromStorage(): UserSettings {
@@ -85,8 +86,9 @@ export function useHabits() {
       setGlobalFeedbackSettings({
         soundEnabled: settings.soundEnabled !== false,
         hapticEnabled: settings.hapticEnabled !== false,
+        hapticProfile: settings.hapticProfile ?? "balanced",
       });
-    }, [settings.soundEnabled, settings.hapticEnabled]);
+    }, [settings.soundEnabled, settings.hapticEnabled, settings.hapticProfile]);
 
     useEffect(() => {
       let cancelled = false;
@@ -238,7 +240,11 @@ export function useHabits() {
     const habit = habits.find(h => h.id === habitId);
     if (!habit) return;
     if (isAlreadyCompleted) {
-      feedbackError({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
+      feedbackError({
+        soundEnabled: settings.soundEnabled !== false,
+        hapticEnabled: settings.hapticEnabled !== false,
+        hapticProfile: settings.hapticProfile ?? "balanced",
+      });
       toast({
         title: "Already completed!",
         description: "You've already tracked this habit today.",
@@ -256,7 +262,11 @@ export function useHabits() {
       // Determine if this was a "successful" track
       const isSuccess = updatedHabit.type === "bad" ? !completed : completed;
       const streakIncremented = updatedHabit.streak > oldStreak;
-      const feedbackOpts = { soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false };
+      const feedbackOpts = {
+        soundEnabled: settings.soundEnabled !== false,
+        hapticEnabled: settings.hapticEnabled !== false,
+        hapticProfile: settings.hapticProfile ?? "balanced",
+      };
       if (isSuccess) {
         feedbackTrackSuccess(feedbackOpts, streakIncremented);
       } else {
@@ -279,7 +289,11 @@ export function useHabits() {
   const undoHabitTracking = (habitId: string) => {
     const success = HabitStorage.undoTodayLog(habitId);
     if (success) {
-      feedbackUndo({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
+      feedbackUndo({
+        soundEnabled: settings.soundEnabled !== false,
+        hapticEnabled: settings.hapticEnabled !== false,
+        hapticProfile: settings.hapticProfile ?? "balanced",
+      });
       const updatedHabits = HabitStorage.getHabits();
       setHabits(updatedHabits);
       toast({
@@ -289,7 +303,11 @@ export function useHabits() {
       });
       try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
     } else {
-      feedbackError({ soundEnabled: settings.soundEnabled !== false, hapticEnabled: settings.hapticEnabled !== false });
+      feedbackError({
+        soundEnabled: settings.soundEnabled !== false,
+        hapticEnabled: settings.hapticEnabled !== false,
+        hapticProfile: settings.hapticProfile ?? "balanced",
+      });
       toast({
         title: "Nothing to undo",
         description: "No tracking recorded for today.",

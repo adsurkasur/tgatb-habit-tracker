@@ -2,7 +2,7 @@ import * as React from "react"
 import * as TabsPrimitive from "@radix-ui/react-tabs"
 
 import { cn } from "@/lib/utils"
-import { feedbackButtonPress } from "@/lib/feedback"
+import { feedbackSelection } from "@/lib/feedback"
 
 const Tabs = TabsPrimitive.Root
 
@@ -27,7 +27,7 @@ const TabsTrigger = React.forwardRef<
 >(({ className, onClick, disabled, ...props }, ref) => {
   const handleClick = React.useCallback(
     (e: React.MouseEvent<HTMLButtonElement>) => {
-      if (!disabled) feedbackButtonPress();
+      if (!disabled) feedbackSelection();
       onClick?.(e);
     },
     [disabled, onClick],

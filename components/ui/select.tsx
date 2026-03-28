@@ -5,7 +5,7 @@ import * as SelectPrimitive from "@radix-ui/react-select"
 import { Check, ChevronDown, ChevronUp } from "lucide-react"
 
 import { cn } from "@/lib/utils"
-import { feedbackButtonPress } from "@/lib/feedback"
+import { feedbackSelection } from "@/lib/feedback"
 
 const Select = SelectPrimitive.Root
 
@@ -118,7 +118,7 @@ const SelectItem = React.forwardRef<
 >(({ className, children, onSelect, disabled, ...props }, ref) => {
   const handleSelect = React.useCallback(
     (e: React.SyntheticEvent<HTMLDivElement>) => {
-      if (!disabled) feedbackButtonPress();
+      if (!disabled) feedbackSelection();
       onSelect?.(e);
     },
     [disabled, onSelect],

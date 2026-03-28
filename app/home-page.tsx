@@ -28,7 +28,7 @@ import { HabitType, HabitSchedule, Habit } from "@shared/schema";
 import { Capacitor } from "@capacitor/core";
 import { App } from "@capacitor/app";
 import { useTranslations } from "next-intl";
-import { feedbackButtonPress } from "@/lib/feedback";
+import { feedbackNavigation } from "@/lib/feedback";
 
 export default function Home() {
   const t = useTranslations("Home");
@@ -339,7 +339,7 @@ export default function Home() {
                   {/* Previous button - Desktop - only show if not demo */}
                   {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
                     <button
-                      onClick={() => { feedbackButtonPress(); moveToPreviousHabit(); }}
+                      onClick={() => { feedbackNavigation(); moveToPreviousHabit(); }}
                       className="max-sm:hidden absolute left-0 top-1/2 -translate-x-15 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                         aria-label={t("aria.previousHabit")}
                     >
@@ -362,7 +362,7 @@ export default function Home() {
                   {/* Next button - Desktop - only show if not demo */}
                   {!shouldShowDemoHabit && (goodHabits.length + badHabits.length) > 1 && (
                     <button
-                      onClick={() => { feedbackButtonPress(); moveToNextHabit(); }}
+                      onClick={() => { feedbackNavigation(); moveToNextHabit(); }}
                       className="max-sm:hidden absolute right-0 top-1/2 translate-x-15 -translate-y-1/2 z-10 nav-button w-12 h-12 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group focus:outline-none focus:ring-2 focus:ring-primary/50 cursor-pointer"
                         aria-label={t("aria.nextHabit")}
                     >
@@ -391,7 +391,7 @@ export default function Home() {
                     {/* Mobile navigation buttons below legend */}
                     <div className="max-sm:flex hidden justify-center mt-4 nav-container-mobile">
                       <button
-                        onClick={() => { feedbackButtonPress(); moveToPreviousHabit(); }}
+                        onClick={() => { feedbackNavigation(); moveToPreviousHabit(); }}
                         className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group mx-2 cursor-pointer"
                         aria-label={t("aria.previousHabit")}
                       >
@@ -400,7 +400,7 @@ export default function Home() {
                         </svg>
                       </button>
                       <button
-                        onClick={() => { feedbackButtonPress(); moveToNextHabit(); }}
+                        onClick={() => { feedbackNavigation(); moveToNextHabit(); }}
                         className="nav-button w-10 h-10 bg-primary/10 hover:bg-primary/20 border border-primary/20 hover:border-primary/30 rounded-full flex items-center justify-center transition-all duration-200 hover:scale-110 active:scale-95 group mx-2 cursor-pointer"
                         aria-label={t("aria.nextHabit")}
                       >

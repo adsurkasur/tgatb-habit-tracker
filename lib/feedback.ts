@@ -21,8 +21,13 @@
  */
 
 import {
+  type HapticProfile,
+  setHapticProfile,
   hapticSuccess,
   hapticStreak,
+  hapticFailure,
+  hapticSelection,
+  hapticNavigation,
   hapticError as hapticErrorFn,
   hapticUndo as hapticUndoFn,
   hapticButtonPress as hapticButtonPressFn,
@@ -43,6 +48,7 @@ import {
 
 let _globalSoundEnabled = true;
 let _globalHapticEnabled = true;
+let _globalHapticProfile: HapticProfile = "balanced";
 
 /**
  * One-way setter called from `use-habits.ts` whenever user settings change.
@@ -51,9 +57,12 @@ let _globalHapticEnabled = true;
 export function setGlobalFeedbackSettings(opts: {
   soundEnabled: boolean;
   hapticEnabled: boolean;
+  hapticProfile?: HapticProfile;
 }): void {
   _globalSoundEnabled = opts.soundEnabled;
   _globalHapticEnabled = opts.hapticEnabled;
+  _globalHapticProfile = opts.hapticProfile ?? "balanced";
+  setHapticProfile(_globalHapticProfile);
 }
 
 // ---------------------------------------------------------------------------
@@ -63,11 +72,17 @@ export function setGlobalFeedbackSettings(opts: {
 export interface FeedbackOptions {
   soundEnabled: boolean;
   hapticEnabled: boolean;
+  hapticProfile?: HapticProfile;
+}
+
+function applyHapticProfile(profile?: HapticProfile): void {
+  setHapticProfile(profile ?? _globalHapticProfile);
 }
 
 /** Feedback for successfully marking a habit done. */
 export function feedbackTrackSuccess(opts: FeedbackOptions, streakIncremented: boolean): void {
   if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
     if (streakIncremented) {
       hapticStreak();
     } else {
@@ -85,20 +100,53 @@ export function feedbackTrackSuccess(opts: FeedbackOptions, streakIncremented: b
 
 /** Feedback for marking a habit as not done / failed. */
 export function feedbackTrackFailure(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticSuccess();
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+    hapticFailure();
+  }
   if (opts.soundEnabled) playFailureSound();
 }
 
 /** Feedback for invalid / error action. */
 export function feedbackError(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticErrorFn();
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+    hapticErrorFn();
+  }
   if (opts.soundEnabled) playErrorSound();
 }
 
 /** Feedback for undo action. */
 export function feedbackUndo(opts: FeedbackOptions): void {
-  if (opts.hapticEnabled) hapticUndoFn();
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+    hapticUndoFn();
+  }
   if (opts.soundEnabled) playUndoSound();
+}
+
+/** Selection-change feedback for pickers/tabs/toggles. */
+export function feedbackSelection(): void {
+  try {
+    if (_globalHapticEnabled) {
+      setHapticProfile(_globalHapticProfile);
+      hapticSelection();
+    }
+  } catch {
+    // Silent
+  }
+}
+
+/** Navigation feedback for previous/next style interactions. */
+export function feedbackNavigation(): void {
+  try {
+    if (_globalHapticEnabled) {
+      setHapticProfile(_globalHapticProfile);
+      hapticNavigation();
+    }
+  } catch {
+    // Silent
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -108,7 +156,10 @@ export function feedbackUndo(opts: FeedbackOptions): void {
 /** Ultra-subtle acknowledgement for any button press. Fire-and-forget. */
 export function feedbackButtonPress(): void {
   try {
-    if (_globalHapticEnabled) hapticButtonPressFn();
+    if (_globalHapticEnabled) {
+      setHapticProfile(_globalHapticProfile);
+      hapticButtonPressFn();
+    }
     if (_globalSoundEnabled) playButtonPressSound();
   } catch {
     // Silent — feedback must never break UI

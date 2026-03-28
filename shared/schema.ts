@@ -3,6 +3,7 @@ import { z } from "zod";
 export type HabitType = "good" | "bad";
 
 export type MotivatorPersonality = "positive" | "adaptive" | "harsh";
+export type HapticProfile = "subtle" | "balanced" | "punchy";
 
 export type HabitScheduleType = "daily" | "interval" | "weekly";
 
@@ -58,6 +59,8 @@ export interface UserSettings {
   soundEnabled?: boolean;
   /** Whether haptic feedback is enabled. Default ON. */
   hapticEnabled?: boolean;
+  /** Semantic haptic profile intensity. */
+  hapticProfile?: HapticProfile;
 }
 
 export const habitScheduleSchema = z.object({
@@ -110,6 +113,7 @@ export const userSettingsSchema = z.object({
   reminderTime: z.string().nullable().optional(),
   soundEnabled: z.boolean().optional(),
   hapticEnabled: z.boolean().optional(),
+  hapticProfile: z.enum(["subtle", "balanced", "punchy"]).optional(),
 });
 
 // Export bundle schema and types

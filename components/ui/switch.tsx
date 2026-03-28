@@ -2,7 +2,7 @@ import * as React from "react"
 import * as SwitchPrimitives from "@radix-ui/react-switch"
 
 import { cn } from "@/lib/utils"
-import { feedbackButtonPress } from "@/lib/feedback"
+import { feedbackSelection } from "@/lib/feedback"
 
 const Switch = React.forwardRef<
   React.ElementRef<typeof SwitchPrimitives.Root>,
@@ -10,7 +10,7 @@ const Switch = React.forwardRef<
 >(({ className, onCheckedChange, disabled, ...props }, ref) => {
   const handleCheckedChange = React.useCallback(
     (checked: boolean) => {
-      if (!disabled) feedbackButtonPress();
+      if (!disabled) feedbackSelection();
       onCheckedChange?.(checked);
     },
     [disabled, onCheckedChange],

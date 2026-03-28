@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useEffect, useState, ReactNode } from "react";
 import { HabitStorage } from "@/lib/habit-storage";
+import { UserSettings } from "@shared/schema";
 
 interface ThemeContextType {
   isDark: boolean;
@@ -34,7 +35,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       try {
         const settings = await HabitStorage.getSettings();
         // Merge loaded settings with defaults to ensure all fields exist
-        const defaults = {
+        const defaults: UserSettings = {
           darkMode: false,
           language: "en",
           motivatorPersonality: "positive",
@@ -42,6 +43,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           autoSync: false,
           soundEnabled: true,
           hapticEnabled: true,
+          hapticProfile: "balanced",
         };
         const mergedSettings = { ...defaults, ...settings };
         const darkMode = mergedSettings.darkMode;
@@ -87,7 +89,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       try {
         const currentSettings = await HabitStorage.getSettings();
         // Merge with defaults to ensure all fields are preserved
-        const defaults = {
+        const defaults: UserSettings = {
           darkMode: false,
           language: "en",
           motivatorPersonality: "positive",
@@ -95,6 +97,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
           autoSync: false,
           soundEnabled: true,
           hapticEnabled: true,
+          hapticProfile: "balanced",
         };
         const mergedSettings = { ...defaults, ...currentSettings };
         await HabitStorage.saveSettings({ ...mergedSettings, darkMode });
