@@ -12,7 +12,7 @@ import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
 import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
-import { feedbackHabitOutcome, feedbackCelebration, feedbackError, feedbackUndo, feedbackVictory, setGlobalFeedbackSettings } from "@/lib/feedback";
+import { feedbackHabitOutcome, feedbackError, feedbackUndo, feedbackVictory, setGlobalFeedbackSettings } from "@/lib/feedback";
 import {
   evaluateStreakMilestoneCrossing,
   getCelebrationConfettiCount,

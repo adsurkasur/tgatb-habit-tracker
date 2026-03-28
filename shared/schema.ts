@@ -26,6 +26,8 @@ export interface Habit {
   lastCompletedDate?: Date;
   /** Schedule configuration. Defaults to { type: "daily" } at read-time. */
   schedule?: HabitSchedule;
+  /** For interval schedules: the date of the first log entry. Used to calculate expected dates from the actual start of logging, not from createdAt. */
+  intervalStartDate?: Date;
   // optional metadata for sync/migrations
   updatedAt?: Date;
   deviceId?: string;

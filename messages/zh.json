@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "TGATB 习惯追踪器",
     "description": "好与坏：一个极简的习惯跟踪应用程序"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "没有可用的习惯，立即添加！",
       "selectHabit": "选择习惯...",
-      "habitName": "习惯名称..."
+      "habitName": "习惯名称...",
+      "name": "输入习惯名称..."
+    },
+    "fields": {
+      "name": "习惯名称",
+      "type": "习惯类型",
+      "schedule": "日程"
     },
     "type": {
       "good": "好的",
       "bad": "坏的"
+    },
+    "schedule": {
+      "daily": "日常的",
+      "interval": "每 N 天",
+      "weekly": "平日"
+    },
+    "interval": {
+      "every": "每一个",
+      "days": "天"
+    },
+    "weekdays": {
+      "sun": "太阳",
+      "mon": "周一",
+      "tue": "星期二",
+      "wed": "周三",
+      "thu": "星期四",
+      "fri": "周五",
+      "sat": "星期六"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "今天已经完成了！",
       "badPositive": "今天你没有做到！",
       "goodNegative": "今天你没有做到！",
-      "badNegative": "你今天做到了！"
+      "badNegative": "你今天做到了！",
+      "ongoing": "进行中"
     },
     "status": {
       "goodCompleted": "完全的",

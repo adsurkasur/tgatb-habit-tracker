@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "No habit available, add now!",
       "selectHabit": "Select habit...",
-      "habitName": "Habit name..."
+      "habitName": "Habit name...",
+      "name": "Enter habit name..."
+    },
+    "fields": {
+      "name": "Habit Name",
+      "type": "Habit Type",
+      "schedule": "Schedule"
     },
     "type": {
       "good": "Good",
       "bad": "Bad"
+    },
+    "schedule": {
+      "daily": "Daily",
+      "interval": "Every N Days",
+      "weekly": "Weekdays"
+    },
+    "interval": {
+      "every": "Every",
+      "days": "days"
+    },
+    "weekdays": {
+      "sun": "Sun",
+      "mon": "Mon",
+      "tue": "Tue",
+      "wed": "Wed",
+      "thu": "Thu",
+      "fri": "Fri",
+      "sat": "Sat"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "Already done today!",
       "badPositive": "You didn't do it today!",
       "goodNegative": "You didn't do it today!",
-      "badNegative": "You did it today!"
+      "badNegative": "You did it today!",
+      "ongoing": "Ongoing"
     },
     "status": {
       "goodCompleted": "Completed",

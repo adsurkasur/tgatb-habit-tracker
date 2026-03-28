@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "TGATB Habit Tracker",
     "description": "Das Gute und das Schlechte: Eine minimalistische Anwendung zur Gewohnheitsverfolgung"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "Keine Gewohnheit verfügbar, jetzt hinzufügen!",
       "selectHabit": "Gewohnheit auswählen...",
-      "habitName": "Gewohnheitsname..."
+      "habitName": "Gewohnheitsname...",
+      "name": "Geben Sie den Namen der Gewohnheit ein..."
+    },
+    "fields": {
+      "name": "Gewohnheitsname",
+      "type": "Gewohnheitstyp",
+      "schedule": "Zeitplan"
     },
     "type": {
       "good": "Gut",
       "bad": "Schlecht"
+    },
+    "schedule": {
+      "daily": "Täglich",
+      "interval": "Alle N Tage",
+      "weekly": "Wochentags"
+    },
+    "interval": {
+      "every": "Jeder",
+      "days": "Tage"
+    },
+    "weekdays": {
+      "sun": "Sonne",
+      "mon": "Mo",
+      "tue": "Di",
+      "wed": "Mi",
+      "thu": "Do",
+      "fri": "Fr",
+      "sat": "Sa"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "Heute schon erledigt!",
       "badPositive": "Du hast es heute nicht getan!",
       "goodNegative": "Du hast es heute nicht getan!",
-      "badNegative": "Du hast es heute geschafft!"
+      "badNegative": "Du hast es heute getan!",
+      "ongoing": "Laufend"
     },
     "status": {
       "goodCompleted": "Abgeschlossen",

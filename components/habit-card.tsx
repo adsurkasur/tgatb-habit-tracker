@@ -5,6 +5,7 @@ import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
 import { useEffect, useState, memo } from "react";
 import { useTranslations } from "next-intl";
+import { isExpectedDate } from "@/lib/schedule";
 
 interface HabitCardProps {
   habit: Habit;
@@ -92,34 +93,72 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   onUndo?: () => void;
   t: (key: string, values?: Record<string, string | number | Date>) => string;
 }) {
+  // Determine if today is an expected date in the habit's schedule (REAL off-day logic)
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const isTodayExpected = isExpectedDate(habit, today);
+  
+  // An off-day is when today is NOT expected in the schedule
+  const isOffDay = !isTodayExpected;
+  
+  // On off-days, show styling as if the habit is "on track" (completed)
+  // This indicates the user is doing well on the schedule
+  const showAsCompleted = isOffDay || (isCompletedToday && isPositiveAction);
+  
+  // DEBUG
+  if (process.env.NODE_ENV !== 'production') {
+    console.log(`[HabitCard] ${habit.name}:`, {
+      isTodayExpected,
+      isOffDay,
+      isCompletedToday,
+      isPositiveAction,
+      showAsCompleted,
+      schedule: habit.schedule,
+      intervalStartDate: habit.intervalStartDate,
+    });
+  }
+  
   const cardToneClass = () => {
-    if (!isCompletedToday) {
-      return habit.type === 'bad' ? 'bg-card border-red-100 dark:border-red-900' : 'bg-card border-green-200 dark:border-green-700';
-    }
-    if (isPositiveAction) {
+    // Off-day: show as completed/on-track (green for good, blue for bad)
+    if (showAsCompleted) {
       return habit.type === 'good'
         ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
         : 'bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800';
     }
+    
+    // Expected day without completion
+    if (!isCompletedToday) {
+      return habit.type === 'bad' ? 'bg-card border-red-100 dark:border-red-900' : 'bg-card border-green-200 dark:border-green-700';
+    }
+    
+    // Expected day with negative action (missed/done)
     return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
   };
+  
   const questionText = () => {
+    // Off-day: show ongoing message
+    if (isOffDay) {
+      return t('question.ongoing');
+    }
+    
     if (!isCompletedToday) return t('question.pending');
     if (isPositiveAction) return habit.type === 'bad' ? t('question.badPositive') : t('question.goodPositive');
     return habit.type === 'good' ? t('question.goodNegative') : t('question.badNegative');
   };
+  
   return (
     <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
       {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
       <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
-        <StatusBadge visible={isCompletedToday} isPositiveAction={isPositiveAction} type={habit.type} />
+        {/* Show badge on off-days as "on-track", or on completed days */}
+        <StatusBadge visible={showAsCompleted} isPositiveAction={true} type={habit.type} />
         <StreakBadge type={habit.type} streak={habit.streak} t={t} />
         <div className="space-y-6 mt-8">
           <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} t={t} />
           <div className="text-center">
             <h3 className="text-xl font-semibold text-foreground">{questionText()}</h3>
           </div>
-          <ActionButtons isCompletedToday={isCompletedToday} onUndo={onUndo} onTrack={onTrack} t={t} />
+          <ActionButtons isCompletedToday={isCompletedToday} isOffDay={isOffDay} onUndo={onUndo} onTrack={onTrack} t={t} />
         </div>
       </div>
     </div>
@@ -201,8 +240,9 @@ function HabitHeader({ name, type, completedAt, t }: { name: string; type: Habit
   );
 }
 
-function ActionButtons({ isCompletedToday, onUndo, onTrack, t }: { isCompletedToday: boolean; onUndo?: () => void; onTrack: (completed: boolean) => void; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
-  if (isCompletedToday) {
+function ActionButtons({ isCompletedToday, isOffDay, onUndo, onTrack, t }: { isCompletedToday: boolean; isOffDay: boolean; onUndo?: () => void; onTrack: (completed: boolean) => void; t: (key: string, values?: Record<string, string | number | Date>) => string }) {
+  // Show Undo button only if completed (with a log), not if just an off-day
+  if (isCompletedToday && !isOffDay) {
     return (
       <div className="flex space-x-4">
         <Button
@@ -218,6 +258,21 @@ function ActionButtons({ isCompletedToday, onUndo, onTrack, t }: { isCompletedTo
     );
   }
 
+  // If it's an off-day (greyed out but no log), disable the action buttons
+  if (isOffDay) {
+    return (
+      <div className="flex space-x-4 opacity-50">
+        <Button disabled className="flex-1 h-16 bg-green-500 text-white material-radius cursor-not-allowed" size="lg">
+          <Check className="w-8 h-8" />
+        </Button>
+        <Button disabled className="flex-1 h-16 bg-red-500 text-white material-radius cursor-not-allowed" size="lg">
+          <X className="w-8 h-8" />
+        </Button>
+      </div>
+    );
+  }
+
+  // Show Check/X buttons for pending days
   return (
     <div className="flex space-x-4">
       <Button onClick={() => onTrack(true)} className="flex-1 h-16 bg-green-500 hover:bg-green-600 text-white material-radius" size="lg">

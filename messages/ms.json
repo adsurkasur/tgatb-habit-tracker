@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "Penjejak Tabiat TGATB",
     "description": "Kebaikan dan Keburukan: Aplikasi penjejakan tabiat minimalis"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "Tiada tabiat tersedia, tambah sekarang!",
       "selectHabit": "Pilih tabiat...",
-      "habitName": "Nama tabiat..."
+      "habitName": "Nama tabiat...",
+      "name": "Masukkan nama tabiat..."
+    },
+    "fields": {
+      "name": "Nama Tabiat",
+      "type": "Jenis Tabiat",
+      "schedule": "Jadual"
     },
     "type": {
       "good": "bagus",
       "bad": "teruk"
+    },
+    "schedule": {
+      "daily": "Setiap hari",
+      "interval": "Setiap N Hari",
+      "weekly": "hari minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Matahari",
+      "mon": "isn",
+      "tue": "Tue",
+      "wed": "Rabu",
+      "thu": "Kha",
+      "fri": "Jum",
+      "sat": "Sab"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "Sudah selesai hari ini!",
       "badPositive": "Anda tidak melakukannya hari ini!",
       "goodNegative": "Anda tidak melakukannya hari ini!",
-      "badNegative": "Anda melakukannya hari ini!"
+      "badNegative": "Anda melakukannya hari ini!",
+      "ongoing": "Sedang berlangsung"
     },
     "status": {
       "goodCompleted": "Selesai",

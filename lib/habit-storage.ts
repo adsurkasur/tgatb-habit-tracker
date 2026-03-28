@@ -53,6 +53,7 @@ export class HabitStorage {
           streak: Number(habitObj.streak ?? 0),
           createdAt: new Date(String(habitObj.createdAt)),
           lastCompletedDate: habitObj.lastCompletedDate ? new Date(String(habitObj.lastCompletedDate)) : undefined,
+          intervalStartDate: habitObj.intervalStartDate ? new Date(String(habitObj.intervalStartDate)) : undefined,
           // Apply default schedule at read-time (never rewrite storage)
           schedule: (habitObj.schedule as HabitSchedule | undefined) ?? { type: "daily" },
         };
@@ -65,6 +66,10 @@ export class HabitStorage {
 
   static saveHabits(habits: Habit[]): void {
     localStorage.setItem(habitsKey(), JSON.stringify(habits));
+  }
+
+  static getHabitById(habitId: string): Habit | undefined {
+    return this.getHabits().find(h => h.id === habitId);
   }
 
   static addHabit(name: string, type: HabitType, schedule?: HabitSchedule): Habit {
@@ -127,6 +132,31 @@ export class HabitStorage {
     localStorage.setItem(logsKey(), JSON.stringify(logs));
   }
 
+  /** Helper: Set intervalStartDate for interval habits on first log. */
+  private static setIntervalStartDateIfNeeded(habitId: string, logDate: string): void {
+    const habit = this.getHabitById(habitId);
+    if (!habit) return;
+    
+    // Only for interval schedules that don't have a start date yet
+    if (habit.schedule?.type === "interval" && !habit.intervalStartDate) {
+      // Convert logDate (YYYY-MM-DD) to Date
+      const [year, month, day] = logDate.split("-").map(Number);
+      const intervalStart = new Date(year, month - 1, day);
+      
+      const updatedHabit: Habit = {
+        ...habit,
+        intervalStartDate: intervalStart,
+      };
+      
+      const habits = this.getHabits();
+      const idx = habits.findIndex(h => h.id === habitId);
+      if (idx !== -1) {
+        habits[idx] = updatedHabit;
+        this.saveHabits(habits);
+      }
+    }
+  }
+
   static addLog(habitId: string, completed: boolean): HabitLog {
     const logs = this.getLogs();
     const today = formatLocalDate(new Date()); // Use local timezone
@@ -144,6 +174,9 @@ export class HabitStorage {
     
     filteredLogs.push(newLog);
     this.saveLogs(filteredLogs);
+    
+    // Set intervalStartDate if this is the first log for an interval habit
+    this.setIntervalStartDateIfNeeded(habitId, today);
     
     // Update streak
     this.updateStreak(habitId);
@@ -166,6 +199,10 @@ export class HabitStorage {
       };
       filteredLogs.push(newLog);
       this.saveLogs(filteredLogs);
+      
+      // Set intervalStartDate if this is the first log for an interval habit
+      this.setIntervalStartDateIfNeeded(habitId, date);
+      
       // Update streak for this habit
       this.updateStreak(habitId);
       return newLog;
@@ -357,16 +394,31 @@ export class HabitStorage {
 
   // New utility methods for enhanced functionality
   static isHabitCompletedToday(habitId: string): boolean {
+    const habit = this.getHabitById(habitId);
+    if (!habit) return false;
+
     const logs = this.getLogs();
-    const today = formatLocalDate(new Date()); // Use local timezone
+    const today = new Date();
+    const todayStr = formatLocalDate(today); // Use local timezone
     
+    // First, check if there's an explicit log for today
     const todayLog = logs.find(log => 
       log.habitId === habitId && 
-      log.date === today
+      log.date === todayStr
     );
     
-    // Return true if there's any log for today (positive or negative action)
-    return !!todayLog;
+    if (todayLog) {
+      return true; // User explicitly logged something today
+    }
+
+    // No explicit log for today. Check if today is an expected date for the schedule.
+    // If today IS expected, it's still pending (no log yet) → return false
+    // If today is NOT expected (but still within an interval), mark as "checked" → return true
+    if (isExpectedDate(habit, today)) {
+      return false; // Expected day with no log = pending
+    }
+
+    return true; // Non-expected day = already "checked" (grayed out in the interval)
   }
 
   static getTodayLog(habitId: string): HabitLog | undefined {

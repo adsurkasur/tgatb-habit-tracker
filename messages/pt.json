@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "Rastreador de hábitos TGATB",
     "description": "The Good and The Bad: um aplicativo minimalista de rastreamento de hábitos"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "Nenhum hábito disponível, adicione agora!",
       "selectHabit": "Selecione o hábito...",
-      "habitName": "Nome do hábito..."
+      "habitName": "Nome do hábito...",
+      "name": "Digite o nome do hábito..."
+    },
+    "fields": {
+      "name": "Nome do hábito",
+      "type": "Tipo de hábito",
+      "schedule": "Agendar"
     },
     "type": {
       "good": "Bom",
       "bad": "Ruim"
+    },
+    "schedule": {
+      "daily": "Diário",
+      "interval": "A cada N dias",
+      "weekly": "Dias da semana"
+    },
+    "interval": {
+      "every": "Todo",
+      "days": "dias"
+    },
+    "weekdays": {
+      "sun": "Sol",
+      "mon": "seg",
+      "tue": "ter",
+      "wed": "qua",
+      "thu": "qui",
+      "fri": "sex",
+      "sat": "Sentado"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "Já fiz hoje!",
       "badPositive": "Você não fez isso hoje!",
       "goodNegative": "Você não fez isso hoje!",
-      "badNegative": "Você fez isso hoje!"
+      "badNegative": "Você fez isso hoje!",
+      "ongoing": "Em andamento"
     },
     "status": {
       "goodCompleted": "Concluído",

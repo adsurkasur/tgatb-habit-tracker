@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "Pelacak Kebiasaan TGATB",
     "description": "The Good and The Bad: aplikasi pelacak kebiasaan minimalis"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "Belum ada kebiasaan, tambah sekarang!",
       "selectHabit": "Pilih kebiasaan...",
-      "habitName": "Nama kebiasaan..."
+      "habitName": "Nama kebiasaan...",
+      "name": "Masukkan nama kebiasaan..."
+    },
+    "fields": {
+      "name": "Nama Kebiasaan",
+      "type": "Jenis Kebiasaan",
+      "schedule": "Jadwal"
     },
     "type": {
       "good": "Baik",
       "bad": "Buruk"
+    },
+    "schedule": {
+      "daily": "Harian",
+      "interval": "Setiap N Hari",
+      "weekly": "Hari dalam Minggu"
+    },
+    "interval": {
+      "every": "Setiap",
+      "days": "hari"
+    },
+    "weekdays": {
+      "sun": "Min",
+      "mon": "Sen",
+      "tue": "Sel",
+      "wed": "Rab",
+      "thu": "Kam",
+      "fri": "Jum",
+      "sat": "Sab"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "Sudah selesai hari ini!",
       "badPositive": "Kamu tidak melakukannya hari ini!",
       "goodNegative": "Kamu tidak melakukannya hari ini!",
-      "badNegative": "Kamu melakukannya hari ini!"
+      "badNegative": "Kamu melakukannya hari ini!",
+      "ongoing": "Sedang berlangsung"
     },
     "status": {
       "goodCompleted": "Selesai",

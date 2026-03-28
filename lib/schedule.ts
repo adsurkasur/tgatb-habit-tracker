@@ -10,7 +10,7 @@
  *   - All functions are **pure**  no side effects, no storage access,
  *     no Date.now() usage.
  *   - A habit with no schedule or `{ type: "daily" }` expects every day.
- *   - Interval schedules count from the habit's `createdAt` date.
+ *   - Interval schedules count from the habit's `intervalStartDate` (first log) or `createdAt`.
  *   - Weekly schedules match on `Date.getDay()` (0=Sun  6=Sat).
  *
  * Allowed callers:
@@ -20,6 +20,7 @@
  */
 
 import type { Habit, HabitSchedule } from "@shared/schema";
+import { formatLocalDate } from "./utils";
 
 /** Default schedule applied to habits that lack one. */
 const DEFAULT_SCHEDULE: HabitSchedule = { type: "daily" };
@@ -45,17 +46,37 @@ export function isExpectedDate(habit: Habit, date: Date): boolean {
 
     case "interval": {
       const intervalDays = schedule.intervalDays ?? 2;
-      const created = new Date(habit.createdAt);
-      created.setHours(0, 0, 0, 0);
+      // Use intervalStartDate if available (first logged date), otherwise fall back to createdAt
+      // Use formatLocalDate to ensure consistent timezone-aware date handling
+      const startDate = habit.intervalStartDate ?? habit.createdAt;
+      const startStr = formatLocalDate(startDate);
+      const targetStr = formatLocalDate(date);
 
-      const target = new Date(date);
-      target.setHours(0, 0, 0, 0);
+      // Parse date strings to calculate day difference
+      const [startY, startM, startD] = startStr.split("-").map(Number);
+      const [targetY, targetM, targetD] = targetStr.split("-").map(Number);
 
-      const diffMs = target.getTime() - created.getTime();
+      const startDateObj = new Date(startY, startM - 1, startD);
+      const targetDateObj = new Date(targetY, targetM - 1, targetD);
+
+      const diffMs = targetDateObj.getTime() - startDateObj.getTime();
       const diffDays = Math.round(diffMs / (24 * 60 * 60 * 1000));
 
+      const isExpected = diffDays >= 0 && diffDays % intervalDays === 0;
+      
+      // DEBUG
+      if (process.env.NODE_ENV !== 'production') {
+        console.log(`[isExpectedDate] ${habit.name}:`, {
+          startStr,
+          targetStr,
+          diffDays,
+          intervalDays,
+          isExpected,
+        });
+      }
+      
       // Expected on day 0, intervalDays, 2*intervalDays, etc.
-      return diffDays >= 0 && diffDays % intervalDays === 0;
+      return isExpected;
     }
 
     case "weekly": {

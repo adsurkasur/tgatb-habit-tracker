@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "TGATB تعقب العادة",
     "description": "الجيد والسيئ: تطبيق بسيط لتتبع العادات"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "لا توجد عادة متاحة، أضف الآن!",
       "selectHabit": "اختر العادة...",
-      "habitName": "اسم العادة..."
+      "habitName": "اسم العادة...",
+      "name": "أدخل اسم العادة..."
+    },
+    "fields": {
+      "name": "اسم العادة",
+      "type": "نوع العادة",
+      "schedule": "جدول"
     },
     "type": {
       "good": "جيد",
       "bad": "سيء"
+    },
+    "schedule": {
+      "daily": "يوميًا",
+      "interval": "كل N أيام",
+      "weekly": "أيام الأسبوع"
+    },
+    "interval": {
+      "every": "كل",
+      "days": "أيام"
+    },
+    "weekdays": {
+      "sun": "شمس",
+      "mon": "الاثنين",
+      "tue": "الثلاثاء",
+      "wed": "تزوج",
+      "thu": "الخميس",
+      "fri": "الجمعة",
+      "sat": "قعد"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "لقد تم بالفعل اليوم!",
       "badPositive": "أنت لم تفعل ذلك اليوم!",
       "goodNegative": "أنت لم تفعل ذلك اليوم!",
-      "badNegative": "لقد فعلتها اليوم!"
+      "badNegative": "لقد فعلتها اليوم!",
+      "ongoing": "قيد التقدم"
     },
     "status": {
       "goodCompleted": "مكتمل",

@@ -1,4 +1,4 @@
-{
+﻿{
   "App": {
     "name": "TGATB 습관 추적기",
     "description": "좋은 것과 나쁜 것: 미니멀리스트 습관 추적 애플리케이션"
@@ -394,11 +394,35 @@
     "placeholders": {
       "noHabit": "사용 가능한 습관이 없습니다. 지금 추가하세요!",
       "selectHabit": "습관을 선택하세요...",
-      "habitName": "습관 이름..."
+      "habitName": "습관 이름...",
+      "name": "습관 이름을 입력하세요..."
+    },
+    "fields": {
+      "name": "습관 이름",
+      "type": "습관 유형",
+      "schedule": "일정"
     },
     "type": {
       "good": "좋은",
       "bad": "나쁜"
+    },
+    "schedule": {
+      "daily": "일일",
+      "interval": "N일마다",
+      "weekly": "평일"
+    },
+    "interval": {
+      "every": "모든",
+      "days": "날"
+    },
+    "weekdays": {
+      "sun": "해",
+      "mon": "월",
+      "tue": "화요일",
+      "wed": "수요일",
+      "thu": "목",
+      "fri": "금",
+      "sat": "앉았다"
     },
     "status": {
       "good": {
@@ -546,7 +570,8 @@
       "goodPositive": "오늘 이미 완료되었습니다!",
       "badPositive": "오늘은 안 했어!",
       "goodNegative": "오늘은 안 했어!",
-      "badNegative": "오늘 해냈어요!"
+      "badNegative": "오늘 해냈어요!",
+      "ongoing": "진행 중"
     },
     "status": {
       "goodCompleted": "완전한",

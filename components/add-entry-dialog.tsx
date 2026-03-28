@@ -36,6 +36,9 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const [status, setStatus] = useState<boolean | null>(null);
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitType, setNewHabitType] = useState<"good" | "bad">("good");
+  const [newHabitScheduleType, setNewHabitScheduleType] = useState<"daily" | "interval" | "weekly">("daily");
+  const [newHabitIntervalDays, setNewHabitIntervalDays] = useState(2);
+  const [newHabitWeekdays, setNewHabitWeekdays] = useState<number[]>([]);
   const [lastAddedHabitId, setLastAddedHabitId] = useState<string | null>(null);
   const [tab, setTab] = useState("entry");
   const { containerRef: swipeRef } = useSwipeableTabs({
@@ -54,6 +57,9 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
         setStatus(null);
         setNewHabitName("");
         setNewHabitType("good");
+        setNewHabitScheduleType("daily");
+        setNewHabitIntervalDays(2);
+        setNewHabitWeekdays([]);
         setLastAddedHabitId(null);
         setTab("entry");
       }, 0);
@@ -96,11 +102,30 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
 
   const handleAddNewHabit = () => {
     if (newHabitName.trim()) {
-      // Add habit only, then auto-switch to Add Entry tab via lastAddedHabitId flow.
-      const newHabit = addHabit({ name: newHabitName.trim(), type: newHabitType });
+      // Build schedule based on selected type
+      let schedule;
+      if (newHabitScheduleType === "interval") {
+        schedule = {
+          type: "interval" as const,
+          intervalDays: Math.max(2, newHabitIntervalDays),
+        };
+      } else if (newHabitScheduleType === "weekly") {
+        schedule = {
+          type: "weekly" as const,
+          daysOfWeek: newHabitWeekdays.length > 0 ? [...newHabitWeekdays].sort() : undefined,
+        };
+      } else {
+        schedule = { type: "daily" as const };
+      }
+
+      // Add habit with schedule, then auto-switch to Add Entry tab via lastAddedHabitId flow.
+      const newHabit = addHabit({ name: newHabitName.trim(), type: newHabitType, schedule });
       setLastAddedHabitId(newHabit.id);
       setNewHabitName("");
       setNewHabitType("good");
+      setNewHabitScheduleType("daily");
+      setNewHabitIntervalDays(2);
+      setNewHabitWeekdays([]);
     }
   };
 
@@ -195,34 +220,132 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
               </div>
             </TabsContent>
             <TabsContent value="habit" className="flex-1 min-h-0 overflow-y-auto mt-0">
-              <div className="space-y-2">
-                <Input
-                  type="text"
-                  ref={habitNameRef}
-                  className="w-full"
-                  placeholder={t("placeholders.habitName")}
-                  value={newHabitName}
-                  onChange={(e) => setNewHabitName(e.target.value)}
-                />
-                <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-                  <Button
-                    type="button"
-                    variant={newHabitType === "good" ? "default" : "outline"}
-                    onClick={() => setNewHabitType("good")}
-                    className={`flex-1 ${newHabitType === "good" ? "bg-green-500 text-white hover:bg-green-600" : ""}`}
-                  >
-                    {t("type.good")}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={newHabitType === "bad" ? "destructive" : "outline"}
-                    onClick={() => setNewHabitType("bad")}
-                    className="flex-1"
-                  >
-                    {t("type.bad")}
-                  </Button>
+              <form className="space-y-5">
+                {/* Habit Name */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{t("fields.name") || "Name"}</label>
+                  <Input
+                    type="text"
+                    ref={habitNameRef}
+                    className="w-full"
+                    placeholder={t("placeholders.name") || "Habit name"}
+                    value={newHabitName}
+                    onChange={(e) => setNewHabitName(e.target.value)}
+                  />
                 </div>
-              </div>
+
+                {/* Habit Type */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{t("fields.type") || "Type"}</label>
+                  <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-2">
+                    <Button
+                      type="button"
+                      onClick={() => setNewHabitType("good")}
+                      className={`w-full material-radius-none font-medium transition-all duration-200 ${
+                        newHabitType === "good"
+                          ? "bg-green-500 hover:bg-green-600 text-white"
+                          : "bg-background hover:bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                    >
+                      {t("type.good")}
+                    </Button>
+                    <Button
+                      type="button"
+                      onClick={() => setNewHabitType("bad")}
+                      className={`w-full material-radius-none font-medium transition-all duration-200 ${
+                        newHabitType === "bad"
+                          ? "bg-red-500 hover:bg-red-600 text-white"
+                          : "bg-background hover:bg-muted text-foreground"
+                      }`}
+                      variant="ghost"
+                    >
+                      {t("type.bad")}
+                    </Button>
+                  </div>
+                </div>
+
+                {/* Schedule Selector */}
+                <div className="space-y-2">
+                  <label className="text-sm font-medium">{t("fields.schedule") || "Schedule"}</label>
+                  <div className="grid grid-cols-1 border border-border material-radius overflow-hidden sm:grid-cols-3">
+                    {(["daily", "interval", "weekly"] as const).map((st) => (
+                      <Button
+                        key={st}
+                        type="button"
+                        onClick={() => setNewHabitScheduleType(st)}
+                        className={`w-full material-radius-none text-xs font-medium transition-all duration-200 ${
+                          newHabitScheduleType === st
+                            ? "bg-primary hover:bg-primary/90 text-white"
+                            : "bg-background hover:bg-muted text-foreground"
+                        }`}
+                        variant="ghost"
+                      >
+                        {st === "daily"
+                          ? t("schedule.daily")
+                          : st === "interval"
+                            ? t("schedule.interval")
+                            : t("schedule.weekly")}
+                      </Button>
+                    ))}
+                  </div>
+
+                  {/* Interval days input */}
+                  {newHabitScheduleType === "interval" && (
+                    <div className="flex items-center gap-2 mt-2">
+                      <label htmlFor="new-habit-interval-days" className="text-sm text-muted-foreground whitespace-nowrap">
+                        {t("interval.every")}
+                      </label>
+                      <Input
+                        id="new-habit-interval-days"
+                        type="number"
+                        min={2}
+                        max={365}
+                        value={newHabitIntervalDays}
+                        onChange={(e) => {
+                          const val = e.target.value.trim();
+                          if (val === "") {
+                            setNewHabitIntervalDays(2);
+                          } else {
+                            const num = parseInt(val, 10);
+                            if (!isNaN(num)) {
+                              setNewHabitIntervalDays(Math.max(2, Math.min(365, num)));
+                            }
+                          }
+                        }}
+                        className="w-20 material-radius"
+                      />
+                      <span className="text-sm text-muted-foreground">{t("interval.days")}</span>
+                    </div>
+                  )}
+
+                  {/* Weekday multi-select */}
+                  {newHabitScheduleType === "weekly" && (
+                    <div className="grid grid-cols-7 gap-1.5 mt-2">
+                      {["sun", "mon", "tue", "wed", "thu", "fri", "sat"].map((dayKey, idx) => (
+                        <Button
+                          key={idx}
+                          type="button"
+                          size="sm"
+                          onClick={() => {
+                            setNewHabitWeekdays(prev =>
+                              prev.includes(idx) ? prev.filter(d => d !== idx) : [...prev, idx]
+                            );
+                          }}
+                          className={`h-8 w-full text-xs font-medium transition-all duration-200 ${
+                            newHabitWeekdays.includes(idx)
+                              ? "bg-primary hover:bg-primary/90 text-white"
+                              : "bg-muted hover:bg-muted/80 text-foreground"
+                          }`}
+                          variant="ghost"
+                        >
+                          {t(`weekdays.${dayKey}`)}
+                        </Button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </form>
             </TabsContent>
             </div>
           </Tabs>
