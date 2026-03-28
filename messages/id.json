@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "Pelacak Kebiasaan TGATB",
     "description": "The Good and The Bad: aplikasi pelacak kebiasaan minimalis"
@@ -567,17 +567,18 @@
     "emptyDescription": "Tambahkan kebiasaan pertamamu untuk mulai!",
     "question": {
       "pending": "Apakah kamu melakukannya?",
-      "goodPositive": "Sudah selesai hari ini!",
-      "badPositive": "Kamu tidak melakukannya hari ini!",
-      "goodNegative": "Kamu tidak melakukannya hari ini!",
-      "badNegative": "Kamu melakukannya hari ini!",
-      "ongoing": "Sedang berlangsung"
+      "goodPositive": "Kamu berhasil{todaySuffix}!",
+      "badPositive": "Kamu tidak melakukannya{todaySuffix}!",
+      "goodNegative": "Kamu tidak melakukannya{todaySuffix}!",
+      "badNegative": "Kamu melakukannya{todaySuffix}!",
+      "ongoing": "Sedang berlangsung",
+      "todaySuffix": " hari ini"
     },
     "status": {
       "goodCompleted": "Selesai",
-      "goodMissed": "Terlewat",
+      "goodMissed": "Belum Selesai",
       "badAvoided": "Berhasil dihindari",
-      "badDone": "Dilakukan"
+      "badDone": "Belum Dihindari"
     },
     "type": {
       "good": "Baik",

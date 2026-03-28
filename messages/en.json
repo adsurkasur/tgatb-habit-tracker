@@ -571,7 +571,8 @@
       "badPositive": "You didn't do it{todaySuffix}!",
       "goodNegative": "You didn't do it{todaySuffix}!",
       "badNegative": "You did it{todaySuffix}!",
-      "ongoing": "Ongoing"
+      "ongoing": "Ongoing",
+      "todaySuffix": " today"
     },
     "status": {
       "goodCompleted": "Completed",
@@ -610,8 +611,10 @@
   },
   "StreakCelebration": {
     "badge": "Milestone",
-    "title": "{weeks, plural, one {# Week Streak!} other {# Weeks Streak!}}",    "titleWeekComplete": "{week, plural, one {Week # Complete!} other {Week # Complete!}}",
-    "titleCheckinsCount": "{count, plural, one {# Time in a Row!} other {# Times in a Row!}}",    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
+    "title": "{weeks, plural, one {# Week Streak!} other {# Weeks Streak!}}",
+    "titleWeekComplete": "{week, plural, one {Week # Complete!} other {Week # Complete!}}",
+    "titleCheckinsCount": "{count, plural, one {# Time in a Row!} other {# Times in a Row!}}",
+    "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
     "quoteLabel": "Today’s Quote",
     "dismiss": "Awesome",
     "quotes": {

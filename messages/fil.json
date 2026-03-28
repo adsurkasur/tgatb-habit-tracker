@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "TGATB Habit Tracker",
     "description": "The Good and The Bad: Isang minimalist na application ng pagsubaybay sa ugali"
@@ -567,17 +567,18 @@
     "emptyDescription": "Idagdag ang iyong unang ugali upang makapagsimula!",
     "question": {
       "pending": "Ginawa mo ba?",
-      "goodPositive": "Tapos na ngayon!",
-      "badPositive": "Hindi mo ginawa ngayon!",
-      "goodNegative": "Hindi mo ginawa ngayon!",
-      "badNegative": "Ginawa mo ngayon!",
-      "ongoing": "Inaasagawa"
+      "goodPositive": "Nagawa mo{todaySuffix}!",
+      "badPositive": "Hindi mo ginawa{todaySuffix}!",
+      "goodNegative": "Hindi mo ginawa{todaySuffix}!",
+      "badNegative": "Ginawa mo{todaySuffix}!",
+      "ongoing": "Inaasagawa",
+      "todaySuffix": " ngayon"
     },
     "status": {
       "goodCompleted": "Nakumpleto",
-      "goodMissed": "Nakaligtaan",
+      "goodMissed": "Hindi Nakumpleto",
       "badAvoided": "Iniiwasan",
-      "badDone": "Tapos na"
+      "badDone": "Hindi Naiwasan"
     },
     "type": {
       "good": "Mabuti",

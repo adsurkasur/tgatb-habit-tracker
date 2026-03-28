@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "TGATB 习惯追踪器",
     "description": "好与坏：一个极简的习惯跟踪应用程序"
@@ -567,17 +567,18 @@
     "emptyDescription": "添加您的第一个习惯即可开始！",
     "question": {
       "pending": "你做到了吗？",
-      "goodPositive": "今天已经完成了！",
-      "badPositive": "今天你没有做到！",
-      "goodNegative": "今天你没有做到！",
-      "badNegative": "你今天做到了！",
-      "ongoing": "进行中"
+      "goodPositive": "你做到了{todaySuffix}！",
+      "badPositive": "你没有做到{todaySuffix}！",
+      "goodNegative": "你没有做到{todaySuffix}！",
+      "badNegative": "你做了{todaySuffix}！",
+      "ongoing": "进行中",
+      "todaySuffix": " 今天"
     },
     "status": {
-      "goodCompleted": "完全的",
-      "goodMissed": "错过了",
-      "badAvoided": "避免",
-      "badDone": "完毕"
+      "goodCompleted": "已完成",
+      "goodMissed": "未完成",
+      "badAvoided": "已避免",
+      "badDone": "未避免"
     },
     "type": {
       "good": "好的",

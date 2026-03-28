@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "ตัวติดตามนิสัย TGATB",
     "description": "ข้อดีและข้อเสีย: แอปพลิเคชั่นติดตามนิสัยที่เรียบง่าย"
@@ -567,17 +567,18 @@
     "emptyDescription": "เพิ่มนิสัยแรกของคุณเพื่อเริ่มต้น!",
     "question": {
       "pending": "คุณทำมัน?",
-      "goodPositive": "เรียบร้อยแล้ววันนี้!",
-      "badPositive": "วันนี้คุณไม่ได้ทำ!",
-      "goodNegative": "วันนี้คุณไม่ได้ทำ!",
-      "badNegative": "วันนี้คุณทำได้แล้ว!",
-      "ongoing": "มีการดำเนิน"
+      "goodPositive": "คุณทำได้{todaySuffix}!",
+      "badPositive": "คุณไม่ได้ทำ{todaySuffix}!",
+      "goodNegative": "คุณไม่ได้ทำ{todaySuffix}!",
+      "badNegative": "คุณทำมัน{todaySuffix}!",
+      "ongoing": "กำลังดำเนินการ",
+      "todaySuffix": " วันนี้"
     },
     "status": {
-      "goodCompleted": "สมบูรณ์",
-      "goodMissed": "พลาด",
-      "badAvoided": "หลีกเลี่ยง",
-      "badDone": "เสร็จแล้ว"
+      "goodCompleted": "สำเร็จแล้ว",
+      "goodMissed": "ยังไม่สำเร็จ",
+      "badAvoided": "หลีกเลี่ยงได้",
+      "badDone": "ยังไม่หลีกเลี่ยง"
     },
     "type": {
       "good": "ดี",

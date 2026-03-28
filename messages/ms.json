@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "Penjejak Tabiat TGATB",
     "description": "Kebaikan dan Keburukan: Aplikasi penjejakan tabiat minimalis"
@@ -567,17 +567,18 @@
     "emptyDescription": "Tambah tabiat pertama anda untuk bermula!",
     "question": {
       "pending": "Adakah anda melakukannya?",
-      "goodPositive": "Sudah selesai hari ini!",
-      "badPositive": "Anda tidak melakukannya hari ini!",
-      "goodNegative": "Anda tidak melakukannya hari ini!",
-      "badNegative": "Anda melakukannya hari ini!",
-      "ongoing": "Sedang berlangsung"
+      "goodPositive": "Kamu berjaya{todaySuffix}!",
+      "badPositive": "Kamu tidak melakukannya{todaySuffix}!",
+      "goodNegative": "Kamu tidak melakukannya{todaySuffix}!",
+      "badNegative": "Kamu melakukannya{todaySuffix}!",
+      "ongoing": "Sedang berlangsung",
+      "todaySuffix": " hari ini"
     },
     "status": {
       "goodCompleted": "Selesai",
-      "goodMissed": "terlepas",
+      "goodMissed": "Belum Selesai",
       "badAvoided": "dielakkan",
-      "badDone": "Selesai"
+      "badDone": "Belum Dielakkan"
     },
     "type": {
       "good": "bagus",

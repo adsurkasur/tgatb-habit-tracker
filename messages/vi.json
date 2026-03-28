@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "Trình theo dõi thói quen TGATB",
     "description": "The Good and The Bad: Ứng dụng theo dõi thói quen tối giản"
@@ -567,17 +567,18 @@
     "emptyDescription": "Thêm thói quen đầu tiên của bạn để bắt đầu!",
     "question": {
       "pending": "Bạn đã làm điều đó phải không?",
-      "goodPositive": "Hôm nay đã xong rồi!",
-      "badPositive": "Bạn đã không làm điều đó ngày hôm nay!",
-      "goodNegative": "Bạn đã không làm điều đó ngày hôm nay!",
-      "badNegative": "Bạn đã làm được điều đó ngày hôm nay!",
-      "ongoing": "Đang tiến hành"
+      "goodPositive": "Bạn đã làm được{todaySuffix}!",
+      "badPositive": "Bạn đã không làm{todaySuffix}!",
+      "goodNegative": "Bạn đã không làm{todaySuffix}!",
+      "badNegative": "Bạn đã làm{todaySuffix}!",
+      "ongoing": "Đang tiến hành",
+      "todaySuffix": " hôm nay"
     },
     "status": {
       "goodCompleted": "Hoàn thành",
-      "goodMissed": "Bỏ lỡ",
-      "badAvoided": "tránh được",
-      "badDone": "Xong"
+      "goodMissed": "Chưa hoàn thành",
+      "badAvoided": "Tránh được",
+      "badDone": "Chưa tránh được"
     },
     "type": {
       "good": "Tốt",

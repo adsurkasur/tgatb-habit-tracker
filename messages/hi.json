@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "टीजीएटीबी आदत ट्रैकर",
     "description": "अच्छा और बुरा: एक न्यूनतम आदत ट्रैकिंग एप्लिकेशन"
@@ -567,17 +567,18 @@
     "emptyDescription": "आरंभ करने के लिए अपनी पहली आदत जोड़ें!",
     "question": {
       "pending": "क्या आपने ऐसा किया?",
-      "goodPositive": "आज पहले ही हो चुका है!",
-      "badPositive": "आपने आज ऐसा नहीं किया!",
-      "goodNegative": "आपने आज ऐसा नहीं किया!",
-      "badNegative": "आपने आज यह किया!",
-      "ongoing": "गणवत्ता"
+      "goodPositive": "तुमने कर दिखाया{todaySuffix}!",
+      "badPositive": "तुमने यह नहीं किया{todaySuffix}!",
+      "goodNegative": "तुमने यह नहीं किया{todaySuffix}!",
+      "badNegative": "तुमने यह कर लिया{todaySuffix}!",
+      "ongoing": "जारी है",
+      "todaySuffix": " आज"
     },
     "status": {
-      "goodCompleted": "पुरा होना।",
-      "goodMissed": "चुक होना",
-      "badAvoided": "बचा",
-      "badDone": "हो गया"
+      "goodCompleted": "पूरा हुआ",
+      "goodMissed": "पूर्ण नहीं हुआ",
+      "badAvoided": "बचाया गया",
+      "badDone": "टाला नहीं गया"
     },
     "type": {
       "good": "अच्छा",

@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "TGATB تعقب العادة",
     "description": "الجيد والسيئ: تطبيق بسيط لتتبع العادات"
@@ -567,17 +567,18 @@
     "emptyDescription": "أضف عادتك الأولى لتبدأ!",
     "question": {
       "pending": "هل فعلت ذلك؟",
-      "goodPositive": "لقد تم بالفعل اليوم!",
-      "badPositive": "أنت لم تفعل ذلك اليوم!",
-      "goodNegative": "أنت لم تفعل ذلك اليوم!",
-      "badNegative": "لقد فعلتها اليوم!",
-      "ongoing": "قيد التقدم"
+      "goodPositive": "لقد أنجزتها{todaySuffix}!",
+      "badPositive": "لم تفعلها{todaySuffix}!",
+      "goodNegative": "لم تفعلها{todaySuffix}!",
+      "badNegative": "لقد فعلتها{todaySuffix}!",
+      "ongoing": "قيد التقدم",
+      "todaySuffix": " اليوم"
     },
     "status": {
       "goodCompleted": "مكتمل",
-      "goodMissed": "مٌفتَقد",
+      "goodMissed": "غير مكتمل",
       "badAvoided": "تم تجنبه",
-      "badDone": "منتهي"
+      "badDone": "غير متجنب"
     },
     "type": {
       "good": "جيد",

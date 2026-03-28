@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "Suivi des habitudes TGATB",
     "description": "Le bon et le mauvais : une application minimaliste de suivi des habitudes"
@@ -567,17 +567,18 @@
     "emptyDescription": "Ajoutez votre première habitude pour commencer !",
     "question": {
       "pending": "L'avez-vous fait ?",
-      "goodPositive": "Déjà fait aujourd'hui !",
-      "badPositive": "Vous ne l'avez pas fait aujourd'hui !",
-      "goodNegative": "Vous ne l'avez pas fait aujourd'hui !",
-      "badNegative": "Vous l'avez fait aujourd'hui!",
-      "ongoing": "En cours"
+      "goodPositive": "Tu l'as fait{todaySuffix} !",
+      "badPositive": "Tu ne l'as pas fait{todaySuffix} !",
+      "goodNegative": "Tu ne l'as pas fait{todaySuffix} !",
+      "badNegative": "Tu l'as fait quand même{todaySuffix} !",
+      "ongoing": "En cours",
+      "todaySuffix": " aujourd'hui"
     },
     "status": {
       "goodCompleted": "Terminé",
-      "goodMissed": "Manqué",
+      "goodMissed": "Non terminé",
       "badAvoided": "Évité",
-      "badDone": "Terminé"
+      "badDone": "Non évité"
     },
     "type": {
       "good": "Bon",

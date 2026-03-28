@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "TGATB Трекер привычек",
     "description": "Хорошее и плохое: минималистское приложение для отслеживания привычек"
@@ -567,17 +567,18 @@
     "emptyDescription": "Добавьте свою первую привычку, чтобы начать!",
     "question": {
       "pending": "Ты это сделал?",
-      "goodPositive": "Уже сделано сегодня!",
-      "badPositive": "Ты не сделал этого сегодня!",
-      "goodNegative": "Ты не сделал этого сегодня!",
-      "badNegative": "Вы сделали это сегодня!",
-      "ongoing": "Онгоинг"
+      "goodPositive": "Ты сделал это{todaySuffix}!",
+      "badPositive": "Ты не сделал это{todaySuffix}!",
+      "goodNegative": "Ты не сделал это{todaySuffix}!",
+      "badNegative": "Ты сделал это{todaySuffix}!",
+      "ongoing": "В процессе",
+      "todaySuffix": " сегодня"
     },
     "status": {
-      "goodCompleted": "Завершенный",
-      "goodMissed": "Пропущенный",
-      "badAvoided": "Избегайте",
-      "badDone": "Сделанный"
+      "goodCompleted": "Завершено",
+      "goodMissed": "Не выполнено",
+      "badAvoided": "Избежено",
+      "badDone": "Не удалось избежать"
     },
     "type": {
       "good": "Хороший",

@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "Rastreador de hábitos TGATB",
     "description": "Lo bueno y lo malo: una aplicación minimalista de seguimiento de hábitos"
@@ -567,17 +567,18 @@
     "emptyDescription": "¡Agrega tu primer hábito para comenzar!",
     "question": {
       "pending": "¿Lo hiciste?",
-      "goodPositive": "¡Ya lo hemos hecho hoy!",
-      "badPositive": "¡No lo hiciste hoy!",
-      "goodNegative": "¡No lo hiciste hoy!",
-      "badNegative": "¡Lo hiciste hoy!",
-      "ongoing": "En progreso"
+      "goodPositive": "¡Lo lograste{todaySuffix}!",
+      "badPositive": "¡No lo hiciste{todaySuffix}!",
+      "goodNegative": "¡No lo hiciste{todaySuffix}!",
+      "badNegative": "¡Lo hiciste{todaySuffix}!",
+      "ongoing": "En progreso",
+      "todaySuffix": " hoy"
     },
     "status": {
       "goodCompleted": "Completado",
-      "goodMissed": "perdido",
+      "goodMissed": "No completado",
       "badAvoided": "evitado",
-      "badDone": "hecho"
+      "badDone": "No evitado"
     },
     "type": {
       "good": "bueno",

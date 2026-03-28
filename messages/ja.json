@@ -1,4 +1,4 @@
-﻿{
+{
   "App": {
     "name": "TGATB 習慣トラッカー",
     "description": "良い点と悪い点: ミニマリストの習慣追跡アプリケーション"
@@ -567,17 +567,18 @@
     "emptyDescription": "まずは最初の習慣を追加してください。",
     "question": {
       "pending": "やったっけ？",
-      "goodPositive": "今日はすでに完了しました！",
-      "badPositive": "今日はそれをしませんでした！",
-      "goodNegative": "今日はそれをしませんでした！",
-      "badNegative": "今日はやったね!",
-      "ongoing": "進行中"
+      "goodPositive": "できた{todaySuffix}！",
+      "badPositive": "やらなかった{todaySuffix}！",
+      "goodNegative": "やらなかった{todaySuffix}！",
+      "badNegative": "やってしまった{todaySuffix}！",
+      "ongoing": "進行中",
+      "todaySuffix": "今日"
     },
     "status": {
       "goodCompleted": "完了しました",
-      "goodMissed": "逃した",
+      "goodMissed": "未完了",
       "badAvoided": "避けられた",
-      "badDone": "終わり"
+      "badDone": "未回避"
     },
     "type": {
       "good": "良い",

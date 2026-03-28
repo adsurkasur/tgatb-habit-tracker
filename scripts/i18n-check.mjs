@@ -24,7 +24,7 @@ function loadMessages(filePath) {
 
 function getLocaleFiles() {
   const files = readdirSync(MESSAGES_DIR)
-    .filter((name) => name.endsWith(".json"))
+    .filter((name) => name.endsWith(".json") && name !== "streak-quotes.json")
     .sort();
 
   if (files.length === 0) {

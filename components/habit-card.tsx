@@ -129,7 +129,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   const usesTodayWording = !habit.schedule || habit.schedule.type === 'daily';
 
   const positiveMessage = (includeToday: boolean) => {
-    const todaySuffix = includeToday ? ' today' : '';
+    const todaySuffix = includeToday ? t('question.todaySuffix') : '';
     if (habit.type === 'good') {
       return t('question.goodPositive', { todaySuffix });
     }
@@ -137,7 +137,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   };
 
   const negativeMessage = (includeToday: boolean) => {
-    const todaySuffix = includeToday ? ' today' : '';
+    const todaySuffix = includeToday ? t('question.todaySuffix') : '';
     if (habit.type === 'good') {
       return t('question.goodNegative', { todaySuffix });
     }
