@@ -5,7 +5,6 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { routing, isValidLocale } from "@/i18n/routing";
 import { getMessagesForLocale } from "@/i18n/messages";
-import { AppReadyMarker } from "@/components/app-ready-marker";
 import { LocaleRuntimeSync } from "@/components/locale-runtime-sync";
 
 const openGraphLocaleByAppLocale: Record<string, string> = {
@@ -84,7 +83,6 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   return (
     <NextIntlClientProvider locale={locale} messages={messages} timeZone={routing.timeZone}>
       <LocaleRuntimeSync locale={locale} />
-      <AppReadyMarker strategy="data-ready" />
       {children}
     </NextIntlClientProvider>
   );

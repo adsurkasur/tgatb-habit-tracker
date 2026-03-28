@@ -6,6 +6,7 @@ import { GlobalLoadingOverlay } from "@/components/global-loading-overlay";
 import { FirebaseInitializer } from "@/components/firebase-initializer";
 import { CapacitorInit } from "@/components/capacitor-init";
 import { MasterLoadingScreen } from "@/components/master-loading-screen";
+import { AppReadyMarker } from "@/components/app-ready-marker";
 
 export const metadata: Metadata = {
   title: "TGATB Habit Tracker",
@@ -102,6 +103,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           {/* <ServiceWorkerRegistration /> */}
           <FirebaseInitializer>
             <Providers>
+              <AppReadyMarker strategy="data-ready" />
               <GlobalLoadingOverlay />
               {children}
             </Providers>
