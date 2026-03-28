@@ -90,20 +90,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                   // Silent fail: any error in bootstrap doesn't break the app
                 }
 
-                // Add app-loaded class when DOM ready (for loader gate)
-                var markAppLoaded = function () {
-                  try {
-                    if (document.body && !document.body.classList.contains("app-loaded")) {
-                      document.body.classList.add("app-loaded");
-                    }
-                  } catch (_) {}
-                };
-
-                if (document.readyState === "loading") {
-                  document.addEventListener("DOMContentLoaded", markAppLoaded);
-                } else {
-                  markAppLoaded();
-                }
               })();
             `,
           }}

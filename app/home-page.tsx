@@ -34,6 +34,7 @@ export default function Home() {
   const t = useTranslations("Home");
   // Use unified exportData and importData from useHabits
   const {
+    isInitialized,
     exportData,
     importData,
     habits,
@@ -225,6 +226,14 @@ export default function Home() {
   const allHabits = [...goodHabits, ...badHabits];
 
   // Keyboard navigation
+  useEffect(() => {
+    if (!isInitialized || typeof window === "undefined") {
+      return;
+    }
+
+    window.dispatchEvent(new CustomEvent("tgatb:data-ready"));
+  }, [isInitialized]);
+
   useEffect(() => {
     const handleKeyPress = (event: KeyboardEvent) => {
       if ((goodHabits.length + badHabits.length) > 1) {

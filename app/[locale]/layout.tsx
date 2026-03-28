@@ -84,7 +84,7 @@ export default async function LocaleLayout({ children, params }: LocaleLayoutPro
   return (
     <NextIntlClientProvider locale={locale} messages={messages} timeZone={routing.timeZone}>
       <LocaleRuntimeSync locale={locale} />
-      <AppReadyMarker />
+      <AppReadyMarker strategy="data-ready" />
       {children}
     </NextIntlClientProvider>
   );

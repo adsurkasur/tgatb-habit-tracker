@@ -64,6 +64,7 @@ export function useHabits() {
   };
   // ...existing code...
   const [habits, setHabits] = useState<Habit[]>([]);
+  const [isInitialized, setIsInitialized] = useState(false);
   const [currentHabitIndex, setCurrentHabitIndex] = useState(0);
   /**
   * navigationEvent emits a new object with an ever-increasing sequence number for each logical navigation.
@@ -88,39 +89,59 @@ export function useHabits() {
     }, [settings.soundEnabled, settings.hapticEnabled]);
 
     useEffect(() => {
+      let cancelled = false;
+      setIsInitialized(false);
+
       (async () => {
-        // Run legacy data migration (once per account, idempotent)
-        await migrateLegacyPlatformStorage();
+        try {
+          // Run legacy data migration (once per account, idempotent)
+          await migrateLegacyPlatformStorage();
 
-        const loadedHabits = HabitStorage.getHabits();
-        const loadedSettings = await HabitStorage.getSettings();
+          const loadedHabits = HabitStorage.getHabits();
+          const loadedSettings = await HabitStorage.getSettings();
 
-        // --- Auto-finalization: fill in missed days ---
-        const allLogs = HabitStorage.getLogs();
-        const newAutoLogs = computeAutoLogs(loadedHabits, allLogs);
-        if (newAutoLogs.length > 0) {
-          const merged = [...allLogs, ...newAutoLogs];
-          HabitStorage.saveLogs(merged);
-          // Recalculate streaks after auto-finalization
-          for (const habit of loadedHabits) {
-            HabitStorage.recalculateStreak(habit.id);
+          // --- Auto-finalization: fill in missed days ---
+          const allLogs = HabitStorage.getLogs();
+          const newAutoLogs = computeAutoLogs(loadedHabits, allLogs);
+          if (newAutoLogs.length > 0) {
+            const merged = [...allLogs, ...newAutoLogs];
+            HabitStorage.saveLogs(merged);
+            // Recalculate streaks after auto-finalization
+            for (const habit of loadedHabits) {
+              HabitStorage.recalculateStreak(habit.id);
+            }
+          }
+
+          // Re-read habits (streaks may have been updated)
+          const freshHabits = HabitStorage.getHabits();
+          if (!cancelled) {
+            setHabits(freshHabits);
+            setCurrentHabitIndex(0);
+            // Merge loaded settings with defaults to prevent losing values if partial
+            const mergedSettings = { ...defaultUserSettings, ...loadedSettings };
+            setSettings(mergedSettings);
+            // Apply dark mode
+            if (mergedSettings.darkMode) {
+              document.documentElement.classList.add("dark");
+            } else {
+              document.documentElement.classList.remove("dark");
+            }
+          }
+        } catch {
+          if (!cancelled) {
+            setHabits(HabitStorage.getHabits());
+            setCurrentHabitIndex(0);
+          }
+        } finally {
+          if (!cancelled) {
+            setIsInitialized(true);
           }
         }
-
-        // Re-read habits (streaks may have been updated)
-        const freshHabits = HabitStorage.getHabits();
-        setHabits(freshHabits);
-        setCurrentHabitIndex(0);
-        // Merge loaded settings with defaults to prevent losing values if partial
-        const mergedSettings = { ...defaultUserSettings, ...loadedSettings };
-        setSettings(mergedSettings);
-        // Apply dark mode
-        if (mergedSettings.darkMode) {
-          document.documentElement.classList.add("dark");
-        } else {
-          document.documentElement.classList.remove("dark");
-        }
       })();
+
+      return () => {
+        cancelled = true;
+      };
     // Re-run whenever the active account changes (login/logout)
     }, [accountId]);
 
@@ -457,6 +478,7 @@ export function useHabits() {
   }, [isLoggedIn]);
 
   return {
+    isInitialized,
     habits,
     goodHabits: habits.filter(h => h.type === 'good'),
     badHabits: habits.filter(h => h.type === 'bad'),
