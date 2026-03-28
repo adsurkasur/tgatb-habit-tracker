@@ -29,6 +29,8 @@ function settingsKey(): string {
   return scopedKey('user_settings');
 }
 
+const SETTINGS_MIRROR_KEY = 'user_settings';
+
 const defaultSettings = (): UserSettings => ({
   darkMode: false,
   language: 'en',
@@ -88,15 +90,29 @@ export const PlatformStorage = {
 };
 
 export async function getSettings(): Promise<UserSettings> {
-  const raw = await PlatformStorage.getItem(settingsKey());
+  const scoped = await PlatformStorage.getItem(settingsKey());
+  const raw = scoped ?? (typeof window !== 'undefined' ? localStorage.getItem(SETTINGS_MIRROR_KEY) : null);
   if (!raw) return defaultSettings();
   try {
-    return JSON.parse(raw) as UserSettings;
+    const parsed = JSON.parse(raw) as Partial<UserSettings>;
+    return {
+      ...defaultSettings(),
+      ...parsed,
+    };
   } catch {
     return defaultSettings();
   }
 }
 
 export async function saveSettings(settings: UserSettings): Promise<void> {
-  await PlatformStorage.setItem(settingsKey(), JSON.stringify(settings));
+  const normalized: UserSettings = {
+    ...defaultSettings(),
+    ...settings,
+  };
+  const payload = JSON.stringify(normalized);
+  await PlatformStorage.setItem(settingsKey(), payload);
+  // Canonical synchronous mirror for bootstrap code paths.
+  if (typeof window !== 'undefined') {
+    localStorage.setItem(SETTINGS_MIRROR_KEY, payload);
+  }
 }

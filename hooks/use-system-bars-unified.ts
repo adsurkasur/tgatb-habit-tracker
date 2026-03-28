@@ -41,7 +41,8 @@ const globalState: SystemBarsState = {
 
 export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: boolean) => {
   const debounceRef = useRef<number | null>(null);
-  const lastApplyRef = useRef<number>(0);
+  const lastDarkModeRef = useRef<boolean | undefined>(undefined);
+  const lastFullscreenRef = useRef<boolean | undefined>(undefined);
   
   const isAndroid = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
   const isIOS = Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'ios';
@@ -50,11 +51,6 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
     if (!Capacitor.isNativePlatform()) return;
 
     // --- Helper functions (inside useCallback to satisfy exhaustive-deps) ---
-    const shouldRun = () => {
-      const now = Date.now();
-      if (now - lastApplyRef.current < DEBOUNCE_MS) return false;
-      lastApplyRef.current = now; return true;
-    };
     const resolveTargetFullscreen = (force?: boolean) => force ?? fullscreenMode ?? globalState.isFullscreen;
     const logStart = (target: boolean) => {
       if (process.env.NODE_ENV !== "production") {
@@ -133,7 +129,8 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
     };
 
     // --- Main logic ---
-    if (!shouldRun()) return;
+    // Skip debounce gate for initialization and theme-only changes (critical updates)
+    // Keep debounce only for repeated fullscreen changes (non-critical)
     const targetFullscreen = resolveTargetFullscreen(forceFullscreen);
     logStart(targetFullscreen);
     try {
@@ -158,24 +155,39 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
     }, DEBOUNCE_MS);
   }, [applySystemBars]);
 
-  // Initialize system bars on first mount and handle fullscreen changes
+  // Track if dark mode changed to apply immediately (critical for first-open)
   useEffect(() => {
     if (!Capacitor.isNativePlatform()) return;
     
-    // Only apply if this is the first initialization OR if fullscreen mode has explicitly changed
-    const shouldApply = !globalState.isInitialized || (fullscreenMode !== undefined && fullscreenMode !== globalState.isFullscreen);
+    // Dark mode changes are CRITICAL: apply immediately, never debounce
+    if (isDarkMode !== lastDarkModeRef.current) {
+      lastDarkModeRef.current = isDarkMode;
+      // Apply immediately for theme changes
+      applySystemBars(fullscreenMode);
+    }
+  }, [isDarkMode, fullscreenMode, applySystemBars]);
+
+  // Initialize system bars on first mount and handle fullscreen changes (debounced)
+  useEffect(() => {
+    if (!Capacitor.isNativePlatform()) return;
+    
+    // Only apply if this is the first initialization OR if fullscreen mode has changed
+    const shouldApply = !globalState.isInitialized || (fullscreenMode !== undefined && fullscreenMode !== lastFullscreenRef.current);
     
     if (shouldApply) {
       if (!globalState.isInitialized) {
         globalState.isInitialized = true;
-        // Apply immediately on first initialization
+        lastFullscreenRef.current = fullscreenMode;
+        lastDarkModeRef.current = isDarkMode;
+        // Apply immediately on first initialization (no debounce)
         applySystemBars(fullscreenMode);
-      } else {
-        // Use debounced apply for subsequent changes
+      } else if (fullscreenMode !== lastFullscreenRef.current) {
+        // Fullscreen changes are debounced (non-critical)
+        lastFullscreenRef.current = fullscreenMode;
         debouncedApply(fullscreenMode);
       }
     }
-  }, [applySystemBars, debouncedApply, fullscreenMode]);
+  }, [applySystemBars, debouncedApply, fullscreenMode, isDarkMode]);
 
   // Cleanup
   useEffect(() => {

@@ -33,7 +33,18 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     (async () => {
       try {
         const settings = await HabitStorage.getSettings();
-        const darkMode = settings.darkMode;
+        // Merge loaded settings with defaults to ensure all fields exist
+        const defaults = {
+          darkMode: false,
+          language: "en",
+          motivatorPersonality: "positive",
+          fullscreenMode: false,
+          autoSync: false,
+          soundEnabled: true,
+          hapticEnabled: true,
+        };
+        const mergedSettings = { ...defaults, ...settings };
+        const darkMode = mergedSettings.darkMode;
         setIsDarkState(darkMode);
         // Apply theme immediately to prevent flash
         if (darkMode) {
@@ -71,11 +82,22 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       document.documentElement.classList.remove("dark");
     }
     
-    // Save to localStorage
+    // Save to localStorage with defaults merged
     (async () => {
       try {
         const currentSettings = await HabitStorage.getSettings();
-        await HabitStorage.saveSettings({ ...currentSettings, darkMode });
+        // Merge with defaults to ensure all fields are preserved
+        const defaults = {
+          darkMode: false,
+          language: "en",
+          motivatorPersonality: "positive",
+          fullscreenMode: false,
+          autoSync: false,
+          soundEnabled: true,
+          hapticEnabled: true,
+        };
+        const mergedSettings = { ...defaults, ...currentSettings };
+        await HabitStorage.saveSettings({ ...mergedSettings, darkMode });
       } catch (error) {
         console.error("Error saving theme settings:", error);
       }

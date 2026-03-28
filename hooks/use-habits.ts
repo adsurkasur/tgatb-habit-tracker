@@ -84,9 +84,20 @@ export function useHabits() {
         const freshHabits = HabitStorage.getHabits();
         setHabits(freshHabits);
         setCurrentHabitIndex(0);
-        setSettings(loadedSettings);
+        // Merge loaded settings with defaults to prevent losing values if partial
+        const defaults = {
+          darkMode: false,
+          language: "en",
+          motivatorPersonality: "positive",
+          fullscreenMode: false,
+          autoSync: false,
+          soundEnabled: true,
+          hapticEnabled: true,
+        };
+        const mergedSettings = { ...defaults, ...loadedSettings };
+        setSettings(mergedSettings);
         // Apply dark mode
-        if (loadedSettings.darkMode) {
+        if (mergedSettings.darkMode) {
           document.documentElement.classList.add("dark");
         } else {
           document.documentElement.classList.remove("dark");
@@ -340,9 +351,20 @@ export function useHabits() {
       const loadedHabits = HabitStorage.getHabits();
       const loadedSettings = await HabitStorage.getSettings();
       setHabits(loadedHabits);
-      setSettings(loadedSettings);
+      // Merge loaded settings with defaults to prevent losing values if partial
+      const defaults = {
+        darkMode: false,
+        language: "en",
+        motivatorPersonality: "positive",
+        fullscreenMode: false,
+        autoSync: false,
+        soundEnabled: true,
+        hapticEnabled: true,
+      };
+      const mergedImportSettings = { ...defaults, ...loadedSettings };
+      setSettings(mergedImportSettings);
       // Immediately update theme if darkMode changed
-      setIsDark(loadedSettings.darkMode);
+      setIsDark(mergedImportSettings.darkMode);
 
       // Keep displayed locale and persisted language in sync after import.
       if (typeof window !== "undefined") {

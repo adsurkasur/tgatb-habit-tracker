@@ -2,7 +2,6 @@
 
 import { useEffect } from "react";
 import type { AppLocale } from "@/i18n/routing";
-import { getSettings, saveSettings } from "@/lib/platform-storage";
 
 type LocaleRuntimeSyncProps = {
   locale: AppLocale;
@@ -10,18 +9,10 @@ type LocaleRuntimeSyncProps = {
 
 export function LocaleRuntimeSync({ locale }: LocaleRuntimeSyncProps) {
   useEffect(() => {
+    // Sync DOM language attribute to current route locale for accessibility.
+    // Note: Route-to-settings overwrite is REMOVED. User's persisted language preference
+    // controls navigation; this component only syncs the DOM attribute.
     document.documentElement.lang = locale;
-
-    void (async () => {
-      try {
-        const settings = await getSettings();
-        if (settings.language !== locale) {
-          await saveSettings({ ...settings, language: locale });
-        }
-      } catch {
-        // Ignore persistence sync failures; locale routing still controls rendered language.
-      }
-    })();
   }, [locale]);
 
   return null;
