@@ -5,5 +5,5 @@
     <color name="colorAccent">#ec4899</color>
     
     <!-- Status bar color for dark theme - using dark purple color -->
-    <color name="status_bar_color">#1e1b2e</color>
+    <color name="status_bar_color">#201e24</color>
 </resources>

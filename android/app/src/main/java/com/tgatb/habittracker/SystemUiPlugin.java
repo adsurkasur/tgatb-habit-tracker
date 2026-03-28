@@ -24,7 +24,7 @@ public class SystemUiPlugin extends Plugin {
     private static boolean darkModeEnabled = false;
     private static final String PURPLE = "#6750A4"; // match web constant
     private static final String LIGHT_SURFACE = "#FFFFFF";
-    private static final String DARK_SURFACE = "#1B1A1E";
+    private static final String DARK_SURFACE = "#201E24";
 
     @PluginMethod
     public void setFullscreen(PluginCall call) {
