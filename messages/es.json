@@ -830,6 +830,8 @@
   "StreakCelebration": {
     "badge": "Milestone",
     "title": "{weeks} Week Streak!",
+    "titleWeekComplete": "¡Semana {week} Completa!",
+    "titleCheckinsCount": "¡{count} Veces Seguidas!",
     "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
     "quoteLabel": "Today's Quote",
     "dismiss": "Awesome",

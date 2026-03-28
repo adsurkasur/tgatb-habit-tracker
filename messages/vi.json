@@ -830,6 +830,8 @@
   "StreakCelebration": {
     "badge": "Milestone",
     "title": "{weeks} Week Streak!",
+    "titleWeekComplete": "Tuần {week} Hoàn Thành!",
+    "titleCheckinsCount": "{count} Lần Liên Tiếp!",
     "subtitle": "{habitName} has reached {streak} days. Keep the momentum going.",
     "quoteLabel": "Today's Quote",
     "dismiss": "Awesome",

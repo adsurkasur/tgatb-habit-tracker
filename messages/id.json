@@ -586,6 +586,8 @@
   "StreakCelebration": {
     "badge": "Milestone",
     "title": "Streak {weeks} Minggu!",
+    "titleWeekComplete": "Minggu {week} Selesai!",
+    "titleCheckinsCount": "{count} Kali Berturut-turut!",
     "subtitle": "{habitName} telah mencapai {streak} hari. Pertahankan momentumnya.",
     "quoteLabel": "Kutipan Hari Ini",
     "dismiss": "Mantap",

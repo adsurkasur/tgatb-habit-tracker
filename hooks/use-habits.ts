@@ -282,6 +282,7 @@ export function useHabits() {
         isPositiveOutcome,
         habitId: updatedHabit.id,
         habitName: updatedHabit.name,
+        habit: updatedHabit,
       });
 
       const feedbackOpts = {
@@ -335,6 +336,8 @@ export function useHabits() {
       milestoneId: "week1",
       milestoneDays: 7,
       milestoneWeeks: 1,
+      milestoneCount: 1,
+      unit: "weeks",
       habitId: "preview",
       habitName: "Momentum",
       streak: 7,
@@ -533,6 +536,7 @@ export function useHabits() {
         isPositiveOutcome,
         habitId: updatedHabit.id,
         habitName: updatedHabit.name,
+        habit: updatedHabit,
       });
 
       if (celebrationPayload && shouldShowCelebrationEffects(settings)) {

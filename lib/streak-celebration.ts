@@ -1,7 +1,8 @@
-import type { UserSettings } from "@shared/schema";
+import type { UserSettings, Habit } from "@shared/schema";
 import { STREAK_QUOTE_IDS } from "@/lib/streak-quotes";
 
 export type CelebrationMilestoneId = string;
+export type CelebrationUnit = "weeks" | "cycles" | "checkins";
 
 export interface CelebrationMilestone {
   id: CelebrationMilestoneId;
@@ -15,6 +16,8 @@ export interface StreakCelebrationPayload {
   milestoneId: CelebrationMilestoneId;
   milestoneDays: number;
   milestoneWeeks: number;
+  milestoneCount: number; // For cycle/interval: number of successful check-ins or weeks completed
+  unit: CelebrationUnit; // "weeks" for daily, "cycles" for weekly/intervals, "checkins" for every-n-days
   habitId: string;
   habitName: string;
   streak: number;
@@ -58,8 +61,9 @@ export function evaluateStreakMilestoneCrossing(params: {
   isPositiveOutcome: boolean;
   habitId: string;
   habitName: string;
+  habit?: Habit; // Optional habit object to determine schedule type
 }): StreakCelebrationPayload | null {
-  const { previousStreak, nextStreak, isPositiveOutcome, habitId, habitName } = params;
+  const { previousStreak, nextStreak, isPositiveOutcome, habitId, habitName, habit } = params;
 
   if (!isPositiveOutcome) return null;
 
@@ -71,11 +75,29 @@ export function evaluateStreakMilestoneCrossing(params: {
 
   if (!milestone) return null;
 
+  // Determine unit and count based on schedule type
+  let unit: CelebrationUnit = "weeks";
+  let milestoneCount = milestone.weeks;
+
+  if (habit?.schedule) {
+    if (habit.schedule.type === "weekly") {
+      // For weekday schedules: celebrate week completion (1 complete week, 2 complete weeks, etc.)
+      unit = "cycles";
+      milestoneCount = milestone.weeks; // Still use weeks as the unit count
+    } else if (habit.schedule.type === "interval") {
+      // For interval schedules: celebrate every 7 check-ins
+      unit = "checkins";
+      milestoneCount = nextStreak; // Use streak count directly as check-in count
+    }
+  }
+
   const seed = `${habitId}:${nextStreak}:${milestone.id}`;
   return {
     milestoneId: milestone.id,
     milestoneDays: milestone.days,
     milestoneWeeks: milestone.weeks,
+    milestoneCount,
+    unit,
     habitId,
     habitName,
     streak: nextStreak,

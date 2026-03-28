@@ -6,12 +6,16 @@ import { useLocale, useTranslations } from "next-intl";
 import { getStreakQuoteById, getStreakQuoteTranslation } from "@/lib/streak-quotes";
 import { Button } from "@/components/ui/button";
 
+import type { CelebrationUnit } from "@/lib/streak-celebration";
+
 interface StreakCelebrationOverlayProps {
   open: boolean;
   weeks: number;
   streak: number;
   habitName: string;
   quoteKey: string;
+  unit?: CelebrationUnit;
+  count?: number;
   reducedMotion: boolean;
   confettiCount: number;
   onClose: () => void;
@@ -39,6 +43,8 @@ export function StreakCelebrationOverlay({
   streak,
   habitName,
   quoteKey,
+  unit = "weeks",
+  count = weeks,
   reducedMotion,
   confettiCount,
   onClose,
@@ -47,6 +53,19 @@ export function StreakCelebrationOverlay({
   const locale = useLocale();
   const quote = getStreakQuoteById(quoteKey);
   const quoteCaption = getStreakQuoteTranslation(quote, locale);
+
+  // Generate dynamic title based on unit type
+  const getTitleKey = (): string => {
+    if (unit === "cycles") return "titleWeekComplete";
+    if (unit === "checkins") return "titleCheckinsCount";
+    return "title"; // default for "weeks"
+  };
+
+  const getTitleValues = (): Record<string, number | string> => {
+    if (unit === "cycles") return { week: count };
+    if (unit === "checkins") return { count };
+    return { weeks: count };
+  };
 
   const particles = useMemo(() => {
     const safeCount = Math.max(1, confettiCount);
@@ -77,7 +96,7 @@ export function StreakCelebrationOverlay({
       data-state="open"
       role="dialog"
       aria-modal="true"
-      aria-label={t("title", { weeks })}
+      aria-label={t(getTitleKey(), getTitleValues())}
       onClick={onClose}
     >
       {!reducedMotion && (
@@ -112,7 +131,7 @@ export function StreakCelebrationOverlay({
           <p className="text-sm font-semibold uppercase tracking-wide">{t("badge")}</p>
         </div>
 
-        <h2 className="text-2xl font-bold leading-tight text-foreground">{t("title", { weeks })}</h2>
+        <h2 className="text-2xl font-bold leading-tight text-foreground">{t(getTitleKey(), getTitleValues())}</h2>
         <p className="mt-2 text-sm text-muted-foreground">
           {t("subtitle", { streak, habitName })}
         </p>

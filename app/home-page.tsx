@@ -561,6 +561,8 @@ export default function Home() {
           streak={streakCelebration?.streak ?? 7}
           habitName={streakCelebration?.habitName ?? "Habit"}
           quoteKey={streakCelebration?.quoteKey ?? "caesar-veni-vidi-vici"}
+          unit={streakCelebration?.unit ?? "weeks"}
+          count={streakCelebration?.milestoneCount ?? 1}
           reducedMotion={streakCelebrationReducedMotion}
           confettiCount={streakCelebrationConfettiCount}
           onClose={dismissStreakCelebration}
