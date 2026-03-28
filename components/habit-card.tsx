@@ -140,7 +140,7 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   
   const cardToneClass = () => {
     if (isNotYet) {
-      return 'bg-slate-200 border-slate-400 dark:bg-slate-800 dark:border-slate-600';
+      return 'bg-primary/10 border-primary/30 dark:bg-primary/15 dark:border-primary/35';
     }
 
     // Off-day: show as completed/on-track (green for good, blue for bad)
@@ -232,7 +232,7 @@ function StatusBadge({ visible, type, state }: { visible: boolean; type: Habit['
   if (state === 'notYet') {
     return (
       <div className="absolute top-4 left-4">
-        <Badge className="text-white border-slate-700 bg-slate-600 border-opacity-80">
+        <Badge className="text-primary border-primary/40 bg-primary/15">
           <Clock3 className="w-3 h-3 mr-1" />
           Not Yet
         </Badge>
@@ -308,7 +308,7 @@ function ActionButtons({ isCompletedToday, isOffDay, onUndo, onTrack, t }: { isC
   if (isOffDay) {
     return (
       <div className="flex space-x-4">
-        <Button disabled variant="outline" className="w-full h-16 border-slate-500 text-slate-700 bg-slate-300 hover:bg-slate-300 dark:border-slate-500 dark:text-slate-200 dark:bg-slate-700 dark:hover:bg-slate-700 material-radius cursor-not-allowed" size="lg">
+        <Button disabled variant="outline" className="w-full h-16 border-primary/35 text-primary/85 bg-primary/12 hover:bg-primary/12 dark:border-primary/35 dark:text-primary/90 dark:bg-primary/18 dark:hover:bg-primary/18 material-radius cursor-not-allowed" size="lg">
           {t('question.ongoing')}
         </Button>
       </div>
