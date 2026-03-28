@@ -5,7 +5,7 @@ import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 
 interface NavigationBarPlugin { setNavigationBarColor?: (opts: { color: string; darkButtons?: boolean }) => Promise<void> }
-interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean }) => Promise<void> }
+interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean; darkMode?: boolean }) => Promise<void> }
 
 /**
  * Unified System Bars Management Hook
@@ -23,19 +23,23 @@ interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean }) => Promi
  */
 
 const PURPLE_COLOR = '#6750a4';
+const LIGHT_SURFACE_COLOR = '#ffffff';
+const DARK_SURFACE_COLOR = '#121212';
 const DEBOUNCE_MS = 300;
 
 interface SystemBarsState {
   isFullscreen: boolean;
+  isDarkMode: boolean;
   isInitialized: boolean;
 }
 
 const globalState: SystemBarsState = {
   isFullscreen: false,
+  isDarkMode: false,
   isInitialized: false
 };
 
-export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
+export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: boolean) => {
   const debounceRef = useRef<number | null>(null);
   const lastApplyRef = useRef<number>(0);
   
@@ -70,10 +74,11 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     };
     const maybeApplySystemUi = async (target: boolean) => {
       try {
+        const darkMode = isDarkMode ?? globalState.isDarkMode;
         const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
         const { SystemUi } = cap?.Plugins || {};
         const sys = SystemUi as unknown as SystemUiPlugin | undefined;
-        if (sys && typeof sys.setFullscreen === 'function') { await sys.setFullscreen({ enabled: target }); }
+        if (sys && typeof sys.setFullscreen === 'function') { await sys.setFullscreen({ enabled: target, darkMode }); }
       } catch (e) { console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e); }
     };
     const applyAndroidBars = async (target: boolean) => {
@@ -84,11 +89,20 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
         console.log(`[SystemBars] Available plugins: ${plugins.join(', ')}`);
         console.log(`[SystemBars] Using StatusBar API as primary method`);
       }
+      
+      // Resolve the current dark mode state
+      const darkMode = isDarkMode ?? globalState.isDarkMode;
+      
       if (target) {
-        await StatusBar.setBackgroundColor({ color: '#00000000' });
-        await StatusBar.hide();
-        await setNavColor('#00000000');
+        // Fullscreen mode: use theme-aware colors
+        const barColor = darkMode ? DARK_SURFACE_COLOR : LIGHT_SURFACE_COLOR;
+        const useDarkIcons = !darkMode;
+        await StatusBar.show();
+        await StatusBar.setStyle({ style: useDarkIcons ? StatusBarStyles.Dark : StatusBarStyles.Light });
+        await StatusBar.setBackgroundColor({ color: barColor });
+        await setNavColor(barColor);
       } else {
+        // Non-fullscreen mode: use purple
         await StatusBar.show();
         await StatusBar.setStyle({ style: StatusBarStyles.Light });
         await StatusBar.setBackgroundColor({ color: PURPLE_COLOR });
@@ -101,8 +115,9 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     };
     const finalizeState = (target: boolean) => {
       globalState.isFullscreen = target;
+      globalState.isDarkMode = isDarkMode ?? globalState.isDarkMode;
       if (process.env.NODE_ENV !== "production") {
-        console.log(`[SystemBars] System bars configuration completed: fullscreen=${target}`);
+        console.log(`[SystemBars] System bars configuration completed: fullscreen=${target}, darkMode=${globalState.isDarkMode}`);
       }
     };
     const smallSettleDelay = () => new Promise(r => setTimeout(r, 100));
@@ -132,7 +147,7 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean) => {
     } catch (error) {
       await attemptRecovery(error, targetFullscreen);
     }
-  }, [fullscreenMode, isAndroid, isIOS]);
+  }, [fullscreenMode, isDarkMode, isAndroid, isIOS]);
 
   const debouncedApply = useCallback((forceFullscreen?: boolean) => {
     if (debounceRef.current) {

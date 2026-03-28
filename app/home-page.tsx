@@ -100,7 +100,7 @@ export default function Home() {
   }, [habits, navigateToHabitIndex]);
 
   // MAJOR FIX: Apply unified system bar theming with fullscreen support
-  useSystemBarsUnified(settings.fullscreenMode);
+  useSystemBarsUnified(settings.fullscreenMode, settings.darkMode);
 
   // Update theme immediately when settings.darkMode changes
   useEffect(() => {

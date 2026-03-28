@@ -21,18 +21,24 @@ import com.getcapacitor.PluginMethod;
 @CapacitorPlugin(name = "SystemUi")
 public class SystemUiPlugin extends Plugin {
     private static boolean fullscreenEnabled = false;
+    private static boolean darkModeEnabled = false;
     private static final String PURPLE = "#6750A4"; // match web constant
+    private static final String LIGHT_SURFACE = "#FFFFFF";
+    private static final String DARK_SURFACE = "#121212";
 
     @PluginMethod
     public void setFullscreen(PluginCall call) {
         boolean enabled = call.getBoolean("enabled", false);
+        boolean darkMode = call.getBoolean("darkMode", darkModeEnabled);
         fullscreenEnabled = enabled;
+        darkModeEnabled = darkMode;
         Activity activity = getActivity();
         if (activity != null) {
             activity.runOnUiThread(() -> applySystemUi(activity));
         }
         JSObject ret = new JSObject();
         ret.put("enabled", fullscreenEnabled);
+        ret.put("darkMode", darkModeEnabled);
         call.resolve(ret);
     }
 
@@ -142,14 +148,27 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void applyColorsAndAppearance(Window window, WindowInsetsControllerCompat controller) {
-        int purple = parsePurple();
-        applyBarColors(window, purple);
-        enforceLightIcons(controller);
-        clearLegacyLightFlags(window);
+        // Fullscreen with theme, or non-fullscreen with purple
+        int barColor;
+        boolean useDarkIcons;
+        
+        if (fullscreenEnabled) {
+            // Fullscreen mode: use theme-aware colors
+            barColor = darkModeEnabled ? parseColor(DARK_SURFACE) : parseColor(LIGHT_SURFACE);
+            useDarkIcons = !darkModeEnabled; // light theme = dark icons, dark theme = light icons
+        } else {
+            // Non-fullscreen mode: use purple
+            barColor = parseColor(PURPLE);
+            useDarkIcons = false; // purple background = light icons
+        }
+        
+        applyBarColors(window, barColor);
+        applyIconAppearance(controller, useDarkIcons);
+        setLegacyLightFlags(window, useDarkIcons);
     }
 
-    private static int parsePurple() {
-        try { return Color.parseColor(PURPLE); } catch (Exception e) { return Color.BLACK; }
+    private static int parseColor(String color) {
+        try { return Color.parseColor(color); } catch (Exception e) { return Color.BLACK; }
     }
 
     private static void applyBarColors(Window window, int purple) {
@@ -191,20 +210,30 @@ public class SystemUiPlugin extends Plugin {
         }
     }
 
-    private static void enforceLightIcons(WindowInsetsControllerCompat controller) {
+    private static void applyIconAppearance(WindowInsetsControllerCompat controller, boolean useDarkIcons) {
         if (controller == null) return;
-        controller.setAppearanceLightStatusBars(false);
+        // If useDarkIcons=true: set light appearance (dark icons on light background)
+        // If useDarkIcons=false: set dark appearance (light icons on dark background)
+        controller.setAppearanceLightStatusBars(useDarkIcons);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            controller.setAppearanceLightNavigationBars(false);
+            controller.setAppearanceLightNavigationBars(useDarkIcons);
         }
     }
 
-    private static void clearLegacyLightFlags(Window window) {
+    private static void setLegacyLightFlags(Window window, boolean useDarkIcons) {
         View decor = window.getDecorView();
         int vis = decor.getSystemUiVisibility();
-        vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        if (useDarkIcons) {
+            vis |= View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        } else {
+            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR;
+        }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            if (useDarkIcons) {
+                vis |= View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            } else {
+                vis &= ~View.SYSTEM_UI_FLAG_LIGHT_NAVIGATION_BAR;
+            }
         }
         decor.setSystemUiVisibility(vis);
     }
