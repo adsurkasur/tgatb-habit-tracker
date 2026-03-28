@@ -57,6 +57,37 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{
             __html: `
               (function () {
+                // CRITICAL: Apply theme synchronously BEFORE React hydration
+                // This ensures .dark class is set before first CSS paint, preventing flash
+                try {
+                  // Get active account from localStorage (defaults to "anonymous")
+                  var activeAccount = localStorage.getItem("tgatb_active_account") || "anonymous";
+                  
+                  // Build scoped settings key: "user_settings::<accountId>"
+                  var scopedSettingsKey = "user_settings::" + activeAccount;
+                  
+                  // Try scoped key first, fall back to legacy key for migration
+                  var rawSettings = localStorage.getItem(scopedSettingsKey);
+                  if (!rawSettings) {
+                    rawSettings = localStorage.getItem("user_settings");
+                  }
+                  
+                  // Parse and apply theme if darkMode is true
+                  if (rawSettings) {
+                    try {
+                      var settings = JSON.parse(rawSettings);
+                      if (settings && settings.darkMode === true) {
+                        document.documentElement.classList.add("dark");
+                      }
+                    } catch (_e) {
+                      // Silent fail: if JSON parsing fails, just skip theme application
+                    }
+                  }
+                } catch (_) {
+                  // Silent fail: any error in bootstrap doesn't break the app
+                }
+
+                // Add app-loaded class when DOM ready (for loader gate)
                 document.addEventListener("DOMContentLoaded", function () {
                   try {
                     if (document.body && !document.body.classList.contains("app-loaded")) {
