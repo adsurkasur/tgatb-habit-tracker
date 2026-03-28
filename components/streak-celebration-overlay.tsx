@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Sparkles, Trophy } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { getStreakQuoteById, getStreakQuoteTranslation } from "@/lib/streak-quotes";
+import { Button } from "@/components/ui/button";
 
 interface StreakCelebrationOverlayProps {
   open: boolean;
@@ -27,6 +28,11 @@ function particlePalette(index: number): string {
   return colors[index % colors.length];
 }
 
+function seededUnit(index: number, salt: number): number {
+  const value = Math.sin((index + 1) * 12.9898 + salt * 78.233) * 43758.5453;
+  return value - Math.floor(value);
+}
+
 export function StreakCelebrationOverlay({
   open,
   weeks,
@@ -42,18 +48,16 @@ export function StreakCelebrationOverlay({
   const quote = getStreakQuoteById(quoteKey);
   const quoteCaption = getStreakQuoteTranslation(quote, locale);
 
-  useEffect(() => {
-    if (!open) return;
-    const timer = window.setTimeout(() => onClose(), reducedMotion ? 1800 : 2400);
-    return () => window.clearTimeout(timer);
-  }, [open, onClose, reducedMotion]);
-
   const particles = useMemo(() => {
-    return Array.from({ length: confettiCount }, (_, i) => {
-      const left = ((i * 9973) % 10000) / 100;
-      const delay = ((i * 613) % 600) / 1000;
-      const duration = 1.3 + (((i * 193) % 900) / 1000);
-      const rotate = ((i * 37) % 360);
+    const safeCount = Math.max(1, confettiCount);
+
+    return Array.from({ length: safeCount }, (_, i) => {
+      const laneCenter = ((i + 0.5) / safeCount) * 100;
+      const jitter = (seededUnit(i, 1) - 0.5) * 8;
+      const left = Math.min(98, Math.max(2, laneCenter + jitter));
+      const delay = seededUnit(i, 2) * 0.6;
+      const duration = 1.3 + seededUnit(i, 3) * 0.9;
+      const rotate = Math.round(seededUnit(i, 4) * 360);
       return {
         id: i,
         left,
@@ -69,10 +73,11 @@ export function StreakCelebrationOverlay({
 
   return (
     <div
-      className="fixed inset-0 z-90 flex items-center justify-center bg-background/70 backdrop-blur-[2px]"
+      className="fixed inset-0 z-90 flex items-center justify-center bg-black/80 data-[state=open]:animate-in data-[state=open]:fade-in-0"
+      data-state="open"
       role="dialog"
       aria-modal="true"
-      aria-label={t("title")}
+      aria-label={t("title", { weeks })}
       onClick={onClose}
     >
       {!reducedMotion && (
@@ -94,7 +99,12 @@ export function StreakCelebrationOverlay({
       )}
 
       <div
-        className="mx-6 w-full max-w-md rounded-xl border border-border bg-card p-6 shadow-2xl"
+        className={`mx-6 w-full max-w-md material-radius-lg border border-border bg-card p-6 surface-elevation-3 ${
+          reducedMotion
+            ? ""
+            : "data-[state=open]:animate-in data-[state=open]:zoom-in-95 data-[state=open]:slide-in-from-bottom-2"
+        }`}
+        data-state="open"
         onClick={(event) => event.stopPropagation()}
       >
         <div className="mb-3 flex items-center gap-2 text-primary">
@@ -123,13 +133,13 @@ export function StreakCelebrationOverlay({
           </p>
         </div>
 
-        <button
+        <Button
           type="button"
-          className="mt-5 w-full rounded-md bg-primary px-4 py-2 text-sm font-semibold text-primary-foreground transition-colors hover:bg-primary/90"
+          className="mt-5 w-full"
           onClick={onClose}
         >
           {t("dismiss")}
-        </button>
+        </Button>
       </div>
     </div>
   );
