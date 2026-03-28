@@ -10,6 +10,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Volume2, Vibrate } from "lucide-react";
+import { Capacitor } from "@capacitor/core";
 import { isHapticsSupported } from "@/lib/haptics";
 import { feedbackButtonPress } from "@/lib/feedback";
 import { useTranslations } from "next-intl";
@@ -21,7 +22,8 @@ interface FeedbackSettingsProps {
 
 export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSettingsProps) {
   const t = useTranslations("FeedbackSettings");
-  const hapticsAvailable = isHapticsSupported();
+  const isNativeApp = Capacitor.isNativePlatform();
+  const hapticsAvailable = isNativeApp && isHapticsSupported();
   const hapticEnabled = hapticsAvailable && settings.hapticEnabled !== false;
   const activeProfile = settings.hapticProfile ?? "balanced";
 

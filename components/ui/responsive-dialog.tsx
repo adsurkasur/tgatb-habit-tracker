@@ -3,7 +3,7 @@
 import * as React from "react";
 import { CloseButton } from "@/components/ui/close-button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { useIsAndroid } from "@/hooks/use-platform";
+import { isNativeAndroidPlatform } from "@/hooks/use-platform";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import {
   Dialog,
@@ -81,7 +81,9 @@ interface ResponsiveDialogProps {
 
 function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard" }: ResponsiveDialogProps) {
   const isMobile = useIsMobile();
-  const isAndroid = useIsAndroid();
+  // Policy: native Android uses OS-level adjustResize, so Vaul input repositioning must be off.
+  // Mobile web (Android/iOS browsers, PWA) keeps Vaul repositioning enabled.
+  const isNativeAndroid = isNativeAndroidPlatform();
 
   // ── Automatic back-navigation (global stack) ──
   // Each ResponsiveDialog registers itself; the topmost one closes first.
@@ -119,17 +121,24 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
             setActiveSnapPoint={setActiveSnap}
             fadeFromIndex={1}
             snapToSequentialPoint
-            // On Android WebView, Vaul's keyboard repositioning causes a transient
+            // Keep a single keyboard owner per platform.
+            // On native Android WebView, Vaul's keyboard repositioning causes a transient
             // downward shift because it mutates style.bottom via visualViewport while
             // snap transforms are still anchored to window.innerHeight. Disabling
             // repositionInputs prevents Vaul from touching bottom/height on keyboard
             // events, letting the native Android scroll/pan handle input visibility.
-            repositionInputs={!isAndroid}
+            repositionInputs={!isNativeAndroid}
           >
             {children}
           </Drawer>
         ) : (
-          <Drawer open={open} onOpenChange={onOpenChange} handleOnly>
+          <Drawer
+            open={open}
+            onOpenChange={onOpenChange}
+            handleOnly
+            // Same policy as standard drawers: disable only for native Android.
+            repositionInputs={!isNativeAndroid}
+          >
             {children}
           </Drawer>
         )

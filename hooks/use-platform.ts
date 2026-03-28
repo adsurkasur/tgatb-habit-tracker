@@ -1,6 +1,15 @@
 import { Capacitor } from '@capacitor/core';
 
 /**
+ * Returns true only when running inside a Capacitor Android native shell.
+ *
+ * Usage: native-only behavior where mobile web should NOT be grouped with app runtime.
+ */
+export function isNativeAndroidPlatform(): boolean {
+  return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
+}
+
+/**
  * Returns true when running inside a Capacitor Android native shell,
  * OR when the browser user-agent indicates Android (PWA / mobile Chrome).
  *
@@ -12,7 +21,7 @@ export function useIsAndroid(): boolean {
   if (typeof navigator === 'undefined') return false;
 
   // Capacitor native check (most reliable for native builds)
-  if (Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android') {
+  if (isNativeAndroidPlatform()) {
     return true;
   }
 
