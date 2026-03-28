@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Flame, RotateCcw, CheckCircle } from "lucide-react";
+import { Check, X, Flame, RotateCcw, CheckCircle, Clock3, XCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
 import { useEffect, useState, memo } from "react";
 import { useTranslations } from "next-intl";
@@ -97,19 +97,39 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const isTodayExpected = isExpectedDate(habit, today);
+
+  const createdDay = new Date(habit.createdAt);
+  createdDay.setHours(0, 0, 0, 0);
+
+  const hasReachedFirstExpectedDay = (() => {
+    if (isTodayExpected) return true;
+    const cursor = new Date(createdDay);
+    while (cursor <= today) {
+      if (isExpectedDate(habit, cursor)) {
+        return true;
+      }
+      cursor.setDate(cursor.getDate() + 1);
+    }
+    return false;
+  })();
   
   // An off-day is when today is NOT expected in the schedule
   const isOffDay = !isTodayExpected;
+  const isNotYet = isOffDay && !hasReachedFirstExpectedDay;
+  const isOngoingOffDay = isOffDay && hasReachedFirstExpectedDay;
   
   // On off-days, show styling as if the habit is "on track" (completed)
   // This indicates the user is doing well on the schedule
-  const showAsCompleted = isOffDay || (isCompletedToday && isPositiveAction);
+  const showAsCompleted = isOngoingOffDay || (isCompletedToday && isPositiveAction);
+  const showNegativeBadge = isCompletedToday && !isPositiveAction && !isOffDay;
   
   // DEBUG
   if (process.env.NODE_ENV !== 'production') {
     console.log(`[HabitCard] ${habit.name}:`, {
       isTodayExpected,
       isOffDay,
+      isNotYet,
+      hasReachedFirstExpectedDay,
       isCompletedToday,
       isPositiveAction,
       showAsCompleted,
@@ -119,6 +139,10 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   }
   
   const cardToneClass = () => {
+    if (isNotYet) {
+      return 'bg-slate-200 border-slate-400 dark:bg-slate-800 dark:border-slate-600';
+    }
+
     // Off-day: show as completed/on-track (green for good, blue for bad)
     if (showAsCompleted) {
       return habit.type === 'good'
@@ -136,9 +160,13 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   };
   
   const questionText = () => {
-    // Off-day: show ongoing message
-    if (isOffDay) {
-      return t('question.ongoing');
+    if (isNotYet) {
+      return 'Still waiting for the time...';
+    }
+
+    // Off-day after schedule has started: mirror daily-like success wording
+    if (isOngoingOffDay) {
+      return habit.type === 'bad' ? t('question.badPositive') : t('question.goodPositive');
     }
     
     if (!isCompletedToday) return t('question.pending');
@@ -150,8 +178,12 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
     <div className="w-full max-w-md mx-auto relative" data-tour="habit-card">
       {/* Surface owns ALL visuals: rounded, border, bg, shadow, padding */}
       <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
-        {/* Show badge on off-days as "on-track", or on completed days */}
-        <StatusBadge visible={showAsCompleted} isPositiveAction={true} type={habit.type} />
+        {/* Show not-yet, positive, or negative badge state based on schedule window and today's log outcome. */}
+        <StatusBadge
+          visible={showAsCompleted || showNegativeBadge || isNotYet}
+          type={habit.type}
+          state={isNotYet ? 'notYet' : showAsCompleted ? 'positive' : 'negative'}
+        />
         <StreakBadge type={habit.type} streak={habit.streak} t={t} />
         <div className="space-y-6 mt-8">
           <HabitHeader name={habit.name} type={habit.type} completedAt={completedAt} t={t} />
@@ -194,15 +226,29 @@ function useSlideAnimation(
   return animationClass;
 }
 
-function StatusBadge({ visible, isPositiveAction, type }: { visible: boolean; isPositiveAction: boolean; type: Habit['type'] }) {
+function StatusBadge({ visible, type, state }: { visible: boolean; type: Habit['type']; state: 'positive' | 'negative' | 'notYet' }) {
   const t = useTranslations("HabitCard");
   if (!visible) return null;
-  const tone = isPositiveAction ? (type === 'good' ? 'bg-green-500 border-green-600' : 'bg-blue-500 border-blue-600') : 'bg-red-500 border-red-600';
-  const label = isPositiveAction ? (type === 'good' ? t('status.goodCompleted') : t('status.badAvoided')) : (type === 'good' ? t('status.goodMissed') : t('status.badDone'));
+  if (state === 'notYet') {
+    return (
+      <div className="absolute top-4 left-4">
+        <Badge className="text-white border-slate-700 bg-slate-600 border-opacity-80">
+          <Clock3 className="w-3 h-3 mr-1" />
+          Not Yet
+        </Badge>
+      </div>
+    );
+  }
+
+  const isPositive = state === 'positive';
+  const tone = isPositive ? (type === 'good' ? 'bg-green-500 border-green-600' : 'bg-blue-500 border-blue-600') : 'bg-red-500 border-red-600';
+  const label = isPositive
+    ? (type === 'good' ? t('status.goodCompleted') : t('status.badAvoided'))
+    : (type === 'good' ? 'Not Completed' : 'Not Avoided');
   return (
     <div className="absolute top-4 left-4">
       <Badge className={`text-white border-opacity-60 ${tone}`}>
-        <CheckCircle className="w-3 h-3 mr-1" />
+        {isPositive ? <CheckCircle className="w-3 h-3 mr-1" /> : <XCircle className="w-3 h-3 mr-1" />}
         {label}
       </Badge>
     </div>
@@ -258,15 +304,12 @@ function ActionButtons({ isCompletedToday, isOffDay, onUndo, onTrack, t }: { isC
     );
   }
 
-  // If it's an off-day (greyed out but no log), disable the action buttons
+  // If it's an off-day, show a single disabled ongoing button
   if (isOffDay) {
     return (
-      <div className="flex space-x-4 opacity-50">
-        <Button disabled className="flex-1 h-16 bg-green-500 text-white material-radius cursor-not-allowed" size="lg">
-          <Check className="w-8 h-8" />
-        </Button>
-        <Button disabled className="flex-1 h-16 bg-red-500 text-white material-radius cursor-not-allowed" size="lg">
-          <X className="w-8 h-8" />
+      <div className="flex space-x-4">
+        <Button disabled variant="outline" className="w-full h-16 border-slate-500 text-slate-700 bg-slate-300 hover:bg-slate-300 dark:border-slate-500 dark:text-slate-200 dark:bg-slate-700 dark:hover:bg-slate-700 material-radius cursor-not-allowed" size="lg">
+          {t('question.ongoing')}
         </Button>
       </div>
     );
