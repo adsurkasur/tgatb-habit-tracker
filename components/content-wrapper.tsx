@@ -1,8 +1,7 @@
 "use client";
 
 import { useTheme } from "./theme-provider";
-import { useEffect, useState } from "react";
-import { ReactNode } from "react";
+import { ReactNode, useSyncExternalStore } from "react";
 
 interface ContentWrapperProps {
   children: ReactNode;
@@ -10,11 +9,11 @@ interface ContentWrapperProps {
 
 export function ContentWrapper({ children }: ContentWrapperProps) {
   const { isLoading } = useTheme();
-  const [hasHydrated, setHasHydrated] = useState(false);
-
-  useEffect(() => {
-    setHasHydrated(true);
-  }, []);
+  const hasHydrated = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false
+  );
 
   const hideDuringThemeLoading = hasHydrated && isLoading;
 
