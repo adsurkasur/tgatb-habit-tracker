@@ -10,17 +10,17 @@
     "title": "Das Gute und das Schlechte",
     "demoLabel": "Demo-Gewohnheit",
     "counter": "{current} von {total} Gewohnheiten",
-    "counterHint": "Verwenden Sie die Tasten â† â†’, die Navigationstasten oder wischen Sie, um zu navigieren",
+    "counterHint": "Verwenden Sie die Tasten ← →, die Navigationstasten oder wischen Sie, um zu navigieren",
     "aria": {
       "previousHabit": "Bisherige Gewohnheit",
-      "nextHabit": "NÃ¤chste Gewohnheit"
+      "nextHabit": "Nächste Gewohnheit"
     },
     "toasts": {
-      "pressBackAgainExit": "DrÃ¼cken Sie erneut die ZurÃ¼ck-Taste, um den Vorgang zu beenden",
-      "habitDeletedTitle": "Gewohnheit gelÃ¶scht!",
+      "pressBackAgainExit": "Drücken Sie erneut die Zurück-Taste, um den Vorgang zu beenden",
+      "habitDeletedTitle": "Gewohnheit gelöscht!",
       "habitDeletedDescription": "Ihre Gewohnheit wurde entfernt.",
-      "undoDeleteAltText": "LÃ¶schen rÃ¼ckgÃ¤ngig machen",
-      "undo": "RÃ¼ckgÃ¤ngig machen"
+      "undoDeleteAltText": "Löschen rückgängig machen",
+      "undo": "Rückgängig machen"
     }
   },
   "AppearanceSettings": {
@@ -34,22 +34,22 @@
       "label": "App-Sprache umschalten",
       "english": "Englisch",
       "indonesian": "Bahasa Indonesien",
-      "modalTitle": "Sprache auswÃ¤hlen",
-      "modalDescription": "WÃ¤hlen Sie die Sprache aus, die auf der App-OberflÃ¤che verwendet wird.",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
+      "modalTitle": "Sprache auswählen",
+      "modalDescription": "Wählen Sie die Sprache aus, die auf der App-Oberfläche verwendet wird.",
+      "restartWarningWeb": "Sprachänderungen gelten ab sofort. Die Seite navigiert zur neuen Sprachversion und wird aktualisiert.",
+      "restartWarningApp": "Sprachänderungen werden sofort übernommen. Es ist kein Neustart der App erforderlich.",
       "cancel": "Abbrechen",
       "apply": "Bewerben",
       "applying": "Bewerben..."
     },
     "fullscreen": {
       "title": "Vollbildmodus",
-      "nativeDescription": "Verstecken Sie die Statusleiste fÃ¼r ein immersives Erlebnis",
-      "nonNativeDescription": "Einstellung fÃ¼r mobile Apps"
+      "nativeDescription": "Verstecken Sie die Statusleiste für ein immersives Erlebnis",
+      "nonNativeDescription": "Einstellung für mobile Apps"
     },
     "toasts": {
       "fullscreenEnabledTitle": "Vollbildmodus aktiviert",
-      "fullscreenEnabledDescription": "Der Vollbildmodus wird mÃ¶glicherweise nicht auf allen GerÃ¤ten perfekt angezeigt. Wenn Sie Probleme bemerken, kÃ¶nnen Sie es in den Einstellungen deaktivieren.",
+      "fullscreenEnabledDescription": "Der Vollbildmodus wird möglicherweise nicht auf allen Geräten perfekt angezeigt. Wenn Sie Probleme bemerken, können Sie es in den Einstellungen deaktivieren.",
       "languageUpdated": "Sprache aktualisiert",
       "switchedToEnglish": "Auf Englisch umgestellt",
       "switchedToIndonesian": "Auf Bahasa Indonesia umgestellt"
@@ -59,51 +59,51 @@
     "title": "Einstellungen"
   },
   "AboutDialog": {
-    "title": "Ãœber TGATB Habit Tracker",
+    "title": "Über TGATB Habit Tracker",
     "projectName": "Das Gute und das Schlechte",
-    "projectDescription": "Eine minimalistische progressive Web-App zum Verfolgen Ihrer tÃ¤glichen Gewohnheiten",
+    "projectDescription": "Eine minimalistische progressive Web-App zum Verfolgen Ihrer täglichen Gewohnheiten",
     "version": "Version {version}",
     "features": {
       "title": "Funktionen",
-      "item1": "â€¢ Verfolgen Sie gute und schlechte Gewohnheiten",
-      "item2": "â€¢ Offline-UnterstÃ¼tzung mit PWA-Technologie",
-      "item3": "â€¢ Streifenverfolgung und visueller Fortschritt",
-      "item4": "â€¢ Minimalistisches, ablenkungsfreies Design",
-      "item5": "â€¢ PlattformÃ¼bergreifende KompatibilitÃ¤t"
+      "item1": "• Verfolgen Sie gute und schlechte Gewohnheiten",
+      "item2": "• Offline-Unterstützung mit PWA-Technologie",
+      "item3": "• Streifenverfolgung und visueller Fortschritt",
+      "item4": "• Minimalistisches, ablenkungsfreies Design",
+      "item5": "• Plattformübergreifende Kompatibilität"
     },
     "builtWith": "Gebaut mit",
     "stack": {
       "nextjs": "Next.js 16",
       "react": "Reaktion 19",
       "typescript": "TypeScript",
-      "tailwind": "RÃ¼ckenwind CSS v4",
+      "tailwind": "Rückenwind CSS v4",
       "pwa": "PWA",
       "capacitor": "Kondensator"
     },
     "links": {
       "title": "Links",
       "github": "Auf GitHub ansehen",
-      "vercel": "UnterstÃ¼tzt von Vercel",
+      "vercel": "Unterstützt von Vercel",
       "privacyPolicy": "Datenschutzrichtlinie",
       "termsOfService": "Nutzungsbedingungen"
     },
     "footer": {
-      "madeWithLove": "Hergestellt mit â¤ï¸ fÃ¼r bessere Gewohnheiten",
-      "copyright": "Â© 2025-2026 TGATB Habit Tracker"
+      "madeWithLove": "Hergestellt mit ❤️ für bessere Gewohnheiten",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
     }
   },
   "NavigationDrawer": {
     "hidden": {
-      "navigationMenuTitle": "NavigationsmenÃ¼",
+      "navigationMenuTitle": "Navigationsmenü",
       "navigationMenuDescription": "Greifen Sie auf Ihr Dashboard und Ihre Einstellungen zur Gewohnheitsverfolgung zu"
     },
     "header": {
       "title": "Gewohnheits-Tracker",
-      "subtitle": "Verfolgen Sie Ihren tÃ¤glichen Fortschritt"
+      "subtitle": "Verfolgen Sie Ihren täglichen Fortschritt"
     },
     "search": {
       "placeholder": "Suchgewohnheiten...",
-      "clear": "Suche lÃ¶schen"
+      "clear": "Suche löschen"
     },
     "sections": {
       "goodHabits": "Gute Gewohnheiten",
@@ -119,8 +119,8 @@
       "help": "Hilfe",
       "history": "Geschichte",
       "settings": "Einstellungen",
-      "supportMe": "UnterstÃ¼tzen Sie mich",
-      "about": "Ãœber"
+      "supportMe": "Unterstützen Sie mich",
+      "about": "Über"
     },
     "habitItem": {
       "days": "{count} Tage"
@@ -135,7 +135,7 @@
     },
     "autoSync": {
       "title": "Automatische Synchronisierung",
-      "description": "Synchronisieren Sie Ã„nderungen automatisch mit Google Drive, wenn Sie angemeldet sind."
+      "description": "Synchronisieren Sie Änderungen automatisch mit Google Drive, wenn Sie angemeldet sind."
     },
     "analytics": {
       "title": "Analytik",
@@ -147,13 +147,13 @@
       "exporting": "Exportieren...",
       "exportData": "Daten exportieren",
       "importData": "Daten importieren",
-      "resolveSyncConflicts": "Synchronisierungskonflikte lÃ¶sen"
+      "resolveSyncConflicts": "Synchronisierungskonflikte lösen"
     }
   },
   "HistoryDialog": {
     "title": "Gewohnheitsgeschichte und Analyse",
     "tabs": {
-      "overview": "Ãœbersicht",
+      "overview": "Übersicht",
       "stats": "Statistiken",
       "calendar": "Kalender",
       "timeline": "Zeitleiste"
@@ -165,7 +165,7 @@
       },
       "combinedStreak": {
         "title": "Kombinierter Streak",
-        "description": "LÃ¤ngste: {longest} Tage"
+        "description": "Längste: {longest} Tage"
       },
       "todaysProgress": {
         "title": "Der heutige Fortschritt",
@@ -173,7 +173,7 @@
       },
       "totalActions": {
         "title": "Gesamtaktionen",
-        "description": "Alle ZeitabschlÃ¼sse"
+        "description": "Alle Zeitabschlüsse"
       }
     },
     "topHabits": {
@@ -182,16 +182,16 @@
     "breakdown": {
       "title": "Gewohnheitsabbau",
       "emptyTitle": "Noch keine Gewohnheiten",
-      "emptyDescription": "FÃ¼gen Sie eine Gewohnheit hinzu, um Ihre AufschlÃ¼sselung hier anzuzeigen",
-      "completions": "{count} AbschlÃ¼sse"
+      "emptyDescription": "Fügen Sie eine Gewohnheit hinzu, um Ihre Aufschlüsselung hier anzuzeigen",
+      "completions": "{count} Abschlüsse"
     },
     "calendar": {
       "today": "Heute",
       "notTracked": "Nicht verfolgt",
       "editEntry": "Eintrag bearbeiten",
       "clearStatus": "Klarer Status",
-      "noDataForDate": "FÃ¼r dieses Datum sind keine Daten verfÃ¼gbar",
-      "addEntry": "Eintrag hinzufÃ¼gen"
+      "noDataForDate": "Für dieses Datum sind keine Daten verfügbar",
+      "addEntry": "Eintrag hinzufügen"
     },
     "timeline": {
       "today": "Heute",
@@ -203,7 +203,7 @@
     }
   },
   "AddHabitDialog": {
-    "title": "Neue Gewohnheit hinzufÃ¼gen",
+    "title": "Neue Gewohnheit hinzufügen",
     "fields": {
       "name": "Gewohnheitsname",
       "type": "Gewohnheitstyp",
@@ -217,7 +217,7 @@
       "bad": "Schlecht"
     },
     "schedule": {
-      "daily": "TÃ¤glich",
+      "daily": "Täglich",
       "interval": "Alle N Tage",
       "weekly": "Wochentags"
     },
@@ -254,7 +254,7 @@
       "bad": "Schlecht"
     },
     "schedule": {
-      "daily": "TÃ¤glich",
+      "daily": "Täglich",
       "interval": "Alle N Tage",
       "weekly": "Wochentags"
     },
@@ -273,12 +273,12 @@
     },
     "actions": {
       "cancel": "Abbrechen",
-      "saveChanges": "Ã„nderungen speichern"
+      "saveChanges": "Änderungen speichern"
     }
   },
   "SyncConflictModal": {
     "title": "Synchronisierungskonflikte erkannt",
-    "description": "Wir haben Konflikte zwischen Ihren lokalen Daten und dem Cloud-Backup festgestellt. WÃ¤hlen Sie unten AuflÃ¶sungen pro Feld aus oder verwenden Sie die globalen Aktionen, um die Remote-Version zu akzeptieren oder Ihre lokalen Daten beizubehalten.",
+    "description": "Wir haben Konflikte zwischen Ihren lokalen Daten und dem Cloud-Backup festgestellt. Wählen Sie unten Auflösungen pro Feld aus oder verwenden Sie die globalen Aktionen, um die Remote-Version zu akzeptieren oder Ihre lokalen Daten beizubehalten.",
     "itemLabel": "Artikel: {id}",
     "differences": "Unterschiede zwischen Lokal und Remote",
     "choices": {
@@ -287,7 +287,7 @@
     },
     "actions": {
       "keepLocal": "Bleiben Sie lokal",
-      "applySelected": "AusgewÃ¤hlte anwenden",
+      "applySelected": "Ausgewählte anwenden",
       "acceptRemote": "Akzeptieren Sie Remote"
     }
   },
@@ -296,16 +296,16 @@
     "subtitle": "Bessere Erfahrung mit Offline-Support und schnellem Zugriff",
     "toasts": {
       "notAvailable": {
-        "title": "App-Installation nicht verfÃ¼gbar",
-        "description": "Die App-Installation wird auf diesem GerÃ¤t oder Browser nicht unterstÃ¼tzt. Probieren Sie Chrome oder Edge auf dem Desktop/MobilgerÃ¤t aus."
+        "title": "App-Installation nicht verfügbar",
+        "description": "Die App-Installation wird auf diesem Gerät oder Browser nicht unterstützt. Probieren Sie Chrome oder Edge auf dem Desktop/Mobilgerät aus."
       },
       "started": {
         "title": "App-Installation gestartet",
-        "description": "Befolgen Sie die Anweisungen Ihres Browsers, um die Installation abzuschlieÃŸen."
+        "description": "Befolgen Sie die Anweisungen Ihres Browsers, um die Installation abzuschließen."
       },
       "dismissed": {
         "title": "App-Installation abgelehnt",
-        "description": "Sie kÃ¶nnen die App jederzeit Ã¼ber Einstellungen -> App installieren installieren."
+        "description": "Sie können die App jederzeit über Einstellungen -> App installieren installieren."
       },
       "failed": {
         "title": "Die App-Installation ist fehlgeschlagen",
@@ -314,29 +314,29 @@
     },
     "instructions": {
       "fallback": {
-        "iosSafari": "Tippen Sie unter iOS/Safari auf die SchaltflÃ¤che â€žTeilenâ€œ und wÃ¤hlen Sie zur Installation â€žZum Startbildschirm hinzufÃ¼genâ€œ aus.",
+        "iosSafari": "Tippen Sie unter iOS/Safari auf die Schaltfläche „Teilen“ und wählen Sie zur Installation „Zum Startbildschirm hinzufügen“.",
         "android": {
           "line1": "Verwenden Sie unter Android Chrome, Edge oder Samsung Internet. Wenn in der Adressleiste Ihres Browsers ein +-Symbol angezeigt wird, tippen Sie zum Installieren darauf.",
-          "line2": "Wenn Sie das Symbol nicht sehen, Ã¶ffnen Sie das BrowsermenÃ¼ und suchen Sie nach â€žZum Startbildschirm hinzufÃ¼genâ€œ oder â€žApp installierenâ€œ."
+          "line2": "Wenn Sie das Symbol nicht sehen, öffnen Sie das Browsermenü und suchen Sie nach „Zum Startbildschirm hinzufügen“ oder „App installieren“."
         },
         "windowsLinux": {
           "line1": "Verwenden Sie unter Windows/Linux Chrome oder Edge. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
-          "line2": "Wenn nicht, Ã¶ffnen Sie das BrowsermenÃ¼ und suchen Sie nach â€žApp installierenâ€œ oder â€žZum Desktop hinzufÃ¼genâ€œ."
+          "line2": "Wenn nicht, öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Desktop hinzufügen“."
         },
         "mac": {
           "line1": "Verwenden Sie unter macOS Chrome oder Edge. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
-          "line2": "Wenn nicht, Ã¶ffnen Sie das BrowsermenÃ¼ und suchen Sie nach â€žApp installierenâ€œ oder â€žZum Dock hinzufÃ¼genâ€œ."
+          "line2": "Wenn nicht, öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Dock hinzufügen“."
         },
         "generic": {
           "line1": "Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
-          "line2": "Andernfalls Ã¶ffnen Sie das BrowsermenÃ¼ und suchen Sie nach â€žApp installierenâ€œ oder â€žZum Startbildschirm hinzufÃ¼genâ€œ."
+          "line2": "Andernfalls öffnen Sie das Browsermenü und suchen Sie nach „App installieren“ oder „Zum Startbildschirm hinzufügen“."
         }
       },
       "default": {
-        "iosSafari": "Tippen Sie unter iOS/Safari auf die SchaltflÃ¤che â€žTeilenâ€œ und wÃ¤hlen Sie zur Installation â€žZum Startbildschirm hinzufÃ¼genâ€œ aus.",
-        "android": "Verwenden Sie auf Android Chrome oder Edge fÃ¼r das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
-        "windowsLinux": "Verwenden Sie unter Windows/Linux Chrome oder Edge fÃ¼r das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
-        "mac": "Verwenden Sie unter macOS Chrome oder Edge fÃ¼r das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es."
+        "iosSafari": "Tippen Sie unter iOS/Safari auf die Schaltfläche „Teilen“ und wählen Sie zur Installation „Zum Startbildschirm hinzufügen“.",
+        "android": "Verwenden Sie auf Android Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+        "windowsLinux": "Verwenden Sie unter Windows/Linux Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es.",
+        "mac": "Verwenden Sie unter macOS Chrome oder Edge für das beste Erlebnis. Wenn Sie in der Adressleiste Ihres Browsers ein Installationssymbol sehen, verwenden Sie es."
       }
     },
     "actions": {
@@ -347,21 +347,21 @@
     }
   },
   "DonationDialog": {
-    "title": "UnterstÃ¼tzen Sie mich",
-    "description": "Wenn Ihnen diese App gefÃ¤llt, sollten Sie darÃ¼ber nachdenken, ihre Entwicklung zu unterstÃ¼tzen. Jeder Beitrag trÃ¤gt dazu bei, dass es kostenlos bleibt und sich verbessert!",
+    "title": "Unterstützen Sie mich",
+    "description": "Wenn Ihnen diese App gefällt, sollten Sie darüber nachdenken, ihre Entwicklung zu unterstützen. Jeder Beitrag trägt dazu bei, dass es kostenlos bleibt und sich verbessert!",
     "sections": {
       "paymentPlatforms": "Zahlungsplattformen",
-      "cryptocurrency": "KryptowÃ¤hrung"
+      "cryptocurrency": "Kryptowährung"
     },
     "qris": {
       "title": "QRIS",
-      "supportLine": "UnterstÃ¼tzen Sie mich mit QRIS!",
-      "description": "Scannen Sie diesen QR-Code mit Ihrer Banking-App, um Ã¼ber QRIS zu spenden.",
+      "supportLine": "Unterstützen Sie mich mit QRIS!",
+      "description": "Scannen Sie diesen QR-Code mit Ihrer Banking-App, um über QRIS zu spenden.",
       "imageAlt": "QRIS-Spendenmethode",
       "download": "Laden Sie QRIS herunter"
     },
     "copiedBadge": "Kopiert!",
-    "thankYou": "Vielen Dank, dass Sie darÃ¼ber nachdenken, dieses Projekt zu unterstÃ¼tzen!",
+    "thankYou": "Vielen Dank, dass Sie darüber nachdenken, dieses Projekt zu unterstützen!",
     "toasts": {
       "copied": {
         "title": "Kopiert!",
@@ -373,7 +373,7 @@
       },
       "saved": {
         "title": "Gespeichert!",
-        "description": "QRIS-Bild auf dem GerÃ¤t gespeichert."
+        "description": "QRIS-Bild auf dem Gerät gespeichert."
       },
       "saveFailed": {
         "title": "Speichern fehlgeschlagen",
@@ -386,14 +386,14 @@
     }
   },
   "AddEntryDialog": {
-    "title": "Eintrag hinzufÃ¼gen fÃ¼r {date}",
+    "title": "Eintrag für {date} hinzufügen",
     "tabs": {
-      "addEntry": "Neuen Eintrag hinzufÃ¼gen",
-      "addHabit": "Neue Gewohnheit hinzufÃ¼gen"
+      "addEntry": "Neuen Eintrag hinzufügen",
+      "addHabit": "Neue Gewohnheit hinzufügen"
     },
     "placeholders": {
-      "noHabit": "Keine Gewohnheit verfÃ¼gbar, jetzt hinzufÃ¼gen!",
-      "selectHabit": "Gewohnheit auswÃ¤hlen...",
+      "noHabit": "Keine Gewohnheit verfügbar, jetzt hinzufügen!",
+      "selectHabit": "Gewohnheit auswählen...",
       "habitName": "Gewohnheitsname..."
     },
     "type": {
@@ -411,8 +411,8 @@
       }
     },
     "actions": {
-      "addEntry": "Eintrag hinzufÃ¼gen",
-      "addHabitAndLog": "Gewohnheit und Protokolleintrag hinzufÃ¼gen"
+      "addEntry": "Eintrag hinzufügen",
+      "addHabitAndLog": "Gewohnheit und Protokolleintrag hinzufügen"
     }
   },
   "EditEntryDialog": {
@@ -438,11 +438,11 @@
   },
   "MotivatorSettings": {
     "title": "Charaktermotivator",
-    "personalityType": "PersÃ¶nlichkeitstyp",
+    "personalityType": "Persönlichkeitstyp",
     "personality": {
       "positive": {
         "title": "Positiv",
-        "description": "Ermutigend und unterstÃ¼tzend"
+        "description": "Ermutigend und unterstützend"
       },
       "adaptive": {
         "title": "Adaptiv",
@@ -456,21 +456,21 @@
   },
   "AddHabitCTA": {
     "title": "Beginnen Sie Ihre Reise",
-    "description": "Erstellen Sie Ihre erste Gewohnheit, um Ihren tÃ¤glichen Fortschritt zu verfolgen und Konsistenz aufzubauen.",
-    "addFirstHabit": "FÃ¼gen Sie Ihre erste Gewohnheit hinzu",
-    "footer": "Jeder Experte war einmal ein AnfÃ¤nger"
+    "description": "Erstellen Sie Ihre erste Gewohnheit, um Ihren täglichen Fortschritt zu verfolgen und Konsistenz aufzubauen.",
+    "addFirstHabit": "Fügen Sie Ihre erste Gewohnheit hinzu",
+    "footer": "Jeder Experte war einmal ein Anfänger"
   },
   "DeleteAllHabitsModal": {
-    "title": "Alle Gewohnheiten lÃ¶schen?",
-    "description": "Diese Aktion kann nicht rÃ¼ckgÃ¤ngig gemacht werden. Sind Sie sicher, dass Sie alle Gewohnheiten lÃ¶schen mÃ¶chten?",
+    "title": "Alle Gewohnheiten löschen?",
+    "description": "Diese Aktion kann nicht rückgängig gemacht werden. Sind Sie sicher, dass Sie alle Gewohnheiten löschen möchten?",
     "actions": {
       "cancel": "Abbrechen",
-      "deleting": "LÃ¶schen...",
-      "delete": "LÃ¶schen"
+      "deleting": "Löschen...",
+      "delete": "Löschen"
     }
   },
   "FeedbackSettings": {
-    "title": "RÃ¼ckmeldung",
+    "title": "Rückmeldung",
     "sound": {
       "title": "Soundeffekte",
       "description": "Spielen Sie Sounds bei Interaktionen ab"
@@ -478,13 +478,13 @@
     "haptic": {
       "title": "Haptisches Feedback",
       "supported": "Vibrieren Sie bei Interaktionen",
-      "notSupported": "Wird auf diesem GerÃ¤t nicht unterstÃ¼tzt"
+      "notSupported": "Wird auf diesem Gerät nicht unterstützt"
     }
   },
   "HelpSupportSettings": {
     "title": "Hilfe und Support",
     "actions": {
-      "showWelcomeGuide": "WillkommensfÃ¼hrer anzeigen",
+      "showWelcomeGuide": "Willkommensführer anzeigen",
       "contactEmail": "Kontaktieren Sie {name} per E-Mail"
     }
   },
@@ -492,35 +492,35 @@
     "title": "Einstellungen"
   },
   "AppDeviceSettings": {
-    "title": "App und GerÃ¤t",
+    "title": "App und Gerät",
     "install": {
       "nativeApp": "Native App",
       "installed": "App installiert",
       "installApp": "App installieren",
       "nativeDescription": "Sie verwenden die native Android-App",
-      "installedDescription": "TGATB ist bereits auf Ihrem GerÃ¤t",
-      "addToHome": "Zum Startbildschirm hinzufÃ¼gen"
+      "installedDescription": "TGATB ist bereits auf Ihrem Gerät",
+      "addToHome": "Zum Startbildschirm hinzufügen"
     },
     "reminder": {
-      "title": "TÃ¤gliche Erinnerung",
+      "title": "Tägliche Erinnerung",
       "timeLabel": "Erinnerungszeit",
       "status": {
-        "notSupported": "Benachrichtigungen werden in diesem Browser nicht unterstÃ¼tzt",
+        "notSupported": "Benachrichtigungen werden in diesem Browser nicht unterstützt",
         "off": "Aus",
-        "denied": "Berechtigung verweigert â€“ Browser-/GerÃ¤teeinstellungen Ã¼berprÃ¼fen",
-        "set": "Erinnerung fÃ¼r {time} festgelegt",
-        "setWeb": "Erinnerung fÃ¼r {time} festgelegt â€“ funktioniert am besten, wenn die App geÃ¶ffnet oder als PWA installiert ist"
+        "denied": "Berechtigung verweigert – Browser-/Geräteeinstellungen überprüfen",
+        "set": "Erinnerung für {time} festgelegt",
+        "setWeb": "Erinnerung für {time} festgelegt – funktioniert am besten, wenn die App geöffnet oder als PWA installiert ist"
       }
     },
     "permission": {
       "title": "Benachrichtigungen erforderlich",
-      "description": "Um Ihnen tÃ¤gliche Erinnerungen zu senden, benÃ¶tigt die App die Erlaubnis, Benachrichtigungen anzuzeigen. Sie kÃ¶nnen dies in Ihren Browser- oder GerÃ¤teeinstellungen aktivieren.",
+      "description": "Um Ihnen tägliche Erinnerungen zu senden, benötigt die App die Erlaubnis, Benachrichtigungen anzuzeigen. Sie können dies in Ihren Browser- oder Geräteeinstellungen aktivieren.",
       "gotIt": "Verstanden"
     }
   },
   "HabitCard": {
     "emptyTitle": "Noch keine Gewohnheiten",
-    "emptyDescription": "FÃ¼gen Sie Ihre erste Gewohnheit hinzu, um loszulegen!",
+    "emptyDescription": "Fügen Sie Ihre erste Gewohnheit hinzu, um loszulegen!",
     "question": {
       "pending": "Hast du es getan?",
       "goodPositive": "Heute schon erledigt!",
@@ -541,14 +541,14 @@
     "streakDays": "{count} Tage",
     "atTime": "um {time}",
     "actions": {
-      "undo": "RÃ¼ckgÃ¤ngig machen"
+      "undo": "Rückgängig machen"
     }
   },
   "OfflineToast": {
-    "message": "Du bist offline. Einige Funktionen kÃ¶nnen eingeschrÃ¤nkt sein."
+    "message": "Du bist offline. Einige Funktionen können eingeschränkt sein."
   },
   "OfflineIndicator": {
-    "message": "Du bist offline. Einige Funktionen kÃ¶nnen eingeschrÃ¤nkt sein."
+    "message": "Du bist offline. Einige Funktionen können eingeschränkt sein."
   },
   "AnalyticsNotice": {
     "title": "Hinweis",
@@ -571,48 +571,48 @@
         "description": "Machen wir einen kurzen Rundgang, um Ihnen den Einstieg in die effektive Verfolgung Ihrer Gewohnheiten zu erleichtern."
       },
       "navigation": {
-        "title": "NavigationsmenÃ¼",
-        "description": "Greifen Sie Ã¼ber dieses MenÃ¼ auf alle Ihre Gewohnheiten zu, sehen Sie sich den Verlauf an und passen Sie Einstellungen an."
+        "title": "Navigationsmenü",
+        "description": "Greifen Sie über dieses Menü auf alle Ihre Gewohnheiten zu, sehen Sie sich den Verlauf an und passen Sie Einstellungen an."
       },
       "addButton": {
-        "hasHabitsTitle": "FÃ¼gen Sie weitere Gewohnheiten hinzu",
-        "emptyTitle": "FÃ¼gen Sie Ihre erste Gewohnheit hinzu",
-        "hasHabitsDescription": "Mit dieser schwebenden SchaltflÃ¤che kÃ¶nnen Sie jederzeit weitere Gewohnheiten hinzufÃ¼gen.",
-        "emptyDescription": "Tippen Sie auf diese SchaltflÃ¤che, um Ihre erste Gewohnheit zu erstellen. Sie kÃ¶nnen sowohl gute Gewohnheiten zum Aufbau als auch schlechte Gewohnheiten zum Abbrechen hinzufÃ¼gen."
+        "hasHabitsTitle": "Fügen Sie weitere Gewohnheiten hinzu",
+        "emptyTitle": "Fügen Sie Ihre erste Gewohnheit hinzu",
+        "hasHabitsDescription": "Mit dieser schwebenden Schaltfläche können Sie jederzeit weitere Gewohnheiten hinzufügen.",
+        "emptyDescription": "Tippen Sie auf diese Schaltfläche, um Ihre erste Gewohnheit zu erstellen. Sie können sowohl gute Gewohnheiten zum Aufbau als auch schlechte Gewohnheiten zum Aufgeben hinzufügen."
       },
       "habitCard": {
         "title": "Verfolgen Sie Ihren Fortschritt",
-        "hasHabitsDescription": "Hier sind deine Gewohnheiten! Tippen Sie darauf, um sie fÃ¼r den Tag als abgeschlossen zu markieren.",
-        "emptyDescription": "Sobald Sie Gewohnheiten hinzufÃ¼gen, werden diese hier angezeigt. Tippen Sie, um sie fÃ¼r den Tag als abgeschlossen zu markieren."
+        "hasHabitsDescription": "Hier sind deine Gewohnheiten! Tippen Sie darauf, um sie für den Tag als abgeschlossen zu markieren.",
+        "emptyDescription": "Sobald Sie Gewohnheiten hinzufügen, werden diese hier angezeigt. Tippen Sie, um sie für den Tag als abgeschlossen zu markieren."
       },
       "complete": {
         "title": "Sie sind bereit!",
-        "description": "Beginnen Sie noch heute damit, bessere Gewohnheiten aufzubauen. Denken Sie daran: BestÃ¤ndigkeit ist der SchlÃ¼ssel zum Erfolg!"
+        "description": "Beginnen Sie noch heute damit, bessere Gewohnheiten aufzubauen. Denken Sie daran: Beständigkeit ist der Schlüssel zum Erfolg!"
       }
     },
     "actions": {
-      "skip": "Ãœberspringen",
-      "previous": "ZurÃ¼ck",
-      "skipTour": "Tour Ã¼berspringen",
-      "next": "Als nÃ¤chstes",
+      "skip": "Überspringen",
+      "previous": "Zurück",
+      "skipTour": "Tour überspringen",
+      "next": "Als nächstes",
       "getStarted": "Legen Sie los",
-      "start": "Starten"
+      "start": "Start"
     }
   },
   "HabitManagementSettings": {
     "title": "Gewohnheitsmanagement",
-    "deleteAll": "Alle Gewohnheiten lÃ¶schen",
+    "deleteAll": "Alle Gewohnheiten löschen",
     "toasts": {
       "deleted": {
-        "title": "Alle Gewohnheiten gelÃ¶scht",
-        "description": "Ihre Gewohnheitsliste wurde gelÃ¶scht."
+        "title": "Alle Gewohnheiten gelöscht",
+        "description": "Ihre Gewohnheitsliste wurde gelöscht."
       },
       "failed": {
-        "title": "LÃ¶schen fehlgeschlagen",
-        "description": "Beim LÃ¶schen von Gewohnheiten ist ein Fehler aufgetreten."
+        "title": "Löschen fehlgeschlagen",
+        "description": "Beim Löschen von Gewohnheiten ist ein Fehler aufgetreten."
       },
       "noHandler": {
-        "description": "Kein LÃ¶schhandler bereitgestellt."
+        "description": "Kein Löschhandler bereitgestellt."
       }
     }
   },
@@ -621,7 +621,7 @@
     "label": "Statusleiste",
     "visible": "Sichtbar",
     "hidden": "Versteckt",
-    "status": "Statusleiste: {visibility} | HÃ¶he: {height}px",
+    "status": "Statusleiste: {visibility} | Höhe: {height}px",
     "actions": {
       "show": "Zeigen",
       "hide": "Verstecken",
@@ -629,9 +629,9 @@
       "darkStyle": "Dunkler Stil",
       "defaultStyle": "Standardstil",
       "redBackground": "Roter Hintergrund",
-      "greenBackground": "GrÃ¼ner Hintergrund",
+      "greenBackground": "Grüner Hintergrund",
       "blueBackground": "Blauer Hintergrund",
-      "resetToWhite": "ZurÃ¼cksetzen auf WeiÃŸ"
+      "resetToWhite": "Zurücksetzen auf Weiß"
     }
   },
   "OfflinePage": {
@@ -647,50 +647,50 @@
   },
   "TermsOfServicePage": {
     "meta": {
-      "title": "Nutzungsbedingungen â€“ TGATB Habit Tracker",
-      "description": "Nutzungsbedingungen fÃ¼r The Good and The Bad: Habit Tracker"
+      "title": "Nutzungsbedingungen – TGATB Habit Tracker",
+      "description": "Nutzungsbedingungen für The Good and The Bad: Habit Tracker"
     },
     "title": "Nutzungsbedingungen",
     "lastUpdated": "Letzte Aktualisierung: 13. Februar 2026",
     "sections": {
       "welcome": {
         "title": "Willkommen",
-        "body": "Willkommen beim TGATB Habit Tracker (â€žDas Gute und das Schlechteâ€œ, â€žwirâ€œ, â€žunsâ€œ, â€žunserâ€œ). Durch die Nutzung unserer Web- und Mobilanwendungen stimmen Sie diesen Nutzungsbedingungen zu."
+        "body": "Willkommen beim TGATB Habit Tracker („Das Gute und das Schlechte“, „wir“, „uns“, „unser“). Durch die Nutzung unserer Web- und Mobilanwendungen stimmen Sie diesen Nutzungsbedingungen zu."
       },
       "use": {
         "title": "Nutzung der App",
-        "item1": "Um die App nutzen zu kÃ¶nnen, mÃ¼ssen Sie mindestens 13 Jahre alt sein.",
-        "item2": "Sie erklÃ¤ren sich damit einverstanden, die App nicht zu missbrauchen oder zu versuchen, auf unbefugte Weise darauf zuzugreifen."
+        "item1": "Um die App nutzen zu können, müssen Sie mindestens 13 Jahre alt sein.",
+        "item2": "Sie erklären sich damit einverstanden, die App nicht zu missbrauchen oder zu versuchen, auf unbefugte Weise darauf zuzugreifen."
       },
       "userContent": {
         "title": "Benutzerinhalte",
-        "item1": "Sie sind fÃ¼r die von Ihnen hinzugefÃ¼gten Inhalte (Gewohnheiten, Notizen usw.) verantwortlich.",
-        "item2": "Wir behalten uns das Recht vor, Inhalte zu entfernen, die gegen diese Bedingungen oder geltende Gesetze verstoÃŸen."
+        "item1": "Sie sind für die von Ihnen hinzugefügten Inhalte (Gewohnheiten, Notizen usw.) verantwortlich.",
+        "item2": "Wir behalten uns das Recht vor, Inhalte zu entfernen, die gegen diese Bedingungen oder geltende Gesetze verstoßen."
       },
       "intellectualProperty": {
         "title": "Geistiges Eigentum",
         "item1": "Alle App-Inhalte, Marken und Codes sind Eigentum von uns oder unseren Lizenzgebern.",
-        "item2": "Sie dÃ¼rfen unsere Inhalte nicht ohne Genehmigung kopieren, Ã¤ndern oder verbreiten."
+        "item2": "Sie dürfen unsere Inhalte nicht ohne Genehmigung kopieren, ändern oder verbreiten."
       },
       "thirdParty": {
         "title": "Dienste Dritter",
         "body": "Die App nutzt Dienste von Drittanbietern (Google Cloud, Firebase usw.). Ihre Nutzung dieser Dienste unterliegt den jeweiligen Bedingungen."
       },
       "limitation": {
-        "title": "HaftungsbeschrÃ¤nkung",
-        "body": "Die App wird â€žwie besehenâ€œ ohne GewÃ¤hrleistungen jeglicher Art bereitgestellt. Wir haften nicht fÃ¼r SchÃ¤den, die durch Ihre Nutzung der App entstehen."
+        "title": "Haftungsbeschränkung",
+        "body": "Die App wird „wie besehen“ ohne Gewährleistungen jeglicher Art bereitgestellt. Wir haften nicht für Schäden, die durch Ihre Nutzung der App entstehen."
       },
       "termination": {
-        "title": "KÃ¼ndigung",
-        "body": "Bei einem VerstoÃŸ gegen diese Bedingungen kÃ¶nnen wir Ihren Zugriff auf die App sperren oder beenden."
+        "title": "Kündigung",
+        "body": "Bei einem Verstoß gegen diese Bedingungen können wir Ihren Zugriff auf die App sperren oder beenden."
       },
       "changes": {
-        "title": "Ã„nderungen dieser Bedingungen",
-        "body": "Wir kÃ¶nnen diese Nutzungsbedingungen von Zeit zu Zeit aktualisieren. Ã„nderungen werden in der App und auf unserer Website verÃ¶ffentlicht."
+        "title": "Änderungen dieser Bedingungen",
+        "body": "Wir können diese Nutzungsbedingungen von Zeit zu Zeit aktualisieren. Änderungen werden in der App und auf unserer Website veröffentlicht."
       },
       "openSource": {
         "title": "Open Source",
-        "body": "TGATB Habit Tracker ist Open Source unter der Apache 2.0-Lizenz. Den vollstÃ¤ndigen Quellcode kÃ¶nnen Sie hier einsehen:"
+        "body": "TGATB Habit Tracker ist Open Source unter der Apache 2.0-Lizenz. Den vollständigen Quellcode können Sie hier einsehen:"
       },
       "contact": {
         "title": "Kontaktieren Sie uns",
@@ -699,7 +699,7 @@
     },
     "links": {
       "privacyPolicy": "Datenschutzrichtlinie",
-      "openApp": "Ã–ffnen Sie den TGATB Habit Tracker"
+      "openApp": "Öffnen Sie den TGATB Habit Tracker"
     },
     "footer": {
       "rightsReserved": "Alle Rechte vorbehalten."
@@ -707,28 +707,28 @@
   },
   "PrivacyPolicyPage": {
     "meta": {
-      "title": "Datenschutzrichtlinie â€“ TGATB Habit Tracker",
-      "description": "Datenschutzrichtlinie fÃ¼r das Gute und das Schlechte: Habit Tracker"
+      "title": "Datenschutzrichtlinie – TGATB Habit Tracker",
+      "description": "Datenschutzrichtlinie für das Gute und das Schlechte: Habit Tracker"
     },
     "title": "Datenschutzrichtlinie",
     "lastUpdated": "Letzte Aktualisierung: 7. Februar 2026",
     "sections": {
       "overview": {
-        "title": "Ãœbersicht",
-        "body": "TGATB Habit Tracker (â€žThe Good and The Badâ€œ) ist eine minimalistische Anwendung zur Gewohnheitsverfolgung, die von adsurkasur entwickelt wurde. In dieser Datenschutzrichtlinie wird erlÃ¤utert, wie wir mit Ihren Daten umgehen, wenn Sie unsere Webanwendung unter www.tgatb.click und unsere mobile Android-Anwendung nutzen."
+        "title": "Übersicht",
+        "body": "TGATB Habit Tracker („The Good and The Bad“) ist eine minimalistische Anwendung zur Gewohnheitsverfolgung, die von adsurkasur entwickelt wurde. In dieser Datenschutzrichtlinie wird erläutert, wie wir mit Ihren Daten umgehen, wenn Sie unsere Webanwendung unter www.tgatb.click und unsere mobile Android-Anwendung nutzen."
       },
       "informationCollected": {
         "title": "Informationen, die wir sammeln",
         "dataYouProvide": {
           "title": "Von Ihnen bereitgestellte Daten",
-          "habitData": "Gewohnheitsdaten: Namen, Typen (gut/schlecht), Abschlussprotokolle und Streaks, die Sie in der App erstellen. Diese Daten werden standardmÃ¤ÃŸig lokal auf Ihrem GerÃ¤t gespeichert.",
-          "settings": "Einstellungen: Dunkelmodus, Sprache, Motivator-PersÃ¶nlichkeit und andere App-Einstellungen, die lokal auf Ihrem GerÃ¤t gespeichert sind.",
-          "googleAccount": "Google-Kontoinformationen (optional): Wenn Sie sich fÃ¼r die Cloud-Sicherung bei Google anmelden, greifen wir ausschlieÃŸlich zur Authentifizierung und zur Google Drive-Sicherungsfunktion auf Ihren Namen, Ihre E-Mail-Adresse und Ihr Profilbild zu."
+          "habitData": "Gewohnheitsdaten: Namen, Typen (gut/schlecht), Abschlussprotokolle und Streaks, die Sie in der App erstellen. Diese Daten werden standardmäßig lokal auf Ihrem Gerät gespeichert.",
+          "settings": "Einstellungen: Dunkelmodus, Sprache, Motivator-Persönlichkeit und andere App-Einstellungen, die lokal auf Ihrem Gerät gespeichert sind.",
+          "googleAccount": "Google-Kontoinformationen (optional): Wenn Sie sich für die Cloud-Sicherung bei Google anmelden, greifen wir ausschließlich zur Authentifizierung und zur Google Drive-Sicherungsfunktion auf Ihren Namen, Ihre E-Mail-Adresse und Ihr Profilbild zu."
         },
         "dataCollectedAutomatically": {
           "title": "Automatisch erfasste Daten",
-          "analytics": "Analysedaten (mit Einwilligung): Wir verwenden Vercel Analytics und Firebase Analytics, um anonyme Nutzungsstatistiken wie Seitenaufrufe, GerÃ¤tetyp und allgemeine Interaktionsmuster zu sammeln. Die Analyse wird erst initialisiert, nachdem Sie Ihre Einwilligung erteilt haben.",
-          "errorTracking": "Fehlerverfolgung (optional): Wenn aktiviert, sammelt Sentry Absturzberichte und Fehlerprotokolle, um uns bei der Verbesserung der App-StabilitÃ¤t zu helfen. Dies ist nur aktiv, wenn eine Einwilligung zur Analyse vorliegt und ein Sentry-DSN konfiguriert ist."
+          "analytics": "Analysedaten (mit Einwilligung): Wir verwenden Vercel Analytics und Firebase Analytics, um anonyme Nutzungsstatistiken wie Seitenaufrufe, Gerätetyp und allgemeine Interaktionsmuster zu sammeln. Die Analyse wird erst initialisiert, nachdem Sie Ihre Einwilligung erteilt haben.",
+          "errorTracking": "Fehlerverfolgung (optional): Wenn aktiviert, sammelt Sentry Absturzberichte und Fehlerprotokolle, um uns bei der Verbesserung der App-Stabilität zu helfen. Dies ist nur aktiv, wenn eine Einwilligung zur Analyse vorliegt und ein Sentry-DSN konfiguriert ist."
         },
         "dataNotCollected": {
           "title": "Daten, die wir NICHT sammeln",
@@ -741,54 +741,54 @@
       },
       "dataStorage": {
         "title": "Wie Ihre Daten gespeichert werden",
-        "local": "Lokale Speicherung (Standard): Alle Gewohnheitsdaten und -einstellungen werden lokal auf Ihrem GerÃ¤t Ã¼ber den Browser â€žlocalStorageâ€œ (Web) oder â€žCapacitor Preferencesâ€œ (Android) gespeichert. Keine Daten verlassen Ihr GerÃ¤t, es sei denn, Sie aktivieren explizit die Cloud-Sicherung.",
-        "cloudBackup": "Cloud-Backup (optional): Wenn Sie sich bei Google anmelden, kÃ¶nnen Sie Ihre Daten auf Ihrem eigenen Google Drive sichern. Ihre Daten werden als Datei in Ihrem persÃ¶nlichen Google Drive gespeichert â€“ wir haben keinen Zugriff auf Ihre Google Drive-Dateien."
+        "local": "Lokale Speicherung (Standard): Alle Gewohnheitsdaten und -einstellungen werden lokal auf Ihrem Gerät über den Browser „localStorage“ (Web) oder „Capacitor Preferences“ (Android) gespeichert. Keine Daten verlassen Ihr Gerät, es sei denn, Sie aktivieren explizit die Cloud-Sicherung.",
+        "cloudBackup": "Cloud-Backup (optional): Wenn Sie sich bei Google anmelden, können Sie Ihre Daten auf Ihrem eigenen Google Drive sichern. Ihre Daten werden als Datei in Ihrem persönlichen Google Drive gespeichert – wir haben keinen Zugriff auf Ihre Google Drive-Dateien."
       },
       "thirdPartyServices": {
         "title": "Dienste Dritter",
         "intro": "Wir nutzen die folgenden Dienste von Drittanbietern:",
-        "firebase": "Firebase-Authentifizierung: FÃ¼r die Google-Anmeldung. Es gelten die Datenschutzbestimmungen von Google.",
-        "firebaseAnalytics": "Firebase Analytics: FÃ¼r anonyme Nutzungsstatistiken (Einwilligung erforderlich).",
-        "vercelAnalytics": "Vercel Analytics: FÃ¼r anonyme Webanalysen (Einwilligung erforderlich).",
-        "googleDrive": "Google Drive API: FÃ¼r optionale Cloud-Sicherung, Zugriff nur auf Ihre eigenen, von der App erstellten Dateien.",
-        "sentry": "Sentry (optional): FÃ¼r Fehler- und Absturzberichte, wenn aktiviert."
+        "firebase": "Firebase-Authentifizierung: Für die Google-Anmeldung. Es gelten die Datenschutzbestimmungen von Google.",
+        "firebaseAnalytics": "Firebase Analytics: Für anonyme Nutzungsstatistiken (Einwilligung erforderlich).",
+        "vercelAnalytics": "Vercel Analytics: Für anonyme Webanalysen (Einwilligung erforderlich).",
+        "googleDrive": "Google Drive API: Für optionale Cloud-Sicherung, Zugriff nur auf Ihre eigenen, von der App erstellten Dateien.",
+        "sentry": "Sentry (optional): Für Fehler- und Absturzberichte, wenn aktiviert."
       },
       "rightsControls": {
         "title": "Ihre Rechte und Kontrollen",
-        "analyticsConsent": "Analytics-Einwilligung: Sie kÃ¶nnen Analytics jederzeit in den App-Einstellungen aktivieren oder deaktivieren.",
-        "dataDeletion": "DatenlÃ¶schung: Sie kÃ¶nnen alle Ihre Gewohnheitsdaten in den App-Einstellungen lÃ¶schen (â€žAlle Gewohnheiten lÃ¶schenâ€œ). Da die Daten lokal gespeichert werden, werden durch das LÃ¶schen Ihrer Browserdaten oder die Deinstallation der App auch alle Daten gelÃ¶scht.",
-        "cloudBackupControl": "Cloud-Backup-Kontrolle: Sie kÃ¶nnen sich jederzeit abmelden, um das Cloud-Backup zu stoppen. Ihre Google Drive-Sicherungsdateien kÃ¶nnen direkt von Ihrem Google Drive aus verwaltet werden.",
-        "dataExport": "Datenexport: Sie kÃ¶nnen Ihre Daten jederzeit aus den App-Einstellungen als JSON-Datei exportieren."
+        "analyticsConsent": "Analytics-Einwilligung: Sie können Analytics jederzeit in den App-Einstellungen aktivieren oder deaktivieren.",
+        "dataDeletion": "Datenlöschung: Sie können alle Ihre Gewohnheitsdaten in den App-Einstellungen löschen („Alle Gewohnheiten löschen“). Da die Daten lokal gespeichert werden, werden durch das Löschen Ihrer Browserdaten oder die Deinstallation der App auch alle Daten gelöscht.",
+        "cloudBackupControl": "Cloud-Backup-Kontrolle: Sie können sich jederzeit abmelden, um das Cloud-Backup zu stoppen. Ihre Google Drive-Sicherungsdateien können direkt von Ihrem Google Drive aus verwaltet werden.",
+        "dataExport": "Datenexport: Sie können Ihre Daten jederzeit aus den App-Einstellungen als JSON-Datei exportieren."
       },
       "deleteData": {
-        "title": "LÃ¶schen Sie Ihre Daten",
-        "intro": "TGATB Habit Tracker speichert Ihre Gewohnheitsdaten lokal auf Ihrem GerÃ¤t. Sie kÃ¶nnen jederzeit alle Ihre Daten lÃ¶schen, ohne dass Sie Ihr Konto lÃ¶schen mÃ¼ssen:",
-        "steps": "1. Ã–ffnen Sie die App\n2. Tippen Sie oben links auf das MenÃ¼symbol (Hamburger-MenÃ¼).\n3. Scrollen Sie nach unten zu â€žGewohnheitsverwaltungâ€œ.\n4. Tippen Sie auf â€žAlle Gewohnheiten lÃ¶schenâ€œ\n5. BestÃ¤tigen Sie den LÃ¶schvorgang, wenn Sie dazu aufgefordert werden",
-        "willDelete": "Dadurch wird Folgendes dauerhaft gelÃ¶scht:",
+        "title": "Löschen Sie Ihre Daten",
+        "intro": "TGATB Habit Tracker speichert Ihre Gewohnheitsdaten lokal auf Ihrem Gerät. Sie können jederzeit alle Ihre Daten löschen, ohne dass Sie Ihr Konto löschen müssen:",
+        "steps": "1. Öffnen Sie die App\n2. Tippen Sie oben links auf das Menüsymbol (Hamburger-Menü).\n3. Scrollen Sie nach unten zu „Gewohnheitsverwaltung“.\n4. Tippen Sie auf „Alle Gewohnheiten löschen“\n5. Bestätigen Sie den Löschvorgang, wenn Sie dazu aufgefordert werden",
+        "willDelete": "Dadurch wird Folgendes dauerhaft gelöscht:",
         "willDeleteItems": "Alle Ihre Gewohnheiten und ihre Namen, alle Abschlussprotokolle und Streak-Daten, alle Verlaufsaufzeichnungen",
-        "willNotDelete": "Dadurch wird Folgendes NICHT gelÃ¶scht:",
-        "willNotDeleteItems": "Ihre App-Einstellungen (Dunkelmodus, Sprache usw.) â€“ diese werden zurÃ¼ckgesetzt, wenn Sie App-Daten lÃ¶schen oder deinstallieren. Alle zuvor auf Ihrem Google Drive gespeicherten Sicherungsdateien â€“ Sie kÃ¶nnen diese direkt von Ihrem Google Drive lÃ¶schen",
-        "alternative": "Alternativ kÃ¶nnen Sie die App deinstallieren oder App-Daten aus Ihren GerÃ¤teeinstellungen lÃ¶schen, um alle lokal gespeicherten Informationen zu entfernen."
+        "willNotDelete": "Dadurch wird Folgendes NICHT gelöscht:",
+        "willNotDeleteItems": "Ihre App-Einstellungen (Dunkelmodus, Sprache usw.) – diese werden zurückgesetzt, wenn Sie App-Daten löschen oder deinstallieren. Alle zuvor auf Ihrem Google Drive gespeicherten Sicherungsdateien – Sie können diese direkt von Ihrem Google Drive löschen",
+        "alternative": "Alternativ können Sie die App deinstallieren oder App-Daten aus Ihren Geräteeinstellungen löschen, um alle lokal gespeicherten Informationen zu entfernen."
       },
       "deleteAccount": {
-        "title": "LÃ¶schen Sie Ihr Konto",
-        "intro": "Wenn Sie sich bei Google angemeldet haben und Ihr Konto und alle damit verbundenen Daten vollstÃ¤ndig entfernen mÃ¶chten, gehen Sie folgendermaÃŸen vor:",
-        "appSteps": "1. Ã–ffnen Sie die App\n2. Tippen Sie oben links auf das MenÃ¼symbol (Hamburger-MenÃ¼).\n3. Scrollen Sie nach unten zu Gewohnheitsverwaltung und tippen Sie auf â€žAlle Gewohnheiten lÃ¶schenâ€œ, um Ihre Daten zu entfernen\n4. Scrollen Sie zu Konto & Daten und tippen Sie auf â€žAbmeldenâ€œ, um sich abzumelden\n5. Deinstallieren Sie die App, um alle verbleibenden lokalen Daten zu entfernen",
-        "googleDriveSteps": "So entfernen Sie Ihre Google Drive-Sicherungsdateien:\n1. Gehen Sie zu Google Drive\n2. Suchen Sie nach â€žtgatbâ€œ oder â€žhabitâ€œ, um Sicherungsdateien zu finden\n3. LÃ¶schen Sie die Sicherungsdateien",
-        "revokeSteps": "So widerrufen Sie den Zugriff der App auf Ihr Google-Konto:\n1. Gehen Sie zu Google-Kontoberechtigungen\n2. Suchen Sie in der Liste nach â€žTGATB Habit Trackerâ€œ.\n3. Klicken Sie auf â€žZugriff entfernenâ€œ",
-        "completion": "Nach Abschluss dieser Schritte werden alle Ihre Daten und Ihr Kontozugriff vollstÃ¤ndig entfernt. Wenn Sie Hilfe benÃ¶tigen, kontaktieren Sie uns unter adsurkasur.dev@gmail.com."
+        "title": "Löschen Sie Ihr Konto",
+        "intro": "Wenn Sie sich bei Google angemeldet haben und Ihr Konto und alle damit verbundenen Daten vollständig entfernen möchten, gehen Sie folgendermaßen vor:",
+        "appSteps": "1. Öffnen Sie die App\n2. Tippen Sie oben links auf das Menüsymbol (Hamburger-Menü).\n3. Scrollen Sie nach unten zu Gewohnheitsverwaltung und tippen Sie auf „Alle Gewohnheiten löschen“, um Ihre Daten zu entfernen\n4. Scrollen Sie zu Konto & Daten und tippen Sie auf „Abmelden“, um sich abzumelden\n5. Deinstallieren Sie die App, um alle verbleibenden lokalen Daten zu entfernen",
+        "googleDriveSteps": "So entfernen Sie Ihre Google Drive-Sicherungsdateien:\n1. Gehen Sie zu Google Drive\n2. Suchen Sie nach „tgatb“ oder „habit“, um Sicherungsdateien zu finden\n3. Löschen Sie die Sicherungsdateien",
+        "revokeSteps": "So widerrufen Sie den Zugriff der App auf Ihr Google-Konto:\n1. Gehen Sie zu Google-Kontoberechtigungen\n2. Suchen Sie in der Liste nach „TGATB Habit Tracker“.\n3. Klicken Sie auf „Zugriff entfernen“",
+        "completion": "Nach Abschluss dieser Schritte werden alle Ihre Daten und Ihr Kontozugriff vollständig entfernt. Wenn Sie Hilfe benötigen, kontaktieren Sie uns unter adsurkasur.dev@gmail.com."
       },
       "dataSecurity": {
         "title": "Datensicherheit",
-        "body": "Wir ergreifen angemessene SicherheitsmaÃŸnahmen, um Ihre Daten zu schÃ¼tzen. Ihre Gewohnheitsdaten werden lokal auf Ihrem GerÃ¤t gespeichert und nicht an unsere Server Ã¼bertragen. Cloud-Backup-Daten werden mithilfe der Sicherheitsinfrastruktur von Google in Ihrem persÃ¶nlichen Google Drive gespeichert. Allerdings ist keine Methode der elektronischen Speicherung zu 100 % sicher."
+        "body": "Wir ergreifen angemessene Sicherheitsmaßnahmen, um Ihre Daten zu schützen. Ihre Gewohnheitsdaten werden lokal auf Ihrem Gerät gespeichert und nicht an unsere Server übertragen. Cloud-Backup-Daten werden mithilfe der Sicherheitsinfrastruktur von Google in Ihrem persönlichen Google Drive gespeichert. Allerdings ist keine Methode der elektronischen Speicherung zu 100 % sicher."
       },
       "childrenPrivacy": {
-        "title": "PrivatsphÃ¤re von Kindern",
-        "body": "Unsere App richtet sich nicht an Kinder unter 13 Jahren. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren. Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und glauben, dass Ihr Kind uns personenbezogene Daten zur VerfÃ¼gung gestellt hat, kontaktieren Sie uns bitte."
+        "title": "Privatsphäre von Kindern",
+        "body": "Unsere App richtet sich nicht an Kinder unter 13 Jahren. Wir erfassen wissentlich keine personenbezogenen Daten von Kindern unter 13 Jahren. Wenn Sie ein Elternteil oder Erziehungsberechtigter sind und glauben, dass Ihr Kind uns personenbezogene Daten zur Verfügung gestellt hat, kontaktieren Sie uns bitte."
       },
       "policyChanges": {
-        "title": "Ã„nderungen an dieser Richtlinie",
-        "body": "Wir kÃ¶nnen diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Alle Ã„nderungen werden durch die Aktualisierung des Datums â€žLetzte Aktualisierungâ€œ oben auf dieser Seite berÃ¼cksichtigt. Wir empfehlen Ihnen, diese Richtlinie regelmÃ¤ÃŸig zu Ã¼berprÃ¼fen."
+        "title": "Änderungen an dieser Richtlinie",
+        "body": "Wir können diese Datenschutzrichtlinie von Zeit zu Zeit aktualisieren. Alle Änderungen werden durch die Aktualisierung des Datums „Letzte Aktualisierung“ oben auf dieser Seite berücksichtigt. Wir empfehlen Ihnen, diese Richtlinie regelmäßig zu überprüfen."
       },
       "contactUs": {
         "title": "Kontaktieren Sie uns",
@@ -801,11 +801,10 @@
     },
     "links": {
       "termsOfService": "Nutzungsbedingungen",
-      "openApp": "Ã–ffnen Sie den TGATB Habit Tracker"
+      "openApp": "Öffnen Sie den TGATB Habit Tracker"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasur. Alle Rechte vorbehalten."
+      "copyright": "© 2025-2026 adsurkasur. Alle Rechte vorbehalten."
     }
   }
 }
-

@@ -10,7 +10,7 @@
     "title": "Yang Baik dan Yang Buruk",
     "demoLabel": "Tabiat Demo",
     "counter": "{current} daripada {total} tabiat",
-    "counterHint": "Gunakan kekunci â† â†’, butang navigasi atau leret untuk menavigasi",
+    "counterHint": "Gunakan kekunci ← →, butang navigasi atau leret untuk menavigasi",
     "aria": {
       "previousHabit": "Tabiat sebelumnya",
       "nextHabit": "Tabiat seterusnya"
@@ -36,8 +36,8 @@
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Pilih bahasa",
       "modalDescription": "Pilih bahasa yang digunakan merentas antara muka apl.",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
+      "restartWarningWeb": "Perubahan bahasa berlaku serta-merta. Halaman tersebut menavigasi ke versi bahasa baharu dan menyegarkan semula.",
+      "restartWarningApp": "Perubahan bahasa berlaku serta-merta. Tiada permulaan semula apl diperlukan.",
       "cancel": "Batal",
       "apply": "Mohon",
       "applying": "Memohon..."
@@ -65,11 +65,11 @@
     "version": "Versi {version}",
     "features": {
       "title": "Ciri-ciri",
-      "item1": "â€¢ Jejaki tabiat baik dan buruk",
-      "item2": "â€¢ Sokongan luar talian dengan teknologi PWA",
-      "item3": "â€¢ Penjejakan coretan dan kemajuan visual",
-      "item4": "â€¢ Reka bentuk minimalis dan bebas gangguan",
-      "item5": "â€¢ Keserasian merentas platform"
+      "item1": "• Jejaki tabiat baik dan buruk",
+      "item2": "• Sokongan luar talian dengan teknologi PWA",
+      "item3": "• Penjejakan coretan dan kemajuan visual",
+      "item4": "• Reka bentuk minimalis dan bebas gangguan",
+      "item5": "• Keserasian merentas platform"
     },
     "builtWith": "Dibina dengan",
     "stack": {
@@ -88,8 +88,8 @@
       "termsOfService": "Syarat Perkhidmatan"
     },
     "footer": {
-      "madeWithLove": "Dibuat dengan â¤ï¸ untuk tabiat yang lebih baik",
-      "copyright": "Â© 2025-2026 TGATB Habit Tracker"
+      "madeWithLove": "Dibuat dengan ❤️ untuk tabiat yang lebih baik",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
     }
   },
   "NavigationDrawer": {
@@ -674,11 +674,11 @@
       },
       "thirdParty": {
         "title": "Perkhidmatan Pihak Ketiga",
-        "body": "Apl menggunakan perkhidmatan pihak ketiga (Google Cloud, Firebase, dsb.). Penggunaan perkhidmatan ini oleh anda adalah tertakluk kepada syarat masing-masing."
+        "body": "Apl menggunakan perkhidmatan pihak ketiga (Google Cloud, Firebase, dll.). Penggunaan perkhidmatan ini oleh anda adalah tertakluk kepada syarat masing-masing."
       },
       "limitation": {
         "title": "Had Liabiliti",
-        "body": "Aplikasi ini disediakan \"seadanya\" tanpa sebarang jenis jaminan. Kami tidak bertanggungjawab ke atas sebarang kerosakan yang timbul daripada penggunaan aplikasi anda."
+        "body": "Aplikasi ini disediakan \"seadanya\" tanpa sebarang jenis jaminan. Kami tidak bertanggungjawab untuk sebarang kerosakan yang timbul daripada penggunaan aplikasi anda."
       },
       "termination": {
         "title": "Penamatan",
@@ -742,7 +742,7 @@
       "dataStorage": {
         "title": "Cara Data Anda Disimpan",
         "local": "Storan setempat (lalai): Semua data tabiat dan tetapan disimpan secara setempat pada peranti anda menggunakan penyemak imbas localStorage (web) atau Keutamaan Kapasitor (Android). Tiada data meninggalkan peranti anda melainkan anda mendayakan sandaran awan secara eksplisit.",
-        "cloudBackup": "Sandaran awan (pilihan): Jika anda log masuk dengan Google, anda boleh memilih untuk menyandarkan data anda ke Google Drive anda sendiri. Data anda disimpan sebagai fail dalam Google Drive peribadi anda â€“ kami tidak mempunyai akses kepada fail Google Drive anda."
+        "cloudBackup": "Sandaran awan (pilihan): Jika anda log masuk dengan Google, anda boleh memilih untuk menyandarkan data anda ke Google Drive anda sendiri. Data anda disimpan sebagai fail dalam Google Drive peribadi anda - kami tidak mempunyai akses kepada fail Google Drive anda."
       },
       "thirdPartyServices": {
         "title": "Perkhidmatan Pihak Ketiga",
@@ -767,7 +767,7 @@
         "willDelete": "Ini akan memadamkan secara kekal:",
         "willDeleteItems": "Semua tabiat anda dan nama mereka, Semua log penyiapan dan data coretan, Semua rekod sejarah",
         "willNotDelete": "Ini TIDAK akan memadam:",
-        "willNotDeleteItems": "Tetapan apl anda (mod gelap, bahasa, dll.) â€” ini ditetapkan semula apabila anda mengosongkan data apl atau menyahpasang, Sebarang fail sandaran yang sebelum ini disimpan ke Google Drive anda â€” anda boleh memadamkannya terus daripada Google Drive anda",
+        "willNotDeleteItems": "Tetapan apl anda (mod gelap, bahasa, dsb.) - ini ditetapkan semula apabila anda mengosongkan data apl atau menyahpasang, Sebarang fail sandaran yang sebelum ini disimpan ke Google Drive anda - anda boleh memadamkannya terus daripada Google Drive anda",
         "alternative": "Sebagai alternatif, anda boleh menyahpasang apl atau mengosongkan data apl daripada tetapan peranti anda untuk mengalih keluar semua maklumat yang disimpan secara setempat."
       },
       "deleteAccount": {
@@ -784,7 +784,7 @@
       },
       "childrenPrivacy": {
         "title": "Privasi Kanak-kanak",
-        "body": "Apl kami tidak ditujukan kepada kanak-kanak di bawah umur 13 tahun. Kami tidak mengumpul maklumat peribadi daripada kanak-kanak di bawah umur 13 tahun dengan sengaja. Jika anda seorang ibu bapa atau penjaga dan percaya anak anda telah memberikan maklumat peribadi kepada kami, sila hubungi kami."
+        "body": "Apl kami tidak ditujukan kepada kanak-kanak di bawah umur 13 tahun. Kami tidak mengumpul maklumat peribadi daripada kanak-kanak di bawah umur 13 tahun dengan sengaja. Jika anda ibu bapa atau penjaga dan percaya anak anda telah memberikan maklumat peribadi kepada kami, sila hubungi kami."
       },
       "policyChanges": {
         "title": "Perubahan kepada Polisi Ini",
@@ -804,8 +804,7 @@
       "openApp": "Buka Penjejak Tabiat TGATB"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasur. Semua hak terpelihara."
+      "copyright": "© 2025-2026 adsurkasur. Semua hak terpelihara."
     }
   }
 }
-

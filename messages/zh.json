@@ -1,811 +1,810 @@
 {
   "App": {
-    "name": "TGATB ä¹ æƒ¯è¿½è¸ªå™¨",
-    "description": "å¥½ä¸Žåï¼šä¸€ä¸ªæžç®€çš„ä¹ æƒ¯è·Ÿè¸ªåº”ç”¨ç¨‹åº"
+    "name": "TGATB 习惯追踪器",
+    "description": "好与坏：一个极简的习惯跟踪应用程序"
   },
   "Routing": {
-    "redirecting": "æ­£åœ¨é‡å®šå‘..."
+    "redirecting": "正在重定向..."
   },
   "Home": {
-    "title": "å¥½çš„å’Œåçš„",
-    "demoLabel": "æ¼”ç¤ºä¹ æƒ¯",
-    "counter": "{current} ä¸ªä¹ æƒ¯ï¼ˆå…± {total} ä¸ªï¼‰",
-    "counterHint": "ä½¿ç”¨ â† â†’ é”®ã€å¯¼èˆªæŒ‰é’®æˆ–æ»‘åŠ¨è¿›è¡Œå¯¼èˆª",
+    "title": "好的和坏的",
+    "demoLabel": "演示习惯",
+    "counter": "{current} 个习惯（共 {total} 个）",
+    "counterHint": "使用 ← → 键、导航按钮或滑动进行导航",
     "aria": {
-      "previousHabit": "ä»¥å‰çš„ä¹ æƒ¯",
-      "nextHabit": "ä¸‹ä¸€ä¸ªä¹ æƒ¯"
+      "previousHabit": "以前的习惯",
+      "nextHabit": "下一个习惯"
     },
     "toasts": {
-      "pressBackAgainExit": "å†æŒ‰ä¸€æ¬¡è¿”å›žå³å¯é€€å‡º",
-      "habitDeletedTitle": "ä¹ æƒ¯åˆ é™¤ï¼",
-      "habitDeletedDescription": "ä½ çš„ä¹ æƒ¯å·²ç»è¢«æ”¹æŽ‰äº†ã€‚",
-      "undoDeleteAltText": "æ’¤æ¶ˆåˆ é™¤",
-      "undo": "æ’¤æ¶ˆ"
+      "pressBackAgainExit": "再按一次返回即可退出",
+      "habitDeletedTitle": "习惯删除！",
+      "habitDeletedDescription": "你的习惯已经被改掉了。",
+      "undoDeleteAltText": "撤消删除",
+      "undo": "撤消"
     }
   },
   "AppearanceSettings": {
-    "title": "å¤–è²Œ",
+    "title": "外貌",
     "darkMode": {
-      "label": "æ·±è‰²æ¨¡å¼",
-      "description": "åœ¨æµ…è‰²å’Œæ·±è‰²ä¸»é¢˜ä¹‹é—´åˆ‡æ¢"
+      "label": "深色模式",
+      "description": "在浅色和深色主题之间切换"
     },
     "language": {
-      "title": "è¯­è¨€",
-      "label": "åˆ‡æ¢åº”ç”¨ç¨‹åºè¯­è¨€",
-      "english": "è‹±è¯­",
-      "indonesian": "å°åº¦å°¼è¥¿äºšè¯­",
-      "modalTitle": "é€‰æ‹©è¯­è¨€",
-      "modalDescription": "é€‰æ‹©åº”ç”¨ç¨‹åºç•Œé¢ä¸­ä½¿ç”¨çš„è¯­è¨€ã€‚",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
-      "cancel": "å–æ¶ˆ",
-      "apply": "ç”³è¯·",
-      "applying": "æ­£åœ¨ç”³è¯·..."
+      "title": "语言",
+      "label": "切换应用程序语言",
+      "english": "英语",
+      "indonesian": "印度尼西亚语",
+      "modalTitle": "选择语言",
+      "modalDescription": "选择应用程序界面中使用的语言。",
+      "restartWarningWeb": "语言更改会立即生效。页面导航到新的语言版本并刷新。",
+      "restartWarningApp": "语言更改会立即生效。无需重新启动应用程序。",
+      "cancel": "取消",
+      "apply": "申请",
+      "applying": "正在申请..."
     },
     "fullscreen": {
-      "title": "å…¨å±æ¨¡å¼",
-      "nativeDescription": "éšè—çŠ¶æ€æ ï¼Œæ²‰æµ¸å¼ä½“éªŒ",
-      "nonNativeDescription": "ç§»åŠ¨åº”ç”¨ç¨‹åºè®¾ç½®"
+      "title": "全屏模式",
+      "nativeDescription": "隐藏状态栏，沉浸式体验",
+      "nonNativeDescription": "移动应用程序设置"
     },
     "toasts": {
-      "fullscreenEnabledTitle": "å¯ç”¨å…¨å±æ¨¡å¼",
-      "fullscreenEnabledDescription": "å…¨å±æ¨¡å¼å¯èƒ½æ— æ³•åœ¨æ‰€æœ‰è®¾å¤‡ä¸Šå®Œç¾Žæ˜¾ç¤ºã€‚å¦‚æžœæ‚¨å‘çŽ°é—®é¢˜ï¼Œå¯ä»¥åœ¨è®¾ç½®ä¸­å°†å…¶å…³é—­ã€‚",
-      "languageUpdated": "è¯­è¨€å·²æ›´æ–°",
-      "switchedToEnglish": "åˆ‡æ¢åˆ°è‹±è¯­",
-      "switchedToIndonesian": "åˆ‡æ¢åˆ°å°åº¦å°¼è¥¿äºšè¯­"
+      "fullscreenEnabledTitle": "启用全屏模式",
+      "fullscreenEnabledDescription": "全屏模式可能无法在所有设备上完美显示。如果您发现问题，可以在设置中将其关闭。",
+      "languageUpdated": "语言已更新",
+      "switchedToEnglish": "切换到英语",
+      "switchedToIndonesian": "切换到印度尼西亚语"
     }
   },
   "SettingsDialog": {
-    "title": "è®¾ç½®"
+    "title": "设置"
   },
   "AboutDialog": {
-    "title": "å…³äºŽ TGATB ä¹ æƒ¯è¿½è¸ªå™¨",
-    "projectName": "å¥½çš„å’Œåçš„",
-    "projectDescription": "ä¸€ä¸ªæžç®€çš„æ¸è¿›å¼ç½‘ç»œåº”ç”¨ç¨‹åºï¼Œç”¨äºŽè·Ÿè¸ªæ‚¨çš„æ—¥å¸¸ä¹ æƒ¯",
-    "version": "ç‰ˆæœ¬ {version}",
+    "title": "关于 TGATB 习惯追踪器",
+    "projectName": "好的和坏的",
+    "projectDescription": "一个极简的渐进式网络应用程序，用于跟踪您的日常习惯",
+    "version": "版本 {version}",
     "features": {
-      "title": "ç‰¹å¾",
-      "item1": "â€¢ è¿½è¸ªå¥½ä¹ æƒ¯å’Œåä¹ æƒ¯",
-      "item2": "â€¢ PWA æŠ€æœ¯çš„ç¦»çº¿æ”¯æŒ",
-      "item3": "â€¢ è¿žç»­è¿½è¸ªå’Œè§†è§‰è¿›æ­¥",
-      "item4": "â€¢ ç®€çº¦ã€æ— å¹²æ‰°çš„è®¾è®¡",
-      "item5": "â€¢ è·¨å¹³å°å…¼å®¹æ€§"
+      "title": "特征",
+      "item1": "• 追踪好习惯和坏习惯",
+      "item2": "• PWA 技术的离线支持",
+      "item3": "• 连续追踪和视觉进步",
+      "item4": "• 简约、无干扰的设计",
+      "item5": "• 跨平台兼容性"
     },
-    "builtWith": "å†…ç½®",
+    "builtWith": "内置",
     "stack": {
       "nextjs": "Next.js 16",
-      "react": "ååº”19",
-      "typescript": "æ‰“å­—ç¨¿",
-      "tailwind": "é¡ºé£Ž CSS v4",
-      "pwa": "æ¸è¿›å¼ç½‘é¡µåº”ç”¨",
-      "capacitor": "ç”µå®¹å™¨"
+      "react": "反应19",
+      "typescript": "打字稿",
+      "tailwind": "顺风 CSS v4",
+      "pwa": "渐进式网页应用",
+      "capacitor": "电容器"
     },
     "links": {
-      "title": "é“¾æŽ¥",
-      "github": "åœ¨ GitHub ä¸ŠæŸ¥çœ‹",
-      "vercel": "ç”± Vercel æä¾›æ”¯æŒ",
-      "privacyPolicy": "éšç§æ”¿ç­–",
-      "termsOfService": "æœåŠ¡æ¡æ¬¾"
+      "title": "链接",
+      "github": "在 GitHub 上查看",
+      "vercel": "由 Vercel 提供支持",
+      "privacyPolicy": "隐私政策",
+      "termsOfService": "服务条款"
     },
     "footer": {
-      "madeWithLove": "ç”¨ â¤ï¸ æ‰“é€ æ›´å¥½çš„ä¹ æƒ¯",
-      "copyright": "Â© 2025-2026 TGATB ä¹ æƒ¯è¿½è¸ªå™¨"
+      "madeWithLove": "用 ❤️ 打造更好的习惯",
+      "copyright": "© 2025-2026 TGATB 习惯追踪器"
     }
   },
   "NavigationDrawer": {
     "hidden": {
-      "navigationMenuTitle": "å¯¼èˆªèœå•",
-      "navigationMenuDescription": "è®¿é—®æ‚¨çš„ä¹ æƒ¯è·Ÿè¸ªä»ªè¡¨æ¿å’Œè®¾ç½®"
+      "navigationMenuTitle": "导航菜单",
+      "navigationMenuDescription": "访问您的习惯跟踪仪表板和设置"
     },
     "header": {
-      "title": "ä¹ æƒ¯è¿½è¸ªå™¨",
-      "subtitle": "è·Ÿè¸ªæ‚¨çš„æ¯æ—¥è¿›åº¦"
+      "title": "习惯追踪器",
+      "subtitle": "跟踪您的每日进度"
     },
     "search": {
-      "placeholder": "æœç´¢ä¹ æƒ¯...",
-      "clear": "æ¸…é™¤æœç´¢"
+      "placeholder": "搜索习惯...",
+      "clear": "清除搜索"
     },
     "sections": {
-      "goodHabits": "å¥½ä¹ æƒ¯",
-      "badHabits": "é™‹ä¹ "
+      "goodHabits": "好习惯",
+      "badHabits": "陋习"
     },
     "empty": {
-      "noGoodHabitsFound": "æ²¡æœ‰å‘çŽ°å¥½ä¹ æƒ¯",
-      "noGoodHabitsYet": "è¿˜æ²¡æœ‰å¥½ä¹ æƒ¯",
-      "noBadHabitsFound": "æœªå‘çŽ°ä¸è‰¯ä¹ æƒ¯",
-      "noBadHabitsTracked": "æ²¡æœ‰è¿½è¸ªåˆ°ä¸è‰¯ä¹ æƒ¯"
+      "noGoodHabitsFound": "没有发现好习惯",
+      "noGoodHabitsYet": "还没有好习惯",
+      "noBadHabitsFound": "未发现不良习惯",
+      "noBadHabitsTracked": "没有追踪到不良习惯"
     },
     "actions": {
-      "help": "å¸®åŠ©",
-      "history": "åŽ†å²",
-      "settings": "è®¾ç½®",
-      "supportMe": "æ”¯æŒæˆ‘",
-      "about": "å…³äºŽ"
+      "help": "帮助",
+      "history": "历史",
+      "settings": "设置",
+      "supportMe": "支持我",
+      "about": "关于"
     },
     "habitItem": {
-      "days": "{count} å¤©"
+      "days": "{count} 天"
     }
   },
   "AccountDataSettings": {
-    "title": "è´¦æˆ·ä¸Žæ•°æ®",
-    "profileAlt": "è½®å»“",
+    "title": "账户与数据",
+    "profileAlt": "轮廓",
     "auth": {
-      "login": "ç™»å½•",
-      "logoutFrom": "ä»Ž {name} æ³¨é”€"
+      "login": "登录",
+      "logoutFrom": "从 {name} 注销"
     },
     "autoSync": {
-      "title": "è‡ªåŠ¨åŒæ­¥",
-      "description": "ç™»å½•åŽè‡ªåŠ¨å°†æ›´æ”¹åŒæ­¥åˆ° Google äº‘ç«¯ç¡¬ç›˜ã€‚"
+      "title": "自动同步",
+      "description": "登录后自动将更改同步到 Google 云端硬盘。"
     },
     "analytics": {
-      "title": "åˆ†æž",
-      "description": "å…è®¸åŒ¿ååˆ†æžä»¥å¸®åŠ©æ”¹è¿›åº”ç”¨ç¨‹åºã€‚"
+      "title": "分析",
+      "description": "允许匿名分析以帮助改进应用程序。"
     },
     "actions": {
-      "exportToCloud": "å¯¼å‡ºè‡³äº‘ç«¯",
-      "importFromCloud": "ä»Žäº‘ç«¯å¯¼å…¥",
-      "exporting": "å‡ºå£...",
-      "exportData": "å¯¼å‡ºæ•°æ®",
-      "importData": "å¯¼å…¥æ•°æ®",
-      "resolveSyncConflicts": "è§£å†³åŒæ­¥å†²çª"
+      "exportToCloud": "导出至云端",
+      "importFromCloud": "从云端导入",
+      "exporting": "出口...",
+      "exportData": "导出数据",
+      "importData": "导入数据",
+      "resolveSyncConflicts": "解决同步冲突"
     }
   },
   "HistoryDialog": {
-    "title": "ä¹ æƒ¯åŽ†å²ä¸Žåˆ†æž",
+    "title": "习惯历史与分析",
     "tabs": {
-      "overview": "æ¦‚è¿°",
-      "stats": "ç»Ÿè®¡æ•°æ®",
-      "calendar": "æ—¥åŽ†",
-      "timeline": "æ—¶é—´è½´"
+      "overview": "概述",
+      "stats": "统计数据",
+      "calendar": "日历",
+      "timeline": "时间轴"
     },
     "stats": {
       "totalHabits": {
-        "title": "æ€»ä¹ æƒ¯",
-        "description": "{good} å¥½ï¼Œ{bad} å"
+        "title": "总习惯",
+        "description": "{good} 好，{bad} 坏"
       },
       "combinedStreak": {
-        "title": "è”åˆè¿žèƒœ",
-        "description": "æœ€é•¿ï¼š{longest} å¤©"
+        "title": "联合连胜",
+        "description": "最长：{longest} 天"
       },
       "todaysProgress": {
-        "title": "ä»Šå¤©çš„è¿›å±•",
-        "description": "{percent}% å·²å®Œæˆ"
+        "title": "今天的进展",
+        "description": "{percent}% 已完成"
       },
       "totalActions": {
-        "title": "æ€»è¡ŒåŠ¨",
-        "description": "æ‰€æœ‰æ—¶é—´å®Œæˆæƒ…å†µ"
+        "title": "总行动",
+        "description": "所有时间完成情况"
       }
     },
     "topHabits": {
-      "title": "ä¸»è¦ä¹ æƒ¯"
+      "title": "主要习惯"
     },
     "breakdown": {
-      "title": "ä¹ æƒ¯å´©æºƒ",
-      "emptyTitle": "è¿˜æ²¡æœ‰ä¹ æƒ¯",
-      "emptyDescription": "æ·»åŠ ä¸€ä¸ªä¹ æƒ¯ï¼Œä»¥ä¾¿åœ¨æ­¤å¤„æŸ¥çœ‹æ‚¨çš„ç»†åˆ†",
-      "completions": "{count} å®Œæˆæƒ…å†µ"
+      "title": "习惯崩溃",
+      "emptyTitle": "还没有习惯",
+      "emptyDescription": "添加一个习惯，以便在此处查看您的细分",
+      "completions": "{count} 完成情况"
     },
     "calendar": {
-      "today": "ä»Šå¤©",
-      "notTracked": "æœªè¿½è¸ª",
-      "editEntry": "ç¼–è¾‘æ¡ç›®",
-      "clearStatus": "çŠ¶æ€æ¸…æ™°",
-      "noDataForDate": "è¯¥æ—¥æœŸæ²¡æœ‰å¯ç”¨æ•°æ®",
-      "addEntry": "æ·»åŠ æ¡ç›®"
+      "today": "今天",
+      "notTracked": "未追踪",
+      "editEntry": "编辑条目",
+      "clearStatus": "状态清晰",
+      "noDataForDate": "该日期没有可用数据",
+      "addEntry": "添加条目"
     },
     "timeline": {
-      "today": "ä»Šå¤©",
-      "completionSummary": "å·²å®Œæˆ {completed}/{total} ä¹ æƒ¯ ({percent}%)",
-      "notTracked": "æœªè¿½è¸ª",
-      "notTrackedTitle": "{name}ï¼šæœªè·Ÿè¸ª",
-      "completedTitle": "{name}ï¼šå·²å®Œæˆ",
-      "notCompletedTitle": "{name}ï¼šæœªå®Œæˆ"
+      "today": "今天",
+      "completionSummary": "已完成 {completed}/{total} 习惯 ({percent}%)",
+      "notTracked": "未追踪",
+      "notTrackedTitle": "{name}：未跟踪",
+      "completedTitle": "{name}：已完成",
+      "notCompletedTitle": "{name}：未完成"
     }
   },
   "AddHabitDialog": {
-    "title": "æ·»åŠ æ–°ä¹ æƒ¯",
+    "title": "添加新习惯",
     "fields": {
-      "name": "ä¹ æƒ¯åç§°",
-      "type": "ä¹ æƒ¯ç±»åž‹",
-      "schedule": "æ—¥ç¨‹"
+      "name": "习惯名称",
+      "type": "习惯类型",
+      "schedule": "日程"
     },
     "placeholders": {
-      "name": "è¾“å…¥ä¹ æƒ¯åç§°..."
+      "name": "输入习惯名称..."
     },
     "type": {
-      "good": "å¥½çš„",
-      "bad": "åçš„"
+      "good": "好的",
+      "bad": "坏的"
     },
     "schedule": {
-      "daily": "æ—¥å¸¸çš„",
-      "interval": "æ¯ N å¤©",
-      "weekly": "å¹³æ—¥"
+      "daily": "日常的",
+      "interval": "每 N 天",
+      "weekly": "平日"
     },
     "interval": {
-      "every": "æ¯ä¸€ä¸ª",
-      "days": "å¤©"
+      "every": "每一个",
+      "days": "天"
     },
     "weekdays": {
-      "sun": "å¤ªé˜³",
-      "mon": "å‘¨ä¸€",
-      "tue": "æ˜ŸæœŸäºŒ",
-      "wed": "å‘¨ä¸‰",
-      "thu": "æ˜ŸæœŸå››",
-      "fri": "å‘¨äº”",
-      "sat": "æ˜ŸæœŸå…­"
+      "sun": "太阳",
+      "mon": "周一",
+      "tue": "星期二",
+      "wed": "周三",
+      "thu": "星期四",
+      "fri": "周五",
+      "sat": "星期六"
     },
     "actions": {
-      "cancel": "å–æ¶ˆ",
-      "save": "èŠ‚çœ"
+      "cancel": "取消",
+      "save": "节省"
     }
   },
   "EditHabitDialog": {
-    "title": "ç¼–è¾‘ä¹ æƒ¯",
+    "title": "编辑习惯",
     "fields": {
-      "name": "ä¹ æƒ¯åç§°",
-      "type": "ä¹ æƒ¯ç±»åž‹",
-      "schedule": "æ—¥ç¨‹"
+      "name": "习惯名称",
+      "type": "习惯类型",
+      "schedule": "日程"
     },
     "placeholders": {
-      "name": "è¾“å…¥ä¹ æƒ¯åç§°..."
+      "name": "输入习惯名称..."
     },
     "type": {
-      "good": "å¥½çš„",
-      "bad": "åçš„"
+      "good": "好的",
+      "bad": "坏的"
     },
     "schedule": {
-      "daily": "æ—¥å¸¸çš„",
-      "interval": "æ¯ N å¤©",
-      "weekly": "å¹³æ—¥"
+      "daily": "日常的",
+      "interval": "每 N 天",
+      "weekly": "平日"
     },
     "interval": {
-      "every": "æ¯ä¸€ä¸ª",
-      "days": "å¤©"
+      "every": "每一个",
+      "days": "天"
     },
     "weekdays": {
-      "sun": "å¤ªé˜³",
-      "mon": "å‘¨ä¸€",
-      "tue": "æ˜ŸæœŸäºŒ",
-      "wed": "å‘¨ä¸‰",
-      "thu": "æ˜ŸæœŸå››",
-      "fri": "å‘¨äº”",
-      "sat": "æ˜ŸæœŸå…­"
+      "sun": "太阳",
+      "mon": "周一",
+      "tue": "星期二",
+      "wed": "周三",
+      "thu": "星期四",
+      "fri": "周五",
+      "sat": "星期六"
     },
     "actions": {
-      "cancel": "å–æ¶ˆ",
-      "saveChanges": "ä¿å­˜æ›´æ”¹"
+      "cancel": "取消",
+      "saveChanges": "保存更改"
     }
   },
   "SyncConflictModal": {
-    "title": "æ£€æµ‹åˆ°åŒæ­¥å†²çª",
-    "description": "æˆ‘ä»¬å‘çŽ°æ‚¨çš„æœ¬åœ°æ•°æ®å’Œäº‘å¤‡ä»½ä¹‹é—´å­˜åœ¨å†²çªã€‚é€‰æ‹©ä¸‹é¢çš„æ¯ä¸ªå­—æ®µåˆ†è¾¨çŽ‡ï¼Œæˆ–ä½¿ç”¨å…¨å±€æ“ä½œæ¥æŽ¥å—è¿œç¨‹ç‰ˆæœ¬æˆ–ä¿ç•™æœ¬åœ°æ•°æ®ã€‚",
-    "itemLabel": "é¡¹ç›®ï¼š{id}",
-    "differences": "æœ¬åœ°ä¸Žè¿œç¨‹å·®å¼‚",
+    "title": "检测到同步冲突",
+    "description": "我们发现您的本地数据和云备份之间存在冲突。选择下面的每个字段分辨率，或使用全局操作来接受远程版本或保留本地数据。",
+    "itemLabel": "项目：{id}",
+    "differences": "本地与远程差异",
     "choices": {
-      "local": "å½“åœ°çš„",
-      "remote": "ååƒ»çš„"
+      "local": "当地的",
+      "remote": "偏僻的"
     },
     "actions": {
-      "keepLocal": "ä¿æŒæœ¬åœ°åŒ–",
-      "applySelected": "åº”ç”¨æ‰€é€‰",
-      "acceptRemote": "æŽ¥å—è¿œç¨‹"
+      "keepLocal": "保持本地化",
+      "applySelected": "应用所选",
+      "acceptRemote": "接受远程"
     }
   },
   "PWAInstallPrompt": {
-    "title": "å®‰è£… TGATB åº”ç”¨ç¨‹åº",
-    "subtitle": "ç¦»çº¿æ”¯æŒå’Œå¿«é€Ÿè®¿é—®å¸¦æ¥æ›´å¥½çš„ä½“éªŒ",
+    "title": "安装 TGATB 应用程序",
+    "subtitle": "离线支持和快速访问带来更好的体验",
     "toasts": {
       "notAvailable": {
-        "title": "åº”ç”¨ç¨‹åºå®‰è£…ä¸å¯ç”¨",
-        "description": "æ­¤è®¾å¤‡æˆ–æµè§ˆå™¨ä¸æ”¯æŒåº”ç”¨ç¨‹åºå®‰è£…ã€‚åœ¨æ¡Œé¢/ç§»åŠ¨è®¾å¤‡ä¸Šå°è¯• Chrome æˆ– Edgeã€‚"
+        "title": "应用程序安装不可用",
+        "description": "此设备或浏览器不支持应用程序安装。在桌面/移动设备上尝试 Chrome 或 Edge。"
       },
       "started": {
-        "title": "åº”ç”¨ç¨‹åºå®‰è£…å¼€å§‹",
-        "description": "æŒ‰ç…§æµè§ˆå™¨çš„è¯´æ˜Žå®Œæˆå®‰è£…ã€‚"
+        "title": "应用程序安装开始",
+        "description": "按照浏览器的说明完成安装。"
       },
       "dismissed": {
-        "title": "åº”ç”¨ç¨‹åºå®‰è£…è¢«é©³å›ž",
-        "description": "æ‚¨å¯ä»¥éšæ—¶ä»Žâ€œè®¾ç½®â€->â€œå®‰è£…åº”ç”¨ç¨‹åºâ€å®‰è£…è¯¥åº”ç”¨ç¨‹åºã€‚"
+        "title": "应用程序安装被驳回",
+        "description": "您可以随时从“设置”->“安装应用程序”安装该应用程序。"
       },
       "failed": {
-        "title": "åº”ç”¨ç¨‹åºå®‰è£…å¤±è´¥",
-        "description": "å°è¯•å®‰è£…åº”ç”¨ç¨‹åºæ—¶å‡ºçŽ°é—®é¢˜ã€‚"
+        "title": "应用程序安装失败",
+        "description": "尝试安装应用程序时出现问题。"
       }
     },
     "instructions": {
       "fallback": {
-        "iosSafari": "åœ¨ iOS/Safari ä¸Šï¼Œç‚¹å‡»â€œå…±äº«â€æŒ‰é’®å¹¶é€‰æ‹©â€œæ·»åŠ åˆ°ä¸»å±å¹•â€è¿›è¡Œå®‰è£…ã€‚",
+        "iosSafari": "在 iOS/Safari 上，点击“共享”按钮并选择“添加到主屏幕”进行安装。",
         "android": {
-          "line1": "åœ¨ Android ä¸Šï¼Œä½¿ç”¨ Chromeã€Edge æˆ– Samsung Internetã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨åœ°å€æ ä¸­çœ‹åˆ° + å›¾æ ‡ï¼Œè¯·ç‚¹å‡»å®ƒè¿›è¡Œå®‰è£…ã€‚",
-          "line2": "å¦‚æžœæ‚¨æ²¡æœ‰çœ‹åˆ°è¯¥å›¾æ ‡ï¼Œè¯·æ‰“å¼€æµè§ˆå™¨èœå•å¹¶æŸ¥æ‰¾â€œæ·»åŠ åˆ°ä¸»å±å¹•â€æˆ–â€œå®‰è£…åº”ç”¨ç¨‹åºâ€ã€‚"
+          "line1": "在 Android 上，使用 Chrome、Edge 或 Samsung Internet。如果您在浏览器地址栏中看到 + 图标，请点击它进行安装。",
+          "line2": "如果您没有看到该图标，请打开浏览器菜单并查找“添加到主屏幕”或“安装应用程序”。"
         },
         "windowsLinux": {
-          "line1": "åœ¨ Windows/Linux ä¸Šï¼Œä½¿ç”¨ Chrome æˆ– Edgeã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚",
-          "line2": "å¦‚æžœæ²¡æœ‰ï¼Œè¯·æ‰“å¼€æµè§ˆå™¨èœå•å¹¶æŸ¥æ‰¾â€œå®‰è£…åº”ç”¨ç¨‹åºâ€æˆ–â€œæ·»åŠ åˆ°æ¡Œé¢â€ã€‚"
+          "line1": "在 Windows/Linux 上，使用 Chrome 或 Edge。如果您在浏览器的地址栏中看到安装图标，请使用它。",
+          "line2": "如果没有，请打开浏览器菜单并查找“安装应用程序”或“添加到桌面”。"
         },
         "mac": {
-          "line1": "åœ¨ macOS ä¸Šï¼Œä½¿ç”¨ Chrome æˆ– Edgeã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚",
-          "line2": "å¦‚æžœæ²¡æœ‰ï¼Œè¯·æ‰“å¼€æµè§ˆå™¨èœå•å¹¶æŸ¥æ‰¾â€œå®‰è£…åº”ç”¨ç¨‹åºâ€æˆ–â€œæ·»åŠ åˆ°æ‰©å±•åžâ€ã€‚"
+          "line1": "在 macOS 上，使用 Chrome 或 Edge。如果您在浏览器的地址栏中看到安装图标，请使用它。",
+          "line2": "如果没有，请打开浏览器菜单并查找“安装应用程序”或“添加到扩展坞”。"
         },
         "generic": {
-          "line1": "å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚",
-          "line2": "å¦åˆ™ï¼Œæ‰“å¼€æµè§ˆå™¨èœå•å¹¶æŸ¥æ‰¾â€œå®‰è£…åº”ç”¨ç¨‹åºâ€æˆ–â€œæ·»åŠ åˆ°ä¸»å±å¹•â€ã€‚"
+          "line1": "如果您在浏览器的地址栏中看到安装图标，请使用它。",
+          "line2": "否则，打开浏览器菜单并查找“安装应用程序”或“添加到主屏幕”。"
         }
       },
       "default": {
-        "iosSafari": "åœ¨ iOS/Safari ä¸Šï¼Œç‚¹å‡»â€œå…±äº«â€æŒ‰é’®å¹¶é€‰æ‹©â€œæ·»åŠ åˆ°ä¸»å±å¹•â€è¿›è¡Œå®‰è£…ã€‚",
-        "android": "åœ¨ Android ä¸Šï¼Œè¯·ä½¿ç”¨ Chrome æˆ– Edge ä»¥èŽ·å¾—æœ€ä½³ä½“éªŒã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚",
-        "windowsLinux": "åœ¨ Windows/Linux ä¸Šï¼Œä½¿ç”¨ Chrome æˆ– Edge ä»¥èŽ·å¾—æœ€ä½³ä½“éªŒã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚",
-        "mac": "åœ¨ macOS ä¸Šï¼Œä½¿ç”¨ Chrome æˆ– Edge ä»¥èŽ·å¾—æœ€ä½³ä½“éªŒã€‚å¦‚æžœæ‚¨åœ¨æµè§ˆå™¨çš„åœ°å€æ ä¸­çœ‹åˆ°å®‰è£…å›¾æ ‡ï¼Œè¯·ä½¿ç”¨å®ƒã€‚"
+        "iosSafari": "在 iOS/Safari 上，点击“共享”按钮并选择“添加到主屏幕”进行安装。",
+        "android": "在 Android 上，请使用 Chrome 或 Edge 以获得最佳体验。如果您在浏览器的地址栏中看到安装图标，请使用它。",
+        "windowsLinux": "在 Windows/Linux 上，使用 Chrome 或 Edge 以获得最佳体验。如果您在浏览器的地址栏中看到安装图标，请使用它。",
+        "mac": "在 macOS 上，使用 Chrome 或 Edge 以获得最佳体验。如果您在浏览器的地址栏中看到安装图标，请使用它。"
       }
     },
     "actions": {
-      "dismiss": "è§£é›‡",
-      "install": "å®‰è£…",
-      "ok": "å¥½çš„",
-      "notNow": "çŽ°åœ¨ä¸è¦"
+      "dismiss": "解雇",
+      "install": "安装",
+      "ok": "好的",
+      "notNow": "现在不要"
     }
   },
   "DonationDialog": {
-    "title": "æ”¯æŒæˆ‘",
-    "description": "å¦‚æžœæ‚¨å–œæ¬¢è¿™ä¸ªåº”ç”¨ç¨‹åºï¼Œè¯·è€ƒè™‘æ”¯æŒå…¶å¼€å‘ã€‚æ¯ä¸€ä¸ªè´¡çŒ®éƒ½æœ‰åŠ©äºŽä¿æŒå®ƒçš„è‡ªç”±å’Œæ”¹è¿›ï¼",
+    "title": "支持我",
+    "description": "如果您喜欢这个应用程序，请考虑支持其开发。每一个贡献都有助于保持它的自由和改进！",
     "sections": {
-      "paymentPlatforms": "æ”¯ä»˜å¹³å°",
-      "cryptocurrency": "åŠ å¯†è´§å¸"
+      "paymentPlatforms": "支付平台",
+      "cryptocurrency": "加密货币"
     },
     "qris": {
-      "title": "è´¨é‡ä¿¡æ¯ç³»ç»Ÿ",
-      "supportLine": "é€šè¿‡ QRIS æ”¯æŒæˆ‘ï¼",
-      "description": "ä½¿ç”¨æ‚¨çš„é“¶è¡Œåº”ç”¨ç¨‹åºæ‰«ææ­¤äºŒç»´ç ï¼Œå³å¯é€šè¿‡ QRIS è¿›è¡Œæèµ ã€‚",
-      "imageAlt": "QRISæèµ æ–¹å¼",
-      "download": "ä¸‹è½½QRIS"
+      "title": "质量信息系统",
+      "supportLine": "通过 QRIS 支持我！",
+      "description": "使用您的银行应用程序扫描此二维码，即可通过 QRIS 进行捐赠。",
+      "imageAlt": "QRIS捐赠方式",
+      "download": "下载QRIS"
     },
-    "copiedBadge": "å¤åˆ¶äº†ï¼",
-    "thankYou": "æ„Ÿè°¢æ‚¨è€ƒè™‘æ”¯æŒè¯¥é¡¹ç›®ï¼",
+    "copiedBadge": "复制了！",
+    "thankYou": "感谢您考虑支持该项目！",
     "toasts": {
       "copied": {
-        "title": "å¤åˆ¶äº†ï¼",
-        "description": "åœ°å€å·²å¤åˆ¶åˆ°å‰ªè´´æ¿"
+        "title": "复制了！",
+        "description": "地址已复制到剪贴板"
       },
       "copyFailed": {
-        "title": "å¤åˆ¶å¤±è´¥",
-        "description": "è¯·æ‰‹åŠ¨å¤åˆ¶åœ°å€"
+        "title": "复制失败",
+        "description": "请手动复制地址"
       },
       "saved": {
-        "title": "å¾—æ•‘äº†ï¼",
-        "description": "QRIS å›¾åƒä¿å­˜åˆ°è®¾å¤‡ã€‚"
+        "title": "得救了！",
+        "description": "QRIS 图像保存到设备。"
       },
       "saveFailed": {
-        "title": "ä¿å­˜å¤±è´¥",
-        "description": "æ— æ³•ä¿å­˜å›¾åƒã€‚"
+        "title": "保存失败",
+        "description": "无法保存图像。"
       },
       "downloadFailed": {
-        "title": "ä¸‹è½½å¤±è´¥",
-        "description": "æ— æ³•èŽ·å–å›¾åƒã€‚"
+        "title": "下载失败",
+        "description": "无法获取图像。"
       }
     }
   },
   "AddEntryDialog": {
-    "title": "æ·»åŠ  {date} çš„æ¡ç›®",
+    "title": "添加 {date} 的条目",
     "tabs": {
-      "addEntry": "æ·»åŠ æ–°æ¡ç›®",
-      "addHabit": "æ·»åŠ æ–°ä¹ æƒ¯"
+      "addEntry": "添加新条目",
+      "addHabit": "添加新习惯"
     },
     "placeholders": {
-      "noHabit": "æ²¡æœ‰å¯ç”¨çš„ä¹ æƒ¯ï¼Œç«‹å³æ·»åŠ ï¼",
-      "selectHabit": "é€‰æ‹©ä¹ æƒ¯...",
-      "habitName": "ä¹ æƒ¯åç§°..."
+      "noHabit": "没有可用的习惯，立即添加！",
+      "selectHabit": "选择习惯...",
+      "habitName": "习惯名称..."
     },
     "type": {
-      "good": "å¥½çš„",
-      "bad": "åçš„"
+      "good": "好的",
+      "bad": "坏的"
     },
     "status": {
       "good": {
-        "true": "å®Œå…¨çš„",
-        "false": "é”™è¿‡äº†"
+        "true": "完全的",
+        "false": "错过了"
       },
       "bad": {
-        "true": "é¿å…",
-        "false": "å®Œæ¯•"
+        "true": "避免",
+        "false": "完毕"
       }
     },
     "actions": {
-      "addEntry": "æ·»åŠ æ¡ç›®",
-      "addHabitAndLog": "æ·»åŠ ä¹ æƒ¯å’Œæ—¥å¿—æ¡ç›®"
+      "addEntry": "添加条目",
+      "addHabitAndLog": "添加习惯和日志条目"
     }
   },
   "EditEntryDialog": {
-    "title": "ç¼–è¾‘æ¡ç›®",
+    "title": "编辑条目",
     "fields": {
-      "date": "æ—¥æœŸ",
-      "status": "åœ°ä½"
+      "date": "日期",
+      "status": "地位"
     },
     "status": {
       "good": {
-        "true": "å®Œå…¨çš„",
-        "false": "é”™è¿‡äº†"
+        "true": "完全的",
+        "false": "错过了"
       },
       "bad": {
-        "true": "é¿å…",
-        "false": "å®Œæ¯•"
+        "true": "避免",
+        "false": "完毕"
       }
     },
     "actions": {
-      "cancel": "å–æ¶ˆ",
-      "save": "èŠ‚çœ"
+      "cancel": "取消",
+      "save": "节省"
     }
   },
   "MotivatorSettings": {
-    "title": "æ€§æ ¼æ¿€åŠ±å› ç´ ",
-    "personalityType": "æ€§æ ¼ç±»åž‹",
+    "title": "性格激励因素",
+    "personalityType": "性格类型",
     "personality": {
       "positive": {
-        "title": "ç§¯æžçš„",
-        "description": "é¼“åŠ±å’Œæ”¯æŒ"
+        "title": "积极的",
+        "description": "鼓励和支持"
       },
       "adaptive": {
-        "title": "è‡ªé€‚åº”",
-        "description": "å¹³è¡¡ä¸”çŽ°å®ž"
+        "title": "自适应",
+        "description": "平衡且现实"
       },
       "harsh": {
-        "title": "æ®‹é…·çš„",
-        "description": "ç›´æŽ¥ä¸”å…·æœ‰æŒ‘æˆ˜æ€§"
+        "title": "残酷的",
+        "description": "直接且具有挑战性"
       }
     }
   },
   "AddHabitCTA": {
-    "title": "å¼€å§‹ä½ çš„æ—…ç¨‹",
-    "description": "å…»æˆä½ çš„ç¬¬ä¸€ä¸ªä¹ æƒ¯ï¼Œå¼€å§‹è·Ÿè¸ªä½ çš„æ—¥å¸¸è¿›åº¦å¹¶å»ºç«‹ä¸€è‡´æ€§ã€‚",
-    "addFirstHabit": "æ·»åŠ ä½ çš„ç¬¬ä¸€ä¸ªä¹ æƒ¯",
-    "footer": "æ¯ä¸ªä¸“å®¶éƒ½æ›¾ç»æ˜¯åˆå­¦è€…"
+    "title": "开始你的旅程",
+    "description": "养成你的第一个习惯，开始跟踪你的日常进度并建立一致性。",
+    "addFirstHabit": "添加你的第一个习惯",
+    "footer": "每个专家都曾经是初学者"
   },
   "DeleteAllHabitsModal": {
-    "title": "åˆ é™¤æ‰€æœ‰ä¹ æƒ¯ï¼Ÿ",
-    "description": "æ­¤æ“ä½œæ— æ³•æ’¤æ¶ˆã€‚æ‚¨ç¡®å®šè¦åˆ é™¤æ‰€æœ‰ä¹ æƒ¯å—ï¼Ÿ",
+    "title": "删除所有习惯？",
+    "description": "此操作无法撤消。您确定要删除所有习惯吗？",
     "actions": {
-      "cancel": "å–æ¶ˆ",
-      "deleting": "æ­£åœ¨åˆ é™¤...",
-      "delete": "åˆ é™¤"
+      "cancel": "取消",
+      "deleting": "正在删除...",
+      "delete": "删除"
     }
   },
   "FeedbackSettings": {
-    "title": "åé¦ˆ",
+    "title": "反馈",
     "sound": {
-      "title": "éŸ³æ•ˆ",
-      "description": "äº¤äº’æ—¶æ’­æ”¾å£°éŸ³"
+      "title": "音效",
+      "description": "交互时播放声音"
     },
     "haptic": {
-      "title": "è§¦è§‰åé¦ˆ",
-      "supported": "äº’åŠ¨æ—¶æŒ¯åŠ¨",
-      "notSupported": "æ­¤è®¾å¤‡ä¸æ”¯æŒ"
+      "title": "触觉反馈",
+      "supported": "互动时振动",
+      "notSupported": "此设备不支持"
     }
   },
   "HelpSupportSettings": {
-    "title": "å¸®åŠ©ä¸Žæ”¯æŒ",
+    "title": "帮助与支持",
     "actions": {
-      "showWelcomeGuide": "æ˜¾ç¤ºæ¬¢è¿ŽæŒ‡å—",
-      "contactEmail": "é€šè¿‡ç”µå­é‚®ä»¶è”ç³» {name}"
+      "showWelcomeGuide": "显示欢迎指南",
+      "contactEmail": "通过电子邮件联系 {name}"
     }
   },
   "SettingsScreen": {
-    "title": "è®¾ç½®"
+    "title": "设置"
   },
   "AppDeviceSettings": {
-    "title": "åº”ç”¨ç¨‹åºå’Œè®¾å¤‡",
+    "title": "应用程序和设备",
     "install": {
-      "nativeApp": "åŽŸç”Ÿåº”ç”¨ç¨‹åº",
-      "installed": "åº”ç”¨ç¨‹åºå·²å®‰è£…",
-      "installApp": "å®‰è£…åº”ç”¨ç¨‹åº",
-      "nativeDescription": "æ‚¨æ­£åœ¨ä½¿ç”¨æœ¬æœº Android åº”ç”¨ç¨‹åº",
-      "installedDescription": "TGATB å·²åœ¨æ‚¨çš„è®¾å¤‡ä¸Š",
-      "addToHome": "æ·»åŠ åˆ°ä¸»å±å¹•"
+      "nativeApp": "原生应用程序",
+      "installed": "应用程序已安装",
+      "installApp": "安装应用程序",
+      "nativeDescription": "您正在使用本机 Android 应用程序",
+      "installedDescription": "TGATB 已在您的设备上",
+      "addToHome": "添加到主屏幕"
     },
     "reminder": {
-      "title": "æ¯æ—¥æé†’",
-      "timeLabel": "æé†’æ—¶é—´",
+      "title": "每日提醒",
+      "timeLabel": "提醒时间",
       "status": {
-        "notSupported": "è¯¥æµè§ˆå™¨ä¸æ”¯æŒé€šçŸ¥",
-        "off": "ç¦»å¼€",
-        "denied": "æƒé™è¢«æ‹’ç» - æ£€æŸ¥æµè§ˆå™¨/è®¾å¤‡è®¾ç½®",
-        "set": "ä¸º {time} è®¾ç½®çš„æé†’",
-        "setWeb": "ä¸º {time} è®¾ç½®çš„æé†’ - å½“åº”ç”¨ç¨‹åºæ‰“å¼€æˆ–å®‰è£…ä¸º PWA æ—¶æ•ˆæžœæœ€ä½³"
+        "notSupported": "该浏览器不支持通知",
+        "off": "离开",
+        "denied": "权限被拒绝 - 检查浏览器/设备设置",
+        "set": "为 {time} 设置的提醒",
+        "setWeb": "为 {time} 设置的提醒 - 当应用程序打开或安装为 PWA 时效果最佳"
       }
     },
     "permission": {
-      "title": "éœ€è¦é€šçŸ¥",
-      "description": "è¦å‘æ‚¨å‘é€æ¯æ—¥æé†’ï¼Œè¯¥åº”ç”¨ç¨‹åºéœ€è¦èŽ·å¾—æ˜¾ç¤ºé€šçŸ¥çš„æƒé™ã€‚æ‚¨å¯ä»¥åœ¨æµè§ˆå™¨æˆ–è®¾å¤‡è®¾ç½®ä¸­å¯ç”¨æ­¤åŠŸèƒ½ã€‚",
-      "gotIt": "çŸ¥é“äº†"
+      "title": "需要通知",
+      "description": "要向您发送每日提醒，该应用程序需要获得显示通知的权限。您可以在浏览器或设备设置中启用此功能。",
+      "gotIt": "知道了"
     }
   },
   "HabitCard": {
-    "emptyTitle": "è¿˜æ²¡æœ‰ä¹ æƒ¯",
-    "emptyDescription": "æ·»åŠ æ‚¨çš„ç¬¬ä¸€ä¸ªä¹ æƒ¯å³å¯å¼€å§‹ï¼",
+    "emptyTitle": "还没有习惯",
+    "emptyDescription": "添加您的第一个习惯即可开始！",
     "question": {
-      "pending": "ä½ åšåˆ°äº†å—ï¼Ÿ",
-      "goodPositive": "ä»Šå¤©å·²ç»å®Œæˆäº†ï¼",
-      "badPositive": "ä»Šå¤©ä½ æ²¡æœ‰åšåˆ°ï¼",
-      "goodNegative": "ä»Šå¤©ä½ æ²¡æœ‰åšåˆ°ï¼",
-      "badNegative": "ä½ ä»Šå¤©åšåˆ°äº†ï¼"
+      "pending": "你做到了吗？",
+      "goodPositive": "今天已经完成了！",
+      "badPositive": "今天你没有做到！",
+      "goodNegative": "今天你没有做到！",
+      "badNegative": "你今天做到了！"
     },
     "status": {
-      "goodCompleted": "å®Œå…¨çš„",
-      "goodMissed": "é”™è¿‡äº†",
-      "badAvoided": "é¿å…",
-      "badDone": "å®Œæ¯•"
+      "goodCompleted": "完全的",
+      "goodMissed": "错过了",
+      "badAvoided": "避免",
+      "badDone": "完毕"
     },
     "type": {
-      "good": "å¥½çš„",
-      "bad": "åçš„"
+      "good": "好的",
+      "bad": "坏的"
     },
-    "streakDays": "{count} å¤©",
-    "atTime": "åœ¨ {time}",
+    "streakDays": "{count} 天",
+    "atTime": "在 {time}",
     "actions": {
-      "undo": "æ’¤æ¶ˆ"
+      "undo": "撤消"
     }
   },
   "OfflineToast": {
-    "message": "ä½ ç¦»çº¿äº†ã€‚æŸäº›åŠŸèƒ½å¯èƒ½ä¼šå—åˆ°é™åˆ¶ã€‚"
+    "message": "你离线了。某些功能可能会受到限制。"
   },
   "OfflineIndicator": {
-    "message": "ä½ ç¦»çº¿äº†ã€‚æŸäº›åŠŸèƒ½å¯èƒ½ä¼šå—åˆ°é™åˆ¶ã€‚"
+    "message": "你离线了。某些功能可能会受到限制。"
   },
   "AnalyticsNotice": {
-    "title": "æ³¨æ„",
-    "description": "æˆ‘ä»¬ä½¿ç”¨ Vercel Analytics æ¥æ”¹å–„æ‚¨çš„ä½“éªŒã€‚åŒ¿åä½¿ç”¨æ•°æ®æœ‰åŠ©äºŽæˆ‘ä»¬æ”¹è¿›åº”ç”¨ç¨‹åºã€‚",
-    "gotIt": "çŸ¥é“äº†"
+    "title": "注意",
+    "description": "我们使用 Vercel Analytics 来改善您的体验。匿名使用数据有助于我们改进应用程序。",
+    "gotIt": "知道了"
   },
   "LoadingScreen": {
     "title": "TGTB",
-    "subtitle": "ä¹ æƒ¯è¿½è¸ªå™¨",
-    "loading": "æ­£åœ¨åŠ è½½æ‚¨çš„ä¹ æƒ¯..."
+    "subtitle": "习惯追踪器",
+    "loading": "正在加载您的习惯..."
   },
   "LoadingOverlay": {
-    "loading": "åŠ è½½ä¸­..."
+    "loading": "加载中..."
   },
   "WelcomeOverlay": {
-    "stepCounter": "ç¬¬ {current} æ­¥ï¼ˆå…± {total}ï¼‰",
+    "stepCounter": "第 {current} 步（共 {total}）",
     "steps": {
       "welcome": {
-        "title": "æ¬¢è¿Žä½¿ç”¨ä¹ æƒ¯è¿½è¸ªå™¨ï¼",
-        "description": "è®©æˆ‘ä»¬å¿«é€Ÿæµè§ˆä¸€ä¸‹ï¼Œä»¥å¸®åŠ©æ‚¨å¼€å§‹æœ‰æ•ˆåœ°è·Ÿè¸ªæ‚¨çš„ä¹ æƒ¯ã€‚"
+        "title": "欢迎使用习惯追踪器！",
+        "description": "让我们快速浏览一下，以帮助您开始有效地跟踪您的习惯。"
       },
       "navigation": {
-        "title": "å¯¼èˆªèœå•",
-        "description": "ä»Žæ­¤èœå•è®¿é—®æ‚¨çš„æ‰€æœ‰ä¹ æƒ¯ã€æŸ¥çœ‹åŽ†å²è®°å½•å¹¶è°ƒæ•´è®¾ç½®ã€‚"
+        "title": "导航菜单",
+        "description": "从此菜单访问您的所有习惯、查看历史记录并调整设置。"
       },
       "addButton": {
-        "hasHabitsTitle": "æ·»åŠ æ›´å¤šä¹ æƒ¯",
-        "emptyTitle": "æ·»åŠ ä½ çš„ç¬¬ä¸€ä¸ªä¹ æƒ¯",
-        "hasHabitsDescription": "ä½¿ç”¨æ­¤æµ®åŠ¨æŒ‰é’®å¯ä»¥éšæ—¶æ·»åŠ æ›´å¤šä¹ æƒ¯ã€‚",
-        "emptyDescription": "ç‚¹å‡»æ­¤æŒ‰é’®å³å¯å…»æˆæ‚¨çš„ç¬¬ä¸€ä¸ªä¹ æƒ¯ã€‚æ‚¨å¯ä»¥æ·»åŠ è¦å…»æˆçš„å¥½ä¹ æƒ¯å’Œè¦æ”¹æŽ‰çš„åä¹ æƒ¯ã€‚"
+        "hasHabitsTitle": "添加更多习惯",
+        "emptyTitle": "添加你的第一个习惯",
+        "hasHabitsDescription": "使用此浮动按钮可以随时添加更多习惯。",
+        "emptyDescription": "点击此按钮即可养成您的第一个习惯。您可以添加要养成的好习惯和要改掉的坏习惯。"
       },
       "habitCard": {
-        "title": "è¿½è¸ªæ‚¨çš„è¿›åº¦",
-        "hasHabitsDescription": "è¿™æ˜¯ä½ çš„ä¹ æƒ¯ï¼ç‚¹å‡»å®ƒä»¬å°†å½“å¤©æ ‡è®°ä¸ºå®Œæˆã€‚",
-        "emptyDescription": "æ·»åŠ ä¹ æƒ¯åŽï¼Œå®ƒä»¬å°±ä¼šå‡ºçŽ°åœ¨æ­¤å¤„ã€‚ç‚¹å‡»å°†å®ƒä»¬æ ‡è®°ä¸ºå½“å¤©çš„å®Œæˆã€‚"
+        "title": "追踪您的进度",
+        "hasHabitsDescription": "这是你的习惯！点击它们将当天标记为完成。",
+        "emptyDescription": "添加习惯后，它们就会出现在此处。点击将它们标记为当天的完成。"
       },
       "complete": {
-        "title": "ä¸€åˆ‡å°±ç»ªï¼",
-        "description": "ä»Žä»Šå¤©å¼€å§‹å…»æˆæ›´å¥½çš„ä¹ æƒ¯ã€‚è¯·è®°ä½ï¼Œä¸€è‡´æ€§æ˜¯æˆåŠŸçš„å…³é”®ï¼"
+        "title": "一切就绪！",
+        "description": "从今天开始养成更好的习惯。请记住，一致性是成功的关键！"
       }
     },
     "actions": {
-      "skip": "è·³è¿‡",
-      "previous": "ä»¥å‰çš„",
-      "skipTour": "è·³è¿‡æ¸¸è§ˆ",
-      "next": "ä¸‹ä¸€ä¸ª",
-      "getStarted": "å¼€å§‹ä½¿ç”¨",
-      "start": "å¼€å§‹"
+      "skip": "跳过",
+      "previous": "以前的",
+      "skipTour": "跳过游览",
+      "next": "下一个",
+      "getStarted": "开始使用",
+      "start": "开始"
     }
   },
   "HabitManagementSettings": {
-    "title": "ä¹ æƒ¯ç®¡ç†",
-    "deleteAll": "åˆ é™¤æ‰€æœ‰ä¹ æƒ¯",
+    "title": "习惯管理",
+    "deleteAll": "删除所有习惯",
     "toasts": {
       "deleted": {
-        "title": "æ‰€æœ‰ä¹ æƒ¯éƒ½è¢«åˆ é™¤",
-        "description": "æ‚¨çš„ä¹ æƒ¯æ¸…å•å·²è¢«æ¸…é™¤ã€‚"
+        "title": "所有习惯都被删除",
+        "description": "您的习惯清单已被清除。"
       },
       "failed": {
-        "title": "åˆ é™¤å¤±è´¥",
-        "description": "åˆ é™¤ä¹ æƒ¯æ—¶å‡ºé”™ã€‚"
+        "title": "删除失败",
+        "description": "删除习惯时出错。"
       },
       "noHandler": {
-        "description": "æ²¡æœ‰æä¾›åˆ é™¤å¤„ç†ç¨‹åºã€‚"
+        "description": "没有提供删除处理程序。"
       }
     }
   },
   "StatusBarExample": {
-    "title": "çŠ¶æ€æ æŽ§ä»¶",
-    "label": "çŠ¶æ€æ ",
-    "visible": "å¯è§çš„",
-    "hidden": "éš",
-    "status": "çŠ¶æ€æ ï¼š{visibility} |é«˜åº¦ï¼š{height}px",
+    "title": "状态栏控件",
+    "label": "状态栏",
+    "visible": "可见的",
+    "hidden": "隐",
+    "status": "状态栏：{visibility} |高度：{height}px",
     "actions": {
-      "show": "å±•ç¤º",
-      "hide": "éšè—",
-      "lightStyle": "ç¯å…‰é£Žæ ¼",
-      "darkStyle": "é»‘æš—é£Žæ ¼",
-      "defaultStyle": "é»˜è®¤æ ·å¼",
-      "redBackground": "çº¢è‰²èƒŒæ™¯",
-      "greenBackground": "ç»¿è‰²èƒŒæ™¯",
-      "blueBackground": "è“è‰²èƒŒæ™¯",
-      "resetToWhite": "é‡ç½®ä¸ºç™½è‰²"
+      "show": "展示",
+      "hide": "隐藏",
+      "lightStyle": "灯光风格",
+      "darkStyle": "黑暗风格",
+      "defaultStyle": "默认样式",
+      "redBackground": "红色背景",
+      "greenBackground": "绿色背景",
+      "blueBackground": "蓝色背景",
+      "resetToWhite": "重置为白色"
     }
   },
   "OfflinePage": {
     "toast": {
-      "title": "ä½ ç¦»çº¿äº†",
-      "description": "åº”ç”¨ç¨‹åºç¦»çº¿å·¥ä½œã€‚é‡æ–°è¿žæŽ¥æ—¶æ•°æ®åŒæ­¥ã€‚",
-      "retry": "é‡è¯•"
+      "title": "你离线了",
+      "description": "应用程序离线工作。重新连接时数据同步。",
+      "retry": "重试"
     },
     "fallback": {
-      "title": "TGATB ä¹ æƒ¯è¿½è¸ªå™¨",
-      "description": "æ­£åœ¨åŠ è½½æ‚¨çš„ä¹ æƒ¯..."
+      "title": "TGATB 习惯追踪器",
+      "description": "正在加载您的习惯..."
     }
   },
   "TermsOfServicePage": {
     "meta": {
-      "title": "æœåŠ¡æ¡æ¬¾ - TGATB ä¹ æƒ¯è¿½è¸ªå™¨",
-      "description": "å¥½ä¸Žåçš„æœåŠ¡æ¡æ¬¾ï¼šä¹ æƒ¯è¿½è¸ªå™¨"
+      "title": "服务条款 - TGATB 习惯追踪器",
+      "description": "好与坏的服务条款：习惯追踪器"
     },
-    "title": "æœåŠ¡æ¡æ¬¾",
-    "lastUpdated": "æœ€åŽæ›´æ–°æ—¶é—´ï¼š2026 å¹´ 2 æœˆ 13 æ—¥",
+    "title": "服务条款",
+    "lastUpdated": "最后更新时间：2026 年 2 月 13 日",
     "sections": {
       "welcome": {
-        "title": "æ¬¢è¿Ž",
-        "body": "æ¬¢è¿Žä½¿ç”¨ TGATB ä¹ æƒ¯è¿½è¸ªå™¨ï¼ˆâ€œå¥½ä¸Žåâ€ã€â€œæˆ‘ä»¬â€ã€â€œæˆ‘ä»¬çš„â€ï¼‰ã€‚ä½¿ç”¨æˆ‘ä»¬çš„ç½‘ç»œå’Œç§»åŠ¨åº”ç”¨ç¨‹åºå³è¡¨ç¤ºæ‚¨åŒæ„è¿™äº›æœåŠ¡æ¡æ¬¾ã€‚"
+        "title": "欢迎",
+        "body": "欢迎使用 TGATB 习惯追踪器（“好与坏”、“我们”、“我们的”）。使用我们的网络和移动应用程序即表示您同意这些服务条款。"
       },
       "use": {
-        "title": "åº”ç”¨ç¨‹åºçš„ä½¿ç”¨",
-        "item1": "æ‚¨å¿…é¡»å¹´æ»¡ 13 å²æ‰èƒ½ä½¿ç”¨è¯¥åº”ç”¨ç¨‹åºã€‚",
-        "item2": "æ‚¨åŒæ„ä¸ä¼šæ»¥ç”¨è¯¥åº”ç”¨ç¨‹åºæˆ–å°è¯•ä»¥æœªç»æŽˆæƒçš„æ–¹å¼è®¿é—®å®ƒã€‚"
+        "title": "应用程序的使用",
+        "item1": "您必须年满 13 岁才能使用该应用程序。",
+        "item2": "您同意不会滥用该应用程序或尝试以未经授权的方式访问它。"
       },
       "userContent": {
-        "title": "ç”¨æˆ·å†…å®¹",
-        "item1": "æ‚¨å¯¹æ‚¨æ·»åŠ çš„å†…å®¹ï¼ˆä¹ æƒ¯ã€æ³¨é‡Šç­‰ï¼‰è´Ÿè´£ã€‚",
-        "item2": "æˆ‘ä»¬ä¿ç•™åˆ é™¤è¿åè¿™äº›æ¡æ¬¾æˆ–é€‚ç”¨æ³•å¾‹çš„å†…å®¹çš„æƒåˆ©ã€‚"
+        "title": "用户内容",
+        "item1": "您对您添加的内容（习惯、注释等）负责。",
+        "item2": "我们保留删除违反这些条款或适用法律的内容的权利。"
       },
       "intellectualProperty": {
-        "title": "çŸ¥è¯†äº§æƒ",
-        "item1": "æ‰€æœ‰åº”ç”¨ç¨‹åºå†…å®¹ã€å•†æ ‡å’Œä»£ç å‡å½’æˆ‘ä»¬æˆ–æˆ‘ä»¬çš„è®¸å¯æ–¹æ‰€æœ‰ã€‚",
-        "item2": "æœªç»è®¸å¯ï¼Œæ‚¨ä¸å¾—å¤åˆ¶ã€ä¿®æ”¹æˆ–åˆ†å‘æˆ‘ä»¬çš„å†…å®¹ã€‚"
+        "title": "知识产权",
+        "item1": "所有应用程序内容、商标和代码均归我们或我们的许可方所有。",
+        "item2": "未经许可，您不得复制、修改或分发我们的内容。"
       },
       "thirdParty": {
-        "title": "ç¬¬ä¸‰æ–¹æœåŠ¡",
-        "body": "è¯¥åº”ç”¨ç¨‹åºä½¿ç”¨ç¬¬ä¸‰æ–¹æœåŠ¡ï¼ˆGoogle Cloudã€Firebase ç­‰ï¼‰ã€‚æ‚¨å¯¹è¿™äº›æœåŠ¡çš„ä½¿ç”¨é¡»éµå®ˆå…¶å„è‡ªçš„æ¡æ¬¾ã€‚"
+        "title": "第三方服务",
+        "body": "该应用程序使用第三方服务（Google Cloud、Firebase 等）。您对这些服务的使用须遵守其各自的条款。"
       },
       "limitation": {
-        "title": "è´£ä»»é™åˆ¶",
-        "body": "è¯¥åº”ç”¨ç¨‹åºâ€œæŒ‰åŽŸæ ·â€æä¾›ï¼Œä¸æä¾›ä»»ä½•å½¢å¼çš„ä¿è¯ã€‚å¯¹äºŽæ‚¨å› ä½¿ç”¨è¯¥åº”ç”¨ç¨‹åºè€Œé€ æˆçš„ä»»ä½•æŸå®³ï¼Œæˆ‘ä»¬ä¸æ‰¿æ‹…ä»»ä½•è´£ä»»ã€‚"
+        "title": "责任限制",
+        "body": "该应用程序“按原样”提供，不提供任何形式的保证。对于您因使用该应用程序而造成的任何损害，我们不承担任何责任。"
       },
       "termination": {
-        "title": "ç»ˆæ­¢",
-        "body": "å¦‚æžœæ‚¨è¿åè¿™äº›æ¡æ¬¾ï¼Œæˆ‘ä»¬å¯èƒ½ä¼šæš‚åœæˆ–ç»ˆæ­¢æ‚¨å¯¹åº”ç”¨ç¨‹åºçš„è®¿é—®ã€‚"
+        "title": "终止",
+        "body": "如果您违反这些条款，我们可能会暂停或终止您对应用程序的访问。"
       },
       "changes": {
-        "title": "è¿™äº›æ¡æ¬¾çš„å˜æ›´",
-        "body": "æˆ‘ä»¬å¯èƒ½ä¼šä¸æ—¶æ›´æ–°è¿™äº›æœåŠ¡æ¡æ¬¾ã€‚æ›´æ”¹å°†å‘å¸ƒåœ¨åº”ç”¨ç¨‹åºå’Œæˆ‘ä»¬çš„ç½‘ç«™ä¸Šã€‚"
+        "title": "这些条款的变更",
+        "body": "我们可能会不时更新这些服务条款。更改将发布在应用程序和我们的网站上。"
       },
       "openSource": {
-        "title": "å¼€æº",
-        "body": "TGATB ä¹ æƒ¯è·Ÿè¸ªå™¨æ˜¯åœ¨ Apache 2.0 è®¸å¯è¯ä¸‹å¼€æºçš„ã€‚æ‚¨å¯ä»¥åœ¨ä»¥ä¸‹ä½ç½®æŸ¥çœ‹å®Œæ•´çš„æºä»£ç ï¼š"
+        "title": "开源",
+        "body": "TGATB 习惯跟踪器是在 Apache 2.0 许可证下开源的。您可以在以下位置查看完整的源代码："
       },
       "contact": {
-        "title": "è”ç³»æˆ‘ä»¬",
-        "body": "å¦‚æžœæ‚¨å¯¹è¿™äº›æœåŠ¡æ¡æ¬¾æœ‰ä»»ä½•ç–‘é—®ï¼Œè¯·é€šè¿‡ä»¥ä¸‹æ–¹å¼è”ç³»æˆ‘ä»¬ï¼š"
+        "title": "联系我们",
+        "body": "如果您对这些服务条款有任何疑问，请通过以下方式联系我们："
       }
     },
     "links": {
-      "privacyPolicy": "éšç§æ”¿ç­–",
-      "openApp": "æ‰“å¼€ TGATB ä¹ æƒ¯è¿½è¸ªå™¨"
+      "privacyPolicy": "隐私政策",
+      "openApp": "打开 TGATB 习惯追踪器"
     },
     "footer": {
-      "rightsReserved": "ç‰ˆæƒæ‰€æœ‰ã€‚"
+      "rightsReserved": "版权所有。"
     }
   },
   "PrivacyPolicyPage": {
     "meta": {
-      "title": "éšç§æ”¿ç­– - TGATB ä¹ æƒ¯è¿½è¸ªå™¨",
-      "description": "å¥½ä¸Žåçš„éšç§æ”¿ç­–ï¼šä¹ æƒ¯è¿½è¸ªå™¨"
+      "title": "隐私政策 - TGATB 习惯追踪器",
+      "description": "好与坏的隐私政策：习惯追踪器"
     },
-    "title": "éšç§æ”¿ç­–",
-    "lastUpdated": "æœ€åŽæ›´æ–°æ—¶é—´ï¼š2026 å¹´ 2 æœˆ 7 æ—¥",
+    "title": "隐私政策",
+    "lastUpdated": "最后更新时间：2026 年 2 月 7 日",
     "sections": {
       "overview": {
-        "title": "æ¦‚è¿°",
-        "body": "TGATB Habit Trackerï¼ˆâ€œå¥½ä¸Žåâ€ï¼‰æ˜¯ç”± adsurkasur å¼€å‘çš„ä¸€æ¬¾æžç®€ä¹ æƒ¯è·Ÿè¸ªåº”ç”¨ç¨‹åºã€‚æœ¬éšç§æ”¿ç­–è§£é‡Šäº†å½“æ‚¨ä½¿ç”¨æˆ‘ä»¬çš„ç½‘ç»œåº”ç”¨ç¨‹åº www.tgatb.click å’Œæˆ‘ä»¬çš„ Android ç§»åŠ¨åº”ç”¨ç¨‹åºæ—¶ï¼Œæˆ‘ä»¬å¦‚ä½•å¤„ç†æ‚¨çš„ä¿¡æ¯ã€‚"
+        "title": "概述",
+        "body": "TGATB Habit Tracker（“好与坏”）是由 adsurkasur 开发的一款极简习惯跟踪应用程序。本隐私政策解释了当您使用我们的网络应用程序 www.tgatb.click 和我们的 Android 移动应用程序时，我们如何处理您的信息。"
       },
       "informationCollected": {
-        "title": "æˆ‘ä»¬æ”¶é›†çš„ä¿¡æ¯",
+        "title": "我们收集的信息",
         "dataYouProvide": {
-          "title": "æ‚¨æä¾›çš„æ•°æ®",
-          "habitData": "ä¹ æƒ¯æ•°æ®ï¼šåç§°ã€ç±»åž‹ï¼ˆå¥½/åï¼‰ã€å®Œæˆæ—¥å¿—ä»¥åŠæ‚¨åœ¨åº”ç”¨ç¨‹åºä¸­åˆ›å»ºçš„æ¡çº¹ã€‚é»˜è®¤æƒ…å†µä¸‹ï¼Œæ­¤æ•°æ®å­˜å‚¨åœ¨æ‚¨çš„è®¾å¤‡æœ¬åœ°ã€‚",
-          "settings": "è®¾ç½®åå¥½è®¾ç½®ï¼šæ·±è‰²æ¨¡å¼ã€è¯­è¨€ã€æ¿€åŠ±è€…ä¸ªæ€§ä»¥åŠæœ¬åœ°å­˜å‚¨åœ¨è®¾å¤‡ä¸Šçš„å…¶ä»–åº”ç”¨ç¨‹åºåå¥½è®¾ç½®ã€‚",
-          "googleAccount": "Google å¸æˆ·ä¿¡æ¯ï¼ˆå¯é€‰ï¼‰ï¼šå¦‚æžœæ‚¨é€‰æ‹©ä½¿ç”¨ Google ç™»å½•è¿›è¡Œäº‘å¤‡ä»½ï¼Œæˆ‘ä»¬å°†ä»…å‡ºäºŽèº«ä»½éªŒè¯å’Œ Google äº‘ç«¯ç¡¬ç›˜å¤‡ä»½åŠŸèƒ½è®¿é—®æ‚¨çš„å§“åã€ç”µå­é‚®ä»¶åœ°å€å’Œä¸ªäººèµ„æ–™å›¾ç‰‡ã€‚"
+          "title": "您提供的数据",
+          "habitData": "习惯数据：名称、类型（好/坏）、完成日志以及您在应用程序中创建的条纹。默认情况下，此数据存储在您的设备本地。",
+          "settings": "设置偏好设置：深色模式、语言、激励者个性以及本地存储在设备上的其他应用程序偏好设置。",
+          "googleAccount": "Google 帐户信息（可选）：如果您选择使用 Google 登录进行云备份，我们将仅出于身份验证和 Google 云端硬盘备份功能访问您的姓名、电子邮件地址和个人资料图片。"
         },
         "dataCollectedAutomatically": {
-          "title": "è‡ªåŠ¨æ”¶é›†çš„æ•°æ®",
-          "analytics": "åˆ†æžæ•°æ®ï¼ˆç»åŒæ„ï¼‰ï¼šæˆ‘ä»¬ä½¿ç”¨ Vercel Analytics å’Œ Firebase Analytics æ”¶é›†åŒ¿åä½¿ç”¨ç»Ÿè®¡ä¿¡æ¯ï¼Œä¾‹å¦‚é¡µé¢æµè§ˆé‡ã€è®¾å¤‡ç±»åž‹å’Œä¸€èˆ¬äº¤äº’æ¨¡å¼ã€‚ä»…åœ¨æ‚¨åŒæ„åŽæ‰ä¼šåˆå§‹åŒ–åˆ†æžã€‚",
-          "errorTracking": "é”™è¯¯è·Ÿè¸ªï¼ˆå¯é€‰ï¼‰ï¼šå¦‚æžœå¯ç”¨ï¼ŒSentry ä¼šæ”¶é›†å´©æºƒæŠ¥å‘Šå’Œé”™è¯¯æ—¥å¿—ï¼Œä»¥å¸®åŠ©æˆ‘ä»¬æé«˜åº”ç”¨ç¨‹åºç¨³å®šæ€§ã€‚ä»…å½“ç»™äºˆåˆ†æžåŒæ„å¹¶é…ç½® Sentry DSN æ—¶ï¼Œæ­¤åŠŸèƒ½æ‰å¤„äºŽæ´»åŠ¨çŠ¶æ€ã€‚"
+          "title": "自动收集的数据",
+          "analytics": "分析数据（经同意）：我们使用 Vercel Analytics 和 Firebase Analytics 收集匿名使用统计信息，例如页面浏览量、设备类型和一般交互模式。仅在您同意后才会初始化分析。",
+          "errorTracking": "错误跟踪（可选）：如果启用，Sentry 会收集崩溃报告和错误日志，以帮助我们提高应用程序稳定性。仅当给予分析同意并配置 Sentry DSN 时，此功能才处于活动状态。"
         },
         "dataNotCollected": {
-          "title": "æˆ‘ä»¬ä¸æ”¶é›†çš„æ•°æ®",
-          "noPayments": "æˆ‘ä»¬ä¸æ”¶é›†ä»˜æ¬¾ä¿¡æ¯",
-          "noLocation": "æˆ‘ä»¬ä¸æ”¶é›†ä½ç½®æ•°æ®",
-          "noContacts": "æˆ‘ä»¬ä¸æ”¶é›†è”ç³»äººæˆ–ç”µè¯æ•°æ®",
-          "noAds": "æˆ‘ä»¬ä¸æä¾›å¹¿å‘Šæˆ–æ”¶é›†å¹¿å‘Šç›¸å…³æ•°æ®",
-          "noSelling": "æˆ‘ä»¬ä¸ä¼šå°†æ‚¨çš„æ•°æ®å‡ºå”®ç»™ç¬¬ä¸‰æ–¹"
+          "title": "我们不收集的数据",
+          "noPayments": "我们不收集付款信息",
+          "noLocation": "我们不收集位置数据",
+          "noContacts": "我们不收集联系人或电话数据",
+          "noAds": "我们不提供广告或收集广告相关数据",
+          "noSelling": "我们不会将您的数据出售给第三方"
         }
       },
       "dataStorage": {
-        "title": "æ‚¨çš„æ•°æ®å¦‚ä½•å­˜å‚¨",
-        "local": "æœ¬åœ°å­˜å‚¨ï¼ˆé»˜è®¤ï¼‰ï¼šæ‰€æœ‰ä¹ æƒ¯æ•°æ®å’Œè®¾ç½®éƒ½ä½¿ç”¨æµè§ˆå™¨ localStorage (web) æˆ– Capacitor Preferences (Android) æœ¬åœ°å­˜å‚¨åœ¨æ‚¨çš„è®¾å¤‡ä¸Šã€‚é™¤éžæ‚¨æ˜Žç¡®å¯ç”¨äº‘å¤‡ä»½ï¼Œå¦åˆ™æ•°æ®ä¸ä¼šç¦»å¼€æ‚¨çš„è®¾å¤‡ã€‚",
-        "cloudBackup": "äº‘å¤‡ä»½ï¼ˆå¯é€‰ï¼‰ï¼šå¦‚æžœæ‚¨ä½¿ç”¨ Google ç™»å½•ï¼Œæ‚¨å¯ä»¥é€‰æ‹©å°†æ•°æ®å¤‡ä»½åˆ°æ‚¨è‡ªå·±çš„ Google äº‘ç«¯ç¡¬ç›˜ã€‚æ‚¨çš„æ•°æ®ä½œä¸ºæ–‡ä»¶å­˜å‚¨åœ¨æ‚¨çš„ä¸ªäºº Google äº‘ç«¯ç¡¬ç›˜ä¸­ - æˆ‘ä»¬æ— æƒè®¿é—®æ‚¨çš„ Google äº‘ç«¯ç¡¬ç›˜æ–‡ä»¶ã€‚"
+        "title": "您的数据如何存储",
+        "local": "本地存储（默认）：所有习惯数据和设置都使用浏览器 localStorage (web) 或 Capacitor Preferences (Android) 本地存储在您的设备上。除非您明确启用云备份，否则数据不会离开您的设备。",
+        "cloudBackup": "云备份（可选）：如果您使用 Google 登录，您可以选择将数据备份到您自己的 Google 云端硬盘。您的数据作为文件存储在您的个人 Google 云端硬盘中 - 我们无权访问您的 Google 云端硬盘文件。"
       },
       "thirdPartyServices": {
-        "title": "ç¬¬ä¸‰æ–¹æœåŠ¡",
-        "intro": "æˆ‘ä»¬ä½¿ç”¨ä»¥ä¸‹ç¬¬ä¸‰æ–¹æœåŠ¡ï¼š",
-        "firebase": "Firebase èº«ä»½éªŒè¯ï¼šç”¨äºŽ Google ç™»å½•ã€‚å— Google éšç§æ”¿ç­–ç®¡è¾–ã€‚",
-        "firebaseAnalytics": "Firebase Analyticsï¼šç”¨äºŽåŒ¿åä½¿ç”¨ç»Ÿè®¡ï¼ˆéœ€è¦åŒæ„ï¼‰ã€‚",
-        "vercelAnalytics": "Vercel Analyticsï¼šç”¨äºŽåŒ¿åç½‘ç»œåˆ†æžï¼ˆéœ€è¦åŒæ„ï¼‰ã€‚",
-        "googleDrive": "Google Drive APIï¼šå¯¹äºŽå¯é€‰çš„äº‘å¤‡ä»½ï¼Œä»…è®¿é—®æ‚¨è‡ªå·±çš„åº”ç”¨ç¨‹åºåˆ›å»ºçš„æ–‡ä»¶ã€‚",
-        "sentry": "Sentryï¼ˆå¯é€‰ï¼‰ï¼šå¯ç”¨åŽç”¨äºŽé”™è¯¯å’Œå´©æºƒæŠ¥å‘Šã€‚"
+        "title": "第三方服务",
+        "intro": "我们使用以下第三方服务：",
+        "firebase": "Firebase 身份验证：用于 Google 登录。受 Google 隐私政策管辖。",
+        "firebaseAnalytics": "Firebase Analytics：用于匿名使用统计（需要同意）。",
+        "vercelAnalytics": "Vercel Analytics：用于匿名网络分析（需要同意）。",
+        "googleDrive": "Google Drive API：对于可选的云备份，仅访问您自己的应用程序创建的文件。",
+        "sentry": "Sentry（可选）：启用后用于错误和崩溃报告。"
       },
       "rightsControls": {
-        "title": "æ‚¨çš„æƒåˆ©å’ŒæŽ§åˆ¶æƒ",
-        "analyticsConsent": "åˆ†æžåŒæ„ï¼šæ‚¨å¯ä»¥éšæ—¶åœ¨åº”ç”¨ç¨‹åºè®¾ç½®ä¸­å¯ç”¨æˆ–ç¦ç”¨åˆ†æžã€‚",
-        "dataDeletion": "æ•°æ®åˆ é™¤ï¼šæ‚¨å¯ä»¥ä»Žåº”ç”¨ç¨‹åºè®¾ç½®ä¸­åˆ é™¤æ‰€æœ‰ä¹ æƒ¯æ•°æ®ï¼ˆâ€œåˆ é™¤æ‰€æœ‰ä¹ æƒ¯â€ï¼‰ã€‚ç”±äºŽæ•°æ®å­˜å‚¨åœ¨æœ¬åœ°ï¼Œæ¸…é™¤æµè§ˆå™¨æ•°æ®æˆ–å¸è½½åº”ç”¨ç¨‹åºä¹Ÿä¼šåˆ é™¤æ‰€æœ‰æ•°æ®ã€‚",
-        "cloudBackupControl": "äº‘å¤‡ä»½æŽ§åˆ¶ï¼šæ‚¨å¯ä»¥éšæ—¶æ³¨é”€ä»¥åœæ­¢äº‘å¤‡ä»½ã€‚æ‚¨å¯ä»¥ç›´æŽ¥ä»Ž Google äº‘ç«¯ç¡¬ç›˜ç®¡ç†æ‚¨çš„ Google äº‘ç«¯ç¡¬ç›˜å¤‡ä»½æ–‡ä»¶ã€‚",
-        "dataExport": "æ•°æ®å¯¼å‡ºï¼šæ‚¨å¯ä»¥éšæ—¶ä»Žåº”ç”¨ç¨‹åºè®¾ç½®ä¸­å°†æ•°æ®å¯¼å‡ºä¸º JSON æ–‡ä»¶ã€‚"
+        "title": "您的权利和控制权",
+        "analyticsConsent": "分析同意：您可以随时在应用程序设置中启用或禁用分析。",
+        "dataDeletion": "数据删除：您可以从应用程序设置中删除所有习惯数据（“删除所有习惯”）。由于数据存储在本地，清除浏览器数据或卸载应用程序也会删除所有数据。",
+        "cloudBackupControl": "云备份控制：您可以随时注销以停止云备份。您可以直接从 Google 云端硬盘管理您的 Google 云端硬盘备份文件。",
+        "dataExport": "数据导出：您可以随时从应用程序设置中将数据导出为 JSON 文件。"
       },
       "deleteData": {
-        "title": "åˆ é™¤æ‚¨çš„æ•°æ®",
-        "intro": "TGATB ä¹ æƒ¯è·Ÿè¸ªå™¨å°†æ‚¨çš„ä¹ æƒ¯æ•°æ®å­˜å‚¨åœ¨æ‚¨çš„è®¾å¤‡æœ¬åœ°ã€‚æ‚¨å¯ä»¥éšæ—¶åˆ é™¤æ‰€æœ‰æ•°æ®ï¼Œè€Œæ— éœ€åˆ é™¤æ‚¨çš„å¸æˆ·ï¼š",
-        "steps": "1. æ‰“å¼€åº”ç”¨ç¨‹åº\n2. ç‚¹å‡»å·¦ä¸Šè§’çš„èœå•å›¾æ ‡ï¼ˆæ±‰å ¡èœå•ï¼‰\n3.å‘ä¸‹æ»šåŠ¨åˆ°ä¹ æƒ¯ç®¡ç†\n4. ç‚¹å‡»â€œåˆ é™¤æ‰€æœ‰ä¹ æƒ¯â€\n5.å‡ºçŽ°æç¤ºæ—¶ç¡®è®¤åˆ é™¤",
-        "willDelete": "è¿™å°†æ°¸ä¹…åˆ é™¤ï¼š",
-        "willDeleteItems": "æ‚¨çš„æ‰€æœ‰ä¹ æƒ¯åŠå…¶åç§°ã€æ‰€æœ‰å®Œæˆæ—¥å¿—å’Œè¿žèƒœæ•°æ®ã€æ‰€æœ‰åŽ†å²è®°å½•",
-        "willNotDelete": "è¿™ä¸ä¼šåˆ é™¤ï¼š",
-        "willNotDeleteItems": "æ‚¨çš„åº”ç”¨ç¨‹åºè®¾ç½®ï¼ˆæ·±è‰²æ¨¡å¼ã€è¯­è¨€ç­‰ï¼‰ - å½“æ‚¨æ¸…é™¤åº”ç”¨ç¨‹åºæ•°æ®æˆ–å¸è½½æ—¶ï¼Œè¿™äº›è®¾ç½®ä¼šé‡ç½®ã€‚ä¹‹å‰ä¿å­˜åˆ° Google äº‘ç«¯ç¡¬ç›˜çš„ä»»ä½•å¤‡ä»½æ–‡ä»¶ - æ‚¨å¯ä»¥ç›´æŽ¥ä»Ž Google äº‘ç«¯ç¡¬ç›˜ä¸­åˆ é™¤è¿™äº›æ–‡ä»¶",
-        "alternative": "æˆ–è€…ï¼Œæ‚¨å¯ä»¥å¸è½½åº”ç”¨ç¨‹åºæˆ–ä»Žè®¾å¤‡è®¾ç½®ä¸­æ¸…é™¤åº”ç”¨ç¨‹åºæ•°æ®ï¼Œä»¥åˆ é™¤æ‰€æœ‰æœ¬åœ°å­˜å‚¨çš„ä¿¡æ¯ã€‚"
+        "title": "删除您的数据",
+        "intro": "TGATB 习惯跟踪器将您的习惯数据存储在您的设备本地。您可以随时删除所有数据，而无需删除您的帐户：",
+        "steps": "1. 打开应用程序\n2. 点击左上角的菜单图标（汉堡菜单）\n3.向下滚动到习惯管理\n4. 点击“删除所有习惯”\n5.出现提示时确认删除",
+        "willDelete": "这将永久删除：",
+        "willDeleteItems": "您的所有习惯及其名称、所有完成日志和连胜数据、所有历史记录",
+        "willNotDelete": "这不会删除：",
+        "willNotDeleteItems": "您的应用程序设置（深色模式、语言等） - 当您清除应用程序数据或卸载时，这些设置会重置。之前保存到 Google 云端硬盘的任何备份文件 - 您可以直接从 Google 云端硬盘中删除这些文件",
+        "alternative": "或者，您可以卸载应用程序或从设备设置中清除应用程序数据，以删除所有本地存储的信息。"
       },
       "deleteAccount": {
-        "title": "åˆ é™¤æ‚¨çš„å¸æˆ·",
-        "intro": "å¦‚æžœæ‚¨ä½¿ç”¨ Google ç™»å½•å¹¶æƒ³è¦å®Œå…¨åˆ é™¤æ‚¨çš„å¸æˆ·å’Œæ‰€æœ‰å…³è”æ•°æ®ï¼Œè¯·æŒ‰ç…§ä»¥ä¸‹æ­¥éª¤æ“ä½œï¼š",
-        "appSteps": "1. æ‰“å¼€åº”ç”¨ç¨‹åº\n2. ç‚¹å‡»å·¦ä¸Šè§’çš„èœå•å›¾æ ‡ï¼ˆæ±‰å ¡èœå•ï¼‰\n3. å‘ä¸‹æ»šåŠ¨åˆ°ä¹ æƒ¯ç®¡ç†ï¼Œç„¶åŽç‚¹å‡»â€œåˆ é™¤æ‰€æœ‰ä¹ æƒ¯â€ä»¥åˆ é™¤æ‚¨çš„æ•°æ®\n4. æ»šåŠ¨è‡³å¸æˆ·å’Œæ•°æ®ï¼Œç„¶åŽç‚¹å‡»â€œæ³¨é”€â€ä»¥æ³¨é”€\n5.å¸è½½åº”ç”¨ç¨‹åºä»¥åˆ é™¤æ‰€æœ‰å‰©ä½™çš„æœ¬åœ°æ•°æ®",
-        "googleDriveSteps": "è¦åˆ é™¤æ‚¨çš„ Google äº‘ç«¯ç¡¬ç›˜å¤‡ä»½æ–‡ä»¶ï¼š\n1. å‰å¾€è°·æ­Œäº‘ç«¯ç¡¬ç›˜\n2.æœç´¢â€œtgatbâ€æˆ–â€œhabitâ€æŸ¥æ‰¾å¤‡ä»½æ–‡ä»¶\n3.åˆ é™¤å¤‡ä»½æ–‡ä»¶",
-        "revokeSteps": "è¦æ’¤é”€åº”ç”¨ç¨‹åºå¯¹æ‚¨çš„ Google å¸æˆ·çš„è®¿é—®æƒé™ï¼š\n1. è½¬åˆ°Googleå¸æˆ·æƒé™\n2. åœ¨åˆ—è¡¨ä¸­æ‰¾åˆ°â€œTGATBä¹ æƒ¯è¿½è¸ªå™¨â€\n3. å•å‡»â€œåˆ é™¤è®¿é—®æƒé™â€",
-        "completion": "å®Œæˆè¿™äº›æ­¥éª¤åŽï¼Œæ‚¨çš„æ‰€æœ‰æ•°æ®å’Œå¸æˆ·è®¿é—®æƒé™å°†è¢«å®Œå…¨åˆ é™¤ã€‚å¦‚æžœæ‚¨éœ€è¦å¸®åŠ©ï¼Œè¯·é€šè¿‡ adsurkasur.dev@gmail.com è”ç³»æˆ‘ä»¬ã€‚"
+        "title": "删除您的帐户",
+        "intro": "如果您使用 Google 登录并想要完全删除您的帐户和所有关联数据，请按照以下步骤操作：",
+        "appSteps": "1. 打开应用程序\n2. 点击左上角的菜单图标（汉堡菜单）\n3. 向下滚动到习惯管理，然后点击“删除所有习惯”以删除您的数据\n4. 滚动至帐户和数据，然后点击“注销”以注销\n5.卸载应用程序以删除所有剩余的本地数据",
+        "googleDriveSteps": "要删除您的 Google 云端硬盘备份文件：\n1. 前往谷歌云端硬盘\n2.搜索“tgatb”或“habit”查找备份文件\n3.删除备份文件",
+        "revokeSteps": "要撤销应用程序对您的 Google 帐户的访问权限：\n1. 转到Google帐户权限\n2. 在列表中找到“TGATB习惯追踪器”\n3. 单击“删除访问权限”",
+        "completion": "完成这些步骤后，您的所有数据和帐户访问权限将被完全删除。如果您需要帮助，请通过 adsurkasur.dev@gmail.com 联系我们。"
       },
       "dataSecurity": {
-        "title": "æ•°æ®å®‰å…¨",
-        "body": "æˆ‘ä»¬å®žæ–½åˆç†çš„å®‰å…¨æŽªæ–½æ¥ä¿æŠ¤æ‚¨çš„æ•°æ®ã€‚æ‚¨çš„ä¹ æƒ¯æ•°æ®å­˜å‚¨åœ¨æ‚¨çš„è®¾å¤‡æœ¬åœ°ï¼Œä¸ä¼šä¼ è¾“åˆ°æˆ‘ä»¬çš„æœåŠ¡å™¨ã€‚äº‘å¤‡ä»½æ•°æ®ä½¿ç”¨ Google çš„å®‰å…¨åŸºç¡€æž¶æž„å­˜å‚¨åœ¨æ‚¨çš„ä¸ªäºº Google äº‘ç«¯ç¡¬ç›˜ä¸­ã€‚ç„¶è€Œï¼Œæ²¡æœ‰ä¸€ç§ç”µå­å­˜å‚¨æ–¹æ³•æ˜¯ 100% å®‰å…¨çš„ã€‚"
+        "title": "数据安全",
+        "body": "我们实施合理的安全措施来保护您的数据。您的习惯数据存储在您的设备本地，不会传输到我们的服务器。云备份数据使用 Google 的安全基础架构存储在您的个人 Google 云端硬盘中。然而，没有一种电子存储方法是 100% 安全的。"
       },
       "childrenPrivacy": {
-        "title": "å„¿ç«¥éšç§",
-        "body": "æˆ‘ä»¬çš„åº”ç”¨ç¨‹åºä¸é’ˆå¯¹ 13 å²ä»¥ä¸‹çš„å„¿ç«¥ã€‚æˆ‘ä»¬ä¸ä¼šæ•…æ„æ”¶é›† 13 å²ä»¥ä¸‹å„¿ç«¥çš„ä¸ªäººä¿¡æ¯ã€‚å¦‚æžœæ‚¨æ˜¯çˆ¶æ¯æˆ–ç›‘æŠ¤äººï¼Œå¹¶ä¸”è®¤ä¸ºæ‚¨çš„å­©å­å·²å‘æˆ‘ä»¬æä¾›äº†ä¸ªäººä¿¡æ¯ï¼Œè¯·ä¸Žæˆ‘ä»¬è”ç³»ã€‚"
+        "title": "儿童隐私",
+        "body": "我们的应用程序不针对 13 岁以下的儿童。我们不会故意收集 13 岁以下儿童的个人信息。如果您是父母或监护人，并且认为您的孩子已向我们提供了个人信息，请与我们联系。"
       },
       "policyChanges": {
-        "title": "æœ¬æ”¿ç­–çš„å˜æ›´",
-        "body": "æˆ‘ä»¬å¯èƒ½ä¼šä¸æ—¶æ›´æ–°æœ¬éšç§æ”¿ç­–ã€‚ä»»ä½•æ›´æ”¹éƒ½å°†é€šè¿‡æ›´æ–°æœ¬é¡µé¡¶éƒ¨çš„â€œä¸Šæ¬¡æ›´æ–°â€æ—¥æœŸæ¥åæ˜ ã€‚æˆ‘ä»¬é¼“åŠ±æ‚¨å®šæœŸæŸ¥çœ‹æœ¬æ”¿ç­–ã€‚"
+        "title": "本政策的变更",
+        "body": "我们可能会不时更新本隐私政策。任何更改都将通过更新本页顶部的“上次更新”日期来反映。我们鼓励您定期查看本政策。"
       },
       "contactUs": {
-        "title": "è”ç³»æˆ‘ä»¬",
-        "body": "å¦‚æžœæ‚¨å¯¹æœ¬éšç§æ”¿ç­–æˆ–æˆ‘ä»¬çš„æ•°æ®å®žè·µæœ‰ä»»ä½•ç–‘é—®ï¼Œè¯·é€šè¿‡ä»¥ä¸‹æ–¹å¼è”ç³»æˆ‘ä»¬ï¼šadsurkasur.dev@gmail.com"
+        "title": "联系我们",
+        "body": "如果您对本隐私政策或我们的数据实践有任何疑问，请通过以下方式联系我们：adsurkasur.dev@gmail.com"
       },
       "openSource": {
-        "title": "å¼€æº",
+        "title": "开源",
         "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
       }
     },
     "links": {
-      "termsOfService": "æœåŠ¡æ¡æ¬¾",
-      "openApp": "æ‰“å¼€ TGATB ä¹ æƒ¯è¿½è¸ªå™¨"
+      "termsOfService": "服务条款",
+      "openApp": "打开 TGATB 习惯追踪器"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasurã€‚ç‰ˆæƒæ‰€æœ‰ã€‚"
+      "copyright": "© 2025-2026 adsurkasur。版权所有。"
     }
   }
 }
-

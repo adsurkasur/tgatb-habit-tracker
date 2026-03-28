@@ -10,7 +10,7 @@
     "title": "Ang Mabuti at Ang Masama",
     "demoLabel": "Demo ugali",
     "counter": "{current} ng {total} gawi",
-    "counterHint": "Gamitin ang â† â†’ key, navigation button, o mag-swipe para mag-navigate",
+    "counterHint": "Gamitin ang ← → key, navigation button, o mag-swipe para mag-navigate",
     "aria": {
       "previousHabit": "Nakaraang ugali",
       "nextHabit": "Susunod na ugali"
@@ -35,9 +35,9 @@
       "english": "Ingles",
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Pumili ng wika",
-      "modalDescription": "Piliin ang wikang ginagamit sa buong interface ng app.",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
+      "modalDescription": "Piliin ang wikang ginagamit sa interface ng app.",
+      "restartWarningWeb": "Nalalapat kaagad ang mga pagbabago sa wika. Nag-navigate ang page sa bagong bersyon ng wika at nagre-refresh.",
+      "restartWarningApp": "Nalalapat kaagad ang mga pagbabago sa wika. Walang kinakailangang pag-restart ng app.",
       "cancel": "Kanselahin",
       "apply": "Mag-apply",
       "applying": "Nag-aaplay..."
@@ -65,11 +65,11 @@
     "version": "Bersyon {version}",
     "features": {
       "title": "Mga tampok",
-      "item1": "â€¢ Subaybayan ang mabuti at masamang gawi",
-      "item2": "â€¢ Offline na suporta sa teknolohiya ng PWA",
-      "item3": "â€¢ Pagsubaybay sa streak at visual na pag-unlad",
-      "item4": "â€¢ Minimalist, walang distraction na disenyo",
-      "item5": "â€¢ Cross-platform compatibility"
+      "item1": "• Subaybayan ang mabuti at masamang gawi",
+      "item2": "• Offline na suporta sa teknolohiya ng PWA",
+      "item3": "• Pagsubaybay sa streak at visual na pag-unlad",
+      "item4": "• Minimalist, walang distraction na disenyo",
+      "item5": "• Cross-platform compatibility"
     },
     "builtWith": "Itinayo gamit ang",
     "stack": {
@@ -88,8 +88,8 @@
       "termsOfService": "Mga Tuntunin ng Serbisyo"
     },
     "footer": {
-      "madeWithLove": "Ginawa gamit ang â¤ï¸ para sa mas magandang gawi",
-      "copyright": "Â© 2025-2026 TGATB Habit Tracker"
+      "madeWithLove": "Ginawa gamit ang ❤️ para sa mas magandang gawi",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
     }
   },
   "NavigationDrawer": {
@@ -183,7 +183,7 @@
       "title": "Pagkasira ng ugali",
       "emptyTitle": "Wala pang ugali",
       "emptyDescription": "Magdagdag ng ugali upang makita ang iyong pagkasira dito",
-      "completions": "{count} pagkumpleto"
+      "completions": "{count} mga pagkumpleto"
     },
     "calendar": {
       "today": "Ngayong araw",
@@ -742,7 +742,7 @@
       "dataStorage": {
         "title": "Paano Iniimbak ang Iyong Data",
         "local": "Lokal na imbakan (default): Ang lahat ng data ng ugali at mga setting ay lokal na iniimbak sa iyong device gamit ang browser localStorage (web) o Capacitor Preferences (Android). Walang data na umalis sa iyong device maliban kung tahasan mong i-enable ang cloud backup.",
-        "cloudBackup": "Cloud backup (opsyonal): Kung magsa-sign in ka sa Google, maaari mong piliing i-back up ang iyong data sa sarili mong Google Drive. Ang iyong data ay nakaimbak bilang isang file sa iyong personal na Google Drive â€“ wala kaming access sa iyong mga file sa Google Drive."
+        "cloudBackup": "Cloud backup (opsyonal): Kung magsa-sign in ka sa Google, maaari mong piliing i-back up ang iyong data sa sarili mong Google Drive. Ang iyong data ay nakaimbak bilang isang file sa iyong personal na Google Drive - wala kaming access sa iyong mga file sa Google Drive."
       },
       "thirdPartyServices": {
         "title": "Mga Serbisyo ng Third-Party",
@@ -767,7 +767,7 @@
         "willDelete": "Ito ay permanenteng magde-delete:",
         "willDeleteItems": "Ang lahat ng iyong mga gawi at ang kanilang mga pangalan, Lahat ng pagkumpleto ng mga log at streak data, Lahat ng mga tala ng kasaysayan",
         "willNotDelete": "HINDI nito tatanggalin:",
-        "willNotDeleteItems": "Mga setting ng iyong app (dark mode, wika, atbp.) â€” ang mga ito ay nagre-reset kapag na-clear mo ang data ng app o nag-uninstall, Anumang backup na file na dati nang na-save sa iyong Google Drive â€” maaari mong i-delete ang mga iyon nang direkta sa iyong Google Drive",
+        "willNotDeleteItems": "Mga setting ng iyong app (dark mode, wika, atbp.) - ang mga ito ay nagre-reset kapag na-clear mo ang data ng app o nag-uninstall, Anumang mga backup na file na dati nang na-save sa iyong Google Drive - maaari mong i-delete ang mga iyon nang direkta sa iyong Google Drive",
         "alternative": "Bilang kahalili, maaari mong i-uninstall ang app o i-clear ang data ng app mula sa mga setting ng iyong device upang alisin ang lahat ng lokal na nakaimbak na impormasyon."
       },
       "deleteAccount": {
@@ -804,8 +804,7 @@
       "openApp": "Buksan ang TGATB Habit Tracker"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasur. Lahat ng karapatan ay nakalaan."
+      "copyright": "© 2025-2026 adsurkasur. Lahat ng karapatan ay nakalaan."
     }
   }
 }
-

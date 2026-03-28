@@ -10,7 +10,7 @@
     "title": "The Good and The Bad",
     "demoLabel": "Kebiasaan Demo",
     "counter": "{current} dari {total} kebiasaan",
-    "counterHint": "Gunakan tombol \u2190 \u2192, tombol navigasi, atau geser untuk berpindah",
+    "counterHint": "Gunakan tombol ← →, tombol navigasi, atau geser untuk berpindah",
     "aria": {
       "previousHabit": "Kebiasaan sebelumnya",
       "nextHabit": "Kebiasaan berikutnya"
@@ -36,8 +36,8 @@
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Pilih bahasa",
       "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi.",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
+      "restartWarningWeb": "Perubahan bahasa berlaku segera. Halaman menavigasi ke versi bahasa baru dan menyegarkan.",
+      "restartWarningApp": "Language changes apply instantly. No app restart is required.",
       "cancel": "Batal",
       "apply": "Terapkan",
       "applying": "Menerapkan..."
@@ -65,11 +65,11 @@
     "version": "Versi {version}",
     "features": {
       "title": "Fitur",
-      "item1": "\u2022 Lacak kebiasaan baik dan buruk",
-      "item2": "\u2022 Dukungan offline dengan teknologi PWA",
-      "item3": "\u2022 Pelacakan streak dan progres visual",
-      "item4": "\u2022 Desain minimalis tanpa gangguan",
-      "item5": "\u2022 Kompatibel lintas platform"
+      "item1": "• Lacak kebiasaan baik dan buruk",
+      "item2": "• Dukungan offline dengan teknologi PWA",
+      "item3": "• Pelacakan streak dan progres visual",
+      "item4": "• Desain minimalis tanpa gangguan",
+      "item5": "• Kompatibel lintas platform"
     },
     "builtWith": "Dibangun dengan",
     "stack": {
@@ -88,8 +88,8 @@
       "termsOfService": "Syarat dan Ketentuan"
     },
     "footer": {
-      "madeWithLove": "Dibuat dengan \u2764\ufe0f untuk kebiasaan yang lebih baik",
-      "copyright": "\u00a9 2025-2026 TGATB Habit Tracker"
+      "madeWithLove": "Dibuat dengan ❤️ untuk kebiasaan yang lebih baik",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
     }
   },
   "NavigationDrawer": {
@@ -742,7 +742,7 @@
       "dataStorage": {
         "title": "Bagaimana Data Anda Disimpan",
         "local": "Penyimpanan lokal (default): Semua data kebiasaan dan pengaturan disimpan secara lokal di perangkat Anda menggunakan localStorage browser (web) atau Capacitor Preferences (Android). Tidak ada data yang meninggalkan perangkat Anda kecuali Anda secara eksplisit mengaktifkan pencadangan cloud.",
-        "cloudBackup": "Pencadangan cloud (opsional): Jika Anda masuk dengan Google, Anda dapat memilih untuk mencadangkan data Anda ke Google Drive pribadi Anda. Data Anda disimpan sebagai file di Google Drive pribadi Anda â€“ kami tidak memiliki akses ke file Google Drive Anda."
+        "cloudBackup": "Pencadangan cloud (opsional): Jika Anda masuk dengan Google, Anda dapat memilih untuk mencadangkan data Anda ke Google Drive pribadi Anda. Data Anda disimpan sebagai file di Google Drive pribadi Anda - kami tidak memiliki akses ke file Google Drive Anda."
       },
       "thirdPartyServices": {
         "title": "Layanan Pihak Ketiga",
@@ -767,7 +767,7 @@
         "willDelete": "Ini akan menghapus secara permanen:",
         "willDeleteItems": "Semua kebiasaan dan nama Anda, Semua log penyelesaian dan data streak, Semua catatan riwayat",
         "willNotDelete": "Ini TIDAK akan menghapus:",
-        "willNotDeleteItems": "Pengaturan aplikasi Anda (mode gelap, bahasa, dll.) â€“ ini disetel ulang saat Anda menghapus data aplikasi atau menghapus, File pencadangan apa pun yang sebelumnya disimpan ke Google Drive Anda â€“ Anda dapat menghapusnya langsung dari Google Drive Anda",
+        "willNotDeleteItems": "Pengaturan aplikasi Anda (mode gelap, bahasa, dll.) - ini disetel ulang saat Anda menghapus data aplikasi atau menghapus, File pencadangan apa pun yang sebelumnya disimpan ke Google Drive Anda - Anda dapat menghapusnya langsung dari Google Drive Anda",
         "alternative": "Alternatifnya, Anda dapat menghapus aplikasi atau menghapus data aplikasi dari pengaturan perangkat Anda untuk menghapus semua informasi yang disimpan secara lokal."
       },
       "deleteAccount": {
@@ -804,8 +804,7 @@
       "openApp": "Buka TGATB Habit Tracker"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasur. Semua hak dilindungi."
+      "copyright": "© 2025-2026 adsurkasur. Semua hak dilindungi."
     }
   }
 }
-

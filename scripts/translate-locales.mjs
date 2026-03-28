@@ -24,6 +24,8 @@ const TARGET_LOCALES = [
 const BATCH_SIZE = 20;
 const SEP = "\n⟪SEP⟫\n";
 const TRANSLATE_URL = "https://translate.googleapis.com/translate_a/single";
+const MAX_RETRIES = 5;
+const BASE_RETRY_DELAY_MS = 500;
 
 function loadJson(filePath) {
   return JSON.parse(readFileSync(filePath, "utf8"));
@@ -106,8 +108,19 @@ async function translateBatch(values, targetLocale) {
     q: joined,
   });
 
-  const response = await fetch(`${TRANSLATE_URL}?${query.toString()}`);
-  if (!response.ok) {
+  let response;
+  for (let attempt = 0; attempt < MAX_RETRIES; attempt += 1) {
+    response = await fetch(`${TRANSLATE_URL}?${query.toString()}`);
+    if (response.ok) {
+      break;
+    }
+
+    if (response.status >= 500 && attempt < MAX_RETRIES - 1) {
+      const delay = BASE_RETRY_DELAY_MS * (attempt + 1);
+      await new Promise((resolve) => setTimeout(resolve, delay));
+      continue;
+    }
+
     throw new Error(`Translate API failed (${response.status})`);
   }
 

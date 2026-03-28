@@ -1,811 +1,810 @@
 {
   "App": {
-    "name": "TrÃ¬nh theo dÃµi thÃ³i quen TGATB",
-    "description": "The Good and The Bad: á»¨ng dá»¥ng theo dÃµi thÃ³i quen tá»‘i giáº£n"
+    "name": "Trình theo dõi thói quen TGATB",
+    "description": "The Good and The Bad: Ứng dụng theo dõi thói quen tối giản"
   },
   "Routing": {
-    "redirecting": "Äang chuyá»ƒn hÆ°á»›ng..."
+    "redirecting": "Đang chuyển hướng..."
   },
   "Home": {
-    "title": "CÃ¡i tá»‘t vÃ  cÃ¡i xáº¥u",
-    "demoLabel": "ThÃ³i quen demo",
-    "counter": "{current} trong sá»‘ {total} thÃ³i quen",
-    "counterHint": "Sá»­ dá»¥ng phÃ­m â† â†’, nÃºt Ä‘iá»u hÆ°á»›ng hoáº·c vuá»‘t Ä‘á»ƒ Ä‘iá»u hÆ°á»›ng",
+    "title": "Cái tốt và cái xấu",
+    "demoLabel": "Thói quen demo",
+    "counter": "{current} trong số {total} thói quen",
+    "counterHint": "Sử dụng phím ← →, nút điều hướng hoặc vuốt để điều hướng",
     "aria": {
-      "previousHabit": "ThÃ³i quen trÆ°á»›c Ä‘Ã¢y",
-      "nextHabit": "ThÃ³i quen tiáº¿p theo"
+      "previousHabit": "Thói quen trước đây",
+      "nextHabit": "Thói quen tiếp theo"
     },
     "toasts": {
-      "pressBackAgainExit": "Nháº¥n láº¡i láº§n ná»¯a Ä‘á»ƒ thoÃ¡t",
-      "habitDeletedTitle": "ÄÃ£ xÃ³a thÃ³i quen!",
-      "habitDeletedDescription": "ThÃ³i quen cá»§a báº¡n Ä‘Ã£ bá»‹ loáº¡i bá».",
-      "undoDeleteAltText": "HoÃ n tÃ¡c xÃ³a",
-      "undo": "HoÃ n tÃ¡c"
+      "pressBackAgainExit": "Nhấn lại lần nữa để thoát",
+      "habitDeletedTitle": "Đã xóa thói quen!",
+      "habitDeletedDescription": "Thói quen của bạn đã bị loại bỏ.",
+      "undoDeleteAltText": "Hoàn tác xóa",
+      "undo": "Hoàn tác"
     }
   },
   "AppearanceSettings": {
-    "title": "Váº» bá» ngoÃ i",
+    "title": "Vẻ bề ngoài",
     "darkMode": {
-      "label": "Cháº¿ Ä‘á»™ tá»‘i",
-      "description": "Chuyá»ƒn Ä‘á»•i giá»¯a chá»§ Ä‘á» sÃ¡ng vÃ  tá»‘i"
+      "label": "Chế độ tối",
+      "description": "Chuyển đổi giữa chủ đề sáng và tối"
     },
     "language": {
-      "title": "NgÃ´n ngá»¯",
-      "label": "Chuyá»ƒn Ä‘á»•i ngÃ´n ngá»¯ á»©ng dá»¥ng",
-      "english": "Tiáº¿ng Anh",
-      "indonesian": "Tiáº¿ng Bahasa Indonesia",
-      "modalTitle": "Chá»n ngÃ´n ngá»¯",
-      "modalDescription": "Chá»n ngÃ´n ngá»¯ Ä‘Æ°á»£c sá»­ dá»¥ng trÃªn giao diá»‡n á»©ng dá»¥ng.",
-      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
-      "cancel": "Há»§y bá»",
-      "apply": "Ãp dá»¥ng",
-      "applying": "Äang Ã¡p dá»¥ng..."
+      "title": "Ngôn ngữ",
+      "label": "Chuyển đổi ngôn ngữ ứng dụng",
+      "english": "Tiếng Anh",
+      "indonesian": "Tiếng Bahasa Indonesia",
+      "modalTitle": "Chọn ngôn ngữ",
+      "modalDescription": "Chọn ngôn ngữ được sử dụng trên giao diện ứng dụng.",
+      "restartWarningWeb": "Thay đổi ngôn ngữ được áp dụng ngay lập tức. Trang điều hướng đến phiên bản ngôn ngữ mới và làm mới.",
+      "restartWarningApp": "Thay đổi ngôn ngữ áp dụng ngay lập tức. Không cần khởi động lại ứng dụng.",
+      "cancel": "Hủy bỏ",
+      "apply": "Áp dụng",
+      "applying": "Đang áp dụng..."
     },
     "fullscreen": {
-      "title": "Cháº¿ Ä‘á»™ toÃ n mÃ n hÃ¬nh",
-      "nativeDescription": "áº¨n thanh tráº¡ng thÃ¡i Ä‘á»ƒ cÃ³ tráº£i nghiá»‡m tuyá»‡t vá»i",
-      "nonNativeDescription": "CÃ i Ä‘áº·t á»©ng dá»¥ng di Ä‘á»™ng"
+      "title": "Chế độ toàn màn hình",
+      "nativeDescription": "Ẩn thanh trạng thái để có trải nghiệm tuyệt vời",
+      "nonNativeDescription": "Cài đặt ứng dụng di động"
     },
     "toasts": {
-      "fullscreenEnabledTitle": "ÄÃ£ báº­t cháº¿ Ä‘á»™ toÃ n mÃ n hÃ¬nh",
-      "fullscreenEnabledDescription": "Cháº¿ Ä‘á»™ toÃ n mÃ n hÃ¬nh cÃ³ thá»ƒ khÃ´ng hiá»ƒn thá»‹ hoÃ n háº£o trÃªn táº¥t cáº£ cÃ¡c thiáº¿t bá»‹. Náº¿u nháº­n tháº¥y váº¥n Ä‘á», báº¡n cÃ³ thá»ƒ táº¯t tÃ­nh nÄƒng nÃ y trong cÃ i Ä‘áº·t.",
-      "languageUpdated": "ÄÃ£ cáº­p nháº­t ngÃ´n ngá»¯",
-      "switchedToEnglish": "ÄÃ£ chuyá»ƒn sang tiáº¿ng Anh",
-      "switchedToIndonesian": "Chuyá»ƒn sang tiáº¿ng Bahasa Indonesia"
+      "fullscreenEnabledTitle": "Đã bật chế độ toàn màn hình",
+      "fullscreenEnabledDescription": "Chế độ toàn màn hình có thể không hiển thị hoàn hảo trên tất cả các thiết bị. Nếu nhận thấy vấn đề, bạn có thể tắt tính năng này trong cài đặt.",
+      "languageUpdated": "Đã cập nhật ngôn ngữ",
+      "switchedToEnglish": "Đã chuyển sang tiếng Anh",
+      "switchedToIndonesian": "Chuyển sang tiếng Bahasa Indonesia"
     }
   },
   "SettingsDialog": {
-    "title": "CÃ i Ä‘áº·t"
+    "title": "Cài đặt"
   },
   "AboutDialog": {
-    "title": "Giá»›i thiá»‡u vá» TrÃ¬nh theo dÃµi thÃ³i quen TGATB",
-    "projectName": "CÃ¡i tá»‘t vÃ  cÃ¡i xáº¥u",
-    "projectDescription": "á»¨ng dá»¥ng web tiáº¿n bá»™ tá»‘i giáº£n Ä‘á»ƒ theo dÃµi thÃ³i quen hÃ ng ngÃ y cá»§a báº¡n",
-    "version": "PhiÃªn báº£n {version}",
+    "title": "Giới thiệu về Trình theo dõi thói quen TGATB",
+    "projectName": "Cái tốt và cái xấu",
+    "projectDescription": "Ứng dụng web tiến bộ tối giản để theo dõi thói quen hàng ngày của bạn",
+    "version": "Phiên bản {version}",
     "features": {
-      "title": "Äáº·c trÆ°ng",
-      "item1": "â€¢ Theo dÃµi thÃ³i quen tá»‘t vÃ  xáº¥u",
-      "item2": "â€¢ Há»— trá»£ ngoáº¡i tuyáº¿n vá»›i cÃ´ng nghá»‡ PWA",
-      "item3": "â€¢ Theo dÃµi vá»‡t vÃ  tiáº¿n trÃ¬nh trá»±c quan",
-      "item4": "â€¢ Thiáº¿t káº¿ tá»‘i giáº£n, khÃ´ng gÃ¢y xao lÃ£ng",
-      "item5": "â€¢ Kháº£ nÄƒng tÆ°Æ¡ng thÃ­ch Ä‘a ná»n táº£ng"
+      "title": "Đặc trưng",
+      "item1": "• Theo dõi thói quen tốt và xấu",
+      "item2": "• Hỗ trợ ngoại tuyến với công nghệ PWA",
+      "item3": "• Theo dõi vệt và tiến trình trực quan",
+      "item4": "• Thiết kế tối giản, không gây xao lãng",
+      "item5": "• Khả năng tương thích đa nền tảng"
     },
-    "builtWith": "ÄÆ°á»£c xÃ¢y dá»±ng vá»›i",
+    "builtWith": "Được xây dựng với",
     "stack": {
       "nextjs": "Next.js 16",
-      "react": "Pháº£n á»©ng 19",
-      "typescript": "Báº£n Ä‘Ã¡nh mÃ¡y",
+      "react": "Phản ứng 19",
+      "typescript": "Bản đánh máy",
       "tailwind": "Tailwind CSS v4",
       "pwa": "PWA",
-      "capacitor": "tá»¥ Ä‘iá»‡n"
+      "capacitor": "tụ điện"
     },
     "links": {
-      "title": "LiÃªn káº¿t",
-      "github": "Xem trÃªn GitHub",
-      "vercel": "ÄÆ°á»£c cung cáº¥p bá»Ÿi Vercel",
-      "privacyPolicy": "ChÃ­nh sÃ¡ch báº£o máº­t",
-      "termsOfService": "Äiá»u khoáº£n dá»‹ch vá»¥"
+      "title": "Liên kết",
+      "github": "Xem trên GitHub",
+      "vercel": "Được cung cấp bởi Vercel",
+      "privacyPolicy": "Chính sách bảo mật",
+      "termsOfService": "Điều khoản dịch vụ"
     },
     "footer": {
-      "madeWithLove": "ÄÆ°á»£c lÃ m báº±ng â¤ï¸ Ä‘á»ƒ cÃ³ thÃ³i quen tá»‘t hÆ¡n",
-      "copyright": "Â© 2025-2026 TGATB Habit Tracker"
+      "madeWithLove": "Được làm bằng ❤️ để có thói quen tốt hơn",
+      "copyright": "© 2025-2026 TGATB Habit Tracker"
     }
   },
   "NavigationDrawer": {
     "hidden": {
-      "navigationMenuTitle": "Menu Ä‘iá»u hÆ°á»›ng",
-      "navigationMenuDescription": "Truy cáº­p báº£ng Ä‘iá»u khiá»ƒn vÃ  cÃ i Ä‘áº·t theo dÃµi thÃ³i quen cá»§a báº¡n"
+      "navigationMenuTitle": "Menu điều hướng",
+      "navigationMenuDescription": "Truy cập bảng điều khiển và cài đặt theo dõi thói quen của bạn"
     },
     "header": {
-      "title": "Theo dÃµi thÃ³i quen",
-      "subtitle": "Theo dÃµi tiáº¿n trÃ¬nh hÃ ng ngÃ y cá»§a báº¡n"
+      "title": "Theo dõi thói quen",
+      "subtitle": "Theo dõi tiến trình hàng ngày của bạn"
     },
     "search": {
-      "placeholder": "ThÃ³i quen tÃ¬m kiáº¿m...",
-      "clear": "XÃ³a tÃ¬m kiáº¿m"
+      "placeholder": "Thói quen tìm kiếm...",
+      "clear": "Xóa tìm kiếm"
     },
     "sections": {
-      "goodHabits": "ThÃ³i quen tá»‘t",
-      "badHabits": "ThÃ³i quen xáº¥u"
+      "goodHabits": "Thói quen tốt",
+      "badHabits": "Thói quen xấu"
     },
     "empty": {
-      "noGoodHabitsFound": "KhÃ´ng tÃ¬m tháº¥y thÃ³i quen tá»‘t",
-      "noGoodHabitsYet": "ChÆ°a cÃ³ thÃ³i quen tá»‘t",
-      "noBadHabitsFound": "KhÃ´ng tÃ¬m tháº¥y thÃ³i quen xáº¥u",
-      "noBadHabitsTracked": "KhÃ´ng cÃ³ thÃ³i quen xáº¥u nÃ o Ä‘Æ°á»£c theo dÃµi"
+      "noGoodHabitsFound": "Không tìm thấy thói quen tốt",
+      "noGoodHabitsYet": "Chưa có thói quen tốt",
+      "noBadHabitsFound": "Không tìm thấy thói quen xấu",
+      "noBadHabitsTracked": "Không có thói quen xấu nào được theo dõi"
     },
     "actions": {
-      "help": "GiÃºp Ä‘á»¡",
-      "history": "Lá»‹ch sá»­",
-      "settings": "CÃ i Ä‘áº·t",
-      "supportMe": "Há»— trá»£ tÃ´i",
-      "about": "Vá»"
+      "help": "Giúp đỡ",
+      "history": "Lịch sử",
+      "settings": "Cài đặt",
+      "supportMe": "Hỗ trợ tôi",
+      "about": "Về"
     },
     "habitItem": {
-      "days": "{count} ngÃ y"
+      "days": "{count} ngày"
     }
   },
   "AccountDataSettings": {
-    "title": "TÃ i khoáº£n & Dá»¯ liá»‡u",
-    "profileAlt": "Há»“ sÆ¡",
+    "title": "Tài khoản & Dữ liệu",
+    "profileAlt": "Hồ sơ",
     "auth": {
-      "login": "ÄÄƒng nháº­p",
-      "logoutFrom": "ÄÄƒng xuáº¥t khá»i {name}"
+      "login": "Đăng nhập",
+      "logoutFrom": "Đăng xuất khỏi {name}"
     },
     "autoSync": {
-      "title": "Tá»± Ä‘á»™ng Ä‘á»“ng bá»™ hÃ³a",
-      "description": "Tá»± Ä‘á»™ng Ä‘á»“ng bá»™ hÃ³a cÃ¡c thay Ä‘á»•i vá»›i Google Drive khi Ä‘Äƒng nháº­p."
+      "title": "Tự động đồng bộ hóa",
+      "description": "Tự động đồng bộ hóa các thay đổi với Google Drive khi đăng nhập."
     },
     "analytics": {
-      "title": "PhÃ¢n tÃ­ch",
-      "description": "Cho phÃ©p phÃ¢n tÃ­ch áº©n danh Ä‘á»ƒ giÃºp cáº£i thiá»‡n á»©ng dá»¥ng."
+      "title": "Phân tích",
+      "description": "Cho phép phân tích ẩn danh để giúp cải thiện ứng dụng."
     },
     "actions": {
-      "exportToCloud": "Xuáº¥t sang Ä‘Ã¡m mÃ¢y",
-      "importFromCloud": "Nháº­p tá»« Ä‘Ã¡m mÃ¢y",
-      "exporting": "Äang xuáº¥t...",
-      "exportData": "Xuáº¥t dá»¯ liá»‡u",
-      "importData": "Nháº­p dá»¯ liá»‡u",
-      "resolveSyncConflicts": "Giáº£i quyáº¿t xung Ä‘á»™t Ä‘á»“ng bá»™ hÃ³a"
+      "exportToCloud": "Xuất sang đám mây",
+      "importFromCloud": "Nhập từ đám mây",
+      "exporting": "Đang xuất...",
+      "exportData": "Xuất dữ liệu",
+      "importData": "Nhập dữ liệu",
+      "resolveSyncConflicts": "Giải quyết xung đột đồng bộ hóa"
     }
   },
   "HistoryDialog": {
-    "title": "Lá»‹ch sá»­ vÃ  phÃ¢n tÃ­ch thÃ³i quen",
+    "title": "Lịch sử và phân tích thói quen",
     "tabs": {
-      "overview": "Tá»•ng quan",
-      "stats": "Thá»‘ng kÃª",
-      "calendar": "Lá»‹ch",
-      "timeline": "DÃ²ng thá»i gian"
+      "overview": "Tổng quan",
+      "stats": "Thống kê",
+      "calendar": "Lịch",
+      "timeline": "Dòng thời gian"
     },
     "stats": {
       "totalHabits": {
-        "title": "Tá»•ng sá»‘ thÃ³i quen",
-        "description": "{good} tá»‘t, {bad} tá»‡"
+        "title": "Tổng số thói quen",
+        "description": "{good} tốt, {bad} tệ"
       },
       "combinedStreak": {
-        "title": "Vá»‡t káº¿t há»£p",
-        "description": "DÃ i nháº¥t: {longest} ngÃ y"
+        "title": "Vệt kết hợp",
+        "description": "Dài nhất: {longest} ngày"
       },
       "todaysProgress": {
-        "title": "Sá»± tiáº¿n bá»™ ngÃ y nay",
-        "description": "{percent}% Ä‘Ã£ hoÃ n thÃ nh"
+        "title": "Sự tiến bộ ngày nay",
+        "description": "{percent}% đã hoàn thành"
       },
       "totalActions": {
-        "title": "Tá»•ng sá»‘ hÃ nh Ä‘á»™ng",
-        "description": "Táº¥t cáº£ thá»i gian hoÃ n thÃ nh"
+        "title": "Tổng số hành động",
+        "description": "Tất cả thời gian hoàn thành"
       }
     },
     "topHabits": {
-      "title": "ThÃ³i quen hÃ ng Ä‘áº§u"
+      "title": "Thói quen hàng đầu"
     },
     "breakdown": {
-      "title": "PhÃ¢n tÃ­ch thÃ³i quen",
-      "emptyTitle": "ChÆ°a cÃ³ thÃ³i quen",
-      "emptyDescription": "ThÃªm thÃ³i quen Ä‘á»ƒ xem báº£ng phÃ¢n tÃ­ch cá»§a báº¡n táº¡i Ä‘Ã¢y",
-      "completions": "{count} hoÃ n thÃ nh"
+      "title": "Phân tích thói quen",
+      "emptyTitle": "Chưa có thói quen",
+      "emptyDescription": "Thêm thói quen để xem bảng phân tích của bạn tại đây",
+      "completions": "{count} hoàn thành"
     },
     "calendar": {
-      "today": "HÃ´m nay",
-      "notTracked": "KhÃ´ng Ä‘Æ°á»£c theo dÃµi",
-      "editEntry": "Chá»‰nh sá»­a má»¥c nháº­p",
-      "clearStatus": "XÃ³a tráº¡ng thÃ¡i",
-      "noDataForDate": "KhÃ´ng cÃ³ dá»¯ liá»‡u cho ngÃ y nÃ y",
-      "addEntry": "ThÃªm má»¥c nháº­p"
+      "today": "Hôm nay",
+      "notTracked": "Không được theo dõi",
+      "editEntry": "Chỉnh sửa mục nhập",
+      "clearStatus": "Xóa trạng thái",
+      "noDataForDate": "Không có dữ liệu cho ngày này",
+      "addEntry": "Thêm mục nhập"
     },
     "timeline": {
-      "today": "HÃ´m nay",
-      "completionSummary": "{completed}/{total} thÃ³i quen Ä‘Ã£ hoÃ n thÃ nh ({percent}%)",
-      "notTracked": "KhÃ´ng Ä‘Æ°á»£c theo dÃµi",
-      "notTrackedTitle": "{name}: KhÃ´ng Ä‘Æ°á»£c theo dÃµi",
-      "completedTitle": "{name}: ÄÃ£ hoÃ n thÃ nh",
-      "notCompletedTitle": "{name}: ChÆ°a hoÃ n thÃ nh"
+      "today": "Hôm nay",
+      "completionSummary": "{completed}/{total} thói quen đã hoàn thành ({percent}%)",
+      "notTracked": "Không được theo dõi",
+      "notTrackedTitle": "{name}: Không được theo dõi",
+      "completedTitle": "{name}: Đã hoàn thành",
+      "notCompletedTitle": "{name}: Chưa hoàn thành"
     }
   },
   "AddHabitDialog": {
-    "title": "ThÃªm thÃ³i quen má»›i",
+    "title": "Thêm thói quen mới",
     "fields": {
-      "name": "TÃªn thÃ³i quen",
-      "type": "Loáº¡i thÃ³i quen",
-      "schedule": "Lá»‹ch trÃ¬nh"
+      "name": "Tên thói quen",
+      "type": "Loại thói quen",
+      "schedule": "Lịch trình"
     },
     "placeholders": {
-      "name": "Nháº­p tÃªn thÃ³i quen..."
+      "name": "Nhập tên thói quen..."
     },
     "type": {
-      "good": "Tá»‘t",
-      "bad": "Xáº¥u"
+      "good": "Tốt",
+      "bad": "Xấu"
     },
     "schedule": {
-      "daily": "Háº±ng ngÃ y",
-      "interval": "Má»—i N ngÃ y",
-      "weekly": "CÃ¡c ngÃ y trong tuáº§n"
+      "daily": "Hằng ngày",
+      "interval": "Mỗi N ngày",
+      "weekly": "Các ngày trong tuần"
     },
     "interval": {
-      "every": "Má»i",
-      "days": "ngÃ y"
+      "every": "Mọi",
+      "days": "ngày"
     },
     "weekdays": {
-      "sun": "Máº·t trá»i",
-      "mon": "Thá»© hai",
-      "tue": "thá»© ba",
-      "wed": "Thá»© tÆ°",
-      "thu": "Thá»© nÄƒm",
-      "fri": "Thá»© SÃ¡u",
-      "sat": "ÄÃ£ ngá»“i"
+      "sun": "Mặt trời",
+      "mon": "Thứ hai",
+      "tue": "thứ ba",
+      "wed": "Thứ tư",
+      "thu": "Thứ năm",
+      "fri": "Thứ sáu",
+      "sat": "Đã ngồi"
     },
     "actions": {
-      "cancel": "Há»§y bá»",
-      "save": "Cá»©u"
+      "cancel": "Hủy bỏ",
+      "save": "Cứu"
     }
   },
   "EditHabitDialog": {
-    "title": "Chá»‰nh sá»­a thÃ³i quen",
+    "title": "Chỉnh sửa thói quen",
     "fields": {
-      "name": "TÃªn thÃ³i quen",
-      "type": "Loáº¡i thÃ³i quen",
-      "schedule": "Lá»‹ch trÃ¬nh"
+      "name": "Tên thói quen",
+      "type": "Loại thói quen",
+      "schedule": "Lịch trình"
     },
     "placeholders": {
-      "name": "Nháº­p tÃªn thÃ³i quen..."
+      "name": "Nhập tên thói quen..."
     },
     "type": {
-      "good": "Tá»‘t",
-      "bad": "Xáº¥u"
+      "good": "Tốt",
+      "bad": "Xấu"
     },
     "schedule": {
-      "daily": "Háº±ng ngÃ y",
-      "interval": "Má»—i N ngÃ y",
-      "weekly": "CÃ¡c ngÃ y trong tuáº§n"
+      "daily": "Hằng ngày",
+      "interval": "Mỗi N ngày",
+      "weekly": "Các ngày trong tuần"
     },
     "interval": {
-      "every": "Má»i",
-      "days": "ngÃ y"
+      "every": "Mọi",
+      "days": "ngày"
     },
     "weekdays": {
-      "sun": "Máº·t trá»i",
-      "mon": "Thá»© hai",
-      "tue": "thá»© ba",
-      "wed": "Thá»© tÆ°",
-      "thu": "Thá»© nÄƒm",
-      "fri": "Thá»© SÃ¡u",
-      "sat": "ÄÃ£ ngá»“i"
+      "sun": "Mặt trời",
+      "mon": "Thứ hai",
+      "tue": "thứ ba",
+      "wed": "Thứ tư",
+      "thu": "Thứ năm",
+      "fri": "Thứ sáu",
+      "sat": "Đã ngồi"
     },
     "actions": {
-      "cancel": "Há»§y bá»",
-      "saveChanges": "LÆ°u thay Ä‘á»•i"
+      "cancel": "Hủy bỏ",
+      "saveChanges": "Lưu thay đổi"
     }
   },
   "SyncConflictModal": {
-    "title": "ÄÃ£ phÃ¡t hiá»‡n xung Ä‘á»™t Ä‘á»“ng bá»™ hÃ³a",
-    "description": "ChÃºng tÃ´i Ä‘Ã£ tÃ¬m tháº¥y xung Ä‘á»™t giá»¯a dá»¯ liá»‡u cá»¥c bá»™ cá»§a báº¡n vÃ  báº£n sao lÆ°u Ä‘Ã¡m mÃ¢y. Chá»n Ä‘á»™ phÃ¢n giáº£i theo tá»«ng trÆ°á»ng bÃªn dÆ°á»›i hoáº·c sá»­ dá»¥ng cÃ¡c hÃ nh Ä‘á»™ng chung Ä‘á»ƒ cháº¥p nháº­n phiÃªn báº£n tá»« xa hoáº·c giá»¯ láº¡i dá»¯ liá»‡u cá»¥c bá»™ cá»§a báº¡n.",
-    "itemLabel": "Má»¥c: {id}",
-    "differences": "Sá»± khÃ¡c biá»‡t cá»¥c bá»™ vÃ  tá»« xa",
+    "title": "Đã phát hiện xung đột đồng bộ hóa",
+    "description": "Chúng tôi đã tìm thấy xung đột giữa dữ liệu cục bộ của bạn và bản sao lưu đám mây. Chọn độ phân giải theo từng trường bên dưới hoặc sử dụng các hành động chung để chấp nhận phiên bản từ xa hoặc giữ lại dữ liệu cục bộ của bạn.",
+    "itemLabel": "Mục: {id}",
+    "differences": "Sự khác biệt cục bộ và từ xa",
     "choices": {
-      "local": "Äá»‹a phÆ°Æ¡ng",
+      "local": "Địa phương",
       "remote": "Xa"
     },
     "actions": {
-      "keepLocal": "Giá»¯ cá»¥c bá»™",
-      "applySelected": "Ãp dá»¥ng Ä‘Ã£ chá»n",
-      "acceptRemote": "Cháº¥p nháº­n tá»« xa"
+      "keepLocal": "Giữ cục bộ",
+      "applySelected": "Áp dụng đã chọn",
+      "acceptRemote": "Chấp nhận từ xa"
     }
   },
   "PWAInstallPrompt": {
-    "title": "CÃ i Ä‘áº·t á»©ng dá»¥ng TGATB",
-    "subtitle": "Tráº£i nghiá»‡m tá»‘t hÆ¡n vá»›i há»— trá»£ ngoáº¡i tuyáº¿n vÃ  truy cáº­p nhanh",
+    "title": "Cài đặt ứng dụng TGATB",
+    "subtitle": "Trải nghiệm tốt hơn với hỗ trợ ngoại tuyến và truy cập nhanh",
     "toasts": {
       "notAvailable": {
-        "title": "CÃ i Ä‘áº·t á»©ng dá»¥ng khÃ´ng cÃ³ sáºµn",
-        "description": "CÃ i Ä‘áº·t á»©ng dá»¥ng khÃ´ng Ä‘Æ°á»£c há»— trá»£ trÃªn thiáº¿t bá»‹ hoáº·c trÃ¬nh duyá»‡t nÃ y. DÃ¹ng thá»­ Chrome hoáº·c Edge trÃªn mÃ¡y tÃ­nh Ä‘á»ƒ bÃ n/thiáº¿t bá»‹ di Ä‘á»™ng."
+        "title": "Cài đặt ứng dụng không có sẵn",
+        "description": "Cài đặt ứng dụng không được hỗ trợ trên thiết bị hoặc trình duyệt này. Dùng thử Chrome hoặc Edge trên máy tính để bàn/thiết bị di động."
       },
       "started": {
-        "title": "ÄÃ£ báº¯t Ä‘áº§u cÃ i Ä‘áº·t á»©ng dá»¥ng",
-        "description": "LÃ m theo hÆ°á»›ng dáº«n cá»§a trÃ¬nh duyá»‡t Ä‘á»ƒ hoÃ n táº¥t cÃ i Ä‘áº·t."
+        "title": "Đã bắt đầu cài đặt ứng dụng",
+        "description": "Làm theo hướng dẫn của trình duyệt để hoàn tất cài đặt."
       },
       "dismissed": {
-        "title": "ÄÃ£ loáº¡i bá» lÆ°á»£t cÃ i Ä‘áº·t á»©ng dá»¥ng",
-        "description": "Báº¡n cÃ³ thá»ƒ cÃ i Ä‘áº·t á»©ng dá»¥ng báº¥t cá»© lÃºc nÃ o tá»« CÃ i Ä‘áº·t -> CÃ i Ä‘áº·t á»©ng dá»¥ng."
+        "title": "Đã loại bỏ lượt cài đặt ứng dụng",
+        "description": "Bạn có thể cài đặt ứng dụng bất cứ lúc nào từ Cài đặt -> Cài đặt ứng dụng."
       },
       "failed": {
-        "title": "CÃ i Ä‘áº·t á»©ng dá»¥ng khÃ´ng thÃ nh cÃ´ng",
-        "description": "ÄÃ£ xáº£y ra lá»—i khi cá»‘ gáº¯ng cÃ i Ä‘áº·t á»©ng dá»¥ng."
+        "title": "Cài đặt ứng dụng không thành công",
+        "description": "Đã xảy ra lỗi khi cố gắng cài đặt ứng dụng."
       }
     },
     "instructions": {
       "fallback": {
-        "iosSafari": "TrÃªn iOS/Safari, cháº¡m vÃ o nÃºt Chia sáº» vÃ  chá»n \"ThÃªm vÃ o MÃ n hÃ¬nh chÃ­nh\" Ä‘á»ƒ cÃ i Ä‘áº·t.",
+        "iosSafari": "Trên iOS/Safari, chạm vào nút Chia sẻ và chọn \"Thêm vào Màn hình chính\" để cài đặt.",
         "android": {
-          "line1": "TrÃªn Android, hÃ£y sá»­ dá»¥ng Chrome, Edge hoáº·c Samsung Internet. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng + trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y nháº¥n vÃ o biá»ƒu tÆ°á»£ng Ä‘Ã³ Ä‘á»ƒ cÃ i Ä‘áº·t.",
-          "line2": "Náº¿u báº¡n khÃ´ng tháº¥y biá»ƒu tÆ°á»£ng, hÃ£y má»Ÿ menu trÃ¬nh duyá»‡t vÃ  tÃ¬m \"ThÃªm vÃ o mÃ n hÃ¬nh chÃ­nh\" hoáº·c \"CÃ i Ä‘áº·t á»©ng dá»¥ng\"."
+          "line1": "Trên Android, hãy sử dụng Chrome, Edge hoặc Samsung Internet. Nếu bạn thấy biểu tượng + trên thanh địa chỉ của trình duyệt, hãy nhấn vào biểu tượng đó để cài đặt.",
+          "line2": "Nếu bạn không thấy biểu tượng, hãy mở menu trình duyệt và tìm \"Thêm vào màn hình chính\" hoặc \"Cài đặt ứng dụng\"."
         },
         "windowsLinux": {
-          "line1": "TrÃªn Windows/Linux, hÃ£y sá»­ dá»¥ng Chrome hoáº·c Edge. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³.",
-          "line2": "Náº¿u khÃ´ng, hÃ£y má»Ÿ menu trÃ¬nh duyá»‡t vÃ  tÃ¬m \"CÃ i Ä‘áº·t á»©ng dá»¥ng\" hoáº·c \"ThÃªm vÃ o mÃ n hÃ¬nh\"."
+          "line1": "Trên Windows/Linux, hãy sử dụng Chrome hoặc Edge. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào màn hình\"."
         },
         "mac": {
-          "line1": "TrÃªn macOS, sá»­ dá»¥ng Chrome hoáº·c Edge. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³.",
-          "line2": "Náº¿u khÃ´ng, hÃ£y má»Ÿ menu trÃ¬nh duyá»‡t vÃ  tÃ¬m \"CÃ i Ä‘áº·t á»©ng dá»¥ng\" hoáº·c \"ThÃªm vÃ o dock\"."
+          "line1": "Trên macOS, sử dụng Chrome hoặc Edge. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào dock\"."
         },
         "generic": {
-          "line1": "Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³.",
-          "line2": "Náº¿u khÃ´ng, hÃ£y má»Ÿ menu trÃ¬nh duyá»‡t vÃ  tÃ¬m \"CÃ i Ä‘áº·t á»©ng dá»¥ng\" hoáº·c \"ThÃªm vÃ o mÃ n hÃ¬nh chÃ­nh\"."
+          "line1": "Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+          "line2": "Nếu không, hãy mở menu trình duyệt và tìm \"Cài đặt ứng dụng\" hoặc \"Thêm vào màn hình chính\"."
         }
       },
       "default": {
-        "iosSafari": "TrÃªn iOS/Safari, cháº¡m vÃ o nÃºt Chia sáº» vÃ  chá»n \"ThÃªm vÃ o MÃ n hÃ¬nh chÃ­nh\" Ä‘á»ƒ cÃ i Ä‘áº·t.",
-        "android": "TrÃªn Android, hÃ£y sá»­ dá»¥ng Chrome hoáº·c Edge Ä‘á»ƒ cÃ³ tráº£i nghiá»‡m tá»‘t nháº¥t. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³.",
-        "windowsLinux": "TrÃªn Windows/Linux, hÃ£y sá»­ dá»¥ng Chrome hoáº·c Edge Ä‘á»ƒ cÃ³ tráº£i nghiá»‡m tá»‘t nháº¥t. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³.",
-        "mac": "TrÃªn macOS, hÃ£y sá»­ dá»¥ng Chrome hoáº·c Edge Ä‘á»ƒ cÃ³ tráº£i nghiá»‡m tá»‘t nháº¥t. Náº¿u báº¡n tháº¥y biá»ƒu tÆ°á»£ng cÃ i Ä‘áº·t trÃªn thanh Ä‘á»‹a chá»‰ cá»§a trÃ¬nh duyá»‡t, hÃ£y sá»­ dá»¥ng biá»ƒu tÆ°á»£ng Ä‘Ã³."
+        "iosSafari": "Trên iOS/Safari, chạm vào nút Chia sẻ và chọn \"Thêm vào Màn hình chính\" để cài đặt.",
+        "android": "Trên Android, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+        "windowsLinux": "Trên Windows/Linux, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó.",
+        "mac": "Trên macOS, hãy sử dụng Chrome hoặc Edge để có trải nghiệm tốt nhất. Nếu bạn thấy biểu tượng cài đặt trên thanh địa chỉ của trình duyệt, hãy sử dụng biểu tượng đó."
       }
     },
     "actions": {
-      "dismiss": "Miá»…n nhiá»‡m",
-      "install": "CÃ i Ä‘áº·t",
-      "ok": "ÄÆ¯á»¢C Rá»’I",
-      "notNow": "KhÃ´ng pháº£i bÃ¢y giá»"
+      "dismiss": "Miễn nhiệm",
+      "install": "Cài đặt",
+      "ok": "ĐƯỢC RỒI",
+      "notNow": "Không phải bây giờ"
     }
   },
   "DonationDialog": {
-    "title": "Há»— trá»£ tÃ´i",
-    "description": "Náº¿u báº¡n thÃ­ch á»©ng dá»¥ng nÃ y, hÃ£y cÃ¢n nháº¯c viá»‡c há»— trá»£ sá»± phÃ¡t triá»ƒn cá»§a nÃ³. Má»i Ä‘Ã³ng gÃ³p Ä‘á»u giÃºp giá»¯ cho nÃ³ miá»…n phÃ­ vÃ  cáº£i thiá»‡n!",
+    "title": "Hỗ trợ tôi",
+    "description": "Nếu bạn thích ứng dụng này, hãy cân nhắc việc hỗ trợ sự phát triển của nó. Mọi đóng góp đều giúp giữ cho nó miễn phí và cải thiện!",
     "sections": {
-      "paymentPlatforms": "Ná»n táº£ng thanh toÃ¡n",
-      "cryptocurrency": "tiá»n Ä‘iá»‡n tá»­"
+      "paymentPlatforms": "Nền tảng thanh toán",
+      "cryptocurrency": "tiền điện tử"
     },
     "qris": {
       "title": "QRIS",
-      "supportLine": "HÃ£y há»— trá»£ tÃ´i vá»›i QRIS!",
-      "description": "QuÃ©t mÃ£ QR nÃ y báº±ng á»©ng dá»¥ng ngÃ¢n hÃ ng cá»§a báº¡n Ä‘á»ƒ quyÃªn gÃ³p qua QRIS.",
-      "imageAlt": "PhÆ°Æ¡ng thá»©c quyÃªn gÃ³p QRIS",
-      "download": "Táº£i xuá»‘ng QRIS"
+      "supportLine": "Hãy hỗ trợ tôi với QRIS!",
+      "description": "Quét mã QR này bằng ứng dụng ngân hàng của bạn để quyên góp qua QRIS.",
+      "imageAlt": "Phương thức quyên góp QRIS",
+      "download": "Tải xuống QRIS"
     },
-    "copiedBadge": "ÄÃ£ sao chÃ©p!",
-    "thankYou": "Cáº£m Æ¡n báº¡n Ä‘Ã£ xem xÃ©t há»— trá»£ dá»± Ã¡n nÃ y!",
+    "copiedBadge": "Đã sao chép!",
+    "thankYou": "Cảm ơn bạn đã xem xét hỗ trợ dự án này!",
     "toasts": {
       "copied": {
-        "title": "ÄÃ£ sao chÃ©p!",
-        "description": "ÄÃ£ sao chÃ©p Ä‘á»‹a chá»‰ vÃ o báº£ng nhá»› táº¡m"
+        "title": "Đã sao chép!",
+        "description": "Đã sao chép địa chỉ vào bảng nhớ tạm"
       },
       "copyFailed": {
-        "title": "KhÃ´ng sao chÃ©p Ä‘Æ°á»£c",
-        "description": "Vui lÃ²ng sao chÃ©p Ä‘á»‹a chá»‰ theo cÃ¡ch thá»§ cÃ´ng"
+        "title": "Không sao chép được",
+        "description": "Vui lòng sao chép địa chỉ theo cách thủ công"
       },
       "saved": {
-        "title": "ÄÃ£ lÆ°u!",
-        "description": "ÄÃ£ lÆ°u hÃ¬nh áº£nh QRIS vÃ o thiáº¿t bá»‹."
+        "title": "Đã lưu!",
+        "description": "Đã lưu hình ảnh QRIS vào thiết bị."
       },
       "saveFailed": {
-        "title": "LÆ°u khÃ´ng thÃ nh cÃ´ng",
-        "description": "KhÃ´ng thá»ƒ lÆ°u hÃ¬nh áº£nh."
+        "title": "Lưu không thành công",
+        "description": "Không thể lưu hình ảnh."
       },
       "downloadFailed": {
-        "title": "Táº£i xuá»‘ng khÃ´ng thÃ nh cÃ´ng",
-        "description": "KhÃ´ng thá»ƒ tÃ¬m náº¡p hÃ¬nh áº£nh."
+        "title": "Tải xuống không thành công",
+        "description": "Không thể tìm nạp hình ảnh."
       }
     }
   },
   "AddEntryDialog": {
-    "title": "ThÃªm má»¥c nháº­p cho {date}",
+    "title": "Thêm mục nhập cho {date}",
     "tabs": {
-      "addEntry": "ThÃªm má»¥c má»›i",
-      "addHabit": "ThÃªm thÃ³i quen má»›i"
+      "addEntry": "Thêm mục mới",
+      "addHabit": "Thêm thói quen mới"
     },
     "placeholders": {
-      "noHabit": "KhÃ´ng cÃ³ thÃ³i quen cÃ³ sáºµn, thÃªm ngay bÃ¢y giá»!",
-      "selectHabit": "Chá»n thÃ³i quen...",
-      "habitName": "TÃªn thÃ³i quen..."
+      "noHabit": "Không có thói quen có sẵn, thêm ngay bây giờ!",
+      "selectHabit": "Chọn thói quen...",
+      "habitName": "Tên thói quen..."
     },
     "type": {
-      "good": "Tá»‘t",
-      "bad": "Xáº¥u"
+      "good": "Tốt",
+      "bad": "Xấu"
     },
     "status": {
       "good": {
-        "true": "HoÃ n thÃ nh",
-        "false": "Bá» lá»¡"
+        "true": "Hoàn thành",
+        "false": "Bỏ lỡ"
       },
       "bad": {
-        "true": "trÃ¡nh Ä‘Æ°á»£c",
+        "true": "tránh được",
         "false": "Xong"
       }
     },
     "actions": {
-      "addEntry": "ThÃªm má»¥c nháº­p",
-      "addHabitAndLog": "ThÃªm thÃ³i quen vÃ  nháº­t kÃ½"
+      "addEntry": "Thêm mục nhập",
+      "addHabitAndLog": "Thêm thói quen và nhật ký"
     }
   },
   "EditEntryDialog": {
-    "title": "Chá»‰nh sá»­a má»¥c nháº­p",
+    "title": "Chỉnh sửa mục nhập",
     "fields": {
-      "date": "NgÃ y",
-      "status": "Tráº¡ng thÃ¡i"
+      "date": "Ngày",
+      "status": "Trạng thái"
     },
     "status": {
       "good": {
-        "true": "HoÃ n thÃ nh",
-        "false": "Bá» lá»¡"
+        "true": "Hoàn thành",
+        "false": "Bỏ lỡ"
       },
       "bad": {
-        "true": "trÃ¡nh Ä‘Æ°á»£c",
+        "true": "tránh được",
         "false": "Xong"
       }
     },
     "actions": {
-      "cancel": "Há»§y bá»",
-      "save": "Cá»©u"
+      "cancel": "Hủy bỏ",
+      "save": "Cứu"
     }
   },
   "MotivatorSettings": {
-    "title": "Äá»™ng lá»±c thÃºc Ä‘áº©y nhÃ¢n váº­t",
-    "personalityType": "Loáº¡i tÃ­nh cÃ¡ch",
+    "title": "Động lực thúc đẩy nhân vật",
+    "personalityType": "Loại tính cách",
     "personality": {
       "positive": {
-        "title": "TÃ­ch cá»±c",
-        "description": "Khuyáº¿n khÃ­ch vÃ  há»— trá»£"
+        "title": "Tích cực",
+        "description": "Khuyến khích và hỗ trợ"
       },
       "adaptive": {
-        "title": "ThÃ­ch á»©ng",
-        "description": "CÃ¢n báº±ng vÃ  thá»±c táº¿"
+        "title": "Thích ứng",
+        "description": "Cân bằng và thực tế"
       },
       "harsh": {
-        "title": "ThÃ´ rÃ¡p",
-        "description": "Trá»±c tiáº¿p vÃ  Ä‘áº§y thÃ¡ch thá»©c"
+        "title": "Thô ráp",
+        "description": "Trực tiếp và đầy thử thách"
       }
     }
   },
   "AddHabitCTA": {
-    "title": "Báº¯t Ä‘áº§u hÃ nh trÃ¬nh cá»§a báº¡n",
-    "description": "Táº¡o thÃ³i quen Ä‘áº§u tiÃªn cá»§a báº¡n Ä‘á»ƒ báº¯t Ä‘áº§u theo dÃµi tiáº¿n Ä‘á»™ hÃ ng ngÃ y vÃ  xÃ¢y dá»±ng tÃ­nh nháº¥t quÃ¡n.",
-    "addFirstHabit": "ThÃªm thÃ³i quen Ä‘áº§u tiÃªn cá»§a báº¡n",
-    "footer": "Má»i chuyÃªn gia Ä‘á»u tá»«ng lÃ  ngÆ°á»i má»›i báº¯t Ä‘áº§u"
+    "title": "Bắt đầu hành trình của bạn",
+    "description": "Tạo thói quen đầu tiên của bạn để bắt đầu theo dõi tiến độ hàng ngày và xây dựng tính nhất quán.",
+    "addFirstHabit": "Thêm thói quen đầu tiên của bạn",
+    "footer": "Mọi chuyên gia đều từng là người mới bắt đầu"
   },
   "DeleteAllHabitsModal": {
-    "title": "XÃ³a táº¥t cáº£ thÃ³i quen?",
-    "description": "KhÃ´ng thá»ƒ hoÃ n tÃ¡c hÃ nh Ä‘á»™ng nÃ y. Báº¡n cÃ³ cháº¯c cháº¯n muá»‘n xÃ³a táº¥t cáº£ thÃ³i quen?",
+    "title": "Xóa tất cả thói quen?",
+    "description": "Không thể hoàn tác hành động này. Bạn có chắc chắn muốn xóa tất cả thói quen?",
     "actions": {
-      "cancel": "Há»§y bá»",
-      "deleting": "Äang xÃ³a...",
-      "delete": "XÃ³a bá»"
+      "cancel": "Hủy bỏ",
+      "deleting": "Đang xóa...",
+      "delete": "Xóa bỏ"
     }
   },
   "FeedbackSettings": {
-    "title": "Nháº­n xÃ©t",
+    "title": "Nhận xét",
     "sound": {
-      "title": "Hiá»‡u á»©ng Ã¢m thanh",
-      "description": "PhÃ¡t Ã¢m thanh khi tÆ°Æ¡ng tÃ¡c"
+      "title": "Hiệu ứng âm thanh",
+      "description": "Phát âm thanh khi tương tác"
     },
     "haptic": {
-      "title": "Pháº£n há»“i xÃºc giÃ¡c",
-      "supported": "Rung khi tÆ°Æ¡ng tÃ¡c",
-      "notSupported": "KhÃ´ng Ä‘Æ°á»£c há»— trá»£ trÃªn thiáº¿t bá»‹ nÃ y"
+      "title": "Phản hồi xúc giác",
+      "supported": "Rung khi tương tác",
+      "notSupported": "Không được hỗ trợ trên thiết bị này"
     }
   },
   "HelpSupportSettings": {
-    "title": "Trá»£ giÃºp & Há»— trá»£",
+    "title": "Trợ giúp & Hỗ trợ",
     "actions": {
-      "showWelcomeGuide": "Hiá»ƒn thá»‹ hÆ°á»›ng dáº«n chÃ o má»«ng",
-      "contactEmail": "LiÃªn há»‡ {name} qua email"
+      "showWelcomeGuide": "Hiển thị hướng dẫn chào mừng",
+      "contactEmail": "Liên hệ {name} qua email"
     }
   },
   "SettingsScreen": {
-    "title": "CÃ i Ä‘áº·t"
+    "title": "Cài đặt"
   },
   "AppDeviceSettings": {
-    "title": "á»¨ng dá»¥ng & Thiáº¿t bá»‹",
+    "title": "Ứng dụng & Thiết bị",
     "install": {
-      "nativeApp": "á»¨ng dá»¥ng gá»‘c",
-      "installed": "ÄÃ£ cÃ i Ä‘áº·t á»©ng dá»¥ng",
-      "installApp": "CÃ i Ä‘áº·t á»©ng dá»¥ng",
-      "nativeDescription": "Báº¡n Ä‘ang sá»­ dá»¥ng á»©ng dá»¥ng Android gá»‘c",
-      "installedDescription": "TGATB Ä‘Ã£ cÃ³ trÃªn thiáº¿t bá»‹ cá»§a báº¡n",
-      "addToHome": "ThÃªm vÃ o mÃ n hÃ¬nh chÃ­nh"
+      "nativeApp": "Ứng dụng gốc",
+      "installed": "Đã cài đặt ứng dụng",
+      "installApp": "Cài đặt ứng dụng",
+      "nativeDescription": "Bạn đang sử dụng ứng dụng Android gốc",
+      "installedDescription": "TGATB đã có trên thiết bị của bạn",
+      "addToHome": "Thêm vào màn hình chính"
     },
     "reminder": {
-      "title": "Nháº¯c nhá»Ÿ hÃ ng ngÃ y",
-      "timeLabel": "Thá»i gian nháº¯c nhá»Ÿ",
+      "title": "Nhắc nhở hàng ngày",
+      "timeLabel": "Thời gian nhắc nhở",
       "status": {
-        "notSupported": "ThÃ´ng bÃ¡o khÃ´ng Ä‘Æ°á»£c há»— trá»£ trong trÃ¬nh duyá»‡t nÃ y",
-        "off": "Táº¯t",
-        "denied": "Quyá»n bá»‹ tá»« chá»‘i - kiá»ƒm tra cÃ i Ä‘áº·t trÃ¬nh duyá»‡t/thiáº¿t bá»‹",
-        "set": "ÄÃ£ Ä‘áº·t lá»i nháº¯c cho {time}",
-        "setWeb": "ÄÃ£ Ä‘áº·t lá»i nháº¯c cho {time} - hoáº¡t Ä‘á»™ng tá»‘t nháº¥t khi á»©ng dá»¥ng Ä‘Æ°á»£c má»Ÿ hoáº·c Ä‘Æ°á»£c cÃ i Ä‘áº·t dÆ°á»›i dáº¡ng PWA"
+        "notSupported": "Thông báo không được hỗ trợ trong trình duyệt này",
+        "off": "Tắt",
+        "denied": "Quyền bị từ chối - kiểm tra cài đặt trình duyệt/thiết bị",
+        "set": "Đã đặt lời nhắc cho {time}",
+        "setWeb": "Đã đặt lời nhắc cho {time} - hoạt động tốt nhất khi ứng dụng được mở hoặc được cài đặt dưới dạng PWA"
       }
     },
     "permission": {
-      "title": "ThÃ´ng bÃ¡o cáº§n thiáº¿t",
-      "description": "Äá»ƒ gá»­i cho báº¡n lá»i nháº¯c hÃ ng ngÃ y, á»©ng dá»¥ng cáº§n cÃ³ quyá»n hiá»ƒn thá»‹ thÃ´ng bÃ¡o. Báº¡n cÃ³ thá»ƒ kÃ­ch hoáº¡t tÃ­nh nÄƒng nÃ y trong cÃ i Ä‘áº·t trÃ¬nh duyá»‡t hoáº·c thiáº¿t bá»‹ cá»§a mÃ¬nh.",
-      "gotIt": "Hiá»ƒu rá»“i"
+      "title": "Thông báo cần thiết",
+      "description": "Để gửi cho bạn lời nhắc hàng ngày, ứng dụng cần có quyền hiển thị thông báo. Bạn có thể kích hoạt tính năng này trong cài đặt trình duyệt hoặc thiết bị của mình.",
+      "gotIt": "Hiểu rồi"
     }
   },
   "HabitCard": {
-    "emptyTitle": "ChÆ°a cÃ³ thÃ³i quen",
-    "emptyDescription": "ThÃªm thÃ³i quen Ä‘áº§u tiÃªn cá»§a báº¡n Ä‘á»ƒ báº¯t Ä‘áº§u!",
+    "emptyTitle": "Chưa có thói quen",
+    "emptyDescription": "Thêm thói quen đầu tiên của bạn để bắt đầu!",
     "question": {
-      "pending": "Báº¡n Ä‘Ã£ lÃ m Ä‘iá»u Ä‘Ã³ pháº£i khÃ´ng?",
-      "goodPositive": "HÃ´m nay Ä‘Ã£ xong rá»“i!",
-      "badPositive": "Báº¡n Ä‘Ã£ khÃ´ng lÃ m Ä‘iá»u Ä‘Ã³ ngÃ y hÃ´m nay!",
-      "goodNegative": "Báº¡n Ä‘Ã£ khÃ´ng lÃ m Ä‘iá»u Ä‘Ã³ ngÃ y hÃ´m nay!",
-      "badNegative": "Báº¡n Ä‘Ã£ lÃ m Ä‘Æ°á»£c Ä‘iá»u Ä‘Ã³ ngÃ y hÃ´m nay!"
+      "pending": "Bạn đã làm điều đó phải không?",
+      "goodPositive": "Hôm nay đã xong rồi!",
+      "badPositive": "Bạn đã không làm điều đó ngày hôm nay!",
+      "goodNegative": "Bạn đã không làm điều đó ngày hôm nay!",
+      "badNegative": "Bạn đã làm được điều đó ngày hôm nay!"
     },
     "status": {
-      "goodCompleted": "HoÃ n thÃ nh",
-      "goodMissed": "Bá» lá»¡",
-      "badAvoided": "trÃ¡nh Ä‘Æ°á»£c",
+      "goodCompleted": "Hoàn thành",
+      "goodMissed": "Bỏ lỡ",
+      "badAvoided": "tránh được",
       "badDone": "Xong"
     },
     "type": {
-      "good": "Tá»‘t",
-      "bad": "Xáº¥u"
+      "good": "Tốt",
+      "bad": "Xấu"
     },
-    "streakDays": "{count} ngÃ y",
-    "atTime": "táº¡i {time}",
+    "streakDays": "{count} ngày",
+    "atTime": "tại {time}",
     "actions": {
-      "undo": "HoÃ n tÃ¡c"
+      "undo": "Hoàn tác"
     }
   },
   "OfflineToast": {
-    "message": "Báº¡n Ä‘ang ngoáº¡i tuyáº¿n. Má»™t sá»‘ tÃ­nh nÄƒng cÃ³ thá»ƒ bá»‹ háº¡n cháº¿."
+    "message": "Bạn đang ngoại tuyến. Một số tính năng có thể bị hạn chế."
   },
   "OfflineIndicator": {
-    "message": "Báº¡n Ä‘ang ngoáº¡i tuyáº¿n. Má»™t sá»‘ tÃ­nh nÄƒng cÃ³ thá»ƒ bá»‹ háº¡n cháº¿."
+    "message": "Bạn đang ngoại tuyến. Một số tính năng có thể bị hạn chế."
   },
   "AnalyticsNotice": {
-    "title": "Äá»ƒ Ã½",
-    "description": "ChÃºng tÃ´i sá»­ dá»¥ng Vercel Analytics Ä‘á»ƒ cáº£i thiá»‡n tráº£i nghiá»‡m cá»§a báº¡n. Dá»¯ liá»‡u sá»­ dá»¥ng áº©n danh giÃºp chÃºng tÃ´i cáº£i thiá»‡n á»©ng dá»¥ng.",
-    "gotIt": "Hiá»ƒu rá»“i"
+    "title": "Để ý",
+    "description": "Chúng tôi sử dụng Vercel Analytics để cải thiện trải nghiệm của bạn. Dữ liệu sử dụng ẩn danh giúp chúng tôi cải thiện ứng dụng.",
+    "gotIt": "Hiểu rồi"
   },
   "LoadingScreen": {
     "title": "TGATB",
-    "subtitle": "Theo dÃµi thÃ³i quen",
-    "loading": "Äang táº£i thÃ³i quen cá»§a báº¡n..."
+    "subtitle": "Theo dõi thói quen",
+    "loading": "Đang tải thói quen của bạn..."
   },
   "LoadingOverlay": {
-    "loading": "Äang táº£i..."
+    "loading": "Đang tải..."
   },
   "WelcomeOverlay": {
-    "stepCounter": "BÆ°á»›c {current} trong sá»‘ {total}",
+    "stepCounter": "Bước {current} trong số {total}",
     "steps": {
       "welcome": {
-        "title": "ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i TrÃ¬nh theo dÃµi thÃ³i quen!",
-        "description": "HÃ£y cÃ¹ng tham quan nhanh Ä‘á»ƒ giÃºp báº¡n báº¯t Ä‘áº§u theo dÃµi thÃ³i quen cá»§a mÃ¬nh má»™t cÃ¡ch hiá»‡u quáº£."
+        "title": "Chào mừng bạn đến với Trình theo dõi thói quen!",
+        "description": "Hãy cùng tham quan nhanh để giúp bạn bắt đầu theo dõi thói quen của mình một cách hiệu quả."
       },
       "navigation": {
-        "title": "Menu Ä‘iá»u hÆ°á»›ng",
-        "description": "Truy cáº­p táº¥t cáº£ thÃ³i quen cá»§a báº¡n, xem lá»‹ch sá»­ vÃ  Ä‘iá»u chá»‰nh cÃ i Ä‘áº·t tá»« menu nÃ y."
+        "title": "Menu điều hướng",
+        "description": "Truy cập tất cả thói quen của bạn, xem lịch sử và điều chỉnh cài đặt từ menu này."
       },
       "addButton": {
-        "hasHabitsTitle": "ThÃªm nhiá»u thÃ³i quen",
-        "emptyTitle": "ThÃªm thÃ³i quen Ä‘áº§u tiÃªn cá»§a báº¡n",
-        "hasHabitsDescription": "Sá»­ dá»¥ng nÃºt ná»•i nÃ y Ä‘á»ƒ thÃªm nhiá»u thÃ³i quen hÆ¡n báº¥t cá»© lÃºc nÃ o.",
-        "emptyDescription": "Nháº¥n vÃ o nÃºt nÃ y Ä‘á»ƒ táº¡o thÃ³i quen Ä‘áº§u tiÃªn cá»§a báº¡n. Báº¡n cÃ³ thá»ƒ thÃªm cáº£ nhá»¯ng thÃ³i quen tá»‘t cáº§n xÃ¢y dá»±ng vÃ  nhá»¯ng thÃ³i quen xáº¥u cáº§n bá»."
+        "hasHabitsTitle": "Thêm nhiều thói quen",
+        "emptyTitle": "Thêm thói quen đầu tiên của bạn",
+        "hasHabitsDescription": "Sử dụng nút nổi này để thêm nhiều thói quen hơn bất cứ lúc nào.",
+        "emptyDescription": "Nhấn vào nút này để tạo thói quen đầu tiên của bạn. Bạn có thể thêm cả những thói quen tốt cần xây dựng và những thói quen xấu cần bỏ."
       },
       "habitCard": {
-        "title": "Theo dÃµi tiáº¿n trÃ¬nh cá»§a báº¡n",
-        "hasHabitsDescription": "ÄÃ¢y lÃ  thÃ³i quen cá»§a báº¡n! Nháº¥n vÃ o chÃºng Ä‘á»ƒ Ä‘Ã¡nh dáº¥u lÃ  hoÃ n thÃ nh trong ngÃ y.",
-        "emptyDescription": "Khi báº¡n thÃªm thÃ³i quen, chÃºng sáº½ xuáº¥t hiá»‡n á»Ÿ Ä‘Ã¢y. Nháº¥n Ä‘á»ƒ Ä‘Ã¡nh dáº¥u chÃºng lÃ  hoÃ n thÃ nh trong ngÃ y."
+        "title": "Theo dõi tiến trình của bạn",
+        "hasHabitsDescription": "Đây là thói quen của bạn! Nhấn vào chúng để đánh dấu là hoàn thành trong ngày.",
+        "emptyDescription": "Khi bạn thêm thói quen, chúng sẽ xuất hiện ở đây. Nhấn để đánh dấu chúng là hoàn thành trong ngày."
       },
       "complete": {
-        "title": "Báº¡n Ä‘Ã£ hoÃ n táº¥t!",
-        "description": "HÃ£y báº¯t Ä‘áº§u xÃ¢y dá»±ng nhá»¯ng thÃ³i quen tá»‘t hÆ¡n ngay hÃ´m nay. HÃ£y nhá»› ráº±ng, sá»± nháº¥t quÃ¡n lÃ  chÃ¬a khÃ³a thÃ nh cÃ´ng!"
+        "title": "Bạn đã hoàn tất!",
+        "description": "Hãy bắt đầu xây dựng những thói quen tốt hơn ngay hôm nay. Hãy nhớ rằng, sự nhất quán là chìa khóa thành công!"
       }
     },
     "actions": {
-      "skip": "Nháº£y",
-      "previous": "TrÆ°á»›c",
-      "skipTour": "Bá» qua chuyáº¿n tham quan",
-      "next": "Káº¿ tiáº¿p",
-      "getStarted": "Báº¯t Ä‘áº§u",
-      "start": "Báº¯t Ä‘áº§u"
+      "skip": "Nhảy",
+      "previous": "Trước",
+      "skipTour": "Bỏ qua chuyến tham quan",
+      "next": "Kế tiếp",
+      "getStarted": "Bắt đầu",
+      "start": "Bắt đầu"
     }
   },
   "HabitManagementSettings": {
-    "title": "Quáº£n lÃ½ thÃ³i quen",
-    "deleteAll": "XÃ³a táº¥t cáº£ thÃ³i quen",
+    "title": "Quản lý thói quen",
+    "deleteAll": "Xóa tất cả thói quen",
     "toasts": {
       "deleted": {
-        "title": "ÄÃ£ xÃ³a táº¥t cáº£ thÃ³i quen",
-        "description": "Danh sÃ¡ch thÃ³i quen cá»§a báº¡n Ä‘Ã£ bá»‹ xÃ³a."
+        "title": "Đã xóa tất cả thói quen",
+        "description": "Danh sách thói quen của bạn đã bị xóa."
       },
       "failed": {
-        "title": "XÃ³a khÃ´ng thÃ nh cÃ´ng",
-        "description": "ÄÃ£ xáº£y ra lá»—i khi xÃ³a thÃ³i quen."
+        "title": "Xóa không thành công",
+        "description": "Đã xảy ra lỗi khi xóa thói quen."
       },
       "noHandler": {
-        "description": "KhÃ´ng cÃ³ trÃ¬nh xá»­ lÃ½ xÃ³a nÃ o Ä‘Æ°á»£c cung cáº¥p."
+        "description": "Không có trình xử lý xóa nào được cung cấp."
       }
     }
   },
   "StatusBarExample": {
-    "title": "Äiá»u khiá»ƒn thanh tráº¡ng thÃ¡i",
-    "label": "Thanh tráº¡ng thÃ¡i",
-    "visible": "Dá»… tháº¥y",
-    "hidden": "áº¨n giáº¥u",
-    "status": "Thanh tráº¡ng thÃ¡i: {visibility} | Chiá»u cao: {height}px",
+    "title": "Điều khiển thanh trạng thái",
+    "label": "Thanh trạng thái",
+    "visible": "Dễ thấy",
+    "hidden": "Ẩn giấu",
+    "status": "Thanh trạng thái: {visibility} | Chiều cao: {height}px",
     "actions": {
-      "show": "TrÃ¬nh diá»…n",
-      "hide": "Trá»‘n",
-      "lightStyle": "Phong cÃ¡ch nháº¹ nhÃ ng",
-      "darkStyle": "Phong cÃ¡ch tá»‘i",
-      "defaultStyle": "Kiá»ƒu máº·c Ä‘á»‹nh",
-      "redBackground": "Ná»n Ä‘á»",
-      "greenBackground": "Ná»n xanh",
-      "blueBackground": "Ná»n mÃ u xanh",
-      "resetToWhite": "Äáº·t láº¡i vá» mÃ u tráº¯ng"
+      "show": "Trình diễn",
+      "hide": "Trốn",
+      "lightStyle": "Phong cách nhẹ nhàng",
+      "darkStyle": "Phong cách tối",
+      "defaultStyle": "Kiểu mặc định",
+      "redBackground": "Nền đỏ",
+      "greenBackground": "Nền xanh",
+      "blueBackground": "Nền màu xanh",
+      "resetToWhite": "Đặt lại về màu trắng"
     }
   },
   "OfflinePage": {
     "toast": {
-      "title": "Báº¡n Ä‘ang ngoáº¡i tuyáº¿n",
-      "description": "á»¨ng dá»¥ng hoáº¡t Ä‘á»™ng ngoáº¡i tuyáº¿n. Äá»“ng bá»™ hÃ³a dá»¯ liá»‡u khi Ä‘Æ°á»£c káº¿t ná»‘i láº¡i.",
-      "retry": "Thá»­ láº¡i"
+      "title": "Bạn đang ngoại tuyến",
+      "description": "Ứng dụng hoạt động ngoại tuyến. Đồng bộ hóa dữ liệu khi được kết nối lại.",
+      "retry": "Thử lại"
     },
     "fallback": {
-      "title": "TrÃ¬nh theo dÃµi thÃ³i quen TGATB",
-      "description": "Äang táº£i thÃ³i quen cá»§a báº¡n..."
+      "title": "Trình theo dõi thói quen TGATB",
+      "description": "Đang tải thói quen của bạn..."
     }
   },
   "TermsOfServicePage": {
     "meta": {
-      "title": "Äiá»u khoáº£n dá»‹ch vá»¥ - TGATB Habit Tracker",
-      "description": "Äiá»u khoáº£n dá»‹ch vá»¥ cho Ä‘iá»u tá»‘t vÃ  Ä‘iá»u xáº¥u: TrÃ¬nh theo dÃµi thÃ³i quen"
+      "title": "Điều khoản dịch vụ - TGATB Habit Tracker",
+      "description": "Điều khoản dịch vụ cho điều tốt và điều xấu: Trình theo dõi thói quen"
     },
-    "title": "Äiá»u khoáº£n dá»‹ch vá»¥",
-    "lastUpdated": "Cáº­p nháº­t láº§n cuá»‘i: ngÃ y 13 thÃ¡ng 2 nÄƒm 2026",
+    "title": "Điều khoản dịch vụ",
+    "lastUpdated": "Cập nhật lần cuối: ngày 13 tháng 2 năm 2026",
     "sections": {
       "welcome": {
-        "title": "ChÃ o má»«ng",
-        "body": "ChÃ o má»«ng báº¡n Ä‘áº¿n vá»›i TGATB Habit Tracker (\"Tá»‘t vÃ  Xáº¥u\", \"chÃºng tÃ´i\", \"cá»§a chÃºng tÃ´i\"). Báº±ng cÃ¡ch sá»­ dá»¥ng trang web vÃ  á»©ng dá»¥ng di Ä‘á»™ng cá»§a chÃºng tÃ´i, báº¡n Ä‘á»“ng Ã½ vá»›i cÃ¡c Äiá»u khoáº£n dá»‹ch vá»¥ nÃ y."
+        "title": "Chào mừng",
+        "body": "Chào mừng bạn đến với TGATB Habit Tracker (\"Tốt và Xấu\", \"chúng tôi\", \"của chúng tôi\"). Bằng cách sử dụng trang web và ứng dụng di động của chúng tôi, bạn đồng ý với các Điều khoản dịch vụ này."
       },
       "use": {
-        "title": "Sá»­ dá»¥ng á»©ng dá»¥ng",
-        "item1": "Báº¡n pháº£i Ã­t nháº¥t 13 tuá»•i Ä‘á»ƒ sá»­ dá»¥ng á»©ng dá»¥ng.",
-        "item2": "Báº¡n Ä‘á»“ng Ã½ khÃ´ng láº¡m dá»¥ng á»©ng dá»¥ng hoáº·c cá»‘ gáº¯ng truy cáº­p á»©ng dá»¥ng theo cÃ¡ch trÃ¡i phÃ©p."
+        "title": "Sử dụng ứng dụng",
+        "item1": "Bạn phải ít nhất 13 tuổi để sử dụng ứng dụng.",
+        "item2": "Bạn đồng ý không lạm dụng ứng dụng hoặc cố gắng truy cập ứng dụng theo cách trái phép."
       },
       "userContent": {
-        "title": "Ná»™i dung ngÆ°á»i dÃ¹ng",
-        "item1": "Báº¡n chá»‹u trÃ¡ch nhiá»‡m vá» ná»™i dung báº¡n thÃªm vÃ o (thÃ³i quen, ghi chÃº, v.v.).",
-        "item2": "ChÃºng tÃ´i cÃ³ quyá»n xÃ³a ná»™i dung vi pháº¡m cÃ¡c Ä‘iá»u khoáº£n nÃ y hoáº·c luáº­t hiá»‡n hÃ nh."
+        "title": "Nội dung người dùng",
+        "item1": "Bạn chịu trách nhiệm về nội dung bạn thêm vào (thói quen, ghi chú, v.v.).",
+        "item2": "Chúng tôi có quyền xóa nội dung vi phạm các điều khoản này hoặc luật hiện hành."
       },
       "intellectualProperty": {
-        "title": "Sá»Ÿ há»¯u trÃ­ tuá»‡",
-        "item1": "Táº¥t cáº£ ná»™i dung á»©ng dá»¥ng, nhÃ£n hiá»‡u vÃ  mÃ£ Ä‘á»u thuá»™c sá»Ÿ há»¯u cá»§a chÃºng tÃ´i hoáº·c ngÆ°á»i cáº¥p phÃ©p cá»§a chÃºng tÃ´i.",
-        "item2": "Báº¡n khÃ´ng Ä‘Æ°á»£c sao chÃ©p, sá»­a Ä‘á»•i hoáº·c phÃ¢n phá»‘i ná»™i dung cá»§a chÃºng tÃ´i mÃ  khÃ´ng Ä‘Æ°á»£c phÃ©p."
+        "title": "Sở hữu trí tuệ",
+        "item1": "Tất cả nội dung ứng dụng, nhãn hiệu và mã đều thuộc sở hữu của chúng tôi hoặc người cấp phép của chúng tôi.",
+        "item2": "Bạn không được sao chép, sửa đổi hoặc phân phối nội dung của chúng tôi mà không được phép."
       },
       "thirdParty": {
-        "title": "Dá»‹ch vá»¥ cá»§a bÃªn thá»© ba",
-        "body": "á»¨ng dá»¥ng sá»­ dá»¥ng cÃ¡c dá»‹ch vá»¥ cá»§a bÃªn thá»© ba (Google Cloud, Firebase, v.v.). Viá»‡c báº¡n sá»­ dá»¥ng cÃ¡c dá»‹ch vá»¥ nÃ y pháº£i tuÃ¢n theo cÃ¡c Ä‘iá»u khoáº£n tÆ°Æ¡ng á»©ng."
+        "title": "Dịch vụ của bên thứ ba",
+        "body": "Ứng dụng sử dụng các dịch vụ của bên thứ ba (Google Cloud, Firebase, v.v.). Việc bạn sử dụng các dịch vụ này phải tuân theo các điều khoản tương ứng."
       },
       "limitation": {
-        "title": "Giá»›i háº¡n trÃ¡ch nhiá»‡m phÃ¡p lÃ½",
-        "body": "á»¨ng dá»¥ng Ä‘Æ°á»£c cung cáº¥p \"nguyÃªn tráº¡ng\" mÃ  khÃ´ng cÃ³ báº¥t ká»³ hÃ¬nh thá»©c báº£o Ä‘áº£m nÃ o. ChÃºng tÃ´i khÃ´ng chá»‹u trÃ¡ch nhiá»‡m vá» báº¥t ká»³ thiá»‡t háº¡i nÃ o phÃ¡t sinh tá»« viá»‡c báº¡n sá»­ dá»¥ng á»©ng dá»¥ng."
+        "title": "Giới hạn trách nhiệm pháp lý",
+        "body": "Ứng dụng được cung cấp \"nguyên trạng\" mà không có bất kỳ hình thức bảo đảm nào. Chúng tôi không chịu trách nhiệm về bất kỳ thiệt hại nào phát sinh từ việc bạn sử dụng ứng dụng."
       },
       "termination": {
-        "title": "Cháº¥m dá»©t",
-        "body": "ChÃºng tÃ´i cÃ³ thá»ƒ Ä‘Ã¬nh chá»‰ hoáº·c cháº¥m dá»©t quyá»n truy cáº­p cá»§a báº¡n vÃ o á»©ng dá»¥ng náº¿u vi pháº¡m cÃ¡c Ä‘iá»u khoáº£n nÃ y."
+        "title": "Chấm dứt",
+        "body": "Chúng tôi có thể đình chỉ hoặc chấm dứt quyền truy cập của bạn vào ứng dụng nếu vi phạm các điều khoản này."
       },
       "changes": {
-        "title": "Thay Ä‘á»•i Ä‘á»‘i vá»›i cÃ¡c Ä‘iá»u khoáº£n nÃ y",
-        "body": "Thá»‰nh thoáº£ng chÃºng tÃ´i cÃ³ thá»ƒ cáº­p nháº­t cÃ¡c Äiá»u khoáº£n dá»‹ch vá»¥ nÃ y. Nhá»¯ng thay Ä‘á»•i sáº½ Ä‘Æ°á»£c Ä‘Äƒng trong á»©ng dá»¥ng vÃ  trÃªn trang web cá»§a chÃºng tÃ´i."
+        "title": "Thay đổi đối với các điều khoản này",
+        "body": "Thỉnh thoảng chúng tôi có thể cập nhật các Điều khoản dịch vụ này. Những thay đổi sẽ được đăng trong ứng dụng và trên trang web của chúng tôi."
       },
       "openSource": {
-        "title": "Nguá»“n má»Ÿ",
-        "body": "TGATB Habit Tracker lÃ  nguá»“n má»Ÿ theo Giáº¥y phÃ©p Apache 2.0. Báº¡n cÃ³ thá»ƒ xem láº¡i mÃ£ nguá»“n hoÃ n chá»‰nh táº¡i:"
+        "title": "Nguồn mở",
+        "body": "TGATB Habit Tracker là nguồn mở theo Giấy phép Apache 2.0. Bạn có thể xem lại mã nguồn hoàn chỉnh tại:"
       },
       "contact": {
-        "title": "LiÃªn há»‡ vá»›i chÃºng tÃ´i",
-        "body": "Náº¿u báº¡n cÃ³ báº¥t ká»³ cÃ¢u há»i nÃ o vá» cÃ¡c Äiá»u khoáº£n dá»‹ch vá»¥ nÃ y, vui lÃ²ng liÃªn há»‡ vá»›i chÃºng tÃ´i táº¡i:"
+        "title": "Liên hệ với chúng tôi",
+        "body": "Nếu bạn có bất kỳ câu hỏi nào về các Điều khoản dịch vụ này, vui lòng liên hệ với chúng tôi tại:"
       }
     },
     "links": {
-      "privacyPolicy": "ChÃ­nh sÃ¡ch báº£o máº­t",
-      "openApp": "Má»Ÿ TrÃ¬nh theo dÃµi thÃ³i quen TGATB"
+      "privacyPolicy": "Chính sách bảo mật",
+      "openApp": "Mở Trình theo dõi thói quen TGATB"
     },
     "footer": {
-      "rightsReserved": "Má»i quyá»n Ä‘Æ°á»£c báº£o lÆ°u."
+      "rightsReserved": "Mọi quyền được bảo lưu."
     }
   },
   "PrivacyPolicyPage": {
     "meta": {
-      "title": "ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° - TGATB Habit Tracker",
-      "description": "ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° cho Ä‘iá»u tá»‘t vÃ  Ä‘iá»u xáº¥u: Theo dÃµi thÃ³i quen"
+      "title": "Chính sách quyền riêng tư - TGATB Habit Tracker",
+      "description": "Chính sách quyền riêng tư cho điều tốt và điều xấu: Theo dõi thói quen"
     },
-    "title": "ChÃ­nh sÃ¡ch báº£o máº­t",
-    "lastUpdated": "Cáº­p nháº­t láº§n cuá»‘i: ngÃ y 7 thÃ¡ng 2 nÄƒm 2026",
+    "title": "Chính sách bảo mật",
+    "lastUpdated": "Cập nhật lần cuối: ngày 7 tháng 2 năm 2026",
     "sections": {
       "overview": {
-        "title": "Tá»•ng quan",
-        "body": "TGATB Habit Tracker (\"The Good and The Bad\") lÃ  má»™t á»©ng dá»¥ng theo dÃµi thÃ³i quen tá»‘i giáº£n Ä‘Æ°á»£c phÃ¡t triá»ƒn bá»Ÿi adsurkasur. ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° nÃ y giáº£i thÃ­ch cÃ¡ch chÃºng tÃ´i xá»­ lÃ½ thÃ´ng tin cá»§a báº¡n khi báº¡n sá»­ dá»¥ng á»©ng dá»¥ng web cá»§a chÃºng tÃ´i táº¡i www.tgatb.click vÃ  á»©ng dá»¥ng di Ä‘á»™ng Android cá»§a chÃºng tÃ´i."
+        "title": "Tổng quan",
+        "body": "TGATB Habit Tracker (\"The Good and The Bad\") là một ứng dụng theo dõi thói quen tối giản được phát triển bởi adsurkasur. Chính sách quyền riêng tư này giải thích cách chúng tôi xử lý thông tin của bạn khi bạn sử dụng ứng dụng web của chúng tôi tại www.tgatb.click và ứng dụng di động Android của chúng tôi."
       },
       "informationCollected": {
-        "title": "ThÃ´ng tin chÃºng tÃ´i thu tháº­p",
+        "title": "Thông tin chúng tôi thu thập",
         "dataYouProvide": {
-          "title": "Dá»¯ liá»‡u báº¡n cung cáº¥p",
-          "habitData": "Dá»¯ liá»‡u thÃ³i quen: TÃªn, loáº¡i (tá»‘t/xáº¥u), nháº­t kÃ½ hoÃ n thÃ nh vÃ  cÃ¡c chuá»—i báº¡n táº¡o trong á»©ng dá»¥ng. Dá»¯ liá»‡u nÃ y Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™ trÃªn thiáº¿t bá»‹ cá»§a báº¡n theo máº·c Ä‘á»‹nh.",
-          "settings": "TÃ¹y chá»n cÃ i Ä‘áº·t: Cháº¿ Ä‘á»™ tá»‘i, ngÃ´n ngá»¯, tÃ­nh cÃ¡ch Ä‘á»™ng lá»±c vÃ  cÃ¡c tÃ¹y chá»n á»©ng dá»¥ng khÃ¡c Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™ trÃªn thiáº¿t bá»‹ cá»§a báº¡n.",
-          "googleAccount": "ThÃ´ng tin tÃ i khoáº£n Google (tÃ¹y chá»n): Náº¿u báº¡n chá»n Ä‘Äƒng nháº­p báº±ng Google Ä‘á»ƒ sao lÆ°u Ä‘Ã¡m mÃ¢y, chÃºng tÃ´i chá»‰ truy cáº­p vÃ o tÃªn, Ä‘á»‹a chá»‰ email vÃ  áº£nh há»“ sÆ¡ cá»§a báº¡n Ä‘á»ƒ xÃ¡c thá»±c vÃ  chá»©c nÄƒng sao lÆ°u Google Drive."
+          "title": "Dữ liệu bạn cung cấp",
+          "habitData": "Dữ liệu thói quen: Tên, loại (tốt/xấu), nhật ký hoàn thành và các chuỗi bạn tạo trong ứng dụng. Dữ liệu này được lưu trữ cục bộ trên thiết bị của bạn theo mặc định.",
+          "settings": "Tùy chọn cài đặt: Chế độ tối, ngôn ngữ, tính cách động lực và các tùy chọn ứng dụng khác được lưu trữ cục bộ trên thiết bị của bạn.",
+          "googleAccount": "Thông tin tài khoản Google (tùy chọn): Nếu bạn chọn đăng nhập bằng Google để sao lưu đám mây, chúng tôi chỉ truy cập vào tên, địa chỉ email và ảnh hồ sơ của bạn để xác thực và chức năng sao lưu Google Drive."
         },
         "dataCollectedAutomatically": {
-          "title": "Dá»¯ liá»‡u Ä‘Æ°á»£c thu tháº­p tá»± Ä‘á»™ng",
-          "analytics": "Dá»¯ liá»‡u phÃ¢n tÃ­ch (cÃ³ sá»± Ä‘á»“ng Ã½): ChÃºng tÃ´i sá»­ dá»¥ng Vercel Analytics vÃ  Firebase Analytics Ä‘á»ƒ thu tháº­p sá»‘ liá»‡u thá»‘ng kÃª sá»­ dá»¥ng áº©n danh nhÆ° lÆ°á»£t xem trang, loáº¡i thiáº¿t bá»‹ vÃ  kiá»ƒu tÆ°Æ¡ng tÃ¡c chung. PhÃ¢n tÃ­ch chá»‰ Ä‘Æ°á»£c khá»Ÿi táº¡o sau khi báº¡n Ä‘á»“ng Ã½.",
-          "errorTracking": "Theo dÃµi lá»—i (tÃ¹y chá»n): Náº¿u Ä‘Æ°á»£c báº­t, Sentry sáº½ thu tháº­p cÃ¡c bÃ¡o cÃ¡o sá»± cá»‘ vÃ  nháº­t kÃ½ lá»—i Ä‘á»ƒ giÃºp chÃºng tÃ´i cáº£i thiá»‡n Ä‘á»™ á»•n Ä‘á»‹nh cá»§a á»©ng dá»¥ng. Äiá»u nÃ y chá»‰ hoáº¡t Ä‘á»™ng khi cÃ³ sá»± Ä‘á»“ng Ã½ phÃ¢n tÃ­ch vÃ  Sentry DSN Ä‘Æ°á»£c Ä‘á»‹nh cáº¥u hÃ¬nh."
+          "title": "Dữ liệu được thu thập tự động",
+          "analytics": "Dữ liệu phân tích (có sự đồng ý): Chúng tôi sử dụng Vercel Analytics và Firebase Analytics để thu thập số liệu thống kê sử dụng ẩn danh như lượt xem trang, loại thiết bị và kiểu tương tác chung. Phân tích chỉ được khởi tạo sau khi bạn đồng ý.",
+          "errorTracking": "Theo dõi lỗi (tùy chọn): Nếu được bật, Sentry sẽ thu thập các báo cáo sự cố và nhật ký lỗi để giúp chúng tôi cải thiện độ ổn định của ứng dụng. Điều này chỉ hoạt động khi có sự đồng ý phân tích và Sentry DSN được định cấu hình."
         },
         "dataNotCollected": {
-          "title": "Dá»¯ liá»‡u chÃºng tÃ´i KHÃ”NG thu tháº­p",
-          "noPayments": "ChÃºng tÃ´i khÃ´ng thu tháº­p thÃ´ng tin thanh toÃ¡n",
-          "noLocation": "ChÃºng tÃ´i khÃ´ng thu tháº­p dá»¯ liá»‡u vá»‹ trÃ­",
-          "noContacts": "ChÃºng tÃ´i khÃ´ng thu tháº­p danh báº¡ hoáº·c dá»¯ liá»‡u Ä‘iá»‡n thoáº¡i",
-          "noAds": "ChÃºng tÃ´i khÃ´ng phá»¥c vá»¥ quáº£ng cÃ¡o hoáº·c thu tháº­p dá»¯ liá»‡u liÃªn quan Ä‘áº¿n quáº£ng cÃ¡o",
-          "noSelling": "ChÃºng tÃ´i khÃ´ng bÃ¡n dá»¯ liá»‡u cá»§a báº¡n cho bÃªn thá»© ba"
+          "title": "Dữ liệu chúng tôi KHÔNG thu thập",
+          "noPayments": "Chúng tôi không thu thập thông tin thanh toán",
+          "noLocation": "Chúng tôi không thu thập dữ liệu vị trí",
+          "noContacts": "Chúng tôi không thu thập danh bạ hoặc dữ liệu điện thoại",
+          "noAds": "Chúng tôi không phục vụ quảng cáo hoặc thu thập dữ liệu liên quan đến quảng cáo",
+          "noSelling": "Chúng tôi không bán dữ liệu của bạn cho bên thứ ba"
         }
       },
       "dataStorage": {
-        "title": "Dá»¯ liá»‡u cá»§a báº¡n Ä‘Æ°á»£c lÆ°u trá»¯ nhÆ° tháº¿ nÃ o",
-        "local": "Bá»™ nhá»› cá»¥c bá»™ (máº·c Ä‘á»‹nh): Táº¥t cáº£ dá»¯ liá»‡u vÃ  cÃ i Ä‘áº·t thÃ³i quen Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™ trÃªn thiáº¿t bá»‹ cá»§a báº¡n báº±ng trÃ¬nh duyá»‡t localStorage (web) hoáº·c TÃ¹y chá»n tá»¥ Ä‘iá»‡n (Android). KhÃ´ng cÃ³ dá»¯ liá»‡u nÃ o rá»i khá»i thiáº¿t bá»‹ cá»§a báº¡n trá»« khi báº¡n báº­t sao lÆ°u Ä‘Ã¡m mÃ¢y má»™t cÃ¡ch rÃµ rÃ ng.",
-        "cloudBackup": "Sao lÆ°u Ä‘Ã¡m mÃ¢y (tÃ¹y chá»n): Náº¿u Ä‘Äƒng nháº­p báº±ng Google, báº¡n cÃ³ thá»ƒ chá»n sao lÆ°u dá»¯ liá»‡u cá»§a mÃ¬nh vÃ o Google Drive cá»§a riÃªng báº¡n. Dá»¯ liá»‡u cá»§a báº¡n Ä‘Æ°á»£c lÆ°u trá»¯ dÆ°á»›i dáº¡ng tá»‡p trong Google Drive cÃ¡ nhÃ¢n cá»§a báº¡n â€“ chÃºng tÃ´i khÃ´ng cÃ³ quyá»n truy cáº­p vÃ o cÃ¡c tá»‡p Google Drive cá»§a báº¡n."
+        "title": "Dữ liệu của bạn được lưu trữ như thế nào",
+        "local": "Bộ nhớ cục bộ (mặc định): Tất cả dữ liệu và cài đặt thói quen được lưu trữ cục bộ trên thiết bị của bạn bằng trình duyệt localStorage (web) hoặc Tùy chọn tụ điện (Android). Không có dữ liệu nào rời khỏi thiết bị của bạn trừ khi bạn bật sao lưu đám mây một cách rõ ràng.",
+        "cloudBackup": "Sao lưu đám mây (tùy chọn): Nếu đăng nhập bằng Google, bạn có thể chọn sao lưu dữ liệu của mình vào Google Drive của riêng bạn. Dữ liệu của bạn được lưu trữ dưới dạng tệp trong Google Drive cá nhân của bạn - chúng tôi không có quyền truy cập vào các tệp Google Drive của bạn."
       },
       "thirdPartyServices": {
-        "title": "Dá»‹ch vá»¥ cá»§a bÃªn thá»© ba",
-        "intro": "ChÃºng tÃ´i sá»­ dá»¥ng cÃ¡c dá»‹ch vá»¥ cá»§a bÃªn thá»© ba sau:",
-        "firebase": "XÃ¡c thá»±c Firebase: Äá»ƒ Ä‘Äƒng nháº­p báº±ng Google. ÄÆ°á»£c Ä‘iá»u chá»‰nh bá»Ÿi ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° cá»§a Google.",
-        "firebaseAnalytics": "PhÃ¢n tÃ­ch Firebase: Äá»ƒ thá»‘ng kÃª viá»‡c sá»­ dá»¥ng áº©n danh (cáº§n cÃ³ sá»± Ä‘á»“ng Ã½).",
-        "vercelAnalytics": "Vercel Analytics: DÃ nh cho phÃ¢n tÃ­ch trang web áº©n danh (cáº§n cÃ³ sá»± Ä‘á»“ng Ã½).",
-        "googleDrive": "API Google Drive: Äá»ƒ sao lÆ°u Ä‘Ã¡m mÃ¢y tÃ¹y chá»n, chá»‰ truy cáº­p cÃ¡c tá»‡p do á»©ng dá»¥ng cá»§a riÃªng báº¡n táº¡o.",
-        "sentry": "Sentry (tÃ¹y chá»n): Äá»ƒ bÃ¡o cÃ¡o lá»—i vÃ  sá»± cá»‘ khi Ä‘Æ°á»£c báº­t."
+        "title": "Dịch vụ của bên thứ ba",
+        "intro": "Chúng tôi sử dụng các dịch vụ của bên thứ ba sau:",
+        "firebase": "Xác thực Firebase: Để đăng nhập bằng Google. Được điều chỉnh bởi Chính sách quyền riêng tư của Google.",
+        "firebaseAnalytics": "Phân tích Firebase: Để thống kê việc sử dụng ẩn danh (cần có sự đồng ý).",
+        "vercelAnalytics": "Vercel Analytics: Dành cho phân tích trang web ẩn danh (cần có sự đồng ý).",
+        "googleDrive": "API Google Drive: Để sao lưu đám mây tùy chọn, chỉ truy cập các tệp do ứng dụng của riêng bạn tạo.",
+        "sentry": "Sentry (tùy chọn): Để báo cáo lỗi và sự cố khi được bật."
       },
       "rightsControls": {
-        "title": "Quyá»n vÃ  quyá»n kiá»ƒm soÃ¡t cá»§a báº¡n",
-        "analyticsConsent": "Sá»± Ä‘á»“ng Ã½ cá»§a phÃ¢n tÃ­ch: Báº¡n cÃ³ thá»ƒ báº­t hoáº·c táº¯t phÃ¢n tÃ­ch báº¥t ká»³ lÃºc nÃ o trong cÃ i Ä‘áº·t á»©ng dá»¥ng.",
-        "dataDeletion": "XÃ³a dá»¯ liá»‡u: Báº¡n cÃ³ thá»ƒ xÃ³a táº¥t cáº£ dá»¯ liá»‡u thÃ³i quen cá»§a mÃ¬nh khá»i cÃ i Ä‘áº·t á»©ng dá»¥ng (\"XÃ³a táº¥t cáº£ thÃ³i quen\"). VÃ¬ dá»¯ liá»‡u Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™ nÃªn viá»‡c xÃ³a dá»¯ liá»‡u trÃ¬nh duyá»‡t cá»§a báº¡n hoáº·c gá»¡ cÃ i Ä‘áº·t á»©ng dá»¥ng cÅ©ng sáº½ xÃ³a táº¥t cáº£ dá»¯ liá»‡u.",
-        "cloudBackupControl": "Kiá»ƒm soÃ¡t sao lÆ°u Ä‘Ã¡m mÃ¢y: Báº¡n cÃ³ thá»ƒ Ä‘Äƒng xuáº¥t báº¥t cá»© lÃºc nÃ o Ä‘á»ƒ dá»«ng sao lÆ°u Ä‘Ã¡m mÃ¢y. CÃ¡c tá»‡p sao lÆ°u Google Drive cá»§a báº¡n cÃ³ thá»ƒ Ä‘Æ°á»£c quáº£n lÃ½ trá»±c tiáº¿p tá»« Google Drive.",
-        "dataExport": "Xuáº¥t dá»¯ liá»‡u: Báº¡n cÃ³ thá»ƒ xuáº¥t dá»¯ liá»‡u cá»§a mÃ¬nh dÆ°á»›i dáº¡ng tá»‡p JSON tá»« cÃ i Ä‘áº·t á»©ng dá»¥ng báº¥t cá»© lÃºc nÃ o."
+        "title": "Quyền và quyền kiểm soát của bạn",
+        "analyticsConsent": "Sự đồng ý của phân tích: Bạn có thể bật hoặc tắt phân tích bất kỳ lúc nào trong cài đặt ứng dụng.",
+        "dataDeletion": "Xóa dữ liệu: Bạn có thể xóa tất cả dữ liệu thói quen của mình khỏi cài đặt ứng dụng (\"Xóa tất cả thói quen\"). Vì dữ liệu được lưu trữ cục bộ nên việc xóa dữ liệu trình duyệt của bạn hoặc gỡ cài đặt ứng dụng cũng sẽ xóa tất cả dữ liệu.",
+        "cloudBackupControl": "Kiểm soát sao lưu đám mây: Bạn có thể đăng xuất bất cứ lúc nào để dừng sao lưu đám mây. Các tệp sao lưu Google Drive của bạn có thể được quản lý trực tiếp từ Google Drive.",
+        "dataExport": "Xuất dữ liệu: Bạn có thể xuất dữ liệu của mình dưới dạng tệp JSON từ cài đặt ứng dụng bất kỳ lúc nào."
       },
       "deleteData": {
-        "title": "XÃ³a dá»¯ liá»‡u cá»§a báº¡n",
-        "intro": "TGATB Habit Tracker lÆ°u trá»¯ dá»¯ liá»‡u thÃ³i quen cá»§a báº¡n cá»¥c bá»™ trÃªn thiáº¿t bá»‹ cá»§a báº¡n. Báº¡n cÃ³ thá»ƒ xÃ³a táº¥t cáº£ dá»¯ liá»‡u cá»§a mÃ¬nh báº¥t ká»³ lÃºc nÃ o mÃ  khÃ´ng cáº§n xÃ³a tÃ i khoáº£n cá»§a mÃ¬nh:",
-        "steps": "1. Má»Ÿ á»©ng dá»¥ng\n2. Nháº¥n vÃ o biá»ƒu tÆ°á»£ng menu (menu hamburger) á»Ÿ gÃ³c trÃªn bÃªn trÃ¡i\n3. Cuá»™n xuá»‘ng Quáº£n lÃ½ thÃ³i quen\n4. Nháº¥n vÃ o \"XÃ³a táº¥t cáº£ thÃ³i quen\"\n5. XÃ¡c nháº­n xÃ³a khi Ä‘Æ°á»£c nháº¯c",
-        "willDelete": "Äiá»u nÃ y sáº½ xÃ³a vÄ©nh viá»…n:",
-        "willDeleteItems": "Táº¥t cáº£ thÃ³i quen cá»§a báº¡n vÃ  tÃªn cá»§a chÃºng, Táº¥t cáº£ nháº­t kÃ½ hoÃ n thÃ nh vÃ  dá»¯ liá»‡u chuá»—i, Táº¥t cáº£ há»“ sÆ¡ lá»‹ch sá»­",
-        "willNotDelete": "Äiá»u nÃ y sáº½ KHÃ”NG xÃ³a:",
-        "willNotDeleteItems": "CÃ i Ä‘áº·t á»©ng dá»¥ng cá»§a báº¡n (cháº¿ Ä‘á»™ tá»‘i, ngÃ´n ngá»¯, v.v.) â€” nhá»¯ng cÃ i Ä‘áº·t nÃ y sáº½ Ä‘Æ°á»£c Ä‘áº·t láº¡i khi báº¡n xÃ³a dá»¯ liá»‡u á»©ng dá»¥ng hoáº·c gá»¡ cÃ i Ä‘áº·t. Má»i tá»‡p sao lÆ°u trÆ°á»›c Ä‘Ã³ Ä‘Ã£ lÆ°u vÃ o Google Drive cá»§a báº¡n â€” báº¡n cÃ³ thá»ƒ xÃ³a nhá»¯ng cÃ i Ä‘áº·t Ä‘Ã³ trá»±c tiáº¿p khá»i Google Drive cá»§a mÃ¬nh",
-        "alternative": "NgoÃ i ra, báº¡n cÃ³ thá»ƒ gá»¡ cÃ i Ä‘áº·t á»©ng dá»¥ng hoáº·c xÃ³a dá»¯ liá»‡u á»©ng dá»¥ng khá»i cÃ i Ä‘áº·t thiáº¿t bá»‹ cá»§a mÃ¬nh Ä‘á»ƒ xÃ³a táº¥t cáº£ thÃ´ng tin Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™."
+        "title": "Xóa dữ liệu của bạn",
+        "intro": "TGATB Habit Tracker lưu trữ dữ liệu thói quen của bạn cục bộ trên thiết bị của bạn. Bạn có thể xóa tất cả dữ liệu của mình bất kỳ lúc nào mà không cần xóa tài khoản của mình:",
+        "steps": "1. Mở ứng dụng\n2. Nhấn vào biểu tượng menu (menu hamburger) ở góc trên bên trái\n3. Cuộn xuống Quản lý thói quen\n4. Nhấn vào \"Xóa tất cả thói quen\"\n5. Xác nhận xóa khi được nhắc",
+        "willDelete": "Điều này sẽ xóa vĩnh viễn:",
+        "willDeleteItems": "Tất cả thói quen của bạn và tên của chúng, Tất cả nhật ký hoàn thành và dữ liệu chuỗi, Tất cả hồ sơ lịch sử",
+        "willNotDelete": "Điều này sẽ KHÔNG xóa:",
+        "willNotDeleteItems": "Cài đặt ứng dụng của bạn (chế độ tối, ngôn ngữ, v.v.) - những cài đặt này sẽ được đặt lại khi bạn xóa dữ liệu ứng dụng hoặc gỡ cài đặt. Mọi tệp sao lưu trước đó đã lưu vào Google Drive của bạn - bạn có thể xóa những tệp đó trực tiếp khỏi Google Drive của mình",
+        "alternative": "Ngoài ra, bạn có thể gỡ cài đặt ứng dụng hoặc xóa dữ liệu ứng dụng khỏi cài đặt thiết bị của mình để xóa tất cả thông tin được lưu trữ cục bộ."
       },
       "deleteAccount": {
-        "title": "XÃ³a tÃ i khoáº£n cá»§a báº¡n",
-        "intro": "Náº¿u báº¡n Ä‘Ã£ Ä‘Äƒng nháº­p báº±ng Google vÃ  muá»‘n xÃ³a hoÃ n toÃ n tÃ i khoáº£n cá»§a mÃ¬nh cÅ©ng nhÆ° táº¥t cáº£ dá»¯ liá»‡u liÃªn quan, hÃ£y lÃ m theo cÃ¡c bÆ°á»›c sau:",
-        "appSteps": "1. Má»Ÿ á»©ng dá»¥ng\n2. Nháº¥n vÃ o biá»ƒu tÆ°á»£ng menu (menu hamburger) á»Ÿ gÃ³c trÃªn bÃªn trÃ¡i\n3. Cuá»™n xuá»‘ng Quáº£n lÃ½ thÃ³i quen vÃ  nháº¥n \"XÃ³a táº¥t cáº£ thÃ³i quen\" Ä‘á»ƒ xÃ³a dá»¯ liá»‡u cá»§a báº¡n\n4. Di chuyá»ƒn Ä‘áº¿n TÃ i khoáº£n & Dá»¯ liá»‡u vÃ  nháº¥n \"ÄÄƒng xuáº¥t\" Ä‘á»ƒ Ä‘Äƒng xuáº¥t\n5. Gá»¡ cÃ i Ä‘áº·t á»©ng dá»¥ng Ä‘á»ƒ xÃ³a táº¥t cáº£ dá»¯ liá»‡u cá»¥c bá»™ cÃ²n láº¡i",
-        "googleDriveSteps": "Äá»ƒ xÃ³a tá»‡p sao lÆ°u Google Drive cá»§a báº¡n:\n1. Truy cáº­p Google Drive\n2. TÃ¬m kiáº¿m \"tgatb\" hoáº·c \"habit\" Ä‘á»ƒ tÃ¬m file sao lÆ°u\n3. XÃ³a cÃ¡c táº­p tin sao lÆ°u",
-        "revokeSteps": "Äá»ƒ thu há»“i quyá»n truy cáº­p cá»§a á»©ng dá»¥ng vÃ o tÃ i khoáº£n Google cá»§a báº¡n:\n1. Äi tá»›i Quyá»n cá»§a TÃ i khoáº£n Google\n2. TÃ¬m \"TGATB Habit Tracker\" trong danh sÃ¡ch\n3. Nháº¥p vÃ o \"XÃ³a quyá»n truy cáº­p\"",
-        "completion": "Sau khi hoÃ n thÃ nh cÃ¡c bÆ°á»›c nÃ y, táº¥t cáº£ quyá»n truy cáº­p dá»¯ liá»‡u vÃ  tÃ i khoáº£n cá»§a báº¡n sáº½ bá»‹ xÃ³a hoÃ n toÃ n. Náº¿u báº¡n cáº§n há»— trá»£, hÃ£y liÃªn há»‡ vá»›i chÃºng tÃ´i táº¡i adsurkasur.dev@gmail.com."
+        "title": "Xóa tài khoản của bạn",
+        "intro": "Nếu bạn đã đăng nhập bằng Google và muốn xóa hoàn toàn tài khoản của mình cũng như tất cả dữ liệu liên quan, hãy làm theo các bước sau:",
+        "appSteps": "1. Mở ứng dụng\n2. Nhấn vào biểu tượng menu (menu hamburger) ở góc trên bên trái\n3. Cuộn xuống Quản lý thói quen và nhấn \"Xóa tất cả thói quen\" để xóa dữ liệu của bạn\n4. Di chuyển đến Tài khoản & Dữ liệu và nhấn \"Đăng xuất\" để đăng xuất\n5. Gỡ cài đặt ứng dụng để xóa tất cả dữ liệu cục bộ còn lại",
+        "googleDriveSteps": "Để xóa tệp sao lưu Google Drive của bạn:\n1. Truy cập Google Drive\n2. Tìm kiếm \"tgatb\" hoặc \"habit\" để tìm file sao lưu\n3. Xóa các tập tin sao lưu",
+        "revokeSteps": "Để thu hồi quyền truy cập của ứng dụng vào tài khoản Google của bạn:\n1. Đi tới Quyền của Tài khoản Google\n2. Tìm \"TGATB Habit Tracker\" trong danh sách\n3. Nhấp vào \"Xóa quyền truy cập\"",
+        "completion": "Sau khi hoàn thành các bước này, tất cả quyền truy cập dữ liệu và tài khoản của bạn sẽ bị xóa hoàn toàn. Nếu bạn cần hỗ trợ, hãy liên hệ với chúng tôi tại adsurkasur.dev@gmail.com."
       },
       "dataSecurity": {
-        "title": "Báº£o máº­t dá»¯ liá»‡u",
-        "body": "ChÃºng tÃ´i thá»±c hiá»‡n cÃ¡c biá»‡n phÃ¡p báº£o máº­t há»£p lÃ½ Ä‘á»ƒ báº£o vá»‡ dá»¯ liá»‡u cá»§a báº¡n. Dá»¯ liá»‡u thÃ³i quen cá»§a báº¡n Ä‘Æ°á»£c lÆ°u trá»¯ cá»¥c bá»™ trÃªn thiáº¿t bá»‹ cá»§a báº¡n vÃ  khÃ´ng Ä‘Æ°á»£c truyá»n Ä‘áº¿n mÃ¡y chá»§ cá»§a chÃºng tÃ´i. Dá»¯ liá»‡u sao lÆ°u Ä‘Ã¡m mÃ¢y Ä‘Æ°á»£c lÆ°u trá»¯ trong Google Drive cÃ¡ nhÃ¢n cá»§a báº¡n báº±ng cÆ¡ sá»Ÿ háº¡ táº§ng báº£o máº­t cá»§a Google. Tuy nhiÃªn, khÃ´ng cÃ³ phÆ°Æ¡ng phÃ¡p lÆ°u trá»¯ Ä‘iá»‡n tá»­ nÃ o an toÃ n 100%."
+        "title": "Bảo mật dữ liệu",
+        "body": "Chúng tôi thực hiện các biện pháp bảo mật hợp lý để bảo vệ dữ liệu của bạn. Dữ liệu thói quen của bạn được lưu trữ cục bộ trên thiết bị của bạn và không được truyền đến máy chủ của chúng tôi. Dữ liệu sao lưu đám mây được lưu trữ trong Google Drive cá nhân của bạn bằng cơ sở hạ tầng bảo mật của Google. Tuy nhiên, không có phương pháp lưu trữ điện tử nào an toàn 100%."
       },
       "childrenPrivacy": {
-        "title": "Quyá»n riÃªng tÆ° cá»§a tráº» em",
-        "body": "á»¨ng dá»¥ng cá»§a chÃºng tÃ´i khÃ´ng hÆ°á»›ng tá»›i tráº» em dÆ°á»›i 13 tuá»•i. ChÃºng tÃ´i khÃ´ng cá»‘ Ã½ thu tháº­p thÃ´ng tin cÃ¡ nhÃ¢n tá»« tráº» em dÆ°á»›i 13 tuá»•i. Náº¿u báº¡n lÃ  cha máº¹ hoáº·c ngÆ°á»i giÃ¡m há»™ vÃ  tin ráº±ng con báº¡n Ä‘Ã£ cung cáº¥p thÃ´ng tin cÃ¡ nhÃ¢n cho chÃºng tÃ´i, vui lÃ²ng liÃªn há»‡ vá»›i chÃºng tÃ´i."
+        "title": "Quyền riêng tư của trẻ em",
+        "body": "Ứng dụng của chúng tôi không hướng tới trẻ em dưới 13 tuổi. Chúng tôi không cố ý thu thập thông tin cá nhân từ trẻ em dưới 13 tuổi. Nếu bạn là cha mẹ hoặc người giám hộ và tin rằng con bạn đã cung cấp thông tin cá nhân cho chúng tôi, vui lòng liên hệ với chúng tôi."
       },
       "policyChanges": {
-        "title": "Nhá»¯ng thay Ä‘á»•i Ä‘á»‘i vá»›i ChÃ­nh sÃ¡ch nÃ y",
-        "body": "Thá»‰nh thoáº£ng chÃºng tÃ´i cÃ³ thá»ƒ cáº­p nháº­t ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° nÃ y. Má»i thay Ä‘á»•i sáº½ Ä‘Æ°á»£c pháº£n Ã¡nh báº±ng cÃ¡ch cáº­p nháº­t ngÃ y \"Cáº­p nháº­t láº§n cuá»‘i\" á»Ÿ Ä‘áº§u trang nÃ y. ChÃºng tÃ´i khuyáº¿n khÃ­ch báº¡n xem láº¡i chÃ­nh sÃ¡ch nÃ y Ä‘á»‹nh ká»³."
+        "title": "Những thay đổi đối với Chính sách này",
+        "body": "Thỉnh thoảng chúng tôi có thể cập nhật Chính sách quyền riêng tư này. Mọi thay đổi sẽ được phản ánh bằng cách cập nhật ngày \"Cập nhật lần cuối\" ở đầu trang này. Chúng tôi khuyến khích bạn xem lại chính sách này định kỳ."
       },
       "contactUs": {
-        "title": "LiÃªn há»‡ vá»›i chÃºng tÃ´i",
-        "body": "Náº¿u báº¡n cÃ³ báº¥t ká»³ cÃ¢u há»i nÃ o vá» ChÃ­nh sÃ¡ch quyá»n riÃªng tÆ° nÃ y hoáº·c cÃ¡ch xá»­ lÃ½ dá»¯ liá»‡u cá»§a chÃºng tÃ´i, vui lÃ²ng liÃªn há»‡ vá»›i chÃºng tÃ´i táº¡i: adsurkasur.dev@gmail.com"
+        "title": "Liên hệ với chúng tôi",
+        "body": "Nếu bạn có bất kỳ câu hỏi nào về Chính sách quyền riêng tư này hoặc cách xử lý dữ liệu của chúng tôi, vui lòng liên hệ với chúng tôi tại: adsurkasur.dev@gmail.com"
       },
       "openSource": {
-        "title": "Nguá»“n má»Ÿ",
+        "title": "Nguồn mở",
         "body": "TGATB Habit Tracker is open source under the Apache 2.0 License. You can review the complete source code at: github.com/adsurkasur/tgatb-habit-tracker"
       }
     },
     "links": {
-      "termsOfService": "Äiá»u khoáº£n dá»‹ch vá»¥",
-      "openApp": "Má»Ÿ TrÃ¬nh theo dÃµi thÃ³i quen TGATB"
+      "termsOfService": "Điều khoản dịch vụ",
+      "openApp": "Mở Trình theo dõi thói quen TGATB"
     },
     "footer": {
-      "copyright": "Â© 2025-2026 adsurkasur. Má»i quyá»n Ä‘Æ°á»£c báº£o lÆ°u."
+      "copyright": "© 2025-2026 adsurkasur. Mọi quyền được bảo lưu."
     }
   }
 }
-
