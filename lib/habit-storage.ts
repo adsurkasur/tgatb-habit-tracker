@@ -34,6 +34,49 @@ function logsKey(): string { return scopedKey("habit_logs"); }
 function settingsKey(): string { return scopedKey("user_settings"); }
 
 export class HabitStorage {
+  static getLastExpectedCheck(habitId: string, referenceDate: Date = new Date()): { date: string; log?: HabitLog } | null {
+    const habit = this.getHabitById(habitId);
+    if (!habit) return null;
+
+    const endDate = new Date(referenceDate);
+    endDate.setHours(0, 0, 0, 0);
+
+    const habitLogs = this.getLogs().filter(log => log.habitId === habitId);
+
+    const anchorCandidates: Date[] = [];
+    const createdAnchor = new Date(habit.createdAt);
+    createdAnchor.setHours(0, 0, 0, 0);
+    anchorCandidates.push(createdAnchor);
+
+    if (habit.intervalStartDate) {
+      const intervalAnchor = new Date(habit.intervalStartDate);
+      intervalAnchor.setHours(0, 0, 0, 0);
+      anchorCandidates.push(intervalAnchor);
+    }
+
+    if (habitLogs.length > 0) {
+      const earliestLogDate = habitLogs
+        .map(log => new Date(log.date + "T00:00:00"))
+        .sort((a, b) => a.getTime() - b.getTime())[0];
+      earliestLogDate.setHours(0, 0, 0, 0);
+      anchorCandidates.push(earliestLogDate);
+    }
+
+    const startDate = new Date(Math.min(...anchorCandidates.map(d => d.getTime())));
+
+    if (endDate < startDate) return null;
+
+    const logsByDate = new Map(habitLogs.map(log => [log.date, log] as const));
+
+    for (let cursor = new Date(endDate); cursor >= startDate; cursor.setDate(cursor.getDate() - 1)) {
+      if (!isExpectedDate(habit, cursor)) continue;
+      const dateKey = formatLocalDate(cursor);
+      return { date: dateKey, log: logsByDate.get(dateKey) };
+    }
+
+    return null;
+  }
+
   static clearAllHabits(): void {
     localStorage.removeItem(habitsKey());
     localStorage.removeItem(logsKey());

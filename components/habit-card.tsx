@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Check, X, Flame, RotateCcw, CheckCircle, Clock3, XCircle } from "lucide-react";
+import { Check, X, Flame, RotateCcw, CheckCircle, XCircle } from "lucide-react";
 import { Habit, HabitLog } from "@shared/schema";
 import { useEffect, useState, memo } from "react";
 import { useTranslations } from "next-intl";
@@ -16,6 +16,8 @@ interface HabitCardProps {
   /** navigationEvent triggers slide animation once per sequence increment. */
   navigationEvent?: { dir: 'left' | 'right'; seq: number } | null;
   todayLog?: HabitLog; // Log for today to determine positive/negative
+  lastExpectedLog?: HabitLog; // Last expected-date log (may be undefined if missed)
+  lastExpectedDate?: string; // Last expected-date key (YYYY-MM-DD)
 }
 
 function HabitCardComponent({ 
@@ -25,7 +27,9 @@ function HabitCardComponent({
   isCompletedToday = false,
   completedAt,
   navigationEvent = null,
-  todayLog
+  todayLog,
+  lastExpectedLog,
+  lastExpectedDate
 }: HabitCardProps) {
   const t = useTranslations("HabitCard");
   const animationClass = useSlideAnimation(habit?.id, navigationEvent);
@@ -35,11 +39,6 @@ function HabitCardComponent({
     return () => clearTimeout(t);
   }, []);
   const isPositiveAction = todayLog ? (habit.type === "good" ? todayLog.completed : !todayLog.completed) : false;
-  // Debug: log animation state changes in dev mode (via effect to avoid render side effects)
-  useEffect(() => {
-    if (!navigationEvent || process.env.NODE_ENV === 'production') return;
-    console.debug('[HabitCard] Animation applied', habit?.id, navigationEvent, 'anim:', animationClass, 'initial:', initialApplied);
-  }, [navigationEvent, habit?.id, animationClass, initialApplied]);
   if (!habit) {
     return (
       <div className="w-full max-w-md mx-auto">
@@ -59,6 +58,8 @@ function HabitCardComponent({
       isCompletedToday={isCompletedToday}
       completedAt={completedAt}
       isPositiveAction={isPositiveAction}
+      lastExpectedLog={lastExpectedLog}
+      lastExpectedDate={lastExpectedDate}
       onTrack={onTrack}
       onUndo={onUndo}
       t={t}
@@ -76,6 +77,8 @@ function areEqual(prevProps: HabitCardProps, nextProps: HabitCardProps) {
     prevProps.onTrack === nextProps.onTrack &&
     prevProps.onUndo === nextProps.onUndo &&
     JSON.stringify(prevProps.todayLog) === JSON.stringify(nextProps.todayLog) &&
+    JSON.stringify(prevProps.lastExpectedLog) === JSON.stringify(nextProps.lastExpectedLog) &&
+    prevProps.lastExpectedDate === nextProps.lastExpectedDate &&
     ((prevProps.navigationEvent && nextProps.navigationEvent && prevProps.navigationEvent.seq === nextProps.navigationEvent.seq) ||
       (!prevProps.navigationEvent && !nextProps.navigationEvent))
   );
@@ -83,12 +86,14 @@ function areEqual(prevProps: HabitCardProps, nextProps: HabitCardProps) {
 
 export const HabitCard = memo(HabitCardComponent, areEqual);
 
-function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, onTrack, onUndo, t }: {
+function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt, isPositiveAction, lastExpectedLog, lastExpectedDate, onTrack, onUndo, t }: {
   habit: Habit;
   animationClass: string;
   isCompletedToday: boolean;
   completedAt?: Date;
   isPositiveAction: boolean;
+  lastExpectedLog?: HabitLog;
+  lastExpectedDate?: string;
   onTrack: (completed: boolean) => void;
   onUndo?: () => void;
   t: (key: string, values?: Record<string, string | number | Date>) => string;
@@ -98,52 +103,70 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   today.setHours(0, 0, 0, 0);
   const isTodayExpected = isExpectedDate(habit, today);
 
-  const createdDay = new Date(habit.createdAt);
-  createdDay.setHours(0, 0, 0, 0);
-
-  const hasReachedFirstExpectedDay = (() => {
-    if (isTodayExpected) return true;
-    const cursor = new Date(createdDay);
-    while (cursor <= today) {
-      if (isExpectedDate(habit, cursor)) {
-        return true;
-      }
-      cursor.setDate(cursor.getDate() + 1);
-    }
-    return false;
-  })();
+  const hasReachedFirstExpectedDay = isTodayExpected || Boolean(lastExpectedDate);
   
   // An off-day is when today is NOT expected in the schedule
   const isOffDay = !isTodayExpected;
   const isNotYet = isOffDay && !hasReachedFirstExpectedDay;
   const isOngoingOffDay = isOffDay && hasReachedFirstExpectedDay;
+  const hasLastExpectedLog = Boolean(lastExpectedLog);
+  const isLastExpectedPositiveAction = lastExpectedLog
+    ? (habit.type === 'good' ? lastExpectedLog.completed : !lastExpectedLog.completed)
+    : false;
+
+  // Off-day result follows the last expected check outcome.
+  // If the last expected day has no log, treat it as negative (missed check).
+  const offDayShowsPositive = isOngoingOffDay && hasLastExpectedLog && isLastExpectedPositiveAction;
   
-  // On off-days, show styling as if the habit is "on track" (completed)
-  // This indicates the user is doing well on the schedule
-  const showAsCompleted = isOngoingOffDay || (isCompletedToday && isPositiveAction);
-  const showNegativeBadge = isCompletedToday && !isPositiveAction && !isOffDay;
-  
-  // DEBUG
-  if (process.env.NODE_ENV !== 'production') {
-    console.log(`[HabitCard] ${habit.name}:`, {
-      isTodayExpected,
-      isOffDay,
-      isNotYet,
-      hasReachedFirstExpectedDay,
-      isCompletedToday,
-      isPositiveAction,
-      showAsCompleted,
-      schedule: habit.schedule,
-      intervalStartDate: habit.intervalStartDate,
-    });
-  }
+  const showAsCompleted = isNotYet
+    ? (isCompletedToday && isPositiveAction)
+    : (isOngoingOffDay ? offDayShowsPositive : (isCompletedToday && isPositiveAction));
+
+  const showNegativeBadge = isNotYet
+    ? (isCompletedToday && !isPositiveAction)
+    : (isOngoingOffDay ? !offDayShowsPositive : (isCompletedToday && !isPositiveAction));
+
+  const usesTodayWording = !habit.schedule || habit.schedule.type === 'daily';
+
+  const positiveMessage = (includeToday: boolean) => {
+    const todaySuffix = includeToday ? ' today' : '';
+    if (habit.type === 'good') {
+      return t('question.goodPositive', { todaySuffix });
+    }
+    return t('question.badPositive', { todaySuffix });
+  };
+
+  const negativeMessage = (includeToday: boolean) => {
+    const todaySuffix = includeToday ? ' today' : '';
+    if (habit.type === 'good') {
+      return t('question.goodNegative', { todaySuffix });
+    }
+    return t('question.badNegative', { todaySuffix });
+  };
   
   const cardToneClass = () => {
     if (isNotYet) {
-      return 'bg-primary/10 border-primary/30 dark:bg-primary/15 dark:border-primary/35';
+      if (isCompletedToday && isPositiveAction) {
+        return habit.type === 'good'
+          ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+          : 'bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800';
+      }
+      if (isCompletedToday && !isPositiveAction) {
+        return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
+      }
+      return 'bg-card border-muted';
     }
 
-    // Off-day: show as completed/on-track (green for good, blue for bad)
+    // Off-day uses last expected check result tone.
+    if (isOngoingOffDay) {
+      if (offDayShowsPositive) {
+        return habit.type === 'good'
+          ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
+          : 'bg-blue-50 border-blue-200 dark:bg-blue-950 dark:border-blue-800';
+      }
+      return 'bg-red-50 border-red-200 dark:bg-red-950 dark:border-red-800';
+    }
+
     if (showAsCompleted) {
       return habit.type === 'good'
         ? 'bg-green-50 border-green-200 dark:bg-green-950 dark:border-green-800'
@@ -161,17 +184,17 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
   
   const questionText = () => {
     if (isNotYet) {
-      return 'Still waiting for the time...';
+      return isCompletedToday && isPositiveAction ? positiveMessage(false) : negativeMessage(false);
     }
 
-    // Off-day after schedule has started: mirror daily-like success wording
+    // Off-day after schedule has started mirrors the last expected check result.
     if (isOngoingOffDay) {
-      return habit.type === 'bad' ? t('question.badPositive') : t('question.goodPositive');
+      return offDayShowsPositive ? positiveMessage(false) : negativeMessage(false);
     }
     
     if (!isCompletedToday) return t('question.pending');
-    if (isPositiveAction) return habit.type === 'bad' ? t('question.badPositive') : t('question.goodPositive');
-    return habit.type === 'good' ? t('question.goodNegative') : t('question.badNegative');
+    if (isPositiveAction) return positiveMessage(usesTodayWording);
+    return negativeMessage(usesTodayWording);
   };
   
   return (
@@ -180,9 +203,9 @@ function HabitCardContent({ habit, animationClass, isCompletedToday, completedAt
       <div className={`habit-card-surface habit-card-animated rounded-lg border p-6 relative surface-elevation-2 card-transition ${animationClass} ${cardToneClass()}`}>
         {/* Show not-yet, positive, or negative badge state based on schedule window and today's log outcome. */}
         <StatusBadge
-          visible={showAsCompleted || showNegativeBadge || isNotYet}
+          visible={showAsCompleted || showNegativeBadge}
           type={habit.type}
-          state={isNotYet ? 'notYet' : showAsCompleted ? 'positive' : 'negative'}
+          state={showAsCompleted ? 'positive' : 'negative'}
         />
         <StreakBadge type={habit.type} streak={habit.streak} t={t} />
         <div className="space-y-6 mt-8">
@@ -215,9 +238,6 @@ function useSlideAnimation(
     if (animationClass) {
       const timer = setTimeout(() => {
         setAnimationClass('');
-        if (process.env.NODE_ENV !== 'production') {
-          console.debug('[useSlideAnimation] Animation cleared for habit', habitId);
-        }
       }, 250);
       return () => clearTimeout(timer);
     }
@@ -226,25 +246,15 @@ function useSlideAnimation(
   return animationClass;
 }
 
-function StatusBadge({ visible, type, state }: { visible: boolean; type: Habit['type']; state: 'positive' | 'negative' | 'notYet' }) {
+function StatusBadge({ visible, type, state }: { visible: boolean; type: Habit['type']; state: 'positive' | 'negative' }) {
   const t = useTranslations("HabitCard");
   if (!visible) return null;
-  if (state === 'notYet') {
-    return (
-      <div className="absolute top-4 left-4">
-        <Badge className="text-primary border-primary/40 bg-primary/15">
-          <Clock3 className="w-3 h-3 mr-1" />
-          Not Yet
-        </Badge>
-      </div>
-    );
-  }
 
   const isPositive = state === 'positive';
   const tone = isPositive ? (type === 'good' ? 'bg-green-500 border-green-600' : 'bg-blue-500 border-blue-600') : 'bg-red-500 border-red-600';
   const label = isPositive
     ? (type === 'good' ? t('status.goodCompleted') : t('status.badAvoided'))
-    : (type === 'good' ? 'Not Completed' : 'Not Avoided');
+    : (type === 'good' ? t('status.goodMissed') : t('status.badDone'));
   return (
     <div className="absolute top-4 left-4">
       <Badge className={`text-white border-opacity-60 ${tone}`}>

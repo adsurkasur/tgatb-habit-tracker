@@ -567,17 +567,17 @@
     "emptyDescription": "Add your first habit to get started!",
     "question": {
       "pending": "Did you do it?",
-      "goodPositive": "Already done today!",
-      "badPositive": "You didn't do it today!",
-      "goodNegative": "You didn't do it today!",
-      "badNegative": "You did it today!",
+      "goodPositive": "You did it{todaySuffix}!",
+      "badPositive": "You didn't do it{todaySuffix}!",
+      "goodNegative": "You didn't do it{todaySuffix}!",
+      "badNegative": "You did it{todaySuffix}!",
       "ongoing": "Ongoing"
     },
     "status": {
       "goodCompleted": "Completed",
-      "goodMissed": "Missed",
+      "goodMissed": "Not Completed",
       "badAvoided": "Avoided",
-      "badDone": "Done"
+      "badDone": "Not Avoided"
     },
     "type": {
       "good": "Good",

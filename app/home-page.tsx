@@ -375,6 +375,8 @@ export default function Home() {
                     completedAt={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog?.timestamp}
                     navigationEvent={shouldShowDemoHabit ? null : navigationEvent}
                     todayLog={shouldShowDemoHabit ? undefined : currentHabitStatus?.todayLog}
+                    lastExpectedLog={shouldShowDemoHabit ? undefined : currentHabitStatus?.lastExpectedLog}
+                    lastExpectedDate={shouldShowDemoHabit ? undefined : currentHabitStatus?.lastExpectedDate}
                   />
 
                   {/* Next button - Desktop - only show if not demo */}

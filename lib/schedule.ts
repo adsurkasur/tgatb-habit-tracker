@@ -63,18 +63,7 @@ export function isExpectedDate(habit: Habit, date: Date): boolean {
       const diffDays = Math.round(diffMs / (24 * 60 * 60 * 1000));
 
       const isExpected = diffDays >= 0 && diffDays % intervalDays === 0;
-      
-      // DEBUG
-      if (process.env.NODE_ENV !== 'production') {
-        console.log(`[isExpectedDate] ${habit.name}:`, {
-          startStr,
-          targetStr,
-          diffDays,
-          intervalDays,
-          isExpected,
-        });
-      }
-      
+
       // Expected on day 0, intervalDays, 2*intervalDays, etc.
       return isExpected;
     }

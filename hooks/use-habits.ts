@@ -384,9 +384,12 @@ export function useHabits() {
   };
 
   const getHabitCompletionStatus = (habitId: string) => {
+    const lastExpectedCheck = HabitStorage.getLastExpectedCheck(habitId);
     return {
       isCompletedToday: HabitStorage.isHabitCompletedToday(habitId),
       todayLog: HabitStorage.getTodayLog(habitId),
+      lastExpectedLog: lastExpectedCheck?.log,
+      lastExpectedDate: lastExpectedCheck?.date,
       stats: HabitStorage.getHabitStats(habitId),
     };
   };
