@@ -36,8 +36,8 @@
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Select language",
       "modalDescription": "Choose the language used across the app interface.",
-      "restartWarningWeb": "Applying a new language refreshes this page to fully update text.",
-      "restartWarningApp": "Applying a new language restarts this app screen to fully update text.",
+      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
+      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
       "cancel": "Cancel",
       "apply": "Apply",
       "applying": "Applying..."
@@ -742,7 +742,7 @@
       "dataStorage": {
         "title": "How Your Data Is Stored",
         "local": "Local storage (default): All habit data and settings are stored locally on your device using browser localStorage (web) or Capacitor Preferences (Android). No data leaves your device unless you explicitly enable cloud backup.",
-        "cloudBackup": "Cloud backup (optional): If you sign in with Google, you may choose to back up your data to your own Google Drive. Your data is stored as a file in your personal Google Drive – we do not have access to your Google Drive files."
+        "cloudBackup": "Cloud backup (optional): If you sign in with Google, you may choose to back up your data to your own Google Drive. Your data is stored as a file in your personal Google Drive â€“ we do not have access to your Google Drive files."
       },
       "thirdPartyServices": {
         "title": "Third-Party Services",
@@ -767,7 +767,7 @@
         "willDelete": "This will permanently delete:",
         "willDeleteItems": "All your habits and their names, All completion logs and streak data, All history records",
         "willNotDelete": "This will NOT delete:",
-        "willNotDeleteItems": "Your app settings (dark mode, language, etc.) — these reset when you clear app data or uninstall, Any backup files previously saved to your Google Drive — you can delete those directly from your Google Drive",
+        "willNotDeleteItems": "Your app settings (dark mode, language, etc.) â€” these reset when you clear app data or uninstall, Any backup files previously saved to your Google Drive â€” you can delete those directly from your Google Drive",
         "alternative": "Alternatively, you can uninstall the app or clear app data from your device settings to remove all locally stored information."
       },
       "deleteAccount": {
@@ -804,7 +804,8 @@
       "openApp": "Open TGATB Habit Tracker"
     },
     "footer": {
-      "copyright": "© 2025-2026 adsurkasur. All rights reserved."
+      "copyright": "Â© 2025-2026 adsurkasur. All rights reserved."
     }
   }
 }
+

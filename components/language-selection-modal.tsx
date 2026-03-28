@@ -99,6 +99,10 @@ export function LanguageSelectionModal({
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody className="max-h-[65vh] overflow-y-auto">
+          <p className="text-xs text-muted-foreground">
+            {isNative ? t("restartWarningApp") : t("restartWarningWeb")}
+          </p>
+
           <div className="space-y-2 pr-1">
             {localeOptions.map((option) => {
               const isSelected = option.locale === selectedLanguage;
@@ -116,10 +120,6 @@ export function LanguageSelectionModal({
               );
             })}
           </div>
-
-          <p className="mt-4 text-xs text-muted-foreground">
-            {isNative ? t("restartWarningApp") : t("restartWarningWeb")}
-          </p>
         </ResponsiveDialogBody>
 
         <ResponsiveDialogFooter>

@@ -24,7 +24,7 @@ interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean; darkMode?:
 
 const PURPLE_COLOR = '#6750a4';
 const LIGHT_SURFACE_COLOR = '#ffffff';
-const DARK_SURFACE_COLOR = '#121212';
+const DARK_SURFACE_COLOR = '#1b1a1e';
 const DEBOUNCE_MS = 300;
 
 interface SystemBarsState {

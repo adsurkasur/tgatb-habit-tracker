@@ -3,6 +3,7 @@ import { Capacitor } from '@capacitor/core';
 import { signInWithGoogle } from "@/mobile/google-auth";
 import { app } from "../components/firebase-initializer";
 import { useToast } from "@/hooks/use-toast";
+import { useLoading } from "@/hooks/use-loading";
 import { TokenStorage } from '@/lib/utils';
 import { getActiveAccountId, setActiveAccountId } from "@/lib/account-scope";
 import { AUTH_TOASTS, getAuthActionErrorToast } from "@/lib/toast-config";
@@ -42,6 +43,7 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 function useProvideAuth(): AuthContextValue {
   const { toast } = useToast();
+  const { show: showLoading, hide: hideLoading } = useLoading();
   const [isLoggedIn, setIsLoggedIn] = useState<boolean | null>(null);
   const [accountId, setAccountId] = useState<string>(getActiveAccountId());
   const [profile, setProfile] = useState<AuthProfile | null>(null);
@@ -131,6 +133,11 @@ function useProvideAuth(): AuthContextValue {
   }, [isCapacitorApp, toast, handleExpiredToken]);
 
   const handleAuth = async () => {
+    const isLoginFlow = !isLoggedIn;
+    if (isLoginFlow) {
+      showLoading();
+    }
+
     try {
       if (!isLoggedIn) {
         // Login flow
@@ -250,6 +257,10 @@ function useProvideAuth(): AuthContextValue {
         toast(getAuthActionErrorToast(!!isLoggedIn, errorMsg));
       }
       console.error(`[useAuth] ${isLoggedIn ? 'logout' : 'sign-in'} error`);
+    } finally {
+      if (isLoginFlow) {
+        hideLoading();
+      }
     }
   };
 

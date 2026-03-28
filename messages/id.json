@@ -36,8 +36,8 @@
       "indonesian": "Bahasa Indonesia",
       "modalTitle": "Pilih bahasa",
       "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi.",
-      "restartWarningWeb": "Menerapkan bahasa baru akan memuat ulang halaman ini agar semua teks diperbarui.",
-      "restartWarningApp": "Menerapkan bahasa baru akan memulai ulang layar aplikasi ini agar semua teks diperbarui.",
+      "restartWarningWeb": "Applying a new language may refreshes this page to fully update text.",
+      "restartWarningApp": "Applying a new language may restarts this app screen to fully update text.",
       "cancel": "Batal",
       "apply": "Terapkan",
       "applying": "Menerapkan..."
@@ -742,7 +742,7 @@
       "dataStorage": {
         "title": "Bagaimana Data Anda Disimpan",
         "local": "Penyimpanan lokal (default): Semua data kebiasaan dan pengaturan disimpan secara lokal di perangkat Anda menggunakan localStorage browser (web) atau Capacitor Preferences (Android). Tidak ada data yang meninggalkan perangkat Anda kecuali Anda secara eksplisit mengaktifkan pencadangan cloud.",
-        "cloudBackup": "Pencadangan cloud (opsional): Jika Anda masuk dengan Google, Anda dapat memilih untuk mencadangkan data Anda ke Google Drive pribadi Anda. Data Anda disimpan sebagai file di Google Drive pribadi Anda – kami tidak memiliki akses ke file Google Drive Anda."
+        "cloudBackup": "Pencadangan cloud (opsional): Jika Anda masuk dengan Google, Anda dapat memilih untuk mencadangkan data Anda ke Google Drive pribadi Anda. Data Anda disimpan sebagai file di Google Drive pribadi Anda â€“ kami tidak memiliki akses ke file Google Drive Anda."
       },
       "thirdPartyServices": {
         "title": "Layanan Pihak Ketiga",
@@ -767,7 +767,7 @@
         "willDelete": "Ini akan menghapus secara permanen:",
         "willDeleteItems": "Semua kebiasaan dan nama Anda, Semua log penyelesaian dan data streak, Semua catatan riwayat",
         "willNotDelete": "Ini TIDAK akan menghapus:",
-        "willNotDeleteItems": "Pengaturan aplikasi Anda (mode gelap, bahasa, dll.) – ini disetel ulang saat Anda menghapus data aplikasi atau menghapus, File pencadangan apa pun yang sebelumnya disimpan ke Google Drive Anda – Anda dapat menghapusnya langsung dari Google Drive Anda",
+        "willNotDeleteItems": "Pengaturan aplikasi Anda (mode gelap, bahasa, dll.) â€“ ini disetel ulang saat Anda menghapus data aplikasi atau menghapus, File pencadangan apa pun yang sebelumnya disimpan ke Google Drive Anda â€“ Anda dapat menghapusnya langsung dari Google Drive Anda",
         "alternative": "Alternatifnya, Anda dapat menghapus aplikasi atau menghapus data aplikasi dari pengaturan perangkat Anda untuk menghapus semua informasi yang disimpan secara lokal."
       },
       "deleteAccount": {
@@ -804,7 +804,8 @@
       "openApp": "Buka TGATB Habit Tracker"
     },
     "footer": {
-      "copyright": "© 2025-2026 adsurkasur. Semua hak dilindungi."
+      "copyright": "Â© 2025-2026 adsurkasur. Semua hak dilindungi."
     }
   }
 }
+
