@@ -566,7 +566,7 @@
     "emptyTitle": "还没有习惯",
     "emptyDescription": "添加您的第一个习惯即可开始！",
     "question": {
-      "pending": "你做到了吗？",
+      "pending": "做了吗？",
       "goodPositive": "你做到了{todaySuffix}！",
       "badPositive": "你没有做到{todaySuffix}！",
       "goodNegative": "你没有做到{todaySuffix}！",

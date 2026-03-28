@@ -570,7 +570,7 @@
       "goodPositive": "Tu l'as fait{todaySuffix} !",
       "badPositive": "Tu ne l'as pas fait{todaySuffix} !",
       "goodNegative": "Tu ne l'as pas fait{todaySuffix} !",
-      "badNegative": "Tu l'as fait quand même{todaySuffix} !",
+      "badNegative": "Tu l'as quand même fait{todaySuffix} !",
       "ongoing": "En cours",
       "todaySuffix": " aujourd'hui"
     },

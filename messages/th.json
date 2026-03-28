@@ -566,12 +566,12 @@
     "emptyTitle": "นิสัยยังไม่มีเลย",
     "emptyDescription": "เพิ่มนิสัยแรกของคุณเพื่อเริ่มต้น!",
     "question": {
-      "pending": "คุณทำมัน?",
+      "pending": "ทำแล้วไหม?",
       "goodPositive": "คุณทำได้{todaySuffix}!",
       "badPositive": "คุณไม่ได้ทำ{todaySuffix}!",
       "goodNegative": "คุณไม่ได้ทำ{todaySuffix}!",
       "badNegative": "คุณทำมัน{todaySuffix}!",
-      "ongoing": "กำลังดำเนินการ",
+      "ongoing": "กำลังทำ",
       "todaySuffix": " วันนี้"
     },
     "status": {

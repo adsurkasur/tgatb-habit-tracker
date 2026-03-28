@@ -570,8 +570,8 @@
       "goodPositive": "Du hast es geschafft{todaySuffix}!",
       "badPositive": "Du hast es nicht gemacht{todaySuffix}!",
       "goodNegative": "Du hast es nicht gemacht{todaySuffix}!",
-      "badNegative": "Du hast es gemacht{todaySuffix}!",
-      "ongoing": "Laufend",
+      "badNegative": "Du hast es trotzdem gemacht{todaySuffix}!",
+      "ongoing": "Im Gange",
       "todaySuffix": " heute"
     },
     "status": {

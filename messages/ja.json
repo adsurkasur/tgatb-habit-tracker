@@ -566,9 +566,9 @@
     "emptyTitle": "まだ習慣が無い",
     "emptyDescription": "まずは最初の習慣を追加してください。",
     "question": {
-      "pending": "やったっけ？",
+      "pending": "できた？",
       "goodPositive": "できた{todaySuffix}！",
-      "badPositive": "やらなかった{todaySuffix}！",
+      "badPositive": "できなかった{todaySuffix}！",
       "goodNegative": "やらなかった{todaySuffix}！",
       "badNegative": "やってしまった{todaySuffix}！",
       "ongoing": "進行中",

@@ -566,7 +566,7 @@
     "emptyTitle": "아직 습관이 없습니다.",
     "emptyDescription": "시작하려면 첫 번째 습관을 추가하세요!",
     "question": {
-      "pending": "당신이 그것을 했나요?",
+      "pending": "했어요?",
       "goodPositive": "해냈어요{todaySuffix}!",
       "badPositive": "하지 않았어요{todaySuffix}!",
       "goodNegative": "하지 않았어요{todaySuffix}!",
@@ -587,7 +587,7 @@
     "streakDays": "{count}일",
     "atTime": "{time}에",
     "actions": {
-      "undo": "끄르다"
+      "undo": "취소"
     }
   },
   "OfflineToast": {
