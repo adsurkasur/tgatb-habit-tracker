@@ -46,13 +46,14 @@ function buildWeeklyMilestones(maxWeeks: number): CelebrationMilestone[] {
 
 export const STREAK_MILESTONES: CelebrationMilestone[] = buildWeeklyMilestones(MAX_PROGRESSIVE_WEEKS);
 
-function pickQuoteKey(keys: string[], seed: string): string {
+/**
+ * Pick a random quote key from the available pool.
+ * Each celebration gets a fresh random quote for maximum variety.
+ */
+function pickQuoteKey(keys: string[]): string {
   if (keys.length === 0) return STREAK_QUOTE_IDS[0] ?? "caesar-veni-vidi-vici";
-  let hash = 0;
-  for (let i = 0; i < seed.length; i += 1) {
-    hash = (hash * 31 + seed.charCodeAt(i)) >>> 0;
-  }
-  return keys[hash % keys.length];
+  const randomIndex = Math.floor(Math.random() * keys.length);
+  return keys[randomIndex];
 }
 
 export function evaluateStreakMilestoneCrossing(params: {
@@ -91,7 +92,6 @@ export function evaluateStreakMilestoneCrossing(params: {
     }
   }
 
-  const seed = `${habitId}:${nextStreak}:${milestone.id}`;
   return {
     milestoneId: milestone.id,
     milestoneDays: milestone.days,
@@ -101,7 +101,7 @@ export function evaluateStreakMilestoneCrossing(params: {
     habitId,
     habitName,
     streak: nextStreak,
-    quoteKey: pickQuoteKey(milestone.quoteKeys, seed),
+    quoteKey: pickQuoteKey(milestone.quoteKeys),
     triggeredAt: new Date().toISOString(),
   };
 }

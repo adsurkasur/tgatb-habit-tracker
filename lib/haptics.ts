@@ -38,6 +38,7 @@ export type HapticEvent =
   | "badDone"
   | "success"
   | "streak"
+  | "victory"
   | "undo"
   | "failure"
   | "warning"
@@ -61,6 +62,11 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
     streak: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 18 },
       { type: "impact", style: ImpactStyle.Medium },
+    ],
+    victory: [
+      { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 12 },
+      { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 12 },
+      { type: "impact", style: ImpactStyle.Heavy },
     ],
     undo: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 14 },
@@ -87,6 +93,12 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
       { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 24 },
       { type: "impact", style: ImpactStyle.Medium },
     ],
+    victory: [
+      { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 16 },
+      { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 16 },
+      { type: "impact", style: ImpactStyle.Heavy, waitAfterMs: 20 },
+      { type: "impact", style: ImpactStyle.Heavy },
+    ],
     undo: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 14 },
       { type: "impact", style: ImpactStyle.Light },
@@ -112,6 +124,12 @@ const profileSequences: Record<HapticProfile, Record<HapticEvent, SequenceStep[]
       { type: "impact", style: ImpactStyle.Medium, waitAfterMs: 20 },
       { type: "impact", style: ImpactStyle.Medium },
     ],
+    victory: [
+      { type: "impact", style: ImpactStyle.Heavy, waitAfterMs: 14 },
+      { type: "impact", style: ImpactStyle.Heavy, waitAfterMs: 14 },
+      { type: "impact", style: ImpactStyle.Heavy, waitAfterMs: 18 },
+      { type: "impact", style: ImpactStyle.Heavy },
+    ],
     undo: [
       { type: "impact", style: ImpactStyle.Light, waitAfterMs: 10 },
       { type: "impact", style: ImpactStyle.Medium },
@@ -132,6 +150,7 @@ const webVibrationPatterns: Partial<Record<HapticEvent, number[]>> = {
   badDone: [18, 20, 14],
   success: [10, 14, 12],
   streak: [12, 16, 12, 20, 18],
+  victory: [16, 12, 16, 12, 20, 14, 20],
   undo: [8, 10, 8],
   failure: [16],
   warning: [18],
@@ -309,6 +328,14 @@ export async function hapticSuccess(): Promise<void> {
  */
 export async function hapticStreak(): Promise<void> {
   await hapticEvent("streak");
+}
+
+/**
+ * Victory / milestone achieved — Multi-impact heavy sequence.
+ * Creates an emphatic, triumphant feeling with pronounced heavy impacts.
+ */
+export async function hapticVictory(): Promise<void> {
+  await hapticEvent("victory");
 }
 
 /**

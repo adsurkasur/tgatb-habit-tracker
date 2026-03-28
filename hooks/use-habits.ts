@@ -12,7 +12,7 @@ import { useTheme } from "@/components/theme-provider";
 import { formatLocalDate } from "@/lib/utils";
 import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
-import { feedbackHabitOutcome, feedbackCelebration, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
+import { feedbackHabitOutcome, feedbackCelebration, feedbackError, feedbackUndo, feedbackVictory, setGlobalFeedbackSettings } from "@/lib/feedback";
 import {
   evaluateStreakMilestoneCrossing,
   getCelebrationConfettiCount,
@@ -306,7 +306,7 @@ export function useHabits() {
       if (celebrationPayload && shouldShowCelebrationEffects(settings)) {
         setStreakCelebration(celebrationPayload);
 
-        feedbackCelebration({
+        feedbackVictory({
           soundEnabled: shouldPlayCelebrationSound(settings),
           hapticEnabled: shouldPlayCelebrationHaptics(settings),
           hapticProfile: settings.hapticProfile ?? "balanced",
@@ -345,7 +345,7 @@ export function useHabits() {
       triggeredAt: new Date().toISOString(),
     });
 
-    feedbackCelebration({
+    feedbackVictory({
       soundEnabled: shouldPlayCelebrationSound(settings),
       hapticEnabled: shouldPlayCelebrationHaptics(settings),
       hapticProfile: settings.hapticProfile ?? "balanced",
@@ -542,7 +542,7 @@ export function useHabits() {
       if (celebrationPayload && shouldShowCelebrationEffects(settings)) {
         setStreakCelebration(celebrationPayload);
 
-        feedbackCelebration({
+        feedbackVictory({
           soundEnabled: shouldPlayCelebrationSound(settings),
           hapticEnabled: shouldPlayCelebrationHaptics(settings),
           hapticProfile: settings.hapticProfile ?? "balanced",

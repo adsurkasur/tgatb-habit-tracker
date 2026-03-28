@@ -29,6 +29,7 @@ import {
   hapticBadDone,
   hapticSuccess,
   hapticStreak,
+  hapticVictory,
   hapticFailure,
   hapticSelection,
   hapticNavigation,
@@ -40,6 +41,7 @@ import {
 import {
   playSuccessSound,
   playStreakSound,
+  playVictorySound,
   playFailureSound,
   playErrorSound,
   playUndoSound,
@@ -196,6 +198,17 @@ export function feedbackCelebration(opts: FeedbackOptions): void {
   }
   if (opts.soundEnabled) {
     playStreakSound();
+  }
+}
+
+/** Special victory feedback for milestone achievements — more impactful than regular celebration. */
+export function feedbackVictory(opts: FeedbackOptions): void {
+  if (opts.hapticEnabled) {
+    applyHapticProfile(opts.hapticProfile);
+    hapticVictory();
+  }
+  if (opts.soundEnabled) {
+    playVictorySound();
   }
 }
 

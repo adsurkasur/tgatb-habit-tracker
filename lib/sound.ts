@@ -120,6 +120,21 @@ export function playStreakSound(): void {
   } catch { /* silent */ }
 }
 
+/** Victorious ascending fanfare — milestone achievement. */
+export function playVictorySound(): void {
+  try {
+    const ctx = getAudioContext();
+    if (!ctx) return;
+    const t = ctx.currentTime;
+
+    // Victorious ascending fanfare: low-mid-high-higher progression
+    playToneAt(ctx, t + 0.000, 523.25, 140, "sine", 0.14); // C5
+    playToneAt(ctx, t + 0.120, 659.25, 140, "sine", 0.14); // E5
+    playToneAt(ctx, t + 0.240, 783.99, 140, "sine", 0.14); // G5
+    playToneAt(ctx, t + 0.360, 987.77, 200, "sine", 0.16); // B5 (held longer)
+  } catch { /* silent */ }
+}
+
 /** Single descending tone — habit marked as failed / not done. */
 export function playFailureSound(): void {
   try {
