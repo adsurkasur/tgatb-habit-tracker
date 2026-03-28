@@ -63,7 +63,7 @@ describe('getCompletedDatesSet', () => {
     expect(completedDates.has('2026-03-15')).toBe(false);
   });
 
-  it('ignores logs before habit creation date', () => {
+  it('includes manual backfills before habit creation date', () => {
     const habits = [makeHabit('h-good', 'good', '2026-03-20')];
 
     HabitStorage.saveLogs([
@@ -73,7 +73,7 @@ describe('getCompletedDatesSet', () => {
 
     const completedDates = getCompletedDatesSet(habits);
 
-    expect(completedDates.has('2026-03-19')).toBe(false);
+    expect(completedDates.has('2026-03-19')).toBe(true);
     expect(completedDates.has('2026-03-20')).toBe(true);
   });
 
