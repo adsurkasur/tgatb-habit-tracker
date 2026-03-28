@@ -50,9 +50,37 @@ const messagesByLocale: Record<AppLocale, typeof enMessages> = {
   ru: ruMessages,
 };
 
-function getLocaleFromPathname(pathname: string): AppLocale {
+function getLocaleFromPathname(pathname: string): AppLocale | null {
   const segment = pathname.split("/").filter(Boolean)[0];
-  return segment && isValidLocale(segment) ? segment : routing.defaultLocale;
+  return segment && isValidLocale(segment) ? segment : null;
+}
+
+function getBootLocale(): AppLocale {
+  if (typeof window === "undefined") {
+    return routing.defaultLocale;
+  }
+
+  try {
+    const bootLang = (window as Window & { __TGATB_BOOT_LANGUAGE?: string }).__TGATB_BOOT_LANGUAGE;
+    if (bootLang && isValidLocale(bootLang)) {
+      return bootLang;
+    }
+
+    const activeAccount = localStorage.getItem("tgatb_active_account") || "anonymous";
+    const scopedKey = `user_settings::${activeAccount}`;
+    const raw = localStorage.getItem(scopedKey) || localStorage.getItem("user_settings");
+
+    if (raw) {
+      const parsed = JSON.parse(raw) as { language?: string };
+      if (parsed.language && isValidLocale(parsed.language)) {
+        return parsed.language;
+      }
+    }
+  } catch {
+    // Fallback to default locale on malformed storage payloads.
+  }
+
+  return routing.defaultLocale;
 }
 
 export function Providers({ children }: { children: React.ReactNode }) {
@@ -80,8 +108,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
     })();
   }, []);
 
+  const [bootLocale] = useState<AppLocale>(() => getBootLocale());
   const pathname = usePathname() ?? "/";
-  const locale = getLocaleFromPathname(pathname);
+  const locale = getLocaleFromPathname(pathname) ?? bootLocale;
   const messages = messagesByLocale[locale] ?? enMessages;
 
 

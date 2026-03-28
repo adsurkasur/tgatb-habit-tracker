@@ -14,6 +14,41 @@ import { extractLocaleFromPathname, withLocalePath } from "@/i18n/pathname";
 import { isValidLocale, routing, type AppLocale } from "@/i18n/routing";
 import { feedbackTrackSuccess, feedbackTrackFailure, feedbackError, feedbackUndo, setGlobalFeedbackSettings } from "@/lib/feedback";
 
+const defaultUserSettings: UserSettings = {
+  darkMode: false,
+  language: "en",
+  motivatorPersonality: "positive",
+  fullscreenMode: false,
+  autoSync: false,
+  soundEnabled: true,
+  hapticEnabled: true,
+};
+
+function getInitialSettingsFromStorage(): UserSettings {
+  if (typeof window === "undefined") {
+    return defaultUserSettings;
+  }
+
+  try {
+    const activeAccount = localStorage.getItem("tgatb_active_account") || "anonymous";
+    const scoped = localStorage.getItem(`user_settings::${activeAccount}`);
+    const fallback = localStorage.getItem("user_settings");
+    const raw = scoped || fallback;
+
+    if (!raw) {
+      return defaultUserSettings;
+    }
+
+    const parsed = JSON.parse(raw) as Partial<UserSettings>;
+    return {
+      ...defaultUserSettings,
+      ...parsed,
+    };
+  } catch {
+    return defaultUserSettings;
+  }
+}
+
 export function useHabits() {
   // Clear all habits and logs from storage and state
   const clearAllHabits = async () => {
@@ -40,15 +75,7 @@ export function useHabits() {
   const { isLoggedIn, accountId } = useAuth();
   const { schedulePush, pushNow, pullOnce } = useCloudSync();
 
-  const [settings, setSettings] = useState<UserSettings>({
-    darkMode: false,
-    language: "en",
-    motivatorPersonality: "positive",
-    fullscreenMode: false,
-    autoSync: false,
-    soundEnabled: true,
-    hapticEnabled: true,
-  });
+  const [settings, setSettings] = useState<UserSettings>(() => getInitialSettingsFromStorage());
   const { toast } = useToast();
   const { setIsDark } = useTheme();
 
@@ -85,16 +112,7 @@ export function useHabits() {
         setHabits(freshHabits);
         setCurrentHabitIndex(0);
         // Merge loaded settings with defaults to prevent losing values if partial
-        const defaults = {
-          darkMode: false,
-          language: "en",
-          motivatorPersonality: "positive",
-          fullscreenMode: false,
-          autoSync: false,
-          soundEnabled: true,
-          hapticEnabled: true,
-        };
-        const mergedSettings = { ...defaults, ...loadedSettings };
+        const mergedSettings = { ...defaultUserSettings, ...loadedSettings };
         setSettings(mergedSettings);
         // Apply dark mode
         if (mergedSettings.darkMode) {
@@ -352,16 +370,7 @@ export function useHabits() {
       const loadedSettings = await HabitStorage.getSettings();
       setHabits(loadedHabits);
       // Merge loaded settings with defaults to prevent losing values if partial
-      const defaults = {
-        darkMode: false,
-        language: "en",
-        motivatorPersonality: "positive",
-        fullscreenMode: false,
-        autoSync: false,
-        soundEnabled: true,
-        hapticEnabled: true,
-      };
-      const mergedImportSettings = { ...defaults, ...loadedSettings };
+      const mergedImportSettings = { ...defaultUserSettings, ...loadedSettings };
       setSettings(mergedImportSettings);
       // Immediately update theme if darkMode changed
       setIsDark(mergedImportSettings.darkMode);

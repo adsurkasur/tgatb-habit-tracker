@@ -79,6 +79,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
                       if (settings && settings.darkMode === true) {
                         document.documentElement.classList.add("dark");
                       }
+                      if (settings && typeof settings.language === "string" && settings.language.length > 0) {
+                        document.documentElement.lang = settings.language;
+                        window.__TGATB_BOOT_LANGUAGE = settings.language;
+                      }
                     } catch (_e) {
                       // Silent fail: if JSON parsing fails, just skip theme application
                     }
