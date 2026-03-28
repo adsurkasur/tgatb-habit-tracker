@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Maklum Balas Haptic",
       "supported": "Bergetar pada interaksi",
-      "notSupported": "Tidak disokong pada peranti ini"
+      "notSupported": "Tidak disokong pada peranti ini",
+      "off": "Mati",
+      "profileLabel": "rasa",
+      "profilePlaceholder": "Pilih rasa",
+      "profileDescriptions": {
+        "subtle": "Lembut dan minimum",
+        "balanced": "Maklum balas harian semulajadi",
+        "punchy": "Ketuk yang rangup dan lebih kuat"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "halus"
+        },
+        "balanced": {
+          "label": "Seimbang"
+        },
+        "punchy": {
+          "label": "Punchy"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

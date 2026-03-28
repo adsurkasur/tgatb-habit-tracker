@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Phản hồi xúc giác",
       "supported": "Rung khi tương tác",
-      "notSupported": "Không được hỗ trợ trên thiết bị này"
+      "notSupported": "Không được hỗ trợ trên thiết bị này",
+      "off": "Tắt",
+      "profileLabel": "Cảm thấy",
+      "profilePlaceholder": "Chọn cảm giác",
+      "profileDescriptions": {
+        "subtle": "Mềm mại và tối thiểu",
+        "balanced": "Phản hồi tự nhiên hàng ngày",
+        "punchy": "Vòi sắc nét và mạnh mẽ hơn"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "tinh tế"
+        },
+        "balanced": {
+          "label": "Cân bằng"
+        },
+        "punchy": {
+          "label": "mạnh mẽ"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

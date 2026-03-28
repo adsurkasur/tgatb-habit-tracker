@@ -478,7 +478,26 @@
     "haptic": {
       "title": "触觉反馈",
       "supported": "互动时振动",
-      "notSupported": "此设备不支持"
+      "notSupported": "此设备不支持",
+      "off": "离开",
+      "profileLabel": "感觉",
+      "profilePlaceholder": "选择手感",
+      "profileDescriptions": {
+        "subtle": "柔软且简约",
+        "balanced": "自然的日常反馈",
+        "punchy": "清脆有力的水龙头"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "微妙的"
+        },
+        "balanced": {
+          "label": "均衡"
+        },
+        "punchy": {
+          "label": "有力的"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

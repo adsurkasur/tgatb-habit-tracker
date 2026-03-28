@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Retour haptique",
       "supported": "Vibrer sur les interactions",
-      "notSupported": "Non pris en charge sur cet appareil"
+      "notSupported": "Non pris en charge sur cet appareil",
+      "off": "Désactivé",
+      "profileLabel": "Sentir",
+      "profilePlaceholder": "Sélectionnez la sensation",
+      "profileDescriptions": {
+        "subtle": "Doux et minimal",
+        "balanced": "Rétroaction naturelle au quotidien",
+        "punchy": "Des robinets nets et plus forts"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Subtil"
+        },
+        "balanced": {
+          "label": "Équilibré"
+        },
+        "punchy": {
+          "label": "Dynamique"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Haptic Feedback",
       "supported": "Mag-vibrate sa mga pakikipag-ugnayan",
-      "notSupported": "Hindi suportado sa device na ito"
+      "notSupported": "Hindi suportado sa device na ito",
+      "off": "Naka-off",
+      "profileLabel": "Pakiramdam",
+      "profilePlaceholder": "Piliin ang pakiramdam",
+      "profileDescriptions": {
+        "subtle": "Malambot at minimal",
+        "balanced": "Natural araw-araw na feedback",
+        "punchy": "Malutong at mas malakas na gripo"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "banayad"
+        },
+        "balanced": {
+          "label": "Balanseng"
+        },
+        "punchy": {
+          "label": "Punch"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

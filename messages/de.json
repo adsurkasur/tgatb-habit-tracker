@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Haptisches Feedback",
       "supported": "Vibrieren Sie bei Interaktionen",
-      "notSupported": "Wird auf diesem Gerät nicht unterstützt"
+      "notSupported": "Wird auf diesem Gerät nicht unterstützt",
+      "off": "Aus",
+      "profileLabel": "Fühlen",
+      "profilePlaceholder": "Gefühl auswählen",
+      "profileDescriptions": {
+        "subtle": "Weich und minimalistisch",
+        "balanced": "Natürliches Alltagsfeedback",
+        "punchy": "Knackige und stärkere Schläge"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Subtil"
+        },
+        "balanced": {
+          "label": "Ausgewogen"
+        },
+        "punchy": {
+          "label": "Schlagkräftig"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

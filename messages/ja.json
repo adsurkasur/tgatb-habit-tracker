@@ -478,7 +478,26 @@
     "haptic": {
       "title": "触覚フィードバック",
       "supported": "インタラクション時に振動する",
-      "notSupported": "このデバイスではサポートされていません"
+      "notSupported": "このデバイスではサポートされていません",
+      "off": "オフ",
+      "profileLabel": "感じる",
+      "profilePlaceholder": "感触を選ぶ",
+      "profileDescriptions": {
+        "subtle": "ソフトかつミニマル",
+        "balanced": "日常の自然なフィードバック",
+        "punchy": "サクサク強力なタップ"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "微妙"
+        },
+        "balanced": {
+          "label": "バランスの取れた"
+        },
+        "punchy": {
+          "label": "パンチの効いた"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

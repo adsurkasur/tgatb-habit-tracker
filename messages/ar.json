@@ -478,7 +478,26 @@
     "haptic": {
       "title": "ردود الفعل اللمسية",
       "supported": "يهتز على التفاعلات",
-      "notSupported": "غير مدعوم على هذا الجهاز"
+      "notSupported": "غير مدعوم على هذا الجهاز",
+      "off": "عن",
+      "profileLabel": "يشعر",
+      "profilePlaceholder": "حدد يشعر",
+      "profileDescriptions": {
+        "subtle": "لينة والحد الأدنى",
+        "balanced": "ردود فعل يومية طبيعية",
+        "punchy": "صنابير واضحة وأقوى"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "دقيق"
+        },
+        "balanced": {
+          "label": "متوازن"
+        },
+        "punchy": {
+          "label": "لكمة"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Haptic Feedback",
       "supported": "Vibrate on interactions",
-      "notSupported": "Not supported on this device"
+      "notSupported": "Not supported on this device",
+      "off": "Off",
+      "profileLabel": "Feel",
+      "profilePlaceholder": "Select feel",
+      "profileDescriptions": {
+        "subtle": "Soft and minimal",
+        "balanced": "Natural everyday feedback",
+        "punchy": "Crisp and stronger taps"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Subtle"
+        },
+        "balanced": {
+          "label": "Balanced"
+        },
+        "punchy": {
+          "label": "Punchy"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Feedback tátil",
       "supported": "Vibrar nas interações",
-      "notSupported": "Não compatível com este dispositivo"
+      "notSupported": "Não compatível com este dispositivo",
+      "off": "Desligado",
+      "profileLabel": "Sentir",
+      "profilePlaceholder": "Selecione sentir",
+      "profileDescriptions": {
+        "subtle": "Suave e minimalista",
+        "balanced": "Feedback diário natural",
+        "punchy": "Torneiras nítidas e mais fortes"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Sutil"
+        },
+        "balanced": {
+          "label": "Equilibrado"
+        },
+        "punchy": {
+          "label": "Incisivo"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

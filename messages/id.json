@@ -37,7 +37,7 @@
       "modalTitle": "Pilih bahasa",
       "modalDescription": "Pilih bahasa yang digunakan di seluruh antarmuka aplikasi.",
       "restartWarningWeb": "Perubahan bahasa berlaku segera. Halaman menavigasi ke versi bahasa baru dan menyegarkan.",
-      "restartWarningApp": "Language changes apply instantly. No app restart is required.",
+      "restartWarningApp": "Perubahan bahasa berlaku seketika. Tidak perlu memulai ulang aplikasi.",
       "cancel": "Batal",
       "apply": "Terapkan",
       "applying": "Menerapkan..."
@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Getaran",
       "supported": "Bergetar saat berinteraksi",
-      "notSupported": "Tidak didukung di perangkat ini"
+      "notSupported": "Tidak didukung di perangkat ini",
+      "off": "Mati",
+      "profileLabel": "Rasa",
+      "profilePlaceholder": "Pilih rasa",
+      "profileDescriptions": {
+        "subtle": "Lembut dan minimal",
+        "balanced": "Getaran harian yang pas",
+        "punchy": "Ketukan lebih tegas dan tajam"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Halus"
+        },
+        "balanced": {
+          "label": "Seimbang"
+        },
+        "punchy": {
+          "label": "Tegas"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

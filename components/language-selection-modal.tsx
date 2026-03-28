@@ -76,6 +76,7 @@ export function LanguageSelectionModal({
     setApplying(true);
     try {
       await onApply(selectedLanguage);
+      onOpenChange(false);
     } finally {
       setApplying(false);
     }
@@ -99,7 +100,7 @@ export function LanguageSelectionModal({
         </ResponsiveDialogHeader>
 
         <ResponsiveDialogBody className="max-h-[65vh] overflow-y-auto">
-          <p className="text-xs text-muted-foreground">
+          <p className="mb-3 text-xs text-muted-foreground">
             {isNative ? t("restartWarningApp") : t("restartWarningWeb")}
           </p>
 

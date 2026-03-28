@@ -478,7 +478,26 @@
     "haptic": {
       "title": "Тактильная обратная связь",
       "supported": "Вибрация при взаимодействии",
-      "notSupported": "Не поддерживается на этом устройстве"
+      "notSupported": "Не поддерживается на этом устройстве",
+      "off": "Выключенный",
+      "profileLabel": "Чувствовать",
+      "profilePlaceholder": "Выберите ощущение",
+      "profileDescriptions": {
+        "subtle": "Мягкий и минималистичный",
+        "balanced": "Естественная повседневная обратная связь",
+        "punchy": "Четкие и сильные удары"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "Тонкий"
+        },
+        "balanced": {
+          "label": "Сбалансированный"
+        },
+        "punchy": {
+          "label": "энергичный"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

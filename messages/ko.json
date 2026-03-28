@@ -478,7 +478,26 @@
     "haptic": {
       "title": "햅틱 피드백",
       "supported": "상호작용 시 진동",
-      "notSupported": "이 기기에서는 지원되지 않습니다."
+      "notSupported": "이 기기에서는 지원되지 않습니다.",
+      "off": "끄다",
+      "profileLabel": "느끼다",
+      "profilePlaceholder": "느낌을 선택하세요",
+      "profileDescriptions": {
+        "subtle": "부드럽고 미니멀함",
+        "balanced": "자연스러운 일상 피드백",
+        "punchy": "선명하고 강한 탭"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "미묘한"
+        },
+        "balanced": {
+          "label": "균형 잡힌"
+        },
+        "punchy": {
+          "label": "펀치감 있는"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

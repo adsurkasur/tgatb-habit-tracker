@@ -478,7 +478,26 @@
     "haptic": {
       "title": "हैप्टिक राय",
       "supported": "बातचीत पर कंपन करें",
-      "notSupported": "इस डिवाइस पर समर्थित नहीं है"
+      "notSupported": "इस डिवाइस पर समर्थित नहीं है",
+      "off": "बंद",
+      "profileLabel": "अनुभव करना",
+      "profilePlaceholder": "अनुभूति का चयन करें",
+      "profileDescriptions": {
+        "subtle": "नरम और न्यूनतम",
+        "balanced": "स्वाभाविक रोजमर्रा की प्रतिक्रिया",
+        "punchy": "कुरकुरा और मजबूत नल"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "जटिल"
+        },
+        "balanced": {
+          "label": "संतुलित"
+        },
+        "punchy": {
+          "label": "असरदार"
+        }
+      }
     }
   },
   "HelpSupportSettings": {

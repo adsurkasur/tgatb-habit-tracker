@@ -25,10 +25,10 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
   const hapticEnabled = hapticsAvailable && settings.hapticEnabled !== false;
   const activeProfile = settings.hapticProfile ?? "balanced";
 
-  const profileOptions: Array<{ value: HapticProfile; label: string }> = [
-    { value: "subtle", label: "Subtle" },
-    { value: "balanced", label: "Balanced" },
-    { value: "punchy", label: "Punchy" },
+  const profileOptions: Array<{ value: HapticProfile }> = [
+    { value: "subtle" },
+    { value: "balanced" },
+    { value: "punchy" },
   ];
 
   return (
@@ -78,8 +78,8 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
                   {!hapticsAvailable
                     ? t("haptic.notSupported")
                     : hapticEnabled
-                      ? `Profile: ${profileOptions.find((p) => p.value === activeProfile)?.label ?? "Balanced"}`
-                      : "Off"}
+                      ? t(`haptic.profileDescriptions.${activeProfile}`)
+                      : t("haptic.off")}
                 </p>
               </div>
             </div>
@@ -91,29 +91,33 @@ export function FeedbackSettings({ settings, onUpdateSettings }: FeedbackSetting
             />
           </div>
 
-          <div className={`overflow-hidden transition-all duration-300 ease-in-out ${
-            hapticsAvailable && hapticEnabled
-              ? "max-h-40 opacity-100 border-t border-border/60"
-              : "max-h-0 opacity-0"
-          }`}>
-            <div className="p-4">
-              <label className="text-sm font-medium mb-2 block">Haptic Profile</label>
-              <Select
-                value={activeProfile}
-                onValueChange={(value) => onUpdateSettings({ hapticProfile: value as HapticProfile })}
-                disabled={!hapticsAvailable || !hapticEnabled}
-              >
-                <SelectTrigger>
-                  <SelectValue placeholder="Select profile" />
-                </SelectTrigger>
-                <SelectContent>
-                  {profileOptions.map((profile) => (
-                    <SelectItem key={profile.value} value={profile.value}>
-                      {profile.label}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+          <div
+            className={`grid transition-all duration-200 ease-in-out ${
+              hapticsAvailable && hapticEnabled
+                ? "grid-rows-[1fr] opacity-100"
+                : "grid-rows-[0fr] opacity-0"
+            }`}
+          >
+            <div className="overflow-hidden">
+              <div className="flex items-center justify-between px-4 pb-4 pt-0">
+                <span className="text-sm text-muted-foreground">{t("haptic.profileLabel")}</span>
+                <Select
+                  value={activeProfile}
+                  onValueChange={(value) => onUpdateSettings({ hapticProfile: value as HapticProfile })}
+                  disabled={!hapticsAvailable || !hapticEnabled}
+                >
+                  <SelectTrigger className="w-40">
+                    <SelectValue placeholder={t("haptic.profilePlaceholder")} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {profileOptions.map((profile) => (
+                      <SelectItem key={profile.value} value={profile.value}>
+                        {t(`haptic.profileOptions.${profile.value}.label`)}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
             </div>
           </div>
         </div>

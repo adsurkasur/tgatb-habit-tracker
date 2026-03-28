@@ -478,7 +478,26 @@
     "haptic": {
       "title": "การตอบสนองแบบสัมผัส",
       "supported": "สั่นเมื่อมีปฏิสัมพันธ์",
-      "notSupported": "ไม่รองรับอุปกรณ์นี้"
+      "notSupported": "ไม่รองรับอุปกรณ์นี้",
+      "off": "ปิด",
+      "profileLabel": "รู้สึก",
+      "profilePlaceholder": "เลือกความรู้สึก",
+      "profileDescriptions": {
+        "subtle": "นุ่มนวลและเรียบง่าย",
+        "balanced": "ข้อเสนอแนะในชีวิตประจำวันอย่างเป็นธรรมชาติ",
+        "punchy": "ก๊อกที่คมชัดและแข็งแกร่งยิ่งขึ้น"
+      },
+      "profileOptions": {
+        "subtle": {
+          "label": "บอบบาง"
+        },
+        "balanced": {
+          "label": "สมดุล"
+        },
+        "punchy": {
+          "label": "พันช์"
+        }
+      }
     }
   },
   "HelpSupportSettings": {
