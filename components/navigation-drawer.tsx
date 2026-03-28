@@ -152,44 +152,51 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
   const effectiveBadHabitsOpen = searchQuery ? true : badHabitsOpen;
 
   // Memoize callbacks to prevent child re-renders
+  const handleSheetOpenChange = useCallback((nextOpen: boolean) => {
+    if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onOpenChange(nextOpen);
+  }, [onOpenChange]);
+
   const handleSettingsClick = useCallback(() => {
   onSettingsClick();
-  onOpenChange(false);
-  }, [onSettingsClick, onOpenChange]);
+  handleSheetOpenChange(false);
+  }, [onSettingsClick, handleSheetOpenChange]);
 
 
   const handleHistoryClick = useCallback(() => {
   onHistoryClick?.();
-  onOpenChange(false);
-  }, [onHistoryClick, onOpenChange]);
+  handleSheetOpenChange(false);
+  }, [onHistoryClick, handleSheetOpenChange]);
 
   const handleDonateClick = useCallback(() => {
   onDonateClick?.();
-  onOpenChange(false);
-  }, [onDonateClick, onOpenChange]);
+  handleSheetOpenChange(false);
+  }, [onDonateClick, handleSheetOpenChange]);
 
   const handleAboutClick = useCallback(() => {
   onAboutClick?.();
-  onOpenChange(false);
-  }, [onAboutClick, onOpenChange]);
+  handleSheetOpenChange(false);
+  }, [onAboutClick, handleSheetOpenChange]);
 
   const handleHelpClick = useCallback(() => {
   onHelpClick?.();
-  onOpenChange(false);
-  }, [onHelpClick, onOpenChange]);
+  handleSheetOpenChange(false);
+  }, [onHelpClick, handleSheetOpenChange]);
 
   // Handle mobile back navigation for the navigation drawer
   useMobileBackNavigation({
     onBackPressed: () => {
-      onOpenChange(false);
+      handleSheetOpenChange(false);
     },
     isActive: open
   });
 
   return (
-  <Sheet open={open} onOpenChange={onOpenChange}>
+  <Sheet open={open} onOpenChange={handleSheetOpenChange}>
       <SheetTrigger asChild>
-        <Button variant="ghost" size="icon" className="state-layer-hover" onClick={() => onOpenChange(true)}>
+        <Button variant="ghost" size="icon" className="state-layer-hover" onClick={() => handleSheetOpenChange(true)}>
           <Menu className="w-6 h-6" />
         </Button>
       </SheetTrigger>
@@ -206,7 +213,7 @@ const NavigationDrawer = React.memo<NavigationDrawerProps>(({
                 <h2 className="text-2xl font-bold text-foreground">{t("header.title")}</h2>
                 <p className="text-sm text-muted-foreground mt-1">{t("header.subtitle")}</p>
               </div>
-              <CloseButton onClick={() => onOpenChange(false)} />
+              <CloseButton onClick={() => handleSheetOpenChange(false)} />
             </div>
           </div>
           {/* Search Bar */}

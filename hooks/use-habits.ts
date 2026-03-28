@@ -515,10 +515,37 @@ export function useHabits() {
    * Add or update a log for any habit and date (for missed entries)
    */
   const addOrUpdateLog = (habitId: string, date: string, completed: boolean) => {
+    const habitBeforeUpdate = habits.find((h) => h.id === habitId);
+    const previousStreak = habitBeforeUpdate?.streak ?? 0;
+
     HabitStorage.addOrUpdateLog(habitId, date, completed);
+
     // Refresh habits to get updated streaks
     const updatedHabits = HabitStorage.getHabits();
     setHabits(updatedHabits);
+
+    const updatedHabit = updatedHabits.find((h) => h.id === habitId);
+    if (updatedHabit) {
+      const isPositiveOutcome = updatedHabit.type === "bad" ? !completed : completed;
+      const celebrationPayload = evaluateStreakMilestoneCrossing({
+        previousStreak,
+        nextStreak: updatedHabit.streak,
+        isPositiveOutcome,
+        habitId: updatedHabit.id,
+        habitName: updatedHabit.name,
+      });
+
+      if (celebrationPayload && shouldShowCelebrationEffects(settings)) {
+        setStreakCelebration(celebrationPayload);
+
+        feedbackCelebration({
+          soundEnabled: shouldPlayCelebrationSound(settings),
+          hapticEnabled: shouldPlayCelebrationHaptics(settings),
+          hapticProfile: settings.hapticProfile ?? "balanced",
+        });
+      }
+    }
+
     try { if (settings.autoSync && isLoggedIn) schedulePush(); } catch {}
   };
 
