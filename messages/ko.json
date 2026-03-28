@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "축하 햅틱",
-      "description": "이정표에 도달했을 때 축하 진동을 재생합니다."
+      "description": "이정표에 도달했을 때 축하 진동을 재생합니다.",
+      "appOnly": "앱에서만 사용할 수 있습니다",
+      "notSupported": "이 기기에서는 지원되지 않습니다."
     },
     "motion": {
       "title": "모션",

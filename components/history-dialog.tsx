@@ -1,5 +1,5 @@
 // Modular AddEntryButton component
-function AddEntryButton({ show, onClick, label }: { show: boolean; onClick: () => void; label: string }) {
+function AddEntryButton({ show, onClick, label, date }: { show: boolean; onClick: (date: string) => void; label: string; date: string }) {
   if (!show) return null;
   return (
     <div className="w-full flex justify-center mt-4">
@@ -8,7 +8,9 @@ function AddEntryButton({ show, onClick, label }: { show: boolean; onClick: () =
         size="sm"
         variant="outline"
         className="border-dashed border-primary/40 text-primary hover:bg-primary/5 hover:border-primary/60"
-        onClick={onClick}
+        onClick={() => {
+          if (date) onClick(date);
+        }}
       >
         <Plus className="w-4 h-4 mr-1" />
         {label}
@@ -56,7 +58,7 @@ import {
 import { Habit } from '@/shared/schema';
 import { getHabitStats } from '@/lib/habit-storage';
 import { formatLocalDate } from '@/lib/utils';
-import { buildDailyLogs, buildDayLog, getCompletedDatesSet, computeStatSummary, DayLog } from '@/lib/history';
+import { buildDailyLogs, buildDayLog, getCompletedDatesSet, getNegativeDatesSet, computeStatSummary, DayLog } from '@/lib/history';
 import { format, isToday } from 'date-fns';
 
 interface HistoryDialogProps {
@@ -99,6 +101,7 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
 
   // Set of all dates with at least one completion (for calendar dots)
   const completedDates = useMemo(() => getCompletedDatesSet(habits), [habits]);
+  const negativeDates = useMemo(() => getNegativeDatesSet(habits), [habits]);
 
   // Build day log on-demand for any selected date (not limited to 30 days)
   const selectedDayLog = useMemo(
@@ -141,7 +144,7 @@ export function HistoryDialog({ open, onOpenChange, habits, removeLog, onRequest
               </TabsContent>
 
               <TabsContent value="calendar" className="flex-1 min-h-0 mt-0 overflow-y-auto overflow-x-hidden">
-                <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} t={t} />
+                <CalendarTabContent selectedDate={selectedDate} setSelectedDate={setSelectedDate} completedDates={completedDates} negativeDates={negativeDates} selectedDayLog={selectedDayLog} removeLog={removeLog} onRequestAddEntry={onRequestAddEntry} onRequestEditEntry={onRequestEditEntry} t={t} />
               </TabsContent>
 
               <TabsContent value="timeline" className="flex-1 min-h-0 mt-0 overflow-y-auto">
@@ -319,6 +322,7 @@ function CalendarTabContent({
   selectedDate,
   setSelectedDate,
   completedDates,
+  negativeDates,
   selectedDayLog,
   removeLog,
   onRequestAddEntry,
@@ -328,6 +332,7 @@ function CalendarTabContent({
   selectedDate: Date | undefined;
   setSelectedDate: (date: Date | undefined) => void;
   completedDates: Set<string>;
+  negativeDates: Set<string>;
   selectedDayLog: DayLog | null | undefined;
   removeLog: (habitId: string, date: string) => void;
   onRequestAddEntry: (date: string) => void;
@@ -367,10 +372,15 @@ function CalendarTabContent({
             className="rounded-lg border w-full sm:max-w-none [--cell-size:2rem] sm:[--cell-size:2.75rem]"
             disabled={{ after: new Date() }}
             modifiers={{
-              completed: date => completedDates.has(formatLocalDate(date)),
+              completed: date => {
+                const dateKey = formatLocalDate(date);
+                return completedDates.has(dateKey) && !negativeDates.has(dateKey);
+              },
+              negative: date => negativeDates.has(formatLocalDate(date)),
             }}
             modifiersClassNames={{
               completed: "!bg-green-100 dark:!bg-green-900/30 !rounded-md",
+              negative: "!bg-red-100 dark:!bg-red-900/30 !rounded-md",
             }}
           />
         </div>
@@ -412,14 +422,14 @@ function CalendarTabContent({
                         }
                       } else if (habit.type === "bad") {
                         if (habit.completed) {
+                          // Done
+                          bgClass = "bg-red-50 dark:bg-red-900/20";
+                          icon = <XCircle className={iconClass + " text-red-500"} />;
+                        } else {
                           // Avoided
                           bgClass = "bg-blue-50 dark:bg-blue-900/20";
                           icon = <CheckCircle className={iconClass + " text-blue-500"} />;
                           nameClass = "text-xs sm:text-sm truncate font-medium";
-                        } else {
-                          // Done
-                          bgClass = "bg-red-50 dark:bg-red-900/20";
-                          icon = <XCircle className={iconClass + " text-red-500"} />;
                         }
                       }
                       return (
@@ -473,7 +483,8 @@ function CalendarTabContent({
               {/* Show AddEntryButton for any past or today date (not future) */}
               <AddEntryButton
                 show={!!selectedDate && isPastOrToday(selectedDate)}
-                onClick={() => onRequestAddEntry(formattedDate)}
+                  onClick={onRequestAddEntry}
+                  date={formattedDate}
                 label={t('calendar.addEntry')}
               />
           </div>
@@ -486,7 +497,9 @@ function TimelineTabContent({ dailyLogs, t }: { dailyLogs: DayLog[]; t: (key: st
   return (
     <div className="space-y-3 sm:space-y-4">
         {dailyLogs.map((log, index) => {
-          const completedCount = log.habits.filter(h => h.completed).length;
+          const completedCount = log.habits.filter(h =>
+            h.completed !== null && (h.type === 'good' ? h.completed === true : h.completed === false)
+          ).length;
           const totalHabitsForDay = log.habits.length;
           const completionRate = totalHabitsForDay > 0 ? (completedCount / totalHabitsForDay) * 100 : 0;
 
@@ -525,7 +538,11 @@ function TimelineTabContent({ dailyLogs, t }: { dailyLogs: DayLog[]; t: (key: st
                     return (
                       <div
                         key={habit.id}
-                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${habit.completed ? (habit.type === 'good' ? 'bg-green-500' : 'bg-red-500') : 'bg-muted-foreground/20'}`}
+                        className={`w-2 h-2 sm:w-3 sm:h-3 rounded-full ${
+                          habit.type === 'good'
+                            ? (habit.completed ? 'bg-green-500' : 'bg-red-500')
+                            : (habit.completed ? 'bg-red-500' : 'bg-blue-500')
+                        }`}
                         title={habit.completed ? t('timeline.completedTitle', { name: habit.name }) : t('timeline.notCompletedTitle', { name: habit.name })}
                       />
                     );

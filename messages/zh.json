@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "庆祝触觉反馈",
-      "description": "达到里程碑时播放庆祝振动。"
+      "description": "达到里程碑时播放庆祝振动。",
+      "appOnly": "仅在应用中可用",
+      "notSupported": "此设备不支持"
     },
     "motion": {
       "title": "动画",

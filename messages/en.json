@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Celebration Haptics",
-      "description": "Play celebratory haptics when a milestone is reached."
+      "description": "Play celebratory haptics when a milestone is reached.",
+      "appOnly": "Only available in the App",
+      "notSupported": "Not supported on this device"
     },
     "motion": {
       "title": "Motion",

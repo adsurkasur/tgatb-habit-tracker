@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Jubiläums-Haptik",
-      "description": "Spiele festliche Vibrationen ab, wenn ein Meilenstein erreicht wird."
+      "description": "Spiele festliche Vibrationen ab, wenn ein Meilenstein erreicht wird.",
+      "appOnly": "Nur in der App verfügbar",
+      "notSupported": "Wird auf diesem Gerät nicht unterstützt"
     },
     "motion": {
       "title": "Bewegung",

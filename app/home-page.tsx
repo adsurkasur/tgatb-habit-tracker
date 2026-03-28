@@ -312,8 +312,9 @@ export default function Home() {
       }
     };
 
-    main.addEventListener('touchstart', handleTouchStart);
-    main.addEventListener('touchend', handleTouchEnd);
+    const passiveListener: AddEventListenerOptions = { passive: true };
+    main.addEventListener('touchstart', handleTouchStart, passiveListener);
+    main.addEventListener('touchend', handleTouchEnd, passiveListener);
     return () => {
       main.removeEventListener('touchstart', handleTouchStart);
       main.removeEventListener('touchend', handleTouchEnd);

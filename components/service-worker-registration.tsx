@@ -32,6 +32,19 @@ export function ServiceWorkerRegistration() {
       return;
     }
 
+    // In development, stale precache manifests commonly reference deleted chunk hashes.
+    // Keep SW disabled in dev to avoid noisy 404/install failures and ensure HMR correctness.
+    if (process.env.NODE_ENV !== "production") {
+      if ('serviceWorker' in navigator) {
+        void navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (const registration of registrations) {
+            void registration.unregister();
+          }
+        });
+      }
+      return;
+    }
+
     if ('serviceWorker' in navigator) {
       // Try Workbox registration first
       if (window.workbox) {

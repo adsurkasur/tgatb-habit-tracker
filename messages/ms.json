@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Haptics Perayaan",
-      "description": "Mainkan getaran perayaan apabila pencapaian dicapai."
+      "description": "Mainkan getaran perayaan apabila pencapaian dicapai.",
+      "appOnly": "Hanya tersedia dalam Aplikasi",
+      "notSupported": "Tidak disokong pada peranti ini"
     },
     "motion": {
       "title": "Gerakan",

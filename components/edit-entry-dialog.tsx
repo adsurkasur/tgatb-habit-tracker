@@ -23,7 +23,17 @@ interface EditEntryDialogProps {
 
 export function EditEntryDialog({ open, onOpenChange, habit, date, completed, onSave }: EditEntryDialogProps) {
   const t = useTranslations("EditEntryDialog");
-  const [status, setStatus] = useState<boolean | null>(completed);
+  const toUiStatus = (value: boolean | null, type: Habit["type"]) => {
+    if (value === null) return null;
+    return type === "bad" ? !value : value;
+  };
+
+  const toStoredStatus = (value: boolean | null, type: Habit["type"]) => {
+    if (value === null) return null;
+    return type === "bad" ? !value : value;
+  };
+
+  const [status, setStatus] = useState<boolean | null>(toUiStatus(completed, habit.type));
 
   // Adjust state during render when props change (React-approved pattern)
   const [prevCompleted, setPrevCompleted] = useState(completed);
@@ -33,7 +43,7 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
     setPrevCompleted(completed);
     setPrevHabit(habit);
     setPrevDate(date);
-    setStatus(completed);
+    setStatus(toUiStatus(completed, habit.type));
   }
 
   // Helper to get status labels based on habit type
@@ -54,14 +64,15 @@ export function EditEntryDialog({ open, onOpenChange, habit, date, completed, on
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (status !== null) {
-      onSave(status);
+    const storedStatus = toStoredStatus(status, habit.type);
+    if (storedStatus !== null) {
+      onSave(storedStatus);
       onOpenChange(false);
     }
   };
 
   const handleCancel = () => {
-    setStatus(completed);
+    setStatus(toUiStatus(completed, habit.type));
     onOpenChange(false);
   };
 

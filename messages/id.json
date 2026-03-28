@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Haptics Perayaan",
-      "description": "Putar getaran perayaan saat milestone tercapai."
+      "description": "Putar getaran perayaan saat milestone tercapai.",
+      "appOnly": "Hanya tersedia di Aplikasi",
+      "notSupported": "Tidak didukung di perangkat ini"
     },
     "motion": {
       "title": "Gerakan",

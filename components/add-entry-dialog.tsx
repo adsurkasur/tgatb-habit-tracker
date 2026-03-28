@@ -36,7 +36,6 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   const [status, setStatus] = useState<boolean | null>(null);
   const [newHabitName, setNewHabitName] = useState("");
   const [newHabitType, setNewHabitType] = useState<"good" | "bad">("good");
-  const [newHabitStatus, setNewHabitStatus] = useState<boolean | null>(null);
   const [lastAddedHabitId, setLastAddedHabitId] = useState<string | null>(null);
   const [tab, setTab] = useState("entry");
   const { containerRef: swipeRef } = useSwipeableTabs({
@@ -55,7 +54,6 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
         setStatus(null);
         setNewHabitName("");
         setNewHabitType("good");
-        setNewHabitStatus(null);
         setLastAddedHabitId(null);
         setTab("entry");
       }, 0);
@@ -87,8 +85,9 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   }, [tab]);
 
   const handleAddEntry = () => {
-    if (selectedHabit && status !== null) {
-      addOrUpdateLog(selectedHabit.id, date, status);
+    if (selectedHabit && status !== null && date && date.trim()) {
+      const storedStatus = selectedHabit.type === "bad" ? !status : status;
+      addOrUpdateLog(selectedHabit.id, date, storedStatus);
       setSelectedHabit(null);
       setStatus(null);
       onOpenChange(false);
@@ -96,14 +95,12 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
   };
 
   const handleAddNewHabit = () => {
-    if (newHabitName.trim() && newHabitStatus !== null) {
-      // Use main addHabit logic from parent
+    if (newHabitName.trim()) {
+      // Add habit only, then auto-switch to Add Entry tab via lastAddedHabitId flow.
       const newHabit = addHabit({ name: newHabitName.trim(), type: newHabitType });
-      addOrUpdateLog(newHabit.id, date, newHabitStatus);
       setLastAddedHabitId(newHabit.id);
       setNewHabitName("");
       setNewHabitType("good");
-      setNewHabitStatus(null);
     }
   };
 
@@ -112,6 +109,15 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
     type === "good"
       ? { "true": t("status.good.true"), "false": t("status.good.false") }
       : { "true": t("status.bad.true"), "false": t("status.bad.false") };
+
+  const getStatusButtonClass = (type: "good" | "bad", value: boolean, selected: boolean) => {
+    if (!selected) return "";
+    if (type === "good" && value === true) return "bg-green-500 text-white hover:bg-green-600";
+    if (type === "good" && value === false) return "bg-red-500 text-white hover:bg-red-600";
+    if (type === "bad" && value === true) return "bg-blue-500 text-white hover:bg-blue-600";
+    if (type === "bad" && value === false) return "bg-red-500 text-white hover:bg-red-600";
+    return "";
+  };
 
   return (
     <ResponsiveDialog open={open} onOpenChange={onOpenChange} drawerSize="compact">
@@ -172,7 +178,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     variant={status === true ? "default" : "outline"}
                     onClick={() => setStatus(true)}
                     disabled={!selectedHabit}
-                    className={`flex-1 ${selectedHabit && selectedHabit.type === "good" && status === true ? "bg-green-500 text-white hover:bg-green-600" : selectedHabit && selectedHabit.type === "bad" && status === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}`}
+                    className={`flex-1 ${selectedHabit ? getStatusButtonClass(selectedHabit.type, true, status === true) : ""}`}
                   >
                     <CheckCircle className="w-4 h-4 mr-1" />{selectedHabit ? getStatusLabels(selectedHabit.type === "bad" ? "bad" : "good")["true"] : t("status.good.true")}
                   </Button>
@@ -181,7 +187,7 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     variant={status === false ? "destructive" : "outline"}
                     onClick={() => setStatus(false)}
                     disabled={!selectedHabit}
-                    className="flex-1"
+                    className={`flex-1 ${selectedHabit ? getStatusButtonClass(selectedHabit.type, false, status === false) : ""}`}
                   >
                     <XCircle className="w-4 h-4 mr-1" />{selectedHabit ? getStatusLabels(selectedHabit.type === "bad" ? "bad" : "good")["false"] : t("status.good.false")}
                   </Button>
@@ -216,24 +222,6 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
                     {t("type.bad")}
                   </Button>
                 </div>
-                <div className="grid grid-cols-1 gap-2 mt-2 sm:grid-cols-2">
-                  <Button
-                    type="button"
-                    variant={newHabitStatus === true ? "default" : "outline"}
-                    onClick={() => setNewHabitStatus(true)}
-                    className={`flex-1 ${newHabitType === "good" && newHabitStatus === true ? "bg-green-500 text-white hover:bg-green-600" : newHabitType === "bad" && newHabitStatus === true ? "bg-blue-500 text-white hover:bg-blue-600" : ""}`}
-                  >
-                    <CheckCircle className="w-4 h-4 mr-1" />{getStatusLabels(newHabitType)["true"]}
-                  </Button>
-                  <Button
-                    type="button"
-                    variant={newHabitStatus === false ? "destructive" : "outline"}
-                    onClick={() => setNewHabitStatus(false)}
-                    className="flex-1"
-                  >
-                    <XCircle className="w-4 h-4 mr-1" />{getStatusLabels(newHabitType)["false"]}
-                  </Button>
-                </div>
               </div>
             </TabsContent>
             </div>
@@ -253,10 +241,10 @@ export function AddEntryDialog({ open, onOpenChange, habits, date, addOrUpdateLo
               <Button
                 type="button"
                 className="w-full cta-color-hover"
-                disabled={!newHabitName.trim() || newHabitStatus === null}
+                disabled={!newHabitName.trim()}
                 onClick={handleAddNewHabit}
               >
-                {t("actions.addHabitAndLog")}
+                {t("tabs.addHabit")}
               </Button>
             )}
           </div>

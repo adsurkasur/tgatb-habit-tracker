@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Haptique de Célébration",
-      "description": "Jouer les vibrations de célébration lorsqu'un jalon est atteint."
+      "description": "Jouer les vibrations de célébration lorsqu'un jalon est atteint.",
+      "appOnly": "Disponible uniquement dans l'application",
+      "notSupported": "Non pris en charge sur cet appareil"
     },
     "motion": {
       "title": "Mouvement",

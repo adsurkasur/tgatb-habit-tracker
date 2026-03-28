@@ -108,13 +108,20 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
     }
   }, [open, isStandard]);
 
+  const handleOpenChange = React.useCallback((nextOpen: boolean) => {
+    if (typeof document !== "undefined" && document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+    onOpenChange(nextOpen);
+  }, [onOpenChange]);
+
   return (
     <ResponsiveDialogContext.Provider value={{ isMobile, onOpenChange, drawerSize, activeSnapPoint: isStandard ? activeSnap : null }}>
       {isMobile ? (
         isStandard ? (
           <Drawer
             open={open}
-            onOpenChange={onOpenChange}
+            onOpenChange={handleOpenChange}
             handleOnly
             snapPoints={[0.45, 0.85, 1]}
             activeSnapPoint={activeSnap}
@@ -134,16 +141,19 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
         ) : (
           <Drawer
             open={open}
-            onOpenChange={onOpenChange}
+            onOpenChange={handleOpenChange}
             handleOnly
-            // Same policy as standard drawers: disable only for native Android.
-            repositionInputs={!isNativeAndroid}
+              // Compact drawers: disable repositionInputs entirely (both native + web) to prevent
+              // keyboard push behavior. Compact modals are small and should let the system handle
+              // keyboard visibility without drawer interference. This prevents the "object pushing
+              // screen" visual bug where content shifts upward when keyboard appears.
+              repositionInputs={false}
           >
             {children}
           </Drawer>
         )
       ) : (
-        <Dialog open={open} onOpenChange={onOpenChange}>
+        <Dialog open={open} onOpenChange={handleOpenChange}>
           {children}
         </Dialog>
       )}

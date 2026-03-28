@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Haptic ng Pagdiriwang",
-      "description": "Maglarawan ng pagdiriwang haptics kapag naabot ang isang milestone."
+      "description": "Maglarawan ng pagdiriwang haptics kapag naabot ang isang milestone.",
+      "appOnly": "Available lang sa App",
+      "notSupported": "Hindi suportado sa device na ito"
     },
     "motion": {
       "title": "Paggalaw",

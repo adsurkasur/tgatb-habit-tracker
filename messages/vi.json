@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Rung kỷ niệm",
-      "description": "Phát rung kỷ niệm khi đạt được một mục tiêu."
+      "description": "Phát rung kỷ niệm khi đạt được một mục tiêu.",
+      "appOnly": "Chỉ khả dụng trong ứng dụng",
+      "notSupported": "Không được hỗ trợ trên thiết bị này"
     },
     "motion": {
       "title": "Chuyển động",

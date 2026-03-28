@@ -852,7 +852,9 @@
     },
     "haptics": {
       "title": "Háptica de Celebração",
-      "description": "Reproduzir vibração de celebração quando um marco é atingido."
+      "description": "Reproduzir vibração de celebração quando um marco é atingido.",
+      "appOnly": "Disponível apenas no aplicativo",
+      "notSupported": "Não compatível com este dispositivo"
     },
     "motion": {
       "title": "Movimento",
