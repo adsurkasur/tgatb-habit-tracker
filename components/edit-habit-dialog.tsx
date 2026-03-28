@@ -176,7 +176,17 @@ export function EditHabitDialog({ open, onOpenChange, onEditHabit, habit }: Edit
                     min={2}
                     max={365}
                     value={intervalDays}
-                    onChange={(e) => setIntervalDays(parseInt(e.target.value) || 2)}
+                    onChange={(e) => {
+                      const val = e.target.value.trim();
+                      if (val === "") {
+                        setIntervalDays(2);
+                      } else {
+                        const num = parseInt(val, 10);
+                        if (!isNaN(num)) {
+                          setIntervalDays(Math.max(2, Math.min(365, num)));
+                        }
+                      }
+                    }}
                     className="w-20 material-radius"
                   />
                   <span className="text-sm text-muted-foreground">{t("interval.days")}</span>
