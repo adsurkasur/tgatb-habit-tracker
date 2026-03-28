@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { Capacitor } from '@capacitor/core';
 import { initializeCapacitor } from '@/lib/capacitor';
 import { HabitStorage } from '@/lib/habit-storage';
+import { warmupHaptics } from '@/lib/haptics';
 
 export function CapacitorInit() {
   // System bar styling handled by SystemBarsManager; only initialize Capacitor here
@@ -36,6 +37,7 @@ export function CapacitorInit() {
           try {
             // Settings no longer needed for initialization; unified system bars hook manages fullscreen
             await HabitStorage.getSettings().catch(()=>{}); // pre-warm storage (ignore errors)
+            await warmupHaptics();
           } catch {}
           initializeCapacitor();
         })();

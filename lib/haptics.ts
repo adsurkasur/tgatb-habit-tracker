@@ -25,6 +25,7 @@
 
 import { Capacitor } from "@capacitor/core";
 import { Haptics, ImpactStyle, NotificationType } from "@capacitor/haptics";
+import { PremiumHaptics } from "@/lib/premium-haptics-plugin";
 
 export type HapticProfile = "subtle" | "balanced" | "punchy";
 export type HapticEvent =
@@ -121,6 +122,7 @@ const EVENT_MIN_GAP_MS = 28;
 
 let _profile: HapticProfile = "balanced";
 let _lastEventAt = 0;
+let _premiumPluginSupported: boolean | null = null;
 
 // ---------------------------------------------------------------------------
 // Capability detection
@@ -148,10 +150,28 @@ function isWebVibrationSupported(): boolean {
 
 export function setHapticProfile(profile: HapticProfile): void {
   _profile = profile;
+  if (Capacitor.isNativePlatform()) {
+    PremiumHaptics.setProfile({ profile }).catch(() => {
+      // Silent fallback to built-in patterns.
+    });
+  }
 }
 
 export function getHapticProfile(): HapticProfile {
   return _profile;
+}
+
+export async function warmupHaptics(): Promise<void> {
+  if (!Capacitor.isNativePlatform()) return;
+
+  try {
+    const supported = await isPremiumPluginAvailable();
+    if (supported) {
+      await PremiumHaptics.warmup();
+    }
+  } catch {
+    // Silent
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -199,6 +219,33 @@ async function runNativeSequence(event: HapticEvent): Promise<void> {
   }
 }
 
+async function isPremiumPluginAvailable(): Promise<boolean> {
+  if (!Capacitor.isNativePlatform()) return false;
+  if (_premiumPluginSupported !== null) return _premiumPluginSupported;
+
+  try {
+    const result = await PremiumHaptics.isSupported();
+    _premiumPluginSupported = !!result.supported;
+  } catch {
+    _premiumPluginSupported = false;
+  }
+
+  return _premiumPluginSupported;
+}
+
+async function runPremiumPluginEvent(event: HapticEvent): Promise<boolean> {
+  const supported = await isPremiumPluginAvailable();
+  if (!supported) return false;
+
+  try {
+    await PremiumHaptics.play({ event, profile: _profile });
+    return true;
+  } catch {
+    _premiumPluginSupported = false;
+    return false;
+  }
+}
+
 function runWebVibration(event: HapticEvent): void {
   const pattern = webVibrationPatterns[event];
   if (!pattern || !isWebVibrationSupported()) return;
@@ -211,6 +258,10 @@ export async function hapticEvent(event: HapticEvent): Promise<void> {
 
   try {
     if (isNativeHapticsSupported()) {
+      const pluginHandled = await runPremiumPluginEvent(event);
+      if (pluginHandled) {
+        return;
+      }
       await runNativeSequence(event);
       return;
     }

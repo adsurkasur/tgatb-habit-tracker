@@ -17,6 +17,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         // Register custom plugin before super so bridge picks it up
         registerPlugin(SystemUiPlugin.class);
+        registerPlugin(PremiumHapticsPlugin.class);
         super.onCreate(savedInstanceState);
 
         // FIXED: Revert WebView background to default transparent/white
