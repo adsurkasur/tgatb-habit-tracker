@@ -6,6 +6,7 @@ import android.graphics.Color;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.view.WindowManager;
 import androidx.core.view.WindowCompat;
 import com.getcapacitor.BridgeActivity;
 
@@ -34,6 +35,9 @@ public class MainActivity extends BridgeActivity {
         } else {
             // Android 15+ is edge-to-edge by default; avoid deprecated API call.
         }
+
+        // Force pan mode to avoid WebView resize gaps/slabs above IME on some OEM builds.
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SystemUiPlugin.reapply(this);
     }
 
