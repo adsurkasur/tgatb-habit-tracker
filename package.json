@@ -154,7 +154,7 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "autoprefixer": "^10.4.24",
-    "baseline-browser-mapping": "^2.10.10",
+    "baseline-browser-mapping": "^2.10.12",
     "eslint": "9.39.4",
     "eslint-config-next": "^16.1.6",
     "jsdom": "^29.0.1",
