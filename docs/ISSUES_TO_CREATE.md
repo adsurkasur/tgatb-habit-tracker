@@ -1,5 +1,8 @@
 # Prepared GitHub Issues (create these using `gh issue create` or via web UI)
 
+Status: Historical issue-preparation artifact. Some issue content may already be resolved.
+Cross-check with `CHANGELOG.md` and current docs before creating issues.
+
 Below are ready-to-use issue bodies copied from `docs/ISSUES_PROPOSED.md`. You can create them manually or with the `gh` CLI.
 
 ## 1) Implement per-item merge strategy for Drive cloud sync

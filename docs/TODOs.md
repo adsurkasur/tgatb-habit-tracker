@@ -1,5 +1,8 @@
 # Consolidated TODOs (auto-collected)
 
+Status: Snapshot from periodic scans. Items may be outdated as code evolves.
+Re-run the documented scan command before using this file as action input.
+
 This file consolidates actionable `TODO` / `FIXME` occurrences found in the repository (filtered to exclude build artifacts).
 
 ## Summary

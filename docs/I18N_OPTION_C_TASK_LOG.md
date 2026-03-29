@@ -1,5 +1,8 @@
 # Option C Integration Task Log
 
+Status: Historical execution log for Option C rollout. It is retained for traceability and may include phase-specific assumptions from implementation time.
+Use `docs/I18N_IMPLEMENTATION.md` and `docs/I18N_OPERATIONS.md` for current i18n behavior.
+
 ## Task Metadata
 
 | Property | Value |

@@ -77,6 +77,9 @@ Note: For a current, code-level review and outstanding issues, see [docs/REVIEW_
 - 📦 Installable as a PWA (Progressive Web App) on desktop and mobile
 - 🤖 Android app build via Capacitor (see [ANDROID_SETUP.md](docs/ANDROID_SETUP.md))
 - 🔔 Push notifications (browser and Android)
+- 🌍 16-language localization with locale-aware routes and runtime switching
+- 🎉 Progressive streak celebrations with multilingual quote support
+- 📳 Profile-based haptic feedback on native app with graceful web fallback
 - 🧩 Modular hooks and utilities for habits, PWA, offline, and status bar
 
 ### Technical
@@ -116,7 +119,7 @@ To enable Sentry in CI/Production:
 
 ## Why Minimalist?
 
-TGATB Habit Tracker is designed for users who want a distraction-free, fast, and reliable way to track habits. No sign-up required, no ads, no clutter—just your habits.
+TGATB Habit Tracker is designed for users who want a distraction-free, fast, and reliable way to track habits. Local tracking requires no sign-up, and optional cloud backup/sync (Google Drive) is available when you sign in.
 
 ---
 
@@ -175,11 +178,17 @@ npm run android:open    # Open in Android Studio
 - `npm run dev` — Start Next.js development server (webpack mode for stability)
 - `npm run dev:turbopack` — Start Next.js development server with Turbopack
 - `npm run build` — Build for production
-- `npm run i18n:check` — Validate locale message key parity (`en`/`id`)
+- `npm run i18n:check` — Validate locale message key parity across all supported locales
+- `npm run i18n:encoding:check` — Detect encoding corruption in locale files
+- `npm run i18n:encoding:fix` — Auto-fix known encoding issues in locale files
+- `npm run i18n:literals` — Guard against newly introduced hard-coded UI literals
 - `npm run start` — Start production server
 - `npm run lint` — Run ESLint for code quality
 - `npm run check` — Run TypeScript type checking
 - `npm run test:unit` — Run local unit tests for migrations/merge (uses `ts-node` in dev)
+- `npm run test:ui` — Run UI/component tests (Vitest)
+- `npm run test:integration` — Run integration tests (Vitest + MSW)
+- `npm run test:e2e` — Run Playwright end-to-end tests
 - `npm run setup:android` — Check Android prerequisites
 - `npm run android:build` — Build Android APK
 - `npm run android:open` — Open project in Android Studio
@@ -226,13 +235,31 @@ npm run android:open    # Open in Android Studio
 
 ## Testing
 
-- Unit tests: a lightweight set of TypeScript test scripts is provided under `tests/` to validate migration and merge behavior. Run locally with:
+- Unit tests: TypeScript test scripts under `tests/` validate migrations, merges, token storage, and edge cases.
 
 ```bash
 npm run test:unit
 ```
 
-- CI: a GitHub Actions workflow runs typecheck, lint, and tests on PRs and pushes. Ensure tests pass locally before opening a PR.
+- UI tests: Vitest is used for component-level tests.
+
+```bash
+npm run test:ui
+```
+
+- Integration tests: MSW-backed integration tests run via Vitest.
+
+```bash
+npm run test:integration
+```
+
+- E2E tests: Playwright tests critical user flows.
+
+```bash
+npm run test:e2e
+```
+
+- CI: GitHub Actions runs lint, typecheck, localization checks, tests, and build validation on PRs and pushes.
 
 ---
 

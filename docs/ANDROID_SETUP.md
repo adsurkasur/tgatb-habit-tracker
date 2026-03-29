@@ -2,7 +2,7 @@
 
 This guide helps you set up Android development for the TGATB Habit Tracker on **Windows**, **macOS**, and **Linux**.
 
-> Audit note (2025-12-12): The codebase includes a working Capacitor configuration and Android Gradle settings (AGP `8.13.0`). System bar handling is centralized in `hooks/use-system-bars-unified.ts`. Before building, confirm your local JDK, Gradle and Android SDK versions match the project requirements and consult `docs/ANDROID_15_COMPATIBILITY.md` for Android 15 specifics.
+> Current note (2026-03-29): The project uses Capacitor 8 and Android build tooling aligned with Java 21, compile/target SDK 35, and AGP 9.1.0. System bar and fullscreen behavior is managed by `hooks/use-system-bars-unified.ts` and the native `SystemUiPlugin`.
 
 ## 🚀 Quick Start
 
@@ -17,7 +17,7 @@ This guide helps you set up Android development for the TGATB Habit Tracker on *
 
 | Software | Version | Purpose |
 |----------|---------|---------|
-| **Node.js** | 18+ | JavaScript runtime |
+| **Node.js** | 20.9+ | JavaScript runtime |
 | **Java JDK** | 21 | Android compilation |
 | **Android Studio** | Latest | IDE and SDK |
 | **Git** | Latest | Version control |

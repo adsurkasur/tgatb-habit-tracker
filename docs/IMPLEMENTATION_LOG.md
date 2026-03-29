@@ -1,5 +1,8 @@
 # Implementation Log: Sync Safety, Migrations, Consent, CI
 
+Status: Historical implementation log. This document records past milestones and may not reflect latest release state.
+For current behavior, refer to `README.md`, `CHANGELOG.md`, and the latest feature guides.
+
 This log records the changes applied to implement conflict-aware sync, migration scaffolding, analytics consent gating, and CI. Each step includes the files changed and rationale.
 
 1) Schema updates

@@ -32,12 +32,19 @@ This guide documents how the project integrates Google authentication and Google
 - A three-way merge utility and per-item merge integration were implemented and wired into `hooks/use-cloud-sync.ts`. The pull flow runs migrations, three-way merges using the last known snapshot as the base, and collects conflicts for user resolution instead of silently overwriting local data.
 - A conflict-resolution UI exists to let users resolve per-field conflicts when automatic merging is ambiguous.
 
+### Current baseline (implemented)
+
+- Local-first operation with optional sign-in for cloud backup/sync.
+- Full-bundle export/import validation with schema checks before persistence.
+- Drive upload/download on web and native using OAuth access tokens.
+- Pull merge flow with migrations + conflict detection/resolution.
+
 ### Important Caveats & Risks (updated)
 
 - The sync flow now performs conservative merges instead of immediate destructive overwrites, but the UI and UX around conflict resolution should be validated with real multi-device scenarios.
 - Pushes still currently upload the full bundle; consider delta/patched uploads to reduce bandwidth and improve merge fidelity.
 
-### Recommendations (next steps)
+### Recommendations (next hardening steps)
 
 - Validate the merge and migration behavior with end-to-end tests simulating multiple devices and concurrent edits.
 - Polish the conflict-resolution UX and add clear user guidance (when and how to resolve conflicts) and an audit log of resolved conflicts.
@@ -51,9 +58,9 @@ This guide documents how the project integrates Google authentication and Google
 
 ### Suggested next steps
 
-1. Review `hooks/use-cloud-sync.ts` and `web/drive-sync.ts` to design a merge strategy.
-2. Add migration scaffolding in `lib/` and unit tests around `shared/schema.ts` validators.
-3. Add clear UI for manual export/restore and confirm-before-import.
+1. Expand end-to-end multi-device sync tests (real conflict scenarios and recovery paths).
+2. Improve conflict-resolution UX with clearer decision explanations and change previews.
+3. Add telemetry-safe operational diagnostics around sync failures (without exposing sensitive payloads).
 
 Repository housekeeping: a filtered `TODO|FIXME` scan has been run and results are consolidated in `docs/TODOs.md`.
 

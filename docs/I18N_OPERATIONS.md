@@ -4,9 +4,9 @@ This guide defines ownership, release quality gates, and rollback procedures for
 
 ## Scope
 
-- Locales currently supported: `en`, `id`
-- Routing model: locale path prefixes (`/en`, `/id`) with static export
-- Message catalogs: `messages/en.json`, `messages/id.json`
+- Locales currently supported: `en`, `id`, `ms`, `th`, `vi`, `fil`, `zh`, `ja`, `ko`, `es`, `fr`, `de`, `pt`, `ar`, `hi`, `ru`
+- Routing model: locale path prefixes (for example `/en`, `/id`, `/ja`, `/ar`) with static export
+- Message catalogs: `messages/<locale>.json` for each locale in `i18n/routing.ts`
 
 ## Ownership Model
 
@@ -16,12 +16,12 @@ This guide defines ownership, release quality gates, and rollback procedures for
 | Message catalogs | Engineering | Product/content reviewer | Key parity, naming consistency, removal of stale keys |
 | UX copy quality | Product/content reviewer | Engineering | Translation quality and tone consistency |
 | Legal content translations | Legal/content reviewer | Engineering | Terms and Privacy content correctness |
-| QA verification | QA | Engineering | Locale smoke tests for `en` and `id` |
+| QA verification | QA | Engineering | Locale smoke tests across all supported locales (minimum: EN + top active locales) |
 
 ## Development Workflow
 
 1. Add new keys to `messages/en.json` first.
-2. Add matching keys to `messages/id.json` in the same change.
+2. Add matching keys to every locale catalog in the same change.
 3. Use structured namespaces (for example: `FeatureName.section.label`).
 4. Avoid hard-coded user-facing strings in components and pages.
 5. Run the full validation sequence before opening a PR:
@@ -33,7 +33,7 @@ This guide defines ownership, release quality gates, and rollback procedures for
 
 ## PR Review Checklist (Localization)
 
-- [ ] New keys are present in both locale catalogs.
+- [ ] New keys are present in all locale catalogs.
 - [ ] Key names are stable and semantically grouped.
 - [ ] No untranslated hard-coded strings were introduced.
 - [ ] Locale-aware routes and metadata remain correct.
@@ -52,10 +52,10 @@ Run before every release that includes copy, route, SEO, or PWA changes:
    - `npm run check`
    - `npm run lint`
    - `npm run build`
-4. Verify generated locale routes include:
-   - `/en`, `/id`
-   - `/en/privacy-policy`, `/id/privacy-policy`
-   - `/en/terms-of-service`, `/id/terms-of-service`
+4. Verify generated locale routes include all configured locales and key localized routes:
+   - `/en`, `/id`, and other locales from `i18n/routing.ts`
+   - `/<locale>/privacy-policy`
+   - `/<locale>/terms-of-service`
    - `/sitemap.xml`
 5. Verify metadata behavior:
    - Canonical URLs resolve to locale-specific route URLs
@@ -72,7 +72,7 @@ If localization changes introduce regressions, use the following rollback levels
 
 Use when copy is incorrect but routing and rendering are stable.
 
-- Revert message catalog changes (`messages/en.json`, `messages/id.json`).
+- Revert message catalog changes (`messages/*.json`).
 - Re-run `npm run i18n:check` and `npm run build`.
 
 ### Level 2: Route metadata rollback

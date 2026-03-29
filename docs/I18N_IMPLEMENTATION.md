@@ -14,6 +14,20 @@ runtime behavior, SEO/PWA integration, notification localization, and automation
 
 - `en` (default)
 - `id`
+- `ms`
+- `th`
+- `vi`
+- `fil`
+- `zh`
+- `ja`
+- `ko`
+- `es`
+- `fr`
+- `de`
+- `pt`
+- `ar`
+- `hi`
+- `ru`
 
 Defined in [i18n/routing.ts](i18n/routing.ts).
 
@@ -24,12 +38,12 @@ The app uses next-intl with App Router and locale segments:
 - Locale route segment: [app/[locale]](app/[locale])
 - Locale provider and metadata: [app/[locale]/layout.tsx](app/[locale]/layout.tsx)
 - Request config: [i18n/request.ts](i18n/request.ts)
-- Locale catalogs: [messages/en.json](messages/en.json), [messages/id.json](messages/id.json)
+- Locale catalogs: `messages/<locale>.json` for each locale in `i18n/routing.ts`
 
 Root routing behavior:
 
-- Root path [app/page.tsx](app/page.tsx) redirects to the default locale route (`/en`).
-- Localized home page uses [app/[locale]/page.tsx](app/[locale]/page.tsx) and reuses home UI.
+- Root path [app/page.tsx](app/page.tsx) directly renders the home page component.
+- Locale-aware routes remain available under [app/[locale]/page.tsx](app/[locale]/page.tsx).
 
 ## Locale Routing and Path Utilities
 
@@ -87,6 +101,20 @@ Catalog files:
 
 - [messages/en.json](messages/en.json)
 - [messages/id.json](messages/id.json)
+- [messages/ms.json](messages/ms.json)
+- [messages/th.json](messages/th.json)
+- [messages/vi.json](messages/vi.json)
+- [messages/fil.json](messages/fil.json)
+- [messages/zh.json](messages/zh.json)
+- [messages/ja.json](messages/ja.json)
+- [messages/ko.json](messages/ko.json)
+- [messages/es.json](messages/es.json)
+- [messages/fr.json](messages/fr.json)
+- [messages/de.json](messages/de.json)
+- [messages/pt.json](messages/pt.json)
+- [messages/ar.json](messages/ar.json)
+- [messages/hi.json](messages/hi.json)
+- [messages/ru.json](messages/ru.json)
 
 Keys are organized by namespace (for example `Home`, `AppearanceSettings`,
 `NavigationDrawer`, `HistoryDialog`, `PrivacyPolicyPage`, etc.) and consumed via `useTranslations`.
@@ -123,7 +151,7 @@ Base URL behavior:
 
 Sitemap implementation is in [app/sitemap.ts](app/sitemap.ts):
 
-- Generates localized URLs for key routes (`/en`, `/id`, and localized policy/offline pages).
+- Generates localized URLs for all supported locales and localized policy/offline pages.
 - Marked static with `export const dynamic = 'force-static'` for export compatibility.
 
 ## PWA Locale Strategy
@@ -131,7 +159,7 @@ Sitemap implementation is in [app/sitemap.ts](app/sitemap.ts):
 Manifest file: [public/manifest.json](public/manifest.json)
 
 - Locale-safe `start_url` is set to `/en/`.
-- Localized shortcut entries are provided for EN and ID add-habit actions.
+- Manifest remains export-safe while app runtime handles locale selection.
 
 Service worker source: [worker/index.js](worker/index.js)
 
@@ -223,4 +251,4 @@ Recommended sustainability validation sequence:
 
 - Consolidate legal-page localization strategy so both Terms and Privacy use the same catalog-driven pattern.
 - Add optional tooling to detect new hard-coded user-facing strings early.
-- Expand locale coverage only after parity automation and review workflow are ready.
+- Keep expanding locale quality through translation review while maintaining key parity checks.

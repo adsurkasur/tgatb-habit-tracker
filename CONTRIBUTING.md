@@ -15,9 +15,9 @@ Thanks for contributing! Please follow these guidelines to make PRs easier to re
 - Run `npm run build` to verify production build.
 
 ## Localization workflow
-- Add new user-facing keys in `messages/en.json` and `messages/id.json` in the same PR.
+- Add new user-facing keys in all supported locale catalogs in the same PR (`messages/*.json`, based on `i18n/routing.ts`).
 - Do not introduce hard-coded user-facing strings in new components/pages.
-- Ensure locale-aware routes and metadata remain valid for `/en` and `/id`.
+- Ensure locale-aware routes and metadata remain valid for all configured locales.
 - Follow the full release and rollback guidance in [docs/I18N_OPERATIONS.md](docs/I18N_OPERATIONS.md).
 
 ## Tests

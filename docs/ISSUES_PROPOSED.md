@@ -1,5 +1,8 @@
 # Proposed GitHub Issues (ready to create)
 
+Status: Historical issue-planning artifact. Some items listed here may already be implemented.
+Validate against current code and `CHANGELOG.md` before creating new issues.
+
 Below are suggested GitHub Issue bodies you can create directly (via the web UI, `gh issue create`, or automation). Each issue includes a short title, description, suggested labels, and acceptance criteria.
 
 ---

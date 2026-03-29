@@ -1,5 +1,8 @@
 # Review: Remaining Issues and Recommendations
 
+Status: Historical snapshot from 2026-02-07. This file is not the current source of truth for project status.
+For current state, use `README.md`, `CHANGELOG.md`, and active guides in `docs/`.
+
 Last reviewed: 2026-02-07
 
 This document summarizes a comprehensive study of the repository, lists remaining issues by priority, describes risks and impacted files, and offers recommended solutions and next steps.

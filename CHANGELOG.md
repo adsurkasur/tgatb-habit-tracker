@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.0.24 - 2026-03-29
+
+**Overview:**
+Release line focused on mobile/native UX quality, richer habit feedback, and broader localization completeness.
+
+### Changes (1.1.0.24)
+
+- **Keyboard and viewport stability (Android/Capacitor):** Improved IME behavior, fullscreen resize handling, and removal of keyboard-related slab/gap artifacts.
+- **System UI consistency:** Refined status/navigation bar handling and dark-surface alignment for cleaner edge-to-edge presentation.
+- **Haptic feedback overhaul:** Added profile-driven haptic behavior and richer action-specific tactile responses on native app, with clearer app-only messaging on web.
+- **Habit status and schedule UX:** Improved off-day/not-yet status logic for interval/weekday schedules and refined card messaging/state handling.
+- **Streak celebration expansion:** Added progressive weekly milestones, improved celebration overlays, expanded multilingual quote support, and settings for celebration behavior.
+- **Localization hardening:** Strengthened i18n tooling/encoding safeguards and expanded translated coverage across supported locales.
+- **Stability and validation:** Included release checkpoints with lint/type/test alignment and platform-specific reliability polish.
+- **Documentation accuracy refresh:** Updated README and platform guides to match current scripts/runtime behavior, and labeled archival planning logs as historical snapshots.
+
 ## 1.0.1.55 - 2026-03-28
 
 **Overview:**
