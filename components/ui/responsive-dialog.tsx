@@ -48,6 +48,7 @@ import { cn } from "@/lib/utils";
 // ─── Context ─────────────────────────────────────────────
 interface ResponsiveDialogContextValue {
   isMobile: boolean;
+  isDrawer: boolean;
   onOpenChange: (open: boolean) => void;
   drawerSize: "standard" | "compact";
   activeSnapPoint: number | string | null;
@@ -55,6 +56,7 @@ interface ResponsiveDialogContextValue {
 
 const ResponsiveDialogContext = React.createContext<ResponsiveDialogContextValue>({
   isMobile: false,
+  isDrawer: false,
   onOpenChange: () => {},
   drawerSize: "standard",
   activeSnapPoint: null,
@@ -84,6 +86,7 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
   // Policy: native app uses OS-level keyboard handling, so Vaul input repositioning must be off.
   // Mobile web (Android/iOS browsers, PWA) keeps Vaul repositioning enabled.
   const isNativeApp = isNativePlatform();
+  const shouldUseDrawer = isMobile && !isNativeApp;
 
   // ── Automatic back-navigation (global stack) ──
   // Each ResponsiveDialog registers itself; the topmost one closes first.
@@ -116,8 +119,8 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
   }, [onOpenChange]);
 
   return (
-    <ResponsiveDialogContext.Provider value={{ isMobile, onOpenChange, drawerSize, activeSnapPoint: isStandard ? activeSnap : null }}>
-      {isMobile ? (
+    <ResponsiveDialogContext.Provider value={{ isMobile, isDrawer: shouldUseDrawer, onOpenChange, drawerSize, activeSnapPoint: shouldUseDrawer && isStandard ? activeSnap : null }}>
+      {shouldUseDrawer ? (
         isStandard ? (
           <Drawer
             open={open}
@@ -177,10 +180,10 @@ function ResponsiveDialogContent({
   dialogClassName,
   drawerClassName,
 }: ResponsiveDialogContentProps) {
-  const { isMobile, onOpenChange, drawerSize, activeSnapPoint } = useResponsiveDialog();
+  const { isDrawer, onOpenChange, drawerSize, activeSnapPoint } = useResponsiveDialog();
   const isNativeApp = isNativePlatform();
 
-  if (isMobile) {
+  if (isDrawer) {
     const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
 
     return (
@@ -239,8 +242,8 @@ interface ResponsiveDialogHeaderProps extends React.HTMLAttributes<HTMLDivElemen
 }
 
 function ResponsiveDialogHeader({ className, children, ...props }: ResponsiveDialogHeaderProps) {
-  const { isMobile, onOpenChange } = useResponsiveDialog();
-  const Comp = isMobile ? DrawerHeader : DialogHeader;
+  const { isMobile, isDrawer, onOpenChange } = useResponsiveDialog();
+  const Comp = isDrawer ? DrawerHeader : DialogHeader;
 
   return (
     <Comp
@@ -270,8 +273,8 @@ function ResponsiveDialogTitle({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogTitle>) {
-  const { isMobile } = useResponsiveDialog();
-  const Comp = isMobile ? DrawerTitle : DialogTitle;
+  const { isDrawer } = useResponsiveDialog();
+  const Comp = isDrawer ? DrawerTitle : DialogTitle;
 
   return (
     <Comp className={cn("text-xl font-semibold", className)} {...props}>
@@ -286,8 +289,8 @@ function ResponsiveDialogDescription({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogDescription>) {
-  const { isMobile } = useResponsiveDialog();
-  const Comp = isMobile ? DrawerDescription : DialogDescription;
+  const { isDrawer } = useResponsiveDialog();
+  const Comp = isDrawer ? DrawerDescription : DialogDescription;
 
   return (
     <Comp className={className} {...props}>
@@ -302,15 +305,15 @@ interface ResponsiveDialogBodyProps extends React.HTMLAttributes<HTMLDivElement>
 }
 
 function ResponsiveDialogBody({ className, children, ...props }: ResponsiveDialogBodyProps) {
-  const { isMobile, drawerSize, activeSnapPoint } = useResponsiveDialog();
+  const { isMobile, isDrawer, drawerSize, activeSnapPoint } = useResponsiveDialog();
 
   // On mobile standard drawers, constrain the scroll area to the visible snap height
   // minus overhead for pill handle + header (~5rem). This prevents content from
   // extending below the viewport at lower snap points.
   const adaptiveStyle = React.useMemo(() => {
-    if (!isMobile || drawerSize !== "standard" || typeof activeSnapPoint !== "number") return undefined;
+    if (!isMobile || !isDrawer || drawerSize !== "standard" || typeof activeSnapPoint !== "number") return undefined;
     return { maxHeight: `calc(${activeSnapPoint * 100}dvh - 5rem)` };
-  }, [isMobile, drawerSize, activeSnapPoint]);
+  }, [isMobile, isDrawer, drawerSize, activeSnapPoint]);
 
   return (
     <div className={cn("flex-1 overflow-y-auto px-6 py-4", className)} style={adaptiveStyle} {...props}>
@@ -321,8 +324,8 @@ function ResponsiveDialogBody({ className, children, ...props }: ResponsiveDialo
 
 // ─── Footer ──────────────────────────────────────────────
 function ResponsiveDialogFooter({ className, children, ...props }: React.HTMLAttributes<HTMLDivElement>) {
-  const { isMobile } = useResponsiveDialog();
-  const Comp = isMobile ? DrawerFooter : DialogFooter;
+  const { isMobile, isDrawer } = useResponsiveDialog();
+  const Comp = isDrawer ? DrawerFooter : DialogFooter;
 
   return (
     <Comp
@@ -344,8 +347,8 @@ function ResponsiveDialogClose({
   children,
   ...props
 }: React.ComponentPropsWithoutRef<typeof DialogClose>) {
-  const { isMobile } = useResponsiveDialog();
-  const Comp = isMobile ? DrawerClose : DialogClose;
+  const { isDrawer } = useResponsiveDialog();
+  const Comp = isDrawer ? DrawerClose : DialogClose;
 
   return (
     <Comp className={className} {...props}>
