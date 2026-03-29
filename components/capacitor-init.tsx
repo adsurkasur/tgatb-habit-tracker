@@ -15,16 +15,20 @@ export function CapacitorInit() {
     if (typeof window !== 'undefined') {
       try {
         if (Capacitor.isNativePlatform()) {
+          document.documentElement.classList.add('native-app');
           const meta = document.querySelector('meta[name="viewport"]');
           if (meta) {
             const content = meta.getAttribute('content') || '';
-            if (!content.includes('user-scalable')) {
-              meta.setAttribute('content', content + ', user-scalable=no, maximum-scale=1.0');
+            const additions: string[] = [];
+            if (!content.includes('viewport-fit=cover')) additions.push('viewport-fit=cover');
+            if (!content.includes('user-scalable')) additions.push('user-scalable=no', 'maximum-scale=1.0');
+            if (additions.length > 0) {
+              meta.setAttribute('content', content + ', ' + additions.join(', '));
             }
           } else {
             const newMeta = document.createElement('meta');
             newMeta.name = 'viewport';
-            newMeta.content = 'width=device-width, initial-scale=1.0, user-scalable=no, maximum-scale=1.0';
+            newMeta.content = 'width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no, maximum-scale=1.0';
             document.head.appendChild(newMeta);
           }
         }

@@ -768,7 +768,7 @@ html {
       right: 0 !important;
       bottom: 0 !important;
       width: 100vw !important;
-      height: 100vh !important;
+      height: 100dvh !important;
       max-width: none !important;
       max-height: none !important;
       margin: 0 !important;
@@ -907,8 +907,21 @@ html {
   
   /* Ensure dialog content is properly contained */
   [data-radix-popper-content-wrapper] {
-    max-height: 100vh !important;
+    max-height: 100dvh !important;
     overflow: hidden;
+  }
+
+  /* Native app viewport safety: avoid legacy 100vh behavior when IME appears. */
+  .native-app .min-h-screen {
+    min-height: 100dvh !important;
+  }
+
+  .native-app .h-screen {
+    height: 100dvh !important;
+  }
+
+  .native-app .max-h-screen {
+    max-height: 100dvh !important;
   }
 }
 

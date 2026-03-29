@@ -5,7 +5,10 @@ import { Capacitor } from '@capacitor/core';
 import { StatusBar, Style as StatusBarStyles } from '@capacitor/status-bar';
 
 interface NavigationBarPlugin { setNavigationBarColor?: (opts: { color: string; darkButtons?: boolean }) => Promise<void> }
-interface SystemUiPlugin { setFullscreen?: (opts: { enabled: boolean; darkMode?: boolean }) => Promise<void> }
+interface SystemUiPlugin {
+  setFullscreen?: (opts: { enabled: boolean; darkMode?: boolean }) => Promise<void>;
+  refreshInsets?: () => Promise<void>;
+}
 
 /**
  * Unified System Bars Management Hook
@@ -74,7 +77,12 @@ export const useSystemBarsUnified = (fullscreenMode?: boolean, isDarkMode?: bool
         const cap = (window as unknown as { Capacitor?: { Plugins?: Record<string, unknown> } }).Capacitor;
         const { SystemUi } = cap?.Plugins || {};
         const sys = SystemUi as unknown as SystemUiPlugin | undefined;
-        if (sys && typeof sys.setFullscreen === 'function') { await sys.setFullscreen({ enabled: target, darkMode }); }
+        if (sys && typeof sys.setFullscreen === 'function') {
+          await sys.setFullscreen({ enabled: target, darkMode });
+        }
+        if (isAndroid && sys && typeof sys.refreshInsets === 'function') {
+          await sys.refreshInsets();
+        }
       } catch (e) { console.warn('🔧 [SystemBars] SystemUi enhancement failed (non-critical):', e); }
     };
     const applyAndroidBars = async (target: boolean) => {

@@ -7,12 +7,21 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.view.WindowManager;
+import android.webkit.WebView;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowCompat;
 import com.getcapacitor.BridgeActivity;
 
 public class MainActivity extends BridgeActivity {
     private static final String PREFS_NAME = "tgatb_boot_state";
     private static final String PREF_LAST_VERSION_CODE = "last_version_code";
+    private int baseWebViewPaddingLeft = 0;
+    private int baseWebViewPaddingTop = 0;
+    private int baseWebViewPaddingRight = 0;
+    private int baseWebViewPaddingBottom = 0;
+    private boolean imeInsetsInstalled = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -24,6 +33,7 @@ public class MainActivity extends BridgeActivity {
         // FIXED: Revert WebView background to default transparent/white
         getBridge().getWebView().setBackgroundColor(Color.TRANSPARENT);
         clearWebViewCacheOnAppUpgrade();
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         // IMPROVED: Proper window insets handling based on fullscreen state
         if (Build.VERSION.SDK_INT < 35) {
@@ -35,10 +45,51 @@ public class MainActivity extends BridgeActivity {
         } else {
             // Android 15+ is edge-to-edge by default; avoid deprecated API call.
         }
-
-        // Force pan mode to avoid WebView resize gaps/slabs above IME on some OEM builds.
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         SystemUiPlugin.reapply(this);
+        installImeInsetsForWebView();
+        refreshImeInsets();
+    }
+
+    private void installImeInsetsForWebView() {
+        if (getBridge() == null || getBridge().getWebView() == null || imeInsetsInstalled) {
+            return;
+        }
+
+        final WebView webView = getBridge().getWebView();
+
+        baseWebViewPaddingLeft = webView.getPaddingLeft();
+        baseWebViewPaddingTop = webView.getPaddingTop();
+        baseWebViewPaddingRight = webView.getPaddingRight();
+        baseWebViewPaddingBottom = webView.getPaddingBottom();
+
+        ViewCompat.setOnApplyWindowInsetsListener(webView, (view, insets) -> {
+            final Insets imeInsets = insets.getInsets(WindowInsetsCompat.Type.ime());
+            final Insets systemBarInsets = insets.getInsets(WindowInsetsCompat.Type.systemBars());
+            final boolean imeVisible = insets.isVisible(WindowInsetsCompat.Type.ime());
+
+            final int imeExtraBottom = imeVisible
+                    ? Math.max(0, imeInsets.bottom - systemBarInsets.bottom)
+                    : 0;
+
+            view.setPadding(
+                    baseWebViewPaddingLeft,
+                    baseWebViewPaddingTop,
+                    baseWebViewPaddingRight,
+                    baseWebViewPaddingBottom + imeExtraBottom
+            );
+
+            return insets;
+        });
+
+        imeInsetsInstalled = true;
+        ViewCompat.requestApplyInsets(webView);
+    }
+
+    private void refreshImeInsets() {
+        if (getBridge() == null || getBridge().getWebView() == null) {
+            return;
+        }
+        ViewCompat.requestApplyInsets(getBridge().getWebView());
     }
 
     private void clearWebViewCacheOnAppUpgrade() {
@@ -63,14 +114,18 @@ public class MainActivity extends BridgeActivity {
     @Override
     public void onResume() {
         super.onResume();
-    SystemUiPlugin.reapply(this);
+        SystemUiPlugin.reapply(this);
+        refreshImeInsets();
     }
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-     if (hasFocus) SystemUiPlugin.reapply(this);
- }
+        if (hasFocus) {
+            SystemUiPlugin.reapply(this);
+            refreshImeInsets();
+        }
+    }
 
  // Let back press navigate directly; immersive sticky prevents bars from intercepting
 

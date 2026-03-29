@@ -5,12 +5,10 @@ import android.graphics.Color;
 import android.os.Build;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowInsets;
 import androidx.core.view.WindowCompat;
+import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 import androidx.core.view.WindowInsetsControllerCompat;
-import androidx.core.view.ViewCompat;
-import androidx.core.graphics.Insets;
 
 import com.getcapacitor.JSObject;
 import com.getcapacitor.Plugin;
@@ -49,6 +47,20 @@ public class SystemUiPlugin extends Plugin {
         call.resolve(ret);
     }
 
+    @PluginMethod
+    public void refreshInsets(PluginCall call) {
+        Activity activity = getActivity();
+        if (activity != null) {
+            activity.runOnUiThread(() -> {
+                View root = activity.findViewById(android.R.id.content);
+                if (root != null) {
+                    ViewCompat.requestApplyInsets(root);
+                }
+            });
+        }
+        call.resolve();
+    }
+
     public static void reapply(Activity activity) {
         if (activity == null) return;
         activity.runOnUiThread(() -> applySystemUi(activity));
@@ -62,7 +74,6 @@ public class SystemUiPlugin extends Plugin {
         final WindowInsetsControllerCompat controller = WindowCompat.getInsetsController(window, decor);
 
         configureEdgeToEdge(window);
-        installStatusBarHeightCssVarBridge(activity, decor);
         applyColorsAndAppearance(window, controller); // recolor first
         configureControllerBehavior(controller);
 
@@ -70,6 +81,11 @@ public class SystemUiPlugin extends Plugin {
             enterFullscreen(decor, controller);
         } else {
             exitFullscreen(decor, controller);
+        }
+
+        View root = activity.findViewById(android.R.id.content);
+        if (root != null) {
+            ViewCompat.requestApplyInsets(root);
         }
     }
 
@@ -80,22 +96,6 @@ public class SystemUiPlugin extends Plugin {
             // Android 15+ defaults to edge-to-edge; avoid using deprecated setDecorFitsSystemWindows.
             // Keep fullscreen semantics via insets and controller behavior.
         }
-    }
-
-    private static void installStatusBarHeightCssVarBridge(Activity activity, View decor) {
-        ViewCompat.setOnApplyWindowInsetsListener(decor, (v, insets) -> {
-            Insets sb = insets.getInsets(WindowInsetsCompat.Type.statusBars());
-            int top = sb.top;
-            try {
-                if (activity instanceof com.getcapacitor.BridgeActivity) {
-                    ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView().post(() ->
-                        ((com.getcapacitor.BridgeActivity) activity).getBridge().getWebView()
-                            .evaluateJavascript("document.documentElement.style.setProperty('--status-bar-height', '" + top + "px')", null)
-                    );
-                }
-            } catch (Throwable ignored) {}
-            return insets;
-        });
     }
 
     private static void configureControllerBehavior(WindowInsetsControllerCompat controller) {
@@ -182,12 +182,9 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void applyColorsAndroid15Plus(Window window, int purple) {
-        View decorView = window.getDecorView();
-        decorView.setOnApplyWindowInsetsListener((view, insets) -> {
-            // Android 15+ recommends drawing behind status/navigation bars instead of directly setting their colors.
-            view.setBackgroundColor(purple);
-            return insets;
-        });
+        // Keep intentional theme/purple behavior without intercepting window insets.
+        // Intercepting decor insets here can desync IME layout and expose slab gaps.
+        window.getDecorView().setBackgroundColor(purple);
 
         // Keep appearance policy but avoid deprecated direct color APIs on 35+.
         // Legacy colors are handled in applyColorsLegacy below for older Android versions.
