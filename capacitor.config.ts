@@ -27,7 +27,7 @@ const config: CapacitorConfig = {
       backgroundColor: "#00000000"
     },
     Keyboard: {
-      resizeOnFullScreen: false
+      resizeOnFullScreen: true
     },
     NavigationBar: {
       backgroundColor: '#6750a4' // Set default purple, runtime will override

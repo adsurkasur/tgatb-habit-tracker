@@ -1,12 +1,19 @@
 import { Capacitor } from '@capacitor/core';
 
 /**
+ * Returns true when running inside any Capacitor native shell.
+ */
+export function isNativePlatform(): boolean {
+  return Capacitor.isNativePlatform();
+}
+
+/**
  * Returns true only when running inside a Capacitor Android native shell.
  *
  * Usage: native-only behavior where mobile web should NOT be grouped with app runtime.
  */
 export function isNativeAndroidPlatform(): boolean {
-  return Capacitor.isNativePlatform() && Capacitor.getPlatform() === 'android';
+  return isNativePlatform() && Capacitor.getPlatform() === 'android';
 }
 
 /**

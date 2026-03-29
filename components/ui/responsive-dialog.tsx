@@ -3,7 +3,7 @@
 import * as React from "react";
 import { CloseButton } from "@/components/ui/close-button";
 import { useIsMobile } from "@/hooks/use-mobile";
-import { isNativeAndroidPlatform } from "@/hooks/use-platform";
+import { isNativePlatform } from "@/hooks/use-platform";
 import { useMobileBackNavigation } from "@/hooks/use-mobile-back-navigation";
 import {
   Dialog,
@@ -81,9 +81,9 @@ interface ResponsiveDialogProps {
 
 function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard" }: ResponsiveDialogProps) {
   const isMobile = useIsMobile();
-  // Policy: native Android uses OS-level adjustResize, so Vaul input repositioning must be off.
+  // Policy: native app uses OS-level keyboard handling, so Vaul input repositioning must be off.
   // Mobile web (Android/iOS browsers, PWA) keeps Vaul repositioning enabled.
-  const isNativeAndroid = isNativeAndroidPlatform();
+  const isNativeApp = isNativePlatform();
 
   // ── Automatic back-navigation (global stack) ──
   // Each ResponsiveDialog registers itself; the topmost one closes first.
@@ -129,12 +129,12 @@ function ResponsiveDialog({ open, onOpenChange, children, drawerSize = "standard
             fadeFromIndex={1}
             snapToSequentialPoint
             // Keep a single keyboard owner per platform.
-            // On native Android WebView, Vaul's keyboard repositioning causes a transient
+            // On native WebView, Vaul's keyboard repositioning causes a transient
             // downward shift because it mutates style.bottom via visualViewport while
             // snap transforms are still anchored to window.innerHeight. Disabling
             // repositionInputs prevents Vaul from touching bottom/height on keyboard
-            // events, letting the native Android scroll/pan handle input visibility.
-            repositionInputs={!isNativeAndroid}
+            // events, letting native scroll/pan handle input visibility.
+            repositionInputs={!isNativeApp}
           >
             {children}
           </Drawer>
@@ -178,6 +178,7 @@ function ResponsiveDialogContent({
   drawerClassName,
 }: ResponsiveDialogContentProps) {
   const { isMobile, onOpenChange, drawerSize, activeSnapPoint } = useResponsiveDialog();
+  const isNativeApp = isNativePlatform();
 
   if (isMobile) {
     const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
@@ -187,7 +188,11 @@ function ResponsiveDialogContent({
         className={cn(
           // Standard drawers: full viewport height so snap-point offsets map correctly.
           // Compact drawers: cap at 90vh for content-based sizing.
-          drawerSize === "compact" ? "max-h-[90vh]" : "h-dvh flex flex-col",
+          drawerSize === "compact"
+            ? "max-h-[90vh]"
+            : isNativeApp
+              ? "h-full flex flex-col"
+              : "h-dvh flex flex-col",
           className,
           drawerClassName,
         )} 
