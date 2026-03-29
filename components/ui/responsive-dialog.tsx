@@ -182,6 +182,7 @@ function ResponsiveDialogContent({
 }: ResponsiveDialogContentProps) {
   const { isDrawer, onOpenChange, drawerSize, activeSnapPoint } = useResponsiveDialog();
   const isNativeApp = isNativePlatform();
+  const useNativeMobileSheet = !isDrawer && isNativeApp;
 
   if (isDrawer) {
     const isAtMinSnap = drawerSize === "standard" && activeSnapPoint === 0.45;
@@ -227,6 +228,8 @@ function ResponsiveDialogContent({
     <DialogContent
       className={cn(
         "material-radius-lg surface-elevation-3 min-w-0 [&>button]:hidden [&_button]:max-w-full",
+        useNativeMobileSheet &&
+          "!left-0 !right-0 !top-auto !bottom-0 !translate-x-0 !translate-y-0 !w-screen !max-w-none !rounded-t-[10px] !rounded-b-none !p-0 !gap-0 !flex !flex-col !max-h-[90vh]",
         className,
         dialogClassName,
       )}

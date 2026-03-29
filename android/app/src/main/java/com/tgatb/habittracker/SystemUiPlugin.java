@@ -182,10 +182,15 @@ public class SystemUiPlugin extends Plugin {
     }
 
     private static void applyColorsAndroid15Plus(Window window, int purple) {
-        // Do not tint the decor background via inset listener.
-        // When the IME resizes WebView, any exposed decor area would inherit this tint and
-        // appear as a large blocking slab above the keyboard.
-        // We still apply icon appearance policy; bar colors are managed by plugin/runtime calls.
+        View decorView = window.getDecorView();
+        decorView.setOnApplyWindowInsetsListener((view, insets) -> {
+            // Android 15+ recommends drawing behind status/navigation bars instead of directly setting their colors.
+            view.setBackgroundColor(purple);
+            return insets;
+        });
+
+        // Keep appearance policy but avoid deprecated direct color APIs on 35+.
+        // Legacy colors are handled in applyColorsLegacy below for older Android versions.
     }
 
     private static void applyColorsLegacy(Window window, int purple) {
