@@ -156,7 +156,7 @@
     "autoprefixer": "^10.4.24",
     "baseline-browser-mapping": "^2.10.10",
     "eslint": "9.39.4",
-    "eslint-config-next": "^16.1.6",
+    "eslint-config-next": "^16.2.2",
     "jsdom": "^29.0.1",
     "msw": "^2.12.14",
     "postcss": "^8.5.6",
