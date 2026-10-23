@@ -568,9 +568,11 @@ export function useHabits() {
 
   // After initial load, if autoSync enabled and user is logged in, pull remote data once
   const importDataRef = useRef(importData);
-  importDataRef.current = importData;
   const pullOnceRef = useRef(pullOnce);
-  pullOnceRef.current = pullOnce;
+  useEffect(() => {
+    importDataRef.current = importData;
+    pullOnceRef.current = pullOnce;
+  });
 
   useEffect(() => {
     (async () => {
