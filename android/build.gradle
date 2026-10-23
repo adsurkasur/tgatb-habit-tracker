@@ -16,6 +16,16 @@ apply from: "variables.gradle"
 
 // Repositories are centrally managed in settings.gradle (PREFER_SETTINGS mode)
 
+// ponytail: capacitor-save-as hardcodes compileSdk 35, but capacitor-android 8 requires 36.
+// Drop this once the plugin reads rootProject.ext.compileSdkVersion.
+subprojects {
+    afterEvaluate { project ->
+        if (project.plugins.hasPlugin('com.android.library')) {
+            project.android.compileSdk = rootProject.ext.compileSdkVersion
+        }
+    }
+}
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
