@@ -154,7 +154,7 @@ export async function generateMetadata({ params }: LocaleParams): Promise<Metada
 	const copy = await getPrivacyCopy(resolvedLocale);
 
 	const alternates: Record<string, string> = {};
-	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click";
+	const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://tgatb.arinahub.com";
 
 	for (const loc of routing.locales) {
 		const urlPath = loc === routing.defaultLocale ? "" : `/${loc}`;
