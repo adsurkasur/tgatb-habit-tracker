@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.0.26 - 2026-10-23
+
+**Overview:**
+Fixes the 1.1.0.25 Play upload, which was rejected for minSdk 23.
+
+### Changes (1.1.0.26)
+
+- **Minimum Android 7.0:** `minSdkVersion` raised to 24 (required by Play automatic protection and Capacitor 8).
+- **Security updates:** All critical advisories resolved (Next.js 16.4.2, next-auth, protobufjs, tar, websocket-driver). `@capacitor/android`/`@capacitor/core` pinned to 8.4.3, the first release outside GHSA-rvm3-566m-v7fv; 8.5.x breaks system bar tinting.
+- **Lint compliance:** Latest-value refs are now written in effects, the back-navigation ID uses `useId()`, and the export button no longer wraps its handler in a per-render debounce (the in-progress guard already blocks double exports).
+
 ## 1.1.0.25 - 2026-10-23
 
 **Overview:**

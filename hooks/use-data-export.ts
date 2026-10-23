@@ -1,5 +1,4 @@
 import { useRef, useState } from "react";
-import { debounce } from "@/lib/utils/debounce";
 import { validateExportImportJson } from "@/lib/validate-export-import";
 import { exportDataPlatform } from "@/lib/platform-export";
 import { useToast } from "@/hooks/use-toast";
@@ -15,7 +14,7 @@ export function useDataExport(
   const [isExporting, setIsExporting] = useState(false);
   const exportInProgressRef = useRef(false);
 
-  const handleExportClick = debounce(async () => {
+  const handleExportClick = async () => {
     if (exportInProgressRef.current) return;
     exportInProgressRef.current = true;
     setIsExporting(true);
@@ -61,7 +60,7 @@ export function useDataExport(
       exportInProgressRef.current = false;
       hideLoading();
     }
-  }, 500);
+  };
 
   const handleImportClick = () => {
     fileInputRef.current?.click();

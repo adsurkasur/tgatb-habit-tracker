@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useId, useRef } from 'react';
 import { useIsMobile } from './use-mobile';
 
 // ─── Global back-navigation stack (singleton) ────────────
@@ -72,27 +72,24 @@ export function useMobileBackNavigation({
 }: UseMobileBackNavigationOptions = {}) {
   const isMobile = useIsMobile();
 
-  // Stable unique ID per hook instance — generated lazily on first render
-  const stableId = useRef('');
-  if (!stableId.current) {
-    // eslint-disable-next-line react-hooks/purity -- one-time lazy init; value is stable after first render
-    stableId.current = `mbk-${Date.now()}-${Math.random().toString(36).slice(2, 9)}`;
-  }
+  // Stable unique ID per hook instance
+  const stableId = useId();
 
   // Always ref the latest callback so the stack closure calls the current one
   const callbackRef = useRef(onBackPressed);
-  callbackRef.current = onBackPressed;
+  useEffect(() => {
+    callbackRef.current = onBackPressed;
+  });
 
   useEffect(() => {
     if (!isMobile || !isActive) return;
 
-    const id = stableId.current;
-    pushBack(id, () => callbackRef.current?.());
+    pushBack(stableId, () => callbackRef.current?.());
 
     return () => {
-      popBack(id);
+      popBack(stableId);
     };
-  }, [isMobile, isActive]);
+  }, [isMobile, isActive, stableId]);
 }
 
 // ─── Imperative helpers for native back button (Capacitor) ───
