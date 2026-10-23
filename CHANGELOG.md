@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file.
 
+## 1.1.0.25 - 2026-10-23
+
+**Overview:**
+Play policy compliance release.
+
+### Changes (1.1.0.25)
+
+- **Target Android 16:** `compileSdk` and `targetSdk` raised to 36 (Google Play requirement since 31 Aug 2026). Library modules are forced to compile against the same SDK because `capacitor-save-as` hardcodes 35.
+- **Domain migration:** Website, privacy policy, and sitemap moved from `www.tgatb.click` to `tgatb.arinahub.com`.
+
 ## 1.1.0.24 - 2026-03-29
 
 **Overview:**
