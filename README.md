@@ -2,8 +2,8 @@
 
 [![Build Status](https://img.shields.io/github/actions/workflow/status/adsurkasur/tgatb-habit-tracker/ci.yml)](https://github.com/adsurkasur/tgatb-habit-tracker/actions)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
-[![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://www.tgatb.click/)
-[![Privacy Policy](https://img.shields.io/badge/privacy-policy-green.svg)](https://www.tgatb.click/privacy-policy)
+[![Vercel Deploy](https://img.shields.io/badge/deploy-vercel-blue.svg)](https://tgatb.arinahub.com/)
+[![Privacy Policy](https://img.shields.io/badge/privacy-policy-green.svg)](https://tgatb.arinahub.com/privacy-policy)
 
 <p align="center">
 	<img src="public/logo/icon-512x512.png" alt="TGATB Logo" width="128" height="128" />
@@ -50,7 +50,7 @@
 
 ## Demo
 
-Try it live: [www.tgatb.click](https://www.tgatb.click/)
+Try it live: [tgatb.arinahub.com](https://tgatb.arinahub.com/)
 
 Note: For a current, code-level review and outstanding issues, see [docs/REVIEW_AND_ISSUES.md](docs/REVIEW_AND_ISSUES.md).
 
@@ -271,7 +271,7 @@ This application is optimized for **Vercel deployment**:
 
 1. **Connect Repository:** Import your GitHub repository to Vercel
 2. **Deploy:** Vercel automatically builds and deploys with zero configuration
-3. **Access:** Your app will be available at [www.tgatb.click](https://www.tgatb.click/)
+3. **Access:** Your app will be available at [tgatb.arinahub.com](https://tgatb.arinahub.com/)
 
 The Next.js App Router architecture makes deployment seamless with:
 

@@ -145,7 +145,7 @@ Route-specific SEO is also applied in localized legal pages.
 Base URL behavior:
 
 - Uses `NEXT_PUBLIC_BASE_URL` when provided.
-- Falls back to `https://www.tgatb.click` when missing.
+- Falls back to `https://tgatb.arinahub.com` when missing.
 
 ## Locale-Aware Sitemap
 

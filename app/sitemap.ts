@@ -6,7 +6,7 @@ export const dynamic = "force-static";
 const localizedPaths = ["", "/offline", "/privacy-policy", "/terms-of-service"] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://www.tgatb.click";
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || "https://tgatb.arinahub.com";
   const now = new Date();
 
   return routing.locales.flatMap((locale) => {
